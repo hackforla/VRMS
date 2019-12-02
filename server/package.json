@@ -1,0 +1,29 @@
+{
+  "name": "vrms-server",
+  "version": "1.0.0",
+  "description": "VRMS Server",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "author": "sarL3y",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "debug": "^4.1.1",
+    "mocha": "^6.2.2",
+    "supertest": "^4.0.2"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "helmet": "^3.21.2",
+    "morgan": "^1.9.1"
+  },
+  "directories": {
+    "test": "test"
+  }
+}

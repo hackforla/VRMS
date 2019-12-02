@@ -1,0 +1,11 @@
+{
+  "name": "vrms-client",
+  "version": "1.0.0",
+  "description": "VRMS Client",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "sarL3y",
+  "license": "ISC"
+}
