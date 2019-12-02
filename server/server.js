@@ -4,6 +4,6 @@ const app = require('./index.js');
 const PORT = 3000;
 
 // Spin up the server
-app.listen(PORT, () => {
+app.listen(process.env.PORT || PORT, () => {
     console.log('Server is listening on port: ' + PORT);
 });
