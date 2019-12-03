@@ -15,8 +15,6 @@ services:
     volumes:
       - ./server/src:/srv/app/server/src
 
-    command: npm run dev
-
   #############
   # REACT APP #
   #############
@@ -33,6 +31,5 @@ services:
       - ./client/public:/srv/app/client/public
     links: 
       - server
-    command: npm run start
     
   
