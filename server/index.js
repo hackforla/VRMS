@@ -7,6 +7,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const cors = require('cors');
+const path = require('path');
 
 // Create a new application using the Express framework
 const app = express();
@@ -24,10 +25,18 @@ app.use(helmet());
 // Cross-Origin-Resource-Sharing
 app.use(cors());
 
+// Serve static files from the React frontend app
+app.use(express.static(path.join(__dirname, 'client/build')));
+
 const Users = require('./users/users.js');
 const Events = require('./events/events.js');
 
 // ROUTES
+
+// Anything that doesn't match the above, send back index.html
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname + '/client/build/index.html'));
+  });
 
 app.get('/api', (req, res) => {
 
