@@ -2,3 +2,6 @@ build:
   docker:
     web: client/Dockerfile
     server: server/Dockerfile
+run:
+  web: npm run build
+  server: npm start
