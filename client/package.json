@@ -2,7 +2,7 @@
   "name": "vrms-client",
   "version": "1.0.0",
   "description": "VRMS Client",
-  "homepage" : "http://vrms-prototype.herokuapp.com",
+  "homepage": "http://vrms-prototype.herokuapp.com",
   "dependencies": {
     "react": "^16.12.0",
     "react-dom": "^16.12.0",

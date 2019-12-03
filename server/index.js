@@ -26,18 +26,12 @@ app.use(helmet());
 app.use(cors());
 
 // Serve static files from the React frontend app
-app.use(express.static(path.join(__dirname, '/../client/build')));
-
-// Anything that doesn't match the above, send back index.html
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '/../client/build/index.html'));
-  });
+app.use(express.static(path.join(__dirname, './client/build')));
 
 const Users = require('./users/users.js');
 const Events = require('./events/events.js');
 
 // ROUTES
-
 app.get('/api', (req, res) => {
 
     res.send(
@@ -84,5 +78,10 @@ app.get('/api/events/:id', (req, res) => {
     matchedEvent.length === 0 ? res.send('No match') : res.send(matchedEvent);
 
 });
+
+// Anything that doesn't match the above, send back index.html
+// app.get('*', (req, res) => {
+//     res.sendFile(path.join(__dirname, '/../client/build/index.html'));
+//   });
 
 module.exports = app;
