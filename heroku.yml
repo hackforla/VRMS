@@ -1,4 +1,4 @@
 build:
   docker:
-    web: client/Dockerfile
-    server: server/Dockerfile
+    # web: client/Dockerfile
+    server: Dockerfile
