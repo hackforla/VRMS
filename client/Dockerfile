@@ -2,12 +2,13 @@ FROM node:10
 
 WORKDIR /client/
 
-COPY package*.json ./
-
-RUN npm install
-RUN npm run build
+# COPY package*.json ./
 
 COPY . .
+
+RUN npm install
+
+RUN npm run build
 
 EXPOSE 3000
 

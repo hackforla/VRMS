@@ -2,11 +2,9 @@ FROM node:10
 
 WORKDIR /server/
 
-COPY package*.json ./
+COPY . .
 
 RUN npm install
-
-COPY . .
 
 EXPOSE 4000
 
