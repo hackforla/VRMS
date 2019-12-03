@@ -1,11 +1,11 @@
 version: '3'
 services:
-  client:
+  web:
     build: ./client
     ports:
       - "3000:3000"
-    # volumes: 
-    #   - ./client:/
+    depends_on: 
+      - server
   server:
     build: ./server
     ports:
