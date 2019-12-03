@@ -1,14 +1,17 @@
-FROM node:10
+FROM node:10 as build
 
-WORKDIR /client
+RUN mkdir -p /srv/app/client/
 
-# COPY package*.json ./
+WORKDIR /srv/app/client/
 
-COPY . .
+COPY package*.json /srv/app/client/
 
 RUN npm install
+
+COPY . /srv/app/client/
+
 RUN npm run build
 
-EXPOSE 3000
+# EXPOSE 3000
 
 CMD [ "npm", "start" ]

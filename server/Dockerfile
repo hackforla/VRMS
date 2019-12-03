@@ -1,13 +1,19 @@
 FROM node:10
 
-WORKDIR /server
+RUN npm install nodemon -g
 
-COPY package*.json ./
+RUN mkdir -p /srv/app/server/
+
+WORKDIR /srv/app/server
+
+COPY package*.json /srv/app/server/
 
 RUN npm install
 
-COPY . .
+COPY . /srv/app/server/
 
-EXPOSE 4000
+# COPY --from=build /srv/app/client/ /srv/app/
 
-CMD [ "npm", "start" ]
+# EXPOSE 4000
+
+CMD [ "npm", "run", "dev" ]

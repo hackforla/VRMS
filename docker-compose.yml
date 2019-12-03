@@ -1,18 +1,38 @@
 version: '3'
 services:
-  web:
-    build: ./client
-    ports:
-      - "3000:3000"
-    depends_on: 
-      - server
+
+  ###############
+  # NODE SERVER #
+  ###############
   server:
     build: ./server
+    expose:
+      - "4000"
+    environment:
+      API_HOST: "http://localhost:4000"
     ports:
       - "4000:4000"
-    # volumes: 
-    #   - ./server:/
-  # mongodb:
-  #   image: "mongo"
-  #   ports:
-  #    - "27017:27017"
+    volumes:
+      - ./server/src:/srv/app/server/src
+
+    command: npm run dev
+
+  #############
+  # REACT APP #
+  #############
+  web:
+    build: ./client
+    expose:
+      - "3000"
+    environment:
+      - REACT_APP_PORT="3000"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client/src:/srv/app/client/src
+      - ./client/public:/srv/app/client/public
+    links: 
+      - server
+    command: npm run start
+    
+  
