@@ -1,12 +1,10 @@
-FROM node:10
+FROM mhart/alpine-node:13
 
 WORKDIR /
 
-COPY package*.json /
+COPY . . 
 
 RUN npm install
-
-COPY . .
 
 RUN mkdir -p /client/
 
