@@ -1,0 +1,21 @@
+.nav-wrapper {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 10vh;
+}
+
+.navbar {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.navbar-buttons {
+    
+}
+
+.navbar-button {
+    padding: 5px;
+}

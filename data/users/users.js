@@ -8,23 +8,23 @@ module.exports = [
     },
     {
         "id": "123456781",
-        "username": "Admin1",
+        "username": "User1",
         "password": "SecretPassword1",
-        "email": "admin1@email.com",
-        "accessLevel": 'User'
+        "email": "user1@email.com",
+        "accessLevel": "User"
     },
     {
         "id": "123456782",
-        "username": "Admin2",
+        "username": "User2",
         "password": "SecretPassword2",
-        "email": "admin2@email.com",
-        "accessLevel": 'User'
+        "email": "user2@email.com",
+        "accessLevel": "User"
     },
     {
         "id": "123456783",
-        "username": "Admin3",
+        "username": "User3",
         "password": "SecretPassword3",
-        "email": "admin3@email.com",
-        "accessLevel": 'User'
+        "email": "user3@email.com",
+        "accessLevel": "User"
     }
 ];

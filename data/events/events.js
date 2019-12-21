@@ -10,27 +10,28 @@ module.exports = [
                     "firstName": "Matt",
                     "lastName": "T"
                 },
-                "email": null
+                "email": "testemail@email.com"
             }, {
                 "name": {
                     "firstName": "Bonnie",
                     "lastName": "W"
                 },
-                "email": null
+                "email": "testemail1@email.com"
             }, {
                 "name": {
                     "firstName": "Shawn",
                     "lastName": "D"
                 },
-                "email": null
+                "email": "testemail2@email.com"
             }, {
                 "name": {
                     "firstName": "Mohith",
                     "lastName": "R"
                 },
-                "email": null
+                "email": "testemail3@email.com"
             }
         ],
+        "checkInReady": true,
         "checkIns": []
     }, 
     {
@@ -59,6 +60,7 @@ module.exports = [
                 "email": null
             }
         ],
+        "checkInReady": false,
         "checkIns": []
     }, 
     {
@@ -87,6 +89,7 @@ module.exports = [
                 "email": null
             }
         ],
+        "checkInReady": false,
         "checkIns": []
     }
 ];
