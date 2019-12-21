@@ -1,24 +1,23 @@
 # FROM mhart/alpine-node:13
-FROM node:8.9.3-alpine as server
 
-WORKDIR /usr/src/app
+# WORKDIR /usr/src/app
 
-COPY /package*.json ./ 
+# COPY /package*.json ./ 
 
-RUN npm install
+# RUN npm install
 
-COPY . .
+# COPY . .
 
-WORKDIR /usr/src/app/client
+# WORKDIR /usr/src/app/client
 
-COPY /client/package*.json ./
+# COPY /client/package*.json ./
 
-RUN npm install
+# RUN npm install
 
-COPY /client .
+# COPY /client .
 
-RUN npm run build
+# RUN npm run build
 
-WORKDIR /usr/src/app
+# WORKDIR /usr/src/app
 
-CMD [ "npm", "start" ]
+# CMD [ "npm", "start" ]
