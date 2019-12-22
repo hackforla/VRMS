@@ -29,12 +29,31 @@ app.use(morgan('dev'));
 // Cross-Origin-Resource-Sharing
 app.use(cors());
 
+mongoose.Promise = global.Promise; 
+
+// ROUTES
+
+const eventsRouter = require('./routers/events.router');
+const checkInsRouter = require('./routers/checkIns.router');
+const usersRouter = require('./routers/users.router');
+const answersRouter = require('./routers/answers.router');
+
+app.use('/api/events', eventsRouter);
+app.use('/api/checkIns', checkInsRouter);
+app.use('/api/answers', answersRouter);
+app.use('/api/users', usersRouter);
+
 const CLIENT_BUILD_PATH = path.join(__dirname, './client/build');
 
 // Serve static files from the React frontend app
 app.use(express.static(path.join(CLIENT_BUILD_PATH)));
 
-mongoose.Promise = global.Promise; 
+// Anything that doesn't match the above, send back index.html
+app.get('*', (req, res) => {
+    const index = path.join(CLIENT_BUILD_PATH, 'index.html');
+
+    res.sendFile(index);
+});
 
 let server;
 
@@ -73,33 +92,6 @@ async function closeServer() {
     });
 };
 
-// ROUTES
-// app.get('/api', (req, res) => {
-//     console.log(mongoose.connection.db);
-//     res.send(
-//         'Routes: ' + '\n' + 
-//         '/users ' +
-//         '/events ');
-// });
-
-// GET /events
-
-const eventsRouter = require('./routers/events.router');
-const checkInsRouter = require('./routers/checkIns.router');
-const usersRouter = require('./routers/users.router');
-const answersRouter = require('./routers/answers.router');
-
-app.use('/api/events', eventsRouter);
-app.use('/api/checkIns', checkInsRouter);
-app.use('/api/answers', answersRouter);
-app.use('/api/users', usersRouter);
-
-// Anything that doesn't match the above, send back index.html
-app.get('*', (req, res) => {
-    const index = path.join(CLIENT_BUILD_PATH, 'index.html');
-
-    res.sendFile(index);
-});
 
 runServer(DATABASE_URL).catch(err => console.error(err));
 // app.listen(process.env.PORT || PORT, () => {
