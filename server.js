@@ -75,7 +75,7 @@ async function closeServer() {
 
 // ROUTES
 app.get('/api', (req, res) => {
-
+    console.log(mongoose.connection.db);
     res.send(
         'Routes: ' + '\n' + 
         '/users ' +
@@ -101,9 +101,7 @@ app.get('*', (req, res) => {
     res.sendFile(index);
 });
 
-if (require.main === module) {
-    runServer(DATABASE_URL).catch(err => console.error(err));
-};
+runServer(DATABASE_URL).catch(err => console.error(err));
 // app.listen(process.env.PORT || PORT, () => {
 //     console.log(`Server is listening on port: ${process.env.PORT || PORT}`);
 // });
