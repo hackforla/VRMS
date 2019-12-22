@@ -74,13 +74,13 @@ async function closeServer() {
 };
 
 // ROUTES
-app.get('/api', (req, res) => {
-    console.log(mongoose.connection.db);
-    res.send(
-        'Routes: ' + '\n' + 
-        '/users ' +
-        '/events ');
-});
+// app.get('/api', (req, res) => {
+//     console.log(mongoose.connection.db);
+//     res.send(
+//         'Routes: ' + '\n' + 
+//         '/users ' +
+//         '/events ');
+// });
 
 // GET /events
 
