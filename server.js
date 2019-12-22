@@ -51,7 +51,6 @@ app.use(express.static(path.join(CLIENT_BUILD_PATH)));
 // Anything that doesn't match the above, send back index.html
 app.get('*', (req, res) => {
     const index = path.join(CLIENT_BUILD_PATH, 'index.html');
-    console.log("I'm TRYING client build path!!!");
 
     res.sendFile(index);
 });
@@ -59,7 +58,6 @@ app.get('*', (req, res) => {
 let server;
 
 async function runServer(databaseUrl, port = PORT) {
-    console.log("I'm TRYING (server)!!!");
 
         await mongoose
             .connect(
@@ -73,8 +71,7 @@ async function runServer(databaseUrl, port = PORT) {
 
         server = app
             .listen(port, () => {
-                console.log(`Server listening on ${port}`);
-                console.log("I'm TRYING!!!");
+                console.log(`Mongoose connected from runServer() and is listening on ${port}`);
             })
             .on('error', err => {
                 mongoose.disconnect();
@@ -85,7 +82,7 @@ async function runServer(databaseUrl, port = PORT) {
 async function closeServer() {
     await mongoose.disconnect().then(() => {
         return new Promise((resolve, reject) => {
-            console.log('Closing server');
+            console.log('Closing Mongoose connection. Bye');
             server.close(err => {
                 if (err) {
                     return reject(err);
@@ -96,9 +93,9 @@ async function closeServer() {
     });
 };
 
-
-runServer(DATABASE_URL).catch(err => console.error(err));
-console.log("I'm TRYING (server.js please)!!!");
+if (require.main === module) {
+    runServer(DATABASE_URL).catch(err => console.error(err));
+};
 
 // app.listen(process.env.PORT || PORT, () => {
 //     console.log(`Server is listening on port: ${process.env.PORT || PORT}`);

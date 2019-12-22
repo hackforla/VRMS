@@ -6,8 +6,7 @@ const { Event } = require('../models/event.model');
 // GET /api/events/
 router.get('/', (req, res) => {
     const { query } = req;
-    console.log("I'm TRYING!!!");
-    
+        
     Event
         .find(query.checkInReady === 'true' ? query : undefined)
         .then(events => {
