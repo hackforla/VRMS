@@ -12,7 +12,7 @@ const SelectCheckIn = (props) => {
     async function fetchEvent() {
         try {
             setIsLoading(true);
-            const res = await fetch("http://localhost:4000/api/events?checkInReady=true");
+            const res = await fetch("/api/events?checkInReady=true");
             const resJson = await res.json();
 
             setEvents(resJson);

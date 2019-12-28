@@ -40,7 +40,7 @@ const Event = (props) => {
     async function fetchEvent() {
         try {
             setIsLoading(true);
-            const res = await fetch(`http://localhost:4000/api/events/${props.match.params.id}`);
+            const res = await fetch(`/api/events/${props.match.params.id}`);
             const resJson = await res.json();
             
             setEvent(resJson);
@@ -53,20 +53,19 @@ const Event = (props) => {
 
     async function setCheckInReady(e) {
         e.preventDefault();
-        console.log('Hello!');
-        const payload = { checkInReady: true };
 
         try {
-        setIsLoading(true);
-        await fetch(`http://localhost:4000/api/events/${props.match.params.id}`, {
-            method: 'PATCH',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(payload)
-        });
-        console.log('Done');
-        setIsLoading(false);
+            setIsLoading(true);
+            const payload = { checkInReady: true };
+
+            await fetch(`/api/events/${props.match.params.id}`, {
+                method: 'PATCH',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
+            setIsLoading(false);
         } catch(error) {
             // setIsError(error);
             setIsLoading(false);

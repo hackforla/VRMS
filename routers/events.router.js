@@ -56,7 +56,7 @@ router.patch('/:id', (req, res) => {
         })
         .catch(err => {
             console.log(err);
-            res.sendStatus(400).json({
+            res.sendStatus(500).json({
                 message: `/PATCH Couldn't set check-in: ${err}`
             })
         });

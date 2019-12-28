@@ -11,7 +11,7 @@ const Events = (props) => {
 
     async function fetchData() {
         try {
-            const res = await fetch("http://localhost:4000/api/events");
+            const res = await fetch("/api/events");
             const resJson = await res.json();
 
             setEvents(resJson);
