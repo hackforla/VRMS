@@ -29,7 +29,7 @@ const NewUser = (props) => {
     }, []);
 
     return (
-        <div className="flexcenter-container">
+        <div className="flex-container">
             <div className="new">
                 <div className="new-headers">
                     <h3>Welcome!</h3>

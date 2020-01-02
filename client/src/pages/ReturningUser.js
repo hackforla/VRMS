@@ -30,7 +30,7 @@ const ReturningUser = (props) => {
     }, []);
 
     return (
-        <div className="flexcenter-container">
+        <div className="flex-container">
             <div className="returning">
                 <div className="returning-headers">
                     <h3>Welcome Back!</h3>

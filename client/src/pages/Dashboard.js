@@ -25,7 +25,7 @@ const Dashboard = (props) => {
     }, []);
 
     return (
-        <div className="flexcenter-container">
+        <div className="flex-container">
             <div className="dashboard">
                 <div className="events">
                     <Events />

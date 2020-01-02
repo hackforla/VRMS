@@ -8,6 +8,7 @@ import '../sass/Event.scss';
 const Event = (props) => {
     const [isLoading, setIsLoading] = useState(false);
     const [event, setEvent] = useState([]);
+    const [isCheckInReady, setIsCheckInReady] = useState();
     // const [isError, setIsError] = useState(null);
     // const [selected, setSelected] = useState('checkIns');
     // const [rsvps, setRsvps] = useState([]);
@@ -38,73 +39,85 @@ const Event = (props) => {
     // }
 
     async function fetchEvent() {
+        
         try {
-            setIsLoading(true);
             const res = await fetch(`/api/events/${props.match.params.id}`);
             const resJson = await res.json();
             
             setEvent(resJson);
-            setIsLoading(false);
+            setIsCheckInReady(resJson.checkInReady);
+
         } catch(error) {
             // setIsError(error);
-            setIsLoading(false);
         }
     }
 
     async function setCheckInReady(e) {
         e.preventDefault();
-
+        
         try {
-            setIsLoading(true);
-            const payload = { checkInReady: true };
+            // const payload = { checkInReady: true };
 
             await fetch(`/api/events/${props.match.params.id}`, {
                 method: 'PATCH',
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(payload)
-            });
-            setIsLoading(false);
+                // body: JSON.stringify(payload)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        setEvent(event);
+                        setIsCheckInReady(!isCheckInReady);
+                    }
+                });
+
         } catch(error) {
             // setIsError(error);
-            setIsLoading(false);
+            setIsLoading(!isLoading);
         }
     }
 
     useEffect(() => {
         fetchEvent();
         // fetchRsvps();
-
-    }, []);
+    }, [isLoading, isCheckInReady]);
 
     return (
-            <div className="flexcenter-container">
-                {isLoading ? <div>Loading...</div> : (
-                    <div className="event">
-                        {event && event.location ? (
-                            <div className="event-headers">
-                                <h4>{event.name}</h4>
-                                {/* <h5>RSVP's: {event.rsvps.length}</h5> */}
-                                <p>{event.date}</p>
-                                <p>{event.location.city}</p>
-                                <p>{event.location.state}</p>
-                            </div>
-                            ) : (
-                                <div>Loading...</div>
-                            )
-                        }
+        <div className="flex-container">
+            <div className="event">
+                {event && event.location ? (
+                    <div className="event-headers">
+                        <h4>{event.name}</h4>
+                        {/* <h5>RSVP's: {event.rsvps.length}</h5> */}
+                        <p>{event.date}</p>
+                        <p>{event.location.city}</p>
+                        <p>{event.location.state}</p>
+                    </div>
+                    ) : (
+                        <div>Loading...</div>
+                    )
+                }
 
-                        <div className="set-checkin-button">    
+                <div className="set-checkin-button">    
+                    {event && isCheckInReady === false ? 
+                        (
                             <Link 
                                 to={`/events/${event._id}`}
                                 onClick={e => setCheckInReady(e)}>
                                     OPEN
                             </Link>
-                        </div>
-                    </div>
-                )}
+                        ) : (
+                            <Link 
+                                to={`/events/${event._id}`}
+                                onClick={e => setCheckInReady(e)}>
+                                    CLOSE
+                            </Link>
+                        )
+                    }
+                </div>
             </div>
+        </div>
     )
 };
 

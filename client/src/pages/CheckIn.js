@@ -32,7 +32,7 @@ const CheckIn = (props) => {
     }, []);
 
     return (
-        <div className="flexcenter-container">
+        <div className="flex-container">
             {newOrReturning === 'returningUser' ? (
                 <div className="check-in-container">
                     <div className="check-in-headers">

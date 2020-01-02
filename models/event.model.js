@@ -12,6 +12,7 @@ const eventSchema = mongoose.Schema({
     hacknight: { type: String },
     date: { type: Date },
     createdDate: { type: Date, default: Date.now },
+    updatedDate: { type: Date, default: Date.now },
     checkInCount: { type: Number, default: 0 },
     checkInReady: { type: Boolean, default: false },
     owner: {

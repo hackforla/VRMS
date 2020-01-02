@@ -31,7 +31,7 @@ const SelectCheckIn = (props) => {
     }, []);
 
     return (
-        <div className="flexcenter-container">
+        <div className="flex-container">
             <h3>Events to check-in for below:</h3>
             {isLoading ? <div>Loading...</div> : (
                 <div className="event-container">

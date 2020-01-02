@@ -50,7 +50,15 @@ router.get('/:id', (req, res) => {
 
 router.patch('/:id', (req, res) => {
     Event
-        .findByIdAndUpdate(req.params.id, req.body)
+        .findById(req.params.id, function(err, event) {
+            event.checkInReady = !event.checkInReady;
+
+            event.save(err => {
+                if (err) {
+                    console.log(err);
+                }
+            })
+        })
         .then(checkIn => {
             res.sendStatus(204).end();
         })
