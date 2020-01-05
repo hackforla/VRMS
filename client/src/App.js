@@ -8,7 +8,8 @@ import Event from './pages/Event';
 import NewUser from './pages/NewUser';
 import ReturningUser from './pages/ReturningUser';
 import AdminLogin from './pages/AdminLogin';
-import CheckIn from './pages/CheckIn';
+import CheckInForm from './pages/CheckInForm';
+import MagicLink from './pages/MagicLink';
 
 import './App.scss';
 
@@ -19,7 +20,8 @@ const routes = [
 	{ path: '/new', name: 'new', Component: NewUser },
 	{ path: '/returning', name: 'returning', Component: ReturningUser },
 	{ path: '/login', name: 'login', Component: AdminLogin },
-	{ path: '/checkIn/:userType', name: 'checkIn', Component: CheckIn }
+	{ path: '/checkIn/:userType', name: 'checkIn', Component: CheckInForm },
+	{ path: '/magicLink', name: 'magicLink', Component: MagicLink }
 ];
 
 // { path: '/events', name: 'events', Component: Events },

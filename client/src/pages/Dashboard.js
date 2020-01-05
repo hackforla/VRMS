@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-import Events from '../components/Events';
+import DashboardEvents from '../components/DashboardEvents';
 
 const Dashboard = (props) => {
     // const [isLoading, setIsLoading] = useState(false);
@@ -28,7 +28,7 @@ const Dashboard = (props) => {
         <div className="flex-container">
             <div className="dashboard">
                 <div className="events">
-                    <Events />
+                    <DashboardEvents />
                 </div>
             </div>
         </div>

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 // import '../sass/EventsContainer.scss';
 // import '../sass/EventsContainer-media-queries.scss';
 
-const Events = (props) => {
+const DashboardEvents = (props) => {
     const [isLoading, setIsLoading] = useState(false);
     const [events, setEvents] = useState([]);
     const [isError, setIsError] = useState(false);
@@ -45,5 +45,5 @@ const Events = (props) => {
     )
 };
 
-export default Events;
+export default DashboardEvents;
     

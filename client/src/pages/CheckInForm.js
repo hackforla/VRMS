@@ -7,7 +7,7 @@ const CheckIn = (props) => {
     const [isLoading, setIsLoading] = useState(false);
     const [events, setEvents] = useState([]);
     // const [isError, setIsError] = useState(null);
-    const [newOrReturning, setNewOrReturning] = useState(props.match.params.userType);
+    const [newOrReturning, setNewOrReturning] = useState(props && props.match.params.userType);
     const [formInput, setFormInput] = useState('');
 
     async function fetchEvent() {
@@ -17,6 +17,48 @@ const CheckIn = (props) => {
             const resJson = await res.json();
 
             setEvents(resJson);
+            setIsLoading(false);
+        } catch(error) {
+            console.log(error);
+            setIsLoading(false);
+            // setIsError(error);
+            // alert(error);
+        }
+    }
+
+    async function checkInNewUser(e) {
+        e.preventDefault();
+
+        try {
+            setIsLoading(true);
+            // const res = await fetch("/api/checkIn", { method: 'POST' });
+            // const resJson = await res.json();
+            // 
+            // setResponse ? 
+
+            console.log('Checking IN New User BABY WOO');
+
+            setIsLoading(false);
+        } catch(error) {
+            console.log(error);
+            setIsLoading(false);
+            // setIsError(error);
+            // alert(error);
+        }
+    }
+
+    async function checkInReturningUser(e) {
+        e.preventDefault();
+
+        try {
+            setIsLoading(true);
+            // const res = await fetch("/api/checkIn", { method: 'POST' });
+            // const resJson = await res.json();
+            // 
+            // setResponse ? 
+
+            console.log('Checking IN Returning User BABY WOO');
+
             setIsLoading(false);
         } catch(error) {
             console.log(error);
@@ -50,11 +92,23 @@ const CheckIn = (props) => {
                                     onChange={e => setFormInput(e.target.value)}
                                 /> 
                             </div>
-                            <div className="form-input-button">
-                                <button type="submit" className="form-check-in-submit" onClick={e => e.preventDefault}>
-                                        Check In
-                                </button>
-                            </div>
+                            {!isLoading ? (
+                                <div className="form-row">
+                                    <div className="form-input-button">
+                                        <button type="submit" className="form-check-in-submit" onClick={e => checkInReturningUser(e)}>
+                                                Check In
+                                        </button>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="form-row">
+                                    <div className="form-input-button">
+                                        <button type="submit" className="form-check-in-submit" onClick={e => e.preventDefault()}>
+                                                Checking In...
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
                         </form>
                     </div>
                 </div>
@@ -127,7 +181,7 @@ const CheckIn = (props) => {
                             {!isLoading ? (
                                 <div className="form-row">
                                     <div className="form-input-button">
-                                        <button type="submit" className="form-check-in-submit" onClick={e => e.preventDefault}>
+                                        <button type="submit" className="form-check-in-submit" onClick={e => checkInNewUser(e)}>
                                                 Check In
                                         </button>
                                     </div>
@@ -135,7 +189,7 @@ const CheckIn = (props) => {
                             ) : (
                                 <div className="form-row">
                                     <div className="form-input-button">
-                                        <button type="submit" className="form-check-in-submit" onClick={e => e.preventDefault}>
+                                        <button type="submit" className="form-check-in-submit" onClick={e => e.preventDefault()}>
                                                 Checking In...
                                         </button>
                                     </div>

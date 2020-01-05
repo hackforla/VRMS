@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 // import { Link } from 'react-router-dom';
 
-import SelectCheckIn from '../components/SelectCheckIn';
+import ReadyEvents from '../components/ReadyEvents';
 
 // import '../sass/HomeContainer.scss';
 // import '../sass/HomeContainer-media-queries.scss';
@@ -36,7 +36,7 @@ const ReturningUser = (props) => {
                     <h3>Welcome Back!</h3>
                     <h4>We're happy to see you</h4>
 
-                    <SelectCheckIn returningUser={returningUser}/>
+                    <ReadyEvents returningUser={returningUser}/>
                 </div>
                 
                 

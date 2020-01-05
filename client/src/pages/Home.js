@@ -33,12 +33,14 @@ const Home = (props) => {
                     <h1>VRMS</h1>
                     <h2>Volunteer Relationship Management System</h2>
                 </div>
+
                 <div className="home-buttons">
-                    <Link to={'/new'}>New</Link>
-                    <Link to={'/returning'}>Returning</Link>
+                    <Link className="home-button" to={'/new'}>New</Link>
+                    <Link className="home-button" to={'/returning'}>Returning</Link>
                 </div>
+                 
                 <div className="login-button">
-                    <Link to={'/login'}>Login</Link>
+                    <Link className="home-button" to={'/login'}>Login</Link>
                 </div>
             </div>
         </div>

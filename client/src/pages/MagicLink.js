@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
 // import { Link } from 'react-router-dom';
 
-import ReadyEvents from '../components/ReadyEvents';
-
 // import '../sass/EventContainer.scss';
 // import '../sass/EventContainer-media-queries.scss';
 
-const NewUser = (props) => {
+const MagicLink = (props) => {
     // const [isLoading, setIsLoading] = useState(false);
     // const [event, setEvent] = useState([]);
     // const [isError, setIsError] = useState(null);
-    const [newUser, setNewUser] = useState(true);
+    const [magicLink, setMagicLink] = useState('https://localhost:3000/api/happyURLfuntime');
 
     // async function fetchData() {
     //     try {
@@ -32,14 +30,14 @@ const NewUser = (props) => {
         <div className="flex-container">
             <div className="new">
                 <div className="new-headers">
-                    <h3>Welcome!</h3>
-                    <h4>Thanks for coming.</h4>
+                    <h3>Magic Link</h3>
+                    <h4>You gotta go click it!</h4>
+                    <h5>You'll be returned to a page containing a brand spanking new user profile all to yourself'!</h5>
 
-                    <ReadyEvents newUser={newUser}/>
                 </div>
             </div>
         </div>
     )
 };
 
-export default NewUser; 
+export default MagicLink; 

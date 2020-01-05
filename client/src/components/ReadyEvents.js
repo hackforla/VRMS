@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-// import '../sass/SelectCheckIn.scss';
+import '../sass/ReadyEvents.scss';
 // import '../sass/SelectCheckIn-media-queries.scss';
 
-const SelectCheckIn = (props) => {
+const ReadyEvents = (props) => {
     const [isLoading, setIsLoading] = useState(false);
     const [events, setEvents] = useState([]);
     // const [isError, setIsError] = useState(null);
@@ -61,5 +61,5 @@ const SelectCheckIn = (props) => {
     )
 };
 
-export default SelectCheckIn;
+export default ReadyEvents;
     

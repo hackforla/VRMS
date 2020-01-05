@@ -17,6 +17,12 @@ code {
     monospace;
 }
 
+ol, ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
   padding: 0;
@@ -24,11 +30,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  font-size: 3em;
+  font-size: 10em;
+  line-height: .85em;
 }
 
 h2 {
-  font-size: 2.8em;
+  font-size: 4em;
+  line-height: 1.05em;
 }
 
 h3 {

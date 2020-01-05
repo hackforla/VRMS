@@ -6,4 +6,38 @@
 .home-buttons {
     display: flex;
     flex-direction: column;
+    align-self: center;
+    width: 60%;
+    margin-top: 36px;
+}
+
+.login-button {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    width: 60%;
+}
+
+.home-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid black;
+    border-radius: 6px;
+    height: 40px;
+    margin-top: 12px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.home-headers {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-left: 12px;
+
+    & h2 {
+        max-width: 20px;
+    }
 }
