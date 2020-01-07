@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-// import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-import '../sass/MagicLink.scss';
+import DashboardEvents from '../components/DashboardEvents';
 
-const MagicLink = (props) => {
+const AdminDashboard = (props) => {
     // const [isLoading, setIsLoading] = useState(false);
     // const [event, setEvent] = useState([]);
     // const [isError, setIsError] = useState(null);
-    const [magicLink, setMagicLink] = useState('https://localhost:3000/api/happyURLfuntime');
 
     // async function fetchData() {
     //     try {
@@ -20,32 +19,22 @@ const MagicLink = (props) => {
     //     }
     // }
 
-    function forwardRequest() {
-        return props.history.push('/user');
-    }
-
     useEffect(() => {
         // fetchData();
-
-        setTimeout(forwardRequest
-        , 5000);
-
-
 
     }, []);
 
     return (
         <div className="flex-container">
-            <div className="new">
-                <div className="new-headers">
-                    <h3>Magic Link Sent</h3>
-                    <h4>You gotta go click it!</h4>
-                    <h5>You'll be returned to a page containing a brand spanking new user profile all to yourself!</h5>
-
+            <div className="dashboard">
+                <div className="events">
+                    <h3>Your Events:</h3>
+                    <DashboardEvents />
                 </div>
             </div>
         </div>
     )
 };
 
-export default MagicLink; 
+export default AdminDashboard;
+    

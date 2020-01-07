@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-import DashboardEvents from '../components/DashboardEvents';
-
-const Dashboard = (props) => {
+const UserDashboard = (props) => {
     // const [isLoading, setIsLoading] = useState(false);
     // const [event, setEvent] = useState([]);
     // const [isError, setIsError] = useState(null);
@@ -27,13 +25,17 @@ const Dashboard = (props) => {
     return (
         <div className="flex-container">
             <div className="dashboard">
+                <h3>Your Volunteer Journey</h3>
                 <div className="events">
-                    <DashboardEvents />
+                    Profile
+                </div>
+                <div className="events">
+                    Events
                 </div>
             </div>
         </div>
     )
 };
 
-export default Dashboard;
+export default UserDashboard;
     

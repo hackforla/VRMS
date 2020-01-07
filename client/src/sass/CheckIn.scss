@@ -11,8 +11,8 @@
     justify-content: flex-start;
     align-items: flex-start;
     text-align: left;
-    width: 400px;
-    max-width: 400px;
+    width: 300px;
+    max-width: 300px;
 }
 
 .check-in-form {
@@ -22,13 +22,13 @@
 }
 
 .form-check-in {
-    width: 400px;
-    max-width: 400px;
+    width: 300px;
+    max-width: 300px;
 }
 
 .form-row {
-    max-width: 400px;
-    width: 400px;
+    max-width: 300px;
+    width: 300px;
     margin: 6px 0px;
 
     p {
@@ -42,16 +42,16 @@
 }
 
 label {
-    max-width: 400px;
-    width: 400px;
+    max-width: 300px;
+    width: 300px;
     text-align: left;
     font-size: 30px;
     font-weight: bold;
 }
 
 input[type=text], input[type=email] {
-    max-width: 400px;
-    width: 400px;
+    max-width: 300px;
+    width: 300px;
     height: 36px;
     border: 1px solid black;
     border-radius: 2px;
@@ -62,7 +62,7 @@ input[type=text], input[type=email] {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 400px;
+    width: 300px;
     height: 40px;
     margin-top: 20px;
     border: 1px solid black;

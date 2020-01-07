@@ -39,6 +39,9 @@ const CheckIn = (props) => {
             console.log('Checking IN New User BABY WOO');
 
             setIsLoading(false);
+
+            props.history.push('/magicLink');
+
         } catch(error) {
             console.log(error);
             setIsLoading(false);
@@ -60,6 +63,10 @@ const CheckIn = (props) => {
             console.log('Checking IN Returning User BABY WOO');
 
             setIsLoading(false);
+            
+            // Redirect 
+            props.history.push('/user');
+
         } catch(error) {
             console.log(error);
             setIsLoading(false);
@@ -85,7 +92,7 @@ const CheckIn = (props) => {
                         <form className="form-topics" onSubmit={e => e.preventDefault()}>
                             <div className="form-input-text">
                                 <input 
-                                    placeholder="Returning User Form"
+                                    placeholder=""
                                     type="text"
                                     value={formInput.toString()}
                                     aria-label="topic"
