@@ -32,16 +32,17 @@ app.use(cors());
 mongoose.Promise = global.Promise; 
 
 // ROUTES
-
 const eventsRouter = require('./routers/events.router');
 const checkInsRouter = require('./routers/checkIns.router');
-const usersRouter = require('./routers/users.router');
 const answersRouter = require('./routers/answers.router');
+const usersRouter = require('./routers/users.router');
+const questionsRouter = require('./routers/questions.router');
 
 app.use('/api/events', eventsRouter);
 app.use('/api/checkIns', checkInsRouter);
 app.use('/api/answers', answersRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/questions', questionsRouter);
 
 const CLIENT_BUILD_PATH = path.join(__dirname, './client/build');
 
@@ -55,28 +56,28 @@ app.get('*', (req, res) => {
     res.sendFile(index);
 });
 
+// Make the server funcitons available to testing 
 let server;
 
 async function runServer(databaseUrl, port = PORT) {
+    await mongoose
+        .connect(
+            databaseUrl, 
+            { 
+                useNewUrlParser: true, 
+                useCreateIndex: true, 
+                useUnifiedTopology: true
+            }
+        ).catch(err => err);
 
-        await mongoose
-            .connect(
-                databaseUrl, 
-                { 
-                    useNewUrlParser: true, 
-                    useCreateIndex: true, 
-                    useUnifiedTopology: true
-                }
-            ).catch(err => err);
-
-        server = app
-            .listen(port, () => {
-                console.log(`Mongoose connected from runServer() and is listening on ${port}`);
-            })
-            .on('error', err => {
-                mongoose.disconnect();
-                return err;
-            });
+    server = app
+        .listen(port, () => {
+            console.log(`Mongoose connected from runServer() and is listening on ${port}`);
+        })
+        .on('error', err => {
+            mongoose.disconnect();
+            return err;
+        });
 }
 
 async function closeServer() {

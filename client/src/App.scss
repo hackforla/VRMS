@@ -1,5 +1,5 @@
 .app {
-  height: 100vh;
+  height: 100%;
   width: 100vw;
   display: flex;
   justify-content: center;
@@ -7,15 +7,14 @@
 }
 
 .app-container {
-  height: 100vh;
+  height: 100%;
   max-width: 600px;
   width: 100%;
-  border: 1px solid black;
   border-radius: 6px;
 }
 
 .main {
-  height: 80vh;
+  height: 100%;
 }
 
 .flexcenter-container {
@@ -31,7 +30,6 @@
 .flex-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   height: 100%;
   width: 100%;
 }

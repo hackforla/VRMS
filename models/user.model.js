@@ -4,15 +4,30 @@ const mongoose = require('mongoose');
 const userSchema = mongoose.Schema({
     name: {
         firstName: { type: String, required: true },
-        lastName: { type: String, required: true }
+        lastName: { type: String }
     },
     email: { type: String },
-    accessLevel: { type: String },
+    accessLevel: { type: String, default: "user" },
     createdDate: { type: Date, default: Date.now },
-    checkInCount: { type: Number },
-    questionsAnsweredCount: { type: Number }
+    checkInCount: { type: Number, default: 0 },
+    questionsAnsweredCount: { type: Number, default: 0 }
     // password: { type: String, required: true }
 });
+
+userSchema.methods.serialize = () => {
+    return {
+        id: this._id,
+        name: {
+            firstName: this.name.firstName,
+            lastName: this.name.lastName
+        },
+        email: this.email,
+        accessLevel: this.accessLevel,
+        createdDate: this.createdDate,
+        checkInCount: this.checkInCount,
+        questionsAnsweredCount: this.questionsAnsweredCount
+    };
+};
 
 
 
