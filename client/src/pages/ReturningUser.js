@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-// import { Link } from 'react-router-dom';
 
 import ReadyEvents from '../components/ReadyEvents';
 
@@ -7,25 +6,9 @@ import ReadyEvents from '../components/ReadyEvents';
 // import '../sass/HomeContainer-media-queries.scss';
 
 const ReturningUser = (props) => {
-    // const [isLoading, setIsLoading] = useState(false);
-    // const [event, setEvent] = useState([]);
-    // const [isError, setIsError] = useState(null);
-    const [returningUser, setNewUser] = useState(true);
-
-
-    // async function fetchData() {
-    //     try {
-    //         const res = await fetch(`http://localhost:4000/api/events/${props.match.params.id}`);
-    //         const resJson = await res.json();
-    //         setEvent(resJson);
-    //     } catch(error) {
-    //         setIsError(error);
-    //         alert(error);
-    //     }
-    // }
+    const [returningUser] = useState(true);
 
     useEffect(() => {
-        // fetchData();
 
     }, []);
 

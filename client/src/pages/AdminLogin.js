@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-// import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 
 // import '../sass/HomeContainer.scss';
@@ -34,11 +34,7 @@ const AdminLogin = (props) => {
                     <h4>Please login below.</h4>
                 </div>
                 <div className="adminlogin-buttons">
-                    {/* <Link to={'/new'}>New</Link>
-                    <Link to={'/returning'}>Returning</Link>
-                </div>
-                <div className="login-button">
-                    <Link to={'/login'}>Login</Link> */}
+                    <Link to={'/login'}>Login</Link>
                 </div>
             </div>
         </div>

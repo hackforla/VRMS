@@ -5,9 +5,9 @@ import { Link } from 'react-router-dom';
 // import '../sass/EventsContainer-media-queries.scss';
 
 const DashboardEvents = (props) => {
-    const [isLoading, setIsLoading] = useState(false);
+    // const [isLoading, setIsLoading] = useState(false);
     const [events, setEvents] = useState([]);
-    const [isError, setIsError] = useState(false);
+    // const [isError, setIsError] = useState(false);
 
     async function fetchData() {
         try {

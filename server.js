@@ -27,7 +27,7 @@ app.use(morgan('dev'));
 // app.use(helmet());
 
 // Cross-Origin-Resource-Sharing
-app.use(cors());
+// app.use(cors());
 
 mongoose.Promise = global.Promise; 
 

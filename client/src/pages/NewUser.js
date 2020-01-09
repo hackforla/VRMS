@@ -7,24 +7,9 @@ import ReadyEvents from '../components/ReadyEvents';
 // import '../sass/EventContainer-media-queries.scss';
 
 const NewUser = (props) => {
-    // const [isLoading, setIsLoading] = useState(false);
-    // const [event, setEvent] = useState([]);
-    // const [isError, setIsError] = useState(null);
-    const [newUser, setNewUser] = useState(true);
-
-    // async function fetchData() {
-    //     try {
-    //         const res = await fetch(`http://localhost:4000/api/events/${props.match.params.id}`);
-    //         const resJson = await res.json();
-    //         setEvent(resJson);
-    //     } catch(error) {
-    //         setIsError(error);
-    //         alert(error);
-    //     }
-    // }
+    const [newUser] = useState(true);
 
     useEffect(() => {
-        // fetchData();
 
     }, []);
 
