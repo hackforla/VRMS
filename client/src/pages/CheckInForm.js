@@ -10,13 +10,13 @@ const CheckInForm = (props) => {
     // const [isError, setIsError] = useState(null);
     const [newOrReturning, setNewOrReturning] = useState(props && props.match.params.userType);
     const [formInput, setFormInput] = useState({ 
-        firstName: "",
-        lastName: "",
         email: "",
         currentRole: "",
         desiredRole: "",
         answer: ""
     });
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
 
     const fetchQuestions = async () => {
         try {
@@ -41,30 +41,41 @@ const CheckInForm = (props) => {
         [e.currentTarget.name]: e.currentTarget.value
     });
 
+    const handleFirstNameChange = (e) => setFirstName(
+        e.currentTarget.value
+    );
+
+    const handleLastNameChange = (e) => setLastName(
+        e.currentTarget.value
+    );
+
     const submitForm = (userForm) => {
-        const formToSubmit = JSON.stringify(userForm);
+        // const formToSubmit = JSON.stringify(userForm);
 
         // Remove empty values, then submit form to db ? 
         
-        // fetch('/api/users', {
-        //     method: "POST",
-        //     body: JSON.stringify(formToSubmit),
-        //     headers: {
-        //         "Content-Type": "application/json"
-        //     }
-        // })
-        //     .then(res => {
-        //         if (res.ok) {
-        //             return res.ok;
-        //         }
-        //         throw new Error(res.statusText);
-        //     })
-        //     .catch(err => {
-        //         console.log(error);
-        //     });
+        fetch('/api/users', {
+            method: "POST",
+            body: JSON.stringify(userForm),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(res => {
+                if (res.ok) {
+                    return res.json();
+                }
+                throw new Error(res.statusText);
+            })
+            .then(responseId => 
+                console.log(responseId)
+            )
+            .catch(err => {
+                console.log(err);
+            });
         
-        console.log(formToSubmit);
-        console.log('Submitting form!');
+        // console.log(formToSubmit);
+        console.log('submitForm just ran!');
     }
 
     const checkInNewUser = async (e) => {
@@ -82,11 +93,16 @@ const CheckInForm = (props) => {
             // const res = await fetch("/api/checkIn", { method: 'POST' });
             // const resJson = await res.json();
             
-            // setResponse ? 
+            const userForm = { name: { firstName, lastName }, email: formInput.email};
+            // submitForm(formInput);
 
-            submitForm(formInput);
-
-            console.log('Checking in New User');
+            console.log('-----------------');
+            console.log('Submitting Form!');
+            console.log('-----------------');
+            submitForm(userForm);
+            console.log('-----------------');
+            console.log('Checking in New User!');
+            console.log('-----------------');
 
             setIsLoading(false);
 
@@ -193,9 +209,9 @@ const CheckInForm = (props) => {
                                     <input 
                                         type="text"
                                         name="firstName"
-                                        value={formInput.firstName.toString()}
+                                        value={firstName.toString()}
                                         aria-label="topic"
-                                        onChange={handleInputChange}
+                                        onChange={handleFirstNameChange}
                                     /> 
                                 </div>
                             </div>
@@ -205,9 +221,9 @@ const CheckInForm = (props) => {
                                     <input 
                                         type="text"
                                         name="lastName"
-                                        value={formInput.lastName.toString()}
+                                        value={lastName.toString()}
                                         aria-label="topic"
-                                        onChange={handleInputChange}
+                                        onChange={handleLastNameChange}
                                     /> 
                                 </div>
                             </div>
@@ -224,8 +240,6 @@ const CheckInForm = (props) => {
                                 </div>
                                 <p>{"(This allows easy use of the app. We'll never sell your data!)"}</p>
                             </div>
-
-                            {console.log(questions)}
 
                             {questions.length !== 0 && questions.map((question, index) => {
                                 return (

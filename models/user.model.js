@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 // const bcrypt = require('bcrypt-nodejs');
 
+mongoose.Promise = global.Promise;
+
 const userSchema = mongoose.Schema({
     name: {
         firstName: { type: String, required: true },
@@ -41,4 +43,4 @@ userSchema.methods.serialize = () => {
 
 const User = mongoose.model('User', userSchema);
 
-module.exports = User;
+module.exports = { User };

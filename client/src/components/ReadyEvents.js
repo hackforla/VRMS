@@ -45,11 +45,11 @@ const ReadyEvents = (props) => {
                             </div>
 
                             {props.newUser ? (
-                                <Link to={`/checkIn/newUser`} className="checkin-newuser-button">New User Check-In</Link>
+                                <Link to={`/checkIn/newUser?eventId=${event._id}`} className="checkin-newuser-button">New User Check-In</Link>
                             ) : null}
 
                             {props.returningUser ? (
-                                <Link  to={`/checkIn/returningUser`} className="checkin-newuser-button">Returning User Check-In</Link>
+                                <Link  to={`/checkIn/returningUser?eventId=${event._id}`} className="checkin-newuser-button">Returning User Check-In</Link>
                             ) : null}
                         </div>
                     ))) : (
