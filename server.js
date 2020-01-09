@@ -39,7 +39,7 @@ const usersRouter = require('./routers/users.router');
 const questionsRouter = require('./routers/questions.router');
 
 app.use('/api/events', eventsRouter);
-app.use('/api/checkIns', checkInsRouter);
+app.use('/api/checkins', checkInsRouter);
 app.use('/api/answers', answersRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/questions', questionsRouter);

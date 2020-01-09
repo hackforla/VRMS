@@ -67,9 +67,23 @@ const CheckInForm = (props) => {
                 }
                 throw new Error(res.statusText);
             })
-            .then(responseId => 
-                console.log(responseId)
-            )
+            .then(responseId => {
+
+                const checkInForm = { userId: (responseId), eventId: new URLSearchParams(props.location.search).get('eventId') };
+                // console.log(checkInForm);
+
+                return fetch('/api/checkins', {
+                    method: "POST",
+                    body: JSON.stringify(checkInForm),
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+                .then(res => {
+                    console.log(res);
+                })
+                .catch(err => console.log(err))
+            })
             .catch(err => {
                 console.log(err);
             });
@@ -101,12 +115,12 @@ const CheckInForm = (props) => {
             console.log('-----------------');
             submitForm(userForm);
             console.log('-----------------');
-            console.log('Checking in New User!');
+            console.log('checkInNewUser ran!');
             console.log('-----------------');
 
             setIsLoading(false);
 
-            props.history.push('/magicLink');
+            // props.history.push('/magicLink');
 
         } catch(error) {
             console.log(error);

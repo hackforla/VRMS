@@ -5,7 +5,7 @@ mongoose.Promise = global.Promise;
 const checkInSchema = mongoose.Schema({
     userId: { type: String },
     eventId: { type: String },
-    checkedIn: { type: Boolean },
+    checkedIn: { type: Boolean, default: true },
     createdDate: { type: Date, default: Date.now },
 });
 

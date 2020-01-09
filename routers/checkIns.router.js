@@ -5,6 +5,7 @@ const { CheckIn } = require('../models/checkIn.model');
 
 // GET /api/checkIns/
 router.get('/', (req, res) => {
+
     CheckIn
         .find()
         .then(checkIns => {
@@ -20,6 +21,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
+
     CheckIn
         .findById(req.params.id)
         .then(checkIn => {
@@ -34,7 +36,8 @@ router.get('/:id', (req, res) => {
         });
 });
 
-router.post('/'), (req, res) => {
+router.post('/', (req, res) => {
+
     CheckIn
         .create(req.body)
         .then(checkIn => {
@@ -46,6 +49,6 @@ router.post('/'), (req, res) => {
                 message: `/POST Internal server error: ${err}`
             })
         });
-}
+});
 
 module.exports = router;
