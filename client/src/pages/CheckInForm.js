@@ -11,7 +11,9 @@ const CheckInForm = (props) => {
         currentRole: "",
         desiredRole: "",
         attendance: ""
+        
     });
+
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
 
@@ -79,12 +81,12 @@ const CheckInForm = (props) => {
         //     .catch(err => {
         //         console.log(err);
         //     });
-        console.log(formInput);
+        console.log(userForm);
         
         console.log('submitForm just ran!');
     }
 
-    const checkInNewUser = async (e) => {
+    const checkInNewUser = (e) => {
         e.preventDefault();
 
         try {
@@ -96,10 +98,11 @@ const CheckInForm = (props) => {
                     firstName, 
                     lastName 
                 }, 
-                email: formInput.email,
-                currentRole: formInput.currentRole,
-                desiredRole: formInput.desiredRole,
-                attendance: formInput.attendance
+                ...formInput
+                // email: formInput.email,
+                // currentRole: formInput.currentRole,
+                // desiredRole: formInput.desiredRole,
+                // attendance: formInput.attendance
             };
 
             submitForm(userForm);
@@ -111,7 +114,7 @@ const CheckInForm = (props) => {
         }
     }
 
-    const checkInReturningUser = async (e) => {
+    const checkInReturningUser = (e) => {
         e.preventDefault();
 
         try {
