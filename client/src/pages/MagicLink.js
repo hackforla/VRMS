@@ -43,6 +43,12 @@ const MagicLink = (props) => {
                     {/* <h4>You gotta go click it!</h4>
                     <h5>You'll be returned to a page containing a brand spanking new user profile all to yourself!</h5> */}
 
+
+                </div>
+                <div>
+                    <p>Thanks for being a part of the pre-alpha test!</p>
+                    <p>Your feedback is valued and appreciated.</p>
+                    <p>Have fun tonight!</p>
                 </div>
             </div>
         </div>

@@ -10,12 +10,12 @@ const CheckInForm = (props) => {
         email: "",
         currentRole: "",
         desiredRole: "",
-        attendance: ""
-        
+        attendanceLength: ""
     });
 
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
+    const [newMember, setNewMember] = useState(true);
 
     const fetchQuestions = async () => {
         try {
@@ -46,44 +46,46 @@ const CheckInForm = (props) => {
         e.currentTarget.value
     );
 
+    const handleNewMemberChange = (e) => {
+        setNewMember(e.target.value);
+        console.log(newMember);
+    };
+    
     const submitForm = (userForm) => {
         // First, create a new user in the user collection
-        // fetch('/api/users', {
-        //     method: "POST",
-        //     body: JSON.stringify(userForm),
-        //     headers: {
-        //         "Content-Type": "application/json"
-        //     }
-        // })
-        //     .then(res => {
-        //         if (res.ok) {
-        //             return res.json();
-        //         }
-        //         throw new Error(res.statusText);
-        //     })
-        //     .then(responseId => {
+        fetch('/api/users', {
+            method: "POST",
+            body: JSON.stringify(userForm),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(res => {
+                if (res.ok) {
+                    return res.json();
+                }
+                throw new Error(res.statusText);
+            })
+            .then(responseId => {
 
-        //         const checkInForm = { userId: (responseId), eventId: new URLSearchParams(props.location.search).get('eventId') };
-        //         // console.log(checkInForm);
-                    // Then, create a new check-in
-        //         return fetch('/api/checkins', {
-        //             method: "POST",
-        //             body: JSON.stringify(checkInForm),
-        //             headers: {
-        //                 "Content-Type": "application/json"
-        //             }
-        //         })
-        //         .then(res => {
-        //             console.log(res);
-        //         })
-        //         .catch(err => console.log(err));
-        //     })
-        //     .catch(err => {
-        //         console.log(err);
-        //     });
-        console.log(userForm);
-        
-        console.log('submitForm just ran!');
+                const checkInForm = { userId: (responseId), eventId: new URLSearchParams(props.location.search).get('eventId') };
+                // console.log(checkInForm);
+                // Then, create a new check-in
+                return fetch('/api/checkins', {
+                    method: "POST",
+                    body: JSON.stringify(checkInForm),
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+                .then(res => {
+                    props.history.push('/magicLink');
+                })
+                .catch(err => console.log(err));
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }
 
     const checkInNewUser = (e) => {
@@ -98,11 +100,8 @@ const CheckInForm = (props) => {
                     firstName, 
                     lastName 
                 }, 
-                ...formInput
-                // email: formInput.email,
-                // currentRole: formInput.currentRole,
-                // desiredRole: formInput.desiredRole,
-                // attendance: formInput.attendance
+                ...formInput,
+                newMember
             };
 
             submitForm(userForm);
@@ -245,7 +244,7 @@ const CheckInForm = (props) => {
                             </div>
 
                             {questions.length !== 0 && questions.map((question) => {
-                                return (
+                                return question.type === 'text' && (
                                     <div key={question._id} className="form-row">
                                         <div className="form-input-text">
                                             <label htmlFor={question.htmlName}>{question.questionText}</label>
@@ -260,6 +259,65 @@ const CheckInForm = (props) => {
                                     </div>
                                 );
                             })}
+
+                            {questions.length !== 0 && questions.map((question) => {
+                                return question.type === 'select' && (
+                                    <div key={question._id} className="form-row">
+                                        <div className="form-input-text">
+                                            <label htmlFor={question.htmlName}>{question.questionText}</label>
+                                            <select 
+                                                name={question.htmlName}
+                                                value={newMember}
+                                                // aria-label="topic"
+                                                onChange={handleNewMemberChange}
+                                                required
+                                            >
+                                                <option value="true">Yes</option>
+                                                <option value="false">No</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+
+                            {/* {newMember === false ? (
+                                questions.length !== 0 && questions.map((question) => {
+                                    return question.htmlName === 'attendanceLength' && (
+                                        <div key={question._id} className="form-row">
+                                            <div className="form-input-text">
+                                                <label htmlFor={question.htmlName}>{question.questionText}</label>
+                                                <input 
+                                                    type="text"
+                                                    name={question.htmlName}
+                                                    value={Object.keys(formInput).includes(question.htmlName) ? formInput[question.htmlName.toString()].toString() : ""}
+                                                    // aria-label="topic"
+                                                    onChange={handleInputChange}
+                                                /> 
+                                            </div>
+                                        </div>
+                                    );
+                                })
+                            ) : (null)
+                            } */}
+
+                            {newMember === true ? (null) : (
+                                questions.length !== 0 && questions.map((question) => {
+                                    return question.htmlName === 'attendanceLength' && (
+                                        <div key={question._id} className="form-row">
+                                            <div className="form-input-text">
+                                                <label htmlFor={question.htmlName}>{question.questionText}</label>
+                                                <input 
+                                                    type="text"
+                                                    name={question.htmlName}
+                                                    value={Object.keys(formInput).includes(question.htmlName) ? formInput[question.htmlName.toString()].toString() : ""}
+                                                    // aria-label="topic"
+                                                    onChange={handleInputChange}
+                                                /> 
+                                            </div>
+                                        </div>
+                                    );
+                                })
+                            )}
 
                             {!isLoading ? (
                                 <div className="form-row">

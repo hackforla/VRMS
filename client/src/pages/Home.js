@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 
@@ -6,9 +6,27 @@ import '../sass/Home.scss';
 // import '../sass/Home-media-queries.scss';
 
 const Home = (props) => {
+    const [event, setEvent] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+
+    async function fetchEvent() {
+        try {
+            setIsLoading(true);
+            const res = await fetch("/api/events?checkInReady=true");
+            const resJson = await res.json();
+
+            setEvent(resJson);
+            setIsLoading(false);
+        } catch(error) {
+            console.log(error);
+            setIsLoading(false);
+            // setIsError(error);
+            // alert(error);
+        }
+    }
 
     useEffect(() => {
-        // fetchData();
+        fetchEvent();
 
     }, []);
 
@@ -21,12 +39,20 @@ const Home = (props) => {
                 </div>
 
                 <div className="home-buttons">
-                    <Link className="home-button" to={'/new'}>New</Link>
-                    <Link className="home-button" to={'/returning'}>Returning</Link>
+                    {event.length !== 0 && event.map(event => {
+                        return (
+                            <Link 
+                                to={`/checkIn/newUser?eventId=${event._id}`} 
+                                key={event._id} 
+                                className="home-button">Check-In New User
+                            </Link>
+                        )
+                    })}
+                    {/* <Link className="home-button" to={'/returning'}>Returning</Link> */}
                 </div>
                  
                 <div className="login-button">
-                    <Link className="home-button" to={'/login'}>Login</Link>
+                    {/* <Link className="home-button" to={'/login'}>Login</Link> */}
                 </div>
             </div>
         </div>
