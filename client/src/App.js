@@ -27,7 +27,7 @@ const routes = [
 	
 ];
 
-function App() {
+function App(props) {
   return (
     <div className="app">
 		<div className="app-container">

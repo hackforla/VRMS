@@ -15,8 +15,8 @@ const CheckInForm = (props) => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [newMember, setNewMember] = useState(true);
-    const [month, setMonth] = useState("JAN");
-    const [year, setYear] = useState("2020");
+    const [month, setMonth] = useState("-MONTH-");
+    const [year, setYear] = useState("-YEAR-");
 
     const fetchQuestions = async () => {
         try {
@@ -360,7 +360,7 @@ const CheckInForm = (props) => {
                                 <div className="form-row">
                                     <div className="form-input-button">
                                         <button type="submit" className="form-check-in-submit" onClick={e => checkInNewUser(e)}>
-                                                Check In
+                                                CHECK IN
                                         </button>
                                     </div>
                                 </div>
@@ -368,7 +368,7 @@ const CheckInForm = (props) => {
                                 <div className="form-row">
                                     <div className="form-input-button">
                                         <button type="submit" className="form-check-in-submit" onClick={e => e.preventDefault()}>
-                                                Checking In...
+                                                CHECKING IN...
                                         </button>
                                     </div>
                                 </div>

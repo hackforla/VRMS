@@ -37,17 +37,20 @@ const MagicLink = (props) => {
     return (
         <div className="flex-container">
             <div className="new">
+                <div class="rotated-success"></div>
                 <div className="new-headers">
                     {/* <h3>Magic Link Sent</h3> */}
                     <h3>Success!</h3>
-                    {/* <h4>You gotta go click it!</h4>
-                    <h5>You'll be returned to a page containing a brand spanking new user profile all to yourself!</h5> */}
-
-
+                    <h4>Soon, you'll be able to: </h4>
                 </div>
-                <div>
-                    <p>Thanks for being a part of the pre-alpha test!</p>
-                    <p>Your feedback is valued and appreciated.</p>
+                <div className="future-list">
+                    <p>👉 View a detailed, personalized volunteer profile...</p>
+                    <p>👉 Connect with other volunteers...</p>
+                    <p>👉 Get matched with projects that need you!</p>
+                </div>
+
+                <div className="success-info">
+                    <p>Thanks for being a part of the pre-alpha test! Your feedback is valued and appreciated.</p>
                     <p>Have fun tonight!</p>
                 </div>
             </div>

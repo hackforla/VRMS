@@ -4,13 +4,15 @@ import { Link } from 'react-router-dom';
 import '../sass/Navbar.scss';
 
 const Navbar = (props) => {
+    console.log(props.match);
 
     return (
         <div className="nav-wrapper">
             <nav className="navbar" role="navigation" aria-label="main navigation">
                 <div className="navbar-brand">
                     <Link to="/">
-                        Home
+                        <p className="home-link-text">VRMS+</p>
+                        <p className="home-link-text">HFLA</p>
                     </Link>
                 </div>
 

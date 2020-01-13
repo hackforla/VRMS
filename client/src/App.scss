@@ -4,13 +4,22 @@
   display: flex;
   justify-content: center;
   align-content: center;
+  overflow: hidden;
 }
 
 .app-container {
+  position: relative;
   height: 100%;
-  max-width: 600px;
+  max-width: 500px;
   width: 100%;
-  border-radius: 6px;
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-bottom: 24px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  background-color: rgb(250, 17, 79);
+  margin-bottom: 10vh;
+  overflow: hidden;
 }
 
 .main {
