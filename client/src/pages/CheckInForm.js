@@ -4,6 +4,9 @@ import '../sass/CheckIn.scss';
 
 const CheckInForm = (props) => {
     const [isLoading, setIsLoading] = useState(false);
+    const [isFormReady, setIsFormReady] = useState(false);
+    const [isError, setIsError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
     const [questions, setQuestions] = useState([]);
     const [newOrReturning] = useState(props && props.match.params.userType);
     const [formInput, setFormInput] = useState({ 
@@ -15,8 +18,8 @@ const CheckInForm = (props) => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [newMember, setNewMember] = useState(true);
-    const [month, setMonth] = useState("-MONTH-");
-    const [year, setYear] = useState("-YEAR-");
+    const [month, setMonth] = useState("JAN");
+    const [year, setYear] = useState("2020");
 
     const fetchQuestions = async () => {
         try {
@@ -58,7 +61,10 @@ const CheckInForm = (props) => {
     const handleNewMemberChange = (e) => {
         if (e.target.value === "true") {
             setNewMember(true);
+            setMonth("JAN");
+            setYear("2020");
         }
+
         if (e.target.value === "false") {
             setNewMember(false);
         }
@@ -106,27 +112,55 @@ const CheckInForm = (props) => {
             });
     }
 
+    // function checkIsEmptyField(obj) {
+    //     if (!Object.values(obj).some(key => (key !== null && key !== ''))) {
+    //         setIsError(true);
+    //         setErrorMessage("Please don't leave any fields blank");
+    //         setIsFormReady(false);
+    //     }  
+    // } 
+
     const checkInNewUser = (e) => {
         e.preventDefault();
+
+        const firstAttended = `${month} ${year}`;
+            
+        // SET all of the user's info from useState objects
+        const userForm = { 
+            name: { 
+                firstName, 
+                lastName 
+            }, 
+            ...formInput,
+            newMember,
+            firstAttended
+        };
 
         try {
             setIsLoading(true);
 
-            const firstAttended = `${month} ${year}`;
-            
-            // SET all of the user's info from useState objects
-            const userForm = { 
-                name: { 
-                    firstName, 
-                    lastName 
-                }, 
-                ...formInput,
-                newMember,
-                firstAttended
-            };
+            // checkIsEmptyField(userForm);
+            setIsFormReady(true);
+
+            if (Object.values(userForm).some(value => value === "")) {
+                setIsError(true);
+                setErrorMessage("Please don't leave any fields blank");
+                setIsFormReady(false);
+            }
+
+            if(year === "2020" && month !== "JAN") {
+                setIsError(true);
+                setErrorMessage("You can't set a date in the future... Please try again.");
+                setIsFormReady(false);
+            }
+
+            console.log(isFormReady);
 
             // SUBMIT all of the user's info from the userForm object
-            submitForm(userForm);
+            if(isFormReady) {
+                submitForm(userForm);
+            }  
+
             setIsLoading(false);
 
         } catch(error) {
@@ -170,7 +204,7 @@ const CheckInForm = (props) => {
     useEffect(() => {
         fetchQuestions();
 
-    }, []);
+    }, [errorMessage]);
 
     return (
         <div className="flex-container">
@@ -355,6 +389,8 @@ const CheckInForm = (props) => {
                                     );
                                 })
                             )}
+
+                            {isError && errorMessage.length > 1 ? <div className="error">{errorMessage}</div> : null}
 
                             {!isLoading ? (
                                 <div className="form-row">

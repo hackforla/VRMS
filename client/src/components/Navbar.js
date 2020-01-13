@@ -16,8 +16,8 @@ const Navbar = (props) => {
                     </Link>
                 </div>
 
-                <div class="navbar-image">
-                    <img src="/hflalogo.png"></img>
+                <div className="navbar-image">
+                    <img src="/hflalogo.png" alt="Hack for LA Logo"></img>
                 </div>
 
                 {/* <div className="navbar-buttons">
