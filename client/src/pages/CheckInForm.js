@@ -139,19 +139,27 @@ const CheckInForm = (props) => {
         try {
             setIsLoading(true);
 
-            // checkIsEmptyField(userForm);
-            setIsFormReady(true);
-
-            if (Object.values(userForm).some(value => value === "")) {
+            if(
+                userForm.name.firstName === "" || 
+                userForm.name.lastName === "" || 
+                userForm.email === "" || 
+                userForm.currentRole === "" || 
+                userForm.desiredRole === "" || 
+                firstAttended === ""
+            ) {
                 setIsError(true);
                 setErrorMessage("Please don't leave any fields blank");
                 setIsFormReady(false);
+            } else {
+                setIsFormReady(true);
             }
 
             if(year === "2020" && month !== "JAN") {
                 setIsError(true);
                 setErrorMessage("You can't set a date in the future... Please try again.");
                 setIsFormReady(false);
+            } else {
+                setIsFormReady(true);
             }
 
             console.log(isFormReady);
