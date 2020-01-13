@@ -14,7 +14,8 @@ body {
   background-repeat: no-repeat;
   background-position: top;
   background-position-x: 30%;
-  background-size: cover;
+  background-size: 110%;
+  overflow: scroll;
 }
 
 @font-face {
