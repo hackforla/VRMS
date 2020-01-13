@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom';
 
 import Home from './pages/Home';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 import AdminDashboard from './pages/AdminDashboard';
 import UserDashboard from './pages/UserDashboard';
 import Event from './pages/Event';
@@ -37,6 +38,7 @@ function App(props) {
 					<Route key={path} exact path={path} component={Component} />
 				))}
 			</main>
+			<Footer />
 		</div>
     </div>
   );
