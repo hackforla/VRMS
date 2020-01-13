@@ -270,7 +270,7 @@ const CheckInForm = (props) => {
                                 return question.type === 'text' && (
                                     <div key={question._id} className="form-row">
                                         <div className="form-input-text">
-                                            <label htmlFor={question.htmlName}>{question.questionText}</label>
+                                            {/* <label htmlFor={question.htmlName}>{question.questionText}</label> */}
                                             <input 
                                                 type="text"
                                                 name={question.htmlName}

@@ -50,12 +50,15 @@ label {
 }
 
 input[type=text], input[type=email] {
-    max-width: 300px;
-    width: 300px;
+    max-width: 310px;
+    width: 310px;
     height: 36px;
+    outline: none;
     border: 1px solid black;
     border-radius: 2px;
-    font-size: 32px;
+    font-size: 24px;
+    padding: 0 4px;
+    margin: 4px 0px
 }
 
 .form-input-radio {
@@ -63,12 +66,16 @@ input[type=text], input[type=email] {
     flex-direction: column;
     justify-content: center;
     align-content: center;
+    margin: 4px;
+
 }
 
 .radio-buttons {
     display: flex;
     justify-content: space-around;
+    margin: 8px;
 }
+
 
 
 
@@ -79,6 +86,7 @@ input[type=text], input[type=email] {
     width: 300px;
     height: 40px;
     margin-top: 20px;
+    margin-bottom: 20px;
     border: 1px solid black;
     border-radius: 2px;
 }
