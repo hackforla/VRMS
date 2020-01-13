@@ -33,7 +33,7 @@ const Home = (props) => {
     return (
         <div className="flexcenter-container">
             <div className="home">
-                <div class="rotated-home"></div>
+                {/* <div class="rotated-home"></div> */}
                 <div className="home-headers">
                     <h1>VRMS</h1>
                     <h2>Volunteer Relationship Management System</h2>

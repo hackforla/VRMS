@@ -37,7 +37,7 @@ const MagicLink = (props) => {
     return (
         <div className="flex-container">
             <div className="new">
-                <div class="rotated-success"></div>
+                {/* <div class="rotated-success"></div> */}
                 <div className="new-headers">
                     {/* <h3>Magic Link Sent</h3> */}
                     <h3>Success!</h3>

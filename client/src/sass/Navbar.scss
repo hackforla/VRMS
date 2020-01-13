@@ -3,14 +3,17 @@
     flex-direction: row;
     width: 100%;
     height: 6vh;
-    margin-bottom: 24px;
+    margin-bottom: 10vh;
+    z-index: 1;
 }
 
 .navbar {
+    position: relative;
     flex: 1;
     display: flex;
-    justify-content: space-between;
     padding: 20px;
+    z-index: 1;
+    justify-content: center;
 }
 
 .navbar-buttons {
@@ -29,9 +32,23 @@
 
 .navbar-brand {
     font-size: 16px;
+    position: absolute;
+    top: 36px;
+    left: 12px;
 }
 
-.navbar-brand-image {
-    width: auto;
-    z-index: -2;
+.navbar-image {
+    height: 75px;
+    justify-self: center;
+    align-self: flex-start;
+
+    img {
+        height: 100%;
+    }
+}
+
+@media (max-width: 500px) {
+    .navbar-image {
+        height: 60px;
+    }
 }

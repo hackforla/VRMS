@@ -218,7 +218,7 @@ const CheckInForm = (props) => {
                 <div className="check-in-container">
                     <div className="check-in-headers">
                         <h3>Welcome!</h3>
-                        <h4>Tell us a little bit about yourself!</h4>
+                        <h4>Tell us a little bit about yourself:</h4>
                     </div>
                     <div className="check-in-form">
                         <form className="form-check-in" onSubmit={e => e.preventDefault()}>

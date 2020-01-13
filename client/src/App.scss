@@ -17,7 +17,8 @@
   padding-bottom: 24px;
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
-  background-color: rgb(250, 17, 79);
+  // background-color: rgb(250, 17, 79);
+  background-color: white;
   margin-bottom: 10vh;
   overflow: hidden;
 }
@@ -41,4 +42,10 @@
   flex-direction: column;
   height: 100%;
   width: 100%;
+}
+
+@media (max-width: 500px) {
+  .app-container {
+    margin-bottom: 15vh;
+  }
 }

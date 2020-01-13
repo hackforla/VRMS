@@ -7,11 +7,13 @@
 .rotated-home {
     position: absolute;
     background-color: white;
-    width: 800px;
+    width: 900px;
     margin-left: -12%;
-    margin-top: -6%;
-    height: 400px;
-    transform: rotate(-8deg);
+    // margin-top: -6%;
+    height: 600px;
+    top: -20%;
+    left: -10%;
+    transform: rotate(-14deg);
     z-index: 0;
     overflow: hidden;
 }

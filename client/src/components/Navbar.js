@@ -4,23 +4,25 @@ import { Link } from 'react-router-dom';
 import '../sass/Navbar.scss';
 
 const Navbar = (props) => {
-    console.log(props.match);
+    console.log(props);
 
     return (
         <div className="nav-wrapper">
             <nav className="navbar" role="navigation" aria-label="main navigation">
                 <div className="navbar-brand">
+                    
                     <Link to="/">
-                        <p className="home-link-text">VRMS+</p>
-                        <p className="home-link-text">HFLA</p>
+                        <p className="home-link-text">Home</p>
                     </Link>
                 </div>
 
-                <div className="navbar-buttons">
-                    {/* <Link className="navbar-button primary" to="/new">New User</Link>
-                    <Link className="navbar-button" to="/returning">Returning User</Link>
-                    <Link className="navbar-button primary" to="/admin">Dashboard</Link> */}
+                <div class="navbar-image">
+                    <img src="/hflalogo.png"></img>
                 </div>
+
+                {/* <div className="navbar-buttons">
+                    
+                </div> */}
             </nav>
         </div>
     );

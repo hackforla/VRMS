@@ -3,7 +3,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 80vh;
+    height: 60vh;
 }
 
 .new-headers {
@@ -33,9 +33,9 @@
     background-color: white;
     width: 800px;
     margin-left: -12%;
-    margin-top: -2%;
-    height: 500px;
-    transform: rotate(-8deg);
+    height: 700px;
+    top: -10%;
+    transform: rotate(-14deg);
     z-index: 0;
     overflow: hidden;
 }
@@ -47,7 +47,7 @@
         width: 800px;
         margin-left: -12%;
         margin-top: -2%;
-        height: 500px;
+        height: 700px;
         transform: rotate(-8deg);
         z-index: 0;
         overflow: hidden;
