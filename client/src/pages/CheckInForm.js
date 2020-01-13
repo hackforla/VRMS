@@ -233,6 +233,7 @@ const CheckInForm = (props) => {
                                         // aria-label="topic"
                                         onChange={handleFirstNameChange}
                                         aria-label="First Name"
+                                        required
                                     /> 
                                 </div>
                             </div>
@@ -247,6 +248,7 @@ const CheckInForm = (props) => {
                                         // aria-label="topic"
                                         onChange={handleLastNameChange}
                                         aria-label="Last Name"
+                                        required
                                     /> 
                                 </div>
                             </div>
@@ -261,6 +263,7 @@ const CheckInForm = (props) => {
                                         // aria-label="topic"
                                         onChange={handleInputChange}
                                         aria-label="Email Address"
+                                        required
                                     /> 
                                 </div>
                                 <p>{"(This allows easy use of the app. We'll never sell your data!)"}</p>
@@ -278,6 +281,7 @@ const CheckInForm = (props) => {
                                                 value={Object.keys(formInput).includes(question.htmlName) ? formInput[question.htmlName.toString()].toString() : ""}
                                                 // aria-label="topic"
                                                 onChange={handleInputChange}
+                                                required
                                             /> 
                                         </div>
                                     </div>
@@ -298,6 +302,7 @@ const CheckInForm = (props) => {
                                                     // aria-label="topic"
                                                     onChange={handleNewMemberChange}
                                                     defaultChecked
+                                                    required
                                                 /> 
                                                 <label htmlFor="radio1">Yes</label>
                                                 <input 
