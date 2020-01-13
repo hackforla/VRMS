@@ -45,7 +45,7 @@ label {
     max-width: 300px;
     width: 300px;
     text-align: left;
-    font-size: 30px;
+    font-size: 24px;
     font-weight: bold;
 }
 
@@ -57,6 +57,20 @@ input[type=text], input[type=email] {
     border-radius: 2px;
     font-size: 32px;
 }
+
+.form-input-radio {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+}
+
+.radio-buttons {
+    display: flex;
+    justify-content: space-around;
+}
+
+
 
 .form-input-button {
     display: flex;

@@ -11,12 +11,10 @@ const userSchema = mongoose.Schema({
     email: { type: String },
     accessLevel: { type: String, default: "user" },
     createdDate: { type: Date, default: Date.now },
-    checkInCount: { type: Number, default: 1 },
-    questionsAnsweredCount: { type: Number, default: 0 },
     currentRole: { type: String },
     desiredRole: { type: String },
     newMember: { type: Boolean },
-    attendanceLength: { type: String }
+    firstAttended: { type: String }
     // password: { type: String, required: true }
 });
 
@@ -30,12 +28,10 @@ userSchema.methods.serialize = () => {
         email: this.email,
         accessLevel: this.accessLevel,
         createdDate: this.createdDate,
-        checkInCount: this.checkInCount,
-        questionsAnsweredCount: this.questionsAnsweredCount,
         currentRole: this.currentRole,
         desiredRole: this.desiredRole,
         newMember: this.newMember,
-        attendanceLength: this.attendanceLength
+        firstAttended: this.firstAttended
     };
 };
 

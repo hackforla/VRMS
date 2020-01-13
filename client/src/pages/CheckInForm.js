@@ -12,10 +12,11 @@ const CheckInForm = (props) => {
         desiredRole: "",
         attendanceLength: ""
     });
-
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [newMember, setNewMember] = useState(true);
+    const [month, setMonth] = useState("JAN");
+    const [year, setYear] = useState("2019");
 
     const fetchQuestions = async () => {
         try {
@@ -46,13 +47,30 @@ const CheckInForm = (props) => {
         e.currentTarget.value
     );
 
+    const handleMonthChange = (e) => setMonth(
+        e.currentTarget.value
+    );
+
+    const handleYearChange = (e) => setYear(
+        e.currentTarget.value
+    );
+
     const handleNewMemberChange = (e) => {
-        setNewMember(e.target.value);
-        console.log(newMember);
+        if (e.target.value === "true") {
+            setNewMember(true);
+        }
+        if (e.target.value === "false") {
+            setNewMember(false);
+        }
     };
+
+    const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+    const years = ["2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013"];
     
     const submitForm = (userForm) => {
         // First, create a new user in the user collection
+        console.log(userForm);
+
         fetch('/api/users', {
             method: "POST",
             body: JSON.stringify(userForm),
@@ -67,10 +85,10 @@ const CheckInForm = (props) => {
                 throw new Error(res.statusText);
             })
             .then(responseId => {
+                // Then, create a new check-in
 
                 const checkInForm = { userId: (responseId), eventId: new URLSearchParams(props.location.search).get('eventId') };
-                // console.log(checkInForm);
-                // Then, create a new check-in
+
                 return fetch('/api/checkins', {
                     method: "POST",
                     body: JSON.stringify(checkInForm),
@@ -93,17 +111,21 @@ const CheckInForm = (props) => {
 
         try {
             setIsLoading(true);
+
+            const firstAttended = `${month} ${year}`;
             
-            // Set the user's info from useState object
+            // SET all of the user's info from useState objects
             const userForm = { 
                 name: { 
                     firstName, 
                     lastName 
                 }, 
                 ...formInput,
-                newMember
+                newMember,
+                firstAttended
             };
 
+            // SUBMIT all of the user's info from the userForm object
             submitForm(userForm);
             setIsLoading(false);
 
@@ -121,12 +143,7 @@ const CheckInForm = (props) => {
 
             // Get userId from auth cookie (JWT) => return it in response
             // fetch to create checkin using userId
-
-            // const res = await fetch("/api/checkIn", { method: 'POST' });
-            // const resJson = await res.json();
-            // 
-            // setResponse ? 
-
+        
             submitForm(formInput);
 
             console.log('Checking in Returning User');
@@ -207,37 +224,43 @@ const CheckInForm = (props) => {
                         <form className="form-check-in" onSubmit={e => e.preventDefault()}>
                             <div className="form-row">
                                 <div className="form-input-text">
-                                    <label htmlFor="first-name">First Name</label>
+                                    {/* <label htmlFor="first-name">First Name</label> */}
                                     <input 
                                         type="text"
                                         name="firstName"
+                                        placeholder="First Name"
                                         value={firstName.toString()}
                                         // aria-label="topic"
                                         onChange={handleFirstNameChange}
+                                        aria-label="First Name"
                                     /> 
                                 </div>
                             </div>
                             <div className="form-row">
                                 <div className="form-input-text">
-                                    <label htmlFor="last-name">Last Name</label>
+                                    {/* <label htmlFor="last-name">Last Name</label> */}
                                     <input 
                                         type="text"
                                         name="lastName"
+                                        placeholder="Last Name"
                                         value={lastName.toString()}
                                         // aria-label="topic"
                                         onChange={handleLastNameChange}
+                                        aria-label="Last Name"
                                     /> 
                                 </div>
                             </div>
                             <div className="form-row">
                                 <div className="form-input-text">
-                                    <label htmlFor="email">Email Address</label>
+                                    {/* <label htmlFor="email">Email Address</label> */}
                                     <input 
                                         type="email"
                                         name="email"
+                                        placeholder="Email Address"
                                         value={formInput.email.toString()}
                                         // aria-label="topic"
                                         onChange={handleInputChange}
+                                        aria-label="Email Address"
                                     /> 
                                 </div>
                                 <p>{"(This allows easy use of the app. We'll never sell your data!)"}</p>
@@ -251,6 +274,7 @@ const CheckInForm = (props) => {
                                             <input 
                                                 type="text"
                                                 name={question.htmlName}
+                                                placeholder={question.placeholderText}
                                                 value={Object.keys(formInput).includes(question.htmlName) ? formInput[question.htmlName.toString()].toString() : ""}
                                                 // aria-label="topic"
                                                 onChange={handleInputChange}
@@ -263,42 +287,33 @@ const CheckInForm = (props) => {
                             {questions.length !== 0 && questions.map((question) => {
                                 return question.type === 'select' && (
                                     <div key={question._id} className="form-row">
-                                        <div className="form-input-text">
-                                            <label htmlFor={question.htmlName}>{question.questionText}</label>
-                                            <select 
-                                                name={question.htmlName}
-                                                value={newMember}
-                                                // aria-label="topic"
-                                                onChange={handleNewMemberChange}
-                                                required
-                                            >
-                                                <option value="true">Yes</option>
-                                                <option value="false">No</option>
-                                            </select>
+                                        <div className="form-input-radio">
+                                            <label htmlFor={question.htmlName}>Is this your first time attending a Hack Night?</label>
+                                            <div className="radio-buttons">
+                                                <input 
+                                                    id="radio1"
+                                                    type="radio"
+                                                    name={question.htmlName}
+                                                    value={true}
+                                                    // aria-label="topic"
+                                                    onChange={handleNewMemberChange}
+                                                    defaultChecked
+                                                /> 
+                                                <label htmlFor="radio1">Yes</label>
+                                                <input 
+                                                    id="radio2"
+                                                    type="radio"
+                                                    name={question.htmlName}
+                                                    value={false}
+                                                    // aria-label="topic"
+                                                    onChange={handleNewMemberChange}
+                                                /> 
+                                                <label htmlFor="radio2">No</label>
+                                            </div>
                                         </div>
                                     </div>
                                 );
                             })}
-
-                            {/* {newMember === false ? (
-                                questions.length !== 0 && questions.map((question) => {
-                                    return question.htmlName === 'attendanceLength' && (
-                                        <div key={question._id} className="form-row">
-                                            <div className="form-input-text">
-                                                <label htmlFor={question.htmlName}>{question.questionText}</label>
-                                                <input 
-                                                    type="text"
-                                                    name={question.htmlName}
-                                                    value={Object.keys(formInput).includes(question.htmlName) ? formInput[question.htmlName.toString()].toString() : ""}
-                                                    // aria-label="topic"
-                                                    onChange={handleInputChange}
-                                                /> 
-                                            </div>
-                                        </div>
-                                    );
-                                })
-                            ) : (null)
-                            } */}
 
                             {newMember === true ? (null) : (
                                 questions.length !== 0 && questions.map((question) => {
@@ -306,13 +321,30 @@ const CheckInForm = (props) => {
                                         <div key={question._id} className="form-row">
                                             <div className="form-input-text">
                                                 <label htmlFor={question.htmlName}>{question.questionText}</label>
-                                                <input 
-                                                    type="text"
-                                                    name={question.htmlName}
-                                                    value={Object.keys(formInput).includes(question.htmlName) ? formInput[question.htmlName.toString()].toString() : ""}
-                                                    // aria-label="topic"
-                                                    onChange={handleInputChange}
-                                                /> 
+                                                <div className="radio-buttons">
+                                                    <select 
+                                                        name={question.htmlName}
+                                                        value={month}
+                                                        // aria-label="topic"
+                                                        onChange={handleMonthChange}
+                                                        required
+                                                    >
+                                                    {months.map((month, index) => {
+                                                        return <option key={index} value={month}>{month}</option>
+                                                    })} 
+                                                    </select>
+                                                    <select 
+                                                        name={question.htmlName}
+                                                        value={year}
+                                                        // aria-label="topic"
+                                                        onChange={handleYearChange}
+                                                        required
+                                                    >
+                                                    {years.map((year, index) => {
+                                                        return <option key={index} value={year}>{year}</option>
+                                                    })}
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
                                     );
@@ -345,4 +377,3 @@ const CheckInForm = (props) => {
 };
 
 export default CheckInForm;
-    
