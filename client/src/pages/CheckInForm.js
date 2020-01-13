@@ -16,7 +16,7 @@ const CheckInForm = (props) => {
     const [lastName, setLastName] = useState("");
     const [newMember, setNewMember] = useState(true);
     const [month, setMonth] = useState("JAN");
-    const [year, setYear] = useState("2019");
+    const [year, setYear] = useState("2020");
 
     const fetchQuestions = async () => {
         try {
