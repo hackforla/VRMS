@@ -4,7 +4,7 @@ import '../sass/CheckIn.scss';
 
 const CheckInForm = (props) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [isFormReady, setIsFormReady] = useState(false);
+    // const [isFormReady, setIsFormReady] = useState(true);
     const [isError, setIsError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [questions, setQuestions] = useState([]);
@@ -136,10 +136,12 @@ const CheckInForm = (props) => {
             firstAttended
         };
 
+        let ready = true;
+
         try {
             setIsLoading(true);
 
-            if(
+            if (
                 userForm.name.firstName === "" || 
                 userForm.name.lastName === "" || 
                 userForm.email === "" || 
@@ -149,23 +151,19 @@ const CheckInForm = (props) => {
             ) {
                 setIsError(true);
                 setErrorMessage("Please don't leave any fields blank");
-                setIsFormReady(false);
-            } else {
-                setIsFormReady(true);
-            }
+                ready = false;
+            } 
 
             if(year === "2020" && month !== "JAN") {
                 setIsError(true);
                 setErrorMessage("You can't set a date in the future... Please try again.");
-                setIsFormReady(false);
-            } else {
-                setIsFormReady(true);
-            }
+                ready = false;
+            } 
 
-            console.log(isFormReady);
+            // console.log(isFormReady);
 
             // SUBMIT all of the user's info from the userForm object
-            if(isFormReady) {
+            if(ready) {
                 submitForm(userForm);
             }  
 
@@ -212,7 +210,7 @@ const CheckInForm = (props) => {
     useEffect(() => {
         fetchQuestions();
 
-    }, [errorMessage]);
+    }, []);
 
     return (
         <div className="flex-container">
