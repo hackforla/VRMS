@@ -261,7 +261,7 @@ const CheckInForm = (props) => {
                         <h4>Tell us a little bit about yourself:</h4>
                     </div>
                     <div className="check-in-form">
-                        <form className="form-check-in" onSubmit={e => e.preventDefault()}>
+                        <form className="form-check-in" autoComplete="off" onSubmit={e => e.preventDefault()}>
                             <div className="form-row">
                                 <div className="form-input-text">
                                     {/* <label htmlFor="first-name">First Name</label> */}
