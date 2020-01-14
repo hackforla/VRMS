@@ -1,6 +1,6 @@
 {
   "short_name": "VRMS",
-  "name": "VRMS",
+  "name": "Volunteer Relationship Management System",
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,14 +8,19 @@
       "type": "image/x-icon"
     },
     {
+      "src": "logo180.png",
+      "type": "image/png",
+      "sizes": "180x180"
+    },
+    {
       "src": "logo192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "logo310.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "310x310"
     }
   ],
   "start_url": ".",

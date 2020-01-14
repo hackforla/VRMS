@@ -10,11 +10,13 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-image: url('/bg-image-sunset.jpg');
+  background-image: url('/bg-image-skyline.jpg');
   background-repeat: no-repeat;
   background-position: top;
-  background-position-x: 30%;
-  background-size: 110%;
+  /* background-position-x: 30%; */
+  background-position-y: 80%;
+  /* background-size: 110%; */
+  background-size: cover;
   overflow: scroll;
 }
 
