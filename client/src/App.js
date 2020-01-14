@@ -32,7 +32,7 @@ function App(props) {
   return (
     <div className="app">
 		<div className="app-container">
-			<Navbar {...props} />
+			<Navbar />
 			<main role="main" className="main">
 				{routes.map(({ path, Component }) => (
 					<Route key={path} exact path={path} component={Component} />

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link , withRouter } from 'react-router-dom';
 
 import '../sass/Navbar.scss';
 
@@ -16,16 +16,18 @@ const Navbar = (props) => {
                     </Link>
                 </div>
 
-                <div className="navbar-image">
-                    <img src="/hflalogo.png" alt="Hack for LA Logo"></img>
-                </div>
-
-                {/* <div className="navbar-buttons">
-                    
-                </div> */}
+                {props.location.pathname === "/" || props.location.pathname === "/magicLink" ? (
+                    <div className="navbar-image grow">
+                        <img src="/hflalogo.png" alt="Hack for LA Logo"></img>
+                    </div>
+                ) : (
+                    <div className="navbar-image">
+                        <img src="/hflalogo.png" alt="Hack for LA Logo"></img>
+                    </div>
+                )}
             </nav>
         </div>
     );
 };
 
-export default Navbar;
+export default withRouter(Navbar);
