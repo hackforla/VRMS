@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
     User
         .find()
         .then(users => {
-            res.json(users);
+            res.sendStatus(200);
         })
         .catch(err => console.log(err));
 });
