@@ -14,7 +14,7 @@ const path = require('path');
 const app = express();
 
 // Load config variables 
-const { DATABASE_URL, PORT } = require('./config/database');
+const { TEST_DATABASE_URL, PORT } = require('./config/database');
 
 // Required to view Request Body (req.body) in JSON
 app.use(bodyParser.json());
@@ -95,7 +95,7 @@ async function closeServer() {
 };
 
 if (require.main === module) {
-    runServer(DATABASE_URL).catch(err => console.error(err));
+    runServer(TEST_DATABASE_URL).catch(err => console.error(err));
 };
 
 // app.listen(process.env.PORT || PORT, () => {

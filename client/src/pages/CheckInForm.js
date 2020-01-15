@@ -154,9 +154,26 @@ const CheckInForm = (props) => {
                         }
                     })
                     .then(res => {
-                        console.log(res);
-                        props.history.push('/magicLink');
+                        return res.json();
                     })
+                    .then(response => {
+                        const checkInForm = { userId: `${response}`, eventId: new URLSearchParams(props.location.search).get('eventId') };
+
+                        console.log(checkInForm.userId);
+
+                        return fetch('/api/checkins', {
+                            method: "POST",
+                            body: JSON.stringify(checkInForm),
+                            headers: {
+                                "Content-Type": "application/json"
+                            }
+                        })
+                        .then(res => {
+                            console.log(res);
+                            props.history.push('/magicLink');
+                        })
+                        .catch(err => console.log(err));
+                    })                    
                     .catch(err => console.log(err));
                 }
             })
