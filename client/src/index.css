@@ -12,12 +12,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-image: url('/bg-image-skyline.jpg');
   background-repeat: no-repeat;
-  background-position: top;
+  background-position: bottom;
   /* background-position-x: 30%; */
   background-position-y: 80%;
-  /* background-size: 110%; */
   background-size: cover;
+  /* background-size: cover; */
   overflow: scroll;
+  height: 100vh;
 }
 
 @font-face {
