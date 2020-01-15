@@ -85,7 +85,7 @@ const Event = (props) => {
 
     return (
         <div className="flex-container">
-            <div className="event">
+            <div className="event-container">
                 {event && event.location ? (
                     <div className="event-headers">
                         <h4>{event.name}</h4>

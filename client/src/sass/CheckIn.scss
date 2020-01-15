@@ -169,3 +169,18 @@ select {
         outline: none;
     }
 }
+
+.select-reason {
+    display: flex;
+    justify-content: space-around;
+    margin: 8px;
+
+    select {
+        min-width: 280px;
+    }
+}
+
+.block {
+    pointer-events: none;
+    opacity: .4;
+}

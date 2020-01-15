@@ -5,26 +5,35 @@ const { User } = require('../models/user.model');
 
 // GET /api/users/
 router.get('/', (req, res) => {
-    
+    const { query } = req;
+    console.log(query);
+
     User
-        .find()
-        .then(users => {
-            res.sendStatus(200);
+        .findOne(query)
+        .then(user => {
+            if (!user) {
+                res.json(false);
+            } else {
+                res.json(user._id);
+            }
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log(err);
+            res.sendStatus(500).json({
+                message: `/GET Internal server error: ${err}`
+            })
+        });
 });
 
-router.get('/:id', (req, res) => {
-    // const matchedUser = [];
-
-    // Users.forEach(user => {
-    //     if (user.id.toString() === req.params.id) {
-    //         matchedUser.push(user);
-    //     }
-    // });
-        
-    // // Check if there was a match and return it
-    // matchedUser.length === 0 ? res.send({ "message": "No match" }) : res.send(matchedUser);
+router.patch('/:id', (req, res) => {
+    console.log( )
+    User
+        .findByIdAndUpdate(req.params.id, req.body)
+        .then(edit => res.status(204).end())
+        .catch(err =>
+            res.status(500).json({
+                error: 'Couldn\'t edit form... Try again.'
+            }));
 
 });
 

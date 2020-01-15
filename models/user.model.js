@@ -14,7 +14,8 @@ const userSchema = mongoose.Schema({
     currentRole: { type: String },
     desiredRole: { type: String },
     newMember: { type: Boolean },
-    firstAttended: { type: String }
+    firstAttended: { type: String },
+    attendanceReason: { type: String }
     // password: { type: String, required: true }
 });
 
@@ -31,7 +32,8 @@ userSchema.methods.serialize = () => {
         currentRole: this.currentRole,
         desiredRole: this.desiredRole,
         newMember: this.newMember,
-        firstAttended: this.firstAttended
+        firstAttended: this.firstAttended,
+        attendanceReason: this.attendanceReason
     };
 };
 

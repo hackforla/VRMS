@@ -39,26 +39,28 @@ const Home = (props) => {
                     <h2>Volunteer Relationship Management System</h2>
                 </div>
 
-                <div className="home-buttons">
-                    {event.length !== 0 && event.map(event => {
-                        return (
+                {event.length !== 0 && event.map((event, index) => {
+                    return (
+                        <div key={`${event._id}-${index}`} className="home-buttons">
                             <Link 
                                 to={`/checkIn/newUser?eventId=${event._id}`} 
-                                key={event._id} 
                                 className="home-button">
                                     CHECK IN NEW USER
                             </Link>
-                        )
-                    })}
-                    {/* <Link className="home-button" to={'/returning'}>Returning</Link> */}
-                </div>
+                            <Link 
+                                to={`/checkIn/returningUser?eventId=${event._id}`} 
+                                className="home-button">
+                                    CHECK IN RETURNING USER
+                            </Link>
+                        </div>
+                    )
+                })}
                  
                 <div className="login-button">
                     {/* <Link className="home-button" to={'/login'}>Login</Link> */}
                 </div>
             </div>
         </div>
-
     )
 };
 

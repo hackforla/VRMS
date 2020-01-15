@@ -5,6 +5,7 @@ import '../sass/CheckIn.scss';
 const CheckInForm = (props) => {
     const [isLoading, setIsLoading] = useState(false);
     // const [isFormReady, setIsFormReady] = useState(true);
+    const [isQuestionAnswered, setIsQuestionAnswered] = useState(false);
     const [isError, setIsError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [questions, setQuestions] = useState([]);
@@ -20,6 +21,7 @@ const CheckInForm = (props) => {
     const [newMember, setNewMember] = useState(true);
     const [month, setMonth] = useState("JAN");
     const [year, setYear] = useState("2020");
+    const [reason, setReason] = useState("--SELECT ONE--");
 
     const fetchQuestions = async () => {
         try {
@@ -28,8 +30,6 @@ const CheckInForm = (props) => {
             const resJson = await res.json();
 
             setQuestions(resJson);
-
-            console.log(questions);
             setIsLoading(false);
         } catch(error) {
             console.log(error);
@@ -58,6 +58,11 @@ const CheckInForm = (props) => {
         e.currentTarget.value
     );
 
+    const handleReasonChange = (e) => {
+        setReason(e.currentTarget.value);
+        setIsQuestionAnswered(true);
+    };
+
     const handleNewMemberChange = (e) => {
         if (e.target.value === "true") {
             setNewMember(true);
@@ -72,10 +77,10 @@ const CheckInForm = (props) => {
 
     const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
     const years = ["2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013"];
+    const reasons = ["--SELECT ONE--", "Open Data", "Homelessness", "Social Justice/Equity", "Transportation", "Mental Health", "Civic Engagement"];
     
     const submitForm = (userForm) => {
         // First, create a new user in the user collection
-        console.log(userForm);
 
         fetch('/api/users', {
             method: "POST",
@@ -106,6 +111,54 @@ const CheckInForm = (props) => {
                     props.history.push('/magicLink');
                 })
                 .catch(err => console.log(err));
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
+
+    const submitReturningUserForm = (email) => {
+        // First, create a new user in the user collection
+        console.log(email);
+
+        fetch(`/api/users?email=${email}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(res => {
+                return res.json();
+            })
+            .then(responseId => {
+
+                const answer = { 
+                    attendanceReason: reason
+                };
+
+                console.log(answer);
+
+                if (responseId === false) {
+                    setIsError(true);
+                    setErrorMessage("You haven't checked in with that email. Redirecting home to create a new profile...");
+
+                    setTimeout(() => {
+                        props.history.push("/");
+                    }, 4000)
+                } else {
+                    return fetch(`/api/users/${responseId}`, {
+                        method: "PATCH",
+                        body: JSON.stringify(answer),
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    })
+                    .then(res => {
+                        console.log(res);
+                        props.history.push('/magicLink');
+                    })
+                    .catch(err => console.log(err));
+                }
             })
             .catch(err => {
                 console.log(err);
@@ -184,15 +237,11 @@ const CheckInForm = (props) => {
             // Get userId from auth cookie (JWT) => return it in response
             // fetch to create checkin using userId
         
-            submitForm(formInput);
+            submitReturningUserForm(formInput.email);
 
             console.log('Checking in Returning User');
 
             setIsLoading(false);
-            
-            // Redirect 
-            props.history.push('/user');
-
         } catch(error) {
             console.log(error);
             setIsLoading(false);
@@ -217,38 +266,81 @@ const CheckInForm = (props) => {
             {newOrReturning === 'returningUser' ? (
                 <div className="check-in-container">
                     <div className="check-in-headers">
-                        <h3>Welcome Back!</h3>
-                        <h4>Answer a quick question to unlock the check-in button!</h4>
+                        <h3>Welcome back!</h3>
+                        <h4>Answer a quick question to unlock the check-in button.</h4>
                     </div>
                     <div className="check-in-form">
-                        <form className="form-returning" onSubmit={e => e.preventDefault()}>
-                            <div className="form-input-text">
-                                <input 
-                                    placeholder=""
-                                    type="text"
-                                    name="answer"
-                                    value={formInput.attendance}
-                                    // aria-label="topic"
-                                    onChange={handleInputChange}
-                                /> 
+                        <form className="form-check-in" autoComplete="off" onSubmit={e => e.preventDefault()}>
+
+                        {questions.length !== 0 && questions.map((question) => {
+                            return question.htmlName === 'attendanceReason' && (
+                                <div key={question._id} className="form-row">
+                                    <div className="form-input-text">
+                                        <label htmlFor={question.htmlName}>{question.questionText}</label>
+                                        <div className="select-reason">
+                                            <select 
+                                                name={question.htmlName}
+                                                value={reason}
+                                                // aria-label="topic"
+                                                onChange={handleReasonChange}
+                                                required
+                                            >
+                                            {reasons.map((reason, index) => {
+                                                return <option key={index} value={reason}>{reason}</option>
+                                            })} 
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+
+                            <div className="form-row">
+                                <div className="form-input-text">
+                                    <label htmlFor="email">What email address did you use to check-in last time?</label>
+                                    <input 
+                                        type="email"
+                                        name="email"
+                                        placeholder="Email Address"
+                                        value={formInput.email.toString()}
+                                        // aria-label="topic"
+                                        onChange={handleInputChange}
+                                        aria-label="Email Address"
+                                        required
+                                    /> 
+                                </div>
+                                <p>{"(This allows easy use of the app. We'll never sell your data!)"}</p>
                             </div>
-                            {!isLoading ? (
+
+                            {isError && errorMessage.length > 1 ? <div className="error">{errorMessage}</div> : null}
+                            
+                            {isQuestionAnswered && reason !== "--SELECT ONE--" && formInput.email && formInput.email !== "" ? (
+                                !isLoading ? (
+                                    <div className="form-row">
+                                        <div className="form-input-button">
+                                            <button type="submit" className="form-check-in-submit" onClick={e => checkInReturningUser(e)}>
+                                                    CHECK IN
+                                            </button>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="form-row">
+                                        <div className="form-input-button">
+                                            <button type="submit" className="form-check-in-submit" onClick={e => e.preventDefault()}>
+                                                    CHECKING IN...
+                                            </button>
+                                        </div>
+                                    </div>
+                                )
+                            ) : ( 
                                 <div className="form-row">
-                                    <div className="form-input-button">
-                                        <button type="submit" className="form-check-in-submit" onClick={e => checkInReturningUser(e)}>
-                                                Check In
+                                    <div className="form-input-button block">
+                                        <button type="submit" className="form-check-in-submit block" onClick={e => e.preventDefault()}>
+                                                CHECK IN
                                         </button>
                                     </div>
                                 </div>
-                            ) : (
-                                <div className="form-row">
-                                    <div className="form-input-button">
-                                        <button type="submit" className="form-check-in-submit" onClick={e => e.preventDefault()}>
-                                                Checking In...
-                                        </button>
-                                    </div>
-                                </div>
-                            )}
+                            )}   
                         </form>
                     </div>
                 </div>
