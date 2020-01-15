@@ -29,7 +29,7 @@ router.patch('/:id', (req, res) => {
     console.log( )
     User
         .findByIdAndUpdate(req.params.id, req.body)
-        .then(edit => res.status(204).end())
+        .then(edit => res.json(req.params.id))
         .catch(err =>
             res.status(500).json({
                 error: 'Couldn\'t edit form... Try again.'
