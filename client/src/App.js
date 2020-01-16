@@ -25,6 +25,7 @@ const routes = [
 	{ path: '/login', name: 'login', Component: AdminLogin },
 	{ path: '/checkIn/:userType', name: 'checkIn', Component: CheckInForm },
 	{ path: '/magicLink', name: 'magicLink', Component: MagicLink },
+	{ path: '*', name: 'home', Component: Home }
 	
 ];
 
