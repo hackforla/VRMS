@@ -24,9 +24,7 @@ const routes = [
 	{ path: '/returning', name: 'returning', Component: ReturningUser },
 	{ path: '/login', name: 'login', Component: AdminLogin },
 	{ path: '/checkIn/:userType', name: 'checkIn', Component: CheckInForm },
-	{ path: '/magicLink', name: 'magicLink', Component: MagicLink },
-	{ path: '*', name: 'home', Component: Home }
-	
+	{ path: '/magicLink', name: 'magicLink', Component: MagicLink }	
 ];
 
 function App(props) {
