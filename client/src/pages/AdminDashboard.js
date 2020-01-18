@@ -124,14 +124,14 @@ const AdminDashboard = (props) => {
                                     // to={`/events/${event._id}`}
                                     className="dashboard-nav-button fill-green"
                                     onClick={e => setCheckInReady(e)}>
-                                        OPEN EVENT
+                                        OPEN CHECK-IN
                                 </Link>
                             ) : (
                                 <Link 
                                     // to={`/events/${event._id}`}
                                     className="dashboard-nav-button fill-red"
                                     onClick={e => setCheckInReady(e)}>
-                                        CLOSE EVENT
+                                        CLOSE CHECK-IN
                                 </Link>
                             )
                         }
@@ -227,7 +227,6 @@ const AdminDashboard = (props) => {
 
                 {eventsIsSelected ? (
                     <div className="eventsandusers-container">
-                        <h4>Your Events:</h4>
                         <DashboardEvents />
                     </div> 
                 ) : (
@@ -236,7 +235,6 @@ const AdminDashboard = (props) => {
 
                 {usersIsSelected ? (
                     <div className="eventsandusers-container">
-                        <h3>Your Brigade:</h3>
                         <DashboardUsers />
                     </div> 
                 ) : (
