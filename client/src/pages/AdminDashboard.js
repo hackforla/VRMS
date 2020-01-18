@@ -23,7 +23,7 @@ const AdminDashboard = (props) => {
     const auth = useAuth();
 
     async function setCheckInReady(e) {
-        // e.preventDefault();
+        e.preventDefault();
         
         // try {
         //     // const payload = { checkInReady: true };
@@ -121,14 +121,14 @@ const AdminDashboard = (props) => {
                         {event && isCheckInReady === false ? 
                             (
                                 <Link 
-                                    to={`/events/${event._id}`}
+                                    // to={`/events/${event._id}`}
                                     className="dashboard-nav-button fill-green"
                                     onClick={e => setCheckInReady(e)}>
                                         OPEN EVENT
                                 </Link>
                             ) : (
                                 <Link 
-                                    to={`/events/${event._id}`}
+                                    // to={`/events/${event._id}`}
                                     className="dashboard-nav-button fill-red"
                                     onClick={e => setCheckInReady(e)}>
                                         CLOSE EVENT
