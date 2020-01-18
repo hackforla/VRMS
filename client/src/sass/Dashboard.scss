@@ -1,7 +1,7 @@
 .dashboard {
     display: flex;
     flex-direction: column;
-    height: 96vh;
+    // height: 96vh;
     overflow: scroll;
 }
 
@@ -73,6 +73,7 @@
 .dashboard-warning {
     margin: 6px;
     padding: 12px 6px 0px 6px;
+    height: 100%;
 
     p {
         font-size: 18px;

@@ -4,7 +4,6 @@ import { Link, Redirect } from 'react-router-dom';
 import DashboardEvents from '../components/DashboardEvents';
 import DashboardUsers from '../components/DashboardUsers';
 
-// import useIsLoggedIn from '../hooks/useIsLoggedIn';
 import useAuth from '../hooks/useAuth';
 
 import '../sass/Dashboard.scss';
@@ -20,7 +19,6 @@ const AdminDashboard = (props) => {
     const [isLoading, setIsLoading] = useState(false);
     const [event, setEvent] = useState([]);
     const [isCheckInReady, setIsCheckInReady] = useState(false);
-    // const isLoggedIn = useIsLoggedIn(0);
 
     const auth = useAuth();
 
@@ -229,7 +227,7 @@ const AdminDashboard = (props) => {
 
                 {eventsIsSelected ? (
                     <div className="eventsandusers-container">
-                        <h3>Your Events:</h3>
+                        <h4>Your Events:</h4>
                         <DashboardEvents />
                     </div> 
                 ) : (
