@@ -22,7 +22,7 @@ Head over to the [wiki](https://github.com/hackforla/VRMS/wiki).
 
 You'll find all the product documentation, and if this seems like a project you'd like to dedicate your time to, reach out to the leads on Slack or at one of our weekly Hack Nights.
 
-## Using Git
+## Using Git (If you're familiar with forking and pulling/pushing/committing, head to the next section)
 
 This section discusses some tips and best practices for working with Git.
 
@@ -44,19 +44,21 @@ This section discusses some tips and best practices for working with Git.
 
 In the `vrms` slack channel, send your GitHub name to the project manager (or on the slack channel thread) and we'll add you as a member to the GitHub repository Team.
 
-Once you have accepted the GitHub invite (comes via email or in your GitHub notifications), please do the following:
+Once you have accepted the GitHub invite (via email or in your GitHub notifications), please do the following:
 
 1. Mark your own membership public https://help.github.com/en/articles/publicizing-or-hiding-organization-membership#changing-the-visibility-of-your-organization-membership
 
 1. Setup two factor authentication on your account https://github.com/hackforla/governance/issues/20
 
+These steps are manditory in order to contribute to all HackforLA projects. 
+
 #### Step 2: Fork the repository
 
-In https://github.com/hackforla/website, look for the fork icon in the top right. Click it and create a fork of the repository.
+In https://github.com/hackforla/VRMS, look for the fork icon in the top right. Click it and create a fork of the repository.
 
 For git beginners, a fork is a copy of the repository that will be placed on your GitHub account url.
 
-It should create a copy here: https://github.com/your_GitHub_user_name/website, where `your_GitHub_user_name` is replaced with exactly that.
+It should create a copy here: https://github.com/your_GitHub_user_name/vrms, where `your_GitHub_user_name` is replaced with exactly that.
 
 Note that this copy is on a remote server on the GitHub website and not on your computer yet.
 
@@ -71,7 +73,7 @@ First create a new folder on your desktop that will contain `hackforla` projects
 In your shell, navigate there then run the following commands:
 
 ```bash
-git clone https://github.com/your_GitHub_user_name/website.git
+git clone https://github.com/your_GitHub_user_name/vrms.git
 ```
 
 You should now have a new folder in your `hackforla` folder called `vrms`.
@@ -88,10 +90,10 @@ If you accidentally cloned the `hackforla/vrms.git` then you can change your loc
 git remote set-url origin https://github.com/your_user_name/vrms.git
 ```
 
-Add another remote called `development` that points to the `hackforla` version of the repository. This will allow you to incorporate changes later:
+Add another remote called `vrms` that points to the `hackforla` version of the repository. This will allow you to incorporate changes later:
 
 ```bash
-git remote add development https://github.com/hackforla/vrms.git
+git remote add vrms https://github.com/hackforla/vrms.git
 ```
 
 #### Step 4: Change to a new branch
@@ -125,16 +127,63 @@ No law of physics will break if you don't adhere to this scheme but laws of git 
 Your fork of this repository on GitHub, and your local clone of that fork, will
 get out of sync with this (upstream) repository from time to time.
 
-Assuming you have a local clone with remotes `development` (this repo) and `origin`
+Assuming you have a local clone with remotes `vrms` (this repo) and `origin`
 (your GitHub fork of this repo):
 
 ```bash
 # WARNING: this will erase local pending changes!
 # commit them to a different branch or use git stash
 git checkout master
-git fetch development
-git reset --hard development/master
+git fetch vrms
+git reset --hard vrms/master
 ```
+
+## Get up and running
+
+Do you have (Node)[https://nodejs.org/en/download/] and NPM installed?
+
+Verify with `node -v` and `npm -v` respectively.
+
+If you completed the Git steps above, you should be ready with your local fork loaded in your code editor of choice. Check your remotes again with `git remote -v` to make sure you're good to go. 
+
+From the app root `vrms/`, we `npm install` to setup the `package.json` for the Node server, then `cd client/` and `npm install` again to setup the `package.json` for the React front end. This might take a minute or two. 
+
+`cd ..` back to the app root.
+
+Take a second to review the `server.js` file here. It is a blueprint for the back end, so please familiarize yourself with it. You'll see folders for the database collection models, routes for the API, and a config file which loads the necessary environment variables. 
+
+Now, back to the command line:
+
+`touch .env` to create a file for your environment variables.
+
+Copy/paste the following inside:
+
+```API_HOST=http://localhost:4000
+APP_SERVER_PORT=4000
+REACT_APP_PORT=3000
+TEST_DATABASE_URL=mongodb+srv://testuser2:Riy4gVoo3RYzLJEB@cluster0-haogu.mongodb.net/testdb?retryWrites=true&w=majority
+```
+
+`touch .gitignore` (if not included) 
+
+Copy/paste again so it looks like this:
+
+```/node_modules
+npm-debug.log
+.DS_Store
+/*.env
+```
+
+`pwd` and make sure you're in the app root. 
+
+`nodemon` (if installed, or `npm start`)
+
+`cd client/`
+
+`npm start` again
+
+You should now have a live app. Happy hacking.
+
 
 ### Licensing *WIP*
 
