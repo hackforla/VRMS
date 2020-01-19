@@ -8,7 +8,8 @@ router.get('/', (req, res) => {
     const { query } = req;
     console.log(query);
 
-    User
+    if(query.email) {
+        User
         .findOne(query)
         .then(user => {
             if (!user) {
@@ -23,7 +24,40 @@ router.get('/', (req, res) => {
                 message: `/GET Internal server error: ${err}`
             })
         });
+    } else {
+        User
+        .find()
+        .then(users => {
+            if (!users) {
+                res.json(false);
+            } else {
+                res.json(users);
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            res.sendStatus(500).json({
+                message: `/GET Internal server error: ${err}`
+            })
+        });
+    }
+    
 });
+
+router.get('/:id', (req, res) => {
+    User
+        .findById(req.params.id)
+        .then(user => {
+            res.json(user);
+        })
+        .catch(err => {
+            console.log(err);
+            res.sendStatus(500).json({
+                message: `/GET Internal server error: ${err}`
+            })
+        });
+});
+
 
 router.patch('/:id', (req, res) => {
     console.log( )

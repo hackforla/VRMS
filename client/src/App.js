@@ -1,4 +1,5 @@
 import React from 'react';
+import { ProvideAuth } from './context/authContext';
 import { Route } from 'react-router-dom';
 
 import Home from './pages/Home';
@@ -29,17 +30,19 @@ const routes = [
 
 function App(props) {
   return (
-    <div className="app">
-		<div className="app-container">
-			<Navbar />
-			<main role="main" className="main">
-				{routes.map(({ path, Component }) => (
-					<Route key={path} exact path={path} component={Component} />
-				))}
-			</main>
-			<Footer />
+	<ProvideAuth>
+		<div className="app">
+			<div className="app-container">
+				<Navbar />
+				<main role="main" className="main">
+					{routes.map(({ path, Component }) => (
+						<Route key={path} exact path={path} component={Component} />
+					))}
+				</main>
+				<Footer />
+			</div>
 		</div>
-    </div>
+	</ProvideAuth>
   );
 }
 
