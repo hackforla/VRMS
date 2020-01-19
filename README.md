@@ -4,7 +4,7 @@ VRMS is a tool used for the engagement, support, and retention of a network of v
 
 This is an ambitious project to create a system that will help us measure our human capital development, reduce repetitive tasks and processes for leadership, and improve outcomes for both volunteers and the projects they contribute to.
 
-### Project context
+### Project Context
 
 We are currently in the initial planning phase after delivering a prototype to the organization's leadership. Our priorities are laying out a feature roadmap for beta and beyond, and a recruiting a team of dedicated members to build the product. Time is of the essence, as each Hack Night is a new opportunity to garner valuable data which, in return, supports the organization and it's members. 
 
@@ -18,7 +18,7 @@ This is a Full Stack web app, built with:
 
 ## How to contribute
 
-Head over to the [wiki](https://github.com/hackforla/VRMS/wiki);
+Head over to the [wiki](https://github.com/hackforla/VRMS/wiki).
 
 You'll find all the product documentation, and if this seems like a project you'd like to dedicate your time to, reach out to the leads on Slack or at one of our weekly Hack Nights.
 
@@ -28,7 +28,7 @@ This section discusses some tips and best practices for working with Git.
 
 ### Making changes, committing and pushing
 
-1. Changes start on your local clone of this repository, in your own branch.
+1. Changes start on your local fork of this repository, in your own branch.
 
 1. Commit your changes with a comment related to the issue it addresses to your local repository.
 
