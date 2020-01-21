@@ -10,54 +10,64 @@ import '../sass/Dashboard.scss';
 
 const AdminDashboard = (props) => {
     const [events, setEvents] = useState([]);
+    const [nextEvent, setNextEvent] = useState([]);
+    const [isCheckInReady, setIsCheckInReady] = useState();
     const [users, setUsers] = useState([]);
-    const [user, setUser] = useState([]);
     const [tabSelected, setTabSelected] = useState();
     const [optionSelected, setOptionSelected] = useState("left");
     const [eventsIsSelected, setEventsIsSelected] = useState(false);
     const [usersIsSelected, setUsersIsSelected] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [event, setEvent] = useState([]);
-    const [isCheckInReady, setIsCheckInReady] = useState(false);
 
     const auth = useAuth();
 
-    async function setCheckInReady(e) {
-        e.preventDefault();
-        
-        // try {
-        //     // const payload = { checkInReady: true };
+    async function getNextEvent() {
 
-        //     await fetch(`/api/events/${props.match.params.id}`, {
-        //         method: 'PATCH',
-        //         headers: {
-        //             "Content-Type": "application/json"
-        //         },
-        //         // body: JSON.stringify(payload)
-        //     })
-        //         .then(response => {
-        //             if (response.ok) {
-        //                 setEvent(event);
-        //                 setIsCheckInReady(!isCheckInReady);
-        //             }
-        //         });
+        try {
+            const events = await fetch('/api/events');
+            const eventsJson = await events.json();
 
-        // } catch(error) {
-        //     // setIsError(error);
-        //     setIsLoading(!isLoading);
-        // }
+            const dates = eventsJson.map(event => {
+                return Date.parse(event.date);
+            });
+
+            const nextDate = new Date(Math.max.apply(null, dates));
+            const nextDateUtc = new Date(nextDate).toISOString();
+
+            const nextEvent = eventsJson.filter(event => {
+                const eventDate = new Date(event.date).toISOString();
+                return eventDate === nextDateUtc;
+            });
+
+            setIsCheckInReady(nextEvent[0].checkInReady);
+            setNextEvent(nextEvent);
+
+        } catch(error) {
+            // setIsError(error);
+            // setIsLoading(!isLoading);
+            console.log(error);
+        }
     }
 
-    async function isAccessLevelAdmin(e) {
+    async function setCheckInReady(e, nextEventId) {
         e.preventDefault();
         
         try {
-            const res = await fetch(`/api/users/${props.match.params.id}`);
-            const resJson = await res.json();
+            await fetch(`/api/events/${nextEventId}`, {
+                method: 'PATCH',
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        setIsCheckInReady(!isCheckInReady);
+                    }
+                });
 
-            setUser(resJson);
         } catch(error) {
-            alert(error);
+            // setIsError(error);
+            // setIsLoading(!isLoading);
         }
     }
 
@@ -92,52 +102,54 @@ const AdminDashboard = (props) => {
     }
 
     useEffect(() => {
-        // console.log(`Admin dashboard useffect isLoggedIn: ${isLoggedIn}`);
-        console.log(`Admin dashboard says auth is: ${auth.user}`);
-        // if(!isLoggedIn) {
-        //     props.history.replace("/login");
-        // }
+        getNextEvent();
 
     }, []);
 
     return (
         auth.user ? (
             <div className="flex-container">
-            <div className="dashboard">
-                <div className="dashboard-headers">
-                    <h3>Hi, {auth.user.name.firstName}</h3>
-                </div>
+                <div className="dashboard">
+                    <div className="dashboard-headers">
+                        <h3>Hi, {auth.user.name.firstName}</h3>
+                    </div>
             
-                <div className="dashboard-warning">
-                    <p>You have an event coming up:</p>
-                </div>
-                
-                <div className="warning-event">
-                    <div className="warning-event-headers">
-                        <h4>HackforLA Westside</h4>
-                        <p>Monday, January 20th</p>
-                    </div>
-                    <div className="warning-event-toggle">
-                        {event && isCheckInReady === false ? 
-                            (
-                                <Link 
-                                    // to={`/events/${event._id}`}
-                                    className="dashboard-nav-button fill-green"
-                                    onClick={e => setCheckInReady(e)}>
-                                        OPEN CHECK-IN
-                                </Link>
-                            ) : (
-                                <Link 
-                                    // to={`/events/${event._id}`}
-                                    className="dashboard-nav-button fill-red"
-                                    onClick={e => setCheckInReady(e)}>
-                                        CLOSE CHECK-IN
-                                </Link>
-                            )
-                        }
-                    </div>
-                    
-                </div> 
+                    {nextEvent[0] ? (
+                        <>
+                            <div className="dashboard-warning">
+                                <p>You have an event coming up:</p>
+                            </div>
+                            
+                            <div className="warning-event">
+                                <div className="warning-event-headers">
+                                    <h4>{nextEvent[0].name}</h4>
+                                    <p>{nextEvent[0].date}</p>
+                                </div>
+                                <div className="warning-event-toggle">
+                                    {nextEvent[0] && isCheckInReady === false ? 
+                                        (
+                                            <Link 
+                                                to={`/events/${nextEvent[0]._id}`}
+                                                className="dashboard-nav-button fill-green"
+                                                onClick={e => setCheckInReady(e, nextEvent[0]._id)}>
+                                                    OPEN CHECK-IN
+                                            </Link>
+                                        ) : (
+                                            <Link 
+                                                to={`/events/${nextEvent[0]._id}`}
+                                                className="dashboard-nav-button fill-red"
+                                                onClick={e => setCheckInReady(e, nextEvent[0]._id)}>
+                                                    CLOSE CHECK-IN
+                                            </Link>
+                                        )
+                                    }
+                                </div>
+                            </div>
+                        </>
+                    ) : (
+                        <div>No events coming up!</div>
+                    )}
+
                 <div className="dashboard-nav">
                     {events && users ? (
                         <div className="dashboard-nav-row">
