@@ -3,14 +3,13 @@ const router = express.Router();
 
 const { CheckIn } = require('../models/checkIn.model');
 
-// GET /api/checkIns/
+// GET /api/checkins/
 router.get('/', (req, res) => {
 
     CheckIn
         .find()
         .then(checkIns => {
             res.json(checkIns);
-            console.log(checkIns);
         })
         .catch(err => {
             console.log(err);
@@ -26,7 +25,6 @@ router.get('/:id', (req, res) => {
         .findById(req.params.id)
         .then(checkIn => {
             res.json(checkIn);
-            console.log(checkIn);
         })
         .catch(err => {
             console.log(err);

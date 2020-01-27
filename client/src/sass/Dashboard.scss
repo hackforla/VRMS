@@ -1,5 +1,165 @@
 .dashboard {
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    // height: 96vh;
+    overflow: scroll;
+}
+
+.dashboard-headers {
+    margin: 6px;
+    padding: 48px 6px 6px 6px;
+    border: 1px solid black;
+    border-radius: 6px;
+}
+
+.dashboard-stats {
+    display: flex;
+    margin: 6px;
+    padding: 6px 6px 6px 6px;
+    border: 1px solid black;
+    border-radius: 6px;
+}
+
+.dashboard-stat-container {
+    display: inline-flex;
+    flex: 1;
+    justify-content: space-around;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    flex: 3;
+}
+
+.stats-form-row {
+    max-width: 200px;
+    width: 200px;
+    margin: 6px 0px;
+
+    p {
+        text-align: left;
+        font-weight: bold;
+        letter-spacing: .05em;
+    }
+}
+
+.stat-select {
+    display: flex;
+
+    select {
+        max-width: 180px;
+    }
+}
+
+.stat-number {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 48px;
+    font-family: sans-serif;
+    color: rgb(250, 17, 79);
+    flex: 2;
+
+    p {
+        margin: 0px;
+        padding: 0px;
+    }
+}
+
+.dashboard-nav {
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-nav-row {
+    display: flex;
+    flex-direction: row;
+    min-height: 60px;
+}
+
+.dashboard-nav-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 3px solid black;
+    border-radius: 6px;
+    height: 40px;
+    margin: 12px 6px;
+    font-size: 18px;
+    font-weight: bold;
+    z-index: 1;
+    transition: all .3s ease-in-out;
+
+    &:hover {
+        background-color: black;
+        color: white;
+    }
+}
+
+.fill-green {
+    &:hover {
+        background-color: green;
+        border: 3px solid green;
+    }
+}
+
+.fill-red {
+    &:hover {
+        background-color: red;
+        border: 3px solid red;
+    }
+}
+
+.plus-sign {
+    align-self: center;
+    font-weight: bold;
+    font-size: 24px;
+    margin: 0px;
+    padding: 0px;
+    line-height: 0px;
+}
+
+.tab-selected {
+    background-color: black;
+    color: white;
+}
+
+.dashboard-warning {
+    margin: 6px;
+    padding: 12px 6px 0px 6px;
+    height: 100%;
+
+    p {
+        font-size: 18px;
+        margin: 0px;
+        padding: 0px;
+    }
+}
+
+.warning-event-headers {
+    margin-bottom: 12px;
+
+    p {
+        padding: 0px;
+        margin: 0px;
+    }
+}
+
+.warning-event {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid black;
+    border-radius: 6px;
+    padding: 6px 6px 6px 6px;
+    margin: 6px;
+}
+
+.eventsandusers-container {
+    margin: 6px;
+    padding: 6px;
+    border: 1px solid black;
+    border-radius: 6px;
 }

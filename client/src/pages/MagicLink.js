@@ -20,18 +20,18 @@ const MagicLink = (props) => {
     //     }
     // }
 
-    // function forwardRequest() {
-    //     return props.history.push('/user');
-    // }
+    function forwardRequest() {
+
+        
+    }
 
     useEffect(() => {
         // fetchData();
+        let timer = setTimeout(() => {
+            props.history.push('/');
+        }, 6000);
 
-        // setTimeout(forwardRequest
-        // , 5000);
-
-
-
+        return () => clearTimeout(timer);
     }, []);
 
     return (

@@ -22,6 +22,7 @@ const CheckInForm = (props) => {
     const [month, setMonth] = useState("JAN");
     const [year, setYear] = useState("2020");
     const [reason, setReason] = useState("--SELECT ONE--");
+    const [project, setProject] = useState("--SELECT ONE--");
 
     const fetchQuestions = async () => {
         try {
@@ -63,6 +64,11 @@ const CheckInForm = (props) => {
         setIsQuestionAnswered(true);
     };
 
+    const handleProjectChange = (e) => {
+        setProject(e.currentTarget.value);
+        setIsQuestionAnswered(true);
+    };
+    
     const handleNewMemberChange = (e) => {
         if (e.target.value === "true") {
             setNewMember(true);
@@ -77,7 +83,8 @@ const CheckInForm = (props) => {
 
     const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
     const years = ["2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013"];
-    const reasons = ["--SELECT ONE--", "Open Data", "Homelessness", "Social Justice/Equity", "Transportation", "Mental Health", "Civic Engagement"];
+    const reasons = ["--SELECT ONE--", "Open Data", "Homelessness", "Social Justice/Equity", "Transportation", "Mental Health", "Civic Engagement", "Environment"];
+    const projects = ["--SELECT ONE--", "311 Data", "Engage", "Food Oasis", "HackforLA.org Website", "HelloGOV", "Lucky Parking", "Metro On-time", "New Schools Today", "Not Today", "Public Tree Map", "Record Clearance", "Shared Housing Project", "TDM Calculator", "Triage Tracker", "Undebate", "VRMS"];
     
     const submitForm = (userForm) => {
         // First, create a new user in the user collection
@@ -136,7 +143,13 @@ const CheckInForm = (props) => {
                     attendanceReason: reason
                 };
 
+                // const answer = { 
+                //     whichProject: project
+                // };
+
                 console.log(answer);
+
+                const answerJson = JSON.stringify(answer);
 
                 if (responseId === false) {
                     setIsError(true);
@@ -148,7 +161,7 @@ const CheckInForm = (props) => {
                 } else {
                     return fetch(`/api/users/${responseId}`, {
                         method: "PATCH",
-                        body: JSON.stringify(answer),
+                        body: answerJson,
                         headers: {
                             "Content-Type": "application/json"
                         }
@@ -159,7 +172,7 @@ const CheckInForm = (props) => {
                     .then(response => {
                         const checkInForm = { userId: `${response}`, eventId: new URLSearchParams(props.location.search).get('eventId') };
 
-                        console.log(checkInForm.userId);
+                        console.log(`Here's the form: ${checkInForm.toString()}`);
 
                         return fetch('/api/checkins', {
                             method: "POST",
@@ -169,8 +182,10 @@ const CheckInForm = (props) => {
                             }
                         })
                         .then(res => {
-                            console.log(res);
-                            props.history.push('/magicLink');
+                            if (res.ok) {
+                                console.log("That whole function ran successfully");
+                                props.history.push('/magicLink');
+                            }
                         })
                         .catch(err => console.log(err));
                     })                    
@@ -284,7 +299,6 @@ const CheckInForm = (props) => {
                 <div className="check-in-container">
                     <div className="check-in-headers">
                         <h3>Welcome back!</h3>
-                        <h4>Answer a quick question to unlock the check-in button.</h4>
                     </div>
                     <div className="check-in-form">
                         <form className="form-check-in" autoComplete="off" onSubmit={e => e.preventDefault()}>
@@ -311,6 +325,29 @@ const CheckInForm = (props) => {
                                 </div>
                             );
                         })}
+
+                        {/* {questions.length !== 0 && questions.map((question) => {
+                            return question.htmlName === 'whichProject' && (
+                                <div key={question._id} className="form-row">
+                                    <div className="form-input-text">
+                                        <label htmlFor={question.htmlName}>{question.questionText}</label>
+                                        <div className="select-reason">
+                                            <select 
+                                                name={question.htmlName}
+                                                value={project}
+                                                // aria-label="topic"
+                                                onChange={handleProjectChange}
+                                                required
+                                            >
+                                            {projects.map((project, index) => {
+                                                return <option key={index} value={project}>{project}</option>
+                                            })} 
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })} */}
 
                             <div className="form-row">
                                 <div className="form-input-text">
@@ -358,6 +395,34 @@ const CheckInForm = (props) => {
                                     </div>
                                 </div>
                             )}   
+
+                            {/* {isQuestionAnswered && project !== "--SELECT ONE--" && formInput.email && formInput.email !== "" ? (
+                                !isLoading ? (
+                                    <div className="form-row">
+                                        <div className="form-input-button">
+                                            <button type="submit" className="form-check-in-submit" onClick={e => checkInReturningUser(e)}>
+                                                    CHECK IN
+                                            </button>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="form-row">
+                                        <div className="form-input-button">
+                                            <button type="submit" className="form-check-in-submit" onClick={e => e.preventDefault()}>
+                                                    CHECKING IN...
+                                            </button>
+                                        </div>
+                                    </div>
+                                )
+                            ) : ( 
+                                <div className="form-row">
+                                    <div className="form-input-button block">
+                                        <button type="submit" className="form-check-in-submit block" onClick={e => e.preventDefault()}>
+                                                CHECK IN
+                                        </button>
+                                    </div>
+                                </div>
+                            )} */}
                         </form>
                     </div>
                 </div>

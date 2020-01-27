@@ -22,16 +22,9 @@
     display: flex;
     flex-direction: column;
     align-self: center;
-    width: 70%;
+    width: 80%;
     margin-top: 36px;
     margin-bottom: 8vh;
-}
-
-.login-button {
-    display: flex;
-    flex-direction: column;
-    align-self: center;
-    width: 60%;
 }
 
 .home-button {
@@ -42,6 +35,7 @@
     border-radius: 6px;
     height: 40px;
     margin-top: 12px;
+    padding: 0px 6px;
     font-size: 18px;
     font-weight: bold;
     z-index: 1;
@@ -83,4 +77,8 @@
     //     z-index: 0;
     //     overflow: hidden;
     // }
+
+    .home-buttons {
+        width: 90%;
+    }
 }

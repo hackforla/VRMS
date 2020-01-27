@@ -55,10 +55,6 @@ const Home = (props) => {
                         </div>
                     )
                 })}
-                 
-                <div className="login-button">
-                    {/* <Link className="home-button" to={'/login'}>Login</Link> */}
-                </div>
             </div>
         </div>
     )

@@ -4,16 +4,21 @@ import { Link , withRouter } from 'react-router-dom';
 import '../sass/Navbar.scss';
 
 const Navbar = (props) => {
-    console.log(props);
 
     return (
         <div className="nav-wrapper">
             <nav className="navbar" role="navigation" aria-label="main navigation">
                 <div className="navbar-brand">
+                    {props.location.pathname === "/" ? (
+                        <Link to="/admin">
+                            <p className="home-link-text">LOGIN</p>
+                        </Link>
+                    ) : (
+                        <Link to="/">
+                            <p className="home-link-text">HOME</p>
+                        </Link>
+                    )}
                     
-                    <Link to="/">
-                        <p className="home-link-text">Home</p>
-                    </Link>
                 </div>
 
                 {props.location.pathname === "/" || props.location.pathname === "/magicLink" ? (

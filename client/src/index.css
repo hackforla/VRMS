@@ -75,7 +75,9 @@ a {
   color: inherit;
   margin: 0px;
   padding: 0px;
-  letter-spacing: .05em;
+  /* letter-spacing: .05em; */
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+  monospace;
 }
 
 button {

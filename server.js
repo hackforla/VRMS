@@ -14,7 +14,7 @@ const path = require('path');
 const app = express();
 
 // Load config variables 
-const { TEST_DATABASE_URL, PORT } = require('./config/database');
+const { DATABASE_URL, PORT } = require('./config/database');
 
 // Required to view Request Body (req.body) in JSON
 app.use(bodyParser.json());
@@ -66,7 +66,8 @@ async function runServer(databaseUrl, port = PORT) {
             { 
                 useNewUrlParser: true, 
                 useCreateIndex: true, 
-                useUnifiedTopology: true
+                useUnifiedTopology: true,
+                useFindAndModify: false
             }
         ).catch(err => err);
 
@@ -95,7 +96,7 @@ async function closeServer() {
 };
 
 if (require.main === module) {
-    runServer(TEST_DATABASE_URL).catch(err => console.error(err));
+    runServer(DATABASE_URL).catch(err => console.error(err));
 };
 
 // app.listen(process.env.PORT || PORT, () => {
