@@ -83,7 +83,7 @@ const CheckInForm = (props) => {
 
     const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
     const years = ["2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013"];
-    const reasons = ["--SELECT ONE--", "Open Data", "Homelessness", "Social Justice/Equity", "Transportation", "Mental Health", "Civic Engagement"];
+    const reasons = ["--SELECT ONE--", "Open Data", "Homelessness", "Social Justice/Equity", "Transportation", "Mental Health", "Civic Engagement", "Environment"];
     const projects = ["--SELECT ONE--", "311 Data", "Engage", "Food Oasis", "HackforLA.org Website", "HelloGOV", "Lucky Parking", "Metro On-time", "New Schools Today", "Not Today", "Public Tree Map", "Record Clearance", "Shared Housing Project", "TDM Calculator", "Triage Tracker", "Undebate", "VRMS"];
     
     const submitForm = (userForm) => {
