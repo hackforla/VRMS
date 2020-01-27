@@ -161,7 +161,7 @@ Copy/paste the following inside:
 ```API_HOST=http://localhost:4000
 APP_SERVER_PORT=4000
 REACT_APP_PORT=3000
-TEST_DATABASE_URL=mongodb+srv://testuser2:Riy4gVoo3RYzLJEB@cluster0-haogu.mongodb.net/testdb?retryWrites=true&w=majority
+DATABASE_URL=mongodb+srv://testuser2:Riy4gVoo3RYzLJEB@cluster0-haogu.mongodb.net/testdb?retryWrites=true&w=majority
 ```
 
 `touch .gitignore` (if not included) 
