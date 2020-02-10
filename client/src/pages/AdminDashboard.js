@@ -9,9 +9,17 @@ import useAuth from '../hooks/useAuth';
 import '../sass/Dashboard.scss';
 
 const AdminDashboard = (props) => {
+    const [brigades, setBrigades] = useState([]);
     const [events, setEvents] = useState([]);
     const [nextEvent, setNextEvent] = useState([]);
     const [isCheckInReady, setIsCheckInReady] = useState();
+    const [brigade, setBrigade] = useState("All");
+    const [checkIns, setCheckIns] = useState(null);
+    const [volunteers, setVolunteers] = useState(null);
+    const [totalVolunteers, setTotalVolunteers] = useState(null);
+    const [satisfiedVolunteers, setSatisfiedVolunteers] = useState(null);
+    const [dtlaEvents, setDtlaEvents] = useState(null);
+    const [westsideEvents, setWestsideEvents] = useState(null);
     const [users, setUsers] = useState([]);
     const [tabSelected, setTabSelected] = useState();
     const [optionSelected, setOptionSelected] = useState("left");
@@ -21,8 +29,64 @@ const AdminDashboard = (props) => {
 
     const auth = useAuth();
 
-    async function getNextEvent() {
+    async function getAndSetBrigadeEvents() {
+        try {
+            const events = await fetch('/api/events');
+            const eventsJson = await events.json();
 
+            const hackNights = eventsJson.map(event => {
+                const { hacknight, _id } = event;
+                return { hacknight, _id };
+            });
+
+
+
+            const dtlaEvents = hackNights.filter(event => {
+                return event.hacknight === "DTLA";
+            });
+
+            setDtlaEvents(dtlaEvents);
+
+            const westsideEvents = hackNights.filter(event => {
+                return event.hacknight === "Westside";
+            });
+
+            setWestsideEvents(westsideEvents);
+
+
+            console.log(hackNights);
+            console.log(dtlaEvents);
+            console.log(westsideEvents);
+
+        } catch(error) {
+            console.log(error);
+        }
+    }
+
+    async function getCheckIns() {
+        try {
+            const checkIns = await fetch('/api/checkins');
+            const checkInsJson = await checkIns.json();
+
+            setCheckIns(checkInsJson);
+        } catch(error) {
+            console.log(error);
+        }
+    }
+
+    async function getUsers() {
+        try {
+            const users = await fetch('/api/users');
+            const usersJson = await users.json();
+
+            setVolunteers(usersJson);
+            setTotalVolunteers(usersJson);
+        } catch(error) {
+            console.log(error);
+        }
+    }
+
+    async function getNextEvent() {
         try {
             const events = await fetch('/api/events');
             const eventsJson = await events.json();
@@ -101,9 +165,71 @@ const AdminDashboard = (props) => {
         }
     }
 
-    useEffect(() => {
-        getNextEvent();
+    const handleBrigadeChange = (e) => {
+        setBrigade(e.currentTarget.value);
 
+        if (e.currentTarget.value === "DTLA") {
+            let dtlaVolunteersArray = [];
+
+            for (let eventCount = 0; eventCount < dtlaEvents.length; eventCount++) {
+                const dtlaVolunteers = checkIns.filter(checkIn => {
+                    return checkIn.eventId === dtlaEvents[eventCount]._id;
+                });
+
+                dtlaVolunteersArray.push(dtlaVolunteers);
+            }
+
+            const flattenedArray = [].concat(...dtlaVolunteersArray);
+
+            const uniqueVolunteers = Array.from(new Set(flattenedArray.map(volunteer => volunteer.userId)));
+
+            setVolunteers(uniqueVolunteers);
+        }
+
+        if (e.currentTarget.value === "Westside") {
+            let westsideVolunteersArray = [];
+
+            for (let eventCount = 0; eventCount < westsideEvents.length; eventCount++) {
+                const westsideVolunteers = checkIns.filter(checkIn => {
+                    return checkIn.eventId === westsideEvents[eventCount]._id;
+                });
+
+                westsideVolunteersArray.push(westsideVolunteers);
+            }
+
+            const flattenedArray = [].concat(...westsideVolunteersArray);
+
+            const uniqueVolunteers = Array.from(new Set(flattenedArray.map(volunteer => volunteer.userId)));
+
+            setVolunteers(uniqueVolunteers);
+        }
+
+        if (e.currentTarget.value === "All") {
+            // const usersToCount = checkIns.filter((checkIn, index) => {
+            //     return checkIns.indexOf(checkIn) === index;
+            // });
+
+            setVolunteers(totalVolunteers);
+        }
+    };
+
+    const handleSatisfiedChange = (e) => {
+        if (e.currentTarget.value === "DTLA") {
+            const satisfiedVolunteers = totalVolunteers.filter(volunteer => {
+                return volunteer.currentRole === volunteer.desiredRole;
+            });
+
+            setSatisfiedVolunteers(satisfiedVolunteers);
+        }
+    }
+
+    const brigadeSelection = ["All", "DTLA", "Westside"];
+
+    useEffect(() => {
+        getAndSetBrigadeEvents();
+        getNextEvent();
+        getUsers();
+        getCheckIns();
     }, []);
 
     return (
@@ -150,110 +276,200 @@ const AdminDashboard = (props) => {
                         <div>No events coming up!</div>
                     )}
 
-                <div className="dashboard-nav">
-                    {events && users ? (
-                        <div className="dashboard-nav-row">
-                            <button
-                                className={`dashboard-nav-button ${events && tabSelected === "events" ? `tab-selected`: ""}`}
-                                onClick={e => handleTabSelect(e, "events")}
-                            >
-                                EVENTS
-                            </button>
-                            <button
-                                className={`dashboard-nav-button ${users && tabSelected === "users" ? `tab-selected`: ""}`}
-                                onClick={e => handleTabSelect(e, "users")}
-                            >
-                                BRIGADE
-                            </button>
-                        </div>
-                    ) : (
-                        <div className="dashboard-nav-row block">
-                            <button
-                                className="dashboard-nav-button"
-                            >
-                                LOADING...
-                            </button>
-                            <button
-                                className="dashboard-nav-button"
-                            >
-                                LOADING...
-                            </button>
+                    <div className="dashboard-stats">
+                        <div className="dashboard-stat-container">
+                            <div className="stat">
+                                <h5>Total Volunteers:</h5>
+
+                                <form className="form-stats" autoComplete="off" onSubmit={e => e.preventDefault()}>
+                                    <div className="stats-form-row">
+                                        <div className="form-input-text">
+                                            <div className="stat-select">
+                                                <select 
+                                                    name={"whichBrigade"}
+                                                    value={brigade}
+                                                    // aria-label="topic"
+                                                    onChange={handleBrigadeChange}
+                                                    required
+                                                >
+                                                {brigadeSelection.map((brigade, index) => {
+                                                    return <option key={index} value={brigade}>{brigade}</option>
+                                                })} 
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div className="stat-number">
+                                <p>{volunteers !== null && volunteers.length}</p>
+                            </div>
                         </div> 
-                    )}
+                    </div>
 
-                    {!eventsIsSelected && !usersIsSelected ? (
-                        <div className="eventsandusers-container">
-                        <h4> ^ Select an option above to get started.</h4>
-                        </div>
-                    ) : (
-                        null
-                    )}
+                    {/* <div className="dashboard-stats">
+                        <div className="dashboard-stat-container">
+                            <div className="stat">
+                                <h5>Current Role = Desired Role</h5>
 
-                    {tabSelected ? (
-                        <div className="plus-sign">
-                            +
-                        </div>
-                    ) : (
-                        null
-                    )}
+                                <form className="form-stats" autoComplete="off" onSubmit={e => e.preventDefault()}>
+                                    <div className="stats-form-row">
+                                        <div className="form-input-text">
+                                            <div className="stat-select">
+                                                <select 
+                                                    name={"whichBrigade"}
+                                                    value={brigade}
+                                                    // aria-label="topic"
+                                                    onChange={handleSatisfiedChange}
+                                                    required
+                                                >
+                                                {brigadeSelection.map((brigade, index) => {
+                                                    return <option key={index} value={brigade}>{brigade}</option>
+                                                })} 
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div className="stat-number">
+                                <p>{satisfiedVolunteers !== null && satisfiedVolunteers.length}</p>
+                            </div>
+                        </div> 
+                    </div> */}
+
+                        {/* <div className="dashboard-stat-container">
+                            <p>Total Check-Ins:</p>
+
+                            <div>{checkIns !== null && checkIns.length}</div>
+
+                            <form className="form-stats" autoComplete="off" onSubmit={e => e.preventDefault()}>
+                                <div className="form-row">
+                                    <div className="form-input-text">
+                                        <div className="select-reason">
+                                            <select 
+                                                name={"whichBrigade"}
+                                                value={brigade}
+                                                // aria-label="topic"
+                                                onChange={handleBrigadeChange}
+                                                required
+                                            >
+                                            {brigades.map((brigade, index) => {
+                                                return <option key={index} value={brigade}>{brigade}</option>
+                                            })} 
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>  */}
+
+                    <div className="dashboard-nav">
+                        {events && users ? (
+                            <div className="dashboard-nav-row">
+                                <button
+                                    className={`dashboard-nav-button ${events && tabSelected === "events" ? `tab-selected`: ""}`}
+                                    onClick={e => handleTabSelect(e, "events")}
+                                >
+                                    EVENTS
+                                </button>
+                                <button
+                                    className={`dashboard-nav-button ${users && tabSelected === "users" ? `tab-selected`: ""}`}
+                                    onClick={e => handleTabSelect(e, "users")}
+                                >
+                                    BRIGADE
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="dashboard-nav-row block">
+                                <button
+                                    className="dashboard-nav-button"
+                                >
+                                    LOADING...
+                                </button>
+                                <button
+                                    className="dashboard-nav-button"
+                                >
+                                    LOADING...
+                                </button>
+                            </div> 
+                        )}
+
+                        {!eventsIsSelected && !usersIsSelected ? (
+                            <div className="eventsandusers-container">
+                            <h4> ^ Select an option above to get started.</h4>
+                            </div>
+                        ) : (
+                            null
+                        )}
+
+                        {tabSelected ? (
+                            <div className="plus-sign">
+                                +
+                            </div>
+                        ) : (
+                            null
+                        )}
+                        
+                        {eventsIsSelected ? (
+                            <div className="dashboard-nav-row">
+                                <button 
+                                    className={`dashboard-nav-button ${events && optionSelected === "left" ? `tab-selected`: ""}`}
+                                    onClick={e => handleOptionSelect(e, "left")}
+                                >
+                                    UPCOMING
+                                </button>
+                                <button
+                                    className={`dashboard-nav-button ${events && optionSelected === "right" ? `tab-selected`: ""}`}
+                                    onClick={e => handleOptionSelect(e, "right")}
+                                >
+                                    PAST
+                                </button>
+                            </div>
+                        ) : (
+                            null
+                        )}
+
+                        {usersIsSelected ? (
+                            <div className="dashboard-nav-row">
+                                <button 
+                                    className={`dashboard-nav-button ${events && optionSelected === "left" ? `tab-selected`: ""}`}
+                                    onClick={e => handleOptionSelect(e, "left")}
+                                >
+                                    NAME
+                                </button>
+                                <button
+                                    className={`dashboard-nav-button ${events && optionSelected === "right" ? `tab-selected`: ""}`}
+                                    onClick={e => handleOptionSelect(e, "right")}
+                                >
+                                    ROLE
+                                </button>
+                            </div>
+                        ) : (
+                            null
+                        )}
+                    </div>
                     
+
                     {eventsIsSelected ? (
-                        <div className="dashboard-nav-row">
-                            <button 
-                                className={`dashboard-nav-button ${events && optionSelected === "left" ? `tab-selected`: ""}`}
-                                onClick={e => handleOptionSelect(e, "left")}
-                            >
-                                UPCOMING
-                            </button>
-                            <button
-                                className={`dashboard-nav-button ${events && optionSelected === "right" ? `tab-selected`: ""}`}
-                                onClick={e => handleOptionSelect(e, "right")}
-                            >
-                                PAST
-                            </button>
-                        </div>
+                        <div className="eventsandusers-container">
+                            <DashboardEvents />
+                        </div> 
                     ) : (
                         null
                     )}
 
                     {usersIsSelected ? (
-                        <div className="dashboard-nav-row">
-                            <button 
-                                className={`dashboard-nav-button ${events && optionSelected === "left" ? `tab-selected`: ""}`}
-                                onClick={e => handleOptionSelect(e, "left")}
-                            >
-                                NAME
-                            </button>
-                            <button
-                                className={`dashboard-nav-button ${events && optionSelected === "right" ? `tab-selected`: ""}`}
-                                onClick={e => handleOptionSelect(e, "right")}
-                            >
-                                ROLE
-                            </button>
-                        </div>
+                        <div className="eventsandusers-container">
+                            <DashboardUsers />
+                        </div> 
                     ) : (
                         null
                     )}
                 </div>
-                
-
-                {eventsIsSelected ? (
-                    <div className="eventsandusers-container">
-                        <DashboardEvents />
-                    </div> 
-                ) : (
-                    null
-                )}
-
-                {usersIsSelected ? (
-                    <div className="eventsandusers-container">
-                        <DashboardUsers />
-                    </div> 
-                ) : (
-                    null
-                )}
             </div>
-        </div>
         ) : (
             <Redirect to="/login" />
         )
