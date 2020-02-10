@@ -66,7 +66,8 @@ async function runServer(databaseUrl, port = PORT) {
             { 
                 useNewUrlParser: true, 
                 useCreateIndex: true, 
-                useUnifiedTopology: true
+                useUnifiedTopology: true,
+                useFindAndModify: false
             }
         ).catch(err => err);
 

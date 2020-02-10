@@ -12,6 +12,62 @@
     border-radius: 6px;
 }
 
+.dashboard-stats {
+    display: flex;
+    margin: 6px;
+    padding: 6px 6px 6px 6px;
+    border: 1px solid black;
+    border-radius: 6px;
+}
+
+.dashboard-stat-container {
+    display: inline-flex;
+    flex: 1;
+    justify-content: space-around;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    flex: 3;
+}
+
+.stats-form-row {
+    max-width: 200px;
+    width: 200px;
+    margin: 6px 0px;
+
+    p {
+        text-align: left;
+        font-weight: bold;
+        letter-spacing: .05em;
+    }
+}
+
+.stat-select {
+    display: flex;
+
+    select {
+        max-width: 180px;
+    }
+}
+
+.stat-number {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 48px;
+    font-family: sans-serif;
+    color: rgb(250, 17, 79);
+    flex: 2;
+
+    p {
+        margin: 0px;
+        padding: 0px;
+    }
+}
+
 .dashboard-nav {
     display: flex;
     flex-direction: column;
