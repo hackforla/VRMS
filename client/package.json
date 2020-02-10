@@ -4,6 +4,7 @@
   "description": "VRMS Client",
   "homepage": "http://vrms-prototype.herokuapp.com",
   "dependencies": {
+    "mathjs": "^6.6.0",
     "node-sass": "^4.13.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
