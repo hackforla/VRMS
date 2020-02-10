@@ -8,6 +8,8 @@ import useAuth from '../hooks/useAuth';
 
 import '../sass/Dashboard.scss';
 
+import { round } from 'mathjs';
+
 const AdminDashboard = (props) => {
     const [brigades, setBrigades] = useState([]);
     const [events, setEvents] = useState([]);
@@ -165,6 +167,10 @@ const AdminDashboard = (props) => {
         }
     }
 
+    const totalHours = (checkIns !== null) && (checkIns.length)*3; // assuming 3 hours per hack night event (per check-in)
+
+    const avgHoursPerVol = (totalVolunteers !== null) && (round((totalHours/totalVolunteers.length) * 100) / 100).toFixed(2);
+
     const handleBrigadeChange = (e) => {
         setBrigade(e.currentTarget.value);
 
@@ -307,7 +313,26 @@ const AdminDashboard = (props) => {
                             </div>
                         </div> 
                     </div>
-
+                    <div className="dashboard-stats">
+                        <div className="dashboard-stat-container">
+                            <div className="stat">
+                                <h5>Total Hours Volunteered:</h5>
+                            </div>
+                            <div className="stat-number">
+                                <p>{totalHours}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="dashboard-stats">
+                        <div className="dashboard-stat-container">
+                            <div className="stat">
+                                <h5>Average Hours Per Volunteer:</h5>
+                            </div>
+                            <div className="stat-number">
+                                <p>{avgHoursPerVol}</p>
+                            </div>
+                        </div>
+                    </div>
                     {/* <div className="dashboard-stats">
                         <div className="dashboard-stat-container">
                             <div className="stat">
