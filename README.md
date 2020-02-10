@@ -18,9 +18,9 @@ This is a Full Stack web app, built with:
 
 ## How to contribute
 
-Head over to the [wiki](https://github.com/hackforla/VRMS/wiki).
+Head over to the Issues tab and see if you'd like to contribute. 
 
-You'll find all the product documentation, and if this seems like a project you'd like to dedicate your time to, reach out to the leads on Slack or at one of our weekly Hack Nights.
+If this seems like a project you'd like to dedicate your time to, reach out to the leads on Slack or at one of our weekly Hack Nights.
 
 ## Using Git (If you're familiar with forking and pulling/pushing/committing, head to the next section)
 
