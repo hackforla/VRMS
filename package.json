@@ -6,7 +6,9 @@
   "scripts": {
     "test": "mocha",
     "start": "node server.js",
-    "dev": "nodemon server.js",
+    "server": "nodemon server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "author": "sarL3y",
@@ -19,6 +21,7 @@
   },
   "dependencies": {
     "body-parser": "^1.19.0",
+    "concurrently": "^5.1.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
