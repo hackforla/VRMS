@@ -239,7 +239,7 @@ const CheckInForm = (props) => {
                 ready = false;
             } 
 
-            if(year === "2020" && month !== "JAN") {
+            if(year === "2020" && month !== "JAN" && month !== "FEB") {
                 setIsError(true);
                 setErrorMessage("You can't set a date in the future... Please try again.");
                 ready = false;
