@@ -4,7 +4,7 @@ const router = express.Router();
 const { User } = require('../models/user.model');
 
 // GET /api/checkuser/
-router.get('/', (req, res) => {
+router.post('/', (req, res) => {
     const { email } = req.body;
     console.log(email);
 

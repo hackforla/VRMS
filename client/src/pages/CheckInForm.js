@@ -23,6 +23,7 @@ const CheckInForm = (props) => {
     const [year, setYear] = useState("2020");
     const [reason, setReason] = useState("--SELECT ONE--");
     // const [project, setProject] = useState("--SELECT ONE--");
+    const [user, setUser] = useState(null);
 
     const fetchQuestions = async () => {
         try {
@@ -100,6 +101,7 @@ const CheckInForm = (props) => {
                 if (res.ok) {
                     return res.json();
                 }
+
                 throw new Error(res.statusText);
             })
             .then(responseId => {
@@ -281,6 +283,35 @@ const CheckInForm = (props) => {
         }
     }
 
+    const checkEmail = (e) => {
+        e.preventDefault();
+
+        try {
+            fetch('/api/checkuser', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email: formInput.email })
+            })
+            .then(res => {
+                if (res.ok) {
+                    return res.json();
+                }
+                
+                throw new Error(res.statusText);
+            })
+            .then(resJson => {
+                console.log(resJson);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     // function getFormValue() {
     //     if (Object.keys(formInput).includes(questions[0].htmlName.toString())) {
     //         return `{formInput.${questions[0].htmlName.toString()}.toString()}`
@@ -288,7 +319,7 @@ const CheckInForm = (props) => {
     // }
 
     useEffect(() => {
-        fetchQuestions();
+        // fetchQuestions();
 
     }, []);
 
@@ -302,7 +333,7 @@ const CheckInForm = (props) => {
                     <div className="check-in-form">
                         <form className="form-check-in" autoComplete="off" onSubmit={e => e.preventDefault()}>
 
-                        {questions.length !== 0 && questions.map((question) => {
+                        {/* {questions.length !== 0 && questions.map((question) => {
                             return question.htmlName === 'attendanceReason' && (
                                 <div key={question._id} className="form-row">
                                     <div className="form-input-text">
@@ -323,7 +354,7 @@ const CheckInForm = (props) => {
                                     </div>
                                 </div>
                             );
-                        })}
+                        })} */}
 
                         {/* {questions.length !== 0 && questions.map((question) => {
                             return question.htmlName === 'whichProject' && (
@@ -367,7 +398,25 @@ const CheckInForm = (props) => {
 
                             {isError && errorMessage.length > 1 ? <div className="error">{errorMessage}</div> : null}
                             
-                            {isQuestionAnswered && 
+                            {!isLoading ? (
+                                <div className="form-row">
+                                    <div className="form-input-button">
+                                        <button type="submit" className="form-check-in-submit" onClick={e => checkEmail(e)}>
+                                                CHECK IN
+                                        </button>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="form-row">
+                                    <div className="form-input-button">
+                                        <button type="submit" className="form-check-in-submit" onClick={e => e.preventDefault()}>
+                                                CHECKING IN...
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+                            
+                            {/* {isQuestionAnswered && 
                             reason !== "--SELECT ONE--" && 
                             formInput.email && 
                             formInput.email !== "" 
@@ -397,7 +446,7 @@ const CheckInForm = (props) => {
                                             </button>
                                         </div>
                                     </div>
-                                )}   
+                                )}    */}
 
                             {/* {isQuestionAnswered && project !== "--SELECT ONE--" && formInput.email && formInput.email !== "" ? (
                                 !isLoading ? (
