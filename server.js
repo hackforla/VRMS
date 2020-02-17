@@ -37,12 +37,14 @@ const checkInsRouter = require('./routers/checkIns.router');
 const answersRouter = require('./routers/answers.router');
 const usersRouter = require('./routers/users.router');
 const questionsRouter = require('./routers/questions.router');
+const checkUserRouter = require('./routers/checkUser.router');
 
 app.use('/api/events', eventsRouter);
 app.use('/api/checkins', checkInsRouter);
 app.use('/api/answers', answersRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/questions', questionsRouter);
+app.use('/api/checkuser', checkUserRouter);
 
 const CLIENT_BUILD_PATH = path.join(__dirname, './client/build');
 

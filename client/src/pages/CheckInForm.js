@@ -126,7 +126,6 @@ const CheckInForm = (props) => {
 
     const submitReturningUserForm = (email) => {
         // First, create a new user in the user collection
-        console.log(email);
 
         fetch(`/api/users?email=${email}`, {
             method: "GET",
@@ -266,7 +265,7 @@ const CheckInForm = (props) => {
         try {
             setIsLoading(true);
 
-            // Get userId from auth cookie (JWT) => return it in response
+            // v1: Get userId from auth cookie (JWT) => return it in response
             // fetch to create checkin using userId
         
             submitReturningUserForm(formInput.email);
@@ -368,33 +367,37 @@ const CheckInForm = (props) => {
 
                             {isError && errorMessage.length > 1 ? <div className="error">{errorMessage}</div> : null}
                             
-                            {isQuestionAnswered && reason !== "--SELECT ONE--" && formInput.email && formInput.email !== "" ? (
-                                !isLoading ? (
+                            {isQuestionAnswered && 
+                            reason !== "--SELECT ONE--" && 
+                            formInput.email && 
+                            formInput.email !== "" 
+                                ? (
+                                    !isLoading ? (
+                                        <div className="form-row">
+                                            <div className="form-input-button">
+                                                <button type="submit" className="form-check-in-submit" onClick={e => checkInReturningUser(e)}>
+                                                        CHECK IN
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="form-row">
+                                            <div className="form-input-button">
+                                                <button type="submit" className="form-check-in-submit" onClick={e => e.preventDefault()}>
+                                                        CHECKING IN...
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )
+                                ) : ( 
                                     <div className="form-row">
-                                        <div className="form-input-button">
-                                            <button type="submit" className="form-check-in-submit" onClick={e => checkInReturningUser(e)}>
+                                        <div className="form-input-button block">
+                                            <button type="submit" className="form-check-in-submit block" onClick={e => e.preventDefault()}>
                                                     CHECK IN
                                             </button>
                                         </div>
                                     </div>
-                                ) : (
-                                    <div className="form-row">
-                                        <div className="form-input-button">
-                                            <button type="submit" className="form-check-in-submit" onClick={e => e.preventDefault()}>
-                                                    CHECKING IN...
-                                            </button>
-                                        </div>
-                                    </div>
-                                )
-                            ) : ( 
-                                <div className="form-row">
-                                    <div className="form-input-button block">
-                                        <button type="submit" className="form-check-in-submit block" onClick={e => e.preventDefault()}>
-                                                CHECK IN
-                                        </button>
-                                    </div>
-                                </div>
-                            )}   
+                                )}   
 
                             {/* {isQuestionAnswered && project !== "--SELECT ONE--" && formInput.email && formInput.email !== "" ? (
                                 !isLoading ? (
