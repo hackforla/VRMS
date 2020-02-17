@@ -22,7 +22,14 @@ const CheckInForm = (props) => {
     const [month, setMonth] = useState("JAN");
     const [year, setYear] = useState("2020");
     const [reason, setReason] = useState("--SELECT ONE--");
-    // const [project, setProject] = useState("--SELECT ONE--");
+    const [project, setProject] = useState("--SELECT ONE--");
+    const [user, setUser] = useState(null);
+
+    // form data to fill drop-downs
+    const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+    const years = ["2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013"];
+    const reasons = ["--SELECT ONE--", "Open Data", "Homelessness", "Social Justice/Equity", "Transportation", "Mental Health", "Civic Engagement", "Environment"];
+    const projects = ["--SELECT ONE--", "311 Data", "Engage", "Food Oasis", "HackforLA.org Website", "HelloGOV", "Lucky Parking", "Metro On-time", "New Schools Today", "Not Today", "Public Tree Map", "Record Clearance", "Shared Housing Project", "TDM Calculator", "Triage Tracker", "Undebate", "VRMS"];
 
     const fetchQuestions = async () => {
         try {
@@ -64,10 +71,10 @@ const CheckInForm = (props) => {
         setIsQuestionAnswered(true);
     };
 
-    // const handleProjectChange = (e) => {
-    //     setProject(e.currentTarget.value);
-    //     setIsQuestionAnswered(true);
-    // };
+    const handleProjectChange = (e) => {
+        setProject(e.currentTarget.value);
+        setIsQuestionAnswered(true);
+    };
     
     const handleNewMemberChange = (e) => {
         if (e.target.value === "true") {
@@ -81,11 +88,6 @@ const CheckInForm = (props) => {
         }
     };
 
-    const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
-    const years = ["2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013"];
-    const reasons = ["--SELECT ONE--", "Open Data", "Homelessness", "Social Justice/Equity", "Transportation", "Mental Health", "Civic Engagement", "Environment"];
-    // const projects = ["--SELECT ONE--", "311 Data", "Engage", "Food Oasis", "HackforLA.org Website", "HelloGOV", "Lucky Parking", "Metro On-time", "New Schools Today", "Not Today", "Public Tree Map", "Record Clearance", "Shared Housing Project", "TDM Calculator", "Triage Tracker", "Undebate", "VRMS"];
-    
     const submitForm = (userForm) => {
         // First, create a new user in the user collection
 
@@ -100,6 +102,7 @@ const CheckInForm = (props) => {
                 if (res.ok) {
                     return res.json();
                 }
+
                 throw new Error(res.statusText);
             })
             .then(responseId => {
@@ -124,9 +127,68 @@ const CheckInForm = (props) => {
             });
     }
 
+    const submitReturning = (e) => {
+        e.preventDefault();
+
+        const answer = {};
+
+        if (reason !== "--SELECT ONE--") {
+            answer.attendanceReason = reason;
+        }
+
+        if (project !== "--SELECT ONE--") {
+            answer.currentProject = project;
+        }
+
+        if ((user.attendanceReason === undefined || user.currentProject.length === undefined) && (reason === "--SELECT ONE--" || project === "--SELECT ONE--")) {
+            alert('Answer the question to unlock the check-in button!');
+        } else {
+            console.log(answer);
+
+            const answerJson = JSON.stringify(answer);
+
+            console.log(answerJson);
+
+            try {
+                fetch(`/api/users/${user._id}`, {
+                    method: "PATCH",
+                    body: answerJson,
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+                .then(res => {
+                    return res.json();
+                })
+                .then(response => {
+                    const checkInForm = { userId: `${user._id}`, eventId: new URLSearchParams(props.location.search).get('eventId') };
+        
+                    console.log(`Here's the form: ${checkInForm.toString()}`);
+        
+                    return fetch('/api/checkins', {
+                        method: "POST",
+                        body: JSON.stringify(checkInForm),
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    })
+                    .then(res => {
+                        if (res.ok) {
+                            console.log("That whole function ran successfully");
+                            props.history.push('/magicLink');
+                        }
+                    })
+                    .catch(err => console.log(err));
+                })                    
+                .catch(err => console.log(err));
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }
+
     const submitReturningUserForm = (email) => {
         // First, create a new user in the user collection
-        console.log(email);
 
         fetch(`/api/users?email=${email}`, {
             method: "GET",
@@ -266,7 +328,7 @@ const CheckInForm = (props) => {
         try {
             setIsLoading(true);
 
-            // Get userId from auth cookie (JWT) => return it in response
+            // v1: Get userId from auth cookie (JWT) => return it in response
             // fetch to create checkin using userId
         
             submitReturningUserForm(formInput.email);
@@ -279,6 +341,41 @@ const CheckInForm = (props) => {
             setIsLoading(false);
             // setIsError(error);
             // alert(error);
+        }
+    }
+
+    const checkEmail = (e) => {
+        e.preventDefault();
+
+        try {
+            setIsLoading(true);
+
+            fetch('/api/checkuser', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email: formInput.email })
+            })
+            .then(res => {
+                if (res.ok) {
+                    return res.json();
+                }
+                
+                throw new Error(res.statusText);
+            })
+            .then(resJson => {
+                console.log(resJson);
+                setUser(resJson);
+                setIsLoading(false);
+            })
+            .catch(err => {
+                console.log(err);
+                setIsLoading(false);
+            })
+        } catch (error) {
+            console.log(error);
+            setIsLoading(false);
         }
     }
 
@@ -303,7 +400,7 @@ const CheckInForm = (props) => {
                     <div className="check-in-form">
                         <form className="form-check-in" autoComplete="off" onSubmit={e => e.preventDefault()}>
 
-                        {questions.length !== 0 && questions.map((question) => {
+                        {/* {questions.length !== 0 && questions.map((question) => {
                             return question.htmlName === 'attendanceReason' && (
                                 <div key={question._id} className="form-row">
                                     <div className="form-input-text">
@@ -324,7 +421,7 @@ const CheckInForm = (props) => {
                                     </div>
                                 </div>
                             );
-                        })}
+                        })} */}
 
                         {/* {questions.length !== 0 && questions.map((question) => {
                             return question.htmlName === 'whichProject' && (
@@ -348,7 +445,7 @@ const CheckInForm = (props) => {
                                 </div>
                             );
                         })} */}
-
+                        {user === null || user === false ? (
                             <div className="form-row">
                                 <div className="form-input-text">
                                     <label htmlFor="email">What email address did you use to check-in last time?</label>
@@ -365,10 +462,113 @@ const CheckInForm = (props) => {
                                 </div>
                                 <p>{"(This allows easy use of the app. We'll never sell your data!)"}</p>
                             </div>
+                        ) : (
+                            null
+                        )}
 
-                            {isError && errorMessage.length > 1 ? <div className="error">{errorMessage}</div> : null}
-                            
-                            {isQuestionAnswered && reason !== "--SELECT ONE--" && formInput.email && formInput.email !== "" ? (
+                        {isError && errorMessage.length > 1 ? <div className="error">{errorMessage}</div> : null}
+                        {user === false && <div className="error">Try entering your email again.</div>}
+
+                        {user === null || user === false ? (
+                            !isLoading ? (
+                            <div className="form-row">
+                                <div className="form-input-button">
+                                    <button type="submit" className="form-check-in-submit" onClick={e => checkEmail(e)}>
+                                            ENTER
+                                    </button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="form-row">
+                                <div className="form-input-button">
+                                    <button type="submit" className="form-check-in-submit block" onClick={e => e.preventDefault()}>
+                                            ENTERING...
+                                    </button>
+                                </div>
+                            </div>
+                        )) : (
+                            null
+                        )}
+
+                        {user !== null &&
+                        user !== false &&
+                        user.attendanceReason === undefined && 
+                            questions.map((question) => {
+                                return question.htmlName === 'attendanceReason' && (
+                                    <div key={question._id} className="form-row">
+                                        <div className="form-input-text">
+                                            <label htmlFor={question.htmlName}>{question.questionText}</label>
+                                            <div className="select-reason">
+                                                <select 
+                                                    name={question.htmlName}
+                                                    value={reason}
+                                                    // aria-label="topic"
+                                                    onChange={handleReasonChange}
+                                                    required
+                                                >
+                                                {reasons.map((reason, index) => {
+                                                    return <option key={index} value={reason}>{reason}</option>
+                                                })} 
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+
+                        {user !== null &&
+                        user !== false &&
+                        user.currentProject === undefined && 
+                            questions.map((question) => {
+                                return question.htmlName === 'currentProject' && (
+                                    <div key={question._id} className="form-row">
+                                        <div className="form-input-text">
+                                            <label htmlFor={question.htmlName}>{question.questionText}</label>
+                                            <div className="select-reason">
+                                                <select 
+                                                    name={question.htmlName}
+                                                    value={project}
+                                                    // aria-label="topic"
+                                                    onChange={handleProjectChange}
+                                                    required
+                                                >
+                                                {projects.map((project, index) => {
+                                                    return <option key={index} value={project}>{project}</option>
+                                                })} 
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+
+                        {user ? (
+                            !isLoading ? (
+                                <div className="form-row">
+                                    <div className="form-input-button">
+                                        <button type="submit" className="form-check-in-submit" onClick={e => submitReturning(e)}>
+                                                CHECK IN
+                                        </button>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="form-row">
+                                    <div className="form-input-button">
+                                        <button type="submit" className="form-check-in-submit" onClick={e => e.preventDefault()}>
+                                                CHECKING IN...
+                                        </button>
+                                    </div>
+                                </div>
+                            )
+                        ) : (
+                            null
+                        )}
+                        
+                        {/* {isQuestionAnswered && 
+                        reason !== "--SELECT ONE--" && 
+                        formInput.email && 
+                        formInput.email !== "" 
+                            ? (
                                 !isLoading ? (
                                     <div className="form-row">
                                         <div className="form-input-button">
@@ -394,35 +594,35 @@ const CheckInForm = (props) => {
                                         </button>
                                     </div>
                                 </div>
-                            )}   
+                            )}    */}
 
-                            {/* {isQuestionAnswered && project !== "--SELECT ONE--" && formInput.email && formInput.email !== "" ? (
-                                !isLoading ? (
-                                    <div className="form-row">
-                                        <div className="form-input-button">
-                                            <button type="submit" className="form-check-in-submit" onClick={e => checkInReturningUser(e)}>
-                                                    CHECK IN
-                                            </button>
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div className="form-row">
-                                        <div className="form-input-button">
-                                            <button type="submit" className="form-check-in-submit" onClick={e => e.preventDefault()}>
-                                                    CHECKING IN...
-                                            </button>
-                                        </div>
-                                    </div>
-                                )
-                            ) : ( 
+                        {/* {isQuestionAnswered && project !== "--SELECT ONE--" && formInput.email && formInput.email !== "" ? (
+                            !isLoading ? (
                                 <div className="form-row">
-                                    <div className="form-input-button block">
-                                        <button type="submit" className="form-check-in-submit block" onClick={e => e.preventDefault()}>
+                                    <div className="form-input-button">
+                                        <button type="submit" className="form-check-in-submit" onClick={e => checkInReturningUser(e)}>
                                                 CHECK IN
                                         </button>
                                     </div>
                                 </div>
-                            )} */}
+                            ) : (
+                                <div className="form-row">
+                                    <div className="form-input-button">
+                                        <button type="submit" className="form-check-in-submit" onClick={e => e.preventDefault()}>
+                                                CHECKING IN...
+                                        </button>
+                                    </div>
+                                </div>
+                            )
+                        ) : ( 
+                            <div className="form-row">
+                                <div className="form-input-button block">
+                                    <button type="submit" className="form-check-in-submit block" onClick={e => e.preventDefault()}>
+                                            CHECK IN
+                                    </button>
+                                </div>
+                            </div>
+                        )} */}
                         </form>
                     </div>
                 </div>
