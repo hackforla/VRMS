@@ -143,11 +143,11 @@ const CheckInForm = (props) => {
         if ((user.attendanceReason === undefined && reason === "--SELECT ONE--") || (user.currentProject === undefined && project === "--SELECT ONE--")) {
             alert('Answer the question to unlock the check-in button!');
         } else {
-            console.log(answer);
+            // console.log(answer);
 
             const answerJson = JSON.stringify(answer);
 
-            console.log(answerJson);
+            // console.log(answerJson);
 
             try {
                 fetch(`/api/users/${user._id}`, {
@@ -163,7 +163,7 @@ const CheckInForm = (props) => {
                 .then(response => {
                     const checkInForm = { userId: `${user._id}`, eventId: new URLSearchParams(props.location.search).get('eventId') };
         
-                    console.log(`Here's the form: ${checkInForm.toString()}`);
+                    // console.log(`Here's the form: ${checkInForm.toString()}`);
         
                     return fetch('/api/checkins', {
                         method: "POST",
@@ -174,7 +174,6 @@ const CheckInForm = (props) => {
                     })
                     .then(res => {
                         if (res.ok) {
-                            console.log("That whole function ran successfully");
                             props.history.push('/magicLink');
                         }
                     })
@@ -209,8 +208,6 @@ const CheckInForm = (props) => {
                 //     whichProject: project
                 // };
 
-                console.log(answer);
-
                 const answerJson = JSON.stringify(answer);
 
                 if (responseId === false) {
@@ -234,7 +231,7 @@ const CheckInForm = (props) => {
                     .then(response => {
                         const checkInForm = { userId: `${response}`, eventId: new URLSearchParams(props.location.search).get('eventId') };
 
-                        console.log(`Here's the form: ${checkInForm.toString()}`);
+                        // console.log(`Here's the form: ${checkInForm.toString()}`);
 
                         return fetch('/api/checkins', {
                             method: "POST",
@@ -245,7 +242,6 @@ const CheckInForm = (props) => {
                         })
                         .then(res => {
                             if (res.ok) {
-                                console.log("That whole function ran successfully");
                                 props.history.push('/magicLink');
                             }
                         })
@@ -365,7 +361,7 @@ const CheckInForm = (props) => {
                 throw new Error(res.statusText);
             })
             .then(resJson => {
-                console.log(resJson);
+                // console.log(resJson);
                 setUser(resJson);
                 setIsLoading(false);
             })
