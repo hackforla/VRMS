@@ -1,14 +1,23 @@
 import React from 'react';
 
-import '../sass/Navbar.scss';
+import '../sass/Footer.scss';
 
-const Footer = (props) => {
-    console.log(props);
+import useAuth from '../hooks/useAuth';
+
+const Footer = () => {
+    const auth = useAuth();
+    console.log(auth);
 
     return (
         <div className="footer-wrapper">
             <footer className="footer" aria-label="footer">
-                <p>pre-alpha version: 0.1</p>
+                <p className="footer-text">version: 0.1</p>
+
+                {auth.user ? (
+                    <p className="footer-text footer-greeting">Logged in as {auth.user.name.firstName}</p>
+                ) : (
+                    null
+                )}
             </footer>
         </div>
     );
