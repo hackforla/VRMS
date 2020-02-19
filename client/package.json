@@ -1,6 +1,6 @@
 {
   "name": "vrms-client",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "VRMS Client",
   "homepage": "http://vrms-prototype.herokuapp.com",
   "dependencies": {
