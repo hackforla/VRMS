@@ -8,7 +8,7 @@ const Navbar = (props) => {
     return (
         <div className="nav-wrapper">
             <nav className="navbar" role="navigation" aria-label="main navigation">
-                <div className="navbar-brand">
+                <div className="navbar-buttons-container">
                     {props.location.pathname === "/" ? (
                         <Link to="/admin">
                             <p className="home-link-text">LOGIN</p>
@@ -18,15 +18,27 @@ const Navbar = (props) => {
                             <p className="home-link-text">HOME</p>
                         </Link>
                     )}
-                    
+
+                    {props.location.pathname === "/admin" ? (
+                        <>
+                            <Link to="/events">
+                                <p className="home-link-text">EVENTS</p>
+                            </Link>
+                            <Link to="/add">
+                                <p className="home-link-text">ADD</p>
+                            </Link>
+                        </>
+                    ) : (
+                        null
+                    )}
                 </div>
 
                 {props.location.pathname === "/" || props.location.pathname === "/magicLink" ? (
-                    <div className="navbar-image grow">
+                    <div className="navbar-logo grow">
                         <img src="/hflalogo.png" alt="Hack for LA Logo"></img>
                     </div>
                 ) : (
-                    <div className="navbar-image">
+                    <div className={`navbar-logo ${props.location.pathname === "/admin" && "justify-right grow"}`}>
                         <img src="/hflalogo.png" alt="Hack for LA Logo"></img>
                     </div>
                 )}
