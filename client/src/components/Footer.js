@@ -2,6 +2,7 @@ import React from 'react';
 
 import '../sass/Footer.scss';
 
+import pkg from '../../package.json';
 import useAuth from '../hooks/useAuth';
 
 const Footer = () => {
@@ -11,7 +12,7 @@ const Footer = () => {
     return (
         <div className="footer-wrapper">
             <footer className="footer" aria-label="footer">
-                <p className="footer-text">version: 0.1</p>
+                <p className="footer-text">version: {pkg.version} "Alpha"</p>
 
                 {auth.user ? (
                     <p className="footer-text footer-greeting">Logged in as {auth.user.name.firstName}</p>
