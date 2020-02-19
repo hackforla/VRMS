@@ -140,7 +140,7 @@ const CheckInForm = (props) => {
             answer.currentProject = project;
         }
 
-        if ((user.attendanceReason === undefined || user.currentProject === undefined) && (reason === "--SELECT ONE--" || project === "--SELECT ONE--")) {
+        if ((user.attendanceReason === undefined && reason === "--SELECT ONE--") || (user.currentProject === undefined && project === "--SELECT ONE--")) {
             alert('Answer the question to unlock the check-in button!');
         } else {
             console.log(answer);
