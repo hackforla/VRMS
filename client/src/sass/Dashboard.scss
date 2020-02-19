@@ -5,50 +5,113 @@
     overflow: scroll;
 }
 
-.dashboard-headers {
+.dashboard-header {
     margin: 6px;
-    padding: 48px 6px 6px 6px;
-    border: 1px solid black;
-    border-radius: 6px;
+    padding: 12px 6px 12px 6px;
+    height: 100%;
+    background-color: #FAFAFA;
+}
+
+.dashboard-header-text-small {
+    font-size: 18px;
+    margin: 0px;
+    padding: 0px;
+}
+
+.dashboard-header-text-large {
+    font-size: 28px;
+    margin: 0px;
+    padding: 0px;
+}
+
+.fill-green {
+    &:hover {
+        background-color: green;
+        border: 2px solid green;
+    }
+}
+
+.fill-red {
+    &:hover {
+        background-color: red;
+        border: 2px solid red;
+    }
+}
+
+.dashboard-warning {
+    margin: 6px;
 }
 
 .dashboard-stats {
     display: flex;
     margin: 6px;
     padding: 6px 6px 6px 6px;
-    border: 1px solid black;
-    border-radius: 6px;
 }
 
 .dashboard-stat-container {
     display: inline-flex;
     flex: 1;
     justify-content: space-around;
+    background-color: #FAFAFA;
 }
 
-.stat {
+.stat-header {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     flex: 3;
+}
+
+.stat-header-text {
+    font-size: 16px;
+}
+
+.form-stats {
+    margin-top: 18px;
 }
 
 .stats-form-row {
     max-width: 200px;
     width: 200px;
-    margin: 6px 0px;
 
     p {
         text-align: left;
-        font-weight: bold;
-        letter-spacing: .05em;
+        letter-spacing: .075em;
     }
+}
+
+.stats-form-input-text {
+    display: flex;
+    flex-direction: column;
 }
 
 .stat-select {
     display: flex;
+    flex-direction: column;
+
+    label {
+        font-size: 16px;
+        font-weight: normal;
+        margin: 4px 0px;
+    }
 
     select {
         max-width: 180px;
+        min-width: 180px;
+        margin: 0px;
+        padding: 6px 12px;
+        font-size: 14px;
+        font-weight: normal;
+        color: rgb(250, 17, 79);
+        background-color: inherit;
+        border: 2px solid rgb(250, 17, 79);
+        border-radius: 6px;
+        background-color: #FFFFFF;
+
+        &:focus {
+            border: 2px solid rgb(250, 17, 79);
+            outline: none;
+        }
     }
 }
 
@@ -68,98 +131,45 @@
     }
 }
 
-.dashboard-nav {
-    display: flex;
-    flex-direction: column;
-}
-
-.dashboard-nav-row {
-    display: flex;
-    flex-direction: row;
-    min-height: 60px;
-}
-
-.dashboard-nav-button {
+.checkin-toggle {
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 3px solid black;
+    border: 2px solid black;
     border-radius: 6px;
     height: 40px;
+    min-width: 340px;
+    max-width: 340px;
     margin: 12px 6px;
-    font-size: 18px;
-    font-weight: bold;
+    font-size: 16px;
     z-index: 1;
     transition: all .3s ease-in-out;
 
     &:hover {
-        background-color: black;
         color: white;
     }
 }
 
-.fill-green {
-    &:hover {
-        background-color: green;
-        border: 3px solid green;
-    }
+.event-name {
+    font-size: 28px;
+    margin: 6px 0px;
 }
 
-.fill-red {
-    &:hover {
-        background-color: red;
-        border: 3px solid red;
-    }
-}
-
-.plus-sign {
-    align-self: center;
-    font-weight: bold;
-    font-size: 24px;
-    margin: 0px;
-    padding: 0px;
-    line-height: 0px;
-}
-
-.tab-selected {
-    background-color: black;
-    color: white;
-}
-
-.dashboard-warning {
-    margin: 6px;
-    padding: 12px 6px 0px 6px;
-    height: 100%;
-
-    p {
-        font-size: 18px;
-        margin: 0px;
-        padding: 0px;
-    }
-}
-
-.warning-event-headers {
-    margin-bottom: 12px;
-
-    p {
-        padding: 0px;
-        margin: 0px;
-    }
+.event-info {
+    margin: 12px 12px 12px 36px;
 }
 
 .warning-event {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    border: 1px solid black;
-    border-radius: 6px;
     padding: 6px 6px 6px 6px;
-    margin: 6px;
+    margin: 0px 6px 18px 6px;
 }
 
-.eventsandusers-container {
-    margin: 6px;
-    padding: 6px;
-    border: 1px solid black;
-    border-radius: 6px;
+.warning-event-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
