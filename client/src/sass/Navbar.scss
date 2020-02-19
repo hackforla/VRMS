@@ -2,8 +2,8 @@
     display: flex;
     flex-direction: row;
     width: 100%;
-    height: 6vh;
-    margin-bottom: 10vh;
+    height: calc(80px + 1vh);
+    margin-bottom: 24px;
     z-index: 1;
 }
 
@@ -16,36 +16,45 @@
     justify-content: center;
 }
 
-.navbar-buttons {
-    
-}
-
 .home-link-text {
     margin: 0;
     padding: 0;
     font-weight: bold;
 }
 
-.navbar-button {
-    padding: 5px;
-}
-
-.navbar-brand {
+.navbar-buttons-container {
     font-size: 16px;
     position: absolute;
+    display: flex;
     top: 36px;
     left: 12px;
+
+    a {
+        margin: 0px 18px 0px 0px;
+        
+        p {
+            font-weight: 600;
+        }
+    }
 }
 
-.navbar-image {
+.navbar-logo {
     height: 75px;
     justify-self: center;
     align-self: flex-start;
+    will-change: transition;
     transition: all .3s ease-in-out;
 
     img {
         height: 100%;
+        width: auto;
     }
+}
+
+.justify-right {
+    position: absolute;
+    top: 12px;
+    right: 0px;
 }
 
 .grow {
@@ -54,7 +63,7 @@
 }
 
 @media (max-width: 500px) {
-    .navbar-image {
+    .navbar-logo {
         height: 60px;
     }
 }

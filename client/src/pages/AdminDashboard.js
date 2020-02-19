@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
+import { round } from 'mathjs';
 
 import DashboardEvents from '../components/DashboardEvents';
 import DashboardUsers from '../components/DashboardUsers';
@@ -7,8 +8,6 @@ import DashboardUsers from '../components/DashboardUsers';
 import useAuth from '../hooks/useAuth';
 
 import '../sass/Dashboard.scss';
-
-import { round } from 'mathjs';
 
 const AdminDashboard = (props) => {
     const [brigades, setBrigades] = useState([]);
@@ -242,97 +241,99 @@ const AdminDashboard = (props) => {
         auth.user ? (
             <div className="flex-container">
                 <div className="dashboard">
-                    <div className="dashboard-headers">
-                        <h3>Hi, {auth.user.name.firstName}</h3>
+                    <div className="dashboard-header">
+                        <p className="dashboard-header-text-small">You have an event coming up:</p>
                     </div>
             
                     {nextEvent[0] ? (
-                        <>
-                            <div className="dashboard-warning">
-                                <p>You have an event coming up:</p>
+                        <div className="warning-event">
+                            <div className="warning-event-headers">
+                                <p className="event-name">{nextEvent[0].name}</p>
+                                <p className="event-info">{nextEvent[0].date}</p>
+                                <p className="event-info">{nextEvent[0].location.city}, {nextEvent[0].location.state}</p>
                             </div>
-                            
-                            <div className="warning-event">
-                                <div className="warning-event-headers">
-                                    <h4>{nextEvent[0].name}</h4>
-                                    <p>{nextEvent[0].date}</p>
-                                </div>
-                                <div className="warning-event-toggle">
-                                    {nextEvent[0] && isCheckInReady === false ? 
-                                        (
-                                            <Link 
-                                                to={`/events/${nextEvent[0]._id}`}
-                                                className="dashboard-nav-button fill-green"
-                                                onClick={e => setCheckInReady(e, nextEvent[0]._id)}>
-                                                    OPEN CHECK-IN
-                                            </Link>
-                                        ) : (
-                                            <Link 
-                                                to={`/events/${nextEvent[0]._id}`}
-                                                className="dashboard-nav-button fill-red"
-                                                onClick={e => setCheckInReady(e, nextEvent[0]._id)}>
-                                                    CLOSE CHECK-IN
-                                            </Link>
-                                        )
-                                    }
-                                </div>
+                            <div className="warning-event-toggle">
+                                {nextEvent[0] && isCheckInReady === false ? 
+                                    (
+                                        <Link 
+                                            to={`/events/${nextEvent[0]._id}`}
+                                            className="checkin-toggle fill-green"
+                                            onClick={e => setCheckInReady(e, nextEvent[0]._id)}>
+                                                OPEN CHECK-IN
+                                        </Link>
+                                    ) : (
+                                        <Link 
+                                            to={`/events/${nextEvent[0]._id}`}
+                                            className="checkin-toggle fill-red"
+                                            onClick={e => setCheckInReady(e, nextEvent[0]._id)}>
+                                                CLOSE CHECK-IN
+                                        </Link>
+                                    )
+                                }
                             </div>
-                        </>
+                        </div>
                     ) : (
                         <div>No events coming up!</div>
                     )}
 
+                    <div className="dashboard-header">
+                        <p className="dashboard-header-text-large">HackforLA Overview</p>
+
+                        <form className="form-stats" autoComplete="off" onSubmit={e => e.preventDefault()}>
+                            <div className="stats-form-row">
+                                <div className="stats-form-input-text">
+                                    <div className="stat-select">
+                                        <label htmlFor="whichBrigade">Location:</label>
+                                        <select 
+                                            name="whichBrigade"
+                                            value={brigade}
+                                            // aria-label="topic"
+                                            onChange={handleBrigadeChange}
+                                            required
+                                        >
+                                        {brigadeSelection.map((brigade, index) => {
+                                            return <option key={index} value={brigade}>{brigade}</option>
+                                        })} 
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
                     <div className="dashboard-stats">
                         <div className="dashboard-stat-container">
-                            <div className="stat">
-                                <h5>Total Volunteers:</h5>
-
-                                <form className="form-stats" autoComplete="off" onSubmit={e => e.preventDefault()}>
-                                    <div className="stats-form-row">
-                                        <div className="form-input-text">
-                                            <div className="stat-select">
-                                                <select 
-                                                    name={"whichBrigade"}
-                                                    value={brigade}
-                                                    // aria-label="topic"
-                                                    onChange={handleBrigadeChange}
-                                                    required
-                                                >
-                                                {brigadeSelection.map((brigade, index) => {
-                                                    return <option key={index} value={brigade}>{brigade}</option>
-                                                })} 
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
+                            <div className="stat-header">
+                                <p className="stat-header-text">Total Volunteers:</p>
                             </div>
-
                             <div className="stat-number">
                                 <p>{volunteers !== null && volunteers.length}</p>
                             </div>
-                        </div> 
+                        </div>
                     </div>
+
                     <div className="dashboard-stats">
                         <div className="dashboard-stat-container">
-                            <div className="stat">
-                                <h5>Total Hours Volunteered:</h5>
+                            <div className="stat-header">
+                                <p className="stat-header-text">Total Hours Volunteered:</p>
                             </div>
                             <div className="stat-number">
                                 <p>{totalHours}</p>
                             </div>
                         </div>
                     </div>
+
                     <div className="dashboard-stats">
                         <div className="dashboard-stat-container">
-                            <div className="stat">
-                                <h5>Average Hours Per Volunteer:</h5>
+                            <div className="stat-header">
+                                <p className="stat-header-text">Average Hours Per Volunteer:</p>
                             </div>
                             <div className="stat-number">
                                 <p>{avgHoursPerVol}</p>
                             </div>
                         </div>
                     </div>
+
                     {/* <div className="dashboard-stats">
                         <div className="dashboard-stat-container">
                             <div className="stat">
@@ -390,109 +391,6 @@ const AdminDashboard = (props) => {
                                 </div>
                             </form>
                         </div>  */}
-
-                    <div className="dashboard-nav">
-                        {events && users ? (
-                            <div className="dashboard-nav-row">
-                                <button
-                                    className={`dashboard-nav-button ${events && tabSelected === "events" ? `tab-selected`: ""}`}
-                                    onClick={e => handleTabSelect(e, "events")}
-                                >
-                                    EVENTS
-                                </button>
-                                <button
-                                    className={`dashboard-nav-button ${users && tabSelected === "users" ? `tab-selected`: ""}`}
-                                    onClick={e => handleTabSelect(e, "users")}
-                                >
-                                    BRIGADE
-                                </button>
-                            </div>
-                        ) : (
-                            <div className="dashboard-nav-row block">
-                                <button
-                                    className="dashboard-nav-button"
-                                >
-                                    LOADING...
-                                </button>
-                                <button
-                                    className="dashboard-nav-button"
-                                >
-                                    LOADING...
-                                </button>
-                            </div> 
-                        )}
-
-                        {!eventsIsSelected && !usersIsSelected ? (
-                            <div className="eventsandusers-container">
-                            <h4> ^ Select an option above to get started.</h4>
-                            </div>
-                        ) : (
-                            null
-                        )}
-
-                        {tabSelected ? (
-                            <div className="plus-sign">
-                                +
-                            </div>
-                        ) : (
-                            null
-                        )}
-                        
-                        {eventsIsSelected ? (
-                            <div className="dashboard-nav-row">
-                                <button 
-                                    className={`dashboard-nav-button ${events && optionSelected === "left" ? `tab-selected`: ""}`}
-                                    onClick={e => handleOptionSelect(e, "left")}
-                                >
-                                    UPCOMING
-                                </button>
-                                <button
-                                    className={`dashboard-nav-button ${events && optionSelected === "right" ? `tab-selected`: ""}`}
-                                    onClick={e => handleOptionSelect(e, "right")}
-                                >
-                                    PAST
-                                </button>
-                            </div>
-                        ) : (
-                            null
-                        )}
-
-                        {usersIsSelected ? (
-                            <div className="dashboard-nav-row">
-                                <button 
-                                    className={`dashboard-nav-button ${events && optionSelected === "left" ? `tab-selected`: ""}`}
-                                    onClick={e => handleOptionSelect(e, "left")}
-                                >
-                                    NAME
-                                </button>
-                                <button
-                                    className={`dashboard-nav-button ${events && optionSelected === "right" ? `tab-selected`: ""}`}
-                                    onClick={e => handleOptionSelect(e, "right")}
-                                >
-                                    ROLE
-                                </button>
-                            </div>
-                        ) : (
-                            null
-                        )}
-                    </div>
-                    
-
-                    {eventsIsSelected ? (
-                        <div className="eventsandusers-container">
-                            <DashboardEvents />
-                        </div> 
-                    ) : (
-                        null
-                    )}
-
-                    {usersIsSelected ? (
-                        <div className="eventsandusers-container">
-                            <DashboardUsers />
-                        </div> 
-                    ) : (
-                        null
-                    )}
                 </div>
             </div>
         ) : (
