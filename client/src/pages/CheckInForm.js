@@ -29,7 +29,7 @@ const CheckInForm = (props) => {
     const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
     const years = ["2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013"];
     const reasons = ["--SELECT ONE--", "Open Data", "Homelessness", "Social Justice/Equity", "Transportation", "Mental Health", "Civic Engagement", "Environment"];
-    const projects = ["--SELECT ONE--", "311 Data", "ArtWatcher", "Engage", "Food Oasis", "HackforLA.org Website", "Heart", "HelloGOV", "Host Home", "Jobs for Hope", "LA Crime Sentencing", "Lucky Parking", "Metro On-time", "New Schools Today", "Not Today", "Public Tree Map", "Record Clearance", "Shared Housing Project", "Spare", "TDM Calculator", "Undebate", "VRMS", "None"];
+    const projects = ["--SELECT ONE--", "311 Data", "ArtWatcher", "Engage", "Food Oasis", "Gender Equity", "HackforLA.org Website", "Heart", "HelloGOV", "Host Home", "Jobs for Hope", "LA Crime Sentencing", "Lucky Parking", "Metro On-time", "New Schools Today", "Not Today", "Public Tree Map", "Record Clearance", "Shared Housing Project", "Spare", "TDM Calculator", "Undebate", "VRMS", "None"];
 
     const fetchQuestions = async () => {
         try {
