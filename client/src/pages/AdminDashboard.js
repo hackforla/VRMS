@@ -6,6 +6,8 @@ import DashboardEvents from '../components/DashboardEvents';
 import DashboardUsers from '../components/DashboardUsers';
 
 import useAuth from '../hooks/useAuth';
+import { ReactComponent as ClockIcon} from '../svg/Icon_Clock.svg';
+import { ReactComponent as LocationIcon} from '../svg/Icon_Location.svg';
 
 import '../sass/Dashboard.scss';
 
@@ -249,8 +251,14 @@ const AdminDashboard = (props) => {
                         <div className="warning-event">
                             <div className="warning-event-headers">
                                 <p className="event-name">{nextEvent[0].name}</p>
-                                <p className="event-info">{nextEvent[0].date}</p>
-                                <p className="event-info">{nextEvent[0].location.city}, {nextEvent[0].location.state}</p>
+                                <div className="event-info-wrapper">
+                                    <ClockIcon />
+                                    <p className="event-info">{nextEvent[0].date}</p>
+                                </div>
+                                <div className="event-info-wrapper">
+                                    <LocationIcon />
+                                    <p className="event-info">{nextEvent[0].location.city}, {nextEvent[0].location.state}</p>
+                                </div>
                             </div>
                             <div className="warning-event-toggle">
                                 {nextEvent[0] && isCheckInReady === false ? 
