@@ -16,6 +16,7 @@ const AdminDashboard = (props) => {
     const [isCheckInReady, setIsCheckInReady] = useState();
     const [brigade, setBrigade] = useState("All");
     const [checkIns, setCheckIns] = useState(null);
+    const [sortedCheckIns, setSortedCheckIns] = useState(null);
     const [volunteers, setVolunteers] = useState(null);
     const [totalVolunteers, setTotalVolunteers] = useState(null);
     const [satisfiedVolunteers, setSatisfiedVolunteers] = useState(null);
@@ -165,7 +166,7 @@ const AdminDashboard = (props) => {
     }
 
     const totalHours = (checkIns !== null) && (checkIns.length) * 3; // assuming 3 hours per hack night event (per check-in)
-    const brigadeHours = (checkIns !== null) && (volunteers !== null) && (volunteers.length) * 3; // sorted
+    const brigadeHours = (sortedCheckIns !== null) && sortedCheckIns.length * 3; // sorted
 
     const avgHoursPerVol = (totalVolunteers !== null) && (round((totalHours/totalVolunteers.length) * 100) / 100).toFixed(2);
     const avgHoursPerBrigadeVol = (volunteers !== null) && (round((brigadeHours/volunteers.length) * 100) / 100).toFixed(2); // sorted
@@ -186,7 +187,8 @@ const AdminDashboard = (props) => {
 
             const flattenedArray = [].concat(...dtlaVolunteersArray);
             const uniqueVolunteers = Array.from(new Set(flattenedArray.map(volunteer => volunteer.userId)));
-
+            
+            setSortedCheckIns(flattenedArray);
             setVolunteers(uniqueVolunteers);
         }
 
@@ -204,6 +206,7 @@ const AdminDashboard = (props) => {
             const flattenedArray = [].concat(...westsideVolunteersArray);
             const uniqueVolunteers = Array.from(new Set(flattenedArray.map(volunteer => volunteer.userId)));
 
+            setSortedCheckIns(flattenedArray);
             setVolunteers(uniqueVolunteers);
         }
 
@@ -219,8 +222,10 @@ const AdminDashboard = (props) => {
             }
 
             const flattenedArray = [].concat(...southLaVolunteersArray);
+
             const uniqueVolunteers = Array.from(new Set(flattenedArray.map(volunteer => volunteer.userId)));
 
+            setSortedCheckIns(flattenedArray);
             setVolunteers(uniqueVolunteers);
         }
 
@@ -253,7 +258,7 @@ const AdminDashboard = (props) => {
     }, []);
 
     return (
-        auth.user ? (
+        // auth.user ? (
             <div className="flex-container">
                 <div className="dashboard">
                     <div className="dashboard-header">
@@ -416,9 +421,9 @@ const AdminDashboard = (props) => {
                         </div>  */}
                 </div>
             </div>
-        ) : (
-            <Redirect to="/login" />
-        )
+        // ) : (
+        //     <Redirect to="/login" />
+        // )
     )
 };
 
