@@ -155,8 +155,19 @@
     margin: 6px 0px;
 }
 
+.event-info-wrapper {
+    display: inline-flex;
+    align-items: center;
+    margin: 6px 0px;
+}
+
 .event-info {
-    margin: 12px 12px 12px 36px;
+    margin: 0px 0px 0px 12px;
+}
+
+.warning-event-headers {
+    display: flex;
+    flex-direction: column;
 }
 
 .warning-event {
