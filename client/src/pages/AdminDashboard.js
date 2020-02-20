@@ -2,12 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { round } from 'mathjs';
 
-import DashboardEvents from '../components/DashboardEvents';
-import DashboardUsers from '../components/DashboardUsers';
-
-import useAuth from '../hooks/useAuth';
 import { ReactComponent as ClockIcon} from '../svg/Icon_Clock.svg';
 import { ReactComponent as LocationIcon} from '../svg/Icon_Location.svg';
+
+import useAuth from '../hooks/useAuth';
 
 import '../sass/Dashboard.scss';
 
@@ -43,7 +41,6 @@ const AdminDashboard = (props) => {
                 return { hacknight, _id };
             });
 
-
             const dtlaEvents = hackNights.filter(event => {
                 return event.hacknight === "DTLA";
             });
@@ -61,13 +58,6 @@ const AdminDashboard = (props) => {
             });
 
             setSouthLaEvents(southLaEvents);
-            
-
-            // console.log(hackNights);
-            // console.log(dtlaEvents);
-            // console.log(westsideEvents);
-            console.log(southLaEvents);
-
         } catch(error) {
             console.log(error);
         }
@@ -115,7 +105,6 @@ const AdminDashboard = (props) => {
 
             setIsCheckInReady(nextEvent[0].checkInReady);
             setNextEvent(nextEvent);
-
         } catch(error) {
             // setIsError(error);
             // setIsLoading(!isLoading);
@@ -175,9 +164,11 @@ const AdminDashboard = (props) => {
         }
     }
 
-    const totalHours = (checkIns !== null) && (checkIns.length)*3; // assuming 3 hours per hack night event (per check-in)
+    const totalHours = (checkIns !== null) && (checkIns.length) * 3; // assuming 3 hours per hack night event (per check-in)
+    const brigadeHours = (checkIns !== null) && (volunteers !== null) && (volunteers.length) * 3; // sorted
 
     const avgHoursPerVol = (totalVolunteers !== null) && (round((totalHours/totalVolunteers.length) * 100) / 100).toFixed(2);
+    const avgHoursPerBrigadeVol = (volunteers !== null) && (round((brigadeHours/volunteers.length) * 100) / 100).toFixed(2); // sorted
 
     const handleBrigadeChange = (e) => {
         setBrigade(e.currentTarget.value);
@@ -194,7 +185,6 @@ const AdminDashboard = (props) => {
             }
 
             const flattenedArray = [].concat(...dtlaVolunteersArray);
-
             const uniqueVolunteers = Array.from(new Set(flattenedArray.map(volunteer => volunteer.userId)));
 
             setVolunteers(uniqueVolunteers);
@@ -212,7 +202,6 @@ const AdminDashboard = (props) => {
             }
 
             const flattenedArray = [].concat(...westsideVolunteersArray);
-
             const uniqueVolunteers = Array.from(new Set(flattenedArray.map(volunteer => volunteer.userId)));
 
             setVolunteers(uniqueVolunteers);
@@ -230,7 +219,6 @@ const AdminDashboard = (props) => {
             }
 
             const flattenedArray = [].concat(...southLaVolunteersArray);
-
             const uniqueVolunteers = Array.from(new Set(flattenedArray.map(volunteer => volunteer.userId)));
 
             setVolunteers(uniqueVolunteers);
@@ -265,7 +253,7 @@ const AdminDashboard = (props) => {
     }, []);
 
     return (
-        auth.user ? (
+        // auth.user ? (
             <div className="flex-container">
                 <div className="dashboard">
                     <div className="dashboard-header">
@@ -351,7 +339,9 @@ const AdminDashboard = (props) => {
                                 <p className="stat-header-text">Total Hours Volunteered:</p>
                             </div>
                             <div className="stat-number">
-                                <p>{totalHours}</p>
+                                <p>
+                                    {brigade === "All" ? (totalHours) : (brigadeHours)}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -362,7 +352,7 @@ const AdminDashboard = (props) => {
                                 <p className="stat-header-text">Average Hours Per Volunteer:</p>
                             </div>
                             <div className="stat-number">
-                                <p>{avgHoursPerVol}</p>
+                                <p>{brigade === "All" ? (avgHoursPerVol) : (avgHoursPerBrigadeVol)}</p>
                             </div>
                         </div>
                     </div>
@@ -426,9 +416,9 @@ const AdminDashboard = (props) => {
                         </div>  */}
                 </div>
             </div>
-        ) : (
-            <Redirect to="/login" />
-        )
+        // ) : (
+        //     <Redirect to="/login" />
+        // )
     )
 };
 
