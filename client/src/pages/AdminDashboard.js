@@ -23,6 +23,7 @@ const AdminDashboard = (props) => {
     const [satisfiedVolunteers, setSatisfiedVolunteers] = useState(null);
     const [dtlaEvents, setDtlaEvents] = useState(null);
     const [westsideEvents, setWestsideEvents] = useState(null);
+    const [southLaEvents, setSouthLaEvents] = useState(null);
     const [users, setUsers] = useState([]);
     const [tabSelected, setTabSelected] = useState();
     const [optionSelected, setOptionSelected] = useState("left");
@@ -43,7 +44,6 @@ const AdminDashboard = (props) => {
             });
 
 
-
             const dtlaEvents = hackNights.filter(event => {
                 return event.hacknight === "DTLA";
             });
@@ -55,11 +55,18 @@ const AdminDashboard = (props) => {
             });
 
             setWestsideEvents(westsideEvents);
+            
+            const southLaEvents = hackNights.filter(event => {
+                return event.hacknight === "South LA";
+            });
 
+            setSouthLaEvents(southLaEvents);
+            
 
-            console.log(hackNights);
-            console.log(dtlaEvents);
-            console.log(westsideEvents);
+            // console.log(hackNights);
+            // console.log(dtlaEvents);
+            // console.log(westsideEvents);
+            console.log(southLaEvents);
 
         } catch(error) {
             console.log(error);
@@ -211,6 +218,24 @@ const AdminDashboard = (props) => {
             setVolunteers(uniqueVolunteers);
         }
 
+        if (e.currentTarget.value === "South LA") {
+            let southLaVolunteersArray = [];
+
+            for (let eventCount = 0; eventCount < southLaEvents.length; eventCount++) {
+                const southLaVolunteers = checkIns.filter(checkIn => {
+                    return checkIn.eventId === southLaEvents[eventCount]._id;
+                });
+
+                southLaVolunteersArray.push(southLaVolunteers);
+            }
+
+            const flattenedArray = [].concat(...southLaVolunteersArray);
+
+            const uniqueVolunteers = Array.from(new Set(flattenedArray.map(volunteer => volunteer.userId)));
+
+            setVolunteers(uniqueVolunteers);
+        }
+
         if (e.currentTarget.value === "All") {
             // const usersToCount = checkIns.filter((checkIn, index) => {
             //     return checkIns.indexOf(checkIn) === index;
@@ -230,7 +255,7 @@ const AdminDashboard = (props) => {
         }
     }
 
-    const brigadeSelection = ["All", "DTLA", "Westside"];
+    const brigadeSelection = ["All", "DTLA", "Westside", "South LA"];
 
     useEffect(() => {
         getAndSetBrigadeEvents();
