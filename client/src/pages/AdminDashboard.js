@@ -30,7 +30,7 @@ const AdminDashboard = (props) => {
     const [usersIsSelected, setUsersIsSelected] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
-    // const auth = useAuth();
+    const auth = useAuth();
 
     async function getAndSetBrigadeEvents() {
         try {
@@ -240,7 +240,7 @@ const AdminDashboard = (props) => {
     }, []);
 
     return (
-        // auth.user ? (
+        auth.user ? (
             <div className="flex-container">
                 <div className="dashboard">
                     <div className="dashboard-header">
@@ -401,9 +401,9 @@ const AdminDashboard = (props) => {
                         </div>  */}
                 </div>
             </div>
-        // ) : (
-        //     <Redirect to="/login" />
-        // )
+        ) : (
+            <Redirect to="/login" />
+        )
     )
 };
 
