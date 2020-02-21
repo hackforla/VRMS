@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { round } from 'mathjs';
 
+import Firebase from '../firebase';
+
 import { ReactComponent as ClockIcon} from '../svg/Icon_Clock.svg';
 import { ReactComponent as LocationIcon} from '../svg/Icon_Location.svg';
 
@@ -10,6 +12,8 @@ import useAuth from '../hooks/useAuth';
 import '../sass/Dashboard.scss';
 
 const AdminDashboard = (props) => {
+    const auth = useAuth();
+
     const [brigades, setBrigades] = useState([]);
     const [events, setEvents] = useState([]);
     const [nextEvent, setNextEvent] = useState([]);
@@ -29,8 +33,6 @@ const AdminDashboard = (props) => {
     const [eventsIsSelected, setEventsIsSelected] = useState(false);
     const [usersIsSelected, setUsersIsSelected] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-
-    const auth = useAuth();
 
     async function getAndSetBrigadeEvents() {
         try {
@@ -258,7 +260,7 @@ const AdminDashboard = (props) => {
     }, []);
 
     return (
-        auth.user ? (
+        auth && auth.user ? (
             <div className="flex-container">
                 <div className="dashboard">
                     <div className="dashboard-header">

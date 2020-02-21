@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
+// import useAuth from '../hooks/useAuth';
+// import { authContext } from '../context/authContext';
+import Firebase from '../firebase';
 import useAuth from '../hooks/useAuth';
-import { authContext } from '../context/authContext';
 
 import '../sass/AdminLogin.scss';
 // import '../sass/HomeContainer-media-queries.scss';
@@ -10,41 +12,43 @@ import '../sass/AdminLogin.scss';
 
 
 const AdminLogin = (props) => {
+    const auth = useAuth();
 
     // const [isLoading, setIsLoading] = useState(false);
     // const [event, setEvent] = useState([]);
     const [isError, setIsError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
     const [email, setEmail] = useState("");
-    const auth = useAuth();
+
+    // const auth = useAuth();
 
     const handleInputChange = (e) => setEmail(e.currentTarget.value);
 
-    const handleLogin = async (e) => {
+    const handleLogin = (e) => {
         e.preventDefault();
-        
-        setIsError(false);
-        try {
-            const isAdmin = await auth.login(email);
 
-            if(isAdmin) {
-                console.log('handleLogin worked!');
-                props.history.push('/admin');
-            } else {
-                setIsError(true);
-                console.log('Welp that didnt work...');
-            }
-        } catch(error) {
-            console.log(error);
-        }
-        
+        if (email === "") {
+            setIsError(true);
+            setErrorMessage("Please don't leave the field blank.");
+        } else if (!email.includes("@") || !email.includes(".")) {
+            setIsError(true);
+            setErrorMessage("Please format the email address correctly.");
+        } else {
+            Firebase.submitEmail(email)
+                .then(response => {
+                    props.history.push('/emailsent');
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        }   
     };
-    
-    useEffect(() => {
-
-    }, []);
 
     return (
-        <div className="flex-container">
+        auth.user 
+        ? <Redirect to="/admin" /> 
+        : (
+            <div className="flex-container">
             <div className="adminlogin-container">
                 <div className="adminlogin-headers">
                     <h3>Welcome Back!</h3>
@@ -59,16 +63,17 @@ const AdminLogin = (props) => {
                                     placeholder="Email Address"
                                     value={email.toString()}
                                     // aria-label="topic"
-                                    onChange={handleInputChange}
+                                    onChange={e => handleInputChange(e)}
                                     aria-label="Email Address"
                                     autoComplete="none"
-                                    required
+                                    required="required"
                                 /> 
                             </div>
                         </div>
                     </form>
+
                     <div className="adminlogin-warning">
-                        {isError ? `You can try entering your email again, but you might not have access to a dashboard yet` : null}
+                        {isError ? errorMessage : null}
                     </div>
 
                     <div className="form-input-button">
@@ -82,7 +87,8 @@ const AdminLogin = (props) => {
                     
                 </div>
             </div>
-    )
+        )
+    );
 };
 
 export default AdminLogin;
