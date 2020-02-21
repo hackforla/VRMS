@@ -6,14 +6,14 @@ import { Redirect } from 'react-router-dom';
 
 // Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyCVcv2k05DLqX5-1I4f0RTSylGHKpR6B3s",
-    authDomain: "vrms-7c0c5.firebaseapp.com",
-    databaseURL: "https://vrms-7c0c5.firebaseio.com",
-    projectId: "vrms-7c0c5",
-    storageBucket: "vrms-7c0c5.appspot.com",
-    messagingSenderId: "167430906380",
-    appId: "1:167430906380:web:77edf6cdcd5e691db90429",
-    measurementId: "G-TMGK2Y2BQZ"
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+    authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+    databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
+    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.REACT_APP_FIREBASE_APP_ID,
+    measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
 };
 
 // Initialize Firebase class with async methods
@@ -39,7 +39,7 @@ class Firebase {
             const actionCodeSettings = {
                 // URL you want to redirect back to. The domain (www.example.com) for this
                 // URL must be whitelisted in the Firebase Console.
-                url: 'https://www.vrms.io/handleauth',
+                url: process.env.REACT_APP_FIREBASE_REDIRECT_URL,
                 // This must be true.
                 handleCodeInApp: true,
             };
