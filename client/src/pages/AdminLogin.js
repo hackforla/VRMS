@@ -17,7 +17,9 @@ const AdminLogin = (props) => {
     // const [isLoading, setIsLoading] = useState(false);
     // const [event, setEvent] = useState([]);
     const [isError, setIsError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
     const [email, setEmail] = useState("");
+
     // const auth = useAuth();
 
     const handleInputChange = (e) => setEmail(e.currentTarget.value);
@@ -25,28 +27,22 @@ const AdminLogin = (props) => {
     const handleLogin = (e) => {
         e.preventDefault();
 
-        Firebase.submitEmail(email);
-        
-        // setIsError(false);
-        // try {
-        //     const isAdmin = await auth.login(email);
-
-        //     if(isAdmin) {
-        //         console.log('handleLogin worked!');
-        //         props.history.push('/admin');
-        //     } else {
-        //         setIsError(true);
-        //         console.log('Welp that didnt work...');
-        //     }
-        // } catch(error) {
-        //     console.log(error);
-        // }
-        
+        if (email === "") {
+            setIsError(true);
+            setErrorMessage("Please don't leave the field blank.");
+        } else if (!email.includes("@") || !email.includes(".")) {
+            setIsError(true);
+            setErrorMessage("Please format the email address correctly.");
+        } else {
+            Firebase.submitEmail(email)
+                .then(response => {
+                    props.history.push('/emailsent');
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        }   
     };
-    
-    useEffect(() => {
-
-    }, []);
 
     return (
         auth.user 
@@ -67,16 +63,17 @@ const AdminLogin = (props) => {
                                     placeholder="Email Address"
                                     value={email.toString()}
                                     // aria-label="topic"
-                                    onChange={handleInputChange}
+                                    onChange={e => handleInputChange(e)}
                                     aria-label="Email Address"
                                     autoComplete="none"
-                                    required
+                                    required="required"
                                 /> 
                             </div>
                         </div>
                     </form>
+
                     <div className="adminlogin-warning">
-                        {isError ? `You can try entering your email again, but you might not have access to a dashboard yet` : null}
+                        {isError ? errorMessage : null}
                     </div>
 
                     <div className="form-input-button">
