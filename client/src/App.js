@@ -1,5 +1,5 @@
 import React from 'react';
-import { ProvideAuth } from './context/authContext';
+import { AuthProvider } from './context/AuthContext';
 import { Route } from 'react-router-dom';
 
 import Home from './pages/Home';
@@ -13,6 +13,7 @@ import ReturningUser from './pages/ReturningUser';
 import AdminLogin from './pages/AdminLogin';
 import CheckInForm from './pages/CheckInForm';
 import MagicLink from './pages/MagicLink';
+import HandleAuth from './pages/HandleAuth';
 
 import './App.scss';
 
@@ -25,12 +26,13 @@ const routes = [
 	{ path: '/returning', name: 'returning', Component: ReturningUser },
 	{ path: '/login', name: 'login', Component: AdminLogin },
 	{ path: '/checkIn/:userType', name: 'checkIn', Component: CheckInForm },
-	{ path: '/magicLink', name: 'magicLink', Component: MagicLink }	
+	{ path: '/magicLink', name: 'magicLink', Component: MagicLink },
+	{ path: '/handleauth', name: 'handleauth', Component: HandleAuth }
 ];
 
 function App(props) {
   return (
-	<ProvideAuth>
+	<AuthProvider>
 		<div className="app">
 			<div className="app-container">
 				<Navbar />
@@ -42,7 +44,7 @@ function App(props) {
 				<Footer />
 			</div>
 		</div>
-	</ProvideAuth>
+	</AuthProvider>
   );
 }
 

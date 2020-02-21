@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 
-import useAuth from '../hooks/useAuth';
-import { authContext } from '../context/authContext';
+// import useAuth from '../hooks/useAuth';
+// import { authContext } from '../context/authContext';
+import Firebase from '../firebase';
 
 import '../sass/AdminLogin.scss';
 // import '../sass/HomeContainer-media-queries.scss';
@@ -15,27 +16,29 @@ const AdminLogin = (props) => {
     // const [event, setEvent] = useState([]);
     const [isError, setIsError] = useState(false);
     const [email, setEmail] = useState("");
-    const auth = useAuth();
+    // const auth = useAuth();
 
     const handleInputChange = (e) => setEmail(e.currentTarget.value);
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        
-        setIsError(false);
-        try {
-            const isAdmin = await auth.login(email);
 
-            if(isAdmin) {
-                console.log('handleLogin worked!');
-                props.history.push('/admin');
-            } else {
-                setIsError(true);
-                console.log('Welp that didnt work...');
-            }
-        } catch(error) {
-            console.log(error);
-        }
+        Firebase.submitEmail(email);
+        
+        // setIsError(false);
+        // try {
+        //     const isAdmin = await auth.login(email);
+
+        //     if(isAdmin) {
+        //         console.log('handleLogin worked!');
+        //         props.history.push('/admin');
+        //     } else {
+        //         setIsError(true);
+        //         console.log('Welp that didnt work...');
+        //     }
+        // } catch(error) {
+        //     console.log(error);
+        // }
         
     };
     
