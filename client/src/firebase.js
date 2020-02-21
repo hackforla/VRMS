@@ -39,7 +39,7 @@ class Firebase {
             const actionCodeSettings = {
                 // URL you want to redirect back to. The domain (www.example.com) for this
                 // URL must be whitelisted in the Firebase Console.
-                url: 'http://localhost:3000/handleauth',
+                url: 'https://www.vrms.io/handleauth',
                 // This must be true.
                 handleCodeInApp: true,
             };
@@ -90,7 +90,7 @@ class Firebase {
                 window.localStorage.removeItem('emailForSignIn', email);
 
                 console.log('Login potentially successful?');
-                
+
                 return result;
             };
         } catch(error) {
