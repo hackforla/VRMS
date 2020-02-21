@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 // import useAuth from '../hooks/useAuth';
 // import { authContext } from '../context/authContext';
 import Firebase from '../firebase';
+import useAuth from '../hooks/useAuth';
 
 import '../sass/AdminLogin.scss';
 // import '../sass/HomeContainer-media-queries.scss';
@@ -11,6 +12,7 @@ import '../sass/AdminLogin.scss';
 
 
 const AdminLogin = (props) => {
+    const auth = useAuth();
 
     // const [isLoading, setIsLoading] = useState(false);
     // const [event, setEvent] = useState([]);
@@ -20,7 +22,7 @@ const AdminLogin = (props) => {
 
     const handleInputChange = (e) => setEmail(e.currentTarget.value);
 
-    const handleLogin = async (e) => {
+    const handleLogin = (e) => {
         e.preventDefault();
 
         Firebase.submitEmail(email);
@@ -47,7 +49,10 @@ const AdminLogin = (props) => {
     }, []);
 
     return (
-        <div className="flex-container">
+        auth.user 
+        ? <Redirect to="/admin" /> 
+        : (
+            <div className="flex-container">
             <div className="adminlogin-container">
                 <div className="adminlogin-headers">
                     <h3>Welcome Back!</h3>
@@ -85,7 +90,8 @@ const AdminLogin = (props) => {
                     
                 </div>
             </div>
-    )
+        )
+    );
 };
 
 export default AdminLogin;

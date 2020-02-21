@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import useAuth from '../hooks/useAuth';
 
 import '../sass/MagicLink.scss';
+import { Redirect } from 'react-router-dom';
 
 const HandleAuth = (props) => {
 
@@ -21,7 +22,10 @@ const HandleAuth = (props) => {
 
     return (
         <div className="flex-container">
-            {auth && auth.user}
+            <div>
+                <p>Redirecting...</p>
+            </div>
+            {auth.user && <Redirect to="/admin" />}
         </div>
     )
 };

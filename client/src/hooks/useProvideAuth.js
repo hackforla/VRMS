@@ -72,13 +72,25 @@ export default function useProvideAuth() {
     // }
 
     useEffect(() => {
-        Firebase.login()
-            .then(result => {
-                if (result) {
-                    console.log(result.user.email);
-                    setUser(result.user.email);
-                }
-            });
+        if (user === null) {
+            Firebase.login();
+        };
+            // .then(result => {
+            //     if (result) {
+            //         console.log(result.user.email);
+            //         setUser(result.user.email);
+            //     }
+            // });
+        
+        Firebase.auth.onAuthStateChanged(user => {
+            console.log('Handling auth change with ', user);
+
+            if (user) {
+                setUser(user);
+            } else {
+                setUser(null);
+            };
+        });
         
         // const user = Firebase.login();
 

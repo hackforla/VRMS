@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { AuthProvider } from './context/AuthContext';
 import { Route } from 'react-router-dom';
+
+import Firebase from './firebase';
 
 import Home from './pages/Home';
 import Navbar from './components/Navbar';
@@ -30,22 +32,23 @@ const routes = [
 	{ path: '/handleauth', name: 'handleauth', Component: HandleAuth }
 ];
 
-function App(props) {
-  return (
-	<AuthProvider>
-		<div className="app">
-			<div className="app-container">
-				<Navbar />
-				<main role="main" className="main">
-					{routes.map(({ path, Component }) => (
-						<Route key={path} exact path={path} component={Component} />
-					))}
-				</main>
-				<Footer />
+const App = (props) => {
+	
+	return (
+		<AuthProvider>
+			<div className="app">
+				<div className="app-container">
+					<Navbar />
+					<main role="main" className="main">
+						{routes.map(({ path, Component }) => (
+							<Route key={path} exact path={path} component={Component} />
+						))}
+					</main>
+					<Footer />
+				</div>
 			</div>
-		</div>
-	</AuthProvider>
-  );
+		</AuthProvider>
+	);
 }
 
 export default App;

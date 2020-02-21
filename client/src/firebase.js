@@ -67,6 +67,7 @@ class Firebase {
     };
 
     async login() {
+        console.log('Trying to login');
         // Confirm the link is a sign-in with email link.
         try {
             if (this.auth.isSignInWithEmailLink(window.location.href)) {
@@ -76,6 +77,7 @@ class Firebase {
                 // Get the email if available. This should be available if the user completes
                 // the flow on the same device where they started it.
                 const email = window.localStorage.getItem('emailForSignIn');
+                console.log("From local storage: " + email);
 
                 if (!email) {
                     // User opened the link on a different device. To prevent session fixation
@@ -84,6 +86,11 @@ class Firebase {
                 }
                     // The client SDK will parse the code from the link for you.
                 const result = await this.auth.signInWithEmailLink(email, window.location.href);
+
+                window.localStorage.removeItem('emailForSignIn', email);
+
+                console.log('Login potentially successful?');
+                
                 return result;
             };
         } catch(error) {
@@ -95,9 +102,9 @@ class Firebase {
         return this.auth.signOut();
     };
 
-    getCurrentUsername() {
-        return this.auth.currentUser && this.auth.currentUser.displayName;
-    };
+    // getCurrentUsername() {
+    //     return this.auth.currentUser && this.auth.currentUser.displayName;
+    // };
 };
 
 export default new Firebase(); 
