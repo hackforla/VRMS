@@ -39,7 +39,7 @@ class Firebase {
             const actionCodeSettings = {
                 // URL you want to redirect back to. The domain (www.example.com) for this
                 // URL must be whitelisted in the Firebase Console.
-                url: process.env.REACT_APP_FIREBASE_REDIRECT_URL,
+                url: process.env.REACT_APP_FIREBASE_DEV_REDIRECT_URL,
                 // This must be true.
                 handleCodeInApp: true,
             };
