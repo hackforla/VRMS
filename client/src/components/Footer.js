@@ -1,23 +1,34 @@
 import React from 'react';
 
-import '../sass/Footer.scss';
+import Firebase from '../firebase';
 
 import pkg from '../../package.json';
 import useAuth from '../hooks/useAuth';
 
+import '../sass/Footer.scss';
+
 const Footer = () => {
-    // const auth = useAuth();
+    const auth = useAuth();
+
+    const handleLogout = (e) => {
+        e.preventDefault();
+        console.log('Trying to logout here!');
+        Firebase.logout();
+    };
 
     return (
         <div className="footer-wrapper">
             <footer className="footer" aria-label="footer">
                 <p className="footer-text">version: {pkg.version} "Alpha"</p>
 
-                {/* {auth.user ? (
-                    <p className="footer-text footer-greeting">Logged in as {auth.user.name.firstName}</p>
+                {auth.user ? (
+                    <div className="footer-greeting">
+                        <p className="footer-text">{`Hi ${auth.user.email}`}</p>
+                        <button className="logout-button" onClick={handleLogout}>{`(LOGOUT)`}</button>
+                    </div>
                 ) : (
                     null
-                )} */}
+                )}
             </footer>
         </div>
     );
