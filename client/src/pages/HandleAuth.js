@@ -15,7 +15,7 @@ const HandleAuth = (props) => {
     useEffect(() => {
         // Firebase.login();
 
-    }, []);
+    }, [auth]);
 
     return (
         <div className="flex-container">
