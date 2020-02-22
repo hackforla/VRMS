@@ -12,7 +12,7 @@ const Footer = () => {
     return (
         <div className="footer-wrapper">
             <footer className="footer" aria-label="footer">
-                <p className="footer-text">version: {pkg.version} "Alpha"</p>
+                <p className="footer-text">v{pkg.version} "Alpha"</p>
 
                 {auth.user ? (
                     <p className="footer-text footer-greeting">Logged in as {auth.user.name.firstName}</p>
