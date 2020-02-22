@@ -76,7 +76,7 @@ class Firebase {
                 // the sign-in operation.
                 // Get the email if available. This should be available if the user completes
                 // the flow on the same device where they started it.
-                const email = window.localStorage.getItem('emailForSignIn');
+                let email = window.localStorage.getItem('emailForSignIn');
                 console.log("From local storage: " + email);
 
                 if (!email) {
