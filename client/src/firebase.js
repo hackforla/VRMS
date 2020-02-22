@@ -87,7 +87,7 @@ class Firebase {
                     // The client SDK will parse the code from the link for you.
                 const result = await this.auth.signInWithEmailLink(email, window.location.href);
 
-                window.localStorage.removeItem('emailForSignIn', email);
+                // window.localStorage.removeItem('emailForSignIn', email);
 
                 console.log('Login potentially successful?');
 
