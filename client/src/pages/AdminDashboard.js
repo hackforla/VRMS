@@ -4,15 +4,15 @@ import { round } from 'mathjs';
 
 import Firebase from '../firebase';
 
+import useAuth from '../hooks/useAuth';
+
 import { ReactComponent as ClockIcon} from '../svg/Icon_Clock.svg';
 import { ReactComponent as LocationIcon} from '../svg/Icon_Location.svg';
-
-import useAuth from '../hooks/useAuth';
 
 import '../sass/Dashboard.scss';
 
 const AdminDashboard = (props) => {
-    const auth = useAuth();
+    // const auth = useAuth();
 
     
     const [brigades, setBrigades] = useState([]);
@@ -268,7 +268,7 @@ const AdminDashboard = (props) => {
     }, []);
 
     return (
-        auth && auth.user ? (
+        // auth && auth.user ? (
             <div className="flex-container">
                 <div className="dashboard">
                     <div className="dashboard-header">
@@ -431,9 +431,9 @@ const AdminDashboard = (props) => {
                         </div>  */}
                 </div>
             </div>
-        ) : (
-            <Redirect to="/login" />
-        )
+        // ) : (
+        //     <Redirect to="/login" />
+        // )
     )
 };
 
