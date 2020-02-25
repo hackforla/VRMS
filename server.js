@@ -58,20 +58,18 @@ app.get('*', (req, res) => {
     res.sendFile(index);
 });
 
-// Make the server funcitons available to testing 
+// Make the server functions available to testing 
 let server;
 
 async function runServer(databaseUrl, port = PORT) {
     await mongoose
-        .connect(
-            databaseUrl, 
-            { 
-                useNewUrlParser: true, 
-                useCreateIndex: true, 
-                useUnifiedTopology: true,
-                useFindAndModify: false
-            }
-        ).catch(err => err);
+        .connect(databaseUrl, { 
+            useNewUrlParser: true, 
+            useCreateIndex: true, 
+            useUnifiedTopology: true,
+            useFindAndModify: false
+        })
+        .catch(err => err);
 
     server = app
         .listen(port, () => {
@@ -81,20 +79,22 @@ async function runServer(databaseUrl, port = PORT) {
             mongoose.disconnect();
             return err;
         });
-}
+};
 
 async function closeServer() {
-    await mongoose.disconnect().then(() => {
-        return new Promise((resolve, reject) => {
-            console.log('Closing Mongoose connection. Bye');
-            server.close(err => {
-                if (err) {
-                    return reject(err);
-                }
-                resolve();
+    await mongoose
+        .disconnect()
+        .then(() => {
+            return new Promise((resolve, reject) => {
+                console.log('Closing Mongoose connection. Bye');
+                server.close(err => {
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve();
+                });
             });
         });
-    });
 };
 
 if (require.main === module) {

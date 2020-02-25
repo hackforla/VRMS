@@ -1,6 +1,8 @@
-import React from 'react';
-import { ProvideAuth } from './context/authContext';
+import React, { useState, useEffect } from 'react';
+import { AuthProvider } from './context/authContext';
 import { Route } from 'react-router-dom';
+
+import Firebase from './firebase';
 
 import Home from './pages/Home';
 import Navbar from './components/Navbar';
@@ -13,6 +15,8 @@ import ReturningUser from './pages/ReturningUser';
 import AdminLogin from './pages/AdminLogin';
 import CheckInForm from './pages/CheckInForm';
 import MagicLink from './pages/MagicLink';
+import HandleAuth from './pages/HandleAuth';
+import EmailSent from './pages/EmailSent';
 
 import './App.scss';
 
@@ -25,25 +29,28 @@ const routes = [
 	{ path: '/returning', name: 'returning', Component: ReturningUser },
 	{ path: '/login', name: 'login', Component: AdminLogin },
 	{ path: '/checkIn/:userType', name: 'checkIn', Component: CheckInForm },
-	{ path: '/magicLink', name: 'magicLink', Component: MagicLink }	
+	{ path: '/magicLink', name: 'magicLink', Component: MagicLink },
+	{ path: '/handleauth', name: 'handleauth', Component: HandleAuth },
+	{ path: '/emailsent', name: 'emailsent', Component: EmailSent }
 ];
 
-function App(props) {
-  return (
-	<ProvideAuth>
-		<div className="app">
-			<div className="app-container">
-				<Navbar />
-				<main role="main" className="main">
-					{routes.map(({ path, Component }) => (
-						<Route key={path} exact path={path} component={Component} />
-					))}
-				</main>
-				<Footer />
+const App = (props) => {
+	
+	return (
+		<AuthProvider>
+			<div className="app">
+				<div className="app-container">
+					<Navbar />
+					<main role="main" className="main">
+						{routes.map(({ path, Component }) => (
+							<Route key={path} exact path={path} component={Component} />
+						))}
+					</main>
+					<Footer />
+				</div>
 			</div>
-		</div>
-	</ProvideAuth>
-  );
+		</AuthProvider>
+	);
 }
 
 export default App;
