@@ -14,6 +14,7 @@ import '../sass/Dashboard.scss';
 const AdminDashboard = (props) => {
     const auth = useAuth();
 
+    
     const [brigades, setBrigades] = useState([]);
     const [events, setEvents] = useState([]);
     const [nextEvent, setNextEvent] = useState([]);
