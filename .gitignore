@@ -2,3 +2,7 @@
 npm-debug.log
 .DS_Store
 /*.env
+
+# Mongo db data
+data
+*.py

@@ -101,8 +101,8 @@ if (require.main === module) {
     runServer(DATABASE_URL).catch(err => console.error(err));
 };
 
-// app.listen(process.env.PORT || PORT, () => {
-//     console.log(`Server is listening on port: ${process.env.PORT || PORT}`);
-// });
+//app.listen(process.env.PORT || PORT, () => {
+//    console.log(`Server is listening on port: ${process.env.PORT || PORT}`);
+//});
 
 module.exports = { app, runServer, closeServer };

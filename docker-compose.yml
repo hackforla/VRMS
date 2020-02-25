@@ -1,38 +1,18 @@
-# version: '3'
-# services:
+version: '3'
 
-#   ###############
-#   # NODE SERVER #
-#   ###############
-#   server:
-#     build:
-#       context: .
-#       dockerfile: Dockerfile
-#     expose:
-#       - "3000"
-#       - "4000"
-#     volumes: 
-#       - .:/usr/src/app
-#     environment:
-#       API_HOST: "http://localhost:4000"
-#     ports:
-#       - "3000:4000"
+services:
+  vrmsapp:
+    build: .
+    ports:
+      - 4000:4000
+    env_file:
+      - .env
 
-#   #############
-#   # REACT APP #
-#   #############
-#   # web:
-#   #   build: ./client
-#   #   expose:
-#   #     - "3000"
-#   #   environment:
-#   #     - REACT_APP_PORT="3000"
-#   #   ports:
-#   #     - "3000:3000"
-#   #   volumes:
-#   #     - ./client/src:/client/src
-#   #     - ./client/public:/client/public
-#   #   links: 
-#   #     - server
-    
-  
+  mongo:
+    image: mongo
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_DATABASE=testdb
+    volumes:
+      - ./data/db:/data/db
