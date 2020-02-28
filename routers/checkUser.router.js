@@ -1,16 +1,17 @@
 const express = require('express');
 const router = express.Router();
+//const git = require('./utils/github.js')
 
 const { User } = require('../models/user.model');
 
 // GET /api/checkuser/
 router.post('/', (req, res) => {
     const { email } = req.body;
-    console.log(email);
-
-    if(email) {
+    console.log(email)
+    if (email) {
+        //let emailStringsPromises = git.newUserProcess(email) //looks for github id and makes some strings to attach to an email
         User
-            .findOne({email})
+            .findOne({ email })
             .then(user => {
                 if (!user) {
                     res.json(false);
@@ -26,9 +27,9 @@ router.post('/', (req, res) => {
                 })
             });
     } else {
-        res.json({ message: "Enter the email address you used to check-in last time."});
+        res.json({ message: "Enter the email address you used to check-in last time." });
     }
-    
+
 });
 
 router.get('/:id', (req, res) => {
@@ -117,7 +118,7 @@ router.get('/:id', (req, res) => {
 //     //         'min' in sizedFields[field] &&
 //     //             req.body[field].trim().length < sizedFields[field].min
 //     // );
-    
+
 //     // const tooLargeField = Object.keys(sizedFields).find(
 //     //     field => 
 //     //         'max' in sizedFields[field] &&

@@ -1,0 +1,1 @@
+exports.GITHUB_AUTH_TOKEN = process.env.GITHUB_AUTH_TOKEN || '641aae2bf0708335ddedc0cd1431a2d624e55f57';

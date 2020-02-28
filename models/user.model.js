@@ -9,6 +9,12 @@ const userSchema = mongoose.Schema({
         lastName: { type: String }
     },
     email: { type: String },
+    gsuite: { type: Boolean },
+    github: {
+        id: { type: String },
+        twofa: { type: Boolean },
+        orgPublic: { type: Boolean }
+    },
     accessLevel: { type: String, default: "user" },
     createdDate: { type: Date, default: Date.now },
     currentRole: { type: String },
@@ -28,6 +34,12 @@ userSchema.methods.serialize = () => {
             lastName: this.name.lastName
         },
         email: this.email,
+        gsuite: this.gsuite,
+        github: {
+            id: this.github.id,
+            twofa: this.github.twofa,
+            orgPublic: this.github.orgPublic
+        },
         accessLevel: this.accessLevel,
         createdDate: this.createdDate,
         currentRole: this.currentRole,
