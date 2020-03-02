@@ -79,8 +79,15 @@ const AdminDashboard = (props) => {
     }
 
     async function getUsers() {
+        const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
+
         try {
-            const users = await fetch('/api/users');
+            const users = await fetch('/api/users', {
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-customrequired-header": headerToSend
+                }
+            });
             const usersJson = await users.json();
 
             setVolunteers(usersJson);
