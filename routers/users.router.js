@@ -6,9 +6,12 @@ const { User } = require('../models/user.model');
 // GET /api/users/
 router.get('/', (req, res) => {
     const { query } = req;
-    console.log(query);
+    const { headers } = req;
+    const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
 
-    if(query.email) {
+    if (headers['x-customrequired-header'] !== expectedHeader) {
+        res.sendStatus(401);
+    } else if (query.email) {
         User
         .findOne(query)
         .then(user => {
@@ -41,7 +44,6 @@ router.get('/', (req, res) => {
             })
         });
     }
-    
 });
 
 router.get('/:id', (req, res) => {
@@ -60,18 +62,79 @@ router.get('/:id', (req, res) => {
 
 
 router.patch('/:id', (req, res) => {
-    console.log( )
-    User
+    const { headers } = req;
+    const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
+
+    if (headers['x-customrequired-header'] !== expectedHeader) {
+        res.sendStatus(401);
+    } else {
+        User
         .findByIdAndUpdate(req.params.id, req.body)
         .then(edit => res.json(req.params.id))
         .catch(err =>
             res.status(500).json({
                 error: 'Couldn\'t edit form... Try again.'
             }));
-
+    }
 });
 
 router.post('/', (req, res) => {
+    const { headers } = req;
+    const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
+    
+    if (headers['x-customrequired-header'] !== expectedHeader) {
+        res.sendStatus(401);
+    } else {
+        let { email } = req.body;
+        let { firstName } = req.body.name;
+
+        User
+            .create(req.body, function (err, user) {
+                if (err) throw err;
+
+                const { id } = user;
+                console.log('Created with id: ' + id);
+                res.status(201).json(id);
+            })
+            // .then(user => {
+            //     .json({ id: res.body.id })
+            // })
+            // .catch(err => console.log(err));
+            // .find()
+            // .count()
+            // .then(count => {
+            //     if (count > 0) {
+            //         res.sendStatus(403);
+            //         // return Promise.reject({
+            //         //     code: 422,
+            //         //     reason: 'ValidationError',
+            //         //     message: 'Email is already in use!',
+            //         //     location: 'email'
+            //         // });
+            //     }
+
+            //     return User;
+            // })
+            // .then(user => {
+            //     return User.create({
+            //         firstName,
+            //         email
+            //     });
+            // })
+            // .then(user => {
+            //     return res.sendStatus(201).json({ id: user._id });
+            // })
+            // .catch(err => {
+            //     console.log(err);
+            //     // if (err.reason === 'ValidationError') {
+            //     //     return res.sendStatus(err.code).json(err);
+            //     // }
+            //     res.sendStatus(500).json({
+            //         code: 500,
+            //         message: 'Internal server error while creating User'});
+            // });
+    }
+
     // const requiredFields = ['firstName', 'email'];
     // const missingField = requiredFields.find(
     //     field => !(field in req.body)
@@ -147,55 +210,6 @@ router.post('/', (req, res) => {
     //         location: tooSmallField || tooLargeField
     //     });
     // }
-
-    let { email } = req.body;
-    let { firstName } = req.body.name;
-
-    User
-        .create(req.body, function (err, user) {
-            if (err) throw err;
-
-            const { id } = user;
-            console.log('Created with id: ' + id);
-            res.status(201).json(id);
-        })
-        // .then(user => {
-        //     .json({ id: res.body.id })
-        // })
-        // .catch(err => console.log(err));
-        // .find()
-        // .count()
-        // .then(count => {
-        //     if (count > 0) {
-        //         res.sendStatus(403);
-        //         // return Promise.reject({
-        //         //     code: 422,
-        //         //     reason: 'ValidationError',
-        //         //     message: 'Email is already in use!',
-        //         //     location: 'email'
-        //         // });
-        //     }
-
-        //     return User;
-        // })
-        // .then(user => {
-        //     return User.create({
-        //         firstName,
-        //         email
-        //     });
-        // })
-        // .then(user => {
-        //     return res.sendStatus(201).json({ id: user._id });
-        // })
-        // .catch(err => {
-        //     console.log(err);
-        //     // if (err.reason === 'ValidationError') {
-        //     //     return res.sendStatus(err.code).json(err);
-        //     // }
-        //     res.sendStatus(500).json({
-        //         code: 500,
-        //         message: 'Internal server error while creating User'});
-        // });
 });
 
 module.exports = router;

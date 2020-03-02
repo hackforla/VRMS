@@ -90,12 +90,14 @@ const CheckInForm = (props) => {
 
     const submitForm = (userForm) => {
         // First, create a new user in the user collection
+        const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
         fetch('/api/users', {
             method: "POST",
             body: JSON.stringify(userForm),
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "x-customrequired-header": headerToSend
             }
         })
             .then(res => {
@@ -150,11 +152,14 @@ const CheckInForm = (props) => {
             // console.log(answerJson);
 
             try {
+                const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
+
                 fetch(`/api/users/${user._id}`, {
                     method: "PATCH",
                     body: answerJson,
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        "x-customrequired-header": headerToSend
                     }
                 })
                 .then(res => {
