@@ -33,7 +33,7 @@ class Firebase {
     };
 
     async submitEmail(email) {
-        console.log('Try submitting ' + email + '...');
+        // console.log('Try submitting ' + email + '...');
 
         try {
             const actionCodeSettings = {
