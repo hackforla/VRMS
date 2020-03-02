@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 
 // import useAuth from '../hooks/useAuth';
@@ -24,7 +24,7 @@ const AdminLogin = (props) => {
 
     const handleInputChange = (e) => setEmail(e.currentTarget.value);
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
 
         if (email === "") {
@@ -34,14 +34,70 @@ const AdminLogin = (props) => {
             setIsError(true);
             setErrorMessage("Please format the email address correctly.");
         } else {
-            Firebase.submitEmail(email)
-                .then(response => {
-                    props.history.push('/emailsent');
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-        }   
+            let isAdmin = await checkEmail(e);
+
+            if (isAdmin === false) {
+                setIsError(true);
+                setErrorMessage("You don't have the correct access level.");
+                
+            } else if (isAdmin === undefined || isAdmin === null) {
+                console.log('Something is wrong try again');
+                
+            } else {
+                Firebase.submitEmail(email)
+                    .then(response => {
+                        props.history.push('/emailsent');
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            }
+        };
+    };
+
+    async function checkEmail(e) {
+        e.preventDefault();
+
+        try {
+            // setIsLoading(true);
+
+            return await fetch('/api/checkuser', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email })
+            })
+            .then(res => {
+                if (res.ok) {
+                    return res.json();
+                }
+                
+                throw new Error(res.statusText);
+            })
+            .then(response => {
+
+                if (response === false) {
+                    setIsError(true);
+                    setErrorMessage("Please enter the correct email address.");
+
+                    return response;
+                } else if (response.accessLevel !== 'admin') {
+                    setIsError(true);
+                    setErrorMessage("You don't have the correct access level to view the dashboard.");
+                } else {
+
+                    return response.email;
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                // setIsLoading(false);
+            })
+        } catch (error) {
+            console.log(error);
+            // setIsLoading(false);
+        }
     };
 
     return (
