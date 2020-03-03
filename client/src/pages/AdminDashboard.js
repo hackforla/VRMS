@@ -12,7 +12,7 @@ import { ReactComponent as LocationIcon} from '../svg/Icon_Location.svg';
 import '../sass/Dashboard.scss';
 
 const AdminDashboard = (props) => {
-    const auth = useAuth();
+    // const auth = useAuth();
 
     const [nextEvent, setNextEvent] = useState([]);
     const [isCheckInReady, setIsCheckInReady] = useState();
@@ -227,7 +227,7 @@ const AdminDashboard = (props) => {
     }, []);
 
     return (
-        auth && auth.user ? (
+        // auth && auth.user ? (
             <div className="flex-container">
                 <div className="dashboard">
                     <div className="dashboard-header">
@@ -310,7 +310,7 @@ const AdminDashboard = (props) => {
                             {dtlaVolunteers !== null && westsideVolunteers !== null && southLaVolunteers !== null && (
                                 brigade === "All" &&
                                     <DonutChart
-                                        data={[{value: dtlaVolunteers.length}, {value: westsideVolunteers.length}, {value: southLaVolunteers.length}]}
+                                        data={[{value: dtlaVolunteers.length, color: "#2A768A"}, {value: westsideVolunteers.length, color: "#102D49"}, {value: southLaVolunteers.length, color: "#CD1F42"}]}
                                         width={175}
                                         height={175}
                                         innerRadius={40}
@@ -320,7 +320,7 @@ const AdminDashboard = (props) => {
                             {dtlaVolunteers !== null && westsideVolunteers !== null && southLaVolunteers !== null && (
                                 brigade === "DTLA" &&
                                     <DonutChart
-                                        data={[{value: dtlaVolunteers.length}]}
+                                        data={[{value: dtlaVolunteers.length, color: "#2A768A"}]}
                                         width={175}
                                         height={175}
                                         innerRadius={40}
@@ -330,7 +330,7 @@ const AdminDashboard = (props) => {
                             {dtlaVolunteers !== null && westsideVolunteers !== null && southLaVolunteers !== null && (
                                 brigade === "Westside" &&
                                     <DonutChart
-                                        data={[{value: westsideVolunteers.length}]}
+                                        data={[{value: westsideVolunteers.length, color: "#102D49"}]}
                                         width={175}
                                         height={175}
                                         innerRadius={40}
@@ -340,7 +340,7 @@ const AdminDashboard = (props) => {
                             {dtlaVolunteers !== null && westsideVolunteers !== null && southLaVolunteers !== null && (
                                 brigade === "South LA" &&
                                     <DonutChart
-                                        data={[{value: southLaVolunteers.length}]}
+                                        data={[{value: southLaVolunteers.length, color: "#CD1F42"}]}
                                         width={175}
                                         height={175}
                                         innerRadius={40}
@@ -369,7 +369,7 @@ const AdminDashboard = (props) => {
                             {dtlaHours !== null && westsideHours !== null && southLaHours !== null && (
                                 brigade === "All" &&
                                     <DonutChart
-                                        data={[{value: dtlaHours}, {value: westsideHours}, {value: southLaHours}]}
+                                        data={[{value: dtlaHours, color: "#2A768A"}, {value: westsideHours, color: "#102D49"}, {value: southLaHours, color: "#CD1F42"}]}
                                         width={175}
                                         height={175}
                                         innerRadius={40}
@@ -379,7 +379,7 @@ const AdminDashboard = (props) => {
                             {dtlaHours !== null && westsideHours !== null && southLaHours !== null && (
                                 brigade === "DTLA" &&
                                     <DonutChart
-                                        data={[{value: dtlaHours}]}
+                                        data={[{value: dtlaHours, color: "#2A768A"}]}
                                         width={175}
                                         height={175}
                                         innerRadius={40}
@@ -389,7 +389,7 @@ const AdminDashboard = (props) => {
                             {dtlaHours !== null && westsideHours !== null && southLaHours !== null && (
                                 brigade === "Westside" &&
                                     <DonutChart
-                                        data={[{value: westsideHours}]}
+                                        data={[{value: westsideHours, color: "#102D49"}]}
                                         width={175}
                                         height={175}
                                         innerRadius={40}
@@ -399,7 +399,7 @@ const AdminDashboard = (props) => {
                             {dtlaHours !== null && westsideHours !== null && southLaHours !== null && (
                                 brigade === "South LA" &&
                                     <DonutChart
-                                        data={[{value: southLaHours}]}
+                                        data={[{value: southLaHours, color: "#CD1F42"}]}
                                         width={175}
                                         height={175}
                                         innerRadius={40}
@@ -428,7 +428,7 @@ const AdminDashboard = (props) => {
                         {avgHoursPerDtlaVol !== null && avgHoursPerWestsideVol !== null && avgHoursPerSouthLaVol !== null && (
                                 brigade === "All" &&
                                     <DonutChart
-                                        data={[{value: avgHoursPerDtlaVol}, {value: avgHoursPerWestsideVol}, {value: avgHoursPerSouthLaVol}]}
+                                        data={[{value: avgHoursPerDtlaVol, color: "#2A768A"}, {value: avgHoursPerWestsideVol, color: "#102D49"}, {value: avgHoursPerSouthLaVol, color: "#CD1F42"}]}
                                         width={175}
                                         height={175}
                                         innerRadius={40}
@@ -438,7 +438,7 @@ const AdminDashboard = (props) => {
                             {avgHoursPerDtlaVol !== null && avgHoursPerWestsideVol !== null && avgHoursPerSouthLaVol !== null && (
                                 brigade === "DTLA" &&
                                     <DonutChart
-                                        data={[{value: avgHoursPerDtlaVol}]}
+                                        data={[{value: avgHoursPerDtlaVol, color: "#2A768A"}]}
                                         width={175}
                                         height={175}
                                         innerRadius={40}
@@ -448,7 +448,7 @@ const AdminDashboard = (props) => {
                             {avgHoursPerDtlaVol !== null && avgHoursPerWestsideVol !== null && avgHoursPerSouthLaVol !== null && (
                                 brigade === "Westside" &&
                                     <DonutChart
-                                        data={[{value: avgHoursPerWestsideVol}]}
+                                        data={[{value: avgHoursPerWestsideVol, color: "#102D49"}]}
                                         width={175}
                                         height={175}
                                         innerRadius={40}
@@ -458,7 +458,7 @@ const AdminDashboard = (props) => {
                             {avgHoursPerDtlaVol !== null && avgHoursPerWestsideVol !== null && avgHoursPerSouthLaVol !== null && (
                                 brigade === "South LA" &&
                                     <DonutChart
-                                        data={[{value: avgHoursPerSouthLaVol}]}
+                                        data={[{value: avgHoursPerSouthLaVol, color: "#CD1F42"}]}
                                         width={175}
                                         height={175}
                                         innerRadius={40}
@@ -469,9 +469,9 @@ const AdminDashboard = (props) => {
                     </div>
                 </div>
             </div>
-        ) : (
-            <Redirect to="/login" />
-        )
+        // ) : (
+        //     <Redirect to="/login" />
+        // )
     )
 };
 

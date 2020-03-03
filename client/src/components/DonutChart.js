@@ -24,7 +24,6 @@ const DonutChart = (props) => {
 
 	useEffect(() => {
 		const data = createPie(props.data);
-		console.log(data);
 		const group = d3.select(ref.current);
 		const groupWithData = group.selectAll("g.arc").data(data);
 
@@ -42,7 +41,10 @@ const DonutChart = (props) => {
 		path
 			.attr("class", "arc")
 			.attr("d", createArc)
-			.attr("fill", (d, i) => colors[i]);
+			.attr("fill", (d, i) => {
+				const { data } = d;
+				return data.color;
+			});
 
 		// const text = groupWithUpdate
 		// 	.append("text")
