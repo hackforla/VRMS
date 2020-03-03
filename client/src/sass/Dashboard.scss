@@ -50,6 +50,7 @@
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
+    flex-direction: column;
     margin: 6px;
     padding: 6px 6px 6px 6px;
 }
@@ -61,9 +62,16 @@
     -webkit-box-flex: 1;
         -ms-flex: 1;
             flex: 1;
-    -ms-flex-pack: distribute;
-        justify-content: space-around;
     background-color: #FAFAFA;
+}
+
+.dashboard-chart-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    // background-color: #FAFAFA;
 }
 
 .stat-header {
@@ -77,13 +85,36 @@
     -webkit-box-pack: center;
         -ms-flex-pack: center;
             justify-content: center;
-    -webkit-box-flex: 3;
-        -ms-flex: 3;
-            flex: 3;
 }
 
 .stat-header-text {
     font-size: 16px;
+}
+
+.stat-number {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+    font-family: sans-serif;
+    color: rgb(250, 17, 79);
+    margin-left: 12px;
+
+    p {
+        margin: 0px;
+        padding: 0px;
+    }
 }
 
 .form-stats {
@@ -155,33 +186,6 @@
             border: 2px solid rgb(250, 17, 79);
             outline: none;
         }
-    }
-}
-
-.stat-number {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-            flex-direction: column;
-    -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
-    font-size: 48px;
-    font-family: sans-serif;
-    color: rgb(250, 17, 79);
-    -webkit-box-flex: 2;
-        -ms-flex: 2;
-            flex: 2;
-
-    p {
-        margin: 0px;
-        padding: 0px;
     }
 }
 

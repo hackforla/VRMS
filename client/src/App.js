@@ -17,6 +17,7 @@ import CheckInForm from './pages/CheckInForm';
 import MagicLink from './pages/MagicLink';
 import HandleAuth from './pages/HandleAuth';
 import EmailSent from './pages/EmailSent';
+import Events from './pages/Events';
 
 import './App.scss';
 
@@ -31,7 +32,8 @@ const routes = [
 	{ path: '/checkIn/:userType', name: 'checkIn', Component: CheckInForm },
 	{ path: '/magicLink', name: 'magicLink', Component: MagicLink },
 	{ path: '/handleauth', name: 'handleauth', Component: HandleAuth },
-	{ path: '/emailsent', name: 'emailsent', Component: EmailSent }
+	{ path: '/emailsent', name: 'emailsent', Component: EmailSent },
+	{ path: '/events', name: 'events', Component: Events }
 ];
 
 const App = (props) => {
