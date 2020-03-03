@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { round } from 'mathjs';
 
-import Firebase from '../firebase';
-
 import useAuth from '../hooks/useAuth';
+
+import DonutChart from '../components/DonutChart';
 
 import { ReactComponent as ClockIcon} from '../svg/Icon_Clock.svg';
 import { ReactComponent as LocationIcon} from '../svg/Icon_Location.svg';
@@ -12,31 +12,32 @@ import { ReactComponent as LocationIcon} from '../svg/Icon_Location.svg';
 import '../sass/Dashboard.scss';
 
 const AdminDashboard = (props) => {
-    // const auth = useAuth();
+    const auth = useAuth();
 
-    
-    const [brigades, setBrigades] = useState([]);
-    const [events, setEvents] = useState([]);
     const [nextEvent, setNextEvent] = useState([]);
     const [isCheckInReady, setIsCheckInReady] = useState();
     const [brigade, setBrigade] = useState("All");
     const [checkIns, setCheckIns] = useState(null);
+    const [sortedDtlaCheckIns, setSortedDtlaCheckIns] = useState(null);
+    const [sortedWestsideCheckIns, setSortedWestsideCheckIns] = useState(null);
+    const [sortedSouthLaCheckIns, setSortedSouthLaCheckIns] = useState(null);
     const [sortedCheckIns, setSortedCheckIns] = useState(null);
     const [volunteers, setVolunteers] = useState(null);
     const [totalVolunteers, setTotalVolunteers] = useState(null);
-    const [satisfiedVolunteers, setSatisfiedVolunteers] = useState(null);
     const [dtlaEvents, setDtlaEvents] = useState(null);
     const [westsideEvents, setWestsideEvents] = useState(null);
     const [southLaEvents, setSouthLaEvents] = useState(null);
-    const [users, setUsers] = useState([]);
-    const [tabSelected, setTabSelected] = useState();
-    const [optionSelected, setOptionSelected] = useState("left");
-    const [eventsIsSelected, setEventsIsSelected] = useState(false);
-    const [usersIsSelected, setUsersIsSelected] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [dtlaVolunteers, setDtlaVolunteers] = useState(null);
+    const [westsideVolunteers, setWestsideVolunteers] = useState(null);
+    const [southLaVolunteers, setSouthLaVolunteers] = useState(null);
 
-    async function getAndSetBrigadeEvents() {
+    async function getAndSetData() {
         try {
+            const checkIns = await fetch('/api/checkins');
+            const checkInsJson = await checkIns.json();
+
+            setCheckIns(checkInsJson);
+
             const events = await fetch('/api/events');
             const eventsJson = await events.json();
 
@@ -44,35 +45,78 @@ const AdminDashboard = (props) => {
                 const { hacknight, _id } = event;
                 return { hacknight, _id };
             });
-
+            // Filter events into it's own array
             const dtlaEvents = hackNights.filter(event => {
                 return event.hacknight === "DTLA";
             });
 
             setDtlaEvents(dtlaEvents);
 
+            let dtlaVolunteersArray = [];
+
+            // For every DTLA Event...
+            for (let eventCount = 0; eventCount < dtlaEvents.length; eventCount++) {
+                // Filter the check-ins by all of the check-ins that have
+                // the event ID matching a DTLA event
+                const dtlaVolunteers = checkInsJson.filter(checkIn => {
+                    return checkIn.eventId === dtlaEvents[eventCount]._id;
+                });
+                // Push those check-ins into the array we created above
+                dtlaVolunteersArray.push(dtlaVolunteers);
+            }
+
+            // Flatten the array above (comes as multiple arrays within an array)
+            const flattenedDtlaArray = [].concat(...dtlaVolunteersArray);
+            // Create a new array from a set (a set removes duplicate values) to 
+            // get the unique volunteers for that specific Hack Night (DTLA)
+            const uniqueDtlaVolunteers = Array.from(new Set(flattenedDtlaArray.map(volunteer => volunteer.userId)));
+            
+            setSortedDtlaCheckIns(flattenedDtlaArray);
+            setDtlaVolunteers(uniqueDtlaVolunteers);
+
             const westsideEvents = hackNights.filter(event => {
                 return event.hacknight === "Westside";
             });
 
             setWestsideEvents(westsideEvents);
+
+            let westsideVolunteersArray = [];
+
+            for (let eventCount = 0; eventCount < westsideEvents.length; eventCount++) {
+                const westsideVolunteers = checkInsJson.filter(checkIn => {
+                    return checkIn.eventId === westsideEvents[eventCount]._id;
+                });
+
+                westsideVolunteersArray.push(westsideVolunteers);
+            }
+
+            const flattenedWestsideArray = [].concat(...westsideVolunteersArray);
+            const uniqueWestsideVolunteers = Array.from(new Set(flattenedWestsideArray.map(volunteer => volunteer.userId)));
+
+            setSortedWestsideCheckIns(flattenedWestsideArray);
+            setWestsideVolunteers(uniqueWestsideVolunteers);
             
             const southLaEvents = hackNights.filter(event => {
                 return event.hacknight === "South LA";
             });
 
             setSouthLaEvents(southLaEvents);
-        } catch(error) {
-            console.log(error);
-        }
-    }
 
-    async function getCheckIns() {
-        try {
-            const checkIns = await fetch('/api/checkins');
-            const checkInsJson = await checkIns.json();
+            let southLaVolunteersArray = [];
 
-            setCheckIns(checkInsJson);
+            for (let eventCount = 0; eventCount < southLaEvents.length; eventCount++) {
+                const southLaVolunteers = checkInsJson.filter(checkIn => {
+                    return checkIn.eventId === southLaEvents[eventCount]._id;
+                });
+
+                southLaVolunteersArray.push(southLaVolunteers);
+            }
+
+            const flattenedSouthLaArray = [].concat(...southLaVolunteersArray);
+            const uniqueSouthLaVolunteers = Array.from(new Set(flattenedSouthLaArray.map(volunteer => volunteer.userId)));
+
+            setSortedSouthLaCheckIns(flattenedSouthLaArray);
+            setSouthLaVolunteers(uniqueSouthLaVolunteers);
         } catch(error) {
             console.log(error);
         }
@@ -138,137 +182,52 @@ const AdminDashboard = (props) => {
                         setIsCheckInReady(!isCheckInReady);
                     }
                 });
-
         } catch(error) {
             // setIsError(error);
             // setIsLoading(!isLoading);
         }
-    }
-
-    const handleTabSelect = (e, selectedType) => {
-        e.preventDefault();
-
-        if(selectedType === "events") {
-            setTabSelected("events");
-            setUsersIsSelected(false);
-            setEventsIsSelected(true);
-        }
-
-        if(selectedType === "users") {
-            setTabSelected("users");
-            setEventsIsSelected(false);
-            setUsersIsSelected(true);
-        }
-    }
-
-    const handleOptionSelect = (e, selectedType) => {
-        e.preventDefault();
-
-        if(selectedType === "left") {
-            setOptionSelected("left");
-            
-        }
-
-        if(selectedType === "right") {
-            setOptionSelected("right");
-            
-        }
-    }
+    };
 
     const totalHours = (checkIns !== null) && (checkIns.length) * 3; // assuming 3 hours per hack night event (per check-in)
-    const brigadeHours = (sortedCheckIns !== null) && sortedCheckIns.length * 3; // sorted
+    const dtlaHours = (sortedDtlaCheckIns !== null) && sortedDtlaCheckIns.length * 3;
+    const westsideHours = (sortedWestsideCheckIns !== null) && sortedWestsideCheckIns.length * 3;
+    const southLaHours = (sortedSouthLaCheckIns !== null) && sortedSouthLaCheckIns.length * 3;
 
     const avgHoursPerVol = (totalVolunteers !== null) && (round((totalHours/totalVolunteers.length) * 100) / 100).toFixed(2);
-    const avgHoursPerBrigadeVol = (volunteers !== null) && (round((brigadeHours/volunteers.length) * 100) / 100).toFixed(2); // sorted
+    const avgHoursPerDtlaVol = (dtlaVolunteers !== null) && (round((dtlaHours/dtlaVolunteers.length) * 100) / 100).toFixed(2);
+    const avgHoursPerWestsideVol = (westsideVolunteers !== null) && (round((westsideHours/westsideVolunteers.length) * 100) / 100).toFixed(2);
+    const avgHoursPerSouthLaVol = (southLaVolunteers !== null) && (round((southLaHours/southLaVolunteers.length) * 100) / 100).toFixed(2);
 
     const handleBrigadeChange = (e) => {
         setBrigade(e.currentTarget.value);
 
         if (e.currentTarget.value === "DTLA") {
-            let dtlaVolunteersArray = [];
-
-            for (let eventCount = 0; eventCount < dtlaEvents.length; eventCount++) {
-                const dtlaVolunteers = checkIns.filter(checkIn => {
-                    return checkIn.eventId === dtlaEvents[eventCount]._id;
-                });
-
-                dtlaVolunteersArray.push(dtlaVolunteers);
-            }
-
-            const flattenedArray = [].concat(...dtlaVolunteersArray);
-            const uniqueVolunteers = Array.from(new Set(flattenedArray.map(volunteer => volunteer.userId)));
-            
-            setSortedCheckIns(flattenedArray);
-            setVolunteers(uniqueVolunteers);
+            setVolunteers(dtlaVolunteers);
         }
 
         if (e.currentTarget.value === "Westside") {
-            let westsideVolunteersArray = [];
-
-            for (let eventCount = 0; eventCount < westsideEvents.length; eventCount++) {
-                const westsideVolunteers = checkIns.filter(checkIn => {
-                    return checkIn.eventId === westsideEvents[eventCount]._id;
-                });
-
-                westsideVolunteersArray.push(westsideVolunteers);
-            }
-
-            const flattenedArray = [].concat(...westsideVolunteersArray);
-            const uniqueVolunteers = Array.from(new Set(flattenedArray.map(volunteer => volunteer.userId)));
-
-            setSortedCheckIns(flattenedArray);
-            setVolunteers(uniqueVolunteers);
+            setVolunteers(westsideVolunteers);
         }
 
         if (e.currentTarget.value === "South LA") {
-            let southLaVolunteersArray = [];
-
-            for (let eventCount = 0; eventCount < southLaEvents.length; eventCount++) {
-                const southLaVolunteers = checkIns.filter(checkIn => {
-                    return checkIn.eventId === southLaEvents[eventCount]._id;
-                });
-
-                southLaVolunteersArray.push(southLaVolunteers);
-            }
-
-            const flattenedArray = [].concat(...southLaVolunteersArray);
-
-            const uniqueVolunteers = Array.from(new Set(flattenedArray.map(volunteer => volunteer.userId)));
-
-            setSortedCheckIns(flattenedArray);
-            setVolunteers(uniqueVolunteers);
+            setVolunteers(southLaVolunteers);
         }
 
         if (e.currentTarget.value === "All") {
-            // const usersToCount = checkIns.filter((checkIn, index) => {
-            //     return checkIns.indexOf(checkIn) === index;
-            // });
-
             setVolunteers(totalVolunteers);
         }
     };
 
-    const handleSatisfiedChange = (e) => {
-        if (e.currentTarget.value === "DTLA") {
-            const satisfiedVolunteers = totalVolunteers.filter(volunteer => {
-                return volunteer.currentRole === volunteer.desiredRole;
-            });
-
-            setSatisfiedVolunteers(satisfiedVolunteers);
-        }
-    }
-
     const brigadeSelection = ["All", "DTLA", "Westside", "South LA"];
 
     useEffect(() => {
-        getAndSetBrigadeEvents();
+        getAndSetData();
         getNextEvent();
         getUsers();
-        getCheckIns();
     }, []);
 
     return (
-        // auth && auth.user ? (
+        auth && auth.user ? (
             <div className="flex-container">
                 <div className="dashboard">
                     <div className="dashboard-header">
@@ -346,6 +305,49 @@ const AdminDashboard = (props) => {
                                 <p>{volunteers !== null && volunteers.length}</p>
                             </div>
                         </div>
+
+                        <div className="dashboard-chart-container">
+                            {dtlaVolunteers !== null && westsideVolunteers !== null && southLaVolunteers !== null && (
+                                brigade === "All" &&
+                                    <DonutChart
+                                        data={[{value: dtlaVolunteers.length}, {value: westsideVolunteers.length}, {value: southLaVolunteers.length}]}
+                                        width={175}
+                                        height={175}
+                                        innerRadius={40}
+                                        outerRadius={80}
+                                    />
+                            )}
+                            {dtlaVolunteers !== null && westsideVolunteers !== null && southLaVolunteers !== null && (
+                                brigade === "DTLA" &&
+                                    <DonutChart
+                                        data={[{value: dtlaVolunteers.length}]}
+                                        width={175}
+                                        height={175}
+                                        innerRadius={40}
+                                        outerRadius={80}
+                                    />
+                            )}
+                            {dtlaVolunteers !== null && westsideVolunteers !== null && southLaVolunteers !== null && (
+                                brigade === "Westside" &&
+                                    <DonutChart
+                                        data={[{value: westsideVolunteers.length}]}
+                                        width={175}
+                                        height={175}
+                                        innerRadius={40}
+                                        outerRadius={80}
+                                    />
+                            )}
+                            {dtlaVolunteers !== null && westsideVolunteers !== null && southLaVolunteers !== null && (
+                                brigade === "South LA" &&
+                                    <DonutChart
+                                        data={[{value: southLaVolunteers.length}]}
+                                        width={175}
+                                        height={175}
+                                        innerRadius={40}
+                                        outerRadius={80}
+                                    />
+                            )}
+                        </div>
                     </div>
 
                     <div className="dashboard-stats">
@@ -355,9 +357,55 @@ const AdminDashboard = (props) => {
                             </div>
                             <div className="stat-number">
                                 <p>
-                                    {brigade === "All" ? (totalHours) : (brigadeHours)}
+                                    {brigade === "All" ? (totalHours) : (null)}
+                                    {brigade === "DTLA" ? (dtlaHours) : (null)}
+                                    {brigade === "Westside" ? (westsideHours) : (null)}
+                                    {brigade === "South LA" ? (southLaHours) : (null)}
                                 </p>
                             </div>
+                        </div>
+
+                        <div className="dashboard-chart-container">
+                            {dtlaHours !== null && westsideHours !== null && southLaHours !== null && (
+                                brigade === "All" &&
+                                    <DonutChart
+                                        data={[{value: dtlaHours}, {value: westsideHours}, {value: southLaHours}]}
+                                        width={175}
+                                        height={175}
+                                        innerRadius={40}
+                                        outerRadius={80}
+                                    />
+                            )}
+                            {dtlaHours !== null && westsideHours !== null && southLaHours !== null && (
+                                brigade === "DTLA" &&
+                                    <DonutChart
+                                        data={[{value: dtlaHours}]}
+                                        width={175}
+                                        height={175}
+                                        innerRadius={40}
+                                        outerRadius={80}
+                                    />
+                            )}
+                            {dtlaHours !== null && westsideHours !== null && southLaHours !== null && (
+                                brigade === "Westside" &&
+                                    <DonutChart
+                                        data={[{value: westsideHours}]}
+                                        width={175}
+                                        height={175}
+                                        innerRadius={40}
+                                        outerRadius={80}
+                                    />
+                            )}
+                            {dtlaHours !== null && westsideHours !== null && southLaHours !== null && (
+                                brigade === "South LA" &&
+                                    <DonutChart
+                                        data={[{value: southLaHours}]}
+                                        width={175}
+                                        height={175}
+                                        innerRadius={40}
+                                        outerRadius={80}
+                                    />
+                            )}
                         </div>
                     </div>
 
@@ -367,73 +415,63 @@ const AdminDashboard = (props) => {
                                 <p className="stat-header-text">Average Hours Per Volunteer:</p>
                             </div>
                             <div className="stat-number">
-                                <p>{brigade === "All" ? (avgHoursPerVol) : (avgHoursPerBrigadeVol)}</p>
+                                <p>
+                                    {brigade === "All" ? (avgHoursPerVol) : (null)}
+                                    {brigade === "DTLA" ? (avgHoursPerDtlaVol) : (null)}
+                                    {brigade === "Westside" ? (avgHoursPerWestsideVol) : (null)}
+                                    {brigade === "South LA" ? (avgHoursPerSouthLaVol) : (null)}
+                                </p>
                             </div>
                         </div>
+
+                        <div className="dashboard-chart-container">
+                        {avgHoursPerDtlaVol !== null && avgHoursPerWestsideVol !== null && avgHoursPerSouthLaVol !== null && (
+                                brigade === "All" &&
+                                    <DonutChart
+                                        data={[{value: avgHoursPerDtlaVol}, {value: avgHoursPerWestsideVol}, {value: avgHoursPerSouthLaVol}]}
+                                        width={175}
+                                        height={175}
+                                        innerRadius={40}
+                                        outerRadius={80}
+                                    />
+                            )}
+                            {avgHoursPerDtlaVol !== null && avgHoursPerWestsideVol !== null && avgHoursPerSouthLaVol !== null && (
+                                brigade === "DTLA" &&
+                                    <DonutChart
+                                        data={[{value: avgHoursPerDtlaVol}]}
+                                        width={175}
+                                        height={175}
+                                        innerRadius={40}
+                                        outerRadius={80}
+                                    />
+                            )}
+                            {avgHoursPerDtlaVol !== null && avgHoursPerWestsideVol !== null && avgHoursPerSouthLaVol !== null && (
+                                brigade === "Westside" &&
+                                    <DonutChart
+                                        data={[{value: avgHoursPerWestsideVol}]}
+                                        width={175}
+                                        height={175}
+                                        innerRadius={40}
+                                        outerRadius={80}
+                                    />
+                            )}
+                            {avgHoursPerDtlaVol !== null && avgHoursPerWestsideVol !== null && avgHoursPerSouthLaVol !== null && (
+                                brigade === "South LA" &&
+                                    <DonutChart
+                                        data={[{value: avgHoursPerSouthLaVol}]}
+                                        width={175}
+                                        height={175}
+                                        innerRadius={40}
+                                        outerRadius={80}
+                                    />
+                            )}
+                        </div>
                     </div>
-
-                    {/* <div className="dashboard-stats">
-                        <div className="dashboard-stat-container">
-                            <div className="stat">
-                                <h5>Current Role = Desired Role</h5>
-
-                                <form className="form-stats" autoComplete="off" onSubmit={e => e.preventDefault()}>
-                                    <div className="stats-form-row">
-                                        <div className="form-input-text">
-                                            <div className="stat-select">
-                                                <select 
-                                                    name={"whichBrigade"}
-                                                    value={brigade}
-                                                    // aria-label="topic"
-                                                    onChange={handleSatisfiedChange}
-                                                    required
-                                                >
-                                                {brigadeSelection.map((brigade, index) => {
-                                                    return <option key={index} value={brigade}>{brigade}</option>
-                                                })} 
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-
-                            <div className="stat-number">
-                                <p>{satisfiedVolunteers !== null && satisfiedVolunteers.length}</p>
-                            </div>
-                        </div> 
-                    </div> */}
-
-                        {/* <div className="dashboard-stat-container">
-                            <p>Total Check-Ins:</p>
-
-                            <div>{checkIns !== null && checkIns.length}</div>
-
-                            <form className="form-stats" autoComplete="off" onSubmit={e => e.preventDefault()}>
-                                <div className="form-row">
-                                    <div className="form-input-text">
-                                        <div className="select-reason">
-                                            <select 
-                                                name={"whichBrigade"}
-                                                value={brigade}
-                                                // aria-label="topic"
-                                                onChange={handleBrigadeChange}
-                                                required
-                                            >
-                                            {brigades.map((brigade, index) => {
-                                                return <option key={index} value={brigade}>{brigade}</option>
-                                            })} 
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>  */}
                 </div>
             </div>
-        // ) : (
-        //     <Redirect to="/login" />
-        // )
+        ) : (
+            <Redirect to="/login" />
+        )
     )
 };
 
