@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
+import moment from 'moment';
 
 import useAuth from '../hooks/useAuth';
 
@@ -46,7 +47,7 @@ const Events = (props) => {
                                                 <div className="event-info-container">
                                                     <div className="event-info-wrapper">
                                                         <ClockIcon />
-                                                        <p className="event-info-text">{event.date}</p>
+                                                        <p className="event-info-text">{moment(event.date).format('ddd, MMM D')}</p>
                                                     </div>
                                                     <div className="event-info-wrapper">
                                                         <LocationIcon />
