@@ -229,7 +229,7 @@ const AdminDashboard = (props) => {
     }, []);
 
     return (
-        // auth && auth.user ? (
+        auth && auth.user ? (
             <div className="flex-container">
                 <div className="dashboard">
                     <div className="dashboard-header">
@@ -708,9 +708,9 @@ const AdminDashboard = (props) => {
                     </div>
                 </div>
             </div>
-        // ) : (
-        //     <Redirect to="/login" />
-        // )
+        ) : (
+            <Redirect to="/login" />
+        )
     )
 };
 
