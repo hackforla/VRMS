@@ -47,7 +47,7 @@ const Events = (props) => {
                                                 <div className="event-info-container">
                                                     <div className="event-info-wrapper">
                                                         <ClockIcon />
-                                                        <p className="event-info-text">{moment(event.date).format('ddd, MMM D')}</p>
+                                                        <p className="event-info-text">{moment(event.date).format('ddd, MMM D @ h:mm a')}</p>
                                                     </div>
                                                     <div className="event-info-wrapper">
                                                         <LocationIcon />
