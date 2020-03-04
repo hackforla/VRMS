@@ -560,7 +560,7 @@ const AdminDashboard = (props) => {
 
                                             </div>
                                             <div className="key-location">
-                                                <p>South LA: {southLaHours !== null && southLaHours.length}</p>
+                                                <p>South LA: {southLaHours !== null && southLaHours}</p>
                                             </div>
                                         </div>
                                     </div>
