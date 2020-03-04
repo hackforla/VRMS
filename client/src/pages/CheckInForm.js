@@ -80,15 +80,15 @@ const CheckInForm = (props) => {
     const handleNewMemberChange = (e) => {
         if (e.target.value === "true") {
             setNewMember(true);
-            setMonth("JAN");
-            setYear("2020");
+            setMonth(moment().format('MMM').toUpperCase());
+            setYear(moment().format('YYYY'));
         }
 
         if (e.target.value === "false") {
             setNewMember(false);
         }
     };
-
+    
     const submitForm = (userForm) => {
         // First, create a new user in the user collection
         const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
