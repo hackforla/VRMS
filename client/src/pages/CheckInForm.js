@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import moment from 'moment';
 
 import '../sass/CheckIn.scss';
 
@@ -19,8 +20,8 @@ const CheckInForm = (props) => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [newMember, setNewMember] = useState(true);
-    const [month, setMonth] = useState("JAN");
-    const [year, setYear] = useState("2020");
+    const [month, setMonth] = useState(moment().format('MMM').toUpperCase());
+    const [year, setYear] = useState(moment().format("YYYY"));
     const [reason, setReason] = useState("--SELECT ONE--");
     const [project, setProject] = useState("--SELECT ONE--");
     const [user, setUser] = useState(null);
