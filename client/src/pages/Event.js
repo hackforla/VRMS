@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
+import moment from 'moment';
 
 import '../sass/Event.scss';
 // import '../sass/Event-media-queries.scss';
@@ -90,7 +90,7 @@ const Event = (props) => {
                     <div className="event-headers">
                         <h4>{event.name}</h4>
                         {/* <h5>RSVP's: {event.rsvps.length}</h5> */}
-                        <p>{event.date}</p>
+                        <p>{moment(event.date).format('dddd, MMMM D, YYYY @ h:mm a')}</p>
                         <p>{event.location.city}</p>
                         <p>{event.location.state}</p>
                     </div>

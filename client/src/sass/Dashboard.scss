@@ -67,11 +67,63 @@
 
 .dashboard-chart-container {
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 20px;
-    // background-color: #FAFAFA;
+    padding: 20px 0px;
+}
+
+.donut-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    max-width: 200px;
+}
+
+.key-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 180px;
+}
+
+.key-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.key-info-container {
+    display: flex;
+    align-items: center;
+    margin: 12px 0px;
+}
+
+.key-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 12px;
+}
+
+.light-blue {
+    background-color: #2A768A;
+}
+
+.dark-blue {
+    background-color: #102D49;
+}
+
+.dark-red {
+    background-color: #CD1F42;
+}
+
+
+.key-location {
+    p {
+        padding: 0px;
+        margin: 0px;
+    }
 }
 
 .stat-header {
@@ -168,8 +220,8 @@
     }
 
     select {
-        max-width: 180px;
-        min-width: 180px;
+        max-width: 150px;
+        min-width: 150px;
         margin: 0px;
         padding: 6px 12px;
         font-size: 14px;
@@ -202,8 +254,8 @@
     border: 2px solid black;
     border-radius: 6px;
     height: 40px;
-    min-width: 340px;
-    max-width: 340px;
+    min-width: 310px;
+    max-width: 310px;
     margin: 12px 6px;
     font-size: 16px;
     z-index: 1;

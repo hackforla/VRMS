@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import moment from 'moment';
 
 import '../sass/CheckIn.scss';
 
@@ -19,8 +20,8 @@ const CheckInForm = (props) => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [newMember, setNewMember] = useState(true);
-    const [month, setMonth] = useState("JAN");
-    const [year, setYear] = useState("2020");
+    const [month, setMonth] = useState(moment().format('MMM').toUpperCase());
+    const [year, setYear] = useState(moment().format("YYYY"));
     const [reason, setReason] = useState("--SELECT ONE--");
     const [project, setProject] = useState("--SELECT ONE--");
     const [user, setUser] = useState(null);
@@ -79,15 +80,15 @@ const CheckInForm = (props) => {
     const handleNewMemberChange = (e) => {
         if (e.target.value === "true") {
             setNewMember(true);
-            setMonth("JAN");
-            setYear("2020");
+            setMonth(moment().format('MMM').toUpperCase());
+            setYear(moment().format('YYYY'));
         }
 
         if (e.target.value === "false") {
             setNewMember(false);
         }
     };
-
+    
     const submitForm = (userForm) => {
         // First, create a new user in the user collection
         const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
@@ -267,7 +268,7 @@ const CheckInForm = (props) => {
     //         setIsFormReady(false);
     //     }  
     // } 
-
+    
     const checkInNewUser = (e) => {
         e.preventDefault();
 
@@ -301,8 +302,14 @@ const CheckInForm = (props) => {
                 setErrorMessage("Please don't leave any fields blank");
                 ready = false;
             } 
-
-            if(year === "2020" && month !== "JAN" && month !== "FEB") {
+            
+            const currYear = parseInt(moment().format('YYYY'));
+            const currMonth = parseInt(moment().format('MM'));
+            const yearJoined = parseInt(year);
+            // extra date info needed to be recognized as a date
+            const monthJoined = parseInt(moment(month + ' 9, 2020').format('MM')); 
+            console.log(currYear, currMonth, yearJoined, monthJoined);
+            if(yearJoined > currYear || (yearJoined === currYear && monthJoined > currMonth)) {
                 setIsError(true);
                 setErrorMessage("You can't set a date in the future... Please try again.");
                 ready = false;
@@ -390,7 +397,7 @@ const CheckInForm = (props) => {
         fetchQuestions();
 
     }, []);
-
+    
     return (
         <div className="flex-container">
             {newOrReturning === 'returningUser' ? (

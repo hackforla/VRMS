@@ -60,12 +60,14 @@ const DonutChart = (props) => {
 	}, [props.data]);
 
 	return (
-		<svg width={props.width} height={props.height}>
-			<g
-				ref={ref}
-				transform={`translate(${props.outerRadius} ${props.outerRadius})`}
-			/>
-		</svg>
+		<div className="donut-container">
+			<svg className="donut" width={props.width} height={props.height}>
+				<g
+					ref={ref}
+					transform={`translate(${props.outerRadius} ${props.outerRadius})`}
+				/>
+			</svg>
+		</div>
 	);
 };
 
