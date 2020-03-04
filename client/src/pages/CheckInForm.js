@@ -268,7 +268,7 @@ const CheckInForm = (props) => {
     //         setIsFormReady(false);
     //     }  
     // } 
-
+    
     const checkInNewUser = (e) => {
         e.preventDefault();
 
@@ -302,8 +302,14 @@ const CheckInForm = (props) => {
                 setErrorMessage("Please don't leave any fields blank");
                 ready = false;
             } 
-
-            if(year === "2020" && month !== "JAN" && month !== "FEB") {
+            
+            const currYear = parseInt(moment().format('YYYY'));
+            const currMonth = parseInt(moment().format('MM'));
+            const yearJoined = parseInt(year);
+            // extra date info needed to be recognized as a date
+            const monthJoined = parseInt(moment(month + ' 9, 2020').format('MM')); 
+            console.log(currYear, currMonth, yearJoined, monthJoined);
+            if(yearJoined > currYear || (yearJoined === currYear && monthJoined > currMonth)) {
                 setIsError(true);
                 setErrorMessage("You can't set a date in the future... Please try again.");
                 ready = false;
@@ -391,7 +397,7 @@ const CheckInForm = (props) => {
         fetchQuestions();
 
     }, []);
-
+    
     return (
         <div className="flex-container">
             {newOrReturning === 'returningUser' ? (
