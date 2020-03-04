@@ -151,6 +151,7 @@ const AdminDashboard = (props) => {
             });
 
             const nextDate = new Date(Math.max.apply(null, dates));
+            console.log(nextDate);
             const nextDateUtc = new Date(nextDate).toISOString();
 
             const nextEvent = eventsJson.filter(event => {
@@ -351,65 +352,76 @@ const AdminDashboard = (props) => {
                             {brigade === "All" && (
                                 <div className="key-wrapper">
                                     <div className="key-container">
-                                        <div className="key-color light-blue">
+                                        <div className="key-info-container">
+                                            <div className="key-color light-blue">
 
+                                            </div>
+                                            <div className="key-location">
+                                                <p>DTLA: {dtlaVolunteers !== null && dtlaVolunteers.length}</p>
+                                            </div>
                                         </div>
-                                        <div className="key-location">
-                                            <p>DTLA</p>
-                                        </div>
-                                    </div>
 
-                                    <div className="key-container">
-                                        <div className="key-color dark-blue">
+                                        <div className="key-info-container">
+                                            <div className="key-color dark-blue">
 
+                                            </div>
+                                            <div className="key-location">
+                                                <p>Westside: {westsideVolunteers !== null && westsideVolunteers.length}</p>
+                                            </div>
                                         </div>
-                                        <div className="key-location">
-                                            <p>Westside</p>
-                                        </div>
-                                    </div>
 
-                                    <div className="key-container">
-                                        <div className="key-color dark-red">
+                                        <div className="key-info-container">
+                                            <div className="key-color dark-red">
 
-                                        </div>
-                                        <div className="key-location">
-                                            <p>South LA</p>
+                                            </div>
+                                            <div className="key-location">
+                                                <p>South LA: {southLaVolunteers !== null && southLaVolunteers.length}</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             )}
+
                             {brigade === "DTLA" && (
                                 <div className="key-wrapper">
                                     <div className="key-container">
-                                        <div className="key-color light-blue">
+                                        <div className="key-info-container">
+                                            <div className="key-color light-blue">
 
-                                        </div>
-                                        <div className="key-location">
-                                            <p>DTLA</p>
+                                            </div>
+                                            <div className="key-location">
+                                                <p>DTLA: {dtlaVolunteers !== null && dtlaVolunteers.length}</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             )}
+
                             {brigade === "Westside" && (
                                 <div className="key-wrapper">
                                     <div className="key-container">
-                                        <div className="key-color dark-blue">
+                                        <div className="key-info-container">
+                                            <div className="key-color dark-blue">
 
-                                        </div>
-                                        <div className="key-location">
-                                            <p>Westside</p>
+                                            </div>
+                                            <div className="key-location">
+                                                <p>Westside: {westsideVolunteers !== null && westsideVolunteers.length}</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             )}
+
                             {brigade === "South LA" && (
                                 <div className="key-wrapper">
                                     <div className="key-container">
-                                        <div className="key-color dark-red">
+                                        <div className="key-info-container">
+                                            <div className="key-color dark-red">
 
-                                        </div>
-                                        <div className="key-location">
-                                            <p>South LA</p>
+                                            </div>
+                                            <div className="key-location">
+                                                <p>South LA: {southLaVolunteers !== null && southLaVolunteers.length}</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -443,6 +455,7 @@ const AdminDashboard = (props) => {
                                         outerRadius={80}
                                     />
                             )}
+
                             {dtlaHours !== null && westsideHours !== null && southLaHours !== null && (
                                 brigade === "DTLA" &&
                                     <DonutChart
@@ -453,6 +466,7 @@ const AdminDashboard = (props) => {
                                         outerRadius={80}
                                     />
                             )}
+
                             {dtlaHours !== null && westsideHours !== null && southLaHours !== null && (
                                 brigade === "Westside" &&
                                     <DonutChart
@@ -463,6 +477,7 @@ const AdminDashboard = (props) => {
                                         outerRadius={80}
                                     />
                             )}
+
                             {dtlaHours !== null && westsideHours !== null && southLaHours !== null && (
                                 brigade === "South LA" &&
                                     <DonutChart
@@ -472,6 +487,84 @@ const AdminDashboard = (props) => {
                                         innerRadius={40}
                                         outerRadius={80}
                                     />
+                            )}
+
+                            {brigade === "All" && (
+                                <div className="key-wrapper">
+                                    <div className="key-container">
+                                        <div className="key-info-container">
+                                            <div className="key-color light-blue">
+
+                                            </div>
+                                            <div className="key-location">
+                                                <p>DTLA: {dtlaHours !== null && dtlaHours}</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="key-info-container">
+                                            <div className="key-color dark-blue">
+
+                                            </div>
+                                            <div className="key-location">
+                                                <p>Westside: {westsideHours !== null && westsideHours}</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="key-info-container">
+                                            <div className="key-color dark-red">
+
+                                            </div>
+                                            <div className="key-location">
+                                                <p>South LA: {southLaHours !== null && southLaHours}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {brigade === "DTLA" && (
+                                <div className="key-wrapper">
+                                    <div className="key-container">
+                                        <div className="key-info-container">
+                                            <div className="key-color light-blue">
+
+                                            </div>
+                                            <div className="key-location">
+                                                <p>DTLA: {dtlaHours !== null && dtlaHours}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {brigade === "Westside" && (
+                                <div className="key-wrapper">
+                                    <div className="key-container">
+                                        <div className="key-info-container">
+                                            <div className="key-color dark-blue">
+
+                                            </div>
+                                            <div className="key-location">
+                                                <p>Westside: {westsideHours !== null && westsideHours}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                            
+                            {brigade === "South LA" && (
+                                <div className="key-wrapper">
+                                    <div className="key-container">
+                                        <div className="key-info-container">
+                                            <div className="key-color dark-red">
+
+                                            </div>
+                                            <div className="key-location">
+                                                <p>South LA: {southLaHours !== null && southLaHours.length}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             )}
                         </div>
                     </div>
@@ -492,7 +585,7 @@ const AdminDashboard = (props) => {
                         </div>
 
                         <div className="dashboard-chart-container">
-                        {avgHoursPerDtlaVol !== null && avgHoursPerWestsideVol !== null && avgHoursPerSouthLaVol !== null && (
+                            {avgHoursPerDtlaVol !== null && avgHoursPerWestsideVol !== null && avgHoursPerSouthLaVol !== null && (
                                 brigade === "All" &&
                                     <DonutChart
                                         data={[{value: avgHoursPerDtlaVol, color: "#2A768A"}, {value: avgHoursPerWestsideVol, color: "#102D49"}, {value: avgHoursPerSouthLaVol, color: "#CD1F42"}]}
@@ -531,6 +624,84 @@ const AdminDashboard = (props) => {
                                         innerRadius={40}
                                         outerRadius={80}
                                     />
+                            )}
+
+                            {brigade === "All" && (
+                                <div className="key-wrapper">
+                                    <div className="key-container">
+                                        <div className="key-info-container">
+                                            <div className="key-color light-blue">
+
+                                            </div>
+                                            <div className="key-location">
+                                                <p>DTLA: {avgHoursPerDtlaVol !== null && avgHoursPerDtlaVol}</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="key-info-container">
+                                            <div className="key-color dark-blue">
+
+                                            </div>
+                                            <div className="key-location">
+                                                <p>Westside: {avgHoursPerWestsideVol !== null && avgHoursPerWestsideVol.length}</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="key-info-container">
+                                            <div className="key-color dark-red">
+
+                                            </div>
+                                            <div className="key-location">
+                                                <p>South LA: {avgHoursPerSouthLaVol !== null && avgHoursPerSouthLaVol}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {brigade === "DTLA" && (
+                                <div className="key-wrapper">
+                                    <div className="key-container">
+                                        <div className="key-info-container">
+                                            <div className="key-color light-blue">
+
+                                            </div>
+                                            <div className="key-location">
+                                                <p>DTLA: {avgHoursPerDtlaVol !== null && avgHoursPerDtlaVol}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {brigade === "Westside" && (
+                                <div className="key-wrapper">
+                                    <div className="key-container">
+                                        <div className="key-info-container">
+                                            <div className="key-color dark-blue">
+
+                                            </div>
+                                            <div className="key-location">
+                                                <p>Westside: {avgHoursPerWestsideVol !== null && avgHoursPerWestsideVol}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                            
+                            {brigade === "South LA" && (
+                                <div className="key-wrapper">
+                                    <div className="key-container">
+                                        <div className="key-info-container">
+                                            <div className="key-color dark-red">
+
+                                            </div>
+                                            <div className="key-location">
+                                                <p>South LA: {avgHoursPerSouthLaVol !== null && avgHoursPerSouthLaVol}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             )}
                         </div>
                     </div>

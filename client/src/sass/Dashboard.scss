@@ -69,19 +69,28 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 20px 10px;
     // background-color: #FAFAFA;
 }
 
 .donut-container {
-    flex: 2;
+    flex: 1;
 }
 
 .key-wrapper {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .key-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.key-info-container {
     display: flex;
     align-items: center;
     margin: 12px 0px;
