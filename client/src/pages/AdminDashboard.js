@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { round } from 'mathjs';
+import moment from 'moment';
 
 import useAuth from '../hooks/useAuth';
 
@@ -241,7 +242,7 @@ const AdminDashboard = (props) => {
                                 <p className="event-name">{nextEvent[0].name}</p>
                                 <div className="event-info-wrapper">
                                     <ClockIcon />
-                                    <p className="event-info">{nextEvent[0].date}</p>
+                                    <p className="event-info">{moment(nextEvent[0].date).format('ddd, MMM D @ h:mm a')}</p>
                                 </div>
                                 <div className="event-info-wrapper">
                                     <LocationIcon />
