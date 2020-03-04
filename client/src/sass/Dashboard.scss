@@ -67,11 +67,51 @@
 
 .dashboard-chart-container {
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 20px;
     // background-color: #FAFAFA;
+}
+
+.donut-container {
+    flex: 2;
+}
+
+.key-wrapper {
+    flex: 1;
+}
+
+.key-container {
+    display: flex;
+    align-items: center;
+    margin: 12px 0px;
+}
+
+.key-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 12px;
+}
+
+.light-blue {
+    background-color: #2A768A;
+}
+
+.dark-blue {
+    background-color: #102D49;
+}
+
+.dark-red {
+    background-color: #CD1F42;
+}
+
+
+.key-location {
+    p {
+        padding: 0px;
+        margin: 0px;
+    }
 }
 
 .stat-header {

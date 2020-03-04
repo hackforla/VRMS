@@ -227,7 +227,7 @@ const AdminDashboard = (props) => {
     }, []);
 
     return (
-        auth && auth.user ? (
+        // auth && auth.user ? (
             <div className="flex-container">
                 <div className="dashboard">
                     <div className="dashboard-header">
@@ -311,8 +311,8 @@ const AdminDashboard = (props) => {
                                 brigade === "All" &&
                                     <DonutChart
                                         data={[{value: dtlaVolunteers.length, color: "#2A768A"}, {value: westsideVolunteers.length, color: "#102D49"}, {value: southLaVolunteers.length, color: "#CD1F42"}]}
-                                        width={175}
-                                        height={175}
+                                        width={160}
+                                        height={160}
                                         innerRadius={40}
                                         outerRadius={80}
                                     />
@@ -321,8 +321,8 @@ const AdminDashboard = (props) => {
                                 brigade === "DTLA" &&
                                     <DonutChart
                                         data={[{value: dtlaVolunteers.length, color: "#2A768A"}]}
-                                        width={175}
-                                        height={175}
+                                        width={160}
+                                        height={160}
                                         innerRadius={40}
                                         outerRadius={80}
                                     />
@@ -331,8 +331,8 @@ const AdminDashboard = (props) => {
                                 brigade === "Westside" &&
                                     <DonutChart
                                         data={[{value: westsideVolunteers.length, color: "#102D49"}]}
-                                        width={175}
-                                        height={175}
+                                        width={160}
+                                        height={160}
                                         innerRadius={40}
                                         outerRadius={80}
                                     />
@@ -341,12 +341,79 @@ const AdminDashboard = (props) => {
                                 brigade === "South LA" &&
                                     <DonutChart
                                         data={[{value: southLaVolunteers.length, color: "#CD1F42"}]}
-                                        width={175}
-                                        height={175}
+                                        width={160}
+                                        height={160}
                                         innerRadius={40}
                                         outerRadius={80}
                                     />
                             )}
+
+                            {brigade === "All" && (
+                                <div className="key-wrapper">
+                                    <div className="key-container">
+                                        <div className="key-color light-blue">
+
+                                        </div>
+                                        <div className="key-location">
+                                            <p>DTLA</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="key-container">
+                                        <div className="key-color dark-blue">
+
+                                        </div>
+                                        <div className="key-location">
+                                            <p>Westside</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="key-container">
+                                        <div className="key-color dark-red">
+
+                                        </div>
+                                        <div className="key-location">
+                                            <p>South LA</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                            {brigade === "DTLA" && (
+                                <div className="key-wrapper">
+                                    <div className="key-container">
+                                        <div className="key-color light-blue">
+
+                                        </div>
+                                        <div className="key-location">
+                                            <p>DTLA</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                            {brigade === "Westside" && (
+                                <div className="key-wrapper">
+                                    <div className="key-container">
+                                        <div className="key-color dark-blue">
+
+                                        </div>
+                                        <div className="key-location">
+                                            <p>Westside</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                            {brigade === "South LA" && (
+                                <div className="key-wrapper">
+                                    <div className="key-container">
+                                        <div className="key-color dark-red">
+
+                                        </div>
+                                        <div className="key-location">
+                                            <p>South LA</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}   
                         </div>
                     </div>
 
@@ -370,8 +437,8 @@ const AdminDashboard = (props) => {
                                 brigade === "All" &&
                                     <DonutChart
                                         data={[{value: dtlaHours, color: "#2A768A"}, {value: westsideHours, color: "#102D49"}, {value: southLaHours, color: "#CD1F42"}]}
-                                        width={175}
-                                        height={175}
+                                        width={160}
+                                        height={160}
                                         innerRadius={40}
                                         outerRadius={80}
                                     />
@@ -380,8 +447,8 @@ const AdminDashboard = (props) => {
                                 brigade === "DTLA" &&
                                     <DonutChart
                                         data={[{value: dtlaHours, color: "#2A768A"}]}
-                                        width={175}
-                                        height={175}
+                                        width={160}
+                                        height={160}
                                         innerRadius={40}
                                         outerRadius={80}
                                     />
@@ -390,8 +457,8 @@ const AdminDashboard = (props) => {
                                 brigade === "Westside" &&
                                     <DonutChart
                                         data={[{value: westsideHours, color: "#102D49"}]}
-                                        width={175}
-                                        height={175}
+                                        width={160}
+                                        height={160}
                                         innerRadius={40}
                                         outerRadius={80}
                                     />
@@ -400,8 +467,8 @@ const AdminDashboard = (props) => {
                                 brigade === "South LA" &&
                                     <DonutChart
                                         data={[{value: southLaHours, color: "#CD1F42"}]}
-                                        width={175}
-                                        height={175}
+                                        width={160}
+                                        height={160}
                                         innerRadius={40}
                                         outerRadius={80}
                                     />
@@ -429,8 +496,8 @@ const AdminDashboard = (props) => {
                                 brigade === "All" &&
                                     <DonutChart
                                         data={[{value: avgHoursPerDtlaVol, color: "#2A768A"}, {value: avgHoursPerWestsideVol, color: "#102D49"}, {value: avgHoursPerSouthLaVol, color: "#CD1F42"}]}
-                                        width={175}
-                                        height={175}
+                                        width={160}
+                                        height={160}
                                         innerRadius={40}
                                         outerRadius={80}
                                     />
@@ -439,8 +506,8 @@ const AdminDashboard = (props) => {
                                 brigade === "DTLA" &&
                                     <DonutChart
                                         data={[{value: avgHoursPerDtlaVol, color: "#2A768A"}]}
-                                        width={175}
-                                        height={175}
+                                        width={160}
+                                        height={160}
                                         innerRadius={40}
                                         outerRadius={80}
                                     />
@@ -449,8 +516,8 @@ const AdminDashboard = (props) => {
                                 brigade === "Westside" &&
                                     <DonutChart
                                         data={[{value: avgHoursPerWestsideVol, color: "#102D49"}]}
-                                        width={175}
-                                        height={175}
+                                        width={160}
+                                        height={160}
                                         innerRadius={40}
                                         outerRadius={80}
                                     />
@@ -459,8 +526,8 @@ const AdminDashboard = (props) => {
                                 brigade === "South LA" &&
                                     <DonutChart
                                         data={[{value: avgHoursPerSouthLaVol, color: "#CD1F42"}]}
-                                        width={175}
-                                        height={175}
+                                        width={160}
+                                        height={160}
                                         innerRadius={40}
                                         outerRadius={80}
                                     />
@@ -469,9 +536,9 @@ const AdminDashboard = (props) => {
                     </div>
                 </div>
             </div>
-        ) : (
-            <Redirect to="/login" />
-        )
+        // ) : (
+        //     <Redirect to="/login" />
+        // )
     )
 };
 
