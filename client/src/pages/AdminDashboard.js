@@ -644,7 +644,7 @@ const AdminDashboard = (props) => {
 
                                             </div>
                                             <div className="key-location">
-                                                <p>Westside: {avgHoursPerWestsideVol !== null && avgHoursPerWestsideVol.length}</p>
+                                                <p>Westside: {avgHoursPerWestsideVol !== null && avgHoursPerWestsideVol}</p>
                                             </div>
                                         </div>
 
