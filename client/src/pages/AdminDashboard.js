@@ -6,6 +6,7 @@ import moment from 'moment';
 import useAuth from '../hooks/useAuth';
 
 import DonutChart from '../components/DonutChart';
+import Leaderboard from '../components/Leaderboard';
 
 import { ReactComponent as ClockIcon} from '../svg/Icon_Clock.svg';
 import { ReactComponent as LocationIcon} from '../svg/Icon_Location.svg';
@@ -229,7 +230,7 @@ const AdminDashboard = (props) => {
     }, []);
 
     return (
-        auth && auth.user ? (
+        // auth && auth.user ? (
             <div className="flex-container">
                 <div className="dashboard">
                     <div className="dashboard-header">
@@ -706,11 +707,13 @@ const AdminDashboard = (props) => {
                             )}
                         </div>
                     </div>
+
+                    <Leaderboard />
                 </div>
             </div>
-        ) : (
-            <Redirect to="/login" />
-        )
+        // ) : (
+        //     <Redirect to="/login" />
+        // )
     )
 };
 
