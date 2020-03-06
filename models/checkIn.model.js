@@ -9,7 +9,7 @@ const checkInSchema = mongoose.Schema({
     createdDate: { type: Date, default: Date.now },
 });
 
-checkInSchema.methods.serialize = () => {
+checkInSchema.methods.serialize = function() {
     return {
         id: this._id,
         userId: this.userId,

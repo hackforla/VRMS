@@ -23,7 +23,7 @@ const eventSchema = mongoose.Schema({
     }
 });
 
-eventSchema.methods.serialize = () => {
+eventSchema.methods.serialize = function() {
     return {
         id: this._id,
         location: {
@@ -32,7 +32,10 @@ eventSchema.methods.serialize = () => {
             country: this.location.country
         },
         hacknight: this.hacknight,
+        eventType: this.eventType,
+        session: this.session,
         date: this.date,
+        hours: this.hours,
         createdDate: this.createdDate,
         checkInCount: this.checkInCount,
         checkInReady: this.checkInReady,

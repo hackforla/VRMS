@@ -14,7 +14,7 @@ const questionSchema = mongoose.Schema({
     }
 });
 
-questionSchema.methods.serialize = () => {
+questionSchema.methods.serialize = function() {
     return {
         id: this._id,
         questionText: this.questionText,

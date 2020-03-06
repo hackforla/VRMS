@@ -20,7 +20,7 @@ const userSchema = mongoose.Schema({
     // password: { type: String, required: true }
 });
 
-userSchema.methods.serialize = () => {
+userSchema.methods.serialize = function() {
     return {
         id: this._id,
         name: {
