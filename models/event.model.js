@@ -10,7 +10,10 @@ const eventSchema = mongoose.Schema({
         country: { type: String }
     },
     hacknight: { type: String },
+    eventType: { type: String }, 
+    session: { type: String },
     date: { type: Date },
+    hours: { type: Number },
     createdDate: { type: Date, default: Date.now },
     updatedDate: { type: Date, default: Date.now },
     checkInCount: { type: Number, default: 0 },
