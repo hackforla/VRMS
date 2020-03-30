@@ -6,7 +6,7 @@ import '../sass/DashboardUsers.scss';
 
 const DashboardUsers = (props) => {
     // const [isLoading, setIsLoading] = useState(false);
-    const [users, setUsers] = useState([]);
+    const [users, setUsers] = useState(null);
     // const [isError, setIsError] = useState(false);
 
     async function fetchData() {
@@ -18,6 +18,8 @@ const DashboardUsers = (props) => {
         } catch(error) {
             alert(error);
         }
+
+        console.log(users);
     }
 
     useEffect(() => {
@@ -29,21 +31,19 @@ const DashboardUsers = (props) => {
         <div className="flexcenter-container">
             <div className="events-list">
                 <ul>
-                    {users.map((user, index) => {
-                        return (
-                            <li key={index}>
-                                <div key={index} className="event">
-                                    <div className="user-name">
-                                        <h5>{user.name.firstName} {user.name.lastName}</h5>
-                                    </div>
-                                    <div className="user-roles">
-                                        <p>Current Role: {user.currentRole}</p>
-                                        <p>Desired Role: {user.desiredRole}</p>
-                                    </div>
+                    {users !== null && users.map((user, index) => (
+                        <li key={index}>
+                            <div key={index} className="event">
+                                <div className="user-name">
+                                    <h5>{user.name.firstName} {user.name.lastName}</h5>
                                 </div>
-                            </li>
-                        )
-                    })}
+                                <div className="user-roles">
+                                    <p>Current Role: {user.currentRole}</p>
+                                    <p>Desired Role: {user.desiredRole}</p>
+                                </div>
+                            </div>
+                        </li>
+                    ))}
                 </ul>
             </div>
         </div>

@@ -309,7 +309,7 @@ const AdminDashboard = props => {
     if (e.currentTarget.value === "South LA") {
       setVolunteers(southLaVolunteers);
     }
-
+    
     if (e.currentTarget.value === "All") {
       setVolunteers(totalVolunteers);
     }
