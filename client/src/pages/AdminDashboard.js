@@ -198,7 +198,25 @@ const AdminDashboard = props => {
       console.log(error);
     }
   }
+  async function setCheckInReady(e, nextEventId) {
+    e.preventDefault();
 
+    try {
+      await fetch(`/api/events/${nextEventId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }).then(response => {
+        if (response.ok) {
+          setIsCheckInReady(!isCheckInReady);
+        }
+      });
+    } catch (error) {
+      // setIsError(error);
+      // setIsLoading(!isLoading);
+    }
+  }
   async function getNextEvent() {
     try {
       const events = await fetch("/api/events");
@@ -223,7 +241,25 @@ const AdminDashboard = props => {
       console.log(error);
     }
   }
+  async function setCheckInReady(e, nextEventId) {
+    e.preventDefault();
 
+    try {
+      await fetch(`/api/events/${nextEventId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }).then(response => {
+        if (response.ok) {
+          setIsCheckInReady(!isCheckInReady);
+        }
+      });
+    } catch (error) {
+      // setIsError(error);
+      // setIsLoading(!isLoading);
+    }
+  }
   const handleBrigadeChange = e => {
     setDonutCharts(e.currentTarget.value);
   };
@@ -244,7 +280,11 @@ const AdminDashboard = props => {
             You have an event coming up:
           </p>
         </div>
-        <UpcomingEvent isCheckInReady={isCheckInReady} nextEvent={nextEvent} />
+        <UpcomingEvent
+          isCheckInReady={isCheckInReady}
+          nextEvent={nextEvent}
+          setCheckInReady={setCheckInReady}
+        />
         <EventOverview
           handleBrigadeChange={handleBrigadeChange}
           uniqueLocations={uniqueLocations}

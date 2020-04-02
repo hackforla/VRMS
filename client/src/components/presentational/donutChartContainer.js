@@ -6,15 +6,19 @@ const DonutChartContainer = props => {
   const pieData = [];
   const pieNames = [];
   let count = 0;
+  let total = 0;
   for (let keys in props.data) {
     count++;
     let newValue = props.data[keys];
     let randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
-
+    total += newValue;
     pieData.push({ value: newValue, color: randomColor });
     pieNames.push(
       <div className="key-info-container" key={count}>
-        <div className="key-color">
+        <div
+          className="key-color"
+          style={{ backgroundColor: `${randomColor}` }}
+        >
           <div className="key-location">
             <p>
               {keys}: {newValue}
@@ -59,7 +63,7 @@ const DonutChartContainer = props => {
         const { data } = d;
         return data.color;
       });
-  }, [props.data]);
+  }, [props]);
 
   return (
     <div className="dashboard-stats">
@@ -67,7 +71,7 @@ const DonutChartContainer = props => {
         <div className="stat-header">
           <p className="stat-header-text">{props.chartName}:</p>
         </div>
-        <div className="stat-number">{props.chartNumber}</div>
+        <div className="stat-number">{total}</div>
       </div>
       <div className="dashboard-chart-container">
         <div className="donut-container">
