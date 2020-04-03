@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 
+import '../../sass/Dashboard.scss';
+
 const DonutChartContainer = props => {
   const ref = useRef(null);
   const pieData = [];
@@ -19,11 +21,11 @@ const DonutChartContainer = props => {
           className="key-color"
           style={{ backgroundColor: `${randomColor}` }}
         >
-          <div className="key-location">
-            <p>
-              {keys}: {newValue}
-            </p>
-          </div>
+        </div>
+        <div className="key-location">
+          <p>
+            {keys}: {newValue}
+          </p>
         </div>
       </div>
     );
