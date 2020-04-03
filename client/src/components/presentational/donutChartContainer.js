@@ -2,28 +2,46 @@ import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 
 const DonutChartContainer = props => {
-  const ref = useRef(props.donutRef);
+  const ref = useRef(null);
   const pieData = [];
-  console.log("UNIQUE LOCATIONS", props.uniqueLocations);
-  for (let keys in props.uniqueLocations) {
-    let newValue = props.uniqueLocations[keys].length;
-    pieData.push({ value: newValue, color: "#2A768A" });
+  const pieNames = [];
+  let count = 0;
+  let total = 0;
+  for (let keys in props.data) {
+    count++;
+    let newValue = props.data[keys];
+    let randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
+    total += newValue;
+    pieData.push({ value: newValue, color: randomColor });
+    pieNames.push(
+      <div className="key-info-container" key={count}>
+        <div
+          className="key-color"
+          style={{ backgroundColor: `${randomColor}` }}
+        >
+          <div className="key-location">
+            <p>
+              {keys}: {newValue}
+            </p>
+          </div>
+        </div>
+      </div>
+    );
   }
-  console.log("PIE DATA", pieData);
+
   const createPie = d3
-    .pie()
+    .pie(pieData)
     .value(d => d.value)
     .sort(null);
 
   const createArc = d3
     .arc()
-    .innerRadius(props.innerRadius)
-    .outerRadius(props.outerRadius);
-
-  const format = d3.format(".2f");
+    .innerRadius(40)
+    .outerRadius(80);
 
   useEffect(() => {
     const data = createPie(pieData);
+
     const group = d3.select(ref.current);
     const groupWithData = group.selectAll("g.arc").data(data);
 
@@ -45,7 +63,7 @@ const DonutChartContainer = props => {
         const { data } = d;
         return data.color;
       });
-  }, [props.uniqueLocations]);
+  }, [props]);
 
   return (
     <div className="dashboard-stats">
@@ -53,16 +71,16 @@ const DonutChartContainer = props => {
         <div className="stat-header">
           <p className="stat-header-text">{props.chartName}:</p>
         </div>
-        <div className="stat-number">
-          <p>{props.chartNumber}</p>
-        </div>
+        <div className="stat-number">{total}</div>
       </div>
-
       <div className="dashboard-chart-container">
         <div className="donut-container">
           <svg className="donut" width={160} height={160}>
             <g ref={ref} transform={`translate(${80} ${80})`} />
           </svg>
+        </div>
+        <div className="key-wrapper">
+          <div className="key-container">{pieNames}</div>
         </div>
       </div>
     </div>
