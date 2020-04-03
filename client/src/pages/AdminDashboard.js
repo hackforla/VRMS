@@ -271,41 +271,40 @@ const AdminDashboard = props => {
   }, []);
 
   return (
-    // auth && auth.user ? (
-
-    <div className="flex-container">
-      <div className="dashboard">
-        <div className="dashboard-header">
-          <p className="dashboard-header-text-small">
-            You have an event coming up:
-          </p>
+    auth && auth.user ? (
+      <div className="flex-container">
+        <div className="dashboard">
+          <div className="dashboard-header">
+            <p className="dashboard-header-text-small">
+              You have an event coming up:
+            </p>
+          </div>
+          <UpcomingEvent
+            isCheckInReady={isCheckInReady}
+            nextEvent={nextEvent}
+            setCheckInReady={setCheckInReady}
+          />
+          <EventOverview
+            handleBrigadeChange={handleBrigadeChange}
+            uniqueLocations={uniqueLocations}
+          />
+          <DonutChartContainer
+            chartName={"Total Volunteers"}
+            data={volunteersSignedIn}
+          />
+          <DonutChartContainer
+            chartName={"Total Volunteer Hours"}
+            data={volunteeredHours}
+          />
+          <DonutChartContainer
+            chartName={"Avg. Hours Per Volunteer"}
+            data={averagedHours}
+          />
         </div>
-        <UpcomingEvent
-          isCheckInReady={isCheckInReady}
-          nextEvent={nextEvent}
-          setCheckInReady={setCheckInReady}
-        />
-        <EventOverview
-          handleBrigadeChange={handleBrigadeChange}
-          uniqueLocations={uniqueLocations}
-        />
-        <DonutChartContainer
-          chartName={"Total Volunteers"}
-          data={volunteersSignedIn}
-        />
-        <DonutChartContainer
-          chartName={"Total Volunteer Hours"}
-          data={volunteeredHours}
-        />
-        <DonutChartContainer
-          chartName={"Avg. Hours Per Volunteer"}
-          data={averagedHours}
-        />
       </div>
-    </div>
-    // ) : (
-    //   <Redirect to="/login" />
-    // );
+    ) : (
+      <Redirect to="/login" />
+    )
   );
 };
 
