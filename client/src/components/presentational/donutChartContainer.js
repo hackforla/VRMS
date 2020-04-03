@@ -21,11 +21,19 @@ const DonutChartContainer = props => {
           className="key-color"
           style={{ backgroundColor: `${randomColor}` }}
         >
+<<<<<<< HEAD
         </div>
         <div className="key-location">
           <p>
             {keys}: {newValue}
           </p>
+=======
+          <div className="key-location">
+            <p>
+              {keys}: {newValue}
+            </p>
+          </div>
+>>>>>>> ad7423602d733d814354f7a26e89461a36a3e193
         </div>
       </div>
     );
