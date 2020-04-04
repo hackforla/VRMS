@@ -9,6 +9,7 @@ const bodyParser = require("body-parser");
 // const helmet = require('helmet');
 // const cors = require('cors');
 const path = require("path");
+const cron = require("node-cron");
 
 // Create a new application using the Express framework
 const app = express();
@@ -29,7 +30,11 @@ app.use(morgan("dev"));
 // Cross-Origin-Resource-Sharing
 // app.use(cors());
 
+// Let mongoose access Promises
 mongoose.Promise = global.Promise;
+
+// Workers
+const openCheckinWorker = require('./workers/openCheckins')(cron);
 
 // ROUTES
 const eventsRouter = require("./routers/events.router");
