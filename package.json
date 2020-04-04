@@ -26,6 +26,7 @@
     "mongoose": "^5.9.7",
     "morgan": "^1.10.0",
     "node-cron": "^2.0.3",
+    "node-fetch": "^2.6.0",
     "nodemon": "^2.0.2"
   },
   "directories": {
