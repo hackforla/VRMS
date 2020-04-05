@@ -9,6 +9,8 @@ const bodyParser = require("body-parser");
 // const helmet = require('helmet');
 // const cors = require('cors');
 const path = require("path");
+const cron = require("node-cron");
+const fetch = require("node-fetch");
 
 // Create a new application using the Express framework
 const app = express();
@@ -29,7 +31,12 @@ app.use(morgan("dev"));
 // Cross-Origin-Resource-Sharing
 // app.use(cors());
 
+// Let mongoose access Promises
 mongoose.Promise = global.Promise;
+
+// WORKERS
+const runOpenCheckinWorker = require('./workers/openCheckins')(cron, fetch);
+const runCloseCheckinWorker = require('./workers/closeCheckins')(cron, fetch);
 
 // ROUTES
 const eventsRouter = require("./routers/events.router");
@@ -62,39 +69,41 @@ app.get("*", (req, res) => {
 let server;
 
 async function runServer(databaseUrl, port = PORT) {
-  await mongoose
-    .connect(databaseUrl, {
-      useNewUrlParser: true,
-      useCreateIndex: true,
-      useUnifiedTopology: true,
-      useFindAndModify: false
-    })
-    .catch(err => err);
+	await mongoose
+		.connect(databaseUrl, {
+			useNewUrlParser: true,
+			useCreateIndex: true,
+			useUnifiedTopology: true,
+			useFindAndModify: false
+		})
+		.catch(err => err);
 
-  server = app
-    .listen(port, () => {
-      console.log(
-        `Mongoose connected from runServer() and is listening on ${port}`
-      );
-    })
-    .on("error", err => {
-      mongoose.disconnect();
-      return err;
-    });
+	server = app
+		.listen(port, () => {
+			console.log(
+				`Mongoose connected from runServer() and is listening on ${port}`
+			);
+		})
+		.on("error", err => {
+			mongoose.disconnect();
+			return err;
+		});
 }
 
 async function closeServer() {
-  await mongoose.disconnect().then(() => {
-    return new Promise((resolve, reject) => {
-      console.log("Closing Mongoose connection. Bye");
-      server.close(err => {
-        if (err) {
-          return reject(err);
-        }
-        resolve();
-      });
-    });
-  });
+	await mongoose.disconnect().then(() => {
+		return new Promise((resolve, reject) => {
+			console.log("Closing Mongoose connection. Bye");
+
+			server.close(err => {
+				if (err) {
+					return reject(err);
+				}
+
+				resolve();
+			});
+		});
+	});
 }
 
 if (require.main === module) {
