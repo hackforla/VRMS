@@ -34,8 +34,9 @@ app.use(morgan("dev"));
 // Let mongoose access Promises
 mongoose.Promise = global.Promise;
 
-// Workers
+// WORKERS
 const runOpenCheckinWorker = require('./workers/openCheckins')(cron, fetch);
+const runCloseCheckinWorker = require('./workers/closeCheckins')(cron, fetch);
 
 // ROUTES
 const eventsRouter = require("./routers/events.router");

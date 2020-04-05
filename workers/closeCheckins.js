@@ -14,23 +14,29 @@ module.exports = (cron, fetch) => {
         };
     };
 
-    async function sortAndFilterEvents(currentTime, thirtyMinutes) {
+    async function sortAndFilterEvents() {
         const events = await fetchEvents();
 
         // Filter events if event date is after now but before thirty minutes from now
         if (events && events.length > 0) {
+            
             const sortedEvents = events.filter(event => {
-                return (event.date > currentTime) && (event.date < thirtyMinutes) && (event.checkInReady === false);
-            })
+                const currentTimeISO = new Date().toISOString();
+                const threeHoursFromStartTime = new Date(event.date).getTime() + 10800000;
+                const threeHoursISO = new Date(threeHoursFromStartTime).toISOString();
+
+                return (currentTimeISO > threeHoursISO) && (event.checkInReady === true);
+            });
+
             console.log('Sorted events: ', sortedEvents);
             return sortedEvents;
         };
     };
     
-    async function openCheckins(events) {
+    async function closeCheckins(events) {
         if(events && events.length > 0) {
             events.forEach(async event => {
-                console.log('Opening event: ', event);
+                console.log('Closing event: ', event);
 
                 await fetch(`http://localhost:4000/api/events/${event._id}`, {
                     method: "PATCH",
@@ -46,22 +52,16 @@ module.exports = (cron, fetch) => {
     };
     
     async function runTask() {
-        console.log("I'm going to open check-ins");
+        console.log("I'm going to close check-ins");
 
-        // Get current time and set to date variable
-        const currentTimeISO = new Date().toISOString();
+        const eventsToOpen = await sortAndFilterEvents();
+        console.log(eventsToOpen);
+        await closeCheckins(eventsToOpen);
 
-        // Calculate thirty minutes from now
-        const thirtyMinutesFromNow = new Date().getTime() + 1800000;
-        const thirtyMinutesISO = new Date(thirtyMinutesFromNow).toISOString();
-
-        const eventsToOpen = await sortAndFilterEvents(currentTimeISO, thirtyMinutesISO);
-        await openCheckins(eventsToOpen);
-
-        console.log("I finished opening check-ins");
+        console.log("I finished closing check-ins");
     };
 
-    const scheduledTask = cron.schedule('*/10 8-21 * * *', () => {
+    const scheduledTask = cron.schedule('*/10 8-23 * * *', () => {
         runTask();
     });
 
