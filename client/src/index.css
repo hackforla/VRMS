@@ -16,9 +16,9 @@ body {
   /* background-position-x: 30%; */
   background-position-y: 80%;
   background-size: cover;
-  /* background-size: cover; */
   overflow: scroll;
   height: 100vh;
+  max-height: 100vh;
 }
 
 @font-face {
@@ -47,13 +47,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  font-size: 8em;
+  font-size: 7em;
   line-height: .85em;
   letter-spacing: .05em;
 }
 
 h2 {
-  font-size: 4em;
+  font-size: 2.8em;
   line-height: 1.05em;
   letter-spacing: .025em;
 }
@@ -101,12 +101,12 @@ label {
 
 @media (max-width: 500px) {
   h1 {
-    font-size: 7em;
+    font-size: 6em;
     line-height: .75em;
   }
   
   h2 {
-    font-size: 3em;
+    font-size: 2.8em;
     line-height: 1em;
   }
   
