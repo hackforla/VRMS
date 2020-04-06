@@ -36,7 +36,7 @@ const Home = (props) => {
     useEffect(() => {
         fetchEvents();
 
-        console.log(event);
+        // console.log(event);
     }, [event]);
 
     return (

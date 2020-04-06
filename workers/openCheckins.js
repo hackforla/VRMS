@@ -22,7 +22,7 @@ module.exports = (cron, fetch) => {
             const sortedEvents = events.filter(event => {
                 return (event.date > currentTime) && (event.date < thirtyMinutes) && (event.checkInReady === false);
             })
-            console.log('Sorted events: ', sortedEvents);
+            // console.log('Sorted events: ', sortedEvents);
             return sortedEvents;
         };
     };
@@ -30,7 +30,7 @@ module.exports = (cron, fetch) => {
     async function openCheckins(events) {
         if(events && events.length > 0) {
             events.forEach(async event => {
-                console.log('Opening event: ', event);
+                // console.log('Opening event: ', event);
 
                 await fetch(`https://vrms-development.herokuapp.com/api/events/${event._id}`, {
                     method: "PATCH",

@@ -28,7 +28,7 @@ module.exports = (cron, fetch) => {
                 return (currentTimeISO > threeHoursISO) && (event.checkInReady === true);
             });
 
-            console.log('Sorted events: ', sortedEvents);
+            // console.log('Sorted events: ', sortedEvents);
             return sortedEvents;
         };
     };
@@ -36,7 +36,7 @@ module.exports = (cron, fetch) => {
     async function closeCheckins(events) {
         if(events && events.length > 0) {
             events.forEach(async event => {
-                console.log('Closing event: ', event);
+                // console.log('Closing event: ', event);
 
                 await fetch(`https://vrms-development.herokuapp.com/api/events/${event._id}`, {
                     method: "PATCH",
@@ -54,9 +54,9 @@ module.exports = (cron, fetch) => {
     async function runTask() {
         console.log("I'm going to close check-ins");
 
-        const eventsToOpen = await sortAndFilterEvents();
-        console.log(eventsToOpen);
-        await closeCheckins(eventsToOpen);
+        const eventsToClose = await sortAndFilterEvents();
+        // console.log(eventsToClose);
+        await closeCheckins(eventsToClose);
 
         console.log("I finished closing check-ins");
     };
