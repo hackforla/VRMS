@@ -103,7 +103,7 @@ const AdminDashboard = props => {
     immediateLocationsTotal = locationsTotal
   ) {
     let returnObj = {};
-    console.log("UNIQUE", immediateUniqueLocations);
+    // console.log("UNIQUE", immediateUniqueLocations);
     if (targetBrigade !== "All") {
       returnObj[targetBrigade] = immediateUniqueLocations[targetBrigade].length;
     } else {
@@ -227,7 +227,7 @@ const AdminDashboard = props => {
       });
 
       const nextDate = new Date(Math.max.apply(null, dates));
-      console.log(nextDate);
+      // console.log(nextDate);
       const nextDateUtc = new Date(nextDate).toISOString();
 
       const nextEvent = eventsJson.filter(event => {
