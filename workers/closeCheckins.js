@@ -5,7 +5,7 @@ module.exports = (cron, fetch) => {
     
     async function fetchEvents() {    
         try {
-            const res = await fetch("https://vrms.io/api/events");
+            const res = await fetch("http://localhost:4000/api/events");
             const resJson = await res.json();
 
             return resJson;
@@ -38,7 +38,7 @@ module.exports = (cron, fetch) => {
             events.forEach(async event => {
                 console.log('Closing event: ', event);
 
-                await fetch(`https://vrms.io/api/events/${event._id}`, {
+                await fetch(`http://localhost:4000/api/events/${event._id}`, {
                     method: "PATCH",
                     headers: {
                       "Content-Type": "application/json"

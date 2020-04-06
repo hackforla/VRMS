@@ -41,10 +41,21 @@
     z-index: 1;
     transition: all .3s ease-in-out;
 
-
     &:hover {
         background-color: black;
         color: white;
+    }
+}
+
+.disabled {
+    border: 3px solid lightgray;
+    color: lightgray;
+    cursor: default;
+    pointer-events: none;
+
+    &:hover {
+        background-color: white;
+        color: lightgray;
     }
 }
 
@@ -57,7 +68,6 @@
     margin-bottom: 2vh;
     padding-top: 6vh;
     z-index: 1;
-
 
     & h2 {
         max-width: 20px;
@@ -90,6 +100,7 @@
             margin: 4px;
 
             label {
+                font-size: 18px;
                 width: 350px !important;
                 max-width: 350px !important;
                 text-align: center;
@@ -121,15 +132,22 @@
 }
 
 .select-meeting-dropdown {
-    width: 240px;
-    padding: 6px;
-    font-size: 16px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 100%;
+    padding: 12px; 
+    font-size: 18px;
     font-weight: bold;
     color: rgb(250, 17, 79);
     background-color: inherit;
     border: 3px solid black;
     border-radius: 0px;
-    margin: 12px;
+    margin: 8px;
+
+    option {
+        padding: 100px;
+    }
 
     &:focus {
         border: 3px solid rgb(250, 17, 79);

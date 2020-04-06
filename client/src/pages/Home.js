@@ -71,10 +71,11 @@ const Home = (props) => {
                         </form>
                     </div>
                 )}
-
-                {event !== '--SELECT ONE--' &&
-                    <CheckInButtons event={event}/>
-                }
+                
+                <div className="home-buttons">
+                    {event !== '--SELECT ONE--' && <CheckInButtons event={event}/>}
+                    {event === '--SELECT ONE--' && <CheckInButtons disabled={true} event={event}/>}
+                </div>
             </div>
         </div>
     )
