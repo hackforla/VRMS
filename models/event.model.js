@@ -10,13 +10,13 @@ const eventSchema = mongoose.Schema({
         country: { type: String }
     },
     hacknight: { type: String },
-    eventType: { type: String }, 
-    session: { type: String },
+    eventType: { type: String },
+    eventDescription: { type: String },
+    projectId: { type: String },
     date: { type: Date },
     hours: { type: Number },
     createdDate: { type: Date, default: Date.now },
     updatedDate: { type: Date, default: Date.now },
-    checkInCount: { type: Number, default: 0 },
     checkInReady: { type: Boolean, default: false },
     owner: {
         ownerId: { type: Number }
@@ -26,6 +26,7 @@ const eventSchema = mongoose.Schema({
 eventSchema.methods.serialize = function() {
     return {
         id: this._id,
+        name: this.name,
         location: {
             city: this.location.city,
             state: this.location.state,
@@ -33,11 +34,11 @@ eventSchema.methods.serialize = function() {
         },
         hacknight: this.hacknight,
         eventType: this.eventType,
-        session: this.session,
+        eventDescription: this.eventDescription,
+        projectId: this.projectId,
         date: this.date,
         hours: this.hours,
         createdDate: this.createdDate,
-        checkInCount: this.checkInCount,
         checkInReady: this.checkInReady,
         owner: {
             ownerId: this.owner.ownerId
