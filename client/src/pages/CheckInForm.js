@@ -139,11 +139,12 @@ const CheckInForm = (props) => {
             answer.attendanceReason = reason;
         }
 
-        if (project !== "--SELECT ONE--") {
-            answer.currentProject = project;
-        }
+        // if (project !== "--SELECT ONE--") {
+        //     answer.currentProject = project;
+        // }
 
-        if ((user.attendanceReason === undefined && reason === "--SELECT ONE--") || (user.currentProject === undefined && project === "--SELECT ONE--")) {
+        // if ((user.attendanceReason === undefined && reason === "--SELECT ONE--") || (user.currentProject === undefined && project === "--SELECT ONE--")) {
+        if (user.attendanceReason === undefined && reason === "--SELECT ONE--") {
             alert('Answer the question to unlock the check-in button!');
         } else {
             // console.log(answer);
@@ -524,7 +525,7 @@ const CheckInForm = (props) => {
                                 );
                             })}
 
-                        {user !== null &&
+                        {/* {user !== null &&
                         user !== false &&
                         user.currentProject === undefined && 
                             questions.map((question) => {
@@ -548,7 +549,7 @@ const CheckInForm = (props) => {
                                         </div>
                                     </div>
                                 );
-                            })}
+                            })} */}
 
                         {user ? (
                             !isLoading ? (
