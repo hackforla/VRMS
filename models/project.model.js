@@ -9,7 +9,7 @@ Project Schema:
 - description
 - owner
 - status (active/complete/paused)
-- hackNights (DTLA, Westside, South)
+- location
 - teamMembers (emails)
 - createdDate
 - completedDate
@@ -20,34 +20,31 @@ Idea for the future: programmingLanguages, numberGithubContributions (pull these
 const projectSchema = mongoose.Schema({
     name: { type: String },
     description: { type: String },
-    owner: { type: String },
+    // owner: { type: String },
     projectStatus: { type: String },
-    hackNights: {
-        dtla: { type: Boolean },
-        westside: { type: Boolean },
-        south: { type: Boolean}     // there's probably a cleaner way to do this
-    },
+    location: { type: String },
     teamMembers: { type: String },
     createdDate: { type: Date, default: Date.now },
     completedDate: { type: Date },
     githubUrl: { type: String },
+    slackUrl: { type: String },
+    zoomMeetingLink: { type: String }
 });
 
 projectSchema.methods.serialize = function() {
     return {
         id: this._id,
+        name: this.name,
         description: this.description,
-        owner: this.owner,
+        // owner: this.owner,
         projectStatus: this.projectStatus,
-        hackNights: {
-            dtla: this.hackNights.dtla,
-            westside: this.hackNights.westside,
-            south: this.hackNights.south
-        },
+        location: this.location,
         teamMembers: this.teamMembers,
         createdDate: this.createdDate,
         completedDate: this.completedDate,
-        githubUrl: this.githubUrl
+        githubUrl: this.githubUrl,
+        slackUrl: this.slackUrl,
+        zoomMeetingLink: this.zoomMeetingLink
     };
 };
 

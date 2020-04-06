@@ -15,7 +15,8 @@ Idea for the future: numberGithubContributions (pull this from github?)
 */
 
 const projectTeamMemberSchema = mongoose.Schema({
-    user: { type: String },
+    userId: { type: String },
+    projectId: { type: String },
     teamMemberStatus: { type: String },
     roleOnProject: { type: String },
     joinedDate: { type: Date, default: Date.now },
@@ -26,7 +27,8 @@ const projectTeamMemberSchema = mongoose.Schema({
 projectTeamMemberSchema.methods.serialize = function() {
     return {
         id: this._id,
-        user: this.user,
+        userId: this.userId,
+        projectId: this.projectId,
         teamMemberStatus: this.teamMemberStatus,
         roleOnProject: this.roleOnProject,
         joinedDate: this.joinedDate,
