@@ -121,7 +121,7 @@ const CheckInForm = (props) => {
                     }
                 })
                 .then(res => {
-                    props.history.push('/magicLink');
+                    props.history.push('/success');
                 })
                 .catch(err => console.log(err));
             })
@@ -139,11 +139,12 @@ const CheckInForm = (props) => {
             answer.attendanceReason = reason;
         }
 
-        if (project !== "--SELECT ONE--") {
-            answer.currentProject = project;
-        }
+        // if (project !== "--SELECT ONE--") {
+        //     answer.currentProject = project;
+        // }
 
-        if ((user.attendanceReason === undefined && reason === "--SELECT ONE--") || (user.currentProject === undefined && project === "--SELECT ONE--")) {
+        // if ((user.attendanceReason === undefined && reason === "--SELECT ONE--") || (user.currentProject === undefined && project === "--SELECT ONE--")) {
+        if (user.attendanceReason === undefined && reason === "--SELECT ONE--") {
             alert('Answer the question to unlock the check-in button!');
         } else {
             // console.log(answer);
@@ -180,7 +181,7 @@ const CheckInForm = (props) => {
                     })
                     .then(res => {
                         if (res.ok) {
-                            props.history.push('/magicLink');
+                            props.history.push('/success');
                         }
                     })
                     .catch(err => console.log(err));
@@ -248,7 +249,7 @@ const CheckInForm = (props) => {
                         })
                         .then(res => {
                             if (res.ok) {
-                                props.history.push('/magicLink');
+                                props.history.push('/success');
                             }
                         })
                         .catch(err => console.log(err));
@@ -524,7 +525,7 @@ const CheckInForm = (props) => {
                                 );
                             })}
 
-                        {user !== null &&
+                        {/* {user !== null &&
                         user !== false &&
                         user.currentProject === undefined && 
                             questions.map((question) => {
@@ -548,7 +549,7 @@ const CheckInForm = (props) => {
                                         </div>
                                     </div>
                                 );
-                            })}
+                            })} */}
 
                         {user ? (
                             !isLoading ? (
@@ -640,7 +641,7 @@ const CheckInForm = (props) => {
                 <div className="check-in-container">
                     <div className="check-in-headers">
                         <h3>Welcome!</h3>
-                        <h4>Tell us a little bit about yourself:</h4>
+                        <h4 className="last-row">Tell us a little bit about yourself:</h4>
                     </div>
                     <div className="check-in-form">
                         <form className="form-check-in" autoComplete="off" onSubmit={e => e.preventDefault()}>
@@ -687,15 +688,15 @@ const CheckInForm = (props) => {
                                         aria-label="Email Address"
                                         required
                                     /> 
+                                    <label>{"(This allows easy use of the app. We'll never sell your data!)"}</label>
                                 </div>
-                                <p>{"(This allows easy use of the app. We'll never sell your data!)"}</p>
+                                {/* <p>{"(This allows easy use of the app. We'll never sell your data!)"}</p> */}
                             </div>
 
                             {questions.length !== 0 && questions.map((question) => {
                                 return question.type === 'text' && (
                                     <div key={question._id} className="form-row">
                                         <div className="form-input-text">
-                                            {/* <label htmlFor={question.htmlName}>{question.questionText}</label> */}
                                             <input 
                                                 type="text"
                                                 name={question.htmlName}
@@ -705,6 +706,7 @@ const CheckInForm = (props) => {
                                                 onChange={handleInputChange}
                                                 required
                                             /> 
+                                            <label htmlFor={question.htmlName}>{question.questionText}</label>
                                         </div>
                                     </div>
                                 );
@@ -712,7 +714,7 @@ const CheckInForm = (props) => {
 
                             {questions.length !== 0 && questions.map((question) => {
                                 return question.type === 'select' && (
-                                    <div key={question._id} className="form-row">
+                                    <div key={question._id} className="form-row last-row">
                                         <div className="form-input-radio">
                                             <label htmlFor={question.htmlName}>Is this your first time attending a Hack Night?</label>
                                             <div className="radio-buttons">

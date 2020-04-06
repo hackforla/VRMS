@@ -20,10 +20,10 @@ const firebaseConfig = {
 class Firebase {
     constructor() {
         app.initializeApp(firebaseConfig);
-        console.log('Firebase initialized');
+        // console.log('Firebase initialized');
 
         this.auth = app.auth();
-        console.log('Auth initialized');
+        // console.log('Auth initialized');
     };
 
     isInitialized() {
@@ -67,7 +67,7 @@ class Firebase {
     };
 
     async login() {
-        console.log('Trying to login');
+        // console.log('Trying to login');
         // Confirm the link is a sign-in with email link.
         try {
             if (this.auth.isSignInWithEmailLink(window.location.href)) {

@@ -4,15 +4,16 @@
   "description": "VRMS Client",
   "homepage": "http://vrms-prototype.herokuapp.com",
   "dependencies": {
-    "d3": "^5.15.0",
-    "firebase": "^7.8.2",
-    "mathjs": "^6.6.0",
+    "d3": "^5.15.1",
+    "firebase": "^7.13.2",
+    "mathjs": "^6.6.2",
+    "minimist": "^1.2.3",
     "moment": "^2.24.0",
-    "node-sass": "^4.13.0",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
+    "node-sass": "^4.13.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.2.0"
+    "react-scripts": "^3.4.1"
   },
   "scripts": {
     "start": "react-scripts start",
