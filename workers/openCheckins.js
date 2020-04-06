@@ -5,7 +5,7 @@ module.exports = (cron, fetch) => {
     
     async function fetchEvents() {    
         try {
-            const res = await fetch("http://localhost:4000/api/events");
+            const res = await fetch("https://vrms-development.herokuapp.com/api/events");
             const resJson = await res.json();
 
             return resJson;
@@ -32,7 +32,7 @@ module.exports = (cron, fetch) => {
             events.forEach(async event => {
                 console.log('Opening event: ', event);
 
-                await fetch(`http://localhost:4000/api/events/${event._id}`, {
+                await fetch(`https://vrms-development.herokuapp.com/api/events/${event._id}`, {
                     method: "PATCH",
                     headers: {
                       "Content-Type": "application/json"
