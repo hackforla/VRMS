@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 
 import '../sass/MagicLink.scss';
 
-const MagicLink = (props) => {
+const Success = (props) => {
     // const [isLoading, setIsLoading] = useState(false);
     // const [event, setEvent] = useState([]);
     // const [isError, setIsError] = useState(null);
@@ -20,37 +20,31 @@ const MagicLink = (props) => {
     //     }
     // }
 
-    function forwardRequest() {
+    // useEffect(() => {
+    //     // fetchData();
+    //     // let timer = setTimeout(() => {
+    //     //     props.history.push('/');
+    //     // }, 6000);
 
-        
-    }
-
-    useEffect(() => {
-        // fetchData();
-        let timer = setTimeout(() => {
-            props.history.push('/');
-        }, 6000);
-
-        return () => clearTimeout(timer);
-    }, []);
+    //     // return () => clearTimeout(timer);
+    // }, []);
 
     return (
         <div className="flex-container">
             <div className="new">
                 {/* <div class="rotated-success"></div> */}
                 <div className="new-headers">
-                    {/* <h3>Magic Link Sent</h3> */}
-                    <h3>Success!</h3>
-                    <h4>Soon, you'll be able to: </h4>
+                    <h3 className="last-row">Success!</h3>
+                    <h4 className="last-row">Soon, you'll be able to: </h4>
                 </div>
                 <div className="future-list">
-                    <p>👉 View a detailed, personalized volunteer profile...</p>
-                    <p>👉 Connect with other volunteers...</p>
-                    <p>👉 Get matched with projects that need you!</p>
+                    <p>👉 View your detailed, personalized journey...</p>
+                    <p>👉 Get matched with projects that need you...</p>
+                    <p>👉 Manage your own project!</p>
                 </div>
 
                 <div className="success-info">
-                    <p>Thanks for being a part of the pre-alpha test! Your feedback is valued and appreciated.</p>
+                    <p>Thanks for being a part of the alpha test! Your feedback is valued and appreciated.</p>
                     <p>Have fun tonight!</p>
                 </div>
             </div>
@@ -58,4 +52,4 @@ const MagicLink = (props) => {
     )
 };
 
-export default MagicLink; 
+export default Success; 

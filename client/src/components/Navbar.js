@@ -33,7 +33,7 @@ const Navbar = (props) => {
                     )}
                 </div>
 
-                {props.location.pathname === "/" || props.location.pathname === "/magicLink" ? (
+                {props.location.pathname === "/" || props.location.pathname === "/success" ? (
                     <div className="navbar-logo grow">
                         <img src="/hflalogo.png" alt="Hack for LA Logo"></img>
                     </div>

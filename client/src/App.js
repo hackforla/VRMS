@@ -14,7 +14,7 @@ import NewUser from "./pages/NewUser";
 import ReturningUser from "./pages/ReturningUser";
 import AdminLogin from "./pages/AdminLogin";
 import CheckInForm from "./pages/CheckInForm";
-import MagicLink from "./pages/MagicLink";
+import Success from "./pages/Success";
 import HandleAuth from "./pages/HandleAuth";
 import EmailSent from "./pages/EmailSent";
 import Events from "./pages/Events";
@@ -30,7 +30,7 @@ const routes = [
   { path: "/returning", name: "returning", Component: ReturningUser },
   { path: "/login", name: "login", Component: AdminLogin },
   { path: "/checkIn/:userType", name: "checkIn", Component: CheckInForm },
-  { path: "/magicLink", name: "magicLink", Component: MagicLink },
+  { path: "/success", name: "success", Component: Success },
   { path: "/handleauth", name: "handleauth", Component: HandleAuth },
   { path: "/emailsent", name: "emailsent", Component: EmailSent },
   { path: "/events", name: "events", Component: Events }

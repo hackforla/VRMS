@@ -40,9 +40,18 @@
     }
 }
 
+.last-row {
+    margin-top: 24px; 
+}
+
 .form-input-text {
     display: flex;
     flex-direction: column;
+
+    label {
+        font-size: 14px;
+        font-weight: 100px;
+    }
 }
 
 label {
