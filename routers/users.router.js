@@ -90,11 +90,14 @@ router.post('/', (req, res) => {
 
         User
             .create(req.body, function (err, user) {
-                if (err) throw err;
-
-                const { id } = user;
-                console.log('Created with id: ' + id);
-                res.status(201).json(id);
+                if (err) {
+                    console.log(err.errmsg);
+                    res.json(err.errmsg);
+                } else {
+                    const { id } = user;
+                    console.log('Created with id: ' + id);
+                    res.status(201).json(id);
+                }
             })
             // .then(user => {
             //     .json({ id: res.body.id })
