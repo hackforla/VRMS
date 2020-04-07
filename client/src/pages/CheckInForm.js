@@ -136,7 +136,9 @@ const CheckInForm = (props) => {
     const submitReturning = (e) => {
         e.preventDefault();
 
-        const answer = {};
+        const answer = {
+            newMember: false
+        };
 
         if (reason !== "--SELECT ONE--") {
             answer.attendanceReason = reason;
