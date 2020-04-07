@@ -105,25 +105,28 @@ const CheckInForm = (props) => {
                 if (res.ok) {
                     return res.json();
                 }
-
+                
                 throw new Error(res.statusText);
             })
             .then(responseId => {
-                // Then, create a new check-in
+                if (responseId.includes('E11000')) {
+                    setIsError(true);
+                    setErrorMessage('Email address is already in use.')
+                } else {
+                    const checkInForm = { userId: (responseId), eventId: new URLSearchParams(props.location.search).get('eventId') };
 
-                const checkInForm = { userId: (responseId), eventId: new URLSearchParams(props.location.search).get('eventId') };
-
-                return fetch('/api/checkins', {
-                    method: "POST",
-                    body: JSON.stringify(checkInForm),
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                })
-                .then(res => {
-                    props.history.push('/success');
-                })
-                .catch(err => console.log(err));
+                    return fetch('/api/checkins', {
+                        method: "POST",
+                        body: JSON.stringify(checkInForm),
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    })
+                        .then(res => {
+                            props.history.push('/success');
+                        })
+                        .catch(err => console.log(err));
+                }
             })
             .catch(err => {
                 console.log(err);
@@ -309,7 +312,7 @@ const CheckInForm = (props) => {
             const yearJoined = parseInt(year);
             // extra date info needed to be recognized as a date
             const monthJoined = parseInt(moment(month + ' 9, 2020').format('MM')); 
-            console.log(currYear, currMonth, yearJoined, monthJoined);
+            // console.log(currYear, currMonth, yearJoined, monthJoined);
             if(yearJoined > currYear || (yearJoined === currYear && monthJoined > currMonth)) {
                 setIsError(true);
                 setErrorMessage("You can't set a date in the future... Please try again.");

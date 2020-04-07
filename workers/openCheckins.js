@@ -62,7 +62,7 @@ module.exports = (cron, fetch) => {
     };
 
     const scheduledTask = cron.schedule('*/10 8-21 * * *', () => {
-        runTask();
+        // runTask();
     });
 
     return scheduledTask;
