@@ -10,25 +10,24 @@ import UpcomingEvent from "../components/presentational/upcomingEvent";
 import EventOverview from "../components/presentational/eventOverview";
 import DonutChartContainer from "../components/presentational/donutChartContainer";
 
-const AdminDashboard = props => {
+const AdminDashboard = (props) => {
   const auth = useAuth();
 
-  //Original State
+  //STATE
   const [nextEvent, setNextEvent] = useState([]);
   const [isCheckInReady, setIsCheckInReady] = useState();
-
   const [volunteers, setVolunteers] = useState(null);
   const [totalVolunteers, setTotalVolunteers] = useState(null);
-
-  //Reorganized State
   const [locationsTotal, setLocationsTotal] = useState({});
   const [uniqueLocations, setUniqueLocations] = useState(null);
   const [volunteersSignedIn, setVolunteersSignedIn] = useState({});
   const [volunteeredHours, setVolunteeredHours] = useState({});
   const [averagedHours, setAveragedHours] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   async function getAndSetData() {
     try {
+      setIsLoading(true);
       const checkIns = await fetch("/api/checkins");
       const checkInsJson = await checkIns.json();
       const events = await fetch("/api/events");
@@ -49,6 +48,7 @@ const AdminDashboard = props => {
       setUniqueLocations(uniqueUsers);
       setLocationsTotal(totalUsers);
       setDonutCharts("All", uniqueUsers, totalUsers);
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -76,7 +76,7 @@ const AdminDashboard = props => {
 
   function findUniqueUsers(locationKeys, uniqueLocations, checkInsJson) {
     let returnObj = JSON.parse(JSON.stringify(uniqueLocations));
-    checkInsJson.forEach(cur => {
+    checkInsJson.forEach((cur) => {
       let userLocation = locationKeys[cur.eventId];
       let userId = cur.userId;
 
@@ -88,7 +88,7 @@ const AdminDashboard = props => {
   }
   function findTotalUsers(locationKeys, uniqueLocations, checkInsJson) {
     let returnObj = JSON.parse(JSON.stringify(uniqueLocations));
-    checkInsJson.forEach(cur => {
+    checkInsJson.forEach((cur) => {
       let userLocation = locationKeys[cur.eventId];
       let userId = cur.userId;
 
@@ -184,16 +184,18 @@ const AdminDashboard = props => {
     const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
     try {
+      setIsLoading(true);
       const users = await fetch("/api/users", {
         headers: {
           "Content-Type": "application/json",
-          "x-customrequired-header": headerToSend
-        }
+          "x-customrequired-header": headerToSend,
+        },
       });
       const usersJson = await users.json();
 
       setVolunteers(usersJson);
       setTotalVolunteers(usersJson);
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -202,16 +204,19 @@ const AdminDashboard = props => {
     e.preventDefault();
 
     try {
+      setIsLoading(true);
+
       await fetch(`/api/events/${nextEventId}`, {
         method: "PATCH",
         headers: {
-          "Content-Type": "application/json"
-        }
-      }).then(response => {
+          "Content-Type": "application/json",
+        },
+      }).then((response) => {
         if (response.ok) {
           setIsCheckInReady(!isCheckInReady);
         }
       });
+      setIsLoading(false);
     } catch (error) {
       // setIsError(error);
       // setIsLoading(!isLoading);
@@ -219,10 +224,12 @@ const AdminDashboard = props => {
   }
   async function getNextEvent() {
     try {
+      setIsLoading(true);
+
       const events = await fetch("/api/events");
       const eventsJson = await events.json();
 
-      const dates = eventsJson.map(event => {
+      const dates = eventsJson.map((event) => {
         return Date.parse(event.date);
       });
 
@@ -230,13 +237,14 @@ const AdminDashboard = props => {
       console.log(nextDate);
       const nextDateUtc = new Date(nextDate).toISOString();
 
-      const nextEvent = eventsJson.filter(event => {
+      const nextEvent = eventsJson.filter((event) => {
         const eventDate = new Date(event.date).toISOString();
         return eventDate === nextDateUtc;
       });
 
       setIsCheckInReady(nextEvent[0].checkInReady);
       setNextEvent(nextEvent);
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -245,22 +253,25 @@ const AdminDashboard = props => {
     e.preventDefault();
 
     try {
+      setIsLoading(true);
+
       await fetch(`/api/events/${nextEventId}`, {
         method: "PATCH",
         headers: {
-          "Content-Type": "application/json"
-        }
-      }).then(response => {
+          "Content-Type": "application/json",
+        },
+      }).then((response) => {
         if (response.ok) {
           setIsCheckInReady(!isCheckInReady);
         }
       });
+      setIsLoading(false);
     } catch (error) {
       // setIsError(error);
       // setIsLoading(!isLoading);
     }
   }
-  const handleBrigadeChange = e => {
+  const handleBrigadeChange = (e) => {
     setDonutCharts(e.currentTarget.value);
   };
 
@@ -280,27 +291,37 @@ const AdminDashboard = props => {
             You have an event coming up:
           </p>
         </div>
-        <UpcomingEvent
-          isCheckInReady={isCheckInReady}
-          nextEvent={nextEvent}
-          setCheckInReady={setCheckInReady}
-        />
-        <EventOverview
-          handleBrigadeChange={handleBrigadeChange}
-          uniqueLocations={uniqueLocations}
-        />
-        <DonutChartContainer
-          chartName={"Total Volunteers"}
-          data={volunteersSignedIn}
-        />
-        <DonutChartContainer
-          chartName={"Total Volunteer Hours"}
-          data={volunteeredHours}
-        />
-        <DonutChartContainer
-          chartName={"Avg. Hours Per Volunteer"}
-          data={averagedHours}
-        />
+        {isLoading ? null : (
+          <UpcomingEvent
+            isCheckInReady={isCheckInReady}
+            nextEvent={nextEvent}
+            setCheckInReady={setCheckInReady}
+          />
+        )}
+        {isLoading ? null : (
+          <EventOverview
+            handleBrigadeChange={handleBrigadeChange}
+            uniqueLocations={uniqueLocations}
+          />
+        )}
+        {isLoading ? null : (
+          <DonutChartContainer
+            chartName={"Total Volunteers"}
+            data={volunteersSignedIn}
+          />
+        )}
+        {isLoading ? null : (
+          <DonutChartContainer
+            chartName={"Total Volunteer Hours"}
+            data={volunteeredHours}
+          />
+        )}
+        {isLoading ? null : (
+          <DonutChartContainer
+            chartName={"Avg. Hours Per Volunteer"}
+            data={averagedHours}
+          />
+        )}
       </div>
     </div>
     // ) : (

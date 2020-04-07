@@ -69,33 +69,6 @@ const CheckInForm = props => {
     "Education/STEM",
     "Fundraising"
   ];
-  const projects = [
-    "--SELECT ONE--",
-    "311 Data",
-    "ArtWatcher",
-    "Civic Tech Index",
-    "Engage",
-    "Food Oasis",
-    "Gender Equity",
-    "HackforLA.org Website",
-    "Heart",
-    "HelloGOV",
-    "Host Home",
-    "Jobs for Hope",
-    "LA Crime Sentencing",
-    "Lucky Parking",
-    "Metro On-time",
-    "New Schools Today",
-    "Not Today",
-    "Public Tree Map",
-    "Record Clearance",
-    "Shared Housing Project",
-    "Spare",
-    "TDM Calculator",
-    "Undebate",
-    "VRMS",
-    "None"
-  ];
 
   const fetchQuestions = async () => {
     try {
