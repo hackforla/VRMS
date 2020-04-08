@@ -18,40 +18,51 @@ import Success from "./pages/Success";
 import HandleAuth from "./pages/HandleAuth";
 import EmailSent from "./pages/EmailSent";
 import Events from "./pages/Events";
+import ProjectManagerDashboard from "./pages/ProjectMangerDashboard";
 
 import "./App.scss";
 
 const routes = [
-  { path: "/", name: "home", Component: Home },
-  { path: "/admin", name: "admindashboard", Component: AdminDashboard },
-  { path: "/user", name: "userdashboard", Component: UserDashboard },
-  { path: "/event/:id", name: "event", Component: Event },
-  { path: "/new", name: "new", Component: NewUser },
-  { path: "/returning", name: "returning", Component: ReturningUser },
-  { path: "/login", name: "login", Component: AdminLogin },
-  { path: "/checkIn/:userType", name: "checkIn", Component: CheckInForm },
-  { path: "/success", name: "success", Component: Success },
-  { path: "/handleauth", name: "handleauth", Component: HandleAuth },
-  { path: "/emailsent", name: "emailsent", Component: EmailSent },
-  { path: "/events", name: "events", Component: Events }
+    { path: "/", name: "home", Component: Home },
+    { path: "/admin", name: "admindashboard", Component: AdminDashboard },
+    { path: "/user", name: "userdashboard", Component: UserDashboard },
+    { path: "/event/:id", name: "event", Component: Event },
+    { path: "/new", name: "new", Component: NewUser },
+    { path: "/returning", name: "returning", Component: ReturningUser },
+    { path: "/login", name: "login", Component: AdminLogin },
+    { path: "/checkIn/:userType", name: "checkIn", Component: CheckInForm },
+    { path: "/success", name: "success", Component: Success },
+    { path: "/handleauth", name: "handleauth", Component: HandleAuth },
+    { path: "/emailsent", name: "emailsent", Component: EmailSent },
+    { path: "/events", name: "events", Component: Events },
+    {
+        path: "/projectmanager",
+        name: "pmdashboard",
+        Component: ProjectManagerDashboard,
+    },
 ];
 
-const App = props => {
-  return (
-    <AuthProvider>
-      <div className="app">
-        <div className="app-container">
-          <Navbar />
-          <main role="main" className="main">
-            {routes.map(({ path, Component }) => (
-              <Route key={path} exact path={path} component={Component} />
-            ))}
-          </main>
-          <Footer />
-        </div>
-      </div>
-    </AuthProvider>
-  );
+const App = (props) => {
+    return (
+        <AuthProvider>
+            <div className="app">
+                <div className="app-container">
+                    <Navbar />
+                    <main role="main" className="main">
+                        {routes.map(({ path, Component }) => (
+                            <Route
+                                key={path}
+                                exact
+                                path={path}
+                                component={Component}
+                            />
+                        ))}
+                    </main>
+                    <Footer />
+                </div>
+            </div>
+        </AuthProvider>
+    );
 };
 
 export default App;
