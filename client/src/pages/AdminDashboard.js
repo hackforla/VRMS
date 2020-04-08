@@ -50,6 +50,7 @@ const AdminDashboard = (props) => {
       setDonutCharts("All", uniqueUsers, totalUsers);
       setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       console.log(error);
     }
   }
@@ -103,7 +104,6 @@ const AdminDashboard = (props) => {
     immediateLocationsTotal = locationsTotal
   ) {
     let returnObj = {};
-    console.log("UNIQUE", immediateUniqueLocations);
     if (targetBrigade !== "All") {
       returnObj[targetBrigade] = immediateUniqueLocations[targetBrigade].length;
     } else {
@@ -197,6 +197,8 @@ const AdminDashboard = (props) => {
       setTotalVolunteers(usersJson);
       setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
+
       console.log(error);
     }
   }
@@ -218,6 +220,8 @@ const AdminDashboard = (props) => {
       });
       setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
+
       // setIsError(error);
       // setIsLoading(!isLoading);
     }
@@ -234,7 +238,6 @@ const AdminDashboard = (props) => {
       });
 
       const nextDate = new Date(Math.max.apply(null, dates));
-      console.log(nextDate);
       const nextDateUtc = new Date(nextDate).toISOString();
 
       const nextEvent = eventsJson.filter((event) => {
@@ -246,6 +249,8 @@ const AdminDashboard = (props) => {
       setNextEvent(nextEvent);
       setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
+
       console.log(error);
     }
   }
@@ -267,6 +272,8 @@ const AdminDashboard = (props) => {
       });
       setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
+
       // setIsError(error);
       // setIsLoading(!isLoading);
     }
