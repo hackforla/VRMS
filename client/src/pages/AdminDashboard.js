@@ -272,7 +272,7 @@ const AdminDashboard = (props) => {
         getUsers();
     }, []);
 
-    return true ? (
+    return auth && auth.user ? (
         <div className="flex-container">
             <div className="dashboard">
                 <div className="dashboard-header">

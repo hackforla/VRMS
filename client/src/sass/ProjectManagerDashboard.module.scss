@@ -23,12 +23,30 @@ input {
 input {
     color: grey;
     border: 1px solid black;
-    margin-right: 0.8rem;
+    margin-right: 0.875em;
     cursor: pointer;
 }
 
 button {
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid black;
+    border-radius: 6px;
+    height: 40px;
+    min-width: 310px;
+    max-width: 310px;
+    margin: 12px 6px;
+    font-size: 16px;
+    z-index: 1;
+    transition: all 0.3s ease-in-out;
+}
+
+button:hover {
+    border: 0;
+    background-color: grey;
+    color: white;
 }
 
 .center {

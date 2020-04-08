@@ -63,8 +63,7 @@ const ProjectManagerDashboard = () => {
                 }
             });
         } catch (error) {
-            // setIsError(error);
-            // setIsLoading(!isLoading);
+            console.log(error);
         }
     }
 
@@ -133,9 +132,7 @@ const ProjectManagerDashboard = () => {
                             })}
                         ></AttendeesCheckListForm>
                         <div className={styles.center}>
-                            <button className="checkin-toggle">
-                                SUBMIT ONBOARDING
-                            </button>
+                            <button>SUBMIT ONBOARDING</button>
                         </div>
                     </React.Fragment>
                 ) : null}
