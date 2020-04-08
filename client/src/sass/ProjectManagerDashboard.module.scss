@@ -1,0 +1,39 @@
+.checklist {
+    padding-left: 0.5rem;
+}
+
+.checklistPerson {
+    font-size: 0.98rem;
+    color: rgb(46, 46, 46);
+}
+
+.onRoster {
+    color: rgba(0, 80, 0, 0.774);
+}
+
+.notOnRoster {
+    color: rgba(163, 0, 0, 0.774);
+}
+
+li,
+input {
+    margin-bottom: 0.35rem;
+}
+
+input {
+    color: grey;
+    border: 1px solid black;
+    margin-right: 0.8rem;
+    cursor: pointer;
+}
+
+button {
+    text-align: center;
+}
+
+.center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
