@@ -9,6 +9,7 @@ import "../sass/Dashboard.scss";
 import UpcomingEvent from "../components/presentational/upcomingEvent";
 import EventOverview from "../components/presentational/eventOverview";
 import DonutChartContainer from "../components/presentational/donutChartContainer";
+import Loading from "../components/presentational/donutChartLoading";
 
 const AdminDashboard = (props) => {
   const auth = useAuth();
@@ -305,25 +306,33 @@ const AdminDashboard = (props) => {
             setCheckInReady={setCheckInReady}
           />
         )}
-        {isLoading ? null : (
+        {isLoading ? (
+          <img src={Loading} alt="Logo" />
+        ) : (
           <EventOverview
             handleBrigadeChange={handleBrigadeChange}
             uniqueLocations={uniqueLocations}
           />
         )}
-        {isLoading ? null : (
+        {!isLoading ? (
+          <Loading />
+        ) : (
           <DonutChartContainer
             chartName={"Total Volunteers"}
             data={volunteersSignedIn}
           />
         )}
-        {isLoading ? null : (
+        {!isLoading ? (
+          <Loading />
+        ) : (
           <DonutChartContainer
             chartName={"Total Volunteer Hours"}
             data={volunteeredHours}
           />
         )}
-        {isLoading ? null : (
+        {!isLoading ? (
+          <Loading />
+        ) : (
           <DonutChartContainer
             chartName={"Avg. Hours Per Volunteer"}
             data={averagedHours}
