@@ -187,13 +187,9 @@ npm-debug.log
 /*.env
 ```
 
-`pwd` and make sure you're in the app root. 
+Make sure you're at the app root, and run:
 
-`nodemon` (if installed, or `npm start`)
-
-`cd client/`
-
-`npm start` again
+`npm run dev-start`
 
 You should now have a live app. Happy hacking.
 
