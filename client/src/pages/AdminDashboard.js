@@ -257,8 +257,6 @@ const AdminDashboard = (props) => {
     e.preventDefault();
 
     try {
-      setIsLoading(true);
-
       await fetch(`/api/events/${nextEventId}`, {
         method: "PATCH",
         headers: {
@@ -269,10 +267,8 @@ const AdminDashboard = (props) => {
           setIsCheckInReady(!isCheckInReady);
         }
       });
-      setIsLoading(false);
     } catch (error) {
-      setIsLoading(false);
-
+      console.log(error);
       // setIsError(error);
       // setIsLoading(!isLoading);
     }
@@ -289,55 +285,59 @@ const AdminDashboard = (props) => {
 
   return (
     auth && auth.user ? (
+      <div className="flex-container">
+        <div className="dashboard">
+          <div className="dashboard-header">
+            <p className="dashboard-header-text-small">
+              You have an event coming up:
+            </p>
+          </div>
 
-    <div className="flex-container">
-      <div className="dashboard">
-        <div className="dashboard-header">
-          <p className="dashboard-header-text-small">
-            You have an event coming up:
-          </p>
+          {isLoading ? <img src={Loading} alt="Logo" /> : (
+            <UpcomingEvent
+              isCheckInReady={isCheckInReady}
+              nextEvent={nextEvent}
+              setCheckInReady={setCheckInReady}
+            />
+          )}
+
+          {isLoading ? (
+            <img src={Loading} alt="Logo" />
+          ) : (
+            <EventOverview
+              handleBrigadeChange={handleBrigadeChange}
+              uniqueLocations={uniqueLocations}
+            />
+          )}
+
+          {isLoading ? (
+            <Loading />
+          ) : (
+            <DonutChartContainer
+              chartName={"Total Volunteers"}
+              data={volunteersSignedIn}
+            />
+          )}
+
+          {isLoading ? (
+            <Loading />
+          ) : (
+            <DonutChartContainer
+              chartName={"Total Volunteer Hours"}
+              data={volunteeredHours}
+            />
+          )}
+          
+          {isLoading ? (
+            <Loading />
+          ) : (
+            <DonutChartContainer
+              chartName={"Avg. Hours Per Volunteer"}
+              data={averagedHours}
+            />
+          )}
         </div>
-        {isLoading ? null : (
-          <UpcomingEvent
-            isCheckInReady={isCheckInReady}
-            nextEvent={nextEvent}
-            setCheckInReady={setCheckInReady}
-          />
-        )}
-        {isLoading ? (
-          <img src={Loading} alt="Logo" />
-        ) : (
-          <EventOverview
-            handleBrigadeChange={handleBrigadeChange}
-            uniqueLocations={uniqueLocations}
-          />
-        )}
-        {!isLoading ? (
-          <Loading />
-        ) : (
-          <DonutChartContainer
-            chartName={"Total Volunteers"}
-            data={volunteersSignedIn}
-          />
-        )}
-        {!isLoading ? (
-          <Loading />
-        ) : (
-          <DonutChartContainer
-            chartName={"Total Volunteer Hours"}
-            data={volunteeredHours}
-          />
-        )}
-        {!isLoading ? (
-          <Loading />
-        ) : (
-          <DonutChartContainer
-            chartName={"Avg. Hours Per Volunteer"}
-            data={averagedHours}
-          />
-        )}
       </div>
-    </div>
     ) : (
       <Redirect to="/login" />
     )

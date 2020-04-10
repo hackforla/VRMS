@@ -23,7 +23,7 @@
     flex-direction: column;
     align-self: center;
     width: 80%;
-    margin-top: 36px;
+    margin-top: 0px;
     margin-bottom: 8vh;
 }
 
@@ -41,10 +41,21 @@
     z-index: 1;
     transition: all .3s ease-in-out;
 
-
     &:hover {
         background-color: black;
         color: white;
+    }
+}
+
+.disabled {
+    border: 3px solid lightgray;
+    color: lightgray;
+    cursor: default;
+    pointer-events: none;
+
+    &:hover {
+        background-color: white;
+        color: lightgray;
     }
 }
 
@@ -58,9 +69,89 @@
     padding-top: 6vh;
     z-index: 1;
 
-
     & h2 {
         max-width: 20px;
+    }
+}
+
+.meeting-select-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-select-meeting {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 375px;
+    max-width: 375px;
+
+    .form-row {
+        max-width: 350px;
+        width: 350px;
+        margin: 6px 0px;
+
+        .form-input-select {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-content: center;
+            margin: 4px;
+
+            label {
+                font-size: 18px;
+                width: 350px !important;
+                max-width: 350px !important;
+                text-align: center;
+            }
+        }
+    
+        p {
+            text-align: left;
+            font-weight: bold;
+            letter-spacing: .05em;
+        }
+    }
+}
+
+.radio-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin: 8px;
+}
+
+.select-meeting-dropdown:-webkit-autofill,
+.select-meeting-dropdown:-webkit-autofill:hover,
+.select-meeting-dropdown:-webkit-autofill:focus {
+  border: none;
+  -webkit-text-fill-color: rgb(250, 17, 79);
+  -webkit-box-shadow: none;
+  border-bottom: 3px solid black;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.select-meeting-dropdown {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 100%;
+    padding: 12px; 
+    font-size: 18px;
+    font-weight: bold;
+    color: rgb(250, 17, 79);
+    background-color: inherit;
+    border: 3px solid black;
+    border-radius: 0px;
+    margin: 8px;
+
+    option {
+        padding: 100px;
+    }
+
+    &:focus {
+        border: 3px solid rgb(250, 17, 79);
+        outline: none;
     }
 }
 

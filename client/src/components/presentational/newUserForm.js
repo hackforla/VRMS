@@ -52,7 +52,7 @@ const NewUserForm = (props) => {
                 placeholder="Email Address"
                 value={props.formInput.email.toString()}
                 // aria-label="topic"
-                onChange={props.andleInputChange}
+                onChange={props.handleInputChange}
                 aria-label="Email Address"
                 required
               />

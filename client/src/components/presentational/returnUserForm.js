@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 const ReturnUserForm = (props) => {
+
   return (
     <div className="check-in-container">
       <div className="check-in-headers">
@@ -106,7 +107,7 @@ const ReturnUserForm = (props) => {
               );
             })}
 
-          {props.user !== null &&
+          {/* {props.user !== null &&
             props.user !== false &&
             props.user.currentProject === undefined &&
             props.questions.map((question) => {
@@ -138,7 +139,7 @@ const ReturnUserForm = (props) => {
                   </div>
                 )
               );
-            })}
+            })} */}
 
           {props.user ? (
             !props.isLoading ? (
@@ -147,7 +148,7 @@ const ReturnUserForm = (props) => {
                   <button
                     type="submit"
                     className="form-check-in-submit"
-                    onClick={(e) => props.ubmitReturning(e)}
+                    onClick={(e) => props.submitReturning(e)}
                   >
                     CHECK IN
                   </button>

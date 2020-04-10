@@ -12,7 +12,7 @@ export default function useProvideAuth() {
         };
         
         Firebase.auth.onAuthStateChanged(user => {
-            console.log('Handling auth change with ', user);
+            // console.log('Handling auth change with ', user);
 
             if (user) {
                 setUser(user);

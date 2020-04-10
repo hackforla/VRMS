@@ -8,7 +8,7 @@ const userSchema = mongoose.Schema({
         firstName: { type: String },
         lastName: { type: String }
     },
-    email: { type: String },
+    email: { type: String, unique: true },
     accessLevel: { type: String, default: "user" },
     createdDate: { type: Date, default: Date.now },
     currentRole: { type: String },

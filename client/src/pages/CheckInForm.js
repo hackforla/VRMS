@@ -124,356 +124,324 @@ const CheckInForm = props => {
     }
   };
 
-  const submitForm = userForm => {
+  const submitForm = (userForm) => {
     // First, create a new user in the user collection
     const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
-    fetch("/api/users", {
-      method: "POST",
-      body: JSON.stringify(userForm),
-      headers: {
-        "Content-Type": "application/json",
-        "x-customrequired-header": headerToSend
-      }
-    })
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        }
-
-        throw new Error(res.statusText);
-      })
-      .then(responseId => {
-        // Then, create a new check-in
-
-        const checkInForm = {
-          userId: responseId,
-          eventId: new URLSearchParams(props.location.search).get("eventId")
-        };
-
-        return fetch("/api/checkins", {
-          method: "POST",
-          body: JSON.stringify(checkInForm),
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
-          .then(res => {
-            props.history.push("/magicLink");
-          })
-          .catch(err => console.log(err));
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
-
-  const submitReturning = e => {
-    e.preventDefault();
-
-    const answer = {};
-
-    if (reason !== "--SELECT ONE--") {
-      answer.attendanceReason = reason;
-    }
-
-    if (project !== "--SELECT ONE--") {
-      answer.currentProject = project;
-    }
-
-    if (
-      (user.attendanceReason === undefined && reason === "--SELECT ONE--") ||
-      (user.currentProject === undefined && project === "--SELECT ONE--")
-    ) {
-      alert("Answer the question to unlock the check-in button!");
-    } else {
-      // console.log(answer);
-
-      const answerJson = JSON.stringify(answer);
-
-      // console.log(answerJson);
-
-      try {
-        const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
-
-        fetch(`/api/users/${user._id}`, {
-          method: "PATCH",
-          body: answerJson,
-          headers: {
+    fetch('/api/users', {
+        method: "POST",
+        body: JSON.stringify(userForm),
+        headers: {
             "Content-Type": "application/json",
             "x-customrequired-header": headerToSend
-          }
-        })
-          .then(res => {
-            return res.json();
-          })
-          .then(response => {
-            const checkInForm = {
-              userId: `${user._id}`,
-              eventId: new URLSearchParams(props.location.search).get("eventId")
-            };
-
-            // console.log(`Here's the form: ${checkInForm.toString()}`);
-
-            return fetch("/api/checkins", {
-              method: "POST",
-              body: JSON.stringify(checkInForm),
-              headers: {
-                "Content-Type": "application/json"
-              }
-            })
-              .then(res => {
-                if (res.ok) {
-                  props.history.push("/magicLink");
-                }
-              })
-              .catch(err => console.log(err));
-          })
-          .catch(err => console.log(err));
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
-
-  const submitReturningUserForm = email => {
-    // First, create a new user in the user collection
-
-    fetch(`/api/users?email=${email}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json"
-      }
+        }
     })
-      .then(res => {
-        return res.json();
-      })
-      .then(responseId => {
-        const answer = {
-          attendanceReason: reason
-        };
+        .then(res => {
+            if (res.ok) {
+                return res.json();
+            }
+            
+            throw new Error(res.statusText);
+        })
+        .then(responseId => {
+            if (responseId.includes('E11000')) {
+                setIsError(true);
+                setErrorMessage('Email address is already in use.')
+            } else {
+                const checkInForm = { userId: (responseId), eventId: new URLSearchParams(props.location.search).get('eventId') };
 
-        // const answer = {
-        //     whichProject: project
-        // };
+                return fetch('/api/checkins', {
+                    method: "POST",
+                    body: JSON.stringify(checkInForm),
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+                    .then(res => {
+                        props.history.push('/success');
+                    })
+                    .catch(err => console.log(err));
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        });
+}
+
+const submitReturning = (e) => {
+    e.preventDefault();
+
+    const answer = {
+        newMember: false
+    };
+
+    if (reason !== "--SELECT ONE--") {
+        answer.attendanceReason = reason;
+    }
+
+    // if (project !== "--SELECT ONE--") {
+    //     answer.currentProject = project;
+    // }
+
+    // if ((user.attendanceReason === undefined && reason === "--SELECT ONE--") || (user.currentProject === undefined && project === "--SELECT ONE--")) {
+    if (user.attendanceReason === undefined && reason === "--SELECT ONE--") {
+        alert('Answer the question to unlock the check-in button!');
+    } else {
+        // console.log(answer);
 
         const answerJson = JSON.stringify(answer);
 
-        if (responseId === false) {
-          setIsError(true);
-          setErrorMessage(
-            "You haven't checked in with that email. Redirecting home to create a new profile..."
-          );
+        // console.log(answerJson);
 
-          setTimeout(() => {
-            props.history.push("/");
-          }, 4000);
-        } else {
-          return fetch(`/api/users/${responseId}`, {
-            method: "PATCH",
-            body: answerJson,
-            headers: {
-              "Content-Type": "application/json"
-            }
-          })
+        try {
+            const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
+
+            fetch(`/api/users/${user._id}`, {
+                method: "PATCH",
+                body: answerJson,
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-customrequired-header": headerToSend
+                }
+            })
             .then(res => {
-              return res.json();
+                return res.json();
             })
             .then(response => {
-              const checkInForm = {
-                userId: `${response}`,
-                eventId: new URLSearchParams(props.location.search).get(
-                  "eventId"
-                )
-              };
-
-              // console.log(`Here's the form: ${checkInForm.toString()}`);
-
-              return fetch("/api/checkins", {
-                method: "POST",
-                body: JSON.stringify(checkInForm),
-                headers: {
-                  "Content-Type": "application/json"
-                }
-              })
+                const checkInForm = { userId: `${user._id}`, eventId: new URLSearchParams(props.location.search).get('eventId') };
+    
+                // console.log(`Here's the form: ${checkInForm.toString()}`);
+    
+                return fetch('/api/checkins', {
+                    method: "POST",
+                    body: JSON.stringify(checkInForm),
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
                 .then(res => {
-                  if (res.ok) {
-                    props.history.push("/magicLink");
-                  }
+                    if (res.ok) {
+                        props.history.push('/success');
+                    }
                 })
                 .catch(err => console.log(err));
-            })
+            })                    
             .catch(err => console.log(err));
+        } catch (error) {
+            console.log(error);
         }
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
+    }
+}
 
-  // function checkIsEmptyField(obj) {
-  //     if (!Object.values(obj).some(key => (key !== null && key !== ''))) {
-  //         setIsError(true);
-  //         setErrorMessage("Please don't leave any fields blank");
-  //         setIsFormReady(false);
-  //     }
-  // }
+// const submitReturningUserForm = (email) => {
+//     // First, create a new user in the user collection
 
-  const checkInNewUser = e => {
+//     fetch(`/api/users?email=${email}`, {
+//         method: "GET",
+//         headers: {
+//             "Content-Type": "application/json"
+//         }
+//     })
+//         .then(res => {
+//             return res.json();
+//         })
+//         .then(responseId => {
+
+//             const answer = { 
+//                 attendanceReason: reason
+//             };
+
+//             // const answer = { 
+//             //     whichProject: project
+//             // };
+
+//             const answerJson = JSON.stringify(answer);
+
+//             if (responseId === false) {
+//                 setIsError(true);
+//                 setErrorMessage("You haven't checked in with that email. Redirecting home to create a new profile...");
+
+//                 setTimeout(() => {
+//                     props.history.push("/");
+//                 }, 4000)
+//             } else {
+//                 return fetch(`/api/users/${responseId}`, {
+//                     method: "PATCH",
+//                     body: answerJson,
+//                     headers: {
+//                         "Content-Type": "application/json"
+//                     }
+//                 })
+//                 .then(res => {
+//                     return res.json();
+//                 })
+//                 .then(response => {
+//                     const checkInForm = { userId: `${response}`, eventId: new URLSearchParams(props.location.search).get('eventId') };
+
+//                     // console.log(`Here's the form: ${checkInForm.toString()}`);
+
+//                     return fetch('/api/checkins', {
+//                         method: "POST",
+//                         body: JSON.stringify(checkInForm),
+//                         headers: {
+//                             "Content-Type": "application/json"
+//                         }
+//                     })
+//                     .then(res => {
+//                         if (res.ok) {
+//                             props.history.push('/success');
+//                         }
+//                     })
+//                     .catch(err => console.log(err));
+//                 })                    
+//                 .catch(err => console.log(err));
+//             }
+//         })
+//         .catch(err => {
+//             console.log(err);
+//         });
+// }
+
+// function checkIsEmptyField(obj) {
+//     if (!Object.values(obj).some(key => (key !== null && key !== ''))) {
+//         setIsError(true);
+//         setErrorMessage("Please don't leave any fields blank");
+//         setIsFormReady(false);
+//     }  
+// } 
+
+const checkInNewUser = (e) => {
     e.preventDefault();
 
     const firstAttended = `${month} ${year}`;
-
+        
     // SET all of the user's info from useState objects
-    const userForm = {
-      name: {
-        firstName,
-        lastName
-      },
-      ...formInput,
-      newMember,
-      firstAttended
+    const userForm = { 
+        name: { 
+            firstName, 
+            lastName 
+        }, 
+        ...formInput,
+        newMember,
+        firstAttended
     };
 
     let ready = true;
 
     try {
-      setIsLoading(true);
+        setIsLoading(true);
 
-      if (
-        userForm.name.firstName === "" ||
-        userForm.name.lastName === "" ||
-        userForm.email === "" ||
-        userForm.currentRole === "" ||
-        userForm.desiredRole === "" ||
-        firstAttended === ""
-      ) {
-        setIsError(true);
-        setErrorMessage("Please don't leave any fields blank");
-        ready = false;
-      }
+        if (
+            userForm.name.firstName === "" || 
+            userForm.name.lastName === "" || 
+            userForm.email === "" || 
+            userForm.currentRole === "" || 
+            userForm.desiredRole === "" || 
+            firstAttended === ""
+        ) {
+            setIsError(true);
+            setErrorMessage("Please don't leave any fields blank");
+            ready = false;
+        } 
+        
+        const currYear = parseInt(moment().format('YYYY'));
+        const currMonth = parseInt(moment().format('MM'));
+        const yearJoined = parseInt(year);
+        // extra date info needed to be recognized as a date
+        const monthJoined = parseInt(moment(month + ' 9, 2020').format('MM')); 
+        // console.log(currYear, currMonth, yearJoined, monthJoined);
+        if(yearJoined > currYear || (yearJoined === currYear && monthJoined > currMonth)) {
+            setIsError(true);
+            setErrorMessage("You can't set a date in the future... Please try again.");
+            ready = false;
+        } 
 
-      const currYear = parseInt(moment().format("YYYY"));
-      const currMonth = parseInt(moment().format("MM"));
-      const yearJoined = parseInt(year);
-      // extra date info needed to be recognized as a date
-      const monthJoined = parseInt(moment(month + " 9, 2020").format("MM"));
-      console.log(currYear, currMonth, yearJoined, monthJoined);
-      if (
-        yearJoined > currYear ||
-        (yearJoined === currYear && monthJoined > currMonth)
-      ) {
-        setIsError(true);
-        setErrorMessage(
-          "You can't set a date in the future... Please try again."
-        );
-        ready = false;
-      }
+        // console.log(isFormReady);
 
-      // console.log(isFormReady);
+        // SUBMIT all of the user's info from the userForm object
+        if(ready) {
+            submitForm(userForm);
+        }  
 
-      // SUBMIT all of the user's info from the userForm object
-      if (ready) {
-        submitForm(userForm);
-      }
+        setIsLoading(false);
 
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-      setIsLoading(false);
+    } catch(error) {
+        console.log(error);
+        setIsLoading(false);
     }
-  };
+}
 
-  const checkInReturningUser = e => {
+// const checkInReturningUser = (e) => {
+//     e.preventDefault();
+
+//     try {
+//         setIsLoading(true);
+
+//         // v1: Get userId from auth cookie (JWT) => return it in response
+//         // fetch to create checkin using userId
+    
+//         submitReturningUserForm(formInput.email);
+
+//         console.log('Checking in Returning User');
+
+//         setIsLoading(false);
+//     } catch(error) {
+//         console.log(error);
+//         setIsLoading(false);
+//         // setIsError(error);
+//         // alert(error);
+//     }
+// }
+
+const checkEmail = (e) => {
     e.preventDefault();
 
     try {
-      setIsLoading(true);
+        setIsLoading(true);
 
-      // v1: Get userId from auth cookie (JWT) => return it in response
-      // fetch to create checkin using userId
-
-      submitReturningUserForm(formInput.email);
-
-      console.log("Checking in Returning User");
-
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-      setIsLoading(false);
-      // setIsError(error);
-      // alert(error);
-    }
-  };
-
-  const checkEmail = e => {
-    e.preventDefault();
-
-    try {
-      setIsLoading(true);
-
-      fetch("/api/checkuser", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ email: formInput.email })
-      })
+        fetch('/api/checkuser', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email: formInput.email })
+        })
         .then(res => {
-          if (res.ok) {
-            return res.json();
-          }
-
-          throw new Error(res.statusText);
+            if (res.ok) {
+                return res.json();
+            }
+            
+            throw new Error(res.statusText);
         })
         .then(resJson => {
-          // console.log(resJson);
-          setUser(resJson);
-          setIsLoading(false);
+            // console.log(resJson);
+            setUser(resJson);
+            setIsLoading(false);
         })
         .catch(err => {
-          console.log(err);
-          setIsLoading(false);
-        });
+            console.log(err);
+            setIsLoading(false);
+        })
     } catch (error) {
-      console.log(error);
-      setIsLoading(false);
+        console.log(error);
+        setIsLoading(false);
     }
-  };
+}
 
-  // function getFormValue() {
-  //     if (Object.keys(formInput).includes(questions[0].htmlName.toString())) {
-  //         return `{formInput.${questions[0].htmlName.toString()}.toString()}`
-  //     }
-  // }
+// function getFormValue() {
+//     if (Object.keys(formInput).includes(questions[0].htmlName.toString())) {
+//         return `{formInput.${questions[0].htmlName.toString()}.toString()}`
+//     } 
+// }
 
-  useEffect(() => {
+useEffect(() => {
     fetchQuestions();
-  }, []);
+
+}, []);
 
   return (
     <div className="flex-container">
-      {newOrReturning === "returningUser" ? (
-        <NewUserForm
-          firstName={firstName}
-          handleFirstNameChange={handleFirstNameChange}
-          lastName={lastName}
-          handleLastNameChange={handleLastNameChange}
-          formInput={formInput}
-          handleInputChange={handleInputChange}
-          questions={questions}
-          handleNewMemberChange={handleNewMemberChange}
-          handleMonthChange={handleMonthChange}
-          months={months}
-          month={month}
-          //   yearhandleYearChange={yearhandleYearChange}
-          years={years}
-          isError={isError}
-          errorMessage={errorMessage}
-          isLoading={isLoading}
-          checkInNewUser={checkInNewUser}
-        />
-      ) : newOrReturning === "newUser" ? (
+      {newOrReturning === "returningUser" && (
         <ReturnUserForm
           user={user}
           formInput={formInput}
@@ -492,7 +460,30 @@ const CheckInForm = props => {
           submitReturning={submitReturning}
           //   yearhandleYearChange={yearhandleYearChange}
         />
-      ) : null}
+      )}
+      
+      {newOrReturning === "newUser" && (
+        <NewUserForm
+          firstName={firstName}
+          handleFirstNameChange={handleFirstNameChange}
+          lastName={lastName}
+          handleLastNameChange={handleLastNameChange}
+          formInput={formInput}
+          handleInputChange={handleInputChange}
+          questions={questions}
+          handleNewMemberChange={handleNewMemberChange}
+          handleMonthChange={handleMonthChange}
+          newMember={newMember}
+          months={months}
+          month={month}
+          handleYearChange={handleYearChange}
+          years={years}
+          isError={isError}
+          errorMessage={errorMessage}
+          isLoading={isLoading}
+          checkInNewUser={checkInNewUser}
+        />
+      )}
     </div>
   );
 };
