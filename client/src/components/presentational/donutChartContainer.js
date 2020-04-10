@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 
-import '../../sass/Dashboard.scss';
+import "../../sass/Dashboard.scss";
 
-const DonutChartContainer = props => {
+const DonutChartContainer = (props) => {
   const ref = useRef(null);
   const pieData = [];
   const pieNames = [];
@@ -30,16 +30,14 @@ const DonutChartContainer = props => {
       </div>
     );
   }
+  total = Math.round(100 * total) / 100;
 
   const createPie = d3
     .pie(pieData)
-    .value(d => d.value)
+    .value((d) => d.value)
     .sort(null);
 
-  const createArc = d3
-    .arc()
-    .innerRadius(40)
-    .outerRadius(80);
+  const createArc = d3.arc().innerRadius(40).outerRadius(80);
 
   useEffect(() => {
     const data = createPie(pieData);
