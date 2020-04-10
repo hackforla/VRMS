@@ -1,7 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Link, Redirect } from "react-router-dom";
-import { round } from "mathjs";
-import moment from "moment";
+import React, { useState, useEffect } from "react";
+import { Redirect } from "react-router-dom";
 
 import useAuth from "../hooks/useAuth";
 
@@ -290,7 +288,7 @@ const AdminDashboard = (props) => {
   }, []);
 
   return (
-    // auth && auth.user ? (
+    auth && auth.user ? (
 
     <div className="flex-container">
       <div className="dashboard">
@@ -340,9 +338,9 @@ const AdminDashboard = (props) => {
         )}
       </div>
     </div>
-    // ) : (
-    //   <Redirect to="/login" />
-    // );
+    ) : (
+      <Redirect to="/login" />
+    )
   );
 };
 
