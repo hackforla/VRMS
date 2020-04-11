@@ -45,7 +45,6 @@ const NewUserForm = (props) => {
           </div>
           <div className="form-row">
             <div className="form-input-text">
-              {/* <label htmlFor="email">Email Address</label> */}
               <input
                 type="email"
                 name="email"
@@ -56,10 +55,8 @@ const NewUserForm = (props) => {
                 aria-label="Email Address"
                 required
               />
+              <label htmlFor="email">{"(This allows easy use of the app. We'll never sell your data!)"}</label>
             </div>
-            <p>
-              {"(This allows easy use of the app. We'll never sell your data!)"}
-            </p>
           </div>
 
           {props.questions.length !== 0 &&
@@ -68,7 +65,6 @@ const NewUserForm = (props) => {
                 question.type === "text" && (
                   <div key={question._id} className="form-row">
                     <div className="form-input-text">
-                      {/* <label htmlFor={question.htmlName}>{question.questionText}</label> */}
                       <input
                         type="text"
                         name={question.htmlName}
@@ -86,6 +82,7 @@ const NewUserForm = (props) => {
                         onChange={props.handleInputChange}
                         required
                       />
+                      <label htmlFor={question.htmlName}>{question.questionText}</label>
                     </div>
                   </div>
                 )
@@ -96,7 +93,7 @@ const NewUserForm = (props) => {
             props.questions.map((question) => {
               return (
                 question.type === "select" && (
-                  <div key={question._id} className="form-row">
+                  <div key={question._id} className="form-row last-row">
                     <div className="form-input-radio">
                       <label htmlFor={question.htmlName}>
                         Is this your first time attending a Hack Night?
