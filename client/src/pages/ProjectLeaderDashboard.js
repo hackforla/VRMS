@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "../sass/Dashboard.scss";
-import styles from "../sass/ProjectManagerDashboard.module.scss";
+import styles from "../sass/ProjectLeaderDashboard.module.scss";
 import UpcomingEvent from "../components/presentational/upcomingEvent";
 import AttendeesCheckList from "../components/dashboard/AttendeesCheckList";
 import AttendeesCheckListForm from "../components/dashboard/AttendeeCheckListForm";
 
-const ProjectManagerDashboard = () => {
+const ProjectLeaderDashboard = () => {
     const [isCheckInReady, setIsCheckInReady] = useState();
     const [nextEvent, setNextEvent] = useState([]);
     const [attendees, setAttendees] = useState([]);
@@ -141,4 +141,4 @@ const ProjectManagerDashboard = () => {
     );
 };
 
-export default ProjectManagerDashboard;
+export default ProjectLeaderDashboard;
