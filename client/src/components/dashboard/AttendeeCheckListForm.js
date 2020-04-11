@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../sass/ProjectManagerDashboard.module.scss";
+import styles from "../../sass/ProjectLeaderDashboard.module.scss";
 import AttendeeCheck from "./AttendeeCheck";
 
 const AttendeeCheckListForm = ({ attendees }) => {
