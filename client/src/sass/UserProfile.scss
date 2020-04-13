@@ -3,7 +3,7 @@
 
 .profile {
     &__header {
-        background-color : #FAFAFA;
+        background-color : #bad3ff;
     }
     &__title {
         font-family: 'Source Code Pro', monospace;
@@ -15,7 +15,7 @@
     &__subtitle {
         font-family: 'Source Code Pro', monospace;
         font-weight: bold;
-        font-size: 1rem;
+        font-size: 1.15rem;
         text-transform: none;
         padding: 5px 5%;
     }
@@ -29,6 +29,8 @@
     color: #3F3356;
     font-weight: 400;
     width: 100%;
+    margin: 15px 0;
+    border-spacing: 8px;
     &__header {
         font-weight: bold;
         text-align: left;
@@ -38,20 +40,34 @@
         text-align: left;
     }
     &__info {
-        display: flex;
-        align-items: center;
+        &--active {
+            color: lime;
+        }
+        &--inactive {
+            color: goldenrod;
+        }
+        &--flex {
+            display: flex;
+            align-items: center;
+        }
     }
     &__selection {
         display: flex;
         align-items: center;
-        min-width: 40px;
+        min-width: 50px;
         justify-content: space-between;
         color: #6979F8;
         background-color: #E5E7FA;
         margin: 0 5px 0 0;
         font-size: .65rem;
         padding: 1px 3px;
+        &:nth-child(even) {
+
+            min-width: 70px;
+          
+        }
     }
+    
     &__delete {
         color: #1A051D;
         font-weight: bold;
