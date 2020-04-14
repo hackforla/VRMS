@@ -12,6 +12,8 @@
     "node-sass": "^4.13.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "moment-recur": "^1.0.7",
+    "classnames": "^2.2.6",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.4.1"
   },
