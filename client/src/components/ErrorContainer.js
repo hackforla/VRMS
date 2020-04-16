@@ -1,10 +1,7 @@
-import React from 'react';
-import cx from 'classnames';
+import React from "react";
 
-import '../sass/ErrorContainer.scss';
+import "../sass/ErrorContainer.scss";
 
-export function ErrorContainer ({ className, ...props }) {
-  return (
-    <div className={cx('ErrorContainer', className)} {...props} />
-  );
+export function ErrorContainer({ className, ...props }) {
+  return <div className="ErrorContainer" />;
 }
