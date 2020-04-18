@@ -1,13 +1,16 @@
-import React from 'react';
-import { Link , withRouter } from 'react-router-dom';
+import React from "react";
+import { Link, withRouter } from "react-router-dom";
 
-import '../sass/Navbar.scss';
+import "../sass/Navbar.scss";
 
 const Navbar = (props) => {
-
     return (
         <div className="nav-wrapper">
-            <nav className="navbar" role="navigation" aria-label="main navigation">
+            <nav
+                className="navbar"
+                role="navigation"
+                aria-label="main navigation"
+            >
                 <div className="navbar-buttons-container">
                     {props.location.pathname === "/" ? (
                         <Link to="/admin">
@@ -19,6 +22,12 @@ const Navbar = (props) => {
                         </Link>
                     )}
 
+                    {props.location.pathname === "/projectmanager" ? (
+                        <Link to="/projects">
+                            <p className="home-link-text">PROJECTS</p>
+                        </Link>
+                    ) : null}
+
                     {props.location.pathname === "/admin" ? (
                         <>
                             <Link to="/events">
@@ -28,17 +37,21 @@ const Navbar = (props) => {
                                 <p className="home-link-text">ADD</p>
                             </Link>
                         </>
-                    ) : (
-                        null
-                    )}
+                    ) : null}
                 </div>
 
-                {props.location.pathname === "/" || props.location.pathname === "/success" ? (
+                {props.location.pathname === "/" ||
+                props.location.pathname === "/success" ? (
                     <div className="navbar-logo grow">
                         <img src="/hflalogo.png" alt="Hack for LA Logo"></img>
                     </div>
                 ) : (
-                    <div className={`navbar-logo ${props.location.pathname === "/admin" && "justify-right grow"}`}>
+                    <div
+                        className={`navbar-logo ${
+                            props.location.pathname === "/admin" &&
+                            "justify-right grow"
+                        }`}
+                    >
                         <img src="/hflalogo.png" alt="Hack for LA Logo"></img>
                     </div>
                 )}
