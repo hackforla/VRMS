@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import "../sass/Dashboard.scss";
 import styles from "../sass/ProjectLeaderDashboard.module.scss";
 import UpcomingEvent from "../components/presentational/upcomingEvent";
-import AttendeesCheckList from "../components/dashboard/AttendeesCheckList";
-import AttendeesCheckListForm from "../components/dashboard/AttendeeCheckListForm";
-
+import AttendeeTable from "../components/dashboard/AttendeeTable";
+import DashboardButton from "../components/dashboard/DashboardButton";
 const ProjectLeaderDashboard = () => {
     const [isCheckInReady, setIsCheckInReady] = useState();
     const [nextEvent, setNextEvent] = useState([]);
@@ -96,44 +95,21 @@ const ProjectLeaderDashboard = () => {
                 {isCheckInReady ? (
                     <React.Fragment>
                         <div
-                            className="dashboard-header"
+                            className={[
+                                "dashboard-header",
+                                styles.dashboardHeaderFlex,
+                            ].join(" ")}
                             style={{ marginBottom: ".5rem" }}
                         >
-                            <p
-                                className={[
-                                    "dashboard-header-text-small",
-                                    styles.onRoster,
-                                ].join(" ")}
-                            >
-                                On Roster
+                            <p className={styles.dashboardHeadingProjectLeader}>
+                                Meeting Participants
                             </p>
+                            <DashboardButton>Download .csv</DashboardButton>
                         </div>
-                        <AttendeesCheckList
-                            attendees={attendees.filter((attendee) => {
-                                return attendee.userId.newMember;
-                            })}
-                        ></AttendeesCheckList>
-                        <div
-                            className="dashboard-header"
-                            style={{ marginBottom: ".5rem" }}
-                        >
-                            <p
-                                className={[
-                                    "dashboard-header-text-small",
-                                    styles.notOnRoster,
-                                ].join(" ")}
-                            >
-                                Not on Roster
-                            </p>
-                        </div>
-                        <AttendeesCheckListForm
-                            attendees={attendees.filter((attendee) => {
-                                return !attendee.userId.newMember;
-                            })}
-                        ></AttendeesCheckListForm>
-                        <div className={styles.center}>
-                            <button>SUBMIT ONBOARDING</button>
-                        </div>
+                        <AttendeeTable
+                            attendees={attendees}
+                            activeMeeting={true}
+                        ></AttendeeTable>
                     </React.Fragment>
                 ) : null}
             </div>
