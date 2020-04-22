@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import '../sass/UserProfile.scss';
-import UserTable from '../components/presentational/UserTable';
+import UserTable from '../components/presentational/profile/UserTable';
 const UserProfile = (props) => {
 
     useEffect(() => {
