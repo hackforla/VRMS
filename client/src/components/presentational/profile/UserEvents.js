@@ -13,8 +13,8 @@ const UserEvents = ({ context }) => {
                         <th className="user-data__header">Date/Time</th>
                         <th className="user-data__header">Link</th>
                     </tr>
-                    { events ? events.map(event => 
-                        (<tr>
+                    { events ? events.map((event,index) => 
+                        (<tr key={index}>
                             <td className="user-data__info">{event.name}</td>
                             <td className="user-data__info">{event.time}</td>
                             <td className="user-data__info">{event.url}</td>
