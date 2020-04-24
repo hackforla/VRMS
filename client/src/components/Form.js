@@ -15,16 +15,16 @@ export function Label({ className, ...props }) {
 export const Input = React.forwardRef(({ className, ...props }, ref) => {
   if (props.type === "radio") {
     return <input className="Radio " type={props.type} ref={ref} {...props} />;
+  } else {
+    return (
+      <input
+        className="Input SupersetInput small inline"
+        type={props.type}
+        ref={ref}
+        {...props}
+      />
+    );
   }
-
-  return (
-    <input
-      className="Input SupersetInput small"
-      type={props.type}
-      ref={ref}
-      {...props}
-    />
-  );
 });
 
 export function Textarea({ className, ...props }) {

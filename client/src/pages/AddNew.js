@@ -223,7 +223,6 @@ const AddNew = (props) => {
                   placeholder="Event Name"
                   value={eventName}
                   onChange={(event) => setEventName(event.target.value)}
-                  className="small"
                 ></Input>
               </div>
 
@@ -274,7 +273,7 @@ const AddNew = (props) => {
                       <Input
                         type="date"
                         id="event-date"
-                        className="small inline"
+                        // className="small inline"
                         value={eventDate}
                         onChange={(event) => {
                           const newDate = event.target.value;
@@ -309,7 +308,6 @@ const AddNew = (props) => {
                   id="start-time"
                   value={eventStartTime}
                   onChange={(event) => setEventStartTime(event.target.value)}
-                  className="small"
                 ></Input>
               </div>
 
@@ -320,7 +318,6 @@ const AddNew = (props) => {
                   id="end-time"
                   value={eventEndTime}
                   onChange={(event) => setEventEndTime(event.target.value)}
-                  className="small"
                 ></Input>
               </div>
 
