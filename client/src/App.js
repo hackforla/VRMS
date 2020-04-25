@@ -22,6 +22,12 @@ import ProjectLeaderDashboard from "./pages/ProjectLeaderDashboard";
 
 import "./App.scss";
 
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faGoogleDrive, faGithub } from "@fortawesome/free-brands-svg-icons";
+import { faTable } from "@fortawesome/free-solid-svg-icons";
+
+library.add(faGoogleDrive, faGithub, faTable);
+
 const routes = [
     { path: "/", name: "home", Component: Home },
     { path: "/admin", name: "admindashboard", Component: AdminDashboard },
@@ -35,7 +41,11 @@ const routes = [
     { path: "/handleauth", name: "handleauth", Component: HandleAuth },
     { path: "/emailsent", name: "emailsent", Component: EmailSent },
     { path: "/events", name: "events", Component: Events },
-    { path: "/projectleader", name: "pldashboard", Component: ProjectLeaderDashboard }
+    {
+        path: "/projectleader",
+        name: "pldashboard",
+        Component: ProjectLeaderDashboard,
+    },
 ];
 
 const App = (props) => {
