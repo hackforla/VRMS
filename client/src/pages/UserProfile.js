@@ -4,11 +4,11 @@ import UserTable from '../components/presentational/profile/UserTable';
 import UserEvents from '../components/presentational/profile/UserEvents';
 import UserTeams from '../components/presentational/profile/UserTeams';
 import { UserProvider, UserContext } from '../context/userContext';
+
 const UserProfile = (props) => {
 
     useEffect(() => {
         // fetchData();
-
     }, []);
 
     return (
