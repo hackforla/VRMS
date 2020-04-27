@@ -18,24 +18,26 @@ import Success from "./pages/Success";
 import HandleAuth from "./pages/HandleAuth";
 import EmailSent from "./pages/EmailSent";
 import Events from "./pages/Events";
+import AddNew from './pages/AddNew';
 import ProjectLeaderDashboard from "./pages/ProjectLeaderDashboard";
 
 import "./App.scss";
 
 const routes = [
-    { path: "/", name: "home", Component: Home },
-    { path: "/admin", name: "admindashboard", Component: AdminDashboard },
-    { path: "/user", name: "userdashboard", Component: UserDashboard },
-    { path: "/event/:id", name: "event", Component: Event },
-    { path: "/new", name: "new", Component: NewUser },
-    { path: "/returning", name: "returning", Component: ReturningUser },
-    { path: "/login", name: "login", Component: AdminLogin },
-    { path: "/checkIn/:userType", name: "checkIn", Component: CheckInForm },
-    { path: "/success", name: "success", Component: Success },
-    { path: "/handleauth", name: "handleauth", Component: HandleAuth },
-    { path: "/emailsent", name: "emailsent", Component: EmailSent },
-    { path: "/events", name: "events", Component: Events },
-    { path: "/projectleader", name: "pldashboard", Component: ProjectLeaderDashboard }
+  { path: "/", name: "home", Component: Home },
+  { path: "/admin", name: "admindashboard", Component: AdminDashboard },
+  { path: "/user", name: "userdashboard", Component: UserDashboard },
+  { path: "/event/:id", name: "event", Component: Event },
+  { path: "/new", name: "new", Component: NewUser },
+  { path: "/returning", name: "returning", Component: ReturningUser },
+  { path: "/login", name: "login", Component: AdminLogin },
+  { path: "/checkIn/:userType", name: "checkIn", Component: CheckInForm },
+  { path: "/success", name: "success", Component: Success },
+  { path: "/handleauth", name: "handleauth", Component: HandleAuth },
+  { path: "/emailsent", name: "emailsent", Component: EmailSent },
+  { path: "/events", name: "events", Component: Events },
+  { path: '/add/:item', name: 'addnew', Component: AddNew},
+  { path: "/projectleader", name: "pldashboard", Component: ProjectLeaderDashboard }
 ];
 
 const App = (props) => {
