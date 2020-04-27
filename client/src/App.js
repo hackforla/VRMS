@@ -19,6 +19,7 @@ import Success from "./pages/Success";
 import HandleAuth from "./pages/HandleAuth";
 import EmailSent from "./pages/EmailSent";
 import Events from "./pages/Events";
+import AddNew from './pages/AddNew';
 import ProjectLeaderDashboard from "./pages/ProjectLeaderDashboard";
 
 import "./App.scss";
@@ -37,7 +38,8 @@ const routes = [
     { path: "/handleauth", name: "handleauth", Component: HandleAuth },
     { path: "/emailsent", name: "emailsent", Component: EmailSent },
     { path: "/events", name: "events", Component: Events },
-    { path: "/projectleader", name: "pldashboard", Component: ProjectLeaderDashboard }
+    { path: "/projectleader", name: "pldashboard", Component: ProjectLeaderDashboard },
+    { path: '/add/:item', name: 'addnew', Component: AddNew}
 ];
 
 const App = (props) => {
