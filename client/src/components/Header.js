@@ -1,10 +1,9 @@
-import React from 'react';
-import cx from 'classnames';
-import '../sass/Headers.scss';
+import React from "react";
+import "../sass/Headers.scss";
 
-export function HeaderBarTextOnly ({ className, children, ...props }) {
+export function HeaderBarTextOnly({ className, children, ...props }) {
   return (
-    <div className={cx('HeaderBarTextOnly', className)} {...props}>
+    <div className="HeaderBarTextOnly" {...props}>
       <p>{children}</p>
     </div>
   );
