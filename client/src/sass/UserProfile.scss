@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@300;400&display=swap');
+
+
+.profile {
+    &__header {
+        background-color : #bad3ff;
+    }
+    &__title {
+        font-family: 'Source Code Pro', monospace;
+        font-weight: bold;
+        font-size: 1.5rem;
+        text-transform: none;
+        padding: 5px 5%;
+    }
+    &__subtitle {
+        font-family: 'Source Code Pro', monospace;
+        font-weight: bold;
+        font-size: 1.15rem;
+        text-transform: none;
+        padding: 5px 5%;
+    }
+}
+
+.user-info {
+    padding: 10px 5%;
+}
+.user-data {
+    font-family: 'Source Code Pro', monospace;
+    color: #3F3356;
+    font-weight: 400;
+    width: 100%;
+    margin: 15px 0;
+    border-spacing: 8px;
+    &__header {
+        font-weight: bold;
+        text-align: left;
+        width: 40%;
+    }
+    &__body {
+        text-align: left;
+    }
+    &__info {
+        &--active {
+            color: lime;
+        }
+        &--inactive {
+            color: goldenrod;
+        }
+        &--flex {
+            display: flex;
+            align-items: center;
+        }
+    }
+    &__selection {
+        display: flex;
+        align-items: center;
+        min-width: 50px;
+        justify-content: space-between;
+        color: #6979F8;
+        background-color: #E5E7FA;
+        margin: 0 5px 0 0;
+        font-size: .65rem;
+        padding: 1px 3px;
+        &:nth-child(even) {
+
+            min-width: 70px;
+          
+        }
+    }
+    
+    &__delete {
+        color: #1A051D;
+        font-weight: bold;
+        font-size: .65rem;
+        width: initial;
+    }
+}
+
+.user-events {
+    padding: 10px 5%;
+}
