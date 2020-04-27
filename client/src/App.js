@@ -9,6 +9,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import AdminDashboard from "./pages/AdminDashboard";
 import UserDashboard from "./pages/UserDashboard";
+import UserProfile from "./pages/UserProfile";
 import Event from "./pages/Event";
 import NewUser from "./pages/NewUser";
 import ReturningUser from "./pages/ReturningUser";
@@ -26,6 +27,7 @@ const routes = [
     { path: "/", name: "home", Component: Home },
     { path: "/admin", name: "admindashboard", Component: AdminDashboard },
     { path: "/user", name: "userdashboard", Component: UserDashboard },
+    { path: "/profile", name: "profile", Component: UserProfile },
     { path: "/event/:id", name: "event", Component: Event },
     { path: "/new", name: "new", Component: NewUser },
     { path: "/returning", name: "returning", Component: ReturningUser },
