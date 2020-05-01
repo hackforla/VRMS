@@ -12,13 +12,14 @@ router.post("/:id", (req, res) => {
   fs.readFile("credentials.json", (err, content) => {
     if (err) return console.log("Error loading client secret file:", err);
     // Authorize a client with credentials, then call the Google Drive API.
-    authorize(JSON.parse(content), grantPermission);
+    // authorize(JSON.parse(content), grantPermission);
+
+    authorize(JSON.parse(content), listFiles);
   });
 });
 
-module.exports = router;
 // If modifying these scopes, delete token.json.
-const SCOPES = ["https://www.googleapis.com/auth/drive.metadata.readonly"];
+const SCOPES = ["https://www.googleapis.com/auth/drive"];
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
@@ -37,11 +38,11 @@ function authorize(credentials, callback) {
     client_secret,
     redirect_uris[0]
   );
-
   // Check if we have previously stored a token.
   fs.readFile(TOKEN_PATH, (err, token) => {
     if (err) return getAccessToken(oAuth2Client, callback);
     oAuth2Client.setCredentials(JSON.parse(token));
+    console.log("READING FILE");
     callback(oAuth2Client);
   });
 }
@@ -53,10 +54,12 @@ function authorize(credentials, callback) {
  * @param {getEventsCallback} callback The callback for the authorized client.
  */
 function getAccessToken(oAuth2Client, callback) {
+  console.log("GETACCESSTOKEN");
   const authUrl = oAuth2Client.generateAuthUrl({
     access_type: "offline",
     scope: SCOPES,
   });
+  console.log("Authorize this app by visiting this url:", authUrl);
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -103,52 +106,4 @@ function listFiles(auth) {
   );
 }
 
-function grantPermission(auth) {
-  console.log("GRANTPERMISSION");
-  const drive = google.drive({ version: "v3", auth });
-
-  var fileId = "1vVPXUw3-s2CxbhbEHip1fYSkKE3awaMo_mMktkxthaM";
-  var permissions = [
-    {
-      type: "user",
-      role: "writer",
-      emailAddress: "jonathan.ko523@gmail.com",
-    },
-    {
-      type: "domain",
-      role: "writer",
-      domain: "example.com",
-    },
-  ];
-  // Using the NPM module 'async'
-  async.eachSeries(
-    permissions,
-    function (permission, permissionCallback) {
-      drive.permissions.create(
-        {
-          resource: permission,
-          fileId: fileId,
-          fields: "id",
-        },
-        function (err, res) {
-          if (err) {
-            // Handle error...
-            console.error("ERROR", err);
-            // permissionCallback(err);
-          } else {
-            console.log("Permission ID: ", res.id);
-            // permissionCallback();
-          }
-        }
-      );
-    },
-    function (err) {
-      if (err) {
-        // Handle error
-        console.error(err);
-      } else {
-        // All permissions inserted
-      }
-    }
-  );
-}
+module.exports = router;
