@@ -33,8 +33,8 @@ const Navbar = (props) => {
                             <Link to="/events">
                                 <p className="home-link-text">EVENTS</p>
                             </Link>
-                            <Link to="/add">
-                                <p className="home-link-text">ADD</p>
+                            <Link to="/add/event">
+                                <p className="home-link-text">ADD EVENT</p>
                             </Link>
                         </>
                     ) : null}
