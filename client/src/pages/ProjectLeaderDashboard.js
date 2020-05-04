@@ -26,6 +26,7 @@ const ProjectLeaderDashboard = () => {
                 "/api/checkins/findEvent/5e8a51892a285b791c2cc2b7"
             );
             const attendesJson = await event.json();
+
             setAttendees(attendesJson);
             // const dates = eventsJson.map((event) => {
             //     return Date.parse(event.date);
@@ -78,14 +79,6 @@ const ProjectLeaderDashboard = () => {
         </li>
     ));
 
-    let notOnboardedAttendees = attendees.filter((attendee) => {
-        return attendee.userId.newMember;
-    });
-
-    let onboardedAttendees = attendees.filter((attendee) => {
-        return !attendee.userId.newMember;
-    });
-
     return (
         <div className="flex-container">
             <div className="dashboard">
@@ -109,31 +102,13 @@ const ProjectLeaderDashboard = () => {
                             style={{ marginBottom: ".5rem" }}
                         >
                             <p className={styles.dashboardHeadingProjectLeader}>
-                                New Members
+                                Meeting Participants
                             </p>
                             <DashboardButton>Download .csv</DashboardButton>
                         </div>
                         <AttendeeTable
-                            attendees={notOnboardedAttendees}
+                            attendees={attendees}
                             activeMeeting={true}
-                            onboarded={false}
-                        ></AttendeeTable>
-                        <div
-                            className={[
-                                "dashboard-header",
-                                styles.dashboardHeaderFlex,
-                            ].join(" ")}
-                            style={{ marginBottom: ".5rem" }}
-                        >
-                            <p className={styles.dashboardHeadingProjectLeader}>
-                                Active Members
-                            </p>
-                            <DashboardButton>Download .csv</DashboardButton>
-                        </div>
-                        <AttendeeTable
-                            attendees={onboardedAttendees}
-                            activeMeeting={true}
-                            onboarded={true}
                         ></AttendeeTable>
                     </React.Fragment>
                 ) : null}

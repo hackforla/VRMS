@@ -79,30 +79,5 @@
 }
 
 .noColor {
-    color: #fca657;
-}
-
-.onboardButton {
-    color: grey;
-    transition: 0.3s color linear;
-    cursor: pointer;
-    font-size: 1.15rem;
-}
-
-.onboardButton:hover,
-.onboardButton:active {
-    color: #27c90f;
-}
-
-.onboardButtonTableCell {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.onboardButtonRow {
-    display: flex;
-    justify-content: space-around;
-    width: 90%;
-    max-width: 85px;
+    color: #FCA657;
 }
