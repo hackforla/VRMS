@@ -1,50 +1,48 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-const { User } = require('../models/user.model');
+const { User } = require("../models/user.model");
 
 // GET /api/checkuser/
-router.post('/', (req, res) => {
+router.post("/", (req, res) => {
     const { email } = req.body;
     console.log(email);
 
-    if(email) {
-        User
-            .findOne({email})
-            .then(user => {
+    if (email) {
+        User.findOne({ email })
+            .then((user) => {
                 if (!user) {
                     res.json(false);
                 } else {
                     res.json(user);
                 }
             })
-            .catch(err => {
+            .catch((err) => {
                 console.log(err);
 
                 res.sendStatus(500).json({
-                    message: `/GET Internal server error: ${err}`
-                })
+                    message: `/GET Internal server error: ${err}`,
+                });
             });
     } else {
-        res.json({ message: "Enter the email address you used to check-in last time."});
+        res.json({
+            message: "Enter the email address you used to check-in last time.",
+        });
     }
-    
 });
 
-router.get('/:id', (req, res) => {
-    User
-        .findById(req.params.id)
-        .then(user => {
+router.get("/:id", (req, res) => {
+    User.findById(req.params.id)
+        .then((user) => {
             res.json(user);
         })
-        .catch(err => {
+        .catch((err) => {
             console.log(err);
             res.sendStatus(500).json({
-                message: `/GET Internal server error: ${err}`
-            })
+                message: `/GET Internal server error: ${err}`,
+            });
         });
 });
-
 
 // router.patch('/:id', (req, res) => {
 //     console.log( )
@@ -113,13 +111,13 @@ router.get('/:id', (req, res) => {
 //     //     }
 //     // };
 //     // const tooSmallField = Object.keys(sizedFields).find(
-//     //     field => 
+//     //     field =>
 //     //         'min' in sizedFields[field] &&
 //     //             req.body[field].trim().length < sizedFields[field].min
 //     // );
-    
+
 //     // const tooLargeField = Object.keys(sizedFields).find(
-//     //     field => 
+//     //     field =>
 //     //         'max' in sizedFields[field] &&
 //     //             req.body[field].trim().length > sizedFields[field].max
 //     // );

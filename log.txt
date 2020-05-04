@@ -1,0 +1,427 @@
+[33mcommit 1f37653f615cf522ee154d78f61eba518b80841d[m[33m ([m[1;36mHEAD -> [m[1;32mdashboard[m[33m)[m
+Author: Matthew Ito <mito81@gmail.com>
+Date:   Sat Apr 25 15:17:02 2020 -0700
+
+    Created seperate icons for check-in for Project Leader Dashboard
+
+[1mdiff --git a/client/package-lock.json b/client/package-lock.json[m
+[1mindex db355ff..c49eef7 100644[m
+[1m--- a/client/package-lock.json[m
+[1m+++ b/client/package-lock.json[m
+[36m@@ -1418,6 +1418,43 @@[m
+       "resolved": "https://registry.npmjs.org/@firebase/webchannel-wrapper/-/webchannel-wrapper-0.2.38.tgz",[m
+       "integrity": "sha512-mp1XmAJsuqaSWm5WQYo7R0zfZWe9EmwMCxsxkKr+ubLOumyNy4NG5aV45hEpFTosQv4myXpiCiS4GFE9mNqLZQ=="[m
+     },[m
+[32m+[m[32m    "@fortawesome/fontawesome-common-types": {[m
+[32m+[m[32m      "version": "0.2.28",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-0.2.28.tgz",[m
+[32m+[m[32m      "integrity": "sha512-gtis2/5yLdfI6n0ia0jH7NJs5i/Z/8M/ZbQL6jXQhCthEOe5Cr5NcQPhgTvFxNOtURE03/ZqUcEskdn2M+QaBg=="[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "@fortawesome/fontawesome-svg-core": {[m
+[32m+[m[32m      "version": "1.2.28",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/@fortawesome/fontawesome-svg-core/-/fontawesome-svg-core-1.2.28.tgz",[m
+[32m+[m[32m      "integrity": "sha512-4LeaNHWvrneoU0i8b5RTOJHKx7E+y7jYejplR7uSVB34+mp3Veg7cbKk7NBCLiI4TyoWS1wh9ZdoyLJR8wSAdg==",[m
+[32m+[m[32m      "requires": {[m
+[32m+[m[32m        "@fortawesome/fontawesome-common-types": "^0.2.28"[m
+[32m+[m[32m      }[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "@fortawesome/free-brands-svg-icons": {[m
+[32m+[m[32m      "version": "5.13.0",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/@fortawesome/free-brands-svg-icons/-/free-brands-svg-icons-5.13.0.tgz",[m
+[32m+[m[32m      "integrity": "sha512-/6xXiJFCMEQxqxXbL0FPJpwq5Cv6MRrjsbJEmH/t5vOvB4dILDpnY0f7zZSlA8+TG7jwlt12miF/yZpZkykucA==",[m
+[32m+[m[32m      "requires": {[m
+[32m+[m[32m        "@fortawesome/fontawesome-common-types": "^0.2.28"[m
+[32m+[m[32m      }[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "@fortawesome/free-solid-svg-icons": {[m
+[32m+[m[32m      "version": "5.13.0",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/@fortawesome/free-solid-svg-icons/-/free-solid-svg-icons-5.13.0.tgz",[m
+[32m+[m[32m      "integrity": "sha512-IHUgDJdomv6YtG4p3zl1B5wWf9ffinHIvebqQOmV3U+3SLw4fC+LUCCgwfETkbTtjy5/Qws2VoVf6z/ETQpFpg==",[m
+[32m+[m[32m      "requires": {[m
+[32m+[m[32m        "@fortawesome/fontawesome-common-types": "^0.2.28"[m
+[32m+[m[32m      }[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "@fortawesome/react-fontawesome": {[m
+[32m+[m[32m      "version": "0.1.9",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/@fortawesome/react-fontawesome/-/react-fontawesome-0.1.9.tgz",[m
+[32m+[m[32m      "integrity": "sha512-49V3WNysLZU5fZ3sqSuys4nGRytsrxJktbv3vuaXkEoxv22C6T7TEG0TW6+nqVjMnkfCQd5xOnmJoZHMF78tOw==",[m
+[32m+[m[32m      "requires": {[m
+[32m+[m[32m        "prop-types": "^15.7.2"[m
+[32m+[m[32m      }[m
+[32m+[m[32m    },[m
+     "@grpc/proto-loader": {[m
+       "version": "0.5.4",[m
+       "resolved": "https://registry.npmjs.org/@grpc/proto-loader/-/proto-loader-0.5.4.tgz",[m
+[1mdiff --git a/client/package.json b/client/package.json[m
+[1mindex 80025bc..f2bf393 100644[m
+[1m--- a/client/package.json[m
+[1m+++ b/client/package.json[m
+[36m@@ -4,6 +4,10 @@[m
+   "description": "VRMS Client",[m
+   "homepage": "http://vrms-prototype.herokuapp.com",[m
+   "dependencies": {[m
+[32m+[m[32m    "@fortawesome/fontawesome-svg-core": "^1.2.28",[m
+[32m+[m[32m    "@fortawesome/free-brands-svg-icons": "^5.13.0",[m
+[32m+[m[32m    "@fortawesome/free-solid-svg-icons": "^5.13.0",[m
+[32m+[m[32m    "@fortawesome/react-fontawesome": "^0.1.9",[m
+     "d3": "^5.15.1",[m
+     "firebase": "^7.13.2",[m
+     "mathjs": "^6.6.2",[m
+[1mdiff --git a/client/src/App.js b/client/src/App.js[m
+[1mindex b5144c8..9cb44ee 100644[m
+[1m--- a/client/src/App.js[m
+[1m+++ b/client/src/App.js[m
+[36m@@ -22,6 +22,12 @@[m [mimport ProjectLeaderDashboard from "./pages/ProjectLeaderDashboard";[m
+ [m
+ import "./App.scss";[m
+ [m
+[32m+[m[32mimport { library } from "@fortawesome/fontawesome-svg-core";[m
+[32m+[m[32mimport { faGoogleDrive, faGithub } from "@fortawesome/free-brands-svg-icons";[m
+[32m+[m[32mimport { faTable } from "@fortawesome/free-solid-svg-icons";[m
+[32m+[m
+[32m+[m[32mlibrary.add(faGoogleDrive, faGithub, faTable);[m
+[32m+[m
+ const routes = [[m
+     { path: "/", name: "home", Component: Home },[m
+     { path: "/admin", name: "admindashboard", Component: AdminDashboard },[m
+[36m@@ -35,7 +41,11 @@[m [mconst routes = [[m
+     { path: "/handleauth", name: "handleauth", Component: HandleAuth },[m
+     { path: "/emailsent", name: "emailsent", Component: EmailSent },[m
+     { path: "/events", name: "events", Component: Events },[m
+[31m-    { path: "/projectleader", name: "pldashboard", Component: ProjectLeaderDashboard }[m
+[32m+[m[32m    {[m
+[32m+[m[32m        path: "/projectleader",[m
+[32m+[m[32m        name: "pldashboard",[m
+[32m+[m[32m        Component: ProjectLeaderDashboard,[m
+[32m+[m[32m    },[m
+ ];[m
+ [m
+ const App = (props) => {[m
+[1mdiff --git a/client/src/components/dashboard/AttendeeTable.js b/client/src/components/dashboard/AttendeeTable.js[m
+[1mindex 1bb7c2b..1a59780 100644[m
+[1m--- a/client/src/components/dashboard/AttendeeTable.js[m
+[1m+++ b/client/src/components/dashboard/AttendeeTable.js[m
+[36m@@ -1,7 +1,7 @@[m
+ import React from "react";[m
+ import styles from "../../sass/ProjectLeaderDashboard.module.scss";[m
+ import AttendeeTableRow from "./AttendeeTableRow";[m
+[31m-const AttendeeTable = ({ attendees, activeMeeting }) => {[m
+[32m+[m[32mconst AttendeeTable = ({ attendees, activeMeeting, onboarded }) => {[m
+     return ([m
+         <div className={styles.attendeeTable}>[m
+             <div className={styles.attendeeTableBoxLeft}>[m
+[36m@@ -11,9 +11,11 @@[m [mconst AttendeeTable = ({ attendees, activeMeeting }) => {[m
+                 <span className={styles.attendeeTableTitle}>role</span>[m
+             </div>[m
+             <div className={styles.attendeeTableBoxCenter}>[m
+[31m-                <span className={styles.attendeeTableTitle}>here?</span>[m
+[32m+[m[32m                <span className={styles.attendeeTableTitle}>[m
+[32m+[m[32m                    {onboarded ? "here?" : "check-in"}[m
+[32m+[m[32m                </span>[m
+             </div>[m
+[31m-            {activeMeeting &&[m
+[32m+[m[32m            {/* {activeMeeting &&[m
+                 attendees[m
+                     .filter((attendee) => {[m
+                         return attendee.userId.newMember;[m
+[36m@@ -36,7 +38,10 @@[m [mconst AttendeeTable = ({ attendees, activeMeeting }) => {[m
+             {activeMeeting &&[m
+                 attendees[m
+                     .filter((attendee) => {[m
+[31m-                        return !attendee.userId.newMember && attendee.userId.name.firstName !== "test";[m
+[32m+[m[32m                        return ([m
+[32m+[m[32m                            !attendee.userId.newMember &&[m
+[32m+[m[32m                            attendee.userId.name.firstName !== "test"[m
+[32m+[m[32m                        );[m
+                     })[m
+                     .map((attendee) => {[m
+                         console.log(attendee.userId.newMember);[m
+[36m@@ -56,7 +61,10 @@[m [mconst AttendeeTable = ({ attendees, activeMeeting }) => {[m
+             {activeMeeting &&[m
+                 attendees[m
+                     .filter((attendee) => {[m
+[31m-                        return !attendee.userId.newMember && attendee.userId.name.firstName === "test";[m
+[32m+[m[32m                        return ([m
+[32m+[m[32m                            !attendee.userId.newMember &&[m
+[32m+[m[32m                            attendee.userId.name.firstName === "test"[m
+[32m+[m[32m                        );[m
+                     })[m
+                     .map((attendee) => {[m
+                         console.log(attendee.userId.newMember);[m
+[36m@@ -72,7 +80,47 @@[m [mconst AttendeeTable = ({ attendees, activeMeeting }) => {[m
+                                 present={false}[m
+                             ></AttendeeTableRow>[m
+                         );[m
+[31m-                    })}[m
+[32m+[m[32m                    })} */}[m
+[32m+[m[32m            {activeMeeting &&[m
+[32m+[m[32m                attendees.map((attendee) => {[m
+[32m+[m[32m                    console.log(attendee.userId.newMember);[m
+[32m+[m[32m                    return ([m
+[32m+[m[32m                        <AttendeeTableRow[m
+[32m+[m[32m                            key={Math.random()}[m
+[32m+[m[32m                            name={[m
+[32m+[m[32m                                attendee.userId.name.firstName +[m
+[32m+[m[32m                                " " +[m
+[32m+[m[32m                                attendee.userId.name.lastName[m
+[32m+[m[32m                            }[m
+[32m+[m[32m                            role={attendee.userId.currentRole}[m
+[32m+[m[32m                            isNewMember={!onboarded}[m
+[32m+[m[32m                            present={attendee.userId.name.firstName !== "test"}[m
+[32m+[m[32m                        ></AttendeeTableRow>[m
+[32m+[m[32m                    );[m
+[32m+[m[32m                })}[m
+[32m+[m[32m            {/* {activeMeeting &&[m
+[32m+[m[32m                attendees[m
+[32m+[m[32m                    .filter((attendee) => {[m
+[32m+[m[32m                        return ([m
+[32m+[m[32m                            !attendee.userId.newMember &&[m
+[32m+[m[32m                            attendee.userId.name.firstName !== "test"[m
+[32m+[m[32m                        );[m
+[32m+[m[32m                    })[m
+[32m+[m[32m                    .map((attendee) => {[m
+[32m+[m[32m                        console.log(attendee.userId.newMember);[m
+[32m+[m[32m                        return ([m
+[32m+[m[32m                            <AttendeeTableRow[m
+[32m+[m[32m                                key={Math.random()}[m
+[32m+[m[32m                                name={[m
+[32m+[m[32m                                    attendee.userId.name.firstName +[m
+[32m+[m[32m                                    " " +[m
+[32m+[m[32m                                    attendee.userId.name.lastName[m
+[32m+[m[32m                                }[m
+[32m+[m[32m                                role={attendee.userId.currentRole}[m
+[32m+[m[32m                                present={true}[m
+[32m+[m[32m                            ></AttendeeTableRow>[m
+[32m+[m[32m                        );[m
+[32m+[m[32m                    })} */}[m
+         </div>[m
+     );[m
+ };[m
+[1mdiff --git a/client/src/components/dashboard/AttendeeTableRow.js b/client/src/components/dashboard/AttendeeTableRow.js[m
+[1mindex be9911b..0a8065b 100644[m
+[1m--- a/client/src/components/dashboard/AttendeeTableRow.js[m
+[1m+++ b/client/src/components/dashboard/AttendeeTableRow.js[m
+[36m@@ -1,21 +1,37 @@[m
+ import React, { Fragment } from "react";[m
+ import styles from "../../sass/ProjectLeaderDashboard.module.scss";[m
+ import DashboardButton from "./DashboardButton";[m
+[32m+[m[32mimport OnboardButton from "./OnboardButton";[m
+ [m
+ const AttendeeTableRow = ({ name, role, isNewMember, present }) => {[m
+     let here = null;[m
+     if (isNewMember) {[m
+[31m-        here = <DashboardButton>Start Onboard</DashboardButton>;[m
+[32m+[m[32m        // here = <DashboardButton>Start Onboard</DashboardButton>;[m
+[32m+[m[32m        here = ([m
+[32m+[m[32m            <div className={styles.onboardButtonRow}>[m
+[32m+[m[32m                <OnboardButton type="github"></OnboardButton>[m
+[32m+[m[32m                <OnboardButton type="google-sheets"></OnboardButton>[m
+[32m+[m[32m                <OnboardButton type="google-drive"></OnboardButton>[m
+[32m+[m[32m            </div>[m
+[32m+[m[32m        );[m
+     } else {[m
+         if (present) {[m
+             here = ([m
+[31m-                <span className={[styles.attendeeTableText, styles.yesColor].join(" ")}>[m
+[32m+[m[32m                <span[m
+[32m+[m[32m                    className={[styles.attendeeTableText, styles.yesColor].join([m
+[32m+[m[32m                        " "[m
+[32m+[m[32m                    )}[m
+[32m+[m[32m                >[m
+                     Yes[m
+                 </span>[m
+             );[m
+         } else {[m
+             here = ([m
+[31m-                <span className={[styles.attendeeTableText, styles.noColor].join(" ")}>[m
+[32m+[m[32m                <span[m
+[32m+[m[32m                    className={[styles.attendeeTableText, styles.noColor].join([m
+[32m+[m[32m                        " "[m
+[32m+[m[32m                    )}[m
+[32m+[m[32m                >[m
+                     No[m
+                 </span>[m
+             );[m
+[36m@@ -30,7 +46,15 @@[m [mconst AttendeeTableRow = ({ name, role, isNewMember, present }) => {[m
+             <div className={styles.attendeeTableBoxCenter}>[m
+                 <span className={styles.attendeeTableText}>{role}</span>[m
+             </div>[m
+[31m-            <div className={styles.attendeeTableBoxCenter}>{here}</div>[m
+[32m+[m[32m            <div[m
+[32m+[m[32m                className={[m
+[32m+[m[32m                    isNewMember[m
+[32m+[m[32m                        ? styles.onboardButtonTableCell[m
+[32m+[m[32m                        : styles.attendeeTableBoxCenter[m
+[32m+[m[32m                }[m
+[32m+[m[32m            >[m
+[32m+[m[32m                {here}[m
+[32m+[m[32m            </div>[m
+         </Fragment>[m
+     );[m
+ };[m
+[1mdiff --git a/client/src/components/dashboard/OnboardButton.js b/client/src/components/dashboard/OnboardButton.js[m
+[1mnew file mode 100644[m
+[1mindex 0000000..9ce84bc[m
+[1m--- /dev/null[m
+[1m+++ b/client/src/components/dashboard/OnboardButton.js[m
+[36m@@ -0,0 +1,34 @@[m
+[32m+[m[32mimport React from "react";[m
+[32m+[m[32mimport styles from "../../sass/ProjectLeaderDashboard.module.scss";[m
+[32m+[m[32mimport { FontAwesomeIcon } from "@fortawesome/react-fontawesome";[m
+[32m+[m[32mimport { faGithub } from "@fortawesome/free-brands-svg-icons";[m
+[32m+[m
+[32m+[m[32mconst OnboardButton = ({ type }) => {[m
+[32m+[m[32m    // let style = "";[m
+[32m+[m[32m    // switch (type) {[m
+[32m+[m[32m    //     case "github":[m
+[32m+[m[32m    //         style = styles.onboardButton;[m
+[32m+[m[32m    //     default:[m
+[32m+[m[32m    // }[m
+[32m+[m[32m    let icon = {};[m
+[32m+[m[32m    switch (type) {[m
+[32m+[m[32m        case "github":[m
+[32m+[m[32m            icon = { prefix: "fab", iconName: "github" };[m
+[32m+[m[32m            break;[m
+[32m+[m[32m        case "google-drive":[m
+[32m+[m[32m            icon = { prefix: "fab", iconName: "google-drive" };[m
+[32m+[m[32m            break;[m
+[32m+[m[32m        case "google-sheets":[m
+[32m+[m[32m            icon = { prefix: "fas", iconName: "table" };[m
+[32m+[m[32m            break;[m
+[32m+[m[32m        default:[m
+[32m+[m[32m            icon = {};[m
+[32m+[m[32m    }[m
+[32m+[m[32m    return ([m
+[32m+[m[32m        <div className={styles.onboardButton}>[m
+[32m+[m[32m            <FontAwesomeIcon icon={icon}></FontAwesomeIcon>[m
+[32m+[m[32m        </div>[m
+[32m+[m[32m    );[m
+[32m+[m[32m};[m
+[32m+[m
+[32m+[m[32mexport default OnboardButton;[m
+[1mdiff --git a/client/src/index.js b/client/src/index.js[m
+[1mindex 2582de9..5ef3072 100644[m
+[1m--- a/client/src/index.js[m
+[1m+++ b/client/src/index.js[m
+[36m@@ -1,15 +1,15 @@[m
+[31m-import React from 'react';[m
+[31m-import ReactDOM from 'react-dom';[m
+[31m-import './index.css';[m
+[31m-import App from './App';[m
+[32m+[m[32mimport React from "react";[m
+[32m+[m[32mimport ReactDOM from "react-dom";[m
+[32m+[m[32mimport "./index.css";[m
+[32m+[m[32mimport App from "./App";[m
+ // import * as serviceWorker from './serviceWorker';[m
+[31m-import { BrowserRouter } from 'react-router-dom';[m
+[32m+[m[32mimport { BrowserRouter } from "react-router-dom";[m
+ [m
+ ReactDOM.render([m
+     <BrowserRouter>[m
+         <App />[m
+[31m-    </BrowserRouter>, [m
+[31m-    document.getElementById('root')[m
+[32m+[m[32m    </BrowserRouter>,[m
+[32m+[m[32m    document.getElementById("root")[m
+ );[m
+ [m
+ // If you want your app to work offline and load faster, you can change[m
+[1mdiff --git a/client/src/pages/ProjectLeaderDashboard.js b/client/src/pages/ProjectLeaderDashboard.js[m
+[1mindex 7dd7490..c1e827c 100644[m
+[1m--- a/client/src/pages/ProjectLeaderDashboard.js[m
+[1m+++ b/client/src/pages/ProjectLeaderDashboard.js[m
+[36m@@ -26,7 +26,6 @@[m [mconst ProjectLeaderDashboard = () => {[m
+                 "/api/checkins/findEvent/5e8a51892a285b791c2cc2b7"[m
+             );[m
+             const attendesJson = await event.json();[m
+[31m-[m
+             setAttendees(attendesJson);[m
+             // const dates = eventsJson.map((event) => {[m
+             //     return Date.parse(event.date);[m
+[36m@@ -79,6 +78,14 @@[m [mconst ProjectLeaderDashboard = () => {[m
+         </li>[m
+     ));[m
+ [m
+[32m+[m[32m    let notOnboardedAttendees = attendees.filter((attendee) => {[m
+[32m+[m[32m        return attendee.userId.newMember;[m
+[32m+[m[32m    });[m
+[32m+[m
+[32m+[m[32m    let onboardedAttendees = attendees.filter((attendee) => {[m
+[32m+[m[32m        return !attendee.userId.newMember;[m
+[32m+[m[32m    });[m
+[32m+[m
+     return ([m
+         <div className="flex-container">[m
+             <div className="dashboard">[m
+[36m@@ -102,13 +109,31 @@[m [mconst ProjectLeaderDashboard = () => {[m
+                             style={{ marginBottom: ".5rem" }}[m
+                         >[m
+                             <p className={styles.dashboardHeadingProjectLeader}>[m
+[31m-                                Meeting Participants[m
+[32m+[m[32m                                New Members[m
+[32m+[m[32m                            </p>[m
+[32m+[m[32m                            <DashboardButton>Download .csv</DashboardButton>[m
+[32m+[m[32m                        </div>[m
+[32m+[m[32m                        <AttendeeTable[m
+[32m+[m[32m                            attendees={notOnboardedAttendees}[m
+[32m+[m[32m                            activeMeeting={true}[m
+[32m+[m[32m                            onboarded={false}[m
+[32m+[m[32m                        ></AttendeeTable>[m
+[32m+[m[32m                        <div[m
+[32m+[m[32m                            className={[[m
+[32m+[m[32m                                "dashboard-header",[m
+[32m+[m[32m                                styles.dashboardHeaderFlex,[m
+[32m+[m[32m                            ].join(" ")}[m
+[32m+[m[32m                            style={{ marginBottom: ".5rem" }}[m
+[32m+[m[32m                        >[m
+[32m+[m[32m                            <p className={styles.dashboardHeadingProjectLeader}>[m
+[32m+[m[32m                                Active Members[m
+                             </p>[m
+                             <DashboardButton>Download .csv</DashboardButton>[m
+                         </div>[m
+                         <AttendeeTable[m
+[31m-                            attendees={attendees}[m
+[32m+[m[32m                            attendees={onboardedAttendees}[m
+                             activeMeeting={true}[m
+[32m+[m[32m                            onboarded={true}[m
+                         ></AttendeeTable>[m
+                     </React.Fragment>[m
+                 ) : null}[m
+[1mdiff --git a/client/src/sass/ProjectLeaderDashboard.module.scss b/client/src/sass/ProjectLeaderDashboard.module.scss[m
+[1mindex 7d2f972..4a0ee02 100644[m
+[1m--- a/client/src/sass/ProjectLeaderDashboard.module.scss[m
+[1m+++ b/client/src/sass/ProjectLeaderDashboard.module.scss[m
+[36m@@ -79,5 +79,30 @@[m
+ }[m
+ [m
+ .noColor {[m
+[31m-    color: #FCA657;[m
+[31m-}[m
+\ No newline at end of file[m
+[32m+[m[32m    color: #fca657;[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m.onboardButton {[m
+[32m+[m[32m    color: grey;[m
+[32m+[m[32m    transition: 0.3s color linear;[m
+[32m+[m[32m    cursor: pointer;[m
+[32m+[m[32m    font-size: 1.15rem;[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m.onboardButton:hover,[m
+[32m+[m[32m.onboardButton:active {[m
+[32m+[m[32m    color: #27c90f;[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m.onboardButtonTableCell {[m
+[32m+[m[32m    display: flex;[m
+[32m+[m[32m    justify-content: center;[m
+[32m+[m[32m    align-items: center;[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m.onboardButtonRow {[m
+[32m+[m[32m    display: flex;[m
+[32m+[m[32m    justify-content: space-around;[m
+[32m+[m[32m    width: 90%;[m
+[32m+[m[32m    max-width: 85px;[m
+[32m+[m[32m}[m
