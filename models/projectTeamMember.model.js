@@ -15,13 +15,13 @@ Idea for the future: numberGithubContributions (pull this from github?)
 */
 
 const projectTeamMemberSchema = mongoose.Schema({
-    userId: { type: String },
-    projectId: { type: String },
-    teamMemberStatus: { type: String },
-    roleOnProject: { type: String },
-    joinedDate: { type: Date, default: Date.now },
-    leftDate: { type: Date },
-    leftReason: { type: String },
+    userId: { type: String },                       // id of the user
+    projectId: { type: String },                    // id of the project
+    teamMemberStatus: { type: String },             // Active or Inactive
+    roleOnProject: { type: String },                // Developer, Project Manager, UX, Data Science
+    joinedDate: { type: Date, default: Date.now },  // date/time joined project
+    leftDate: { type: Date },                       // only if Status = Inactive, date/time went inactive
+    leftReason: { type: String },                   // project completed, project paused, switched projects, no-show, other
 });
 
 projectTeamMemberSchema.methods.serialize = function() {

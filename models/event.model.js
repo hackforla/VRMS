@@ -4,22 +4,22 @@ mongoose.Promise = global.Promise;
 
 const eventSchema = mongoose.Schema({
     name: { type: String },
-    location: {
+    location: {                                         // should we include address here?
         city: { type: String },
         state: { type: String },
         country: { type: String }
     },
-    hacknight: { type: String },
-    eventType: { type: String },
+    hacknight: { type: String },                        // DTLA, Westside, South LA, Online
+    eventType: { type: String },                        // Project Meeting, Orientation, Workshop
     eventDescription: { type: String },
-    projectId: { type: String },
-    date: { type: Date },
-    hours: { type: Number },
-    createdDate: { type: Date, default: Date.now },
-    updatedDate: { type: Date, default: Date.now },
-    checkInReady: { type: Boolean, default: false },
+    projectId: { type: String },                        // only needed if it's type = Project Meeting
+    date: { type: Date },                               // start date and time of the event
+    hours: { type: Number },                            // length of the event in hours
+    createdDate: { type: Date, default: Date.now },     // date/time event was created
+    updatedDate: { type: Date, default: Date.now },     // date/time event was last updated
+    checkInReady: { type: Boolean, default: false },    // is the event open for check-ins?
     owner: {
-        ownerId: { type: Number }
+        ownerId: { type: Number }                       // id of user who created event
     }
 });
 
