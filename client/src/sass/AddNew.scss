@@ -1,0 +1,32 @@
+.addnew {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-direction: column;
+  margin: 6px;
+}
+
+form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+.event-div-container {
+  width: 200px;
+}
+
+.event-date-container {
+  width: 100%;
+}
+
+.inline {
+  display: inline !important;
+  margin: 0;
+}
+
+.center {
+  margin-left: calc((100% - 92.69px)/2);
+}

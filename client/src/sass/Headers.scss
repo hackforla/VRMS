@@ -1,0 +1,23 @@
+.HeaderBarTextOnly {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-flex: 1;
+    -ms-flex: 1;
+      flex: 1;
+  background-color: #FAFAFA;
+}
+
+.HeaderBarTextOnly > p {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+      flex-direction: column;
+  -webkit-box-pack: center;
+    -ms-flex-pack: center;
+      justify-content: center;
+  font-size: 16px;
+}

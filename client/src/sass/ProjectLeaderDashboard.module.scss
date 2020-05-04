@@ -1,0 +1,83 @@
+.attendeeTable {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-column-gap: 0.5rem;
+    grid-row-gap: 1rem;
+    padding: 0 1.375rem;
+    margin-bottom: 1rem;
+}
+
+.attendeeTableBoxLeft {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.attendeeTableBoxCenter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.attendeeTableTitle {
+    font-family: "Source Code Pro Bold", sans-serif;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    color: black;
+    text-transform: uppercase;
+}
+
+.attendeeTableText {
+    font-family: "Source Code Pro SemiBold", sans-serif;
+    font-size: 0.875rem;
+    letter-spacing: 1px;
+    color: black;
+}
+
+.dashboardButton {
+    font-family: "Source Code Pro Medium", sans-serif;
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    background-color: white;
+    color: #1a051d;
+    max-width: 138px;
+    border: 2px solid #fa114f;
+    border-radius: 6px;
+    padding: 4px 4px;
+    box-sizing: border-box;
+    transition: 0.3s background-color linear, 0.3s color linear;
+    cursor: pointer;
+}
+
+.dashboardButton:hover,
+.dashboardButton:active {
+    border: 2px solid #fa114f;
+    border-radius: 6px;
+    padding: 4px 4px;
+    box-sizing: border-box;
+    background-color: #fa114f;
+    color: white;
+}
+
+.dashboardHeadingProjectLeader {
+    font-family: "Source Code Pro SemiBold", sans-serif;
+    font-size: 0.875rem;
+    letter-spacing: 1px;
+    color: black;
+}
+
+.dashboardHeaderFlex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+}
+
+.yesColor {
+    color: #2def0e;
+}
+
+.noColor {
+    color: #FCA657;
+}
