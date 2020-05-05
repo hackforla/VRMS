@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import Firebase from "../firebase";
+import ls from "local-storage";
 import { set } from "mongoose";
 
 export default function useProvideAuth() {
@@ -10,15 +11,16 @@ export default function useProvideAuth() {
     useEffect(() => {
         if (!user) {
             Firebase.login();
-        } else {
         }
 
         Firebase.auth.onAuthStateChanged((user) => {
             // console.log('Handling auth change with ', user);
             if (user) {
                 setUser(user);
+                ls.set("expectedSignIn", "1");
             } else {
                 setUser(null);
+                ls.remove("expectedSignIn");
             }
         });
     }, []);

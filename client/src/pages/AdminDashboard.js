@@ -47,7 +47,6 @@ const AdminDashboard = (props) => {
             setUniqueLocations(uniqueUsers);
             setLocationsTotal(totalUsers);
             setDonutCharts("All", uniqueUsers, totalUsers);
-            setIsLoading(false);
         } catch (error) {
             setIsLoading(false);
             console.log(error);

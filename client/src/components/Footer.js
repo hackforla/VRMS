@@ -1,18 +1,20 @@
-import React from 'react';
+import React from "react";
 
-import Firebase from '../firebase';
+import Firebase from "../firebase";
+import ls from "local-storage";
+import pkg from "../../package.json";
+import useAuth from "../hooks/useAuth";
 
-import pkg from '../../package.json';
-import useAuth from '../hooks/useAuth';
-
-import '../sass/Footer.scss';
+import "../sass/Footer.scss";
 
 const Footer = () => {
     const auth = useAuth();
 
     const handleLogout = (e) => {
         e.preventDefault();
-        console.log('Trying to logout here!');
+        console.log("Trying to logout here!");
+        ls.remove("emailForSignIn");
+        ls.remove("expectedSignIn");
         Firebase.logout();
     };
 
@@ -24,11 +26,12 @@ const Footer = () => {
                 {auth.user ? (
                     <div className="footer-greeting">
                         <p className="footer-text">{`Hi ${auth.user.email}`}</p>
-                        <button className="logout-button" onClick={handleLogout}>{`(LOGOUT)`}</button>
+                        <button
+                            className="logout-button"
+                            onClick={handleLogout}
+                        >{`(LOGOUT)`}</button>
                     </div>
-                ) : (
-                    null
-                )}
+                ) : null}
             </footer>
         </div>
     );

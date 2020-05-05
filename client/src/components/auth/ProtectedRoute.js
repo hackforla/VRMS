@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../../context/authContext";
+import ls from "local-storage";
 import { Route, Redirect } from "react-router-dom";
 import styles from "../../sass/Loader.module.scss";
 
@@ -24,34 +25,21 @@ const ProtectedRoute = ({
     ...rest
 }) => {
     const auth = useContext(AuthContext);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        if (auth.user && auth.accessLevel) {
-            setLoading(false);
-        }
-    }, [auth]);
 
     const meetAccessLevel =
         calculateAccessLevel(auth.accessLevel) >=
         calculateAccessLevel(neededAccessLevel);
 
-    if (loading) {
+    if (auth.user && auth.accessLevel) {
+        if (meetAccessLevel) {
+            return <Route path={path} component={Comp} {...rest}></Route>;
+        } else {
+            return <Redirect to={redirect}></Redirect>;
+        }
+    } else if (ls.get("expectedSignIn")) {
         return <div className={styles.loader}></div>;
     } else {
-        return (
-            <Route
-                path={path}
-                {...rest}
-                render={(props) => {
-                    return meetAccessLevel ? (
-                        <Comp {...props}></Comp>
-                    ) : (
-                        <Redirect to={redirect}></Redirect>
-                    );
-                }}
-            ></Route>
-        );
+        return <Redirect to={redirect}></Redirect>;
     }
 };
 
