@@ -12,10 +12,9 @@ router.post("/:id", (req, res) => {
   fs.readFile("credentials.json", (err, content) => {
     if (err) return console.log("Error loading client secret file:", err);
     // Authorize a client with credentials, then call the Google Drive API.
-    // authorize(JSON.parse(content), grantPermission);
 
-    // authorize(JSON.parse(content), listFiles);
-    authorize(JSON.parse(content), grantPermission);
+    authorize(JSON.parse(content), listFiles);
+    // authorize(JSON.parse(content), grantPermission);
   });
 });
 
@@ -114,7 +113,6 @@ function listFiles(auth) {
 }
 
 function grantPermission(auth) {
-  console.log("GRANT PERMISSION");
   var fileId = "1xw2jvcxD8aIuFZ6C05-y-Um7gDY8fzK3iiy-X8yE1o0";
   var permissions = [
     {
@@ -122,11 +120,6 @@ function grantPermission(auth) {
       role: "writer",
       emailAddress: "jonathan.ko523@gmail.com",
     },
-    // {
-    //   type: "domain",
-    //   role: "writer",
-    //   domain: "example.com",
-    // },
   ];
   // Using the NPM module 'async'
   async.eachSeries(
