@@ -47,6 +47,7 @@ const questionsRouter = require("./routers/questions.router");
 const checkUserRouter = require("./routers/checkUser.router");
 const grantPermissionRouter = require("./routers/grantpermission.router");
 const projectsRouter = require("./routers/projects.router");
+const recurringEventsRouter = require("./routers/recurringEvents.router");
 
 app.use("/api/events", eventsRouter);
 app.use("/api/checkins", checkInsRouter);
@@ -56,6 +57,7 @@ app.use("/api/questions", questionsRouter);
 app.use("/api/checkuser", checkUserRouter);
 app.use("/api/grantpermission", grantPermissionRouter);
 app.use("/api/projects", projectsRouter);
+app.use("/api/recurringevents", recurringEventsRouter);
 
 const CLIENT_BUILD_PATH = path.join(__dirname, "./client/build");
 

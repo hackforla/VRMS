@@ -27,6 +27,8 @@ const projectSchema = mongoose.Schema({
     completedDate: { type: Date },                      // only if Status = Completed, date/time completed
     githubUrl: { type: String },                        // link to main repo
     slackUrl: { type: String },                         // link to Slack channel
+    googleDriveUrl: { type: String },
+    googleDriveId: { type: String },
     videoConferenceLink: { type: String },
     lookingDescription: { type: String },
     recruitingCategories: [{ type: String }],
@@ -47,6 +49,8 @@ projectSchema.methods.serialize = function() {
         completedDate: this.completedDate,
         githubUrl: this.githubUrl,
         slackUrl: this.slackUrl,
+        googleDriveUrl: this.googleDriveUrl,
+        googleDriveId: this.googleDriveId,
         videoConferenceLink: this.videoConferenceLink,
         lookingDescription: this.lookingDescription,
         recruitingCategories: this.recruitingCategories,
