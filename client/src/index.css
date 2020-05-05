@@ -1,132 +1,158 @@
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  font-size: 14px;
-  font-family: "aliseoregular", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-image: url('/bg-image-skyline.jpg');
-  background-repeat: no-repeat;
-  background-position: bottom;
-  /* background-position-x: 30%; */
-  background-position-y: 80%;
-  background-size: cover;
-  overflow: scroll;
-  height: 100vh;
-  max-height: 100vh;
+    margin: 0;
+    font-size: 14px;
+    font-family: "aliseoregular", -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+        "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-image: url("/bg-image-skyline.jpg");
+    background-repeat: no-repeat;
+    background-position: bottom;
+    /* background-position-x: 30%; */
+    background-position-y: 80%;
+    background-size: cover;
+    overflow: scroll;
+    height: 100vh;
+    max-height: 100vh;
 }
 
 @font-face {
-  font-family: 'aliseoregular';
-  src: url('./fonts/aliseo-noncommercial-webfont.woff2') format('woff2'),
-       url('./fonts/aliseo-noncommercial-webfont.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
+    font-family: "aliseoregular";
+    src: url("./fonts/aliseo-noncommercial-webfont.woff2") format("woff2"),
+        url("./fonts/aliseo-noncommercial-webfont.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Source Code Pro Medium";
+    src: url("./fonts/SourceCodePro-Medium.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Source Code Pro SemiBold";
+    src: url("./fonts/SourceCodePro-Semibold.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Source Code Pro Bold";
+    src: url("./fonts/SourceCodePro-Bold.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+        monospace;
 }
 
-ol, ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+ol,
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  margin: 0;
-  padding: 0;
-  /* font-family: 'Merriweather', 'Source Serif Pro', serif; */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+    padding: 0;
+    /* font-family: 'Merriweather', 'Source Serif Pro', serif; */
 }
 
 h1 {
-  font-size: 7em;
-  line-height: .85em;
-  letter-spacing: .05em;
+    font-size: 7em;
+    line-height: 0.85em;
+    letter-spacing: 0.05em;
 }
 
 h2 {
-  font-size: 2.8em;
-  line-height: 1.05em;
-  letter-spacing: .025em;
+    font-size: 2.8em;
+    line-height: 1.05em;
+    letter-spacing: 0.025em;
 }
 
 h3 {
-  font-size: 2.8em;
+    font-size: 2.8em;
 }
 
 h4 {
-  font-size: 2em;
+    font-size: 2em;
 }
 
 h5 {
-  font-size: 1.2em;
+    font-size: 1.2em;
 }
 
 a {
-  text-decoration: none;
-  color: inherit;
-  margin: 0px;
-  padding: 0px;
-  /* letter-spacing: .05em; */
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-  monospace;
+    text-decoration: none;
+    color: inherit;
+    margin: 0px;
+    padding: 0px;
+    /* letter-spacing: .05em; */
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+        monospace;
 }
 
 button {
-  text-decoration: none;
-  color: inherit;
-  margin: 0px;
-  padding: 0px;
-  width: 100%;
-  height: 100%;
-  background-color: inherit;
-  outline: none;
-  border: none;
-  cursor: pointer;
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-  monospace;
+    text-decoration: none;
+    color: inherit;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: inherit;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+        monospace;
 }
 
 label {
-  letter-spacing: .075em;
+    letter-spacing: 0.075em;
 }
 
 @media (max-width: 500px) {
-  h1 {
-    font-size: 6em;
-    line-height: .75em;
-  }
-  
-  h2 {
-    font-size: 2.7em;
-    line-height: 1em;
-  }
-  
-  h3 {
-    font-size: 2.7em;
-  }
-  
-  h4 {
-    font-size: 2em;
-  }
-  
-  h5 {
-    font-size: 1em;
-  }
+    h1 {
+        font-size: 6em;
+        line-height: 0.75em;
+    }
 
-  body {
-    background-image: url('/bg-image-pier.jpg');
-    background-repeat: no-repeat;
-    background-position: top;
-    background-size: 1200px 1200px;
-  }
-  
+    h2 {
+        font-size: 2.7em;
+        line-height: 1em;
+    }
+
+    h3 {
+        font-size: 2.7em;
+    }
+
+    h4 {
+        font-size: 2em;
+    }
+
+    h5 {
+        font-size: 1em;
+    }
+
+    body {
+        background-image: url("/bg-image-pier.jpg");
+        background-repeat: no-repeat;
+        background-position: top;
+        background-size: 1200px 1200px;
+    }
 }
