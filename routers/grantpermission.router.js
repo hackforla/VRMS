@@ -14,7 +14,8 @@ router.post("/:id", (req, res) => {
     // Authorize a client with credentials, then call the Google Drive API.
     // authorize(JSON.parse(content), grantPermission);
 
-    authorize(JSON.parse(content), listFiles);
+    // authorize(JSON.parse(content), listFiles);
+    authorize(JSON.parse(content), grantPermission);
   });
 });
 
@@ -32,11 +33,11 @@ const TOKEN_PATH = "token.json";
  * @param {function} callback The callback to call with the authorized client.
  */
 function authorize(credentials, callback) {
-  const { client_secret, client_id, redirect_uris } = credentials.installed;
+  const { client_secret, client_id, redirect_uris } = credentials.web;
   const oAuth2Client = new google.auth.OAuth2(
     client_id,
     client_secret,
-    redirect_uris[0]
+    redirect_uris[1]
   );
   // Check if we have previously stored a token.
   fs.readFile(TOKEN_PATH, (err, token) => {
@@ -60,12 +61,18 @@ function getAccessToken(oAuth2Client, callback) {
     scope: SCOPES,
   });
   console.log("Authorize this app by visiting this url:", authUrl);
+
+  //After clicking this link and authorizing, all the stuff in the url of the landing page
+  //after 'code' is the code to enter.
+  //For instance: http://localhost:3000/?code=4%2FzQEAykm8BPVHrhyI3zqQJkBJuPxKWddaPcFDs-LNFE_IqVNV2-srTnTs81Yqh5qbin2Kz0WQYVjzxG3gjWo59o&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive#
+  //so code will be '4%2FzQEAykm8BPVHrhyI3zqQJkBJuPxKWddaPcFDs-LNFE_IqVNV2-srTnTs81Yqh5qbin2Kz0WQYVjzxG3gjWo59o&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive#'
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
   });
   rl.question("Enter the code from that page here: ", (code) => {
     rl.close();
+
     oAuth2Client.getToken(code, (err, token) => {
       if (err) return console.error("Error retrieving access token", err);
       oAuth2Client.setCredentials(token);
@@ -101,6 +108,57 @@ function listFiles(auth) {
         });
       } else {
         console.log("No files found.");
+      }
+    }
+  );
+}
+
+function grantPermission(auth) {
+  console.log("GRANT PERMISSION");
+  var fileId = "1xw2jvcxD8aIuFZ6C05-y-Um7gDY8fzK3iiy-X8yE1o0";
+  var permissions = [
+    {
+      type: "user",
+      role: "writer",
+      emailAddress: "jonathan.ko523@gmail.com",
+    },
+    // {
+    //   type: "domain",
+    //   role: "writer",
+    //   domain: "example.com",
+    // },
+  ];
+  // Using the NPM module 'async'
+  async.eachSeries(
+    permissions,
+    function (permission, permissionCallback) {
+      const drive = google.drive({ version: "v3", auth });
+      drive.permissions.create(
+        {
+          resource: permission,
+          fileId: fileId,
+          fields: "id",
+        },
+        function (err, res) {
+          if (err) {
+            // Handle error...
+            console.error(err);
+            permissionCallback(err);
+          } else {
+            console.log("Response: ", res);
+
+            console.log("Permission ID: ", res.id);
+            permissionCallback();
+          }
+        }
+      );
+    },
+    function (err) {
+      if (err) {
+        // Handle error
+        console.error(err);
+      } else {
+        // All permissions inserted
       }
     }
   );
