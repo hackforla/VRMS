@@ -23,7 +23,8 @@ const recurringEventSchema = mongoose.Schema({
     owner: {
         ownerId: { type: Number }                       // id of user who created event
     },
-    videoConferenceLink: { type: String }
+    videoConferenceLink: { type: String },
+    githubIdentifier: { type: String }
 });
 
 recurringEventSchema.methods.serialize = function() {
@@ -48,7 +49,8 @@ recurringEventSchema.methods.serialize = function() {
         owner: {
             ownerId: this.owner.ownerId
         },
-        videoConferenceLink: this.videoConferenceLink
+        videoConferenceLink: this.videoConferenceLink,
+        githubIdentifier: this.githubIdentifier
     };
 };
 
