@@ -6,6 +6,7 @@ import { HeaderBarTextOnly } from "../components/Header";
 import {
   Label,
   Input,
+  Textarea,
   Select,
   Option,
   OptionPlaceholder,
@@ -34,6 +35,8 @@ const AddNew = (props) => {
   const [eventEndTime, setEventEndTime] = useState("21:00");
   const [eventCity, setEventCity] = useState("");
   const [eventState, setEventState] = useState("");
+  const [eventDescription, setEventDescription] = useState("");
+
   // Status
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -397,6 +400,11 @@ const AddNew = (props) => {
                 </Select>
               </div>
 
+              <div className="event-div-container div-full-width">
+                <Label>Description</Label>
+                <Textarea onChange={ev => setEventDescription(ev.target.value)}/>
+              </div>
+              
               {isError && <ErrorContainer>{errorMessage}</ErrorContainer>}
               <SecondaryButton
                 {...(isSubmitting && "disabled")}
