@@ -5,8 +5,8 @@ import "../sass/Form.scss";
 /***********************************************
  * LABEL
  ***********************************************/
-export function Label({ className, ...props }) {
-  return <label className="Label isRadioParent" {...props} />;
+export function Label({ className, isRadioParent, ...props }) {
+  return <label className={`Label ${isRadioParent && 'isRadioParent'}`} {...props} />;
 }
 
 /***********************************************
