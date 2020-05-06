@@ -13,7 +13,7 @@ import {
   SecondaryButton,
   AuxiliaryButton,
 } from "../components/Form";
-import { ErrorContainer } from "../components/ErrorContainer";
+// import { ErrorContainer } from "../components/ErrorContainer";
 // import AddCircle from '@material-ui/core/AddCircle';
 // import RemoveCircle from '@material-ui/core/RemoveCircle';
 
@@ -27,7 +27,7 @@ const AddNew = (props) => {
   // const [eventCreator, setEventCreator] = useState({ email: 'phoebecodes@gmail.com'});
   const [eventCreator, setEventCreator] = useState({});
   const [eventName, setEventName] = useState("");
-  const [eventType, setEventType] = useState("");
+    const [eventType, setEventType] = useState("");
   const [hacknightLocation, setHacknightLocation] = useState("");
   const todayFormatted = moment(new Date()).format("YYYY[-]MM[-]DD");
   const [eventDates, setEventDates] = useState([todayFormatted]);
@@ -276,7 +276,7 @@ const AddNew = (props) => {
 
         {props.match.params.item === "event" && (
           <div className="addnewevent">
-            <form onSubmit={(event) => createNewEvents(event)}>
+            <form onSubmit={(ev) => createNewEvents(ev)} onClick={() => {error && setError('')}}>
               <div className="event-div-container">
                 <Label htmlFor="event-name">Event Name</Label>
                 <Input
@@ -327,8 +327,7 @@ const AddNew = (props) => {
                   ))}
               </div>
 
-              {/* to do: figure out how to add item to dom here */}
-              <div className="event-div-container event-date-container">
+              <div className="event-div-container div-full-width">
                 <Label htmlFor="event-date">Event Date</Label>
                 {eventDates.map((eventDate, index) => {
                   return (
@@ -461,7 +460,8 @@ const AddNew = (props) => {
                 <Textarea onChange={ev => setEventDescription(ev.target.value)}/>
               </div>
 
-              {error && <ErrorContainer>{error}</ErrorContainer>}
+
+              {/* {error && <ErrorContainer>{error}</ErrorContainer>} */}
               <SecondaryButton
                 {...(isSubmitting && "disabled")}
                 className="center"
