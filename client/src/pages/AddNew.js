@@ -273,7 +273,7 @@ const AddNew = (props) => {
                       <Input
                         type="date"
                         id="event-date"
-                        // className="small inline"
+                        size="small"
                         value={eventDate}
                         onChange={(event) => {
                           const newDate = event.target.value;
