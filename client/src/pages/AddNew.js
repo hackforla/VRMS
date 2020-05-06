@@ -14,8 +14,6 @@ import {
   AuxiliaryButton,
 } from "../components/Form";
 // import { ErrorContainer } from "../components/ErrorContainer";
-// import AddCircle from '@material-ui/core/AddCircle';
-// import RemoveCircle from '@material-ui/core/RemoveCircle';
 
 import { UserProvider, UserContext } from '../context/userContext';
 import useAuth from "../hooks/useAuth";
@@ -24,10 +22,9 @@ import "moment-recur";
 
 const AddNew = (props) => {
   // State Data
-  // const [eventCreator, setEventCreator] = useState({ email: 'phoebecodes@gmail.com'});
   const [eventCreator, setEventCreator] = useState({});
   const [eventName, setEventName] = useState("");
-    const [eventType, setEventType] = useState("");
+  const [eventType, setEventType] = useState("");
   const [hacknightLocation, setHacknightLocation] = useState("");
   const todayFormatted = moment(new Date()).format("YYYY[-]MM[-]DD");
   const [eventDates, setEventDates] = useState([todayFormatted]);
@@ -35,7 +32,7 @@ const AddNew = (props) => {
   const [eventEndTime, setEventEndTime] = useState("21:00");
   const [eventIsRemote, setEventIsRemote] = useState(false);
   const [eventCity, setEventCity] = useState("");
-  const [eventState, setEventState] = useState("");
+  const [eventState, setEventState] = useState("CA");
   const [videoConferenceLink, setVideoConferenceLink] = useState("");
   const [eventDescription, setEventDescription] = useState("");
 
@@ -46,7 +43,7 @@ const AddNew = (props) => {
   const auth = useAuth();
 
   // Form Data to Fill Drop-downs
-  const eventTypes = ["Hacknight", "Onboarding", "Happy Hour", "Team Meeting"];
+  const eventTypes = ["hacknight", "onboarding", "happy Hour", "team meeting"]; 
   const hacknightLocations = [
     {
       location: "DTLA",
@@ -119,7 +116,7 @@ const AddNew = (props) => {
     "WY",
   ];
 
-  // allows adding and removal of event dates
+  // allows adding and removal of dates for event
   const editEventDates = (index, action) => {
     const currEventDates = eventDates.map((date) => date);
 
@@ -252,7 +249,6 @@ const AddNew = (props) => {
 
       await Promise.all(
         newEventsData.forEach(async (newEventData) => {
-          console.log(newEventData);
           return await submitForm(newEventData);
         })
       )
@@ -271,7 +267,7 @@ const AddNew = (props) => {
           <UserContext.Consumer>
             {({user}) => setEventCreator(user)}
           </UserContext.Consumer>
-        </UserProvider> 
+        </UserProvider>
         <HeaderBarTextOnly>Add New {props.match.params.item}</HeaderBarTextOnly> 
 
         {props.match.params.item === "event" && (
@@ -295,9 +291,10 @@ const AddNew = (props) => {
                   id="event-type"
                   className="small"
                   value={eventType}
-                  onChange={(event) => {
-                    setEventType(event.target.value);
-                    event !== "Hacknight" && setHacknightLocation("");
+                  onChange={(ev) => {
+                    const evType = ev.target.value;
+                    setEventType(evType);
+                    evType !== "hacknight" && setHacknightLocation("");
                   }}
                 >
                   <OptionPlaceholder>Event Type</OptionPlaceholder>
@@ -307,7 +304,7 @@ const AddNew = (props) => {
                     </Option>
                   ))}
                 </Select>
-                {eventType === "Hacknight" &&
+                {eventType === "hacknight" &&
                   hacknightLocations.map((obj) => (
                     <Label htmlFor={obj.location} isRadioParent="true">
                       <Input
