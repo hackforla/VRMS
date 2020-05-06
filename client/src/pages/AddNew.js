@@ -43,7 +43,7 @@ const AddNew = (props) => {
   const auth = useAuth();
 
   // Form Data to Fill Drop-downs
-  const eventTypes = ["hacknight", "onboarding", "happy Hour", "team meeting"]; 
+  const eventTypes = ["hacknight", "conference", "summit", "meetup"]; 
   const hacknightLocations = [
     {
       location: "DTLA",
