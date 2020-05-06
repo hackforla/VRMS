@@ -297,7 +297,7 @@ const AddNew = (props) => {
                   value={eventType}
                   onChange={(event) => {
                     setEventType(event.target.value);
-                    event !== "hacknight" && setHacknightLocation("");
+                    event !== "Hacknight" && setHacknightLocation("");
                   }}
                 >
                   <OptionPlaceholder>Event Type</OptionPlaceholder>
@@ -307,7 +307,7 @@ const AddNew = (props) => {
                     </Option>
                   ))}
                 </Select>
-                {eventType === "hacknight" &&
+                {eventType === "Hacknight" &&
                   hacknightLocations.map((obj) => (
                     <Label htmlFor={obj.location} isRadioParent="true">
                       <Input
