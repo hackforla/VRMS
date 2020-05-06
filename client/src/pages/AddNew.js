@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import "../sass/AddNew.scss";
 
@@ -25,6 +25,7 @@ const AddNew = (props) => {
   const [eventCreator, setEventCreator] = useState({});
   const [eventName, setEventName] = useState("");
   const [eventType, setEventType] = useState("");
+  const [projectIndex, setProjectIndex] = useState("");
   const [hacknightLocation, setHacknightLocation] = useState("");
   const todayFormatted = moment(new Date()).format("YYYY[-]MM[-]DD");
   const [eventDates, setEventDates] = useState([todayFormatted]);
@@ -35,6 +36,8 @@ const AddNew = (props) => {
   const [eventState, setEventState] = useState("CA");
   const [videoConferenceLink, setVideoConferenceLink] = useState("");
   const [eventDescription, setEventDescription] = useState("");
+
+  const [projects, setProjects] = useState([]);
 
   // Status
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -211,8 +214,6 @@ const AddNew = (props) => {
       return;
     };
 
- 
-
     try {
       const ownerId = await getUserId(eventCreator.email);
 
@@ -232,7 +233,7 @@ const AddNew = (props) => {
           hacknight: hacknightLocation,
           eventType,
           description: eventDescription,
-          // projectId
+          projectId: projects[projectIndex]._id,
           date: ISODate,
           startTime: ISOStartDate,
           endTime: ISOEndDate,
@@ -259,6 +260,31 @@ const AddNew = (props) => {
       setIsSubmitting(false);
     }
   };  
+
+  useEffect(() => {
+    const getProjects = async () => {
+      const prjs = await fetch("/api/projects", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
+          }
+          throw new Error(res.statusText);
+        })
+        .catch((err) => {
+          console.log(err)
+        });
+        
+      setProjects(prjs);
+    } 
+
+    getProjects();
+  }, []);
+
   return (
     auth && auth.user ? (
     <div className="flex-container">
@@ -323,6 +349,30 @@ const AddNew = (props) => {
                     </Label>
                   ))}
               </div>
+
+              {
+                eventType === "hacknight" && (
+                  <div className="event-div-container div-full-width">
+                    <Label htmlFor="project-name">Project</Label>
+                    <Select
+                      id="project-name"
+                      className="small"
+                      value={!!(projects[projectIndex]) ? projects[projectIndex].name : ''}
+                      onChange={(ev) => {
+                        const index = ev.target.value;
+                        setProjectIndex(index);
+                      }}
+                    >
+                      <OptionPlaceholder>Project</OptionPlaceholder>
+                      {projects.map((prj, index) => (
+                        <Option value={index} key={index}>
+                          {prj.name}
+                        </Option>
+                      ))}
+                    </Select>
+                  </div>
+                )
+              }
 
               <div className="event-div-container div-full-width">
                 <Label htmlFor="event-date">Event Date</Label>
