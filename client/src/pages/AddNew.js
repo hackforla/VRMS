@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Redirect } from "react-router-dom";
 import "../sass/AddNew.scss";
 
@@ -16,12 +16,15 @@ import { ErrorContainer } from "../components/ErrorContainer";
 // import AddCircle from '@material-ui/core/AddCircle';
 // import RemoveCircle from '@material-ui/core/RemoveCircle';
 
+import { UserProvider, UserContext } from '../context/userContext';
 import useAuth from "../hooks/useAuth";
 import moment from "moment";
 import "moment-recur";
 
 const AddNew = (props) => {
   // State Data
+  // const [eventCreator, setEventCreator] = useState({ email: 'phoebecodes@gmail.com'});
+  const [eventCreator, setEventCreator] = useState({});
   const [eventName, setEventName] = useState("");
   const [eventType, setEventType] = useState("");
   const [hacknightLocation, setHacknightLocation] = useState("");
@@ -157,7 +160,31 @@ const AddNew = (props) => {
       .catch((err) => console.log(err));
   };
 
-  const createNewEvents = (event) => {
+  const getUserId = (email) => {
+    return fetch('/api/checkuser', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ email })
+    })
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        }
+        
+        throw new Error(error.statusText);
+      })
+      .then(user => {
+        return user._id;
+      })
+      .catch(() => {
+        setError(error.message);
+        setIsSubmitting(false);
+      });
+  }
+
+  const createNewEvents = async (event) => {
     event.preventDefault();
 
     const newEventsData = eventDates.map((eventDate) => {
@@ -182,9 +209,11 @@ const AddNew = (props) => {
 
     try {
       setIsSubmitting(true);
+      const ownerId = await getUserId(eventCreator.email);
 
       newEventsData.forEach((index, newEventData) => {
         if (
+          eventCreator === {} ||
           eventName === "" ||
           eventType === "" ||
           (eventType === "hacknight" && hacknightLocation === "") ||
@@ -207,9 +236,14 @@ const AddNew = (props) => {
   };
 
   return (
-    // auth && auth.user ? (
+    auth && auth.user ? (
     <div className="flex-container">
       <div className="addnew">
+        <UserProvider>
+          <UserContext.Consumer>
+            {({user}) => setEventCreator(user)}
+          </UserContext.Consumer>
+        </UserProvider>
         <HeaderBarTextOnly>Add New {props.match.params.item}</HeaderBarTextOnly>
 
         {props.match.params.item === "event" && (
@@ -376,9 +410,9 @@ const AddNew = (props) => {
         )}
       </div>
     </div>
-    // ) : (
-    //   <Redirect to="/login" />
-    // )
+    ) : (
+      <Redirect to="/login" />
+    )
   );
 };
 
