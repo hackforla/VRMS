@@ -18,7 +18,7 @@ export const Input = React.forwardRef(({ className, ...props }, ref) => {
   } else {
     return (
       <input
-        className="Input SupersetInput small inline"
+        className={`Input SupersetInput inline ${props.size !== 'large' && 'small'}`}
         type={props.type}
         ref={ref}
         {...props}
