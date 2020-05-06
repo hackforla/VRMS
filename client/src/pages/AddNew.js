@@ -41,8 +41,8 @@ const AddNew = (props) => {
 
   // Status
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [error, setError] = useState(null);
+
   const auth = useAuth();
 
   // Form Data to Fill Drop-downs
@@ -147,8 +147,8 @@ const AddNew = (props) => {
       setHacknightLocation('');
     }
   }
-
-  const submitForm = (newEventData, currEventIndex, finalEventIndex) => {
+  
+  const submitForm = (newEventData) => {
     fetch("/api/events", {
       method: "POST",
       body: JSON.stringify(newEventData),
@@ -163,17 +163,9 @@ const AddNew = (props) => {
 
         throw new Error(res.statusText);
       })
-      .then((res) => {
-        // if only one event was submitted, redirect to specific event page
-        if (finalEventIndex === 0) {
-          return <Redirect to={`/event/${res.id}`} />;
-        }
-        // if multiple events were submitted, after all are submitted, redirect to events page
-        else if (currEventIndex === finalEventIndex) {
-          return <Redirect to="/events" />;
-        }
-      })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setError(err)
+      });
   };
 
   const getUserId = (email) => {
@@ -200,62 +192,77 @@ const AddNew = (props) => {
       });
   }
 
-  const createNewEvents = async (event) => {
-    event.preventDefault();
+  const createNewEvents = async (ev) => {
+    ev.preventDefault();
+    setIsSubmitting(true);
 
-    const newEventsData = eventDates.map((eventDate) => {
-      // const formattedDate = ****EDIT ME
-      // const formattedEndDate = ****EDIT ME
-      // const hours = formattedEndDate.diff(formattedDate);
+    if (
+      eventCreator === {} ||
+      eventName === "" ||
+      eventType === "" || 
+      (eventType === "hacknight" && hacknightLocation === "") || 
+      (eventIsRemote ? (
+          !videoConferenceLink
+        ) : (
+          eventCity === "" ||
+          eventState === ""
+        )
+      )
+    ) {
+      setError("Please don't leave any fields blank");
+      setIsSubmitting(false);
+      return;
+    };
 
-      return {
-        name: eventName,
-        location: {
-          city: eventCity,
-          state: eventState,
-          country: "USA",
-        },
-        hacknight: hacknightLocation,
-        eventType,
-        // date: formattedDate,
-        // hours,
-        // owner:  ****EDIT ME
-      };
-    });
+ 
 
     try {
-      setIsSubmitting(true);
       const ownerId = await getUserId(eventCreator.email);
 
-      newEventsData.forEach((index, newEventData) => {
-        if (
-          eventCreator === {} ||
-          eventName === "" ||
-          eventType === "" ||
-          (eventType === "hacknight" && hacknightLocation === "") ||
-          (eventIsRemote ? (
-              !videoConferenceLink
-            ) : (
-              eventCity === "" ||
-              eventState === ""
-            )
-          )
-        ) {
-          setIsError(true);
-          setErrorMessage("Please don't leave any fields blank");
-          throw new Error();
-        }
+      const newEventsData = eventDates.map((eventDate) => {
+        const ISODate = moment(eventDate).toISOString();      
+        const ISOStartDate = moment(eventDate + ' ' + eventStartTime).toISOString();
+        const ISOEndDate = moment(eventDate + ' ' + eventEndTime).toISOString();
+        const hours = moment(ISOEndDate).diff(ISOStartDate, 'hours');
+  
+        return ({
+          name: eventName,
+          location: {
+            city: eventCity,
+            state: eventState,
+            country: 'USA'
+          },
+          hacknight: hacknightLocation,
+          eventType,
+          description: eventDescription,
+          // projectId
+          date: ISODate,
+          startTime: ISOStartDate,
+          endTime: ISOEndDate,
+          hours,
+          createdDate: new Date().toISOString(),
+          owner: {
+            ownerId
+          },
+          videoConferenceLink,
+          // githubIdentifier: EDIT ME
+        });
+      }); 
+  
 
-        submitForm(newEventData, index, newEventsData.length - 1);
-      });
-
-      setIsSubmitting(false);
+      await Promise.all(
+        newEventsData.forEach(async (newEventData) => {
+          console.log(newEventData);
+          return await submitForm(newEventData);
+        })
+      )
+        .then(() => setIsSubmitting(false))
+        .then(() => <Redirect to='/events' />);
     } catch (error) {
-      console.log(error);
+      setError(error.message);
       setIsSubmitting(false);
     }
-  };
-
+  };  
   return (
     auth && auth.user ? (
     <div className="flex-container">
@@ -264,8 +271,8 @@ const AddNew = (props) => {
           <UserContext.Consumer>
             {({user}) => setEventCreator(user)}
           </UserContext.Consumer>
-        </UserProvider>
-        <HeaderBarTextOnly>Add New {props.match.params.item}</HeaderBarTextOnly>
+        </UserProvider> 
+        <HeaderBarTextOnly>Add New {props.match.params.item}</HeaderBarTextOnly> 
 
         {props.match.params.item === "event" && (
           <div className="addnewevent">
@@ -376,7 +383,7 @@ const AddNew = (props) => {
                   onChange={(event) => setEventEndTime(event.target.value)}
                 ></Input>
               </div>
-
+              
               <div className="event-div-container div-full-width">
                 <Label>Hosted Remotely?</Label>
                 <Label htmlFor='true'  onClick={() => hacknightLocation !== 'Online' && setStateForRemote(true)}>
@@ -453,8 +460,8 @@ const AddNew = (props) => {
                 <Label>Description</Label>
                 <Textarea onChange={ev => setEventDescription(ev.target.value)}/>
               </div>
-              
-              {isError && <ErrorContainer>{errorMessage}</ErrorContainer>}
+
+              {error && <ErrorContainer>{error}</ErrorContainer>}
               <SecondaryButton
                 {...(isSubmitting && "disabled")}
                 className="center"
