@@ -33,8 +33,10 @@ const AddNew = (props) => {
   const [eventDates, setEventDates] = useState([todayFormatted]);
   const [eventStartTime, setEventStartTime] = useState("19:00");
   const [eventEndTime, setEventEndTime] = useState("21:00");
+  const [eventIsRemote, setEventIsRemote] = useState(false);
   const [eventCity, setEventCity] = useState("");
   const [eventState, setEventState] = useState("");
+  const [videoConferenceLink, setVideoConferenceLink] = useState("");
   const [eventDescription, setEventDescription] = useState("");
 
   // Status
@@ -135,6 +137,17 @@ const AddNew = (props) => {
     }
   };
 
+  // makes changes for a remote event
+  const setStateForRemote = (boolean) => {
+    setEventIsRemote(boolean);
+    
+    if (eventType === 'hacknight' && boolean) {
+      setHacknightLocation('Online');
+    } else {
+      setHacknightLocation('');
+    }
+  }
+
   const submitForm = (newEventData, currEventIndex, finalEventIndex) => {
     fetch("/api/events", {
       method: "POST",
@@ -220,8 +233,13 @@ const AddNew = (props) => {
           eventName === "" ||
           eventType === "" ||
           (eventType === "hacknight" && hacknightLocation === "") ||
-          eventCity === "" ||
-          eventState === ""
+          (eventIsRemote ? (
+              !videoConferenceLink
+            ) : (
+              eventCity === "" ||
+              eventState === ""
+            )
+          )
         ) {
           setIsError(true);
           setErrorMessage("Please don't leave any fields blank");
@@ -290,6 +308,7 @@ const AddNew = (props) => {
                         onClick={() => {
                           setHacknightLocation(obj.location);
                           setEventCity(obj.city);
+                          obj.location === 'Online' ? setEventIsRemote(true) : setEventIsRemote(false);
                         }}
                         id={obj.location}
                         checked={
@@ -358,47 +377,77 @@ const AddNew = (props) => {
                 ></Input>
               </div>
 
-              <div className="event-div-container">
-                <Label htmlFor="city">City</Label>
-                <Select
-                  type="text"
-                  id="city"
-                  className="small"
-                  value={eventCity}
-                  // restricts city to always match hacknight
-                  onChange={
-                    hacknightLocation
-                      ? null
-                      : (event) => setEventCity(event.target.value)
-                  }
-                  disabled={eventType === "hacknight" ? true : false}
-                >
-                  <OptionPlaceholder>City</OptionPlaceholder>
-                  {cities.map((city, index) => (
-                    <Option key={index} value={city}>
-                      {city}
-                    </Option>
-                  ))}
-                </Select>
+              <div className="event-div-container div-full-width">
+                <Label>Hosted Remotely?</Label>
+                <Label htmlFor='true'  onClick={() => hacknightLocation !== 'Online' && setStateForRemote(true)}>
+                <Input type='radio' name='true'
+                  checked={eventIsRemote} 
+                  onChange={() => setStateForRemote(true)}
+                  disabled={hacknightLocation === 'Online'}
+                  /> 
+                Yes
+                </Label>
+                <Label htmlFor='false' onClick={() => {hacknightLocation !== 'Online' && setStateForRemote(false)}} >
+                <Input type='radio' name='false'
+                  checked={!eventIsRemote} 
+                  onChange={() => setStateForRemote(false)}
+                  disabled={hacknightLocation === 'Online'}/>
+                No 
+                </Label>
               </div>
 
-              <div className="event-div-container">
-                <Label htmlFor="state">State</Label>
-                <Select
-                  type="text"
-                  id="state"
-                  className="small"
-                  value={eventState}
-                  onChange={(event) => setEventState(event.target.value)}
-                >
-                  <OptionPlaceholder>State</OptionPlaceholder>
-                  {states.map((state, index) => (
-                    <Option key={index} value={state}>
-                      {state}
-                    </Option>
-                  ))}
-                </Select>
-              </div>
+              {
+                !eventIsRemote ? (
+                  <>
+                    <div className="event-div-container">
+                    <Label htmlFor="city">City</Label>
+                    <Select
+                      type="text"
+                      id="city"
+                      className="small"
+                      value={eventCity}
+                      // restricts city to always match hacknight
+                      onChange={
+                        hacknightLocation
+                          ? null
+                          : (event) => setEventCity(event.target.value)
+                      }
+                      disabled={eventType === "hacknight" ? true : false}
+                    >
+                      <OptionPlaceholder>City</OptionPlaceholder>
+                      {cities.map((city, index) => (
+                        <Option key={index} value={city}>
+                          {city}
+                        </Option>
+                      ))}
+                    </Select>
+                  </div>
+
+                  <div className="event-div-container">
+                    <Label htmlFor="state">State</Label>
+                    <Select
+                      type="text"
+                      id="state"
+                      className="small"
+                      value={eventState}
+                      onChange={(event) => setEventState(event.target.value)}
+                    >
+                      <OptionPlaceholder>State</OptionPlaceholder>
+                      {states.map((state, index) => (
+                        <Option key={index} value={state}>
+                          {state}
+                        </Option>
+                      ))}
+                    </Select>
+                  </div>
+                  </>
+                ) : (
+                  <div className='event-div-container div-full-width'>
+                    <Label>Video Conference Link</Label>
+                    <Input onChange={setVideoConferenceLink} size='large' placeholder='https://us02.web.zoom.us/j/123456789'/>
+                  </div>
+                )
+              }
 
               <div className="event-div-container div-full-width">
                 <Label>Description</Label>
