@@ -27,6 +27,7 @@ const AddNew = (props) => {
   const [eventType, setEventType] = useState("");
   const [projectIndex, setProjectIndex] = useState("");
   const [hacknightLocation, setHacknightLocation] = useState("");
+  const [eventOccursWeekly, setEventOccursWeekly] = useState(false);
   const todayFormatted = moment(new Date()).format("YYYY[-]MM[-]DD");
   const [eventDates, setEventDates] = useState([todayFormatted]);
   const [eventStartTime, setEventStartTime] = useState("19:00");
@@ -148,10 +149,30 @@ const AddNew = (props) => {
     }
   }
   
-  const submitForm = (newEventData) => {
+  const postSingleEvent = (eventObj) => {
     fetch("/api/events", {
       method: "POST",
-      body: JSON.stringify(newEventData),
+      body: JSON.stringify(eventObj),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+
+        throw new Error(res.statusText);
+      })
+      .catch((err) => {
+        setError(err)
+      });
+  };
+
+  const postRecurringEvent = (eventObj) => {
+    fetch("/api/recurringevents", {
+      method: "POST",
+      body: JSON.stringify(eventObj),
       headers: {
         "Content-Type": "application/json",
       },
@@ -192,7 +213,38 @@ const AddNew = (props) => {
       });
   }
 
-  const createNewEvents = async (ev) => {
+  const createEventObj = (eventDate, ownerId) => {
+    const ISODate = moment(eventDate).toISOString();      
+    const ISOStartDate = moment(eventDate + ' ' + eventStartTime).toISOString();
+    const ISOEndDate = moment(eventDate + ' ' + eventEndTime).toISOString();
+    const hours = moment(ISOEndDate).diff(ISOStartDate, 'hours');
+    console.log('here');
+    console.log(projects[projectIndex]._id);
+    return ({
+      name: eventName,
+      location: {
+        city: eventCity,
+        state: eventState,
+        country: 'USA'
+      },
+      hacknight: hacknightLocation,
+      eventType,
+      description: eventDescription,
+      projectId: projects[projectIndex]._id,
+      date: ISODate,
+      startTime: ISOStartDate,
+      endTime: ISOEndDate,
+      hours,
+      createdDate: new Date().toISOString(),
+      owner: {
+        ownerId
+      },
+      videoConferenceLink,
+      // githubIdentifier: EDIT ME
+    });
+  };  
+
+  const handleSubmit = async (ev) => {
     ev.preventDefault();
     setIsSubmitting(true);
 
@@ -217,49 +269,37 @@ const AddNew = (props) => {
     try {
       const ownerId = await getUserId(eventCreator.email);
 
-      const newEventsData = eventDates.map((eventDate) => {
-        const ISODate = moment(eventDate).toISOString();      
-        const ISOStartDate = moment(eventDate + ' ' + eventStartTime).toISOString();
-        const ISOEndDate = moment(eventDate + ' ' + eventEndTime).toISOString();
-        const hours = moment(ISOEndDate).diff(ISOStartDate, 'hours');
-  
-        return ({
-          name: eventName,
-          location: {
-            city: eventCity,
-            state: eventState,
-            country: 'USA'
-          },
-          hacknight: hacknightLocation,
-          eventType,
-          description: eventDescription,
-          projectId: projects[projectIndex]._id,
-          date: ISODate,
-          startTime: ISOStartDate,
-          endTime: ISOEndDate,
-          hours,
-          createdDate: new Date().toISOString(),
-          owner: {
-            ownerId
-          },
-          videoConferenceLink,
-          // githubIdentifier: EDIT ME
-        });
-      }); 
-  
+      // Handle Recurring Event
+      if (eventOccursWeekly) {
+        console.log('in corr block, val is ', eventOccursWeekly);
+        const evObj = createEventObj(eventDates[0], ownerId);
+        console.log(eventDates[0], evObj);
+        await postRecurringEvent(evObj)
+          .then(() => setIsSubmitting(false))
+          .then(() => <Redirect to='/events' />)
 
-      await Promise.all(
-        newEventsData.forEach(async (newEventData) => {
-          return await submitForm(newEventData);
+      // Handle Regular Event(s)
+      } else {
+        const eventsObjects = [];
+
+        eventDates.forEach((eventDate) => {
+          const evObj = createEventObj(eventDate, ownerId);
+          eventsObjects.push(evObj);
         })
-      )
-        .then(() => setIsSubmitting(false))
-        .then(() => <Redirect to='/events' />);
-    } catch (error) {
+
+        await Promise.all(
+          eventsObjects.forEach(async (event) => {
+            return await postSingleEvent(event);
+          })
+        )
+          .then(() => setIsSubmitting(false))
+          .then(() => <Redirect to='/events' />);
+      }
+    } catch {
       setError(error.message);
       setIsSubmitting(false);
     }
-  };  
+  };
 
   useEffect(() => {
     const getProjects = async () => {
@@ -298,7 +338,7 @@ const AddNew = (props) => {
 
         {props.match.params.item === "event" && (
           <div className="addnewevent">
-            <form onSubmit={(ev) => createNewEvents(ev)} onClick={() => {error && setError('')}}>
+            <form onSubmit={(ev) => handleSubmit(ev)} onClick={() => {error && setError('')}}>
               <div className="event-div-container">
                 <Label htmlFor="event-name">Event Name</Label>
                 <Input
@@ -350,9 +390,34 @@ const AddNew = (props) => {
                   ))}
               </div>
 
+              <div className="event-div-container">
+                <Label htmlFor='event-recurring'>Occurs Weekly</Label>
+                <Label htmlFor="occurs-weekly" isRadioParent="true">
+                  <Input
+                    type="radio"
+                    onClick={() => setEventOccursWeekly(true)}
+                    id='occurs-weekly'
+                    checked={eventOccursWeekly}
+                  />
+                  Yes
+                </Label>
+                <Label htmlFor='doesnt-occur-weekly' isRadioParent="true">
+                  <Input
+                    type="radio"
+                    name='doesnt-occur-weekly'
+                    onClick={() => setEventOccursWeekly(false)}
+                    id='doesnt-occur-weekly'
+                    checked={!eventOccursWeekly}
+                  />
+                  No
+                </Label>
+              </div>
+
+
+
               {
                 eventType === "hacknight" && (
-                  <div className="event-div-container div-full-width">
+                  <div className="event-div-container">
                     <Label htmlFor="project-name">Project</Label>
                     <Select
                       id="project-name"
@@ -391,20 +456,26 @@ const AddNew = (props) => {
                           setEventDates(currEventDates);
                         }}
                       ></Input>
-                      <AuxiliaryButton
-                        onClick={() => editEventDates(index, "add")}
-                        className="inline"
-                      >
-                        +
-                      </AuxiliaryButton>
-                      {index !== 0 && (
-                        <AuxiliaryButton
-                          onClick={() => editEventDates(index, "remove")}
-                          className="inline"
-                        >
-                          -
-                        </AuxiliaryButton>
-                      )}
+                      {
+                        !eventOccursWeekly && (
+                          <>
+                            <AuxiliaryButton
+                              onClick={() => editEventDates(index, "add")}
+                              className="inline"
+                            >
+                              +
+                            </AuxiliaryButton>
+                            {index !== 0 && (
+                              <AuxiliaryButton
+                                onClick={() => editEventDates(index, "remove")}
+                                className="inline"
+                              >
+                                -
+                              </AuxiliaryButton>
+                            )}
+                          </>
+                        )
+                      }
                     </div>
                   );
                 })}
@@ -429,7 +500,7 @@ const AddNew = (props) => {
                   onChange={(event) => setEventEndTime(event.target.value)}
                 ></Input>
               </div>
-              
+
               {
                 eventType !== 'hacknight' && (
                   <div className="event-div-container div-full-width">
@@ -450,7 +521,7 @@ const AddNew = (props) => {
                     No 
                     </Label>
                   </div>
-                )  
+                )
               }
 
               {
