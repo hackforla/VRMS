@@ -7,10 +7,8 @@ Project Schema:
 - id
 - name
 - description
-- owner
 - status (active/complete/paused)
 - location
-- teamMembers (emails)
 - createdDate
 - completedDate
 - githubUrl
@@ -20,15 +18,21 @@ Idea for the future: programmingLanguages, numberGithubContributions (pull these
 const projectSchema = mongoose.Schema({
     name: { type: String },
     description: { type: String },
+    githubIdentifier: { type: String },
     // owner: { type: String },
-    projectStatus: { type: String },
-    location: { type: String },
-    teamMembers: { type: String },
-    createdDate: { type: Date, default: Date.now },
-    completedDate: { type: Date },
-    githubUrl: { type: String },
-    slackUrl: { type: String },
-    zoomMeetingLink: { type: String }
+    projectStatus: { type: String },                    // Active, Completed, or Paused
+    location: { type: String },                         // DTLA, Westside, South LA, or Remote (hacknight)
+    //teamMembers: { type: String },                    // commented since we should be able to get this from Project Team Members table
+    createdDate: { type: Date, default: Date.now },     // date/time project was created
+    completedDate: { type: Date },                      // only if Status = Completed, date/time completed
+    githubUrl: { type: String },                        // link to main repo
+    slackUrl: { type: String },                         // link to Slack channel
+    googleDriveUrl: { type: String },
+    googleDriveId: { type: String },
+    videoConferenceLink: { type: String },
+    lookingDescription: { type: String },
+    recruitingCategories: [{ type: String }],
+    partners: [{ type: String }]
 });
 
 projectSchema.methods.serialize = function() {
@@ -36,15 +40,21 @@ projectSchema.methods.serialize = function() {
         id: this._id,
         name: this.name,
         description: this.description,
+        githubIdentifier: this.githubIdentifier,
         // owner: this.owner,
         projectStatus: this.projectStatus,
         location: this.location,
-        teamMembers: this.teamMembers,
+        //teamMembers: this.teamMembers,
         createdDate: this.createdDate,
         completedDate: this.completedDate,
         githubUrl: this.githubUrl,
         slackUrl: this.slackUrl,
-        zoomMeetingLink: this.zoomMeetingLink
+        googleDriveUrl: this.googleDriveUrl,
+        googleDriveId: this.googleDriveId,
+        videoConferenceLink: this.videoConferenceLink,
+        lookingDescription: this.lookingDescription,
+        recruitingCategories: this.recruitingCategories,
+        partners: this.partners
     };
 };
 

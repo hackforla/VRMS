@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 
-const eventSchema = mongoose.Schema({
+const recurringEventSchema = mongoose.Schema({
     name: { type: String },
     location: {                                         // should we include address here?
         city: { type: String },
@@ -27,7 +27,7 @@ const eventSchema = mongoose.Schema({
     githubIdentifier: { type: String }
 });
 
-eventSchema.methods.serialize = function() {
+recurringEventSchema.methods.serialize = function() {
     return {
         id: this._id,
         name: this.name,
@@ -54,9 +54,9 @@ eventSchema.methods.serialize = function() {
     };
 };
 
-const Event = mongoose.model('Event', eventSchema);
+const RecurringEvent = mongoose.model('RecurringEvent', recurringEventSchema);
 
-module.exports = { Event };
+module.exports = { RecurringEvent };
 
 
 
