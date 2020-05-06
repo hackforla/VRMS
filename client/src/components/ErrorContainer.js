@@ -3,5 +3,5 @@ import React from "react";
 import "../sass/ErrorContainer.scss";
 
 export function ErrorContainer({ className, ...props }) {
-  return <div className="ErrorContainer" />;
+  return <div className="ErrorContainer">{props.children}</div>;
 }
