@@ -430,24 +430,28 @@ const AddNew = (props) => {
                 ></Input>
               </div>
               
-              <div className="event-div-container div-full-width">
-                <Label>Hosted Remotely?</Label>
-                <Label htmlFor='true'  onClick={() => hacknightLocation !== 'Online' && setStateForRemote(true)}>
-                <Input type='radio' name='true'
-                  checked={eventIsRemote} 
-                  onChange={() => setStateForRemote(true)}
-                  disabled={hacknightLocation === 'Online'}
-                  /> 
-                Yes
-                </Label>
-                <Label htmlFor='false' onClick={() => {hacknightLocation !== 'Online' && setStateForRemote(false)}} >
-                <Input type='radio' name='false'
-                  checked={!eventIsRemote} 
-                  onChange={() => setStateForRemote(false)}
-                  disabled={hacknightLocation === 'Online'}/>
-                No 
-                </Label>
-              </div>
+              {
+                eventType !== 'hacknight' && (
+                  <div className="event-div-container div-full-width">
+                    <Label>Hosted Remotely?</Label>
+                    <Label htmlFor='true'  onClick={() => hacknightLocation !== 'Online' && setStateForRemote(true)}>
+                    <Input type='radio' name='true'
+                      checked={eventIsRemote} 
+                      onChange={() => setStateForRemote(true)}
+                      disabled={hacknightLocation === 'Online'}
+                      /> 
+                    Yes
+                    </Label>
+                    <Label htmlFor='false' onClick={() => {hacknightLocation !== 'Online' && setStateForRemote(false)}} >
+                    <Input type='radio' name='false'
+                      checked={!eventIsRemote} 
+                      onChange={() => setStateForRemote(false)}
+                      disabled={hacknightLocation === 'Online'}/>
+                    No 
+                    </Label>
+                  </div>
+                )  
+              }
 
               {
                 !eventIsRemote ? (
