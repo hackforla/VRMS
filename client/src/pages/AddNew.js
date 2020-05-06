@@ -218,8 +218,7 @@ const AddNew = (props) => {
     const ISOStartDate = moment(eventDate + ' ' + eventStartTime).toISOString();
     const ISOEndDate = moment(eventDate + ' ' + eventEndTime).toISOString();
     const hours = moment(ISOEndDate).diff(ISOStartDate, 'hours');
-    console.log('here');
-    console.log(projects[projectIndex]._id);
+   
     return ({
       name: eventName,
       location: {
@@ -240,7 +239,7 @@ const AddNew = (props) => {
         ownerId
       },
       videoConferenceLink,
-      // githubIdentifier: EDIT ME
+      githubIdentifier: projects[projectIndex].githubIdentifier
     });
   };  
 
@@ -271,9 +270,8 @@ const AddNew = (props) => {
 
       // Handle Recurring Event
       if (eventOccursWeekly) {
-        console.log('in corr block, val is ', eventOccursWeekly);
         const evObj = createEventObj(eventDates[0], ownerId);
-        console.log(eventDates[0], evObj);
+
         await postRecurringEvent(evObj)
           .then(() => setIsSubmitting(false))
           .then(() => <Redirect to='/events' />)
