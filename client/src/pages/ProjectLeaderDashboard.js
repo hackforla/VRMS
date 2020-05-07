@@ -15,7 +15,6 @@ const ProjectLeaderDashboard = () => {
         const eventsJson = await events.json();
         console.log(eventsJson);
         setIsCheckInReady(eventsJson.checkInReady);
-
         setNextEvent([eventsJson]);
     }
 
@@ -70,14 +69,6 @@ const ProjectLeaderDashboard = () => {
         getNextEvent();
         getAttendees();
     }, []);
-
-    let attendeesList = attendees.map((attendee) => (
-        <li>
-            {attendee.userId.name.firstName +
-                " " +
-                attendee.userId.name.lastName}
-        </li>
-    ));
 
     return (
         <div className="flex-container">
