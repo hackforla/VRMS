@@ -1,13 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+import CheckInButtons from "../components/presentational/CheckInButtons";
+import ls from "local-storage";
 
-import CheckInButtons from '../components/presentational/CheckInButtons';
-
-import '../sass/Home.scss';
+import "../sass/Home.scss";
 
 const Home = (props) => {
     const [events, setEvents] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [event, setEvent] = useState("--SELECT ONE--");
+    const test = new URLSearchParams(props.location.search);
+    if (test.get("code")) {
+        ls.set("code", decodeURIComponent(test.get("code")));
+        console.log("i did the thing!");
+    }
+
+    // ls.set("token", {
+    //     access_token:
+    //         "ya29.a0Ae4lvC256myjmQzodM9Y7BbzMiB68qyTIDQWVbWaGZEjtCgwauNReUXfjZRMGKV8H59ddMGpq5crIFtStsCV36xsfDhUe1-xwwbZQ0RwNDW6tXmcazjj7mw3ei17Pj2-IQOV66B_2sy6bYfiey0mmQjl95Pk1zPDIyQ",
+    //     refresh_token:
+    //         "1//0631PyTrJ_HbYCgYIARAAGAYSNwF-L9IrEJHSgB_giF8ynS3tAmcWOcTvMaiDiUu8SKMJbGFc-gstdNWlX8LWFWD3EUBMvPVWKkA",
+    //     scope: "https://www.googleapis.com/auth/drive",
+    //     token_type: "Bearer",
+    //     expiry_date: 1588843324660,
+    // });
     // const [isQuestionAnswered, setIsQuestionAnswered] = useState(false);
     // const [meetings, setMeetings] = useState(null);
 
@@ -20,7 +35,7 @@ const Home = (props) => {
 
             setEvents(resJson);
             setIsLoading(false);
-        } catch(error) {
+        } catch (error) {
             console.log(error);
             setIsLoading(false);
             // setIsError(error);
@@ -49,21 +64,35 @@ const Home = (props) => {
 
                 {events && events.length > 1 && (
                     <div className="meeting-select-container">
-                        <form className="form-select-meeting" autoComplete="off" onSubmit={e => e.preventDefault()}>
+                        <form
+                            className="form-select-meeting"
+                            autoComplete="off"
+                            onSubmit={(e) => e.preventDefault()}
+                        >
                             <div className="form-row">
                                 <div className="form-input-select">
-                                    <label htmlFor={'meeting-checkin'}>Select a meeting to check-in:</label>
+                                    <label htmlFor={"meeting-checkin"}>
+                                        Select a meeting to check-in:
+                                    </label>
                                     <div className="radio-buttons">
-                                        <select 
-                                            name={'meeting-checkin'}
+                                        <select
+                                            name={"meeting-checkin"}
                                             className="select-meeting-dropdown"
                                             // aria-label="topic"
                                             onChange={handleEventChange}
                                             required
                                         >
-                                            {events.map(event => {
-                                                return <option key={event._id || 0} value={event._id}>{event.name || "--SELECT ONE--"}</option>
-                                            })} 
+                                            {events.map((event) => {
+                                                return (
+                                                    <option
+                                                        key={event._id || 0}
+                                                        value={event._id}
+                                                    >
+                                                        {event.name ||
+                                                            "--SELECT ONE--"}
+                                                    </option>
+                                                );
+                                            })}
                                         </select>
                                     </div>
                                 </div>
@@ -71,15 +100,18 @@ const Home = (props) => {
                         </form>
                     </div>
                 )}
-                
+
                 <div className="home-buttons">
-                    {event !== '--SELECT ONE--' && <CheckInButtons event={event}/>}
-                    {event === '--SELECT ONE--' && <CheckInButtons disabled={true} event={event}/>}
+                    {event !== "--SELECT ONE--" && (
+                        <CheckInButtons event={event} />
+                    )}
+                    {event === "--SELECT ONE--" && (
+                        <CheckInButtons disabled={true} event={event} />
+                    )}
                 </div>
             </div>
         </div>
-    )
+    );
 };
 
 export default Home;
-    
