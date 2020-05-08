@@ -339,7 +339,7 @@ const AddEvent = (props) => {
 											: setEventIsRemote(false);
 									}}
 									id={obj.location}
-									checked={hacknightLocation === obj.location ? true : false}
+									value={hacknightLocation === obj.location ? true : false}
 								/>
 								{obj.location}
 							</Label>
