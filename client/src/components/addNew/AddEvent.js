@@ -262,7 +262,8 @@ const AddEvent = (props) => {
 
 				await postRecurringEvent(evObj)
 					.then(() => setIsSubmitting(false))
-					.then(() => <Redirect to='/events' />);
+					.then(() => <Redirect to='/events' />)
+					.catch(err => setError(err));
 
 				// Handle Regular Event(s)
 			} else {
@@ -279,7 +280,8 @@ const AddEvent = (props) => {
 					})
 				)
 					.then(() => setIsSubmitting(false))
-					.then(() => <Redirect to='/events' />);
+					.then(() => <Redirect to='/events' />)
+					.catch(err => setError(err));
 			}
 		} catch {
 			setError(error);
