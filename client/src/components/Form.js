@@ -55,7 +55,6 @@ export const OptionPlaceholder = React.forwardRef(
         ref={ref}
         {...props}
         disabled
-        selected
         value=""
       />
     );
