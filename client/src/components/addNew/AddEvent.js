@@ -551,7 +551,7 @@ const AddEvent = (props) => {
 
 				{/* {error && <ErrorContainer>{error}</ErrorContainer>} */}
 				<SecondaryButton
-					{...(isSubmitting && 'disabled')}
+					disabled={isSubmitting}
 					className='center'
 					type='submit'
 				>
