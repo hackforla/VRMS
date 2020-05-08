@@ -319,7 +319,7 @@ const AddEvent = (props) => {
 							evType !== 'hacknight' && setHacknightLocation('');
 						}}
 					>
-						<OptionPlaceholder>Event Type</OptionPlaceholder>
+						<OptionPlaceholder>Select Type</OptionPlaceholder>
 						{eventTypes.map((eventType, index) => (
 							<Option value={eventType} key={index}>
 								{eventType}
@@ -383,7 +383,7 @@ const AddEvent = (props) => {
 								setProjectIndex(index);
 							}}
 						>
-							<OptionPlaceholder>Project</OptionPlaceholder>
+							<OptionPlaceholder>Select Project</OptionPlaceholder>
 							{projects.map((prj, index) => (
 								<Option value={index} key={index}>
 									{prj.name}
@@ -506,7 +506,7 @@ const AddEvent = (props) => {
 								}
 								disabled={eventType === 'hacknight' ? true : false}
 							>
-								<OptionPlaceholder>City</OptionPlaceholder>
+								<OptionPlaceholder>Select A City</OptionPlaceholder>
 								{cities.map((city, index) => (
 									<Option key={index} value={city}>
 										{city}
@@ -524,7 +524,7 @@ const AddEvent = (props) => {
 								value={eventState}
 								onChange={(event) => setEventState(event.target.value)}
 							>
-								<OptionPlaceholder>State</OptionPlaceholder>
+								<OptionPlaceholder>Select A State</OptionPlaceholder>
 								{states.map((state, index) => (
 									<Option key={index} value={state}>
 										{state}
