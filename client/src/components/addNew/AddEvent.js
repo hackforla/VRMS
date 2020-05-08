@@ -327,8 +327,8 @@ const AddEvent = (props) => {
 						))}
 					</Select>
 					{eventType === 'hacknight' &&
-						hacknightLocations.map((obj) => (
-							<Label htmlFor={obj.location} isRadioParent='true'>
+						hacknightLocations.map((obj, index) => (
+							<Label htmlFor={obj.location} isRadioParent='true' key={index}>
 								<Input
 									type='radio'
 									onClick={() => {
