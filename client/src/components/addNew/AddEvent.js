@@ -331,7 +331,9 @@ const AddEvent = (props) => {
 							<Label htmlFor={obj.location} isRadioParent='true' key={index}>
 								<Input
 									type='radio'
-									onClick={() => {
+									name={obj.location}
+									checked={obj.location === hacknightLocation ? true : false}
+									onChange={() => {
 										setHacknightLocation(obj.location);
 										setEventCity(obj.city);
 										obj.location === 'Online'
@@ -458,13 +460,10 @@ const AddEvent = (props) => {
 						<Label>Hosted Remotely?</Label>
 						<Label
 							htmlFor='true'
-							onClick={() =>
-								hacknightLocation !== 'Online' && setStateForRemote(true)
-							}
 						>
 							<Input
 								type='radio'
-								name='true'
+								id='true'
 								checked={eventIsRemote}
 								onChange={() => setStateForRemote(true)}
 								disabled={hacknightLocation === 'Online'}
@@ -473,13 +472,10 @@ const AddEvent = (props) => {
 						</Label>
 						<Label
 							htmlFor='false'
-							onClick={() => {
-								hacknightLocation !== 'Online' && setStateForRemote(false);
-							}}
 						>
 							<Input
 								type='radio'
-								name='false'
+								id='false'
 								checked={!eventIsRemote}
 								onChange={() => setStateForRemote(false)}
 								disabled={hacknightLocation === 'Online'}
