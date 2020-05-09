@@ -1,0 +1,68 @@
+.Label {
+  text-transform: lowercase !important;
+  width: fit-content;
+  display: block;
+  margin: 25px 0 0 2.5px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+// for labels with nested radio buttons
+.isRadioParent {
+  margin-top: 15px;
+}
+
+.SupersetInput {
+  height: 40px;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 10px 0 0 !important;
+  padding: 5px;
+  display: block;
+  border: #fa114f solid 2.5px !important;
+  border-radius: 5px !important;
+  font-family: "aliseoregular", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  color: black !important;
+}
+
+.SupersetInput:disabled {
+  color: gray !important;
+  border-color: gray !important;
+}
+
+.SupersetInput.small {
+  width: 175px !important;
+  max-width: 175px !important;
+}
+
+.SupersetInput::placeholder,.placeholder {
+  color: lightgray !important;
+}
+
+.SecondaryButton {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  padding: 10px 25px !important;
+  width: fit-content !important;
+  font-size: 16px !important;
+  letter-spacing: 2px;
+  font-family: "aliseoregular", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+  "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+  sans-serif !important;
+  border-radius: 5px;
+  background-color: #102d49 !important;
+  color: white !important;
+}
+
+.AuxiliaryButton {
+  font-size: 20px;
+  font-weight: 700;
+  width: fit-content;
+  padding-left: 10px;
+}
+
+.TextArea {
+
+}
