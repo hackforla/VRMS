@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const cors = require('cors');
 
 const { RecurringEvent } = require('../models/recurringEvent.model');
 
 // GET /api/recurringevents/
-router.get('/', (req, res) => {
+router.get('/', cors(), (req, res) => {
     // const { query } = req;
         
     RecurringEvent

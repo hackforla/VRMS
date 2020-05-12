@@ -30,7 +30,7 @@ module.exports = (cron, fetch) => {
     async function openCheckins(events) {
         if(events && events.length > 0) {
             events.forEach(async event => {
-                // console.log('Opening event: ', event);
+                console.log('Opening event: ', event);
 
                 await fetch(`https://vrms.io/api/events/${event._id}`, {
                     method: "PATCH",
