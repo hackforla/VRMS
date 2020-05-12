@@ -7,7 +7,7 @@ module.exports = (cron, fetch) => {
 
     const EVENTS = async () => {
         try {
-            const res = await fetch("https://vrms.io/api/events");
+            const res = await fetch("http://localhost:4000/api/events");
             const resJson = await res.json();
 
             return resJson;
@@ -18,7 +18,7 @@ module.exports = (cron, fetch) => {
 
     const RECURRING_EVENTS = async () => {
         try {
-            const res = await fetch("https://vrms.io/api/recurringevents");
+            const res = await fetch("http://localhost:4000/api/recurringevents");
             const resJson = await res.json();
 
             return resJson;
@@ -43,7 +43,7 @@ module.exports = (cron, fetch) => {
             filteredEvents.forEach(async (event, index) => {
                 const eventExists = await checkIfEventExists(event.name);
                 
-                eventExists ? console.log("I'm not going to run the function") : console.log("I'm going to run a function");
+                eventExists ? console.log("I'm not going to run the function") : createEvent(event);
             });
         };
     };
@@ -62,23 +62,23 @@ module.exports = (cron, fetch) => {
 
             return filteredEvents.length > 0 ? true : false;
         };
-    }
+    };
     
-    async function createEvents(events) {
-        if(events && events.length > 0) {
-            events.forEach(async event => {
-                // console.log('Opening event: ', event);
+    async function createEvent(event) {
+        if(event) {
+            // console.log('Opening event: ', event);
+            const jsonEvent = JSON.stringify(event);
 
-                await fetch(`https://vrms.io/api/events`, {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json"
-                    }
-                })
-                    .catch(err => {
-                        console.log(err);
-                    });
-            });
+            // await fetch(`https://vrms.io/api/events`, {
+            //     method: "POST",
+            //     headers: {
+            //         "Content-Type": "application/json"
+            //     },
+            //     body: jsonEvent
+            // })
+            //     .catch(err => {
+            //         console.log(err);
+            //     });
         };
     };
     
@@ -96,7 +96,9 @@ module.exports = (cron, fetch) => {
     //     await createEvents(eventsToOpen);
 
     //     console.log("I finished opening check-ins");
+    setTimeout(() => {
         getAndFilterEvents(TODAY);
+    }, 5000);
     // };
 
     // const scheduledTask = cron.schedule('*/10 7-21 * * *', () => {

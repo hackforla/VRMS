@@ -34,7 +34,7 @@ eventSchema.methods.serialize = function() {
             state: this.location.state,
             country: this.location.country
         },
-        hacknight: this.hacknight,
+        hacknight: [this.hacknight],
         eventType: this.eventType,
         description: this.eventDescription,
         project: this.project,
