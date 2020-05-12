@@ -12,11 +12,11 @@ import {
 	SecondaryButton,
 	AuxiliaryButton,
 } from '../Form';
-// import { ErrorContainer } from "../components/ErrorContainer";
+// import { ErrorContainer } from "../ErrorContainer";
 import { UserContext } from '../../context/userContext';
 
 const AddEvent = (props) => {
-	const { projects, error, setError } = props;
+	const { projects, error, setError, setRedirectLink } = props;
 	const user = useContext(UserContext).user;
 
 	// State Data
@@ -150,11 +150,11 @@ const AddEvent = (props) => {
 			},
 		})
 			.then((res) => {
-				if (res.ok) {
+				if (!res.ok) {
+					throw new Error(res.statusText);
+				} else {
 					return res.json();
 				}
-
-				throw new Error(res.statusText);
 			})
 			.catch((err) => {
 				setError(err);
@@ -262,7 +262,7 @@ const AddEvent = (props) => {
 
 				await postRecurringEvent(evObj)
 					.then(() => setIsSubmitting(false))
-					.then(() => <Redirect to='/events' />)
+					.then(() => setRedirectLink('/events'))
 					.catch(err => setError(err));
 
 				// Handle Regular Event(s)
@@ -275,12 +275,12 @@ const AddEvent = (props) => {
 				});
 
 				await Promise.all(
-					eventsObjects.forEach(async (event) => {
+					eventsObjects.map(async (event) => {
 						return await postSingleEvent(event);
 					})
 				)
 					.then(() => setIsSubmitting(false))
-					.then(() => <Redirect to='/events' />)
+					.then(() => setRedirectLink('/events'))
 					.catch(err => setError(err));
 			}
 		} catch {

@@ -9,6 +9,7 @@ import '../sass/AddNew.scss';
 const AddNew = (props) => {
 	// State Data
 	const [projects, setProjects] = useState([]);
+	const [redirectLink, setRedirectLink] = useState('');
 	const [error, setError] = useState(null);
 
 	const auth = useAuth();
@@ -38,14 +39,23 @@ const AddNew = (props) => {
 	}, []);
 
 	return auth && auth.user ? (
-		<div className='flex-container'>
-			<HeaderBarTextOnly>Add New {props.match.params.item}</HeaderBarTextOnly>
-			{props.match.params.item === 'event' && (
-				<UserProvider>
-						<AddEvent projects={projects} error={error} setError={setError} />
-				</UserProvider>
-			)}
-		</div>
+		redirectLink ? (
+			<Redirect to={redirectLink} />
+		) : (
+			<div className='flex-container'>
+				<HeaderBarTextOnly>Add New {props.match.params.item}</HeaderBarTextOnly>
+				{props.match.params.item === 'event' && (
+					<UserProvider>
+						<AddEvent
+							projects={projects}
+							error={error}
+							setError={setError}
+							setRedirectLink={setRedirectLink}
+						/>
+					</UserProvider>
+				)}
+			</div>
+		)
 	) : (
 		<Redirect to='/login' />
 	);
