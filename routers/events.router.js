@@ -49,6 +49,7 @@ router.get('/:id', (req, res) => {
 });
 
 router.patch('/:id', (req, res) => {
+    // console.log("Running");
     Event
         .findById(req.params.id, function(err, event) {
             event.checkInReady = !event.checkInReady;
