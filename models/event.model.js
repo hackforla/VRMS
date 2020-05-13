@@ -9,7 +9,7 @@ const eventSchema = mongoose.Schema({
         state: { type: String },
         country: { type: String }
     },
-    hacknight: [{ type: String }],                        // DTLA, Westside, South LA, Online
+    hacknight: { type: String },                        // DTLA, Westside, South LA, Online
     eventType: { type: String },                        // Project Meeting, Orientation, Workshop
     description: { type: String },
     project: {                                          // only needed if it's type = Project Meeting
@@ -41,7 +41,7 @@ eventSchema.methods.serialize = function() {
             state: this.location.state,
             country: this.location.country
         },
-        hacknight: [this.hacknight],
+        hacknight: this.hacknight,
         eventType: this.eventType,
         description: this.eventDescription,
         project: {                                          
