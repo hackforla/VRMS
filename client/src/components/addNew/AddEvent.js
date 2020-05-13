@@ -165,7 +165,7 @@ const AddEvent = (props) => {
 	};
 
 	const postRecurringEvent = async (eventObj) => {
-		console.log('postRecurring will run');
+		console.log('postRecurring running');
 		const ObjToSend = JSON.stringify(eventObj);
 		console.log(ObjToSend);
 		try {
@@ -232,8 +232,8 @@ const AddEvent = (props) => {
 			},
 			hacknight: hacknightLocation,
 			eventType: eventType,
-			// description: eventDescription,
-			// project: { id: projects[projectIndex]._id },
+			description: eventDescription,
+			project: { id: projects ? projects[projectIndex]._id : '123456'},
 			date: ISODate,
 			startTime: ISOStartDate,
 			endTime: ISOEndDate,
@@ -242,7 +242,7 @@ const AddEvent = (props) => {
 			// 	ownerId,
 			// },
 			videoConferenceLink: videoConferenceLink,
-			// githubIdentifier: projects[projectIndex].githubIdentifier,
+			githubIdentifier: projects ? projects[projectIndex].githubIdentifier : "",
 		};
 		
 		console.log('created event object: ', createdEventObj);
@@ -264,8 +264,7 @@ const AddEvent = (props) => {
 				? !videoConferenceLink
 				: eventCity === '' || eventState === '')
 		) {
-			setErrorStatus("Please don't leave any fields blank");
-			console.log("Error checking fields");
+			setErrorStatus({ message: "Please don't leave any fields blank" });
 			setIsSubmitting(false);
 			return;
 		}
