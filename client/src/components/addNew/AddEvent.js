@@ -39,7 +39,7 @@ const AddEvent = (props) => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	// Form Data to Fill Drop-downs
-	const eventTypes = ['hacknight', 'conference', 'summit', 'meetup'];
+	const eventTypes = ['Hacknight', 'Conference', 'Summit', 'Team Meeting', 'Onboarding', 'Happy Hour'];
 	const hacknightLocations = [
 		{
 			location: 'DTLA',
@@ -134,7 +134,7 @@ const AddEvent = (props) => {
 	const setStateForRemote = (boolean) => {
 		setEventIsRemote(boolean);
 
-		if (eventType === 'hacknight' && boolean) {
+		if (eventType === 'Hacknight' && boolean) {
 			setHacknightLocation('Online');
 		} else {
 			setHacknightLocation('');
@@ -221,12 +221,11 @@ const AddEvent = (props) => {
 			hacknight: hacknightLocation,
 			eventType,
 			description: eventDescription,
-			projectId: projects[projectIndex]._id,
+			project: { id: projects[projectIndex]._id },
 			date: ISODate,
 			startTime: ISOStartDate,
 			endTime: ISOEndDate,
 			hours,
-			createdDate: new Date().toISOString(),
 			owner: {
 				ownerId,
 			},
@@ -243,7 +242,7 @@ const AddEvent = (props) => {
 			user.email === '' ||
 			eventName === '' ||
 			eventType === '' ||
-			(eventType === 'hacknight' && hacknightLocation === '') ||
+			(eventType === 'Hacknight' && hacknightLocation === '') ||
 			(eventIsRemote
 				? !videoConferenceLink
 				: eventCity === '' || eventState === '')
@@ -318,7 +317,7 @@ const AddEvent = (props) => {
 						onChange={(ev) => {
 							const evType = ev.target.value;
 							setEventType(evType);
-							evType !== 'hacknight' && setHacknightLocation('');
+							evType !== 'Hacknight' && setHacknightLocation('');
 						}}
 					>
 						<OptionPlaceholder>Select Type</OptionPlaceholder>
@@ -328,7 +327,7 @@ const AddEvent = (props) => {
 							</Option>
 						))}
 					</Select>
-					{eventType === 'hacknight' &&
+					{eventType === 'Hacknight' &&
 						hacknightLocations.map((obj, index) => (
 							<Label htmlFor={obj.location} isRadioParent='true' key={index}>
 								<Input
@@ -373,7 +372,7 @@ const AddEvent = (props) => {
 					</Label>
 				</div>
 
-				{eventType === 'hacknight' && (
+				{eventType === 'Hacknight' && (
 					<div className='event-div-container'>
 						<Label htmlFor='project-name'>Project</Label>
 						<Select
@@ -457,7 +456,7 @@ const AddEvent = (props) => {
 					></Input>
 				</div>
 
-				{eventType !== 'hacknight' && (
+				{eventType !== 'Hacknight' && (
 					<div className='event-div-container div-full-width'>
 						<Label>Hosted Remotely?</Label>
 						<Label
@@ -502,7 +501,7 @@ const AddEvent = (props) => {
 										? null
 										: (event) => setEventCity(event.target.value)
 								}
-								disabled={eventType === 'hacknight' ? true : false}
+								disabled={eventType === 'Hacknight' ? true : false}
 							>
 								<OptionPlaceholder>Select A City</OptionPlaceholder>
 								{cities.map((city, index) => (
