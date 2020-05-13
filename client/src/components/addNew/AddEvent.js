@@ -12,7 +12,7 @@ import {
 	SecondaryButton,
 	AuxiliaryButton,
 } from '../Form';
-// import { ErrorContainer } from "../ErrorContainer";
+import { ErrorContainer } from "../ErrorContainer";
 import { UserContext } from '../../context/userContext';
 
 const AddEvent = (props) => {
@@ -22,7 +22,7 @@ const AddEvent = (props) => {
 	// State Data
 	const [eventName, setEventName] = useState('');
 	const [eventType, setEventType] = useState('');
-	const [projectIndex, setProjectIndex] = useState('');
+	const [projectIndex, setProjectIndex] = useState(null);
 	const [hacknightLocation, setHacknightLocation] = useState('');
 	const [eventOccursWeekly, setEventOccursWeekly] = useState(false);
 	const todayFormatted = moment(new Date()).format('YYYY[-]MM[-]DD');
@@ -34,6 +34,7 @@ const AddEvent = (props) => {
 	const [eventState, setEventState] = useState('CA');
 	const [videoConferenceLink, setVideoConferenceLink] = useState('');
 	const [eventDescription, setEventDescription] = useState('');
+	const [errorStatus, setErrorStatus] = useState(null);
 
 	// Status
 	const [isSubmitting, setIsSubmitting] = useState(false);
@@ -141,6 +142,8 @@ const AddEvent = (props) => {
 		}
 	};
 
+	const handleVcLinkChange = e => setVideoConferenceLink(e.currentTarget.value);
+
 	const postSingleEvent = (eventObj) => {
 		fetch('/api/events', {
 			method: 'POST',
@@ -157,28 +160,34 @@ const AddEvent = (props) => {
 				}
 			})
 			.catch((err) => {
-				setError(err);
+				setErrorStatus(err);
 			});
 	};
 
-	const postRecurringEvent = (eventObj) => {
-		fetch('/api/recurringevents', {
-			method: 'POST',
-			body: JSON.stringify(eventObj),
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		})
-			.then((res) => {
-				if (res.ok) {
-					return res.json();
-				}
-
-				throw new Error(res.statusText);
+	const postRecurringEvent = async (eventObj) => {
+		console.log('postRecurring will run');
+		const ObjToSend = JSON.stringify(eventObj);
+		console.log(ObjToSend);
+		try {
+			await fetch('/api/recurringevents', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: ObjToSend
 			})
-			.catch((err) => {
-				setError(err);
-			});
+				.then((res) => {
+					console.log(res);
+				})
+				.catch((err) => {
+					console.log(err);
+					setErrorStatus(err);
+				});
+		} catch (error) {
+			console.log(error);
+		};
+
+		console.log('postRecurring ran');
 	};
 
 	const getUserId = (email) => {
@@ -199,44 +208,52 @@ const AddEvent = (props) => {
 			.then((user) => {
 				return user._id;
 			})
-			.catch(() => {
-				setError(error.message);
+			.catch((err) => {
+				setErrorStatus(err);
 				setIsSubmitting(false);
 			});
 	};
 
-	const createEventObj = (eventDate, ownerId) => {
+	// const createEventObj = (eventDate, ownerId) => {
+	const createEventObj = (eventDate) => {
 		const ISODate = moment(eventDate).toISOString();
 		const ISOStartDate = moment(eventDate + ' ' + eventStartTime).toISOString();
 		const ISOEndDate = moment(eventDate + ' ' + eventEndTime).toISOString();
 		const hours = moment(ISOEndDate).diff(ISOStartDate, 'hours');
+		console.log('try createEventObj');
+		const name = eventName.toString();
 
-		return {
-			name: eventName,
+		const createdEventObj = {
+			name: name,
 			location: {
 				city: eventCity,
 				state: eventState,
 				country: 'USA',
 			},
 			hacknight: hacknightLocation,
-			eventType,
-			description: eventDescription,
-			project: { id: projects[projectIndex]._id },
+			eventType: eventType,
+			// description: eventDescription,
+			// project: { id: projects[projectIndex]._id },
 			date: ISODate,
 			startTime: ISOStartDate,
 			endTime: ISOEndDate,
-			hours,
-			owner: {
-				ownerId,
-			},
-			videoConferenceLink,
-			githubIdentifier: projects[projectIndex].githubIdentifier,
+			hours: hours,
+			// owner: {
+			// 	ownerId,
+			// },
+			videoConferenceLink: videoConferenceLink,
+			// githubIdentifier: projects[projectIndex].githubIdentifier,
 		};
+		
+		console.log('created event object: ', createdEventObj);
+
+		return createdEventObj;
 	};
 
 	const handleSubmit = async (ev) => {
 		ev.preventDefault();
 		setIsSubmitting(true);
+		console.log('handleSubmit ran');
 
 		if (
 			user.email === '' ||
@@ -247,29 +264,34 @@ const AddEvent = (props) => {
 				? !videoConferenceLink
 				: eventCity === '' || eventState === '')
 		) {
-			setError("Please don't leave any fields blank");
+			setErrorStatus("Please don't leave any fields blank");
+			console.log("Error checking fields");
 			setIsSubmitting(false);
 			return;
 		}
 
 		try {
-			const ownerId = await getUserId(user.email);
+			// const ownerId = await getUserId(user.email);
 
 			// Handle Recurring Event
 			if (eventOccursWeekly) {
-				const evObj = createEventObj(eventDates[0], ownerId);
+				console.log('Trying to run handleSubmit');
+				// const evObj = createEventObj(eventDates[0], ownerId);
+				const evObj = createEventObj(eventDates[0]);
 
 				await postRecurringEvent(evObj)
 					.then(() => setIsSubmitting(false))
 					.then(() => setRedirectLink('/events'))
-					.catch(err => setError(err));
+					.catch(err => setErrorStatus(err));
 
+				console.log('Done running handleSubmit')
 				// Handle Regular Event(s)
 			} else {
 				const eventsObjects = [];
 
 				eventDates.forEach((eventDate) => {
-					const evObj = createEventObj(eventDate, ownerId);
+					// const evObj = createEventObj(eventDate, ownerId);
+					const evObj = createEventObj(eventDate);
 					eventsObjects.push(evObj);
 				});
 
@@ -280,10 +302,10 @@ const AddEvent = (props) => {
 				)
 					.then(() => setIsSubmitting(false))
 					.then(() => setRedirectLink('/events'))
-					.catch(err => setError(err));
+					.catch(err => setErrorStatus(err));
 			}
-		} catch {
-			setError(error);
+		} catch (error) {
+			setErrorStatus(error);
 			setIsSubmitting(false);
 		}
 	};
@@ -534,7 +556,8 @@ const AddEvent = (props) => {
 					<div className='event-div-container div-full-width'>
 						<Label>Video Conference Link</Label>
 						<Input
-							onChange={setVideoConferenceLink}
+							value={videoConferenceLink}
+							onChange={e => handleVcLinkChange(e)}
 							size='large'
 							placeholder='https://us02.web.zoom.us/j/123456789'
 						/>
@@ -546,7 +569,7 @@ const AddEvent = (props) => {
 					<Textarea onChange={(ev) => setEventDescription(ev.target.value)} />
 				</div>
 
-				{/* {error && <ErrorContainer>{error}</ErrorContainer>} */}
+				{errorStatus && <ErrorContainer>{errorStatus.message}</ErrorContainer>}
 				<SecondaryButton
 					disabled={isSubmitting}
 					className='center'

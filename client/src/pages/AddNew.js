@@ -8,7 +8,7 @@ import '../sass/AddNew.scss';
 
 const AddNew = (props) => {
 	// State Data
-	const [projects, setProjects] = useState([]);
+	const [projects, setProjects] = useState(null);
 	const [redirectLink, setRedirectLink] = useState('');
 	const [error, setError] = useState(null);
 
@@ -23,15 +23,12 @@ const AddNew = (props) => {
 				},
 			})
 				.then((res) => {
-					if (res.ok) {
-						return res.json();
-					}
-					throw new Error(res.statusText);
+					return res.json();
 				})
 				.catch((err) => {
 					console.log(err);
 				});
-
+				
 			setProjects(prjs);
 		};
 
@@ -47,7 +44,7 @@ const AddNew = (props) => {
 				{props.match.params.item === 'event' && (
 					<UserProvider>
 						<AddEvent
-							projects={projects}
+							projects={projects && projects}
 							error={error}
 							setError={setError}
 							setRedirectLink={setRedirectLink}
