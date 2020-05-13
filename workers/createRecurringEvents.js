@@ -42,8 +42,39 @@ module.exports = (cron, fetch) => {
             // and do something if true/false 
             filteredEvents.forEach(async (event, index) => {
                 const eventExists = await checkIfEventExists(event.name);
-                
-                eventExists ? console.log("I'm not going to run the function") : createEvent(event);
+                console.log(eventExists);
+                if (eventExists) {
+                    const eventToCreate = {
+                        name: event.name,
+                        location: {
+                            city: event.location.city,
+                            state: event.location.state,
+                            country: event.location.country
+                        },
+                        hacknight: event.hacknight,
+                        eventType: event.eventType,
+                        description: event.eventDescription,
+                        project: {                                          
+                            projectId: event.project.projectId,
+                            name: event.project.name,
+                            videoConferenceLink: event.project.videoConferenceLink,
+                            githubIdentifier: event.project.githubIdentifier,
+                            hflaWebsiteUrl: event.project.hflaWebsiteUrl,
+                            githubUrl: event.project.githubUrl
+                        },
+                        date: event.date,
+                        startTime: event.startTime,
+                        endTime: event.endTime,
+                        hours: event.hours,
+                        owner: {
+                            ownerId: event.owner.ownerId
+                        }
+                    }
+
+                    createEvent(eventToCreate);
+                } else {
+                    console.log("I'm not going to run the function")
+                }
             });
         };
     };
@@ -68,17 +99,17 @@ module.exports = (cron, fetch) => {
         if(event) {
             // console.log('Opening event: ', event);
             const jsonEvent = JSON.stringify(event);
-
-            // await fetch(`https://vrms.io/api/events`, {
-            //     method: "POST",
-            //     headers: {
-            //         "Content-Type": "application/json"
-            //     },
-            //     body: jsonEvent
-            // })
-            //     .catch(err => {
-            //         console.log(err);
-            //     });
+            console.log('Running createEvent');
+            await fetch(`http://localhost:4000/api/events`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: jsonEvent
+            })
+                .catch(err => {
+                    console.log(err);
+                });
         };
     };
     
