@@ -29,6 +29,7 @@ const projectSchema = mongoose.Schema({
     slackUrl: { type: String },                         // link to Slack channel
     googleDriveUrl: { type: String },
     googleDriveId: { type: String },
+    hflaWebsiteUrl: { type: String },
     videoConferenceLink: { type: String },
     lookingDescription: { type: String },
     recruitingCategories: [{ type: String }],
@@ -51,6 +52,7 @@ projectSchema.methods.serialize = function() {
         slackUrl: this.slackUrl,
         googleDriveUrl: this.googleDriveUrl,
         googleDriveId: this.googleDriveId,
+        hflaWebsiteUrl: this.hflaWebsiteUrl,
         videoConferenceLink: this.videoConferenceLink,
         lookingDescription: this.lookingDescription,
         recruitingCategories: this.recruitingCategories,

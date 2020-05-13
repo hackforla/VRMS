@@ -9,10 +9,17 @@ const eventSchema = mongoose.Schema({
         state: { type: String },
         country: { type: String }
     },
-    hacknight: { type: String },                        // DTLA, Westside, South LA, Online
+    hacknight: [{ type: String }],                        // DTLA, Westside, South LA, Online
     eventType: { type: String },                        // Project Meeting, Orientation, Workshop
     description: { type: String },
-    projectId: { type: String },                        // only needed if it's type = Project Meeting
+    project: {                                          // only needed if it's type = Project Meeting
+        projectId: { type: String },
+        name: { type: String },
+        videoConferenceLink: { type: String },
+        githubIdentifier: { type: String },
+        hflaWebsiteUrl: { type: String },
+        githubUrl: { type: String }
+    },
     date: { type: Date },   
     startTime: { type: Date },                          // start date and time of the event
     endTime: { type: Date },                            // end date and time of the event
@@ -22,9 +29,7 @@ const eventSchema = mongoose.Schema({
     checkInReady: { type: Boolean, default: false },    // is the event open for check-ins?
     owner: {
         ownerId: { type: Number }                       // id of user who created event
-    },
-    videoConferenceLink: { type: String },
-    githubIdentifier: { type: String }
+    }
 });
 
 eventSchema.methods.serialize = function() {
@@ -36,10 +41,17 @@ eventSchema.methods.serialize = function() {
             state: this.location.state,
             country: this.location.country
         },
-        hacknight: this.hacknight,
+        hacknight: [this.hacknight],
         eventType: this.eventType,
         description: this.eventDescription,
-        projectId: this.projectId,
+        project: {                                          
+            projectId: this.project.projectId,
+            name: this.project.name,
+            videoConferenceLink: this.project.videoConferenceLink,
+            githubIdentifier: this.project.githubIdentifier,
+            hflaWebsiteUrl: this.project.hflaWebsiteUrl,
+            githubUrl: this.project.githubUrl
+        },
         date: this.date,
         startTime: this.startTime,
         endTime: this.endTime,
@@ -48,9 +60,7 @@ eventSchema.methods.serialize = function() {
         checkInReady: this.checkInReady,
         owner: {
             ownerId: this.owner.ownerId
-        },
-        videoConferenceLink: this.videoConferenceLink,
-        githubIdentifier: this.githubIdentifier
+        }
     };
 };
 
