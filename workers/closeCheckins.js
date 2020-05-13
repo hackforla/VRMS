@@ -52,13 +52,13 @@ module.exports = (cron, fetch) => {
     };
     
     async function runTask() {
-        console.log("I'm going to close check-ins");
+        console.log("Closing check-ins");
 
         const eventsToClose = await sortAndFilterEvents();
         // console.log(eventsToClose);
         await closeCheckins(eventsToClose);
 
-        console.log("I finished closing check-ins");
+        console.log("Check-ins closed");
     };
 
     const scheduledTask = cron.schedule('*/10 8-23 * * *', () => {
