@@ -9,7 +9,7 @@ const recurringEventSchema = mongoose.Schema({
         state: { type: String },
         country: { type: String }
     },
-    hacknight: [{ type: String }],                      // DTLA, Westside, South LA, Online
+    hacknight: { type: String },                      // DTLA, Westside, South LA, Online
     brigade: { type: String, default: "Hack for LA" },
     eventType: { type: String },                        // Project Meeting, Orientation, Workshop
     description: { type: String },
