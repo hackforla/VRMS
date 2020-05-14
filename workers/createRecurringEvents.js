@@ -45,27 +45,34 @@ module.exports = (cron, fetch) => {
             });
 
             // Date to create (Today)
-            const today = new Date().toISOString();
+            // const today = new Date().toISOString();
+            const today = new Date().getDate();
+            const newToday = new Date(today);
+            console.log(newToday);
+            console.log('Today is: ', today);
             const todayDateSliced = today.slice(0, 10);
-            console.log(todayDateSliced);
+            console.log('Today sliced is: ', todayDateSliced);
 
             // For each recurring event, check to see if an event already exists for it
             // and do something if true/false 
             filteredEvents.forEach(async (event) => {
-                console.log('Check if it exists: ', event);
+                // console.log('Check if it exists: ', event);
                 const eventExists = await checkIfEventExists(event.name);
-                console.log(eventExists);
+                // console.log(eventExists);
 
                 // Start time to create (Event's start time)
                 const startTimeSliced = event.startTime.slice(10, event.startTime.length);
                 // End time to create (Event's end time)
                 const endTimeSliced = event.endTime.slice(10, event.endTime.length);
 
+                // const testDate = event.date;
                 const eventDate = todayDateSliced + startTimeSliced;
                 const eventStartTime = eventDate;
                 const eventEndTime = todayDateSliced + endTimeSliced;
-
-                console.log('Event info: ', eventDate, eventStartTime, eventEndTime);
+                // console.log('Recurring event date: ', testDate);
+                console.log('Before: ', eventDate);
+                console.log('After: ', new Date(eventDate).toISOString());
+                // console.log('Event info: ', eventDate, eventStartTime, eventEndTime);
 
                 // if (eventExists) {
                 //     return false;   // console.log("I'm not going to run ceateEvent")
@@ -157,8 +164,12 @@ module.exports = (cron, fetch) => {
     
     };
 
-    // const scheduledTask = cron.schedule('*/1 1-16 * * *', () => {
+    // setTimeout(() => {
     //     runTask();
+    // }, 5000);
+
+    // const scheduledTask = cron.schedule('*/1 1-16 * * *', () => {
+        // runTask();
     // });
 
     // return scheduledTask;
