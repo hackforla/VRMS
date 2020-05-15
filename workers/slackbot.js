@@ -1,34 +1,33 @@
-// module.exports = (fetch) => {
-//     console.log('Hello from SlackBot');
-//     const messageToSend = 'Testing!';
+module.exports = (fetch) => {
+    console.log('Hello from SlackBot');
 
-//     const url = 'https://hooks.slack.com/services/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';
+    const BASE_URL = 'https://slack.com/api/chat.postMessage'
+    const token = process.env.SLACK_TOKEN;
+    const channel = 'C013H2HN0VC';
+    const team = 'VRMS';
+    const linkToCheckInFor = 'https://vrms.io';
+    const messageToSend = '&text=' + 'Hey ' + team + " team! Here's the link to check-in for your meeting tonight: " + linkToCheckInFor + '. Have fun tonight!';
+    const urlToSend = BASE_URL + '?' + 'token=' + token + '&channel=' + channel + messageToSend + '&unfurl_media=false&username=VRMS Bot';
 
-//     async function sendSlackMessage(message, url) {
-//         console.log('Sending...');
+    async function sendSlackMessage(url) {
+        console.log('Sending...');
 
-//         await fetch(url, {
-//             method: 'POST',
-//             headers: {
-//                 "Content-Type": "application/json"
-//             },
-//             body: {
-//                 text: message
-//             }
-//         })
-//             .then(res => {
-//                 console.log(res);
-//             })
-//             .catch(err => {
-//                 console.log(err);
-//             });
+        await fetch(url, {
+            method: 'post'
+        })
+            .then(res => {
+                console.log(res.ok);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+        
+        console.log('Done sending');
+    }
+    setTimeout(() => {
+        sendSlackMessage(urlToSend);
 
-//         console.log('Done sending');
-//     }
-//     setTimeout(() => {
-//         sendSlackMessage(messageToSend, url);
+    }, 5000);
 
-//     }, 5000);
-
-//     // return job;
-// }
+    // return job;
+}
