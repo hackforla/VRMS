@@ -60,7 +60,7 @@ router.patch('/:id', (req, res) => {
             })
         })
         .then(checkIn => {
-            res.sendStatus(204).end();
+            res.sendStatus(204);
         })
         .catch(err => {
             console.log(err);
