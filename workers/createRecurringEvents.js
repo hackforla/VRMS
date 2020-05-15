@@ -119,9 +119,11 @@ module.exports = (cron, fetch) => {
                 const monthToday = today.getMonth();
                 const dateToday = today.getDate();
 
+                // console.log((year === yearToday && month === monthToday && date === dateToday && eventName === event.name));
                 return (year === yearToday && month === monthToday && date === dateToday && eventName === event.name);
             });
-            // console.log("Event's already created: ", filteredEvents);
+
+            console.log("Event's already created: ", filteredEvents);
             return filteredEvents.length > 0 ? true : false;
         };
     };
