@@ -10,8 +10,8 @@ module.exports = (cron, fetch) => {
 
     const fetchEvents = async () => {
         try {
-            // const res = await fetch("https://vrms.io/api/events");
-            const res = await fetch("http://localhost:4000/api/events");
+            const res = await fetch("https://vrms.io/api/events");
+            // const res = await fetch("http://localhost:4000/api/events");
             EVENTS = await res.json();
 
             // return EVENTS;
@@ -22,8 +22,8 @@ module.exports = (cron, fetch) => {
 
     const fetchRecurringEvents = async () => {
         try {
-            // const res = await fetch("https://vrms.io/api/recurringevents");
-            const res = await fetch("http://localhost:4000/api/recurringevents");
+            const res = await fetch("https://vrms.io/api/recurringevents");
+            // const res = await fetch("http://localhost:4000/api/recurringevents");
             RECURRING_EVENTS = await res.json();
 
             // return resJson;
@@ -44,84 +44,84 @@ module.exports = (cron, fetch) => {
                 return (eventDay === todayDay);
             });
 
+            // console.log("Today's events: ", filteredEvents);
+
             // Date to create (Today)
-            // const today = new Date().toISOString();
-            const today = new Date().getDate();
-            const newToday = new Date(today);
-            console.log(newToday);
-            console.log('Today is: ', today);
-            const todayDateSliced = today.slice(0, 10);
-            console.log('Today sliced is: ', todayDateSliced);
+            const today = new Date();
 
             // For each recurring event, check to see if an event already exists for it
             // and do something if true/false 
             filteredEvents.forEach(async (event) => {
                 // console.log('Check if it exists: ', event);
                 const eventExists = await checkIfEventExists(event.name);
-                // console.log(eventExists);
+                const eventDate = new Date(event.date);
 
-                // Start time to create (Event's start time)
-                const startTimeSliced = event.startTime.slice(10, event.startTime.length);
-                // End time to create (Event's end time)
-                const endTimeSliced = event.endTime.slice(10, event.endTime.length);
+                const hours = eventDate.getHours();
+                const minutes = eventDate.getMinutes();
+                const seconds = eventDate.getSeconds();
+                const milliseconds = eventDate.getMilliseconds();
 
-                // const testDate = event.date;
-                const eventDate = todayDateSliced + startTimeSliced;
-                const eventStartTime = eventDate;
-                const eventEndTime = todayDateSliced + endTimeSliced;
-                // console.log('Recurring event date: ', testDate);
-                console.log('Before: ', eventDate);
-                console.log('After: ', new Date(eventDate).toISOString());
-                // console.log('Event info: ', eventDate, eventStartTime, eventEndTime);
+                const yearToday = today.getFullYear();
+                const monthToday = today.getMonth();
+                const dateToday = today.getDate();
 
-                // if (eventExists) {
-                //     return false;   // console.log("I'm not going to run ceateEvent")
-                // } else {
-                //     const eventToCreate = {
-                //         name: event.name && event.name,
-                //         location: {
-                //             city: event.location.city && event.location.city,
-                //             state: event.location.state && event.location.state,
-                //             country: event.location.country && event.location.country
-                //         },
-                //         hacknight: event.hacknight && event.hacknight,
-                //         eventType: event.eventType && event.eventType,
-                //         description: event.eventDescription && event.eventDescription,
-                //         project: event.project && {                                          
-                //             projectId: event.project.projectId ? event.project.projectId : '12345',
-                //             name: event.project.name && event.project.name,
-                //             videoConferenceLink: event.project.videoConferenceLink && event.project.videoConferenceLink,
-                //             githubIdentifier: event.project.githubIdentifier && event.project.githubIdentifier,
-                //             hflaWebsiteUrl: event.project.hflaWebsiteUrl && event.project.hflaWebsiteUrl,
-                //             githubUrl: event.project.githubUrl && event.project.githubUrl
-                //         },
-                //         date: event.date && eventDate,
-                //         startTime: event.startTime && eventStartTime,
-                //         endTime: event.endTime && eventEndTime,
-                //         hours: event.hours && event.hours
-                //     }
-                //     // console.log(eventToCreate);
-                //     createEvent(eventToCreate);
-                // }
+                const newEventDate = new Date(yearToday, monthToday, dateToday, hours, minutes, seconds, milliseconds);
+                // console.log('Today Date: ', newEventDate, '\n');
+
+                const newEndTime = new Date(yearToday, monthToday, dateToday, hours + event.hours, minutes, seconds, milliseconds)
+
+                if (eventExists) {
+                    return false;   // console.log("I'm not going to run ceateEvent")
+                } else {
+                    const eventToCreate = {
+                        name: event.name && event.name,
+                        location: {
+                            city: event.location.city && event.location.city,
+                            state: event.location.state && event.location.state,
+                            country: event.location.country && event.location.country
+                        },
+                        hacknight: event.hacknight && event.hacknight,
+                        eventType: event.eventType && event.eventType,
+                        description: event.eventDescription && event.eventDescription,
+                        project: event.project && {                                          
+                            projectId: event.project.projectId ? event.project.projectId : '12345',
+                            name: event.project.name && event.project.name,
+                            videoConferenceLink: event.project.videoConferenceLink && event.project.videoConferenceLink,
+                            githubIdentifier: event.project.githubIdentifier && event.project.githubIdentifier,
+                            hflaWebsiteUrl: event.project.hflaWebsiteUrl && event.project.hflaWebsiteUrl,
+                            githubUrl: event.project.githubUrl && event.project.githubUrl
+                        },
+                        date: event.date && newEventDate,
+                        startTime: event.startTime && newEventDate,
+                        endTime: event.endTime && newEndTime,
+                        hours: event.hours && event.hours
+                    }
+                    // console.log(eventToCreate);
+                    createEvent(eventToCreate);
+                }
             });
         };
     };
 
     async function checkIfEventExists(eventName) {
         const events = EVENTS;
+        const today = new Date();
 
         if (events && events.length > 0) {
             const filteredEvents = events.filter(event => {
-                const eventDate = new Date(event.date).toISOString();
-                const eventDateSliced = eventDate.slice(0, 10);
-                // console.log(eventDateSliced);
-                const today = new Date().toISOString();
-                const todayDateSliced = today.slice(0, 10);
-                // console.log(todayDateSliced);
-                // console.log('TRUE OR FALSE', eventDateSliced === todayDateSliced);
-                return (eventDateSliced === todayDateSliced && eventName === event.name);
+                const eventDate = new Date(event.date);
+
+                const year = eventDate.getFullYear();
+                const month = eventDate.getMonth();
+                const date = eventDate.getDate();
+
+                const yearToday = today.getFullYear();
+                const monthToday = today.getMonth();
+                const dateToday = today.getDate();
+
+                return (year === yearToday && month === monthToday && date === dateToday && eventName === event.name);
             });
-            // console.log("Today's events: ", filteredEvents);
+            // console.log("Event's already created: ", filteredEvents);
             return filteredEvents.length > 0 ? true : false;
         };
     };
@@ -132,21 +132,21 @@ module.exports = (cron, fetch) => {
             const jsonEvent = JSON.stringify(event);
             console.log('Running createEvent: ', jsonEvent);
 
-            // try {
-            //     // await fetch(`https://vrms.io/api/events`, {
-            //     await fetch('http://localhost:4000/api/events', {
-            //         method: "POST",
-            //         headers: {
-            //             "Content-Type": "application/json"
-            //         },
-            //         body: jsonEvent
-            //     })
-            //         .catch(err => {
-            //             console.log(err);
-            //         });
-            // } catch (error) {
-            //     console.log(error);
-            // };
+            try {
+                await fetch(`https://vrms.io/api/events`, {
+                // await fetch('http://localhost:4000/api/events', {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: jsonEvent
+                })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            } catch (error) {
+                console.log(error);
+            };
         };
     };
     
@@ -168,9 +168,9 @@ module.exports = (cron, fetch) => {
     //     runTask();
     // }, 5000);
 
-    // const scheduledTask = cron.schedule('*/1 1-16 * * *', () => {
-        // runTask();
-    // });
+    const scheduledTask = cron.schedule('*/30 0-18 * * *', () => {
+        runTask();
+    });
 
-    // return scheduledTask;
+    return scheduledTask;
 };
