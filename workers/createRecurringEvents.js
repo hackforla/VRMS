@@ -10,7 +10,7 @@ module.exports = (cron, fetch) => {
 
     const fetchEvents = async () => {
         try {
-            const res = await fetch("https://vrms.io/api/events");
+            const res = await fetch("https://vrms.io/api/events/");
             // const res = await fetch("http://localhost:4000/api/events");
             EVENTS = await res.json();
 
@@ -22,7 +22,7 @@ module.exports = (cron, fetch) => {
 
     const fetchRecurringEvents = async () => {
         try {
-            const res = await fetch("https://vrms.io/api/recurringevents");
+            const res = await fetch("https://vrms.io/api/recurringevents/");
             // const res = await fetch("http://localhost:4000/api/recurringevents");
             RECURRING_EVENTS = await res.json();
 
@@ -134,7 +134,7 @@ module.exports = (cron, fetch) => {
             console.log('Running createEvent: ', jsonEvent);
 
             try {
-                const response = await fetch("https://vrms.io/api/events", {
+                const response = await fetch("https://vrms.io/api/events/", {
                 // const response = await fetch('http://localhost:4000/api/events', {
                     method: "POST",
                     headers: {
