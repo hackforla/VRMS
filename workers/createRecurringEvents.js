@@ -97,7 +97,8 @@ module.exports = (cron, fetch) => {
                         hours: event.hours && event.hours
                     }
                     // console.log(eventToCreate);
-                    createEvent(eventToCreate);
+                    const created = await createEvent(eventToCreate);
+                    console.log(created);
                 };
             });
         };
@@ -127,19 +128,27 @@ module.exports = (cron, fetch) => {
         };
     };
     
-    async function createEvent(event) {
+    const createEvent = async (event) => {
         if(event) {
             // console.log('Creating event: ', event);
             const jsonEvent = JSON.stringify(event);
+            const options = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: jsonEvent
+            }
             console.log('Running createEvent: ', jsonEvent);
 
-            const response = await fetch("https://vrms.io/api/events/", {
-            // const response = await fetch('http://localhost:4000/api/events', {
-                method: "POST",
-                body: jsonEvent
-            }); 
-            const resJson = await response.json();
-            console.log(resJson);
+            try {
+                const response = await fetch("https://vrms.io/api/events/", options); 
+                const resJson = await response.json();
+                return resJson;
+                // console.log(resJson);
+            } catch (error) {
+                console.log(error);
+            };
         };
     };
     
