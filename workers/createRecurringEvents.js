@@ -97,7 +97,7 @@ module.exports = (cron, fetch) => {
                         hours: event.hours && event.hours
                     }
                     // console.log(eventToCreate);
-                    createEvent(eventToCreate);
+                    await createEvent(eventToCreate);
                 }
             });
         };
@@ -121,7 +121,7 @@ module.exports = (cron, fetch) => {
 
                 return (year === yearToday && month === monthToday && date === dateToday && eventName === event.name);
             });
-            // console.log("Event's already created: ", filteredEvents);
+            console.log("Event's already created: ", filteredEvents);
             return filteredEvents.length > 0 ? true : false;
         };
     };
@@ -134,16 +134,16 @@ module.exports = (cron, fetch) => {
 
             try {
                 await fetch(`https://vrms.io/api/events`, {
-                // await fetch('http://localhost:4000/api/events', {
+                // const response = await fetch('http://localhost:4000/api/events', {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
                     body: jsonEvent
-                })
-                    .catch(err => {
-                        console.log(err);
-                    });
+                }); 
+                // const resJson = await response.json();
+                const resJson = await response.json();
+                console.log(resJson);
             } catch (error) {
                 console.log(error);
             };
