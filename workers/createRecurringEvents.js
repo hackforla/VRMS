@@ -134,7 +134,7 @@ module.exports = (cron, fetch) => {
             console.log('Running createEvent: ', jsonEvent);
 
             try {
-                await fetch(`https://vrms.io/api/events`, {
+                const response = await fetch(`https://vrms.io/api/events`, {
                 // const response = await fetch('http://localhost:4000/api/events', {
                     method: "POST",
                     headers: {
@@ -169,7 +169,7 @@ module.exports = (cron, fetch) => {
     //     runTask();
     // }, 5000);
 
-    const scheduledTask = cron.schedule('*/30 0-18 * * *', () => {
+    const scheduledTask = cron.schedule('*/10 0-18 * * *', () => {
         runTask();
     });
 
