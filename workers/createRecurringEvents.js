@@ -134,7 +134,7 @@ module.exports = (cron, fetch) => {
             console.log('Running createEvent: ', jsonEvent);
 
             try {
-                const response = await fetch(`https://vrms.io/api/events`, {
+                const response = await fetch("https://vrms.io/api/events", {
                 // const response = await fetch('http://localhost:4000/api/events', {
                     method: "POST",
                     headers: {
@@ -144,7 +144,7 @@ module.exports = (cron, fetch) => {
                 }); 
                 // const resJson = await response.json();
                 const resJson = await response.json();
-                console.log(resJson);
+                // console.log(resJson);
             } catch (error) {
                 console.log(error);
             };

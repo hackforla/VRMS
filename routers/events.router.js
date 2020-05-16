@@ -21,8 +21,9 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
+    const newEvent = req.body;
     Event
-        .create(req.body, function(err, event) {
+        .create(newEvent, function(err, event) {
             res.send(event);
         })
         .catch(err => {
