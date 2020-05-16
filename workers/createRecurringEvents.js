@@ -97,8 +97,8 @@ module.exports = (cron, fetch) => {
                         hours: event.hours && event.hours
                     }
                     // console.log(eventToCreate);
-                    await createEvent(eventToCreate);
-                }
+                    createEvent(eventToCreate);
+                };
             });
         };
     };
