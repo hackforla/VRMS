@@ -22,8 +22,7 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
     Event
-        .create(req.body)
-        .then(event => {
+        .create(req.body, function(err, event) {
             res.send(event);
         })
         .catch(err => {
