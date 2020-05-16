@@ -142,7 +142,7 @@ module.exports = (cron, fetch) => {
             console.log('Running createEvent: ', jsonEvent);
 
             try {
-                const response = await fetch("https://vrms.io/api/events/", options); 
+                const response = await fetch("https://www.vrms.io/api/events/", options); 
                 const resJson = await response.json();
                 return resJson;
                 // console.log(resJson);
