@@ -22,20 +22,15 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
     const newEvent = req.body;
-    console.log('New Event: ', newEvent);
 
     Event
         .create(newEvent, function(err, event) {
-            console.log('Inside .create: ', newEvent);
-            console.log(event);
+            if (err) {
+                res.send(err);
+            }
+
             res.send(event);
         })
-        .catch(err => {
-            console.log(err);
-            res.sendStatus(400).json({
-                message: `/POST Internal server error: ${err}`
-            })
-        });
 });
 
 router.get('/:id', (req, res) => {
