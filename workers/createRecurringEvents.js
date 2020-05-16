@@ -142,7 +142,7 @@ module.exports = (cron, fetch) => {
                     },
                     body: jsonEvent
                 }); 
-                // const resJson = await response.json();
+                console.log(response);
                 const resJson = await response.json();
                 // console.log(resJson);
             } catch (error) {
