@@ -27,6 +27,7 @@ router.post('/', (req, res) => {
     Event
         .create(newEvent, function(err, event) {
             console.log('Inside .create: ', newEvent);
+            console.log(event);
             res.send(event);
         })
         .catch(err => {

@@ -133,21 +133,13 @@ module.exports = (cron, fetch) => {
             const jsonEvent = JSON.stringify(event);
             console.log('Running createEvent: ', jsonEvent);
 
-            try {
-                const response = await fetch("https://vrms.io/api/events/", {
-                // const response = await fetch('http://localhost:4000/api/events', {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: jsonEvent
-                }); 
-                console.log(response);
-                const resJson = await response.json();
-                // console.log(resJson);
-            } catch (error) {
-                console.log(error);
-            };
+            const response = await fetch("https://vrms.io/api/events/", {
+            // const response = await fetch('http://localhost:4000/api/events', {
+                method: "POST",
+                body: jsonEvent
+            }); 
+            const resJson = await response.json();
+            console.log(resJson);
         };
     };
     
