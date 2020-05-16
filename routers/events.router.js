@@ -24,7 +24,7 @@ router.post('/', (req, res) => {
     Event
         .create(req.body)
         .then(event => {
-            res.sendStatus(201);
+            res.send(event);
         })
         .catch(err => {
             console.log(err);
