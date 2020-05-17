@@ -51,7 +51,7 @@ module.exports = (cron, fetch) => {
 
             for (let i = 0; i < filteredEvents.length; i++) {
                 const eventExists = await checkIfEventExists(filteredEvents[i]);
-                const eventDate = new Date(event.date);
+                const eventDate = new Date(filteredEvents[i].date);
 
                 const hours = eventDate.getHours();
                 const minutes = eventDate.getMinutes();
