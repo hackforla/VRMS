@@ -7,12 +7,11 @@ module.exports = (cron, fetch) => {
     const TODAY = new Date().getDay();
     let EVENTS;
     let RECURRING_EVENTS;
-    const url = process.env.NODE_ENV === 'prod' ? 'https://www.vrms.io' : 'http://localhost:4000';
+    const URL = process.env.NODE_ENV === 'prod' ? 'https://www.vrms.io' : 'http://localhost:4000';
 
     const fetchEvents = async () => {
         try {
-            const res = await fetch(`${url}/api/events/`);
-            // const res = await fetch("http://localhost:4000/api/events");
+            const res = await fetch(`${URL}/api/events/`);
             EVENTS = await res.json();
 
             // return EVENTS;
@@ -23,8 +22,7 @@ module.exports = (cron, fetch) => {
 
     const fetchRecurringEvents = async () => {
         try {
-            const res = await fetch(`${url}/api/recurringevents/`);
-            // const res = await fetch("http://localhost:4000/api/recurringevents");
+            const res = await fetch(`${URL}/api/recurringevents/`);
             RECURRING_EVENTS = await res.json();
 
             // return resJson;
@@ -44,33 +42,35 @@ module.exports = (cron, fetch) => {
 
                 return (eventDay === todayDay);
             });
-
             // console.log("Today's events: ", filteredEvents);
 
-            // Date to create (Today)
             const today = new Date();
 
+            // For each recurring event, check to see if an event already
+            // exists for it and do something if true/false. Can't use
+            // forEach function with async/await.
             for (let i = 0; i < filteredEvents.length; i++) {
-                const eventExists = await checkIfEventExists(filteredEvents[i]);
+                const eventExists = await checkIfEventExists(filteredEvents[i].name);
                 const eventDate = new Date(filteredEvents[i].date);
-
-                const hours = eventDate.getHours();
-                const minutes = eventDate.getMinutes();
-                const seconds = eventDate.getSeconds();
-                const milliseconds = eventDate.getMilliseconds();
-
-                const yearToday = today.getFullYear();
-                const monthToday = today.getMonth();
-                const dateToday = today.getDate();
-
-                const newEventDate = new Date(yearToday, monthToday, dateToday, hours, minutes, seconds, milliseconds);
-                // console.log('Today Date: ', newEventDate, '\n');
-
-                const newEndTime = new Date(yearToday, monthToday, dateToday, hours + filteredEvents[i].hours, minutes, seconds, milliseconds)
 
                 if (eventExists) {
                     return false;   // console.log("I'm not going to run ceateEvent")
                 } else {
+                    // Create new event
+                    const hours = eventDate.getHours();
+                    const minutes = eventDate.getMinutes();
+                    const seconds = eventDate.getSeconds();
+                    const milliseconds = eventDate.getMilliseconds();
+
+                    const yearToday = today.getFullYear();
+                    const monthToday = today.getMonth();
+                    const dateToday = today.getDate();
+
+                    const newEventDate = new Date(yearToday, monthToday, dateToday, hours, minutes, seconds, milliseconds);
+                    // console.log('Today Date: ', newEventDate, '\n');
+
+                    const newEndTime = new Date(yearToday, monthToday, dateToday, hours + filteredEvents[i].hours, minutes, seconds, milliseconds)
+
                     const eventToCreate = {
                         name: filteredEvents[i].name && filteredEvents[i].name,
                         location: {
@@ -86,7 +86,7 @@ module.exports = (cron, fetch) => {
                             name: filteredEvents[i].project.name && filteredEvents[i].project.name,
                             videoConferenceLink: filteredEvents[i].project.videoConferenceLink && filteredEvents[i].project.videoConferenceLink,
                             githubIdentifier: filteredEvents[i].project.githubIdentifier && filteredEvents[i].project.githubIdentifier,
-                            hflaWebsiteUrl: filteredEvents[i].project.hflaWebsiteUrl && filteredEvents[i].project.hflaWebsiteUrl,
+                            hflaWebsiURL: filteredEvents[i].project.hflaWebsiteUrl && filteredEvents[i].project.hflaWebsiteUrl,
                             githubUrl: filteredEvents[i].project.githubUrl && filteredEvents[i].project.githubUrl
                         },
                         date: filteredEvents[i].date && newEventDate,
@@ -97,60 +97,7 @@ module.exports = (cron, fetch) => {
                     // console.log(eventToCreate);
                     const created = await createEvent(eventToCreate);
                     console.log(created);
-                };  
-
-            // For each recurring event, check to see if an event already exists for it
-            // and do something if true/false 
-            // filteredEvents.forEach(async (event) => {
-            //     // console.log('Check if it exists: ', event);
-            //     const eventExists = await checkIfEventExists(event.name);
-            //     const eventDate = new Date(event.date);
-
-            //     const hours = eventDate.getHours();
-            //     const minutes = eventDate.getMinutes();
-            //     const seconds = eventDate.getSeconds();
-            //     const milliseconds = eventDate.getMilliseconds();
-
-            //     const yearToday = today.getFullYear();
-            //     const monthToday = today.getMonth();
-            //     const dateToday = today.getDate();
-
-            //     const newEventDate = new Date(yearToday, monthToday, dateToday, hours, minutes, seconds, milliseconds);
-            //     // console.log('Today Date: ', newEventDate, '\n');
-
-            //     const newEndTime = new Date(yearToday, monthToday, dateToday, hours + event.hours, minutes, seconds, milliseconds)
-
-            //     if (eventExists) {
-            //         return false;   // console.log("I'm not going to run ceateEvent")
-            //     } else {
-            //         const eventToCreate = {
-            //             name: event.name && event.name,
-            //             location: {
-            //                 city: event.location.city && event.location.city,
-            //                 state: event.location.state && event.location.state,
-            //                 country: event.location.country && event.location.country
-            //             },
-            //             hacknight: event.hacknight && event.hacknight,
-            //             eventType: event.eventType && event.eventType,
-            //             description: event.eventDescription && event.eventDescription,
-            //             project: event.project && {                                          
-            //                 projectId: event.project.projectId ? event.project.projectId : '12345',
-            //                 name: event.project.name && event.project.name,
-            //                 videoConferenceLink: event.project.videoConferenceLink && event.project.videoConferenceLink,
-            //                 githubIdentifier: event.project.githubIdentifier && event.project.githubIdentifier,
-            //                 hflaWebsiteUrl: event.project.hflaWebsiteUrl && event.project.hflaWebsiteUrl,
-            //                 githubUrl: event.project.githubUrl && event.project.githubUrl
-            //             },
-            //             date: event.date && newEventDate,
-            //             startTime: event.startTime && newEventDate,
-            //             endTime: event.endTime && newEndTime,
-            //             hours: event.hours && event.hours
-            //         }
-            //         // console.log(eventToCreate);
-            //         const created = await createEvent(eventToCreate);
-            //         console.log(created);
-            //     };
-            // });
+                };
             };
         };
     };
@@ -193,7 +140,7 @@ module.exports = (cron, fetch) => {
             console.log('Running createEvent: ', jsonEvent);
 
             try {
-                const response = await fetch(`${url}/api/events/`, options); 
+                const response = await fetch(`${URL}/api/events/`, options); 
                 const resJson = await response.json();
                 return resJson;
                 // console.log(resJson);
@@ -221,8 +168,8 @@ module.exports = (cron, fetch) => {
     //     runTask();
     // }, 5000);
 
-    const scheduledTask = cron.schedule('*/1 0-18 * * *', () => {
-        // runTask();
+    const scheduledTask = cron.schedule('*/10 0-18 * * *', () => {
+        runTask();
     });
 
     return scheduledTask;

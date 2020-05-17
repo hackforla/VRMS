@@ -8,7 +8,6 @@ module.exports = (cron, fetch) => {
     async function fetchEvents() {    
         try {
             const res = await fetch(`${url}/api/events`);
-            // const res = await fetch("http://localhost:4000/api/events");
             const resJson = await res.json();
 
             return resJson;
@@ -36,7 +35,6 @@ module.exports = (cron, fetch) => {
                 // console.log('Opening event: ', event);
 
                 fetch(`${url}/api/events/${event._id}`, {
-                // fetch(`http://localhost:4000/api/events/${event._id}`, {
                     method: "PATCH",
                     headers: {
                       "Content-Type": "application/json"
