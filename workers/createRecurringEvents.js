@@ -65,7 +65,7 @@ module.exports = (cron, fetch) => {
                 const newEventDate = new Date(yearToday, monthToday, dateToday, hours, minutes, seconds, milliseconds);
                 // console.log('Today Date: ', newEventDate, '\n');
 
-                const newEndTime = new Date(yearToday, monthToday, dateToday, hours + event.hours, minutes, seconds, milliseconds)
+                const newEndTime = new Date(yearToday, monthToday, dateToday, hours + filteredEvents[i].hours, minutes, seconds, milliseconds)
 
                 if (eventExists) {
                     return false;   // console.log("I'm not going to run ceateEvent")
