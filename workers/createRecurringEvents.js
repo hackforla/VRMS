@@ -7,11 +7,11 @@ module.exports = (cron, fetch) => {
     const TODAY = new Date().getDay();
     let EVENTS;
     let RECURRING_EVENTS;
+    const URL = process.env.NODE_ENV === 'prod' ? 'https://www.vrms.io' : 'http://localhost:4000';
 
     const fetchEvents = async () => {
         try {
-            const res = await fetch("https://vrms.io/api/events");
-            // const res = await fetch("http://localhost:4000/api/events");
+            const res = await fetch(`${URL}/api/events/`);
             EVENTS = await res.json();
 
             // return EVENTS;
@@ -22,8 +22,7 @@ module.exports = (cron, fetch) => {
 
     const fetchRecurringEvents = async () => {
         try {
-            const res = await fetch("https://vrms.io/api/recurringevents");
-            // const res = await fetch("http://localhost:4000/api/recurringevents");
+            const res = await fetch(`${URL}/api/recurringevents/`);
             RECURRING_EVENTS = await res.json();
 
             // return resJson;
@@ -43,63 +42,64 @@ module.exports = (cron, fetch) => {
 
                 return (eventDay === todayDay);
             });
+            console.log("Today's events: ", filteredEvents);
 
-            // console.log("Today's events: ", filteredEvents);
-
-            // Date to create (Today)
             const today = new Date();
 
-            // For each recurring event, check to see if an event already exists for it
-            // and do something if true/false 
-            filteredEvents.forEach(async (event) => {
-                // console.log('Check if it exists: ', event);
-                const eventExists = await checkIfEventExists(event.name);
-                const eventDate = new Date(event.date);
-
-                const hours = eventDate.getHours();
-                const minutes = eventDate.getMinutes();
-                const seconds = eventDate.getSeconds();
-                const milliseconds = eventDate.getMilliseconds();
-
-                const yearToday = today.getFullYear();
-                const monthToday = today.getMonth();
-                const dateToday = today.getDate();
-
-                const newEventDate = new Date(yearToday, monthToday, dateToday, hours, minutes, seconds, milliseconds);
-                // console.log('Today Date: ', newEventDate, '\n');
-
-                const newEndTime = new Date(yearToday, monthToday, dateToday, hours + event.hours, minutes, seconds, milliseconds)
+            // For each recurring event, check to see if an event already
+            // exists for it and do something if true/false. Can't use
+            // forEach function with async/await.
+            for (let i = 0; i < filteredEvents.length; i++) {
+                const eventExists = await checkIfEventExists(filteredEvents[i].name);
+                console.log('Event exists? ', eventExists);
+                const eventDate = new Date(filteredEvents[i].date);
 
                 if (eventExists) {
-                    return false;   // console.log("I'm not going to run ceateEvent")
+                    console.log("I'm not going to run ceateEvent");
                 } else {
+                    // Create new event
+                    const hours = eventDate.getHours();
+                    const minutes = eventDate.getMinutes();
+                    const seconds = eventDate.getSeconds();
+                    const milliseconds = eventDate.getMilliseconds();
+
+                    const yearToday = today.getFullYear();
+                    const monthToday = today.getMonth();
+                    const dateToday = today.getDate();
+
+                    const newEventDate = new Date(yearToday, monthToday, dateToday, hours, minutes, seconds, milliseconds);
+                    // console.log('Today Date: ', newEventDate, '\n');
+
+                    const newEndTime = new Date(yearToday, monthToday, dateToday, hours + filteredEvents[i].hours, minutes, seconds, milliseconds)
+
                     const eventToCreate = {
-                        name: event.name && event.name,
+                        name: filteredEvents[i].name && filteredEvents[i].name,
                         location: {
-                            city: event.location.city && event.location.city,
-                            state: event.location.state && event.location.state,
-                            country: event.location.country && event.location.country
+                            city: filteredEvents[i].location.city && filteredEvents[i].location.city,
+                            state: filteredEvents[i].location.state && filteredEvents[i].location.state,
+                            country: filteredEvents[i].location.country && filteredEvents[i].location.country
                         },
-                        hacknight: event.hacknight && event.hacknight,
-                        eventType: event.eventType && event.eventType,
-                        description: event.eventDescription && event.eventDescription,
-                        project: event.project && {                                          
-                            projectId: event.project.projectId ? event.project.projectId : '12345',
-                            name: event.project.name && event.project.name,
-                            videoConferenceLink: event.project.videoConferenceLink && event.project.videoConferenceLink,
-                            githubIdentifier: event.project.githubIdentifier && event.project.githubIdentifier,
-                            hflaWebsiteUrl: event.project.hflaWebsiteUrl && event.project.hflaWebsiteUrl,
-                            githubUrl: event.project.githubUrl && event.project.githubUrl
+                        hacknight: filteredEvents[i].hacknight && filteredEvents[i].hacknight,
+                        eventType: filteredEvents[i].eventType && filteredEvents[i].eventType,
+                        description: filteredEvents[i].eventDescription && filteredEvents[i].eventDescription,
+                        project: filteredEvents[i].project && {                                          
+                            projectId: filteredEvents[i].project.projectId ? filteredEvents[i].project.projectId : '12345',
+                            name: filteredEvents[i].project.name && filteredEvents[i].project.name,
+                            videoConferenceLink: filteredEvents[i].project.videoConferenceLink && filteredEvents[i].project.videoConferenceLink,
+                            githubIdentifier: filteredEvents[i].project.githubIdentifier && filteredEvents[i].project.githubIdentifier,
+                            hflaWebsiURL: filteredEvents[i].project.hflaWebsiteUrl && filteredEvents[i].project.hflaWebsiteUrl,
+                            githubUrl: filteredEvents[i].project.githubUrl && filteredEvents[i].project.githubUrl
                         },
-                        date: event.date && newEventDate,
-                        startTime: event.startTime && newEventDate,
-                        endTime: event.endTime && newEndTime,
-                        hours: event.hours && event.hours
+                        date: filteredEvents[i].date && newEventDate,
+                        startTime: filteredEvents[i].startTime && newEventDate,
+                        endTime: filteredEvents[i].endTime && newEndTime,
+                        hours: filteredEvents[i].hours && filteredEvents[i].hours
                     }
                     // console.log(eventToCreate);
-                    await createEvent(eventToCreate);
-                }
-            });
+                    const created = await createEvent(eventToCreate);
+                    console.log(created);
+                };
+            };
         };
     };
 
@@ -122,29 +122,29 @@ module.exports = (cron, fetch) => {
                 // console.log((year === yearToday && month === monthToday && date === dateToday && eventName === event.name));
                 return (year === yearToday && month === monthToday && date === dateToday && eventName === event.name);
             });
-            console.log("Event's already created: ", filteredEvents);
+            console.log("Events already created: ", filteredEvents);
             return filteredEvents.length > 0 ? true : false;
         };
     };
     
-    async function createEvent(event) {
+    const createEvent = async (event) => {
         if(event) {
             // console.log('Creating event: ', event);
             const jsonEvent = JSON.stringify(event);
+            const options = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: jsonEvent
+            }
             console.log('Running createEvent: ', jsonEvent);
 
             try {
-                await fetch(`https://vrms.io/api/events`, {
-                // const response = await fetch('http://localhost:4000/api/events', {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: jsonEvent
-                }); 
-                // const resJson = await response.json();
+                const response = await fetch(`${URL}/api/events/`, options); 
                 const resJson = await response.json();
-                console.log(resJson);
+                return resJson;
+                // console.log(resJson);
             } catch (error) {
                 console.log(error);
             };
@@ -169,7 +169,7 @@ module.exports = (cron, fetch) => {
     //     runTask();
     // }, 5000);
 
-    const scheduledTask = cron.schedule('*/30 0-18 * * *', () => {
+    const scheduledTask = cron.schedule('*/10 0-18 * * *', () => {
         runTask();
     });
 
