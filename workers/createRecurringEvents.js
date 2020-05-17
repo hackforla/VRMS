@@ -7,10 +7,11 @@ module.exports = (cron, fetch) => {
     const TODAY = new Date().getDay();
     let EVENTS;
     let RECURRING_EVENTS;
+    const url = process.env.NODE_ENV === 'prod' ? 'https://www.vrms.io' : 'http://localhost:4000';
 
     const fetchEvents = async () => {
         try {
-            const res = await fetch("https://vrms.io/api/events/");
+            const res = await fetch(`${url}/api/events/`);
             // const res = await fetch("http://localhost:4000/api/events");
             EVENTS = await res.json();
 
@@ -22,7 +23,7 @@ module.exports = (cron, fetch) => {
 
     const fetchRecurringEvents = async () => {
         try {
-            const res = await fetch("https://vrms.io/api/recurringevents/");
+            const res = await fetch(`${url}/api/recurringevents/`);
             // const res = await fetch("http://localhost:4000/api/recurringevents");
             RECURRING_EVENTS = await res.json();
 
@@ -192,7 +193,7 @@ module.exports = (cron, fetch) => {
             console.log('Running createEvent: ', jsonEvent);
 
             try {
-                const response = await fetch("https://www.vrms.io/api/events/", options); 
+                const response = await fetch(`${url}/api/events/`, options); 
                 const resJson = await response.json();
                 return resJson;
                 // console.log(resJson);
