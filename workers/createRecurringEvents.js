@@ -42,7 +42,7 @@ module.exports = (cron, fetch) => {
 
                 return (eventDay === todayDay);
             });
-            // console.log("Today's events: ", filteredEvents);
+            console.log("Today's events: ", filteredEvents);
 
             const today = new Date();
 
@@ -51,10 +51,11 @@ module.exports = (cron, fetch) => {
             // forEach function with async/await.
             for (let i = 0; i < filteredEvents.length; i++) {
                 const eventExists = await checkIfEventExists(filteredEvents[i].name);
+                console.log('Event exists? ', eventExists);
                 const eventDate = new Date(filteredEvents[i].date);
 
                 if (eventExists) {
-                    return false;   // console.log("I'm not going to run ceateEvent")
+                    console.log("I'm not going to run ceateEvent");
                 } else {
                     // Create new event
                     const hours = eventDate.getHours();
@@ -121,7 +122,7 @@ module.exports = (cron, fetch) => {
                 // console.log((year === yearToday && month === monthToday && date === dateToday && eventName === event.name));
                 return (year === yearToday && month === monthToday && date === dateToday && eventName === event.name);
             });
-            // console.log("Event's already created: ", filteredEvents);
+            console.log("Events already created: ", filteredEvents);
             return filteredEvents.length > 0 ? true : false;
         };
     };
@@ -168,7 +169,7 @@ module.exports = (cron, fetch) => {
     //     runTask();
     // }, 5000);
 
-    const scheduledTask = cron.schedule('*/10 0-18 * * *', () => {
+    const scheduledTask = cron.schedule('*/1 0-18 * * *', () => {
         runTask();
     });
 
