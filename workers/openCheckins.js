@@ -2,10 +2,12 @@ module.exports = (cron, fetch) => {
 
     // Check to see if any events are about to start, 
     // and if so, open their respective check-ins
+
+    const url = process.env.NODE_ENV === 'prod' ? 'https://www.vrms.io' : 'http://localhost:4000';
     
     async function fetchEvents() {    
         try {
-            const res = await fetch("https://vrms.io/api/events");
+            const res = await fetch(`${url}/api/events`);
             // const res = await fetch("http://localhost:4000/api/events");
             const resJson = await res.json();
 
@@ -33,7 +35,7 @@ module.exports = (cron, fetch) => {
             events.forEach(event => {
                 // console.log('Opening event: ', event);
 
-                fetch(`https://vrms.io/api/events/${event._id}`, {
+                fetch(`${url}/api/events/${event._id}`, {
                 // fetch(`http://localhost:4000/api/events/${event._id}`, {
                     method: "PATCH",
                     headers: {
