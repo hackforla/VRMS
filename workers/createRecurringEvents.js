@@ -71,27 +71,27 @@ module.exports = (cron, fetch) => {
                     return false;   // console.log("I'm not going to run ceateEvent")
                 } else {
                     const eventToCreate = {
-                        name: event.name && event.name,
+                        name: filteredEvents[i].name && filteredEvents[i].name,
                         location: {
-                            city: event.location.city && event.location.city,
-                            state: event.location.state && event.location.state,
-                            country: event.location.country && event.location.country
+                            city: filteredEvents[i].location.city && filteredEvents[i].location.city,
+                            state: filteredEvents[i].location.state && filteredEvents[i].location.state,
+                            country: filteredEvents[i].location.country && filteredEvents[i].location.country
                         },
-                        hacknight: event.hacknight && event.hacknight,
-                        eventType: event.eventType && event.eventType,
-                        description: event.eventDescription && event.eventDescription,
-                        project: event.project && {                                          
-                            projectId: event.project.projectId ? event.project.projectId : '12345',
-                            name: event.project.name && event.project.name,
-                            videoConferenceLink: event.project.videoConferenceLink && event.project.videoConferenceLink,
-                            githubIdentifier: event.project.githubIdentifier && event.project.githubIdentifier,
-                            hflaWebsiteUrl: event.project.hflaWebsiteUrl && event.project.hflaWebsiteUrl,
-                            githubUrl: event.project.githubUrl && event.project.githubUrl
+                        hacknight: filteredEvents[i].hacknight && filteredEvents[i].hacknight,
+                        eventType: filteredEvents[i].eventType && filteredEvents[i].eventType,
+                        description: filteredEvents[i].eventDescription && filteredEvents[i].eventDescription,
+                        project: filteredEvents[i].project && {                                          
+                            projectId: filteredEvents[i].project.projectId ? filteredEvents[i].project.projectId : '12345',
+                            name: filteredEvents[i].project.name && filteredEvents[i].project.name,
+                            videoConferenceLink: filteredEvents[i].project.videoConferenceLink && filteredEvents[i].project.videoConferenceLink,
+                            githubIdentifier: filteredEvents[i].project.githubIdentifier && filteredEvents[i].project.githubIdentifier,
+                            hflaWebsiteUrl: filteredEvents[i].project.hflaWebsiteUrl && filteredEvents[i].project.hflaWebsiteUrl,
+                            githubUrl: filteredEvents[i].project.githubUrl && filteredEvents[i].project.githubUrl
                         },
-                        date: event.date && newEventDate,
-                        startTime: event.startTime && newEventDate,
-                        endTime: event.endTime && newEndTime,
-                        hours: event.hours && event.hours
+                        date: filteredEvents[i].date && newEventDate,
+                        startTime: filteredEvents[i].startTime && newEventDate,
+                        endTime: filteredEvents[i].endTime && newEndTime,
+                        hours: filteredEvents[i].hours && filteredEvents[i].hours
                     }
                     // console.log(eventToCreate);
                     const created = await createEvent(eventToCreate);
