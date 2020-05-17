@@ -96,7 +96,7 @@ module.exports = (cron, fetch) => {
                     // console.log(eventToCreate);
                     const created = await createEvent(eventToCreate);
                     console.log(created);
-            };
+                };  
 
             // For each recurring event, check to see if an event already exists for it
             // and do something if true/false 
@@ -150,6 +150,7 @@ module.exports = (cron, fetch) => {
             //         console.log(created);
             //     };
             // });
+            };
         };
     };
 
