@@ -49,11 +49,8 @@ module.exports = (cron, fetch) => {
             // Date to create (Today)
             const today = new Date();
 
-            // For each recurring event, check to see if an event already exists for it
-            // and do something if true/false 
-            filteredEvents.forEach(async (event) => {
-                // console.log('Check if it exists: ', event);
-                const eventExists = await checkIfEventExists(event.name);
+            for (let i = 0; i < filteredEvents.length; i++) {
+                const eventExists = await checkIfEventExists(filteredEvents[i]);
                 const eventDate = new Date(event.date);
 
                 const hours = eventDate.getHours();
@@ -99,8 +96,60 @@ module.exports = (cron, fetch) => {
                     // console.log(eventToCreate);
                     const created = await createEvent(eventToCreate);
                     console.log(created);
-                };
-            });
+            };
+
+            // For each recurring event, check to see if an event already exists for it
+            // and do something if true/false 
+            // filteredEvents.forEach(async (event) => {
+            //     // console.log('Check if it exists: ', event);
+            //     const eventExists = await checkIfEventExists(event.name);
+            //     const eventDate = new Date(event.date);
+
+            //     const hours = eventDate.getHours();
+            //     const minutes = eventDate.getMinutes();
+            //     const seconds = eventDate.getSeconds();
+            //     const milliseconds = eventDate.getMilliseconds();
+
+            //     const yearToday = today.getFullYear();
+            //     const monthToday = today.getMonth();
+            //     const dateToday = today.getDate();
+
+            //     const newEventDate = new Date(yearToday, monthToday, dateToday, hours, minutes, seconds, milliseconds);
+            //     // console.log('Today Date: ', newEventDate, '\n');
+
+            //     const newEndTime = new Date(yearToday, monthToday, dateToday, hours + event.hours, minutes, seconds, milliseconds)
+
+            //     if (eventExists) {
+            //         return false;   // console.log("I'm not going to run ceateEvent")
+            //     } else {
+            //         const eventToCreate = {
+            //             name: event.name && event.name,
+            //             location: {
+            //                 city: event.location.city && event.location.city,
+            //                 state: event.location.state && event.location.state,
+            //                 country: event.location.country && event.location.country
+            //             },
+            //             hacknight: event.hacknight && event.hacknight,
+            //             eventType: event.eventType && event.eventType,
+            //             description: event.eventDescription && event.eventDescription,
+            //             project: event.project && {                                          
+            //                 projectId: event.project.projectId ? event.project.projectId : '12345',
+            //                 name: event.project.name && event.project.name,
+            //                 videoConferenceLink: event.project.videoConferenceLink && event.project.videoConferenceLink,
+            //                 githubIdentifier: event.project.githubIdentifier && event.project.githubIdentifier,
+            //                 hflaWebsiteUrl: event.project.hflaWebsiteUrl && event.project.hflaWebsiteUrl,
+            //                 githubUrl: event.project.githubUrl && event.project.githubUrl
+            //             },
+            //             date: event.date && newEventDate,
+            //             startTime: event.startTime && newEventDate,
+            //             endTime: event.endTime && newEndTime,
+            //             hours: event.hours && event.hours
+            //         }
+            //         // console.log(eventToCreate);
+            //         const created = await createEvent(eventToCreate);
+            //         console.log(created);
+            //     };
+            // });
         };
     };
 
@@ -170,7 +219,7 @@ module.exports = (cron, fetch) => {
     //     runTask();
     // }, 5000);
 
-    const scheduledTask = cron.schedule('*/10 0-18 * * *', () => {
+    const scheduledTask = cron.schedule('*/1 0-18 * * *', () => {
         runTask();
     });
 
