@@ -35,27 +35,28 @@ module.exports = (cron, fetch) => {
 
     async function filterAndCreateEvents() {
         const recurringEvents = RECURRING_EVENTS;
-        console.log("Today Day: ", TODAY);
+        // console.log("Today Day: ", TODAY);
         // Filter recurring events where the event date is today
         if (recurringEvents && recurringEvents.length > 0) {
             const filteredEvents = recurringEvents.filter(event => {
                 const eventDay = new Date(event.date).getDay();
-                console.log("Event Day: ", eventDay);
+                // console.log("Event Day: ", eventDay);
                 return (eventDay === TODAY);
             });
-            console.log("Today's events: ", filteredEvents);
+            // console.log("Today's events: ", filteredEvents);
 
-            console.log('TODAY_DATE for filter: ', TODAY_DATE)
+            // console.log('TODAY_DATE for filter: ', TODAY_DATE)
+
             // For each recurring event, check to see if an event already
             // exists for it and do something if true/false. Can't use
             // forEach function with async/await.
             for (let i = 0; i < filteredEvents.length; i++) {
                 const eventExists = await checkIfEventExists(filteredEvents[i].name);
-                console.log('Event exists? ', eventExists);
+                // console.log('Event exists? ', eventExists);
                 const eventDate = new Date(filteredEvents[i].date);
 
                 if (eventExists) {
-                    console.log("I'm not going to run ceateEvent");
+                    console.log("Not going to run ceateEvent");
                 } else {
                     // Create new event
                     const hours = eventDate.getHours();
@@ -110,7 +111,7 @@ module.exports = (cron, fetch) => {
         if (events && events.length > 0) {
             const filteredEvents = events.filter(event => {
                 const eventDate = new Date(event.date);
-                console.log("Event Date: ", eventDate);
+                // console.log("Event Date: ", eventDate);
                 const year = eventDate.getFullYear();
                 const month = eventDate.getMonth();
                 const date = eventDate.getDate();
@@ -118,8 +119,8 @@ module.exports = (cron, fetch) => {
                 const yearToday = TODAY_DATE.getFullYear();
                 const monthToday = TODAY_DATE.getMonth();
                 const dateToday = TODAY_DATE.getDate();
-                console.log("Event: ", year, month, date);
-                console.log("Today: ", yearToday, monthToday, dateToday);
+                // console.log("Event: ", year, month, date);
+                // console.log("Today: ", yearToday, monthToday, dateToday);
                 // console.log((year === yearToday && month === monthToday && date === dateToday && eventName === event.name));
                 return (year === yearToday && month === monthToday && date === dateToday && eventName === event.name);
             });
@@ -166,13 +167,13 @@ module.exports = (cron, fetch) => {
     
     };
 
-    setTimeout(() => {
-        runTask();
-    }, 5000);
-
-    // const scheduledTask = cron.schedule('*/10 1-18 * * *', () => {
+    // setTimeout(() => {
     //     runTask();
-    // });
+    // }, 5000);
 
-    // return scheduledTask;
+    const scheduledTask = cron.schedule('*/10 7-18 * * *', () => {
+        runTask();
+    });
+
+    return scheduledTask;
 };
