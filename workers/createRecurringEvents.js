@@ -4,11 +4,10 @@ module.exports = (cron, fetch) => {
     // and if so, check to see if an event has already been created
     // for it. If not, create one.
 
-    const TODAY_DATE = new Date();
-    const TODAY = TODAY_DATE.getDay();
-    console.log("Date: ", TODAY_DATE, "Day: ", TODAY);
     let EVENTS;
     let RECURRING_EVENTS;
+    let TODAY_DATE;
+    let TODAY;
     const URL = process.env.NODE_ENV === 'prod' ? 'https://www.vrms.io' : 'http://localhost:4000';
 
     const fetchEvents = async () => {
@@ -34,6 +33,9 @@ module.exports = (cron, fetch) => {
     };
 
     async function filterAndCreateEvents() {
+        TODAY_DATE = new Date();
+        TODAY = TODAY_DATE.getDay();
+        console.log("Date: ", TODAY_DATE, "Day: ", TODAY);
         const recurringEvents = RECURRING_EVENTS;
         // console.log("Today Day: ", TODAY);
         // Filter recurring events where the event date is today
