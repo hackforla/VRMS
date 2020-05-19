@@ -142,8 +142,6 @@ const AddEvent = (props) => {
 		}
 	};
 
-	const handleVcLinkChange = e => setVideoConferenceLink(e.currentTarget.value);
-
 	const postSingleEvent = (eventObj) => {
 		fetch('/api/events', {
 			method: 'POST',
@@ -564,7 +562,7 @@ const AddEvent = (props) => {
 						<Label>Video Conference Link</Label>
 						<Input
 							value={videoConferenceLink}
-							onChange={e => handleVcLinkChange(e)}
+							onChange={e => setVideoConferenceLink(e.target.value)}
 							size='large'
 							placeholder='https://us02.web.zoom.us/j/123456789'
 						/>
