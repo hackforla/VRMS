@@ -16,7 +16,13 @@ const userSchema = mongoose.Schema({
     newMember: { type: Boolean },
     firstAttended: { type: String },
     attendanceReason: { type: String },
-    githubHandle: { type: String}
+    githubHandle: { type: String},
+    projects: [
+        { 
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Project'
+        }
+    ]
     //currentProject: { type: String }              // no longer need this as we can get it from Project Team Member table
     // password: { type: String, required: true }
 });
@@ -36,7 +42,8 @@ userSchema.methods.serialize = function() {
         newMember: this.newMember,
         firstAttended: this.firstAttended,
         attendanceReason: this.attendanceReason,
-        githubHandle: this.githubHandle
+        githubHandle: this.githubHandle,
+        projects: this.projects
         //currentProject: this.currentProject
     };
 };

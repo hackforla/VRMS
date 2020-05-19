@@ -13,12 +13,8 @@ const eventSchema = mongoose.Schema({
     eventType: { type: String },                        // Project Meeting, Orientation, Workshop
     description: { type: String },
     project: {                                          // only needed if it's type = Project Meeting
-        projectId: { type: String },
-        name: { type: String },
-        videoConferenceLink: { type: String },
-        githubIdentifier: { type: String },
-        hflaWebsiteUrl: { type: String },
-        githubUrl: { type: String }
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Project'
     },
     date: { type: Date },   
     startTime: { type: Date },                          // start date and time of the event

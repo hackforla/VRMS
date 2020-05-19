@@ -9,6 +9,7 @@ router.get('/', (req, res) => {
         
     Event
         .find(query.checkInReady === 'true' ? query : undefined)
+        .populate('project')
         .then(events => {
             res.json(events);
         })
