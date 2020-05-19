@@ -233,7 +233,17 @@ const AddEvent = (props) => {
 			hacknight: hacknightLocation,
 			eventType: eventType,
 			description: eventDescription,
-			project: { id: projects ? projects[projectIndex]._id : '123456'},
+			project: projects ? ({
+				projectId: projects[projectIndex]._id, 
+				name: projects[projectIndex].name,
+				videoConferenceLink,
+				githubIdentifier: projects[projectIndex].githubIdentifier,
+				hflaWebsiteUrl: projects[projectIndex].hflaWebsiteUrl, 
+				githubUrl: projects[projectIndex].githubUrl
+			}) : ({
+				projectId: '123456', 
+				videoConferenceLink
+			}),
 			date: ISODate,
 			startTime: ISOStartDate,
 			endTime: ISOEndDate,
@@ -241,8 +251,6 @@ const AddEvent = (props) => {
 			// owner: {
 			// 	ownerId,
 			// },
-			videoConferenceLink: videoConferenceLink,
-			githubIdentifier: projects ? projects[projectIndex].githubIdentifier : "",
 		};
 		
 		console.log('created event object: ', createdEventObj);
