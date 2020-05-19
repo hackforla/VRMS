@@ -273,7 +273,13 @@ const AddEvent = (props) => {
 			setErrorStatus({ message: "Please don't leave any fields blank" });
 			setIsSubmitting(false);
 			return;
-		}
+		};
+
+		if (eventType === 'Hacknight' && (projects && projectIndex === null)) {
+			setErrorStatus({ message: "Please select a project"});
+			setIsSubmitting(false);
+			return;
+		};
 
 		try {
 			// const ownerId = await getUserId(user.email);
