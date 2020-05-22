@@ -46,7 +46,7 @@ module.exports = (cron, fetch) => {
     };
     
     async function runTask() {
-        console.log("I'm going to open check-ins");
+        console.log("Opening check-ins");
 
         // Get current time and set to date variable
         const currentTimeISO = new Date().toISOString();
@@ -58,7 +58,7 @@ module.exports = (cron, fetch) => {
         const eventsToOpen = await sortAndFilterEvents(currentTimeISO, thirtyMinutesISO);
         await openCheckins(eventsToOpen);
 
-        console.log("I finished opening check-ins");
+        console.log("Check-ins opened");
     };
 
     const scheduledTask = cron.schedule('*/10 7-21 * * *', () => {

@@ -154,45 +154,34 @@ function grantPermission(auth, email, fileId) {
     {
       type: "user",
       role: "writer",
-      emailAddress: email,
+      emailAddress: "jonathan.kou523@gmail.com",
     },
   ];
-  async.eachSeries(
-    permissions,
-    function (permission, permissionCallback) {
-      const drive = google.drive({ version: "v3", auth });
-      return new Promise(function (resolve, reject) {
-        drive.permissions.create(
-          {
-            resource: permission,
-            fileId: fileId,
-            fields: "id",
-          },
-          (err, res) => {
-            if (err) {
-              console.log("PROMISE ERROR", err);
-              reject({
-                success: false,
-                message: "The API returned an error: " + err.message,
-              });
-            } else {
-              console.log("RES", res);
-              permissionCallback();
-              resolve({ success: true });
-            }
-          }
-        );
-      });
-    },
-    function (err) {
-      if (err) {
-        // Handle error
-        console.error(err);
-      } else {
-        // All permissions inserted
-      }
-    }
-  );
-}
 
+  return new Promise(function (resolve, reject) {
+    async.eachSeries(permissions, function (permission, permissionCallback) {
+      const drive = google.drive({ version: "v3", auth });
+      drive.permissions.create(
+        {
+          resource: permission,
+          fileId: fileId,
+          fields: "id",
+        },
+        (err, res) => {
+          if (err) {
+            console.log("PROMISE ERROR", err);
+            reject({
+              success: false,
+              message: "The API returned an error: " + err.message,
+            });
+          } else {
+            console.log("RES", res);
+            permissionCallback();
+            resolve({ success: true });
+          }
+        }
+      );
+    });
+  });
+}
 module.exports = router;
