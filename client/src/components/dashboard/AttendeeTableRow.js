@@ -7,30 +7,14 @@ const AttendeeTableRow = ({ name, role, isNewMember, present, clicked }) => {
     let here = null;
 
     if (isNewMember) {
-        here = (
-            <DashboardButton clicked={clicked}>Start Onboard</DashboardButton>
-        );
+        here = <DashboardButton clicked={clicked}>Start Onboard</DashboardButton>;
     } else {
         if (present) {
             here = (
-                <span
-                    className={[styles.attendeeTableText, styles.yesColor].join(
-                        " "
-                    )}
-                >
-                    Yes
-                </span>
+                <span className={[styles.attendeeTableText, styles.yesColor].join(" ")}>Yes</span>
             );
         } else {
-            here = (
-                <span
-                    className={[styles.attendeeTableText, styles.noColor].join(
-                        " "
-                    )}
-                >
-                    No
-                </span>
-            );
+            here = <span className={[styles.attendeeTableText, styles.noColor].join(" ")}>No</span>;
         }
     }
 
