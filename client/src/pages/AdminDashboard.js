@@ -7,6 +7,7 @@ import "../sass/Dashboard.scss";
 import UpcomingEvent from "../components/presentational/upcomingEvent";
 import EventOverview from "../components/presentational/eventOverview";
 import DonutChartContainer from "../components/presentational/donutChartContainer";
+import DashboardReport from "../components/presentational/DashboardReport";
 import Loading from "../components/presentational/donutChartLoading";
 
 const AdminDashboard = (props) => {
@@ -43,10 +44,10 @@ const AdminDashboard = (props) => {
         uniqueLocations,
         checkInsJson
       );
-
       setUniqueLocations(uniqueUsers);
       setLocationsTotal(totalUsers);
       setDonutCharts("All", uniqueUsers, totalUsers);
+      setDoc("All", uniqueUsers, totalUsers);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -84,6 +85,7 @@ const AdminDashboard = (props) => {
         returnObj[userLocation].push(userId);
       }
     });
+
     return returnObj;
   }
   function findTotalUsers(locationKeys, uniqueLocations, checkInsJson) {
@@ -109,7 +111,7 @@ const AdminDashboard = (props) => {
       for (let keys in immediateUniqueLocations) {
         returnObj[keys] = immediateUniqueLocations[keys].length;
       }
-      delete returnObj.All;
+      delete returnObj.Axll;
     }
     setVolunteersSignedIn(returnObj);
   }
@@ -179,6 +181,13 @@ const AdminDashboard = (props) => {
       immediateLocationsTotal
     );
   }
+
+  function setDoc(
+    targetBrigade,
+    immediateUniqueLocations = uniqueLocations,
+    immediateLocationsTotal = locationsTotal
+  ) {}
+
   async function getUsers() {
     const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
@@ -284,63 +293,71 @@ const AdminDashboard = (props) => {
   }, []);
 
   return (
-    auth && auth.user ? (
-      <div className="flex-container">
-        <div className="dashboard">
-          <div className="dashboard-header">
-            <p className="dashboard-header-text-small">
-              You have an event coming up:
-            </p>
-          </div>
-
-          {isLoading ? <img src={Loading} alt="Logo" /> : (
-            <UpcomingEvent
-              isCheckInReady={isCheckInReady}
-              nextEvent={nextEvent}
-              setCheckInReady={setCheckInReady}
-            />
-          )}
-
-          {isLoading ? (
-            <img src={Loading} alt="Logo" />
-          ) : (
-            <EventOverview
-              handleBrigadeChange={handleBrigadeChange}
-              uniqueLocations={uniqueLocations}
-            />
-          )}
-
-          {isLoading ? (
-            <Loading />
-          ) : (
-            <DonutChartContainer
-              chartName={"Total Volunteers"}
-              data={volunteersSignedIn}
-            />
-          )}
-
-          {isLoading ? (
-            <Loading />
-          ) : (
-            <DonutChartContainer
-              chartName={"Total Volunteer Hours"}
-              data={volunteeredHours}
-            />
-          )}
-          
-          {isLoading ? (
-            <Loading />
-          ) : (
-            <DonutChartContainer
-              chartName={"Avg. Hours Per Volunteer"}
-              data={averagedHours}
-            />
-          )}
+    // auth && auth.user ? (
+    <div className="flex-container">
+      <div className="dashboard">
+        <div className="dashboard-header">
+          <p className="dashboard-header-text-small">
+            You have an event coming up:
+          </p>
         </div>
+
+        {isLoading ? (
+          <img src={Loading} alt="Logo" />
+        ) : (
+          <UpcomingEvent
+            isCheckInReady={isCheckInReady}
+            nextEvent={nextEvent}
+            setCheckInReady={setCheckInReady}
+          />
+        )}
+
+        {isLoading ? (
+          <img src={Loading} alt="Logo" />
+        ) : (
+          <EventOverview
+            handleBrigadeChange={handleBrigadeChange}
+            uniqueLocations={uniqueLocations}
+          />
+        )}
+
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <DonutChartContainer
+            chartName={"Total Volunteers"}
+            data={volunteersSignedIn}
+          />
+        )}
+
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <DonutChartContainer
+            chartName={"Total Volunteer Hours"}
+            data={volunteeredHours}
+          />
+        )}
+
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <DonutChartContainer
+            chartName={"Avg. Hours Per Volunteer"}
+            data={averagedHours}
+          />
+        )}
+
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <DashboardReport total={volunteersSignedIn} />
+        )}
       </div>
-    ) : (
-      <Redirect to="/login" />
-    )
+    </div>
+    // ) : (
+    //   <Redirect to="/login" />
+    // )
   );
 };
 
