@@ -25,7 +25,7 @@ questionSchema.methods.serialize = function() {
             userId: this.user.userId
         },
         selectedAnswer: this.selectedAnswer,
-        createdDate = this.createdDate
+        createdDate: this.createdDate
     };
 };
 
