@@ -33,7 +33,7 @@ const AttendeeTable = ({ attendees, activeMeeting }) => {
             });
     };
 
-    const gitHubClickHandler = (githubHandle) => {
+    const gitHubClickHandler = (githubHandle, projectName, accessLevel = 'manager') => {
         // ******************** pbtag -- allow PL to add githubHandle if not
         // already there 
         // if (!githubHandle) {
@@ -41,8 +41,9 @@ const AttendeeTable = ({ attendees, activeMeeting }) => {
 
         const bodyObject = {
             // temporary placeholder handle + repoName
-            handle: "shiningjustice",
-            repoName: "testrepo"
+            handle: "testingphoebe",
+            teamName: "vrms", //projectName, no where to pull that from currently, event object doesn't provide project name
+            accessLevel
         };
         fetch("api/grantpermission/gitHub", {
             method: "POST",
