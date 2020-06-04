@@ -5,38 +5,31 @@ import ls from "local-storage";
 
 const AttendeeTable = ({ attendees, activeMeeting }) => {
     const clickHandler = (email) => {
-        const bodyObject = { email };
-        if (ls.get("token")) {
-            bodyObject.token = ls.get("token");
-        } else if (ls.get("code")) {
-            bodyObject.code = ls.get("code");
-        }
-
-        fetch("/api/grantpermission/", {
+        const bodyObject = {
+            // temporary placeholder email
+            email: "mbirdyw@gmail.com",
+            file: "10_KYe3pbZqiq6reeLA8zDDeIlz-4PxWM",
+        };
+        fetch("api/grantpermission/googleDrive", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                // 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: JSON.stringify(bodyObject),
         })
             .then((res) => {
-                if (res.status === 200) {
-                    return res.json();
-                } else {
-                    throw new Error("error");
+                if (res.status !== 200) {
+                    return res.json().then((res) => {
+                        throw new Error(res.message);
+                    });
                 }
+                return res.json();
             })
             .then((res) => {
-                if (res.url) {
-                    window.open(res.url);
-                }
-                if (res.token) {
-                    ls.set("token", res.token);
-                }
+                console.log(res);
             })
             .catch((err) => {
-                console.log(err.message);
+                console.log(err);
             });
     };
 
@@ -67,9 +60,7 @@ const AttendeeTable = ({ attendees, activeMeeting }) => {
                                 }
                                 role={attendee.userId.currentRole}
                                 isNewMember={true}
-                                clicked={() =>
-                                    clickHandler(attendee.userId.email)
-                                }
+                                clicked={() => clickHandler(attendee.userId.email)}
                             ></AttendeeTableRow>
                         );
                     })}
@@ -77,8 +68,7 @@ const AttendeeTable = ({ attendees, activeMeeting }) => {
                 attendees
                     .filter((attendee) => {
                         return (
-                            !attendee.userId.newMember &&
-                            attendee.userId.name.firstName !== "test"
+                            !attendee.userId.newMember && attendee.userId.name.firstName !== "test"
                         );
                     })
                     .map((attendee) => {
@@ -99,8 +89,7 @@ const AttendeeTable = ({ attendees, activeMeeting }) => {
                 attendees
                     .filter((attendee) => {
                         return (
-                            !attendee.userId.newMember &&
-                            attendee.userId.name.firstName === "test"
+                            !attendee.userId.newMember && attendee.userId.name.firstName === "test"
                         );
                     })
                     .map((attendee) => {

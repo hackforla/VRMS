@@ -8,23 +8,6 @@ const Home = (props) => {
     const [events, setEvents] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [event, setEvent] = useState("--SELECT ONE--");
-    const test = new URLSearchParams(props.location.search);
-    if (test.get("code")) {
-        ls.set("code", decodeURIComponent(test.get("code")));
-        console.log("i did the thing!");
-    }
-
-    // ls.set("token", {
-    //     access_token:
-    //         "ya29.a0Ae4lvC256myjmQzodM9Y7BbzMiB68qyTIDQWVbWaGZEjtCgwauNReUXfjZRMGKV8H59ddMGpq5crIFtStsCV36xsfDhUe1-xwwbZQ0RwNDW6tXmcazjj7mw3ei17Pj2-IQOV66B_2sy6bYfiey0mmQjl95Pk1zPDIyQ",
-    //     refresh_token:
-    //         "1//0631PyTrJ_HbYCgYIARAAGAYSNwF-L9IrEJHSgB_giF8ynS3tAmcWOcTvMaiDiUu8SKMJbGFc-gstdNWlX8LWFWD3EUBMvPVWKkA",
-    //     scope: "https://www.googleapis.com/auth/drive",
-    //     token_type: "Bearer",
-    //     expiry_date: 1588843324660,
-    // });
-    // const [isQuestionAnswered, setIsQuestionAnswered] = useState(false);
-    // const [meetings, setMeetings] = useState(null);
 
     async function fetchEvents() {
         try {
@@ -84,12 +67,8 @@ const Home = (props) => {
                                         >
                                             {events.map((event) => {
                                                 return (
-                                                    <option
-                                                        key={event._id || 0}
-                                                        value={event._id}
-                                                    >
-                                                        {event.name ||
-                                                            "--SELECT ONE--"}
+                                                    <option key={event._id || 0} value={event._id}>
+                                                        {event.name || "--SELECT ONE--"}
                                                     </option>
                                                 );
                                             })}
@@ -102,12 +81,8 @@ const Home = (props) => {
                 )}
 
                 <div className="home-buttons">
-                    {event !== "--SELECT ONE--" && (
-                        <CheckInButtons event={event} />
-                    )}
-                    {event === "--SELECT ONE--" && (
-                        <CheckInButtons disabled={true} event={event} />
-                    )}
+                    {event !== "--SELECT ONE--" && <CheckInButtons event={event} />}
+                    {event === "--SELECT ONE--" && <CheckInButtons disabled={true} event={event} />}
                 </div>
             </div>
         </div>

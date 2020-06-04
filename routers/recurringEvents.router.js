@@ -62,7 +62,7 @@ router.patch('/:id', (req, res) => {
             })
         })
         .then(recurringEvent => {
-            res.sendStatus(204).end();
+            res.sendStatus(204)
         })
         .catch(err => {
             console.log(err);
