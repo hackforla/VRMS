@@ -54,7 +54,7 @@ const ReturnUserForm = (props) => {
                     className="form-check-in-submit"
                     onClick={(e) => props.checkEmail(e)}
                   >
-                    ENTER
+                    CHECK IN
                   </button>
                 </div>
               </div>
@@ -66,7 +66,7 @@ const ReturnUserForm = (props) => {
                     className="form-check-in-submit block"
                     onClick={(e) => e.preventDefault()}
                   >
-                    ENTERING...
+                    CHECKING IN...
                   </button>
                 </div>
               </div>
@@ -140,34 +140,6 @@ const ReturnUserForm = (props) => {
                 )
               );
             })} */}
-
-          {props.user ? (
-            !props.isLoading ? (
-              <div className="form-row">
-                <div className="form-input-button">
-                  <button
-                    type="submit"
-                    className="form-check-in-submit"
-                    onClick={(e) => props.submitReturning(e)}
-                  >
-                    CHECK IN
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="form-row">
-                <div className="form-input-button">
-                  <button
-                    type="submit"
-                    className="form-check-in-submit"
-                    onClick={(e) => e.preventDefault()}
-                  >
-                    CHECKING IN...
-                  </button>
-                </div>
-              </div>
-            )
-          ) : null}
         </form>
       </div>
     </div>
