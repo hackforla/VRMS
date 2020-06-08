@@ -76,9 +76,9 @@ const ReturnUserForm = (props) => {
           {props.user !== null &&
             props.user !== false &&
             props.user.attendanceReason === undefined &&
-            props.questions.map((question) => {
-              return (
-                question.htmlName === "attendanceReason" && (
+            <>
+              {
+                props.questions.map((question) => question.htmlName === "attendanceReason" && (
                   <div key={question._id} className="form-row">
                     <div className="form-input-text">
                       <label htmlFor={question.htmlName}>
@@ -103,9 +103,31 @@ const ReturnUserForm = (props) => {
                       </div>
                     </div>
                   </div>
-                )
-              );
-            })}
+                ))
+              }
+              <div className="form-row">
+                  <div className="form-input-button">
+                    {!props.isLoading ? (
+                      <button
+                      type="submit"
+                      className="form-check-in-submit"
+                      onClick={(e) => props.submitReturning(props.user, e)}
+                      >
+                        CHECK IN
+                      </button>
+                    ) : (
+                      <button
+                        type="submit"
+                        className="form-check-in-submit block"
+                        onClick={(e) => e.preventDefault()}
+                      >
+                        CHECKING IN...
+                      </button>
+                    )}
+                  </div>
+              </div>
+            </>
+          }
 
           {/* {props.user !== null &&
             props.user !== false &&

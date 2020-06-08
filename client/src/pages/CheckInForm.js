@@ -168,7 +168,9 @@ const CheckInForm = props => {
         });
 }
 
-const submitReturning = (returningUser) => {
+const submitReturning = (returningUser, e = null) => {
+    e && e.preventDefault();
+    
     const answer = {
         newMember: false
     };
