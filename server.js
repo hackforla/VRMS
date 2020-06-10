@@ -37,7 +37,10 @@ mongoose.Promise = global.Promise;
 // WORKERS
 const runOpenCheckinWorker = require("./workers/openCheckins")(cron, fetch);
 const runCloseCheckinWorker = require("./workers/closeCheckins")(cron, fetch);
-const runCreateRecurringEventsWorker = require("./workers/createRecurringEvents")(cron, fetch);
+const runCreateRecurringEventsWorker = require("./workers/createRecurringEvents")(
+  cron,
+  fetch
+);
 const runSlackBot = require("./workers/slackbot")(fetch);
 
 // ROUTES
@@ -50,6 +53,7 @@ const checkUserRouter = require("./routers/checkUser.router");
 const grantPermissionRouter = require("./routers/grantpermission.router");
 const projectsRouter = require("./routers/projects.router");
 const recurringEventsRouter = require("./routers/recurringEvents.router");
+const successRouter = require("./routers/success.router");
 
 app.use("/api/events", eventsRouter);
 app.use("/api/checkins", checkInsRouter);
@@ -60,6 +64,7 @@ app.use("/api/checkuser", checkUserRouter);
 app.use("/api/grantpermission", grantPermissionRouter);
 app.use("/api/projects", projectsRouter);
 app.use("/api/recurringevents", recurringEventsRouter);
+app.use("/api/successRouter", successRouter);
 
 const CLIENT_BUILD_PATH = path.join(__dirname, "./client/build");
 
