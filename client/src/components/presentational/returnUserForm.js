@@ -16,7 +16,7 @@ const ReturnUserForm = (props) => {
           <div className="form-row">
             <div className="form-input-text">
               <label htmlFor="email">
-                What email address did you use to check-in last time?
+                Which email address did you use to check-in last time?
               </label>
               <input
                 type="email"
