@@ -184,10 +184,10 @@ const submitReturning = (returningUser, e = null) => {
     // }
 
     // if ((returningUser.attendanceReason === undefined && reason === "--SELECT ONE--") || (returningUser.currentProject === undefined && project === "--SELECT ONE--")) {
-    if (returningUser.attendanceReason === undefined && reason === "--SELECT ONE--") {
-      console.log('something should be selected');
-        alert('Answer the question to unlock the check-in button!');
-    } else {
+    // if (returningUser.attendanceReason === undefined && reason === "--SELECT ONE--") {
+    //   console.log('something should be selected');
+    //     alert('Answer the question to unlock the check-in button!');
+    // } else {
         // console.log(answer);
 
         const answerJson = JSON.stringify(answer);
@@ -231,7 +231,7 @@ const submitReturning = (returningUser, e = null) => {
         } catch (error) {
             console.log(error);
         }
-    }
+    // }
 }
 
 // const submitReturningUserForm = (email) => {
