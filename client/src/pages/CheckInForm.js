@@ -8,7 +8,7 @@ import "../sass/CheckIn.scss";
 const CheckInForm = props => {
   const [isLoading, setIsLoading] = useState(false);
   // const [isFormReady, setIsFormReady] = useState(true);
-  // const [isQuestionAnswered, setIsQuestionAnswered] = useState(false);
+  const [isQuestionAnswered, setIsQuestionAnswered] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [questions, setQuestions] = useState([]);
