@@ -3,11 +3,16 @@ import styles from "../../sass/ProjectLeaderDashboard.module.scss";
 import DashboardButton from "./DashboardButton";
 import ls from "local-storage";
 
-const AttendeeTableRow = ({ name, role, isNewMember, present, clicked }) => {
+const AttendeeTableRow = ({ name, role, isNewMember, present, gDriveClicked, gitHubClicked  }) => {
     let here = null;
 
     if (isNewMember) {
-        here = <DashboardButton clicked={clicked}>Start Onboard</DashboardButton>;
+        here = (
+            <>
+                <DashboardButton clicked={gDriveClicked}>GDrive</DashboardButton>
+                <DashboardButton clicked={gitHubClicked}>GitHub</DashboardButton>
+            </>
+        );
     } else {
         if (present) {
             here = (
