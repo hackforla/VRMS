@@ -25,6 +25,9 @@ const eventSchema = mongoose.Schema({
     checkInReady: { type: Boolean, default: false },    // is the event open for check-ins?
     owner: {
         ownerId: { type: Number }                       // id of user who created event
+    },
+    recurringEventLink: {                               // only populated if this event was created from a RecurringEvent
+        recurringEventId: { type: String }
     }
 });
 
@@ -56,6 +59,9 @@ eventSchema.methods.serialize = function() {
         checkInReady: this.checkInReady,
         owner: {
             ownerId: this.owner.ownerId
+        },
+        recurringEventLink: {
+            recurringEventId: this.recurringEventLink.recurringEventId
         }
     };
 };

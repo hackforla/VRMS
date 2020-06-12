@@ -1,24 +1,25 @@
 import React, { Fragment } from "react";
 import styles from "../../sass/ProjectLeaderDashboard.module.scss";
 import DashboardButton from "./DashboardButton";
+import ls from "local-storage";
 
-const AttendeeTableRow = ({ name, role, isNewMember, present }) => {
+const AttendeeTableRow = ({ name, role, isNewMember, present, gDriveClicked, gitHubClicked  }) => {
     let here = null;
+
     if (isNewMember) {
-        here = <DashboardButton>Start Onboard</DashboardButton>;
+        here = (
+            <>
+                <DashboardButton clicked={gDriveClicked}>GDrive</DashboardButton>
+                <DashboardButton clicked={gitHubClicked}>GitHub</DashboardButton>
+            </>
+        );
     } else {
         if (present) {
             here = (
-                <span className={[styles.attendeeTableText, styles.yesColor].join(" ")}>
-                    Yes
-                </span>
+                <span className={[styles.attendeeTableText, styles.yesColor].join(" ")}>Yes</span>
             );
         } else {
-            here = (
-                <span className={[styles.attendeeTableText, styles.noColor].join(" ")}>
-                    No
-                </span>
-            );
+            here = <span className={[styles.attendeeTableText, styles.noColor].join(" ")}>No</span>;
         }
     }
 

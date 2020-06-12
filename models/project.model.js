@@ -31,9 +31,9 @@ const projectSchema = mongoose.Schema({
     googleDriveId: { type: String },
     hflaWebsiteUrl: { type: String },
     videoConferenceLink: { type: String },
-    lookingDescription: { type: String },
-    recruitingCategories: [{ type: String }],
-    partners: [{ type: String }]
+    lookingDescription: { type: String },               // narrative on what the project is looking for
+    recruitingCategories: [{ type: String }],           // same as global Skills picklist
+    partners: [{ type: String }]                        // any third-party partners on the project, e.g. City of LA
 });
 
 projectSchema.methods.serialize = function() {
