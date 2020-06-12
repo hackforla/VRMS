@@ -11,12 +11,15 @@ const userSchema = mongoose.Schema({
     email: { type: String, unique: true },
     accessLevel: { type: String, default: "user" },
     createdDate: { type: Date, default: Date.now },
+    currentRole: { type: String },                  // will remove but need to update check-in form
+    desiredRole: { type: String },                  // will remove but need to update check-in form
+    newMember: { type: Boolean },
     currentJobTitle: { type: String },              // free-text of their current job title
     desiredJobTitle: { type: String },              // free-text of their desired job title
-    skillsToMatch: [{ type: String }],          // skills the user either has or wants to learn - will use to match to projects
+    skillsToMatch: [{ type: String }],              // skills the user either has or wants to learn - will use to match to projects
     firstAttended: { type: String },
     attendanceReason: { type: String },
-    githubHandle: { type: String},              // handle not including @, not the URL
+    githubHandle: { type: String},                  // handle not including @, not the URL
     phone: { type: String },
     textingOk: { type: Boolean, default: false},     // is the user OK with texting at the phone number provided?
     slackName: { type: String } ,                    // does the user input this?
@@ -37,6 +40,9 @@ userSchema.methods.serialize = function() {
         email: this.email,
         accessLevel: this.accessLevel,
         createdDate: this.createdDate,
+        currentRole: this.currentRole,              // will remove but need to update check-in form
+        desiredRole: this.desiredRole,              // will remove but need to update check-in form
+        newMember: this.newMember,
         currentJobTitle: this.currentRole,
         desiredJobTitle: this.desiredRole,
         skillsToMatch: this.skillsToMatch,
