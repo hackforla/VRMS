@@ -11,12 +11,18 @@ const userSchema = mongoose.Schema({
     email: { type: String, unique: true },
     accessLevel: { type: String, default: "user" },
     createdDate: { type: Date, default: Date.now },
-    currentRole: { type: String },
-    desiredRole: { type: String },
-    newMember: { type: Boolean },
+    currentJobTitle: { type: String },              // free-text of their current job title
+    desiredJobTitle: { type: String },              // free-text of their desired job title
+    skillsToMatch: [{ type: String }],          // skills the user either has or wants to learn - will use to match to projects
     firstAttended: { type: String },
     attendanceReason: { type: String },
-    githubHandle: { type: String}
+    githubHandle: { type: String},              // handle not including @, not the URL
+    phone: { type: String },
+    textingOk: { type: Boolean, default: false},     // is the user OK with texting at the phone number provided?
+    slackName: { type: String } ,                    // does the user input this?
+    isHflaGithubMember: { type: Boolean},            // pull from API once github handle in place?
+    githubPublic2FA: { type: Boolean },              // does the user have 2FA enabled on their github and membership set to public? 
+    availability: { type: String }                   // availability to meet outside of hacknight times; string for now, more structured in future
     //currentProject: { type: String }              // no longer need this as we can get it from Project Team Member table
     // password: { type: String, required: true }
 });
@@ -31,13 +37,18 @@ userSchema.methods.serialize = function() {
         email: this.email,
         accessLevel: this.accessLevel,
         createdDate: this.createdDate,
-        currentRole: this.currentRole,
-        desiredRole: this.desiredRole,
-        newMember: this.newMember,
+        currentJobTitle: this.currentRole,
+        desiredJobTitle: this.desiredRole,
+        skillsToMatch: this.skillsToMatch,
         firstAttended: this.firstAttended,
         attendanceReason: this.attendanceReason,
-        githubHandle: this.githubHandle
-        //currentProject: this.currentProject
+        githubHandle: this.githubHandle,
+        phone: this.phone,
+        textingOk: this.textingOk,
+        slackName: this.slackName,
+        isHflaGithubMember: this.isHflaGithubMember,
+        githubPublic2FA: this.githubPublic2FA,
+        availability: this.availability
     };
 };
 
