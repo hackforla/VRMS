@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+import CheckInButtons from "../components/presentational/CheckInButtons";
+import ls from "local-storage";
 
-import CheckInButtons from '../components/presentational/CheckInButtons';
-
-import '../sass/Home.scss';
+import "../sass/Home.scss";
 
 const Home = (props) => {
     const [events, setEvents] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [event, setEvent] = useState("--SELECT ONE--");
-    // const [isQuestionAnswered, setIsQuestionAnswered] = useState(false);
-    // const [meetings, setMeetings] = useState(null);
 
     async function fetchEvents() {
         try {
@@ -20,7 +18,7 @@ const Home = (props) => {
 
             setEvents(resJson);
             setIsLoading(false);
-        } catch(error) {
+        } catch (error) {
             console.log(error);
             setIsLoading(false);
             // setIsError(error);
@@ -49,21 +47,31 @@ const Home = (props) => {
 
                 {events && events.length > 1 && (
                     <div className="meeting-select-container">
-                        <form className="form-select-meeting" autoComplete="off" onSubmit={e => e.preventDefault()}>
+                        <form
+                            className="form-select-meeting"
+                            autoComplete="off"
+                            onSubmit={(e) => e.preventDefault()}
+                        >
                             <div className="form-row">
                                 <div className="form-input-select">
-                                    <label htmlFor={'meeting-checkin'}>Select a meeting to check-in:</label>
+                                    <label htmlFor={"meeting-checkin"}>
+                                        Select a meeting to check-in:
+                                    </label>
                                     <div className="radio-buttons">
-                                        <select 
-                                            name={'meeting-checkin'}
+                                        <select
+                                            name={"meeting-checkin"}
                                             className="select-meeting-dropdown"
                                             // aria-label="topic"
                                             onChange={handleEventChange}
                                             required
                                         >
-                                            {events.map(event => {
-                                                return <option key={event._id || 0} value={event._id}>{event.name || "--SELECT ONE--"}</option>
-                                            })} 
+                                            {events.map((event) => {
+                                                return (
+                                                    <option key={event._id || 0} value={event._id}>
+                                                        {event.name || "--SELECT ONE--"}
+                                                    </option>
+                                                );
+                                            })}
                                         </select>
                                     </div>
                                 </div>
@@ -71,15 +79,14 @@ const Home = (props) => {
                         </form>
                     </div>
                 )}
-                
+
                 <div className="home-buttons">
-                    {event !== '--SELECT ONE--' && <CheckInButtons event={event}/>}
-                    {event === '--SELECT ONE--' && <CheckInButtons disabled={true} event={event}/>}
+                    {event !== "--SELECT ONE--" && <CheckInButtons event={event} />}
+                    {event === "--SELECT ONE--" && <CheckInButtons disabled={true} event={event} />}
                 </div>
             </div>
         </div>
-    )
+    );
 };
 
 export default Home;
-    

@@ -11,12 +11,14 @@ const ProjectLeaderDashboard = () => {
 
     async function getNextEvent() {
         // event id temporarily hard coded so actual check in data would be listed
-        const events = await fetch("/api/events/5e8a51892a285b791c2cc2b7");
-        const eventsJson = await events.json();
-        console.log(eventsJson);
-        setIsCheckInReady(eventsJson.checkInReady);
-
-        setNextEvent([eventsJson]);
+        try {
+            const events = await fetch("/api/events/5e8a51892a285b791c2cc2b7");
+            const eventsJson = await events.json();
+            setIsCheckInReady(eventsJson.checkInReady);
+            setNextEvent([eventsJson]);
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     async function getAttendees() {
@@ -25,8 +27,9 @@ const ProjectLeaderDashboard = () => {
             const event = await fetch(
                 "/api/checkins/findEvent/5e8a51892a285b791c2cc2b7"
             );
-            const attendesJson = await event.json();
 
+            const attendesJson = await event.json();
+            console.log(attendesJson);
             setAttendees(attendesJson);
             // const dates = eventsJson.map((event) => {
             //     return Date.parse(event.date);
@@ -70,14 +73,6 @@ const ProjectLeaderDashboard = () => {
         getNextEvent();
         getAttendees();
     }, []);
-
-    let attendeesList = attendees.map((attendee) => (
-        <li>
-            {attendee.userId.name.firstName +
-                " " +
-                attendee.userId.name.lastName}
-        </li>
-    ));
 
     return (
         <div className="flex-container">

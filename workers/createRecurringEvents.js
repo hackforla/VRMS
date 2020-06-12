@@ -4,9 +4,10 @@ module.exports = (cron, fetch) => {
     // and if so, check to see if an event has already been created
     // for it. If not, create one.
 
-    const TODAY = new Date().getDay();
     let EVENTS;
     let RECURRING_EVENTS;
+    let TODAY_DATE;
+    let TODAY;
     const URL = process.env.NODE_ENV === 'prod' ? 'https://www.vrms.io' : 'http://localhost:4000';
 
     const fetchEvents = async () => {
@@ -31,31 +32,33 @@ module.exports = (cron, fetch) => {
         };
     };
 
-    async function filterAndCreateEvents(today) {
+    async function filterAndCreateEvents() {
+        TODAY_DATE = new Date();
+        TODAY = TODAY_DATE.getDay();
+        console.log("Date: ", TODAY_DATE, "Day: ", TODAY);
         const recurringEvents = RECURRING_EVENTS;
-        const todayDay = today;
-
+        // console.log("Today Day: ", TODAY);
         // Filter recurring events where the event date is today
         if (recurringEvents && recurringEvents.length > 0) {
             const filteredEvents = recurringEvents.filter(event => {
                 const eventDay = new Date(event.date).getDay();
-
-                return (eventDay === todayDay);
+                // console.log("Event Day: ", eventDay);
+                return (eventDay === TODAY);
             });
-            console.log("Today's events: ", filteredEvents);
+            // console.log("Today's events: ", filteredEvents);
 
-            const today = new Date();
+            // console.log('TODAY_DATE for filter: ', TODAY_DATE)
 
             // For each recurring event, check to see if an event already
             // exists for it and do something if true/false. Can't use
             // forEach function with async/await.
             for (let i = 0; i < filteredEvents.length; i++) {
                 const eventExists = await checkIfEventExists(filteredEvents[i].name);
-                console.log('Event exists? ', eventExists);
+                // console.log('Event exists? ', eventExists);
                 const eventDate = new Date(filteredEvents[i].date);
 
                 if (eventExists) {
-                    console.log("I'm not going to run ceateEvent");
+                    console.log("Not going to run ceateEvent");
                 } else {
                     // Create new event
                     const hours = eventDate.getHours();
@@ -63,9 +66,9 @@ module.exports = (cron, fetch) => {
                     const seconds = eventDate.getSeconds();
                     const milliseconds = eventDate.getMilliseconds();
 
-                    const yearToday = today.getFullYear();
-                    const monthToday = today.getMonth();
-                    const dateToday = today.getDate();
+                    const yearToday = TODAY_DATE.getFullYear();
+                    const monthToday = TODAY_DATE.getMonth();
+                    const dateToday = TODAY_DATE.getDate();
 
                     const newEventDate = new Date(yearToday, monthToday, dateToday, hours, minutes, seconds, milliseconds);
                     // console.log('Today Date: ', newEventDate, '\n');
@@ -105,20 +108,21 @@ module.exports = (cron, fetch) => {
 
     async function checkIfEventExists(eventName) {
         const events = EVENTS;
-        const today = new Date();
+        // const today = new Date();
 
         if (events && events.length > 0) {
             const filteredEvents = events.filter(event => {
                 const eventDate = new Date(event.date);
-
+                // console.log("Event Date: ", eventDate);
                 const year = eventDate.getFullYear();
                 const month = eventDate.getMonth();
                 const date = eventDate.getDate();
 
-                const yearToday = today.getFullYear();
-                const monthToday = today.getMonth();
-                const dateToday = today.getDate();
-
+                const yearToday = TODAY_DATE.getFullYear();
+                const monthToday = TODAY_DATE.getMonth();
+                const dateToday = TODAY_DATE.getDate();
+                // console.log("Event: ", year, month, date);
+                // console.log("Today: ", yearToday, monthToday, dateToday);
                 // console.log((year === yearToday && month === monthToday && date === dateToday && eventName === event.name));
                 return (year === yearToday && month === monthToday && date === dateToday && eventName === event.name);
             });
@@ -159,7 +163,7 @@ module.exports = (cron, fetch) => {
         // console.log('Fetching recurring events...');
         await fetchRecurringEvents();
         // console.log('Filtering and creating...');
-        await filterAndCreateEvents(TODAY);
+        await filterAndCreateEvents();
 
         console.log("Today's events are created");
     
@@ -169,7 +173,7 @@ module.exports = (cron, fetch) => {
     //     runTask();
     // }, 5000);
 
-    const scheduledTask = cron.schedule('*/10 0-18 * * *', () => {
+    const scheduledTask = cron.schedule('*/10 7-18 * * *', () => {
         runTask();
     });
 
