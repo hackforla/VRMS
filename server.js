@@ -35,10 +35,10 @@ app.use(morgan("dev"));
 mongoose.Promise = global.Promise;
 
 // WORKERS
-// const runOpenCheckinWorker = require("./workers/openCheckins")(cron, fetch);
-// const runCloseCheckinWorker = require("./workers/closeCheckins")(cron, fetch);
-// const runCreateRecurringEventsWorker = require("./workers/createRecurringEvents")(cron, fetch);
-// const runSlackBot = require("./workers/slackbot")(fetch);
+const runOpenCheckinWorker = require("./workers/openCheckins")(cron, fetch);
+const runCloseCheckinWorker = require("./workers/closeCheckins")(cron, fetch);
+const runCreateRecurringEventsWorker = require("./workers/createRecurringEvents")(cron, fetch);
+const runSlackBot = require("./workers/slackbot")(fetch);
 
 // ROUTES
 const eventsRouter = require("./routers/events.router");

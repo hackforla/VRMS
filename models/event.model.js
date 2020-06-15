@@ -43,14 +43,7 @@ eventSchema.methods.serialize = function() {
         hacknight: this.hacknight,
         eventType: this.eventType,
         description: this.eventDescription,
-        project: {                                          
-            projectId: this.project.projectId,
-            name: this.project.name,
-            videoConferenceLink: this.project.videoConferenceLink,
-            githubIdentifier: this.project.githubIdentifier,
-            hflaWebsiteUrl: this.project.hflaWebsiteUrl,
-            githubUrl: this.project.githubUrl
-        },
+        project: this.project,
         date: this.date,
         startTime: this.startTime,
         endTime: this.endTime,
