@@ -19,6 +19,13 @@ const userSchema = mongoose.Schema({
     skillsToMatch: [{ type: String }],              // skills the user either has or wants to learn - will use to match to projects
     firstAttended: { type: String },
     attendanceReason: { type: String },
+    githubHandle: { type: String},
+    projects: [
+        { 
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Project'
+        }
+    ],
     githubHandle: { type: String},                  // handle not including @, not the URL
     phone: { type: String },
     textingOk: { type: Boolean, default: false},     // is the user OK with texting at the phone number provided?
@@ -49,6 +56,8 @@ userSchema.methods.serialize = function() {
         firstAttended: this.firstAttended,
         attendanceReason: this.attendanceReason,
         githubHandle: this.githubHandle,
+        projects: this.projects,
+        //currentProject: this.currentProject
         phone: this.phone,
         textingOk: this.textingOk,
         slackName: this.slackName,
