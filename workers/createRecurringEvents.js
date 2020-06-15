@@ -85,14 +85,7 @@ module.exports = (cron, fetch) => {
                         hacknight: filteredEvents[i].hacknight && filteredEvents[i].hacknight,
                         eventType: filteredEvents[i].eventType && filteredEvents[i].eventType,
                         description: filteredEvents[i].eventDescription && filteredEvents[i].eventDescription,
-                        project: filteredEvents[i].project && {                                          
-                            projectId: filteredEvents[i].project.projectId ? filteredEvents[i].project.projectId : '12345',
-                            name: filteredEvents[i].project.name && filteredEvents[i].project.name,
-                            videoConferenceLink: filteredEvents[i].project.videoConferenceLink && filteredEvents[i].project.videoConferenceLink,
-                            githubIdentifier: filteredEvents[i].project.githubIdentifier && filteredEvents[i].project.githubIdentifier,
-                            hflaWebsiURL: filteredEvents[i].project.hflaWebsiteUrl && filteredEvents[i].project.hflaWebsiteUrl,
-                            githubUrl: filteredEvents[i].project.githubUrl && filteredEvents[i].project.githubUrl
-                        },
+                        project: filteredEvents[i].project && filteredEvents[i].project,
                         date: filteredEvents[i].date && newEventDate,
                         startTime: filteredEvents[i].startTime && newEventDate,
                         endTime: filteredEvents[i].endTime && newEndTime,
