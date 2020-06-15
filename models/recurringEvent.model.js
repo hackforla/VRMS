@@ -14,13 +14,9 @@ const recurringEventSchema = mongoose.Schema({
     eventType: { type: String },                        // Project Meeting, Orientation, Workshop
     description: { type: String },
     project: {                                          // only needed if it's type = Project Meeting
-        projectId: { type: String },
-        name: { type: String },
-        videoConferenceLink: { type: String },
-        githubIdentifier: { type: String },
-        hflaWebsiteUrl: { type: String },
-        githubUrl: { type: String }
-    },                                                  
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Project'
+    },                                                
     date: { type: Date },   
     startTime: { type: Date },                          // start date and time of the event
     endTime: { type: Date },                            // end date and time of the event
@@ -46,14 +42,7 @@ recurringEventSchema.methods.serialize = function() {
         brigade: this.brigade,
         eventType: this.eventType,
         description: this.eventDescription,
-        project: {                                          
-            projectId: this.project.projectId,
-            name: this.project.name,
-            videoConferenceLink: this.project.videoConferenceLink,
-            githubIdentifier: this.project.githubIdentifier,
-            hflaWebsiteUrl: this.project.hflaWebsiteUrl,
-            githubUrl: this.project.githubUrl
-        },  
+        project: this.project,
         date: this.date,
         startTime: this.startTime,
         endTime: this.endTime,

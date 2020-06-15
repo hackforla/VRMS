@@ -4,8 +4,12 @@ const fs = require("fs");
 const { google } = require("googleapis");
 const async = require("async");
 // require("dotenv").config();
+const fetch = require('node-fetch');
 
 const SCOPES = ["https://www.googleapis.com/auth/drive"];
+
+// placeholder org for testing
+const githubOrganization = 'testvrms';
 
 // GET /api/grantpermission/googleDrive
 
@@ -49,6 +53,69 @@ router.post("/googleDrive", async (req, res) => {
         }
     });
 });
+
+// GET /api/grantpermission/gitHub (checks if it can update the db data)
+
+// Route accounts for onboaring admins or regular users
+router.post('/gitHub', async (req, res) => {
+    const { teamName, accessLevel, handle } = req.body;
+    const userHandle = handle;
+    const baseTeamSlug = createSlug(teamName);
+    const managerTeamSlug = baseTeamSlug + '-managers';
+    const adminTeamSlug = baseTeamSlug + '-admins';
+
+    const teamSlugs = [baseTeamSlug, managerTeamSlug];
+
+    if (accessLevel === 'admin') teamSlugs.push(adminTeamSlug);
+    
+    function createSlug(string) {
+        let slug = string.toLowerCase();
+        return slug.split(' ').join('-');
+    } ;
+
+    try {
+		// Is member of github organization? If not, add to organization
+		const userStatus = await checkOrgMembershipStatus(userHandle);
+		const orgMembershipStatus = userStatus
+			? userStatus
+			: (await inviteToOrg(userHandle)) && 'pending';
+
+        // Add user to github project teams
+        console.log({teamSlugs});
+        await Promise.all(teamSlugs.map(async (slug) => {
+            const result = await addToTeam(userHandle, slug);
+            console.log({slug});
+            if (result === 'team not found') {
+                throw new Error('team not found')
+            }
+            if (!result) {
+                throw new Error('user not added to one or more teams');
+            };
+            return;
+        }))        
+
+		const result = {
+			orgMembershipStatus,
+			teamMembershipStatus: 'pending',
+		};
+
+		if (orgMembershipStatus === 'active') {
+            // user automatically added to team if active membership in org
+            result.teamMembershipStatus = 'active';
+            
+            // check if membership is public
+			result.publicMembership = await checkPublicMembership(userHandle);
+
+			// check if 2FA is enabled
+			result.twoFAenabled = await check2FA(userHandle);
+		}
+
+		return res.status(200).send(result);
+	} catch (err) {
+		return res.status(500).send({ message: err.message });
+	}
+});
+
 
 router.post("/", async (req, res) => {
     fs.readFile("credentials.json", async (err, content) => {
@@ -228,6 +295,110 @@ function grantPermission(auth, email, fileId) {
             );
         });
     });
+}
+
+
+/**
+ * Checks if user is a public OR private member of the organization.
+ * Requires authentication to the organization (currently via a token in env file).
+ * @param {str} githubHandle
+ */
+function checkOrgMembershipStatus(githubHandle) {
+	return fetch(
+		`https://api.github.com/orgs/${githubOrganization}/memberships/${githubHandle}`,
+		{
+			method: 'GET',
+			headers: {
+				Authorization: `token ${process.env.GITHUB_TOKEN}`,
+			},
+		}
+	)
+		.then((res) => {
+			if (res.status === 200) return res.json();
+			if (res.status === 404) return false;
+
+			return new Error('Unexpected result');
+		})
+		.then((res) => {
+			if (res) {
+				return res.state === 'pending' ? 'pending' : 'active';
+			} else {
+				return false;
+			}
+		});
+}
+
+/**
+ * API call returns 200 if successfully invited or if already in organization
+ * @param {str} githubHandle
+ */
+function inviteToOrg(githubHandle) {
+	return fetch(
+		`https://api.github.com/orgs/${githubOrganization}/memberships/${githubHandle}?role=member`,
+		{
+			method: 'PUT',
+			headers: {
+				Authorization: `token ${process.env.GITHUB_TOKEN}`,
+			},
+		}
+	)
+		.then((res) =>
+			res.status === 200 ? true : new Error('Unexpected response')
+		)
+}
+
+/**
+ * @returns "active" or "pending". Returns "active" if already on team OR
+ * if already a member of the organization (automatically adds them without
+ * sendaingn invitation ). Returns "pending" if membership is pending 
+ * (collaborator invite is sent).
+ * @param {str} githubHandle
+ * @param {str} teamSlug
+ */
+function addToTeam(githubHandle, teamSlug) {
+    return fetch(
+        `https://api.github.com/orgs/${githubOrganization}/teams/${teamSlug}/memberships/${githubHandle}`,
+		{
+			method: 'PUT',
+			headers: {
+				Authorization: `token ${process.env.GITHUB_TOKEN}`,
+			},
+		}
+    )
+        .then((res) => ({
+            result: res.json(),
+            status: res.status
+        }))
+        .then(res => {
+            if (res.result.message === "Not Found") {
+                return ('team not found'); // how can I just throw an error here instead?
+            } else {
+                console.log(res.status);
+                return Boolean(res.status === 200); 
+            }
+        })
+}
+
+function check2FA(githubHandle) {
+	return fetch(
+		`https://api.github.com/orgs/${githubOrganization}/members?filter=2fa_disabled`
+	)
+		.then((no2FAMembersArr) => {
+			if (no2FAMembersArr.length) {
+				return !no2FAMembersArr.includes(
+					(member) => member.login === githubHandle
+				);
+			}
+
+			return true;
+		})
+}
+
+function checkPublicMembership(githubHandle) {
+	return fetch(
+		`https://api.github.com/orgs/${githubOrganization}/public_members/${githubHandle}`
+	)
+		.then((res) => (res.status === 204 ? true : false))
 }
 
 module.exports = router;

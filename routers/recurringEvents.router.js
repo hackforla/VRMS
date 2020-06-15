@@ -11,6 +11,7 @@ router.get('/', cors(), (req, res) => {
     RecurringEvent
         // .find(query.checkInReady === 'true' ? query : undefined)
         .find()
+        .populate('project')
         .then(recurringEvents => {
             res.json(recurringEvents);
         })
