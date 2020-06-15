@@ -49,7 +49,6 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
     User
         .findById(req.params.id)
-        .populate('projects')
         .then(user => {
             res.json(user);
         })
@@ -68,22 +67,15 @@ router.patch('/:id', (req, res) => {
 
     if (headers['x-customrequired-header'] !== expectedHeader) {
         res.sendStatus(401);
-    } else if (!req.body.project) {
-        console.log(req.body);
-
-        res.json({
-            message: 'Bad request'
-        });
     } else {
         User
-            .findByIdAndUpdate(req.params.id, { $push: { "projects": req.body.project } }, { new: true }, function(err, user) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    res.json(user._id);
-                };
-            });
-    };
+        .findByIdAndUpdate(req.params.id, req.body)
+        .then(edit => res.json(req.params.id))
+        .catch(err =>
+            res.status(500).json({
+                error: 'Couldn\'t edit form... Try again.'
+            }));
+    }
 });
 
 router.post('/', (req, res) => {
