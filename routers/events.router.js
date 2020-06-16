@@ -9,6 +9,7 @@ router.get('/', (req, res) => {
         
     Event
         .find(query.checkInReady === 'true' ? query : undefined)
+        .populate('project')
         .then(events => {
             res.json(events);
         })
@@ -36,6 +37,7 @@ router.post('/', (req, res) => {
 router.get('/:id', (req, res) => {
     Event
         .findById(req.params.id)
+        .populate('project')
         .then(event => {
             res.json(event);
         })

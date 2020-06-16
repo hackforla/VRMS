@@ -168,9 +168,9 @@ const CheckInForm = props => {
         });
 }
 
-const submitReturning = (e) => {
-    e.preventDefault();
-
+const submitReturning = (returningUser, e = null) => {
+    e && e.preventDefault();
+    
     const answer = {
         newMember: false
     };
@@ -183,10 +183,11 @@ const submitReturning = (e) => {
     //     answer.currentProject = project;
     // }
 
-    // if ((user.attendanceReason === undefined && reason === "--SELECT ONE--") || (user.currentProject === undefined && project === "--SELECT ONE--")) {
-    if (user.attendanceReason === undefined && reason === "--SELECT ONE--") {
-        alert('Answer the question to unlock the check-in button!');
-    } else {
+    // if ((returningUser.attendanceReason === undefined && reason === "--SELECT ONE--") || (returningUser.currentProject === undefined && project === "--SELECT ONE--")) {
+    // if (returningUser.attendanceReason === undefined && reason === "--SELECT ONE--") {
+    //   console.log('something should be selected');
+    //     alert('Answer the question to unlock the check-in button!');
+    // } else {
         // console.log(answer);
 
         const answerJson = JSON.stringify(answer);
@@ -196,7 +197,7 @@ const submitReturning = (e) => {
         try {
             const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
-            fetch(`/api/users/${user._id}`, {
+            fetch(`/api/users/${returningUser._id}`, {
                 method: "PATCH",
                 body: answerJson,
                 headers: {
@@ -208,7 +209,7 @@ const submitReturning = (e) => {
                 return res.json();
             })
             .then(response => {
-                const checkInForm = { userId: `${user._id}`, eventId: new URLSearchParams(props.location.search).get('eventId') };
+                const checkInForm = { userId: `${returningUser._id}`, eventId: new URLSearchParams(props.location.search).get('eventId') };
     
                 // console.log(`Here's the form: ${checkInForm.toString()}`);
     
@@ -230,7 +231,7 @@ const submitReturning = (e) => {
         } catch (error) {
             console.log(error);
         }
-    }
+    // }
 }
 
 // const submitReturningUserForm = (email) => {
@@ -414,9 +415,10 @@ const checkEmail = (e) => {
             throw new Error(res.statusText);
         })
         .then(resJson => {
-            // console.log(resJson);
+          // console.log(resJson);
             setUser(resJson);
             setIsLoading(false);
+            resJson && submitReturning(resJson);
         })
         .catch(err => {
             console.log(err);

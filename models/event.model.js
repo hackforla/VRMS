@@ -13,12 +13,8 @@ const eventSchema = mongoose.Schema({
     eventType: { type: String },                        // Project Meeting, Orientation, Workshop
     description: { type: String },
     project: {                                          // only needed if it's type = Project Meeting
-        projectId: { type: String },
-        name: { type: String },
-        videoConferenceLink: { type: String },
-        githubIdentifier: { type: String },
-        hflaWebsiteUrl: { type: String },
-        githubUrl: { type: String }
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Project'
     },
     date: { type: Date },   
     startTime: { type: Date },                          // start date and time of the event
@@ -29,6 +25,9 @@ const eventSchema = mongoose.Schema({
     checkInReady: { type: Boolean, default: false },    // is the event open for check-ins?
     owner: {
         ownerId: { type: Number }                       // id of user who created event
+    },
+    recurringEventLink: {                               // only populated if this event was created from a RecurringEvent
+        recurringEventId: { type: String }
     }
 });
 
@@ -44,14 +43,7 @@ eventSchema.methods.serialize = function() {
         hacknight: this.hacknight,
         eventType: this.eventType,
         description: this.eventDescription,
-        project: {                                          
-            projectId: this.project.projectId,
-            name: this.project.name,
-            videoConferenceLink: this.project.videoConferenceLink,
-            githubIdentifier: this.project.githubIdentifier,
-            hflaWebsiteUrl: this.project.hflaWebsiteUrl,
-            githubUrl: this.project.githubUrl
-        },
+        project: this.project,
         date: this.date,
         startTime: this.startTime,
         endTime: this.endTime,
@@ -60,6 +52,9 @@ eventSchema.methods.serialize = function() {
         checkInReady: this.checkInReady,
         owner: {
             ownerId: this.owner.ownerId
+        },
+        recurringEventLink: {
+            recurringEventId: this.recurringEventLink.recurringEventId
         }
     };
 };

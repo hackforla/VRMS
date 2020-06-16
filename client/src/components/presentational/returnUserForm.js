@@ -13,30 +13,28 @@ const ReturnUserForm = (props) => {
           autoComplete="off"
           onSubmit={(e) => e.preventDefault()}
         >
-          {props.user === null || props.user === false ? (
-            <div className="form-row">
-              <div className="form-input-text">
-                <label htmlFor="email">
-                  What email address did you use to check-in last time?
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Email Address"
-                  value={props.formInput.email.toString()}
-                  // aria-label="topic"
-                  onChange={props.handleInputChange}
-                  aria-label="Email Address"
-                  required
-                />
-              </div>
-              <p>
-                {
-                  "(This allows easy use of the app. We'll never sell your data!)"
-                }
-              </p>
+          <div className="form-row">
+            <div className="form-input-text">
+              <label htmlFor="email">
+                Which email address did you use to check-in last time?
+              </label>
+              <input
+                type="email"
+                name="email"
+                placeholder="Email Address"
+                value={props.formInput.email.toString()}
+                // aria-label="topic"
+                onChange={props.handleInputChange}
+                aria-label="Email Address"
+                required
+              />
             </div>
-          ) : null}
+            <p>
+              {
+                "(This allows easy use of the app. We'll never sell your data!)"
+              }
+            </p>
+          </div>
 
           {props.isError && props.errorMessage.length > 1 ? (
             <div className="error">{props.errorMessage}</div>
@@ -45,40 +43,38 @@ const ReturnUserForm = (props) => {
             <div className="error">Try entering your email again.</div>
           )}
 
-          {props.user === null || props.user === false ? (
-            !props.isLoading ? (
-              <div className="form-row">
-                <div className="form-input-button">
-                  <button
-                    type="submit"
-                    className="form-check-in-submit"
-                    onClick={(e) => props.checkEmail(e)}
-                  >
-                    ENTER
-                  </button>
-                </div>
+          {!props.user && !props.isLoading ? (
+            <div className="form-row">
+              <div className="form-input-button">
+                <button
+                  type="submit"
+                  className="form-check-in-submit"
+                  onClick={(e) => props.checkEmail(e)}
+                >
+                  CHECK IN
+                </button>
               </div>
-            ) : (
-              <div className="form-row">
-                <div className="form-input-button">
-                  <button
-                    type="submit"
-                    className="form-check-in-submit block"
-                    onClick={(e) => e.preventDefault()}
-                  >
-                    ENTERING...
-                  </button>
-                </div>
+            </div>
+          ) : (
+            <div className="form-row">
+              <div className="form-input-button">
+                <button
+                  type="submit"
+                  className="form-check-in-submit block"
+                  onClick={(e) => e.preventDefault()}
+                >
+                  CHECKING IN...
+                </button>
               </div>
-            )
-          ) : null}
+            </div>
+          )}
 
-          {props.user !== null &&
+          {/* {props.user !== null &&
             props.user !== false &&
             props.user.attendanceReason === undefined &&
-            props.questions.map((question) => {
-              return (
-                question.htmlName === "attendanceReason" && (
+            <>
+              {
+                props.questions.map((question) => question.htmlName === "attendanceReason" && (
                   <div key={question._id} className="form-row">
                     <div className="form-input-text">
                       <label htmlFor={question.htmlName}>
@@ -103,9 +99,31 @@ const ReturnUserForm = (props) => {
                       </div>
                     </div>
                   </div>
-                )
-              );
-            })}
+                ))
+              }
+              <div className="form-row">
+                  <div className="form-input-button">
+                    {!props.isLoading ? (
+                      <button
+                      type="submit"
+                      className="form-check-in-submit"
+                      onClick={(e) => props.submitReturning(props.user, e)}
+                      >
+                        CHECK IN
+                      </button>
+                    ) : (
+                      <button
+                        type="submit"
+                        className="form-check-in-submit block"
+                        onClick={(e) => e.preventDefault()}
+                      >
+                        CHECKING IN...
+                      </button>
+                    )}
+                  </div>
+              </div>
+            </>
+          } */}
 
           {/* {props.user !== null &&
             props.user !== false &&
@@ -140,34 +158,6 @@ const ReturnUserForm = (props) => {
                 )
               );
             })} */}
-
-          {props.user ? (
-            !props.isLoading ? (
-              <div className="form-row">
-                <div className="form-input-button">
-                  <button
-                    type="submit"
-                    className="form-check-in-submit"
-                    onClick={(e) => props.submitReturning(e)}
-                  >
-                    CHECK IN
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="form-row">
-                <div className="form-input-button">
-                  <button
-                    type="submit"
-                    className="form-check-in-submit"
-                    onClick={(e) => e.preventDefault()}
-                  >
-                    CHECKING IN...
-                  </button>
-                </div>
-              </div>
-            )
-          ) : null}
         </form>
       </div>
     </div>
