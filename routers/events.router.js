@@ -49,6 +49,21 @@ router.get('/:id', (req, res) => {
         });
 });
 
+router.get('/nexteventbyproject/:id', (req, res) => {
+    Event
+        .find({ project: req.params.id })
+        .populate('project')
+        .then(events => {
+            res.status(200).json(events[events.length - 1])
+        })
+        .catch(err => {
+            console.log(err);
+            res.sendStatus(500).json({
+                message: `/GET Internal server error: ${err}`
+            })
+        });
+});
+
 router.patch('/:id', (req, res) => {
     Event
         .findById(req.params.id, function(err, event) {

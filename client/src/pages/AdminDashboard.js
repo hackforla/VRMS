@@ -32,6 +32,8 @@ const AdminDashboard = (props) => {
       const checkInsJson = await checkIns.json();
       const events = await fetch("/api/events");
       const eventsJson = await events.json();
+      console.log("EVENTS", eventsJson);
+      console.log("CHECKINHSHSIN", checkInsJson);
       let locationKeys = findUniqueLocationsKeys(eventsJson);
       let uniqueLocations = findUniqueLocations(eventsJson);
       let uniqueUsers = findUniqueUsers(
@@ -76,6 +78,7 @@ const AdminDashboard = (props) => {
   }
 
   function findUniqueUsers(locationKeys, uniqueLocations, checkInsJson) {
+    console.log("locationKeys", locationKeys);
     let returnObj = JSON.parse(JSON.stringify(uniqueLocations));
     checkInsJson.forEach((cur) => {
       let userLocation = locationKeys[cur.eventId];
@@ -165,6 +168,10 @@ const AdminDashboard = (props) => {
     immediateUniqueLocations = uniqueLocations,
     immediateLocationsTotal = locationsTotal
   ) {
+    console.log("Target Brigade", targetBrigade);
+    console.log("immediateUniqueLocations", immediateUniqueLocations);
+    console.log("immediateLocationsTotal", immediateLocationsTotal);
+
     findVolunteersSignedIn(
       targetBrigade,
       immediateUniqueLocations,

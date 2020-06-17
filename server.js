@@ -53,7 +53,11 @@ const checkUserRouter = require("./routers/checkUser.router");
 const grantPermissionRouter = require("./routers/grantpermission.router");
 const projectsRouter = require("./routers/projects.router");
 const recurringEventsRouter = require("./routers/recurringEvents.router");
+<<<<<<< HEAD
 const successRouter = require("./routers/success.router");
+=======
+const projectTeamMembersRouter = require("./routers/projectTeamMembers.router");
+>>>>>>> ebf13d636a6c242d58932f2d012301273f6b4ba3
 
 app.use("/api/events", eventsRouter);
 app.use("/api/checkins", checkInsRouter);
@@ -64,7 +68,11 @@ app.use("/api/checkuser", checkUserRouter);
 app.use("/api/grantpermission", grantPermissionRouter);
 app.use("/api/projects", projectsRouter);
 app.use("/api/recurringevents", recurringEventsRouter);
+<<<<<<< HEAD
 app.use("/api/successRouter", successRouter);
+=======
+app.use("/api/projectteammembers", projectTeamMembersRouter);
+>>>>>>> ebf13d636a6c242d58932f2d012301273f6b4ba3
 
 const CLIENT_BUILD_PATH = path.join(__dirname, "./client/build");
 
