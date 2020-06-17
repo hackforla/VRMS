@@ -31,7 +31,8 @@ router.get("/:id", (req, res) => {
 });
 
 router.get("/findEvent/:id", (req, res) => {
-    CheckIn.find({ eventId: req.params.id })
+    CheckIn
+        .find({ eventId: req.params.id })
         .populate({
             path: "userId",
             model: "User",
