@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 
 import "../sass/Dashboard.scss";
 
+import AddTeamMember from "../components/dashboard/AddTeamMember";
 const ProjectLeaderDashboard = () => {
   const [isCheckInReady, setIsCheckInReady] = useState();
   const [nextEvent, setNextEvent] = useState([]);
@@ -148,6 +149,17 @@ const ProjectLeaderDashboard = () => {
             nextEvent={nextEvent}
             setCheckInReady={setCheckInReady}
           />
+          
+          <AddTeamMember project={project}/>
+
+          <Link
+            className="checkin-toggle fill-green"
+            onClick={() => {
+              changeTable(false);
+            }}
+          >
+            Roster
+          </Link>
 
           <div className="dashboard-chart-container">
             {/* {isCheckInReady ? ( */}
