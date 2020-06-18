@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 // import Firebase from '../../firebase';
+import "../../sass/AddTeamMember.scss";
 
 const AddTeamMember = (props) => {
   const [isError, setIsError] = useState(false);
@@ -78,13 +79,13 @@ const AddTeamMember = (props) => {
     <div className="flex-container">
       <div className="addmember-container">
         <form
-          className="form-check-in"
+          className="form-add-member"
           autoComplete="off"
           onSubmit={(e) => e.preventDefault()}
         >
           <div className="form-row">
             <div className="form-input-text">
-              <label htmlFor="email">Enter email address:</label>
+              <label htmlFor="email">Add team member:</label>
               <input
                 type="email"
                 name="email"
@@ -97,15 +98,18 @@ const AddTeamMember = (props) => {
               />
             </div>
           </div>
+
+          <div className="form-input-button">
+            <button
+              onClick={(e) => handleSubmit(e)}
+              className="addmember-button"
+            >
+              Add
+            </button>
+          </div>
         </form>
 
         <div className="addmember-warning">{isError ? errorMessage : null}</div>
-
-        <div className="form-input-button">
-          <button onClick={(e) => handleSubmit(e)} className="addmember-button">
-            Add
-          </button>
-        </div>
       </div>
     </div>
   );
