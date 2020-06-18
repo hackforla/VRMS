@@ -34,6 +34,7 @@ const routes = [
     { path: "/returning", name: "returning", Component: ReturningUser },
     { path: "/login", name: "login", Component: AdminLogin },
     { path: "/checkIn/:userType", name: "checkIn", Component: CheckInForm },
+    { path: "/newProfile", name: "newProfile", Component: CheckInForm },
     { path: "/success", name: "success", Component: Success },
     { path: "/handleauth", name: "handleauth", Component: HandleAuth },
     { path: "/emailsent", name: "emailsent", Component: EmailSent },

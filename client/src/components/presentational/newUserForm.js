@@ -98,7 +98,7 @@ const NewUserForm = (props) => {
                       <label htmlFor={question.htmlName}>
                         Is this your first time attending a Hack Night?
                       </label>
-                      <div className="radio-buttons">
+                      <div className="radio-buttons first-time-select">
                         <input
                           id="radio1"
                           type="radio"

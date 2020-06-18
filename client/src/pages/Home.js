@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import CheckInButtons from "../components/presentational/CheckInButtons";
+import CreateNewProfileButton from "../components/presentational/CreateNewProfileButton";
 import ls from "local-storage";
 
 import "../sass/Home.scss";
@@ -80,10 +81,13 @@ const Home = (props) => {
                     </div>
                 )}
 
-                <div className="home-buttons">
-                    {event !== "--SELECT ONE--" && <CheckInButtons event={event} />}
-                    {event === "--SELECT ONE--" && <CheckInButtons disabled={true} event={event} />}
-                </div>
+                {events.length > 0 && (
+                    <div className="home-buttons">
+                        {event === "--SELECT ONE--" && events.length === 1 && <CreateNewProfileButton />}
+                        {event !== "--SELECT ONE--" && events.length > 1 && <CheckInButtons event={event} events={events} />}
+                        {event === "--SELECT ONE--" && events.length > 1 && <CheckInButtons disabled={true} event={event} events={events}/>}
+                    </div>
+                )}
             </div>
         </div>
     );
