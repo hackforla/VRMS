@@ -11,6 +11,7 @@ const ProjectLeaderDashboard = () => {
   const [isCheckInReady, setIsCheckInReady] = useState();
   const [nextEvent, setNextEvent] = useState([]);
   const [attendees, setAttendees] = useState([]);
+  const [roster, setRoster] = useState([]);
   const [attendeeOrRoster, setAttendeeOrRoster] = useState("attendee");
 
   async function getNextEvent() {
@@ -55,6 +56,18 @@ const ProjectLeaderDashboard = () => {
     }
   }
 
+  async function getRoster() {
+    try {
+      const roster = await fetch("/api/projectteammembers");
+
+      const rosterJson = await roster.json();
+      console.log("ROSTER", rosterJson);
+      setRoster(rosterJson);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async function setCheckInReady(e, nextEventId) {
     e.preventDefault();
     try {
@@ -80,6 +93,7 @@ const ProjectLeaderDashboard = () => {
   useEffect(() => {
     getNextEvent();
     getAttendees();
+    getRoster();
   }, []);
 
   return (
@@ -118,7 +132,7 @@ const ProjectLeaderDashboard = () => {
               ></AttendeeTable>
             ) : (
               <RosterTable
-                attendees={attendees}
+                attendees={roster}
                 activeMeeting={true}
               ></RosterTable>
             )}
