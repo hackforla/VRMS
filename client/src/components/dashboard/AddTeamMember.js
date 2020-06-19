@@ -63,7 +63,6 @@ const AddTeamMember = (props) => {
 
             return response;
           } else {
-            console.log(response);
             return response.email;
           }
         })
