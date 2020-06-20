@@ -4,6 +4,7 @@ import RosterTableRow from "./RosterTableRow";
 import ls from "local-storage";
 
 const RosterTable = ({ attendees, activeMeeting }) => {
+  console.log('ATTENDEES', attendees);
   const gDriveClickHandler = (email) => {
     const bodyObject = {
       // temporary placeholder email
@@ -83,7 +84,7 @@ const RosterTable = ({ attendees, activeMeeting }) => {
       <div className={styles.attendeeTableBoxCenter}>
         <span className={styles.attendeeTableTitle}>services</span>
       </div>
-      {activeMeeting &&
+      {attendees &&
         attendees
           .filter((attendee) => {
             return attendee.userId.newMember;
@@ -110,7 +111,7 @@ const RosterTable = ({ attendees, activeMeeting }) => {
               ></RosterTableRow>
             );
           })}
-      {activeMeeting &&
+      {attendees &&
         attendees
           .filter((attendee) => {
             return (
@@ -137,7 +138,7 @@ const RosterTable = ({ attendees, activeMeeting }) => {
               ></RosterTableRow>
             );
           })}
-      {activeMeeting &&
+      {attendees &&
         attendees
           .filter((attendee) => {
             return (

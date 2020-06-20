@@ -2,7 +2,7 @@
   "name": "vrms-client",
   "version": "0.3.0",
   "description": "VRMS Client",
-  "homepage": "http://vrms-prototype.herokuapp.com",
+  "homepage": "https://www.vrms.io",
   "dependencies": {
     "classnames": "^2.2.6",
     "d3": "^5.15.1",

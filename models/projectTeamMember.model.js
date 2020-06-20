@@ -15,7 +15,10 @@ Idea for the future: numberGithubContributions (pull this from github?)
 */
 
 const projectTeamMemberSchema = mongoose.Schema({
-    userId: { type: String },                       // id of the user
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },                                              // id of the user
     projectId: { type: String },                    // id of the project
     teamMemberStatus: { type: String },             // Active or Inactive
     vrmsProjectAdmin: { type: Boolean },            // does this team member have admin rights to the project in VRMS?
