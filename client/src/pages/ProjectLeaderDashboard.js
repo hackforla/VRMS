@@ -11,8 +11,76 @@ const ProjectLeaderDashboard = () => {
   const [isCheckInReady, setIsCheckInReady] = useState();
   const [nextEvent, setNextEvent] = useState([]);
   const [attendees, setAttendees] = useState([]);
-  const [roster, setRoster] = useState([]);
+//   const [roster, setRoster] = useState([]);
+    
   const [attendeeOrRoster, setAttendeeOrRoster] = useState("attendee");
+  const dummyDataRoster = [
+    {
+        userId: {
+          currentRole: "Front End Developer", 
+          email: "carlos@test.com", 
+          name: {firstName: "Carlos", lastName: "F"},
+          newMember: true, 
+          _id: "5e8bac41bf40080392329cfc"
+        }, 
+        projectId:"5e8bfbcf791f537f7e86daeb",
+        teamMemberStatus: true,
+        vrmsProjectAdmin: false,
+        roleOnProject: "Front End Developer",
+        joinedDate: "2020-04-06T22:59:06.095Z",
+        onProjectGithub: false, 
+        onProjectGoogleDrive: false,
+      }, 
+      {
+        userId: {
+          currentRole: "Tester", 
+          email: "matt@test.com", 
+          name: {firstName: "Matt", lastName: "Test"},
+          newMember: true, 
+          _id: "5e8bac41bf40080392329cfc"
+        }, 
+        projectId: "5e8bfbcf791f537f7e86daeb",
+        teamMemberStatus: true,
+        vrmsProjectAdmin: false,
+        roleOnProject: "Tester",
+        joinedDate: new Date(),
+        onProjectGithub: true, 
+        onProjectGoogleDrive: false,
+      },
+      {
+        userId: {
+          currentRole: "Tester", 
+          email: "testmatt@test.com", 
+          name: {firstName: "Matt", lastName: "Test"},
+          newMember: false, 
+          _id: "5e8bb4e2d1620d050cceeb42"
+        }, 
+        projectId: "5e8bfbcf791f537f7e86daeb",
+        teamMemberStatus: true,
+        vrmsProjectAdmin: false,
+        roleOnProject: "Tester",
+        joinedDate: new Date(),
+        onProjectGithub: true, 
+        onProjectGoogleDrive: true,
+      }, 
+      {
+        userId: {
+          currentRole: "Tester", 
+          email: "testingmatt@test.com", 
+          name: {firstName: "Matt", lastName: "Testing"},
+          newMember: false, 
+          _id: "5e8bb4e2d1620d050cceeb42"
+        }, 
+        projectId: "5e8bfbcf791f537f7e86daeb",
+        teamMemberStatus: true,
+        vrmsProjectAdmin: false,
+        roleOnProject: "Tester",
+        joinedDate: new Date(),
+        onProjectGithub: true, 
+        onProjectGoogleDrive: true,
+      }
+  ]
+  const [roster, setRoster] = useState(dummyDataRoster);
 
   async function getNextEvent() {
     // event id temporarily hard coded so actual check in data would be listed
@@ -93,7 +161,7 @@ const ProjectLeaderDashboard = () => {
   useEffect(() => {
     getNextEvent();
     getAttendees();
-    getRoster();
+    // getRoster();
   }, []);
 
   return (
