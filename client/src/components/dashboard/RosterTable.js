@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "../../sass/ProjectLeaderDashboard.module.scss";
-import AttendeeTableRow from "./AttendeeTableRow";
+import RosterTableRow from "./RosterTableRow";
 import ls from "local-storage";
 
 const RosterTable = ({ attendees, activeMeeting }) => {
@@ -81,7 +81,7 @@ const RosterTable = ({ attendees, activeMeeting }) => {
         <span className={styles.attendeeTableTitle}>role</span>
       </div>
       <div className={styles.attendeeTableBoxCenter}>
-        <span className={styles.attendeeTableTitle}>here?</span>
+        <span className={styles.attendeeTableTitle}>services</span>
       </div>
       {activeMeeting &&
         attendees
@@ -90,7 +90,7 @@ const RosterTable = ({ attendees, activeMeeting }) => {
           })
           .map((attendee) => {
             return (
-              <AttendeeTableRow
+              <RosterTableRow
                 key={Math.random()}
                 name={
                   attendee.userId.name.firstName +
@@ -103,7 +103,11 @@ const RosterTable = ({ attendees, activeMeeting }) => {
                 gitHubClicked={() =>
                   gitHubClickHandler(attendee.userId.githubHandle)
                 }
-              ></AttendeeTableRow>
+                services={{
+                  gitHub: attendee.onProjectGithub, 
+                  googleDrive: attendee.onProjectGoogleDrive
+                }}
+              ></RosterTableRow>
             );
           })}
       {activeMeeting &&
@@ -115,8 +119,10 @@ const RosterTable = ({ attendees, activeMeeting }) => {
             );
           })
           .map((attendee) => {
+            const {onProjectGithub, onProjectGoogleDrive} = attendee;
+            
             return (
-              <AttendeeTableRow
+              <RosterTableRow
                 key={Math.random()}
                 name={
                   attendee.userId.name.firstName +
@@ -124,8 +130,11 @@ const RosterTable = ({ attendees, activeMeeting }) => {
                   attendee.userId.name.lastName
                 }
                 role={attendee.userId.currentRole}
-                present={true}
-              ></AttendeeTableRow>
+                services={{
+                  gitHub: attendee.onProjectGithub, 
+                  googleDrive: attendee.onProjectGoogleDrive
+                }}
+              ></RosterTableRow>
             );
           })}
       {activeMeeting &&
@@ -138,7 +147,7 @@ const RosterTable = ({ attendees, activeMeeting }) => {
           })
           .map((attendee) => {
             return (
-              <AttendeeTableRow
+              <RosterTableRow
                 key={Math.random()}
                 name={
                   attendee.userId.name.firstName +
@@ -146,8 +155,11 @@ const RosterTable = ({ attendees, activeMeeting }) => {
                   attendee.userId.name.lastName
                 }
                 role={attendee.userId.currentRole}
-                present={false}
-              ></AttendeeTableRow>
+                services={{
+                  gitHub: attendee.onProjectGithub, 
+                  googleDrive: attendee.onProjectGoogleDrive
+                }}
+              ></RosterTableRow>
             );
           })}
     </div>
