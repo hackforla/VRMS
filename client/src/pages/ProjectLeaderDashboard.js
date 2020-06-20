@@ -121,7 +121,7 @@ const ProjectLeaderDashboard = () => {
               style={{ marginBottom: ".5rem" }}
             >
               <p className={styles.dashboardHeadingProjectLeader}>
-                Meeting Participants
+                {attendeeOrRoster ? 'Meeting Participants' : 'Team Roster'}
               </p>
               <DashboardButton>Download .csv</DashboardButton>
             </div>
@@ -129,6 +129,7 @@ const ProjectLeaderDashboard = () => {
               <AttendeeTable
                 attendees={attendees}
                 activeMeeting={true}
+                // projectId={}
               ></AttendeeTable>
             ) : (
               <RosterTable
