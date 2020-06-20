@@ -4,6 +4,8 @@ import AttendeeTableRow from "./AttendeeTableRow";
 import ls from "local-storage";
 
 const AttendeeTable = ({ attendees, activeMeeting, projectId }) => {
+    console.log('ATTENDEETABLE ATTENDEES', attendees);
+    
     const gDriveClickHandler  = (email) => {
         const bodyObject = {
             // temporary placeholder email
