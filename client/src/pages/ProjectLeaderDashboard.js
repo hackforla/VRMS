@@ -7,6 +7,8 @@ import RosterTable from "../components/dashboard/RosterTable";
 import ProjectDashboardContainer from "../components/presentational/projectDashboardContainer";
 
 import DashboardButton from "../components/dashboard/DashboardButton";
+import { Link } from "react-router-dom";
+
 const ProjectLeaderDashboard = () => {
   const [isCheckInReady, setIsCheckInReady] = useState();
   const [nextEvent, setNextEvent] = useState([]);
@@ -102,7 +104,6 @@ const ProjectLeaderDashboard = () => {
       );
 
       const attendesJson = await event.json();
-      console.log(attendesJson);
       setAttendees(attendesJson);
       // const dates = eventsJson.map((event) => {
       //     return Date.parse(event.date);
@@ -127,9 +128,7 @@ const ProjectLeaderDashboard = () => {
   async function getRoster() {
     try {
       const roster = await fetch("/api/projectteammembers");
-
       const rosterJson = await roster.json();
-      console.log("ROSTER", rosterJson);
       setRoster(rosterJson);
     } catch (error) {
       console.log(error);
@@ -177,9 +176,26 @@ const ProjectLeaderDashboard = () => {
           nextEvent={nextEvent}
           setCheckInReady={setCheckInReady}
         ></UpcomingEvent>
-        <ProjectDashboardContainer
-          changeTable={changeTable}
-        ></ProjectDashboardContainer>
+        <Link
+          className="checkin-toggle fill-green"
+          onClick={() => {
+            changeTable(false);
+          }}
+        >
+          Roster
+        </Link>
+        {isCheckInReady ? (
+          <Link
+            className="checkin-toggle fill-green"
+            onClick={() => {
+              changeTable(true);
+            }}
+            // onClick={(e) => props.setCheckInReady(e, props.nextEvent[0]._id)}
+          >
+            Attendees
+          </Link>
+        ) : null}
+
         {isCheckInReady ? (
           <React.Fragment>
             <div
@@ -193,18 +209,13 @@ const ProjectLeaderDashboard = () => {
               </p>
               <DashboardButton>Download .csv</DashboardButton>
             </div>
-            {attendeeOrRoster ? (
-              <AttendeeTable
-                attendees={attendees}
-                activeMeeting={true}
-                // projectId={}
-              ></AttendeeTable>
-            ) : (
-              <RosterTable
-                attendees={roster}
-                activeMeeting={true}
-              ></RosterTable>
-            )}
+
+            <ProjectDashboardContainer
+              changeTable={changeTable}
+              attendees={attendees}
+              roster={roster}
+              attendeeOrRoster={attendeeOrRoster}
+            ></ProjectDashboardContainer>
           </React.Fragment>
         ) : null}
       </div>
