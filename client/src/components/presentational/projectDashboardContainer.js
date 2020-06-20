@@ -1,6 +1,7 @@
 import React from "react";
-import { ReactComponent as ClockIcon } from "../../svg/Icon_Clock.svg";
-import { ReactComponent as LocationIcon } from "../../svg/Icon_Location.svg";
+
+import AttendeeTable from "../dashboard/AttendeeTable";
+import RosterTable from "../dashboard/RosterTable";
 import { Link } from "react-router-dom";
 
 import moment from "moment";
@@ -8,24 +9,17 @@ import moment from "moment";
 const projectDashboardContainer = (props) => {
   return (
     <div>
-      <Link
-        className="checkin-toggle fill-green"
-        onClick={() => {
-          props.changeTable(true);
-        }}
-        // onClick={(e) => props.setCheckInReady(e, props.nextEvent[0]._id)}
-      >
-        Attendees
-      </Link>
-      <Link
-        className="checkin-toggle fill-green"
-        onClick={() => {
-          props.changeTable(false);
-        }}
-        // onClick={(e) => props.setCheckInReady(e, props.nextEvent[0]._id)}
-      >
-        Roster
-      </Link>
+      {props.attendeeOrRoster ? (
+        <AttendeeTable
+          attendees={props.attendees}
+          activeMeeting={true}
+        ></AttendeeTable>
+      ) : (
+        <RosterTable
+          attendees={props.roster}
+          activeMeeting={true}
+        ></RosterTable>
+      )}
     </div>
   );
 };
