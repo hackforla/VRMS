@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 
 const projectDashboardContainer = (props) => {
+  console.log("container", props);
   return (
     <div>
       {props.attendeeOrRoster ? (

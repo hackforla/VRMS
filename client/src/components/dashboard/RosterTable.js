@@ -83,73 +83,18 @@ const RosterTable = ({ attendees, activeMeeting }) => {
       <div className={styles.attendeeTableBoxCenter}>
         <span className={styles.attendeeTableTitle}>here?</span>
       </div>
-      {activeMeeting &&
-        attendees
-          .filter((attendee) => {
-            return attendee.userId.newMember;
-          })
-          .map((attendee) => {
-            return (
-              <AttendeeTableRow
-                key={Math.random()}
-                name={
-                  attendee.userId.name.firstName +
-                  " " +
-                  attendee.userId.name.lastName
-                }
-                role={attendee.userId.currentRole}
-                isNewMember={true}
-                gDriveClicked={() => gDriveClickHandler(attendee.userId.email)}
-                gitHubClicked={() =>
-                  gitHubClickHandler(attendee.userId.githubHandle)
-                }
-              ></AttendeeTableRow>
-            );
-          })}
-      {activeMeeting &&
-        attendees
-          .filter((attendee) => {
-            return (
-              !attendee.userId.newMember &&
-              attendee.userId.name.firstName !== "test"
-            );
-          })
-          .map((attendee) => {
-            return (
-              <AttendeeTableRow
-                key={Math.random()}
-                name={
-                  attendee.userId.name.firstName +
-                  " " +
-                  attendee.userId.name.lastName
-                }
-                role={attendee.userId.currentRole}
-                present={true}
-              ></AttendeeTableRow>
-            );
-          })}
-      {activeMeeting &&
-        attendees
-          .filter((attendee) => {
-            return (
-              !attendee.userId.newMember &&
-              attendee.userId.name.firstName === "test"
-            );
-          })
-          .map((attendee) => {
-            return (
-              <AttendeeTableRow
-                key={Math.random()}
-                name={
-                  attendee.userId.name.firstName +
-                  " " +
-                  attendee.userId.name.lastName
-                }
-                role={attendee.userId.currentRole}
-                present={false}
-              ></AttendeeTableRow>
-            );
-          })}
+      {attendees.map((attendee) => {
+        return (
+          <AttendeeTableRow
+            key={Math.random()}
+            name={attendee.userId}
+            role={attendee.userId.currentRole}
+            isNewMember={true}
+            gDriveClicked={() => gDriveClickHandler()}
+            gitHubClicked={() => gitHubClickHandler()}
+          ></AttendeeTableRow>
+        );
+      })}
     </div>
   );
 };

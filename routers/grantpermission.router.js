@@ -20,6 +20,7 @@ router.post("/googleDrive", async (req, res) => {
       .status(500)
       .send({ message: "Error, no email or file specified!" });
   }
+  console.log("PROCESS ENV", process.env);
 
   fs.readFile("credentials.json", async (err, content) => {
     const credentialsObject = JSON.parse(content);

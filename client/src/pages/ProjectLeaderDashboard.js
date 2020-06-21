@@ -36,6 +36,7 @@ const ProjectLeaderDashboard = () => {
       );
 
       const attendesJson = await event.json();
+
       setAttendees(attendesJson);
       // const dates = eventsJson.map((event) => {
       //     return Date.parse(event.date);
@@ -86,6 +87,7 @@ const ProjectLeaderDashboard = () => {
   }
 
   async function changeTable(e) {
+    console.log("E", e);
     setAttendeeOrRoster(e);
   }
 
