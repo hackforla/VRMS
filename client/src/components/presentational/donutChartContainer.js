@@ -20,8 +20,7 @@ const DonutChartContainer = (props) => {
         <div
           className="key-color"
           style={{ backgroundColor: `${randomColor}` }}
-        >
-        </div>
+        ></div>
         <div className="key-location">
           <p>
             {keys}: {newValue}
@@ -31,7 +30,7 @@ const DonutChartContainer = (props) => {
     );
   }
   total = Math.round(100 * total) / 100;
-
+  console.log("TOTAL", total);
   const createPie = d3
     .pie(pieData)
     .value((d) => d.value)

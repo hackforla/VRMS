@@ -5,7 +5,9 @@ const { ProjectTeamMember } = require("../models/projectTeamMember.model");
 
 // GET /api/projectteammembers/
 router.get("/", (req, res) => {
-    ProjectTeamMember.find()
+    ProjectTeamMember
+        .find()
+        .populate('userId')
         .then((teamMembers) => {
             res.json(teamMembers);
         })
@@ -19,7 +21,8 @@ router.get("/", (req, res) => {
 
 router.get("/:id", (req, res) => {
     ProjectTeamMember
-        .findById(req.params.id)
+        .find({ projectId: req.params.id })
+        .populate('userId')
         .then((teamMembers) => {
             res.status(200).json(teamMembers);
         })
@@ -32,9 +35,15 @@ router.get("/:id", (req, res) => {
 });
 
 router.get("/projectowner/:id", (req, res) => {
+    console.log('PARAMS', req.params);
+    const id = req.params.id;
+
     ProjectTeamMember
-        .find({ userId: req.params.id })
-        .then((teamMember) => {
+        .findOne({ userId: id })
+        .populate('userId')
+        .populate('projectId')
+        .then(teamMember => {
+            console.log('TEAMMEMBER', teamMember);
             teamMember.vrmsProjectAdmin === true ?
                 res.status(200).json(teamMember) :
                 res.status(200).json(false);

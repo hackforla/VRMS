@@ -44,30 +44,25 @@ const routes = [
         name: "pldashboard",
         Component: ProjectLeaderDashboard,
     },
-    { path: "/add/:item", name: "addnew", Component: AddNew },
+    { path: "/add/:item", name: "addnew", Component: AddNew }
 ];
 
 const App = () => {
-    return (
-        <AuthProvider>
-            <div className="app">
-                <div className="app-container">
-                    <Navbar />
-                    <main role="main" className="main">
-                        {routes.map(({ path, Component }) => (
-                            <Route
-                                key={path}
-                                exact
-                                path={path}
-                                component={Component}
-                            />
-                        ))}
-                    </main>
-                    <Footer />
-                </div>
-            </div>
-        </AuthProvider>
-    );
+  return (
+    <AuthProvider>
+      <div className="app">
+        <div className="app-container">
+          <Navbar />
+          <main role="main" className="main">
+            {routes.map(({ path, Component }) => (
+              <Route key={path} exact path={path} component={Component} />
+            ))}
+          </main>
+          <Footer />
+        </div>
+      </div>
+    </AuthProvider>
+  );
 };
 
 export default App;

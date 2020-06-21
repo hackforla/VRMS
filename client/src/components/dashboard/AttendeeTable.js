@@ -3,7 +3,9 @@ import styles from "../../sass/ProjectLeaderDashboard.module.scss";
 import AttendeeTableRow from "./AttendeeTableRow";
 import ls from "local-storage";
 
-const AttendeeTable = ({ attendees, activeMeeting }) => {
+const AttendeeTable = ({ attendees, activeMeeting, projectId }) => {
+    console.log('ATTENDEETABLE ATTENDEES', attendees);
+    
     const gDriveClickHandler  = (email) => {
         const bodyObject = {
             // temporary placeholder email
@@ -67,6 +69,35 @@ const AttendeeTable = ({ attendees, activeMeeting }) => {
                 console.log(err);
             });
     };
+    
+    const postUserToProjectTeamMember = async (userId) => {
+        try {
+            const newProjectTeamMember = {
+                userId,
+                projectId,
+                teamMemberStatus: 'Active',
+                // Add + set defaults when functionality added
+                // vrmsProjectAdmin:
+                // roleOnProject:
+                // joinedDate:
+                // leftDate
+                // leftReason
+                // githubPermissionLevel
+                // onProjectGithub
+                // onProjectGoogleDrive
+            }
+
+            return await fetch('/api/projectteammembers', {
+                method: 'POST',
+                body: JSON.stringify(newProjectTeamMember),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <div className={styles.attendeeTable}>
@@ -77,7 +108,7 @@ const AttendeeTable = ({ attendees, activeMeeting }) => {
                 <span className={styles.attendeeTableTitle}>role</span>
             </div>
             <div className={styles.attendeeTableBoxCenter}>
-                <span className={styles.attendeeTableTitle}>here?</span>
+                <span className={styles.attendeeTableTitle}>team member?</span>
             </div>
             {activeMeeting &&
                 attendees
@@ -97,6 +128,7 @@ const AttendeeTable = ({ attendees, activeMeeting }) => {
                                 isNewMember={true}
                                 gDriveClicked={() => gDriveClickHandler(attendee.userId.email)}
                                 gitHubClicked={() => gitHubClickHandler(attendee.userId.githubHandle)}
+                                postUser={() => postUserToProjectTeamMember(attendee.userId._id)}
                             ></AttendeeTableRow>
                         );
                     })}
