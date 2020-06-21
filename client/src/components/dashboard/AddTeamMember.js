@@ -14,10 +14,6 @@ const AddTeamMember = (props) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setUser({
-            id: "",
-            role: ""
-        });
         console.log("user1", user);
         setIsError(false);
 
