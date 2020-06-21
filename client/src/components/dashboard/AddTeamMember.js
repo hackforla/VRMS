@@ -18,6 +18,7 @@ const AddTeamMember = (props) => {
             id: "",
             role: ""
         });
+        console.log("user1", user);
         setIsError(false);
 
         if (email === "") {
@@ -33,7 +34,7 @@ const AddTeamMember = (props) => {
                 setIsError(true);
                 setErrorMessage("Email does not exist.");
             } else {
-                console.log(user);
+                console.log("user2", user);
                 await addMember();
                 console.log("Success. Team member added.", user);
             }
@@ -84,7 +85,7 @@ const AddTeamMember = (props) => {
                     return res.json();
                 }
 
-                    throw new Error(res.statusText);
+                throw new Error(res.statusText);
             })
             .then((response) => {
                 if (response === false) {
@@ -98,7 +99,7 @@ const AddTeamMember = (props) => {
                         id: response._id, 
                         role: response.currentRole
                     });
-                    // console.log("user", user)
+
                     return response;
                 }
             })
