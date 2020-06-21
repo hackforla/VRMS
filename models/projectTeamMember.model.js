@@ -23,8 +23,8 @@ const projectTeamMemberSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Project'
     },                    
-    teamMemberStatus: { type: String },             // Active or Inactive
-    vrmsProjectAdmin: { type: Boolean },            // does this team member have admin rights to the project in VRMS?
+    teamMemberStatus: { type: String, default: "Active" },             // Active or Inactive
+    vrmsProjectAdmin: { type: Boolean, default: false },            // does this team member have admin rights to the project in VRMS?
     roleOnProject: { type: String },                // Developer, Project Manager, UX, Data Science
     joinedDate: { type: Date, default: Date.now },  // date/time joined project
     leftDate: { type: Date },                       // only if Status = Inactive, date/time went inactive
