@@ -5,95 +5,108 @@ const AddTeamMember = (props) => {
     const [isError, setIsError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [email, setEmail] = useState("");
+    const [user, setUser] = useState({
+        id: "",
+        role: ""
+    });
 
     const handleInputChange = (e) => setEmail(e.currentTarget.value);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setUser({
+            id: "",
+            role: ""
+        });
         setIsError(false);
 
         if (email === "") {
-        setIsError(true);
-        setErrorMessage("Please don't leave the field blank.");
-        } else if (!email.includes("@") || !email.includes(".")) {
-        setIsError(true);
-        setErrorMessage("Please format the email address correctly.");
-        } else {
-        let hasEmail = await checkEmail(e);
-
-        if (hasEmail === false) {
             setIsError(true);
-            setErrorMessage("Email does not exist.");
+            setErrorMessage("Please don't leave the field blank.");
+        } else if (!email.includes("@") || !email.includes(".")) {
+            setIsError(true);
+            setErrorMessage("Please format the email address correctly.");
         } else {
-            await addMember(e);
-            console.log("Success. Team member added.", email);
-        }
+            let hasEmail = await checkEmail();
+
+            if (hasEmail === false) {
+                setIsError(true);
+                setErrorMessage("Email does not exist.");
+            } else {
+                console.log(user);
+                await addMember();
+                console.log("Success. Team member added.", user);
+            }
         }
     };
 
-    async function addMember(e) {
-        // needs to add a team memember to a project
-        // project leader enters email into input and will add to projectteammember model
-        // need to specify which project if user is lead for multiple projects
-        e.preventDefault();
+    async function addMember() {
+        const parameters = {
+            userId: user.id,
+            projectId: props.project.projectId,
+            roleOnProject: user.role
+        };
 
         try {
-        return await fetch("/api/projectteammembers", {
-            method: "POST",
-            headers: {
-            "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email }),
-        })
+            return await fetch("/api/projectteammembers", {
+                method: "POST",
+                headers: {
+                "Content-Type": "application/json",
+                },
+                body: JSON.stringify(parameters),
+            })
             .then((res) => {
-            if (res.ok) {
-                console.log(res);
-                return res.json();
-            }
+                if (res.ok) {
+                    return res.json();
+                }
 
-            throw new Error(res.statusText);
+                throw new Error(res.statusText);
             })
             .catch((err) => {
-            console.log(err);
+                console.log(err);
             });
         } catch (error) {
-        console.log(error);
+            console.log(error);
         }
     }
 
-    async function checkEmail(e) {
-        e.preventDefault();
-
+    async function checkEmail() {
         try {
-        return await fetch("/api/checkuser", {
-            method: "POST",
-            headers: {
-            "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email }),
-        })
+            return await fetch("/api/checkuser", {
+                method: "POST",
+                headers: {
+                "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email }),
+            })
             .then((res) => {
-            if (res.ok) {
-                return res.json();
-            }
+                if (res.ok) {
+                    return res.json();
+                }
 
-            throw new Error(res.statusText);
+                    throw new Error(res.statusText);
             })
             .then((response) => {
-            if (response === false) {
-                setIsError(true);
-                setErrorMessage("Email not found.");
+                if (response === false) {
+                    setIsError(true);
+                    setErrorMessage("Email not found.");
 
-                return response;
-            } else {
-                return response.email;
-            }
+                    return response;
+                } else {
+                    setUser({
+                        ...user, 
+                        id: response._id, 
+                        role: response.currentRole
+                    });
+                    // console.log("user", user)
+                    return response;
+                }
             })
             .catch((err) => {
-            console.log(err);
+                console.log(err);
             });
         } catch (error) {
-        console.log(error);
+            console.log(error);
         }
     }
 
