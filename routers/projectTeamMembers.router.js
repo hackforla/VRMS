@@ -41,6 +41,7 @@ router.get("/projectowner/:id", (req, res) => {
     ProjectTeamMember
         .findOne({ userId: id })
         .populate('userId')
+        .populate('projectId')
         .then(teamMember => {
             console.log('TEAMMEMBER', teamMember);
             teamMember.vrmsProjectAdmin === true ?

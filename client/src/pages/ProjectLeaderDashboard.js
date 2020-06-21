@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
-import "../sass/Dashboard.scss";
 import styles from "../sass/ProjectLeaderDashboard.module.scss";
 import UpcomingEvent from "../components/presentational/upcomingEvent";
-import AttendeeTable from "../components/dashboard/AttendeeTable";
-import RosterTable from "../components/dashboard/RosterTable";
 import ProjectDashboardContainer from "../components/presentational/projectDashboardContainer";
-
 import DashboardButton from "../components/dashboard/DashboardButton";
+import ProjectInfo from "../components/dashboard/ProjectInfo";
 import { Link } from "react-router-dom";
-// import fetch from "node-fetch";
+
+import "../sass/Dashboard.scss";
 
 const ProjectLeaderDashboard = () => {
   const [isCheckInReady, setIsCheckInReady] = useState();
@@ -18,81 +16,13 @@ const ProjectLeaderDashboard = () => {
   const [roster, setRoster] = useState([]);
   const [attendeeOrRoster, setAttendeeOrRoster] = useState("roster");
 
-  // const dummyDataRoster = [
-  //   {
-  //       userId: {
-  //         currentRole: "Front End Developer", 
-  //         email: "carlos@test.com", 
-  //         name: {firstName: "Carlos", lastName: "F"},
-  //         newMember: true, 
-  //         _id: "5e8bac41bf40080392329cfc"
-  //       }, 
-  //       projectId:"5e8bfbcf791f537f7e86daeb",
-  //       teamMemberStatus: true,
-  //       vrmsProjectAdmin: false,
-  //       roleOnProject: "Front End Developer",
-  //       joinedDate: "2020-04-06T22:59:06.095Z",
-  //       onProjectGithub: false, 
-  //       onProjectGoogleDrive: false,
-  //     }, 
-  //     {
-  //       userId: {
-  //         currentRole: "Tester", 
-  //         email: "matt@test.com", 
-  //         name: {firstName: "Matt", lastName: "Test"},
-  //         newMember: true, 
-  //         _id: "5e8bac41bf40080392329cfc"
-  //       }, 
-  //       projectId: "5e8bfbcf791f537f7e86daeb",
-  //       teamMemberStatus: true,
-  //       vrmsProjectAdmin: false,
-  //       roleOnProject: "Tester",
-  //       joinedDate: new Date(),
-  //       onProjectGithub: true, 
-  //       onProjectGoogleDrive: false,
-  //     },
-  //     {
-  //       userId: {
-  //         currentRole: "Tester", 
-  //         email: "testmatt@test.com", 
-  //         name: {firstName: "Matt", lastName: "Test"},
-  //         newMember: false, 
-  //         _id: "5e8bb4e2d1620d050cceeb42"
-  //       }, 
-  //       projectId: "5e8bfbcf791f537f7e86daeb",
-  //       teamMemberStatus: true,
-  //       vrmsProjectAdmin: false,
-  //       roleOnProject: "Tester",
-  //       joinedDate: new Date(),
-  //       onProjectGithub: true, 
-  //       onProjectGoogleDrive: true,
-  //     }, 
-  //     {
-  //       userId: {
-  //         currentRole: "Tester", 
-  //         email: "testingmatt@test.com", 
-  //         name: {firstName: "Matt", lastName: "Testing"},
-  //         newMember: false, 
-  //         _id: "5e8bb4e2d1620d050cceeb42"
-  //       }, 
-  //       projectId: "5e8bfbcf791f537f7e86daeb",
-  //       teamMemberStatus: true,
-  //       vrmsProjectAdmin: false,
-  //       roleOnProject: "Tester",
-  //       joinedDate: new Date(),
-  //       onProjectGithub: true, 
-  //       onProjectGoogleDrive: true,
-  //     }
-  // ]
-  // const [roster, setRoster] = useState(dummyDataRoster);
-
   async function getProjectFromUserId() {
     try {
       const project = await fetch("/api/projectteammembers/projectowner/5e2790b06dc5b4ed0bc1df56");
       const projectJson = await project.json();
       console.log('PROJECT', projectJson);
       setProject(projectJson);
-      // console.log('PROJECT', projectJson);
+
     } catch (error) {
       console.log(error);
     };
@@ -101,11 +31,13 @@ const ProjectLeaderDashboard = () => {
   async function getNextEvent() {
     // event id temporarily hard coded so actual check in data would be listed
     try {
-      const events = await fetch(`/api/events/nexteventbyproject/${project.projectId}`);
-      const eventsJson = await events.json();
-      setIsCheckInReady(eventsJson.checkInReady);
-      setNextEvent([eventsJson]);
-      // console.log('NEXT EVENT', eventsJson);
+      if (project && project.projectId) {
+        const events = await fetch(`/api/events/nexteventbyproject/${project.projectId._id}`);
+        const eventsJson = await events.json();
+        setIsCheckInReady(eventsJson.checkInReady);
+        setNextEvent([eventsJson]);
+        // console.log('NEXT EVENT', eventsJson);
+      }
     } catch (err) {
       console.log(err);
     };
@@ -114,7 +46,7 @@ const ProjectLeaderDashboard = () => {
   async function getRoster() {
     try {
       if (project && project.projectId) {
-        const roster = await fetch(`/api/projectteammembers/${project.projectId}`);
+        const roster = await fetch(`/api/projectteammembers/${project.projectId._id}`);
         const rosterJson = await roster.json();
         // console.log('ROSTER', rosterJson);
         setRoster(rosterJson);
@@ -128,10 +60,7 @@ const ProjectLeaderDashboard = () => {
     try {
       if (nextEvent && nextEvent[0]._id) {
         const id = nextEvent[0]._id;
-        const attendees = await fetch(
-          `/api/checkins/findEvent/${id}`
-        );
-  
+        const attendees = await fetch(`/api/checkins/findEvent/${id}`);
         const attendeesJson = await attendees.json();
         // console.log('GETATTENDEES', attendeesJson);
         setAttendees(attendeesJson);
@@ -202,8 +131,11 @@ const ProjectLeaderDashboard = () => {
 
   return (
     <div className="flex-container">
-      {project && (
+      {project && project.projectId && (
         <div className="dashboard">
+
+          <ProjectInfo project={project} />
+
           <div className="dashboard-header">
             <p className="dashboard-header-text-small">
               You have an event going on!
@@ -215,27 +147,28 @@ const ProjectLeaderDashboard = () => {
             nextEvent={nextEvent}
             setCheckInReady={setCheckInReady}
           />
-          
-          <Link
-            className="checkin-toggle fill-green"
-            onClick={() => {
-              changeTable(false);
-            }}
-          >
-            Roster
-          </Link>
 
-          {isCheckInReady ? (
-            <Link
-              className="checkin-toggle fill-green"
+          <div className="dashboard-chart-container">
+            {/* {isCheckInReady ? ( */}
+              <button
+                className=""
+                onClick={() => {
+                  changeTable(true);
+                }}
+                // onClick={(e) => props.setCheckInReady(e, props.nextEvent[0]._id)}
+              >
+                Attendees
+              </button>
+            {/* ) : null} */}
+            <button
+              className=""
               onClick={() => {
-                changeTable(true);
+                changeTable(false);
               }}
-              // onClick={(e) => props.setCheckInReady(e, props.nextEvent[0]._id)}
             >
-              Attendees
-            </Link>
-          ) : null}
+              Roster
+            </button>
+          </div>
 
           {isCheckInReady ? (
             <>
