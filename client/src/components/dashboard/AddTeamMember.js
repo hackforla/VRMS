@@ -117,7 +117,7 @@ const AddTeamMember = (props) => {
                 <form
                 className="form-add-member"
                 autoComplete="off"
-                onSubmit={(e) => e.preventDefault()}
+                onSubmit={(e) => handleSubmit(e)}
                 >
                 <div className="form-row">
                     <div className="form-input-text">
@@ -137,7 +137,7 @@ const AddTeamMember = (props) => {
 
                 <div className="form-input-button">
                     <button
-                    onClick={(e) => handleSubmit(e)}
+                    type="submit"
                     className="addmember-button"
                     >
                     Add
