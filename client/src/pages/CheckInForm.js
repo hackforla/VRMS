@@ -206,7 +206,12 @@ const submitReturning = (returningUser, e = null) => {
                 }
             })
             .then(res => {
-                return res.json();
+              console.log('res.ok, 209', res.ok);
+              if (res.ok) {
+                return res.json(); 
+              }
+
+              throw new Error(res.statusText)
             })
             .then(response => {
                 const checkInForm = { userId: `${returningUser._id}`, eventId: new URLSearchParams(props.location.search).get('eventId') };
@@ -222,14 +227,29 @@ const submitReturning = (returningUser, e = null) => {
                 })
                 .then(res => {
                     if (res.ok) {
-                        props.history.push('/success');
+                      return props.history.push('/success'); 
                     }
+                    console.log('throwing new error in line 230');
+                    throw new Error(res.statusText);
                 })
-                .catch(err => console.log(err));
-            })                    
-            .catch(err => console.log(err));
+                .catch(error => {
+                  console.log(error.error);
+                  setIsError(true);
+                  setErrorMessage(error);
+                  setIsLoading(false);
+                })
+            })
+            .catch(error => {
+              console.log(error);
+              setIsError(true);
+              setErrorMessage(error);
+              setIsLoading(false);
+            })              
         } catch (error) {
             console.log(error);
+            setIsError(true);
+            setErrorMessage(error);
+            setIsLoading(false);
         }
     // }
 }
@@ -398,6 +418,10 @@ const checkEmail = (e) => {
     e.preventDefault();
 
     try {
+        if (!formInput.email) {
+          throw new Error("User email is required");
+        }
+
         setIsLoading(true);
 
         fetch('/api/checkuser', {
@@ -426,6 +450,8 @@ const checkEmail = (e) => {
         })
     } catch (error) {
         console.log(error);
+        setIsError(true);
+        setErrorMessage(error)
         setIsLoading(false);
     }
 }
