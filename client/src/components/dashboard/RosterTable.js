@@ -87,7 +87,11 @@ const RosterTable = ({ attendees, activeMeeting }) => {
         return (
           <AttendeeTableRow
             key={Math.random()}
-            name={attendee.userId}
+            name={
+              attendee.userId.name.firstName +
+              " " +
+              attendee.userId.name.lastName
+            }
             role={attendee.userId.currentRole}
             isNewMember={true}
             gDriveClicked={() => gDriveClickHandler()}
