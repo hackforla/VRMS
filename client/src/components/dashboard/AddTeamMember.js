@@ -5,16 +5,11 @@ const AddTeamMember = (props) => {
     const [isError, setIsError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [email, setEmail] = useState("");
-    const [user, setUser] = useState({
-        id: "",
-        role: ""
-    });
 
     const handleInputChange = (e) => setEmail(e.currentTarget.value);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("user1", user);
         setIsError(false);
 
         if (email === "") {
@@ -24,24 +19,53 @@ const AddTeamMember = (props) => {
             setIsError(true);
             setErrorMessage("Please format the email address correctly.");
         } else {
-            let hasEmail = await checkEmail();
-
-            if (hasEmail === false) {
-                setIsError(true);
-                setErrorMessage("Email does not exist.");
-            } else {
-                console.log("user2", user);
-                await addMember();
-                console.log("Success. Team member added.", user);
-            }
+            await addToRoster();
+            console.log("Success. Team member added.");
         }
     };
 
-    async function addMember() {
+    async function addToRoster() {
+        try {
+            return await fetch("/api/checkuser", {
+                method: "POST",
+                headers: {
+                "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email }),
+            })
+            .then((res) => {
+                if (res.ok) {
+                    return res.json();
+                }
+
+                throw new Error(res.statusText);
+            })
+            .then(response => {
+                if (response === false) {
+                    setIsError(true);
+                    setErrorMessage("Email not found.");
+
+                    return response;
+                } else {
+                    return response;
+                }
+            })
+            .then(user => {
+                addMember(user);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function addMember(user) {
         const parameters = {
-            userId: user.id,
+            userId: user._id,
             projectId: props.project.projectId,
-            roleOnProject: user.role
+            roleOnProject: user.currentRole
         };
 
         try {
@@ -58,46 +82,6 @@ const AddTeamMember = (props) => {
                 }
 
                 throw new Error(res.statusText);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    async function checkEmail() {
-        try {
-            return await fetch("/api/checkuser", {
-                method: "POST",
-                headers: {
-                "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ email }),
-            })
-            .then((res) => {
-                if (res.ok) {
-                    return res.json();
-                }
-
-                throw new Error(res.statusText);
-            })
-            .then((response) => {
-                if (response === false) {
-                    setIsError(true);
-                    setErrorMessage("Email not found.");
-
-                    return response;
-                } else {
-                    setUser({
-                        ...user, 
-                        id: response._id, 
-                        role: response.currentRole
-                    });
-
-                    return response;
-                }
             })
             .catch((err) => {
                 console.log(err);
