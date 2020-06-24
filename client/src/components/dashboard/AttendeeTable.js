@@ -4,6 +4,8 @@ import AttendeeTableRow from "./AttendeeTableRow";
 import ls from "local-storage";
 
 const AttendeeTable = ({ attendees, activeMeeting, projectId }) => {
+    console.log('ATTENDEETABLE ATTENDEES', attendees);
+    
     const gDriveClickHandler  = (email) => {
         const bodyObject = {
             // temporary placeholder email
@@ -99,14 +101,14 @@ const AttendeeTable = ({ attendees, activeMeeting, projectId }) => {
 
     return (
         <div className={styles.attendeeTable}>
-            <div className={styles.attendeeTableBoxLeft}>
+            <div className={styles.attendeeTableBoxCenter}>
                 <span className={styles.attendeeTableTitle}>name</span>
             </div>
             <div className={styles.attendeeTableBoxCenter}>
                 <span className={styles.attendeeTableTitle}>role</span>
             </div>
             <div className={styles.attendeeTableBoxCenter}>
-                <span className={styles.attendeeTableTitle}>team member?</span>
+                <span className={styles.attendeeTableTitle}>On Roster</span>
             </div>
             {activeMeeting &&
                 attendees
