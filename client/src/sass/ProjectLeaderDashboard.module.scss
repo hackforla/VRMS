@@ -18,11 +18,12 @@
     justify-content: center;
     align-items: center;
     text-align: center;
+    flex-direction: column;
 }
 
 .attendeeTableTitle {
     font-family: "Source Code Pro Bold", sans-serif;
-    font-size: 1rem;
+    font-size: 1.1rem;
     letter-spacing: 1px;
     color: black;
     text-transform: uppercase;
@@ -60,6 +61,23 @@
     color: white;
 }
 
+.rosterIconImg {
+    width: 100%;
+    height: 100%;
+}
+
+.rosterIconContainer {
+    display: flex;
+    flex-direction: row;
+    
+}
+
+.rosterIcon {
+    max-width: 20px;
+    max-height: 20px;
+    margin: 3px; 
+}
+
 .dashboardHeadingProjectLeader {
     font-family: "Source Code Pro SemiBold", sans-serif;
     font-size: 0.875rem;
@@ -75,7 +93,7 @@
 }
 
 .yesColor {
-    color: #2def0e;
+    color: green;
 }
 
 .noColor {

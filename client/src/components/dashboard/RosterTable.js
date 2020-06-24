@@ -4,7 +4,14 @@ import RosterTableRow from "./RosterTableRow";
 import ls from "local-storage";
 
 const RosterTable = ({ attendees, activeMeeting }) => {
-  console.log('ATTENDEES', attendees);
+
+  const checkmark = <img className={styles.rosterIconImg} src="/projectleaderdashboard/check.png" alt="checkmark" />
+  const gitHubIcon = <img className={styles.rosterIconImg} src="/projectleaderdashboard/github.png" alt="GitHub Icon" />
+  const googleDriveIcon = <img className={styles.rosterIconImg} src="/projectleaderdashboard/googledrive.png" alt="Google Drive Icon" />
+  const slackIcon = <img className={styles.rosterIconImg} src="/projectleaderdashboard/slack.png" alt="Slack Icon" />
+
+  // console.log('ATTENDEES', attendees);
+
   const gDriveClickHandler = (email) => {
     const bodyObject = {
       // temporary placeholder email
@@ -75,14 +82,18 @@ const RosterTable = ({ attendees, activeMeeting }) => {
 
   return (
     <div className={styles.attendeeTable}>
-      <div className={styles.attendeeTableBoxLeft}>
+      <div className={styles.attendeeTableBoxCenter}>
         <span className={styles.attendeeTableTitle}>name</span>
       </div>
       <div className={styles.attendeeTableBoxCenter}>
         <span className={styles.attendeeTableTitle}>role</span>
       </div>
       <div className={styles.attendeeTableBoxCenter}>
-        <span className={styles.attendeeTableTitle}>services</span>
+        <div className={styles.rosterIconContainer}>
+          <div className={styles.rosterIcon}>{slackIcon}</div>
+          <div className={styles.rosterIcon}>{googleDriveIcon}</div>
+          <div className={styles.rosterIcon}>{gitHubIcon}</div>
+        </div>
       </div>
       {attendees &&
         attendees

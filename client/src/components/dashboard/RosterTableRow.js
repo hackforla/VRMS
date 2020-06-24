@@ -5,29 +5,29 @@ import ls from "local-storage";
 
 const RosterTableRow = ({ name, role, isNewMember, gDriveClicked, gitHubClicked, services}) => {
     // see icons attr. note @ bottom
-    const checkmark = <img src="/projectleaderdashboard/check.png" alt="checkmark" />
-    const gitHubIcon = <img src="/projectleaderdashboard/github.png" alt="GitHub Icon" />
-    const googleDriveIcon = <img src="/projectleaderdashboard/googledrive.png" alt="Google Drive Icon" />
-    const slackIcon = <img src="/projectleaderdashboard/slack.png" alt="Slack Icon" />
+    const checkmark = <img className={styles.rosterIconImg} src="/projectleaderdashboard/check.png" alt="checkmark" />
+    const gitHubIcon = <img className={styles.rosterIconImg} src="/projectleaderdashboard/github.png" alt="GitHub Icon" />
+    const googleDriveIcon = <img className={styles.rosterIconImg} src="/projectleaderdashboard/googledrive.png" alt="Google Drive Icon" />
+    const slackIcon = <img className={styles.rosterIconImg} src="/projectleaderdashboard/slack.png" alt="Slack Icon" />
 
     let here = null;
 
     if (isNewMember) {
       here = (
-        <>
-            {services.gitHub ? checkmark : <DashboardButton clicked={gitHubClicked}>{gitHubIcon}</DashboardButton>}
-            {services.googleDrive ? checkmark : <DashboardButton clicked={gDriveClicked}>{googleDriveIcon}</DashboardButton>}
-            <DashboardButton>{slackIcon}</DashboardButton>
-        </>
+        <div className={styles.rosterIconContainer}>
+          <div className={styles.rosterIcon}>{slackIcon}</div>
+          {services.googleDrive ? <div className={styles.rosterIcon}>{checkmark}</div> : <div className={styles.rosterIcon}>{googleDriveIcon}</div>}
+          {services.gitHub ? <div className={styles.rosterIcon}>{checkmark}</div> : <div className={styles.rosterIcon}>{gitHubIcon}</div>}
+        </div>
       );
     } else {
       here = (
-        <>
-            {services.gitHub ? checkmark : <DashboardButton clicked={gitHubClicked}>{gitHubIcon}</DashboardButton>}
-            {services.googleDrive ? checkmark : <DashboardButton clicked={gDriveClicked}>{googleDriveIcon}</DashboardButton>}
-            {/* <DashboardButton>{slackIcon}</DashboardButton> */}
-            {checkmark}
-        </>
+        <div className={styles.rosterIconContainer}>
+          <div className={styles.rosterIcon}>{checkmark}</div>
+          {services.googleDrive ? <div className={styles.rosterIcon}>{checkmark}</div> : <div className={styles.rosterIcon}>{googleDriveIcon}</div>}
+          {services.gitHub ? <div className={styles.rosterIcon}>{checkmark}</div> : <div className={styles.rosterIcon}>{gitHubIcon}</div>}
+          {/* <DashboardButton>{slackIcon}</DashboardButton> */}
+        </div>
       );
     }
     

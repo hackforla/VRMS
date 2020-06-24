@@ -14,7 +14,7 @@ const ProjectLeaderDashboard = () => {
   const [attendees, setAttendees] = useState([]);
   const [project, setProject] = useState([]);
   const [roster, setRoster] = useState([]);
-  const [attendeeOrRoster, setAttendeeOrRoster] = useState("roster");
+  const [attendeeOrRoster, setAttendeeOrRoster] = useState(true);
 
   async function getProjectFromUserId() {
     try {
@@ -136,7 +136,8 @@ const ProjectLeaderDashboard = () => {
 
           <ProjectInfo project={project} />
 
-          <div className="dashboard-header">
+          <div className="dashboard-header flex">
+            <div className="active-event-dot"></div>
             <p className="dashboard-header-text-small">
               You have an event going on!
             </p>
@@ -151,27 +152,36 @@ const ProjectLeaderDashboard = () => {
           <div className="dashboard-chart-container">
             {/* {isCheckInReady ? ( */}
               <button
-                className=""
+                className={`tab-selector ${attendeeOrRoster ? 'tab-selected' : null}`}
                 onClick={() => {
                   changeTable(true);
                 }}
                 // onClick={(e) => props.setCheckInReady(e, props.nextEvent[0]._id)}
               >
-                Attendees
+                ATTENDEES
               </button>
             {/* ) : null} */}
             <button
-              className=""
+              className={`tab-selector ${!attendeeOrRoster ? 'tab-selected' : null}`}
               onClick={() => {
                 changeTable(false);
               }}
             >
-              Roster
+              ROSTER
             </button>
           </div>
 
           {isCheckInReady ? (
             <>
+              {(attendees.length > 0) && (roster.length > 0) && (
+                <ProjectDashboardContainer
+                  changeTable={changeTable}
+                  attendees={attendees}
+                  roster={roster}
+                  attendeeOrRoster={attendeeOrRoster}
+                />
+              )}
+
               <div
                 className={["dashboard-header", styles.dashboardHeaderFlex].join(
                   " "
@@ -184,14 +194,6 @@ const ProjectLeaderDashboard = () => {
                 <DashboardButton>Download .csv</DashboardButton>
               </div>
 
-              {(attendees.length > 0) && (roster.length > 0) && (
-                <ProjectDashboardContainer
-                  changeTable={changeTable}
-                  attendees={attendees}
-                  roster={roster}
-                  attendeeOrRoster={attendeeOrRoster}
-                />
-              )}
             </>
           ) : null}
         </div>
