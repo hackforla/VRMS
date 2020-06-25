@@ -4,7 +4,9 @@ import AttendeeTableRow from "./AttendeeTableRow";
 import ls from "local-storage";
 
 const RosterTable = ({ attendees, activeMeeting }) => {
-  const gDriveClickHandler = (email) => {
+  console.log("ROSTER ATTENDEES", attendees);
+  const gDriveClickHandler = (email, fileid) => {
+    console.log("GDRIVE", email, fileid);
     const bodyObject = {
       // temporary placeholder email
       email: "mbirdyw@gmail.com",
@@ -94,7 +96,7 @@ const RosterTable = ({ attendees, activeMeeting }) => {
             }
             role={attendee.userId.currentRole}
             isNewMember={true}
-            gDriveClicked={() => gDriveClickHandler()}
+            gDriveClicked={() => gDriveClickHandler("testemail", "testfileid")}
             gitHubClicked={() => gitHubClickHandler()}
           ></AttendeeTableRow>
         );
