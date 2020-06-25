@@ -1,0 +1,28 @@
+.form-add-member {
+  flex-wrap: nowrap;
+  width: 320px;
+  margin: auto;
+}
+
+.form-add-member .form-row {
+  width: 240px;
+}
+
+.form-add-member input {
+  width: 240px;
+  font-size: 16px;
+  font-weight: 100;
+}
+
+.form-add-member .form-input-button {
+  width: 60px;
+  margin-bottom: 12px;
+}
+
+.addmember-warning {
+  text-align: center;
+}
+
+.addmember-success {
+  text-align: center;
+}

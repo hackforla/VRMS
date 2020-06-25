@@ -8,13 +8,18 @@ import { Link } from "react-router-dom";
 
 import "../sass/Dashboard.scss";
 
+import AddTeamMember from "../components/dashboard/AddTeamMember";
 const ProjectLeaderDashboard = () => {
   const [isCheckInReady, setIsCheckInReady] = useState();
   const [nextEvent, setNextEvent] = useState([]);
   const [attendees, setAttendees] = useState([]);
   const [project, setProject] = useState([]);
   const [roster, setRoster] = useState([]);
-  const [attendeeOrRoster, setAttendeeOrRoster] = useState(true);
+	const [attendeeOrRoster, setAttendeeOrRoster] = useState(true);
+	const [forceRerender, setForceRerender] = useState(true);
+	const [isError, setIsError] = useState(false);
+	const [errorMessage, setErrorMessage] = useState("");
+	const [isSuccess, setIsSuccess] = useState(false);
 
   async function getProjectFromUserId() {
     try {
@@ -111,7 +116,93 @@ const ProjectLeaderDashboard = () => {
 
   async function getDashboardInfo() {
     await getProjectFromUserId();
-  }
+	}
+	
+	const handleSubmit = async (e, email) => {
+		e.preventDefault();
+		setIsError(false);
+		setIsSuccess(false);
+
+		if (email === "") {
+				setIsError(true);
+				setErrorMessage("Please don't leave the field blank.");
+		} else if (!email.includes("@") || !email.includes(".")) {
+				setIsError(true);
+				setErrorMessage("Please format the email address correctly.");
+		} else {
+				await addToRoster(email);
+				await setForceRerender(!forceRerender);
+		}
+};
+
+async function addToRoster(email) {
+		try {
+				return await fetch("/api/checkuser", {
+						method: "POST",
+						headers: {
+						"Content-Type": "application/json",
+						},
+						body: JSON.stringify({ email }),
+				})
+				.then((res) => {
+						if (res.ok) {
+								return res.json();
+						}
+
+						throw new Error(res.statusText);
+				})
+				.then(response => {
+						if (response === false) {
+								setIsError(true);
+								setErrorMessage("Email not found.");
+
+								return response;
+						} else {
+								return response;
+						}
+				})
+				.then(user => {
+					if (user === false) {
+						return false
+					} else{
+						addMember(user);
+					}
+				})
+				.catch((err) => {
+						console.log(err);
+				});
+		} catch (error) {
+				console.log(error);
+		}
+}
+
+async function addMember(user) {
+		const parameters = {
+				userId: user._id,
+				projectId: project.projectId,
+				roleOnProject: user.currentRole
+		};
+
+		try {
+				return await fetch("/api/projectteammembers", {
+						method: "POST",
+						headers: {
+						"Content-Type": "application/json",
+						},
+						body: JSON.stringify(parameters),
+				})
+				.then((res) => {
+						if (res !== false) {
+								setIsSuccess(true);
+						}
+				})
+				.catch((err) => {
+						console.log(err);
+				});
+		} catch (error) {
+				console.log(error);
+		}
+}
 
   useEffect(() => {
     getDashboardInfo();
@@ -123,7 +214,7 @@ const ProjectLeaderDashboard = () => {
 
   useEffect(() => {
     getRoster();
-  }, [project]);
+  }, [project, forceRerender]);
 
   useEffect(() => {
     getNextEvent();
@@ -148,6 +239,8 @@ const ProjectLeaderDashboard = () => {
             nextEvent={nextEvent}
             setCheckInReady={setCheckInReady}
           />
+          
+          <AddTeamMember isError={isError} errorMessage={errorMessage} isSuccess={isSuccess} addToTeamHandler={handleSubmit}/>
 
           <div className="dashboard-chart-container">
             {/* {isCheckInReady ? ( */}
