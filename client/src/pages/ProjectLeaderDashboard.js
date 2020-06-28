@@ -19,7 +19,9 @@ const ProjectLeaderDashboard = () => {
 	const [forceRerender, setForceRerender] = useState(true);
 	const [isError, setIsError] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
-	const [isSuccess, setIsSuccess] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  let attendeesAreFormatted = false;
+  // const [attendeesAreFormatted, setAttendeesAreFormatted] = useState(false);
 
   async function getProjectFromUserId() {
     try {
@@ -204,11 +206,24 @@ async function addMember(user) {
 		}
 }
 
+function formatAttendees () {
+  attendees.map(attendee => {
+      const isOnRoster = Boolean(roster.find(teamMember => 
+        teamMember.userId._id === attendee.userId._id));
+      
+      attendee.isOnRoster = isOnRoster ? true : false ;
+  })
+
+  setAttendees(attendees);
+  attendeesAreFormatted = true;
+}
+
   useEffect(() => {
     getDashboardInfo();
   }, []);
 
   useEffect(() => {
+    console.log('getAttendees() called');
     getAttendees();
   }, [nextEvent]);
 
@@ -219,6 +234,11 @@ async function addMember(user) {
   useEffect(() => {
     getNextEvent();
   }, [project]);
+
+  useEffect(() => {
+    console.log('formatAttendees() called');
+    formatAttendees();
+  }, [attendees, roster])
 
   return (
     <div className="flex-container">
@@ -268,10 +288,13 @@ async function addMember(user) {
             <>
               {(attendees.length > 0) && (roster.length > 0) && (
                 <ProjectDashboardContainer
+                  attendeesAreFormatted={attendeesAreFormatted}
                   changeTable={changeTable}
                   attendees={attendees}
                   roster={roster}
+                  setRoster={setRoster}
                   attendeeOrRoster={attendeeOrRoster}
+                  projectId={project._id}
                 />
               )}
 

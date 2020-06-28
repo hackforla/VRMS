@@ -3,88 +3,15 @@ import styles from "../../sass/ProjectLeaderDashboard.module.scss";
 import AttendeeTableRow from "./AttendeeTableRow";
 import ls from "local-storage";
 
-const AttendeeTable = ({ attendees, activeMeeting, projectId }) => {
+const AttendeeTable = ({ attendees, activeMeeting, projectId, setRoster, roster }) => {
     console.log('ATTENDEETABLE ATTENDEES', attendees);
     
-    const gDriveClickHandler  = (email) => {
-        const bodyObject = {
-            // temporary placeholder email
-            email: "mbirdyw@gmail.com",
-            file: "10_KYe3pbZqiq6reeLA8zDDeIlz-4PxWM",
-        };
-        fetch("api/grantpermission/googleDrive", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(bodyObject),
-        })
-            .then((res) => {
-                if (res.status !== 200) {
-                    return res.json().then((res) => {
-                        throw new Error(res.message);
-                    });
-                }
-                return res.json();
-            })
-            .then((res) => {
-                console.log(res);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
-
-    const gitHubClickHandler = (githubHandle, projectName, accessLevel = 'manager') => {
-        // ******************** pbtag -- allow PL to add githubHandle if not
-        // already there 
-        // if (!githubHandle) {
-        // }
-
-        const bodyObject = {
-            // temporary placeholder handle + repoName
-            handle: "testingphoebe",
-            teamName: "vrms", //projectName, no where to pull that from currently, event object doesn't provide project name
-            accessLevel
-        };
-        fetch("api/grantpermission/gitHub", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(bodyObject),
-        })
-            .then((res) => {
-                if (res.status !== 200) {
-                    return res.json().then((res) => {
-                        throw new Error(res.message);
-                    });
-                }
-                return res.json();
-            })
-            .then((res) => {
-                console.log(res);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
-    
+    // when refactoring fetch calls move postUserToProjectTeamMember function to projectLeaderDashboard
     const postUserToProjectTeamMember = async (userId) => {
         try {
             const newProjectTeamMember = {
                 userId,
                 projectId,
-                teamMemberStatus: 'Active',
-                // Add + set defaults when functionality added
-                // vrmsProjectAdmin:
-                // roleOnProject:
-                // joinedDate:
-                // leftDate
-                // leftReason
-                // githubPermissionLevel
-                // onProjectGithub
-                // onProjectGoogleDrive
             }
 
             return await fetch('/api/projectteammembers', {
@@ -94,6 +21,8 @@ const AttendeeTable = ({ attendees, activeMeeting, projectId }) => {
                     'Content-Type': 'application/json',
                 },
             })
+                .then(res => !res.ok ? new Error(res.statusText) : res.json() )
+                .then(newTeamMember => setRoster(roster.push(newTeamMember)))
         } catch (error) {
             console.log(error);
         }
@@ -113,7 +42,9 @@ const AttendeeTable = ({ attendees, activeMeeting, projectId }) => {
             {activeMeeting &&
                 attendees
                     .filter((attendee) => {
-                        return attendee.userId.newMember;
+                        return (
+                            attendee.isOnRoster === false
+                        );
                     })
                     .map((attendee) => {
                         return (
@@ -125,10 +56,7 @@ const AttendeeTable = ({ attendees, activeMeeting, projectId }) => {
                                     attendee.userId.name.lastName
                                 }
                                 role={attendee.userId.currentRole}
-                                isNewMember={true}
-                                gDriveClicked={() => gDriveClickHandler(attendee.userId.email)}
-                                gitHubClicked={() => gitHubClickHandler(attendee.userId.githubHandle)}
-                                postUser={() => postUserToProjectTeamMember(attendee.userId._id)}
+                                postUser={postUserToProjectTeamMember}
                             ></AttendeeTableRow>
                         );
                     })}
@@ -136,7 +64,7 @@ const AttendeeTable = ({ attendees, activeMeeting, projectId }) => {
                 attendees
                     .filter((attendee) => {
                         return (
-                            !attendee.userId.newMember && attendee.userId.name.firstName !== "test"
+                            attendee.isOnRoster === true
                         );
                     })
                     .map((attendee) => {
@@ -148,32 +76,29 @@ const AttendeeTable = ({ attendees, activeMeeting, projectId }) => {
                                     " " +
                                     attendee.userId.name.lastName
                                 }
+                                isProjectTeamMember={true}
                                 role={attendee.userId.currentRole}
-                                present={true}
                             ></AttendeeTableRow>
                         );
                     })}
-            {activeMeeting &&
+            
+            {/* {!attendeesAreFormatted &&
                 attendees
-                    .filter((attendee) => {
-                        return (
-                            !attendee.userId.newMember && attendee.userId.name.firstName === "test"
-                        );
-                    })
-                    .map((attendee) => {
-                        return (
-                            <AttendeeTableRow
-                                key={Math.random()}
-                                name={
-                                    attendee.userId.name.firstName +
-                                    " " +
-                                    attendee.userId.name.lastName
-                                }
-                                role={attendee.userId.currentRole}
-                                present={false}
-                            ></AttendeeTableRow>
-                        );
-                    })}
+                .map((attendee) => {
+                    return (
+                        <AttendeeTableRow
+                            key={Math.random()}
+                            name={
+                                attendee.userId.name.firstName +
+                                " " +
+                                attendee.userId.name.lastName
+                            }
+                            isProjectTeamMember={true}
+                            role={attendee.userId.currentRole}
+                        ></AttendeeTableRow>
+                    );
+                })
+            } */}
         </div>
     );
 };

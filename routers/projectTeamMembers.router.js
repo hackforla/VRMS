@@ -60,7 +60,7 @@ router.post("/", (req, res) => {
     ProjectTeamMember
         .create(req.body)
         .then((teamMember) => {
-            res.sendStatus(201);
+            res.status(201).json(teamMember);
         })
         .catch((err) => {
             console.log(err);
