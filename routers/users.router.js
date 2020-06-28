@@ -65,6 +65,11 @@ router.patch('/:id', (req, res) => {
     const { headers } = req;
     const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
 
+    // Return 412 status if no userId
+    if (req.params.id === "undefined") {
+        return res.status(412).json({ error: "user id required" })
+    }
+    
     if (headers['x-customrequired-header'] !== expectedHeader) {
         res.sendStatus(401);
     } else {

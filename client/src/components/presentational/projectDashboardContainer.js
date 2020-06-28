@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 
 const projectDashboardContainer = (props) => {
-  console.log("container", props);
   return (
     <div>
       {props.attendeeOrRoster ? (
@@ -18,6 +17,7 @@ const projectDashboardContainer = (props) => {
       ) : (
         <RosterTable
           attendees={props.roster}
+          RosterProjectId={props.RosterProjectId}
           activeMeeting={true}
         ></RosterTable>
       )}

@@ -1,17 +1,46 @@
 import React from "react";
 import styles from "../../sass/ProjectLeaderDashboard.module.scss";
-import AttendeeTableRow from "./AttendeeTableRow";
+import RosterTableRow from "./RosterTableRow";
 import ls from "local-storage";
 
-const RosterTable = ({ attendees, activeMeeting }) => {
-  console.log("ROSTER ATTENDEES", attendees);
-  const gDriveClickHandler = (email, fileid) => {
-    console.log("GDRIVE", email, fileid);
+const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
+  const gitHubIcon = (
+    <img
+      className={styles.rosterIconImg}
+      src="/projectleaderdashboard/github.png"
+      alt="GitHub Icon"
+    />
+  );
+  const googleDriveIcon = (
+    <img
+      className={styles.rosterIconImg}
+      src="/projectleaderdashboard/googledrive.png"
+      alt="Google Drive Icon"
+      onClick={() => {
+        gDriveClickHandler();
+      }}
+    />
+  );
+  const slackIcon = (
+    <img
+      className={styles.rosterIconImg}
+      src="/projectleaderdashboard/slack.png"
+      alt="Slack Icon"
+    />
+  );
+
+  // console.log('ATTENDEES', attendees);
+
+  const gDriveClickHandler = (email, fileId) => {
+    console.log("RUNNING CLICK HANDLER");
+    //Hardcoding. remove to get user email and fileID as normal
+    email = "Matt.Tapper.gmail@com";
+    fileId = fileId;
     const bodyObject = {
-      // temporary placeholder email
-      email: "mbirdyw@gmail.com",
-      file: "10_KYe3pbZqiq6reeLA8zDDeIlz-4PxWM",
+      email: email,
+      file: fileId,
     };
+    console.log("BODYOBJECt", bodyObject);
     fetch("api/grantpermission/googleDrive", {
       method: "POST",
       headers: {
@@ -20,6 +49,7 @@ const RosterTable = ({ attendees, activeMeeting }) => {
       body: JSON.stringify(bodyObject),
     })
       .then((res) => {
+        console.log("FIRST THEN", res);
         if (res.status !== 200) {
           return res.json().then((res) => {
             throw new Error(res.message);
@@ -28,11 +58,12 @@ const RosterTable = ({ attendees, activeMeeting }) => {
         return res.json();
       })
       .then((res) => {
-        console.log(res);
+        console.log("Second THEN", res);
       })
       .catch((err) => {
         console.log(err);
       });
+    console.log("AFTER");
   };
 
   const gitHubClickHandler = (
@@ -76,31 +107,46 @@ const RosterTable = ({ attendees, activeMeeting }) => {
 
   return (
     <div className={styles.attendeeTable}>
-      <div className={styles.attendeeTableBoxLeft}>
+      <div className={styles.attendeeTableBoxCenter}>
         <span className={styles.attendeeTableTitle}>name</span>
       </div>
       <div className={styles.attendeeTableBoxCenter}>
         <span className={styles.attendeeTableTitle}>role</span>
       </div>
       <div className={styles.attendeeTableBoxCenter}>
-        <span className={styles.attendeeTableTitle}>here?</span>
+        <div className={styles.rosterIconContainer}>
+          <div className={styles.rosterIcon}>{slackIcon}</div>
+          <div className={styles.rosterIcon}>{googleDriveIcon}</div>
+          <div className={styles.rosterIcon}>{gitHubIcon}</div>
+        </div>
       </div>
-      {attendees.map((attendee) => {
-        return (
-          <AttendeeTableRow
-            key={Math.random()}
-            name={
-              attendee.userId.name.firstName +
-              " " +
-              attendee.userId.name.lastName
-            }
-            role={attendee.userId.currentRole}
-            isNewMember={true}
-            gDriveClicked={() => gDriveClickHandler("testemail", "testfileid")}
-            gitHubClicked={() => gitHubClickHandler()}
-          ></AttendeeTableRow>
-        );
-      })}
+      {attendees &&
+        attendees.map((attendee) => {
+          return (
+            <RosterTableRow
+              key={Math.random()}
+              name={
+                attendee.userId.name.firstName +
+                " " +
+                attendee.userId.name.lastName
+              }
+              role={attendee.userId.currentRole}
+              email={attendee.userId.email}
+              isNewMember={true}
+              gDriveClicked={() => {
+                gDriveClickHandler(attendee.userId.email, RosterProjectId);
+              }}
+              gitHubClicked={() =>
+                gitHubClickHandler(attendee.userId.githubHandle)
+              }
+              RosterProjectId={RosterProjectId}
+              services={{
+                gitHub: attendee.onProjectGithub,
+                googleDrive: attendee.onProjectGoogleDrive,
+              }}
+            ></RosterTableRow>
+          );
+        })}
     </div>
   );
 };

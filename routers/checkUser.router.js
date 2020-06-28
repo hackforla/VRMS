@@ -7,6 +7,10 @@ const { User } = require('../models/user.model');
 router.post('/', (req, res) => {
     const { email } = req.body;
     console.log(email);
+    
+    if(email === "undefined") {
+        return res.sendStatus(412).json({ message: "user email is required"})
+    }
 
     if(email) {
         User
