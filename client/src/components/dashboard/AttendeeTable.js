@@ -1,33 +1,36 @@
 import React, { useState, useEffect } from "react";
 import styles from "../../sass/ProjectLeaderDashboard.module.scss";
 import AttendeeTableRow from "./AttendeeTableRow";
-import ls from "local-storage";
+import ProjectTeamMemberApi from "../../services/projectTeamMember-api-service";
 
 const AttendeeTable = ({ attendees, activeMeeting, projectId, setRoster, roster }) => {
     console.log('ATTENDEETABLE ATTENDEES', attendees);
-
+    console.log("roster", roster.find(person => person.userId.name.lastName === "test"));
     const [sortedAttendees, setSortedAttendees] = useState(null);
-    
-    // when refactoring fetch calls move postUserToProjectTeamMember function to projectLeaderDashboard
-    const postUserToProjectTeamMember = async (userId) => {
-        try {
-            const newProjectTeamMember = {
-                userId,
-                projectId,
-            }
 
-            return await fetch('/api/projectteammembers', {
-                method: 'POST',
-                body: JSON.stringify(newProjectTeamMember),
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+    const addToRoster = async (userId, index) => {
+        const newMember = {
+            userId,
+            projectId,
+        };
+
+        await ProjectTeamMemberApi.postMember(newMember)
+            .then(newTeamMember => {
+                // Create a deep copy of the roster and add the new member...
+                const newRoster = roster.map(object => {
+                    return {...object}
+                });
+
+                newTeamMember.userId = sortedAttendees.notOnTeam[index].userId;
+                console.log({newTeamMember});
+                newRoster.push(newTeamMember);
+                console.log({newRoster});
+                // ... so that you're able to update the state in a way that
+                // triggers a rerender
+                setRoster(newRoster);
+                console.log("ok i ran");
             })
-                .then(res => !res.ok ? new Error(res.statusText) : res.json() )
-                .then(newTeamMember => setRoster(roster.push(newTeamMember)))
-        } catch (error) {
-            console.log(error);
-        }
+            .catch(error => console.log(error));
     }
 
     function sortAttendees() {
@@ -72,8 +75,7 @@ const AttendeeTable = ({ attendees, activeMeeting, projectId, setRoster, roster 
             </div>
 
             {sortedAttendees && (
-                sortedAttendees.notOnTeam.map((attendee) => {
-                    console.log({attendee});
+                sortedAttendees.notOnTeam.map((attendee, index) => {
                     return (
                         <AttendeeTableRow
                             key={Math.random()}
@@ -83,7 +85,7 @@ const AttendeeTable = ({ attendees, activeMeeting, projectId, setRoster, roster 
                                 attendee.userId.name.lastName
                             }
                             role={attendee.userId.currentRole}
-                            postUser={postUserToProjectTeamMember}
+                            postUser={() => addToRoster(attendee.userId._id, index)}
                         ></AttendeeTableRow>
                     );
                 })
@@ -91,7 +93,6 @@ const AttendeeTable = ({ attendees, activeMeeting, projectId, setRoster, roster 
 
             {sortedAttendees && (
                 sortedAttendees.onTeam.map((attendee) => {
-                    console.log({attendee});
                     return (
                         <AttendeeTableRow
                             key={Math.random()}
