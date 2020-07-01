@@ -31,7 +31,7 @@ const AttendeeTable = ({ attendees, activeMeeting, projectId, setRoster, roster 
                 console.log("ok i ran");
             })
             .catch(error => console.log(error));
-    }
+    };
 
     function sortAttendees() {
         if (!attendees.length || !roster.length) return;
@@ -48,15 +48,14 @@ const AttendeeTable = ({ attendees, activeMeeting, projectId, setRoster, roster 
             currAttendee.isOnRoster = isOnRoster;
             isOnRoster 
                 ? attendeesOnRoster.push(currAttendee) 
-                : attendeesNotOnRoster.push(currAttendee)
-            ;
+                : attendeesNotOnRoster.push(currAttendee);
         });
       
         setSortedAttendees({
             onTeam: attendeesOnRoster,
             notOnTeam: attendeesNotOnRoster,
         });
-    }
+    };
 
     useEffect(() => {
         sortAttendees();

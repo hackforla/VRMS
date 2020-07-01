@@ -3,53 +3,82 @@ import styles from "../../sass/ProjectLeaderDashboard.module.scss";
 import DashboardButton from "./DashboardButton";
 import ls from "local-storage";
 
-const RosterTableRow = ({ name, role, isNewMember, gDriveClicked, gitHubClicked, services}) => {
-    // see icons attr. note @ bottom
-    const checkmark = <img className={styles.rosterIconImg} src="/projectleaderdashboard/check.png" alt="checkmark" />
-    const gitHubIcon = <img className={styles.rosterIconImg} src="/projectleaderdashboard/github.png" alt="GitHub Icon" />
-    const googleDriveIcon = <img className={styles.rosterIconImg} src="/projectleaderdashboard/googledrive.png" alt="Google Drive Icon" />
-    const slackIcon = <img className={styles.rosterIconImg} src="/projectleaderdashboard/slack.png" alt="Slack Icon" />
+const RosterTableRow = ({
+  name,
+  role,
+  isNewMember,
+  gDriveClicked,
+  gitHubClicked,
+  services,
+}) => {
+  // see icons attr. note @ bottom
+  const checkmark = (
+    <img
+      className={styles.rosterIconImg}
+      src="/projectleaderdashboard/check.png"
+      alt="checkmark"
+    />
+  );
+  const gitHubIcon = (
+    <img
+      className={styles.rosterIconImg}
+      src="/projectleaderdashboard/github.png"
+      alt="GitHub Icon"
+    />
+  );
+  const googleDriveIcon = (
+    <img
+      className={styles.rosterIconImg}
+      src="/projectleaderdashboard/googledrive.png"
+      alt="Google Drive Icon"
+      onClick={() => {
+        gDriveClicked();
+      }}
+    />
+  );
+  const slackIcon = (
+    <img
+      className={styles.rosterIconImg}
+      src="/projectleaderdashboard/slack.png"
+      alt="Slack Icon"
+    />
+  );
 
-    let here = null;
+  //
+  let here = null;
+  here = (
+    <div className={styles.rosterIconContainer}>
+      <div className={styles.rosterIcon}>{slackIcon}</div>
+      {services.googleDrive ? (
+        <div className={styles.rosterIcon}>{checkmark}</div>
+      ) : (
+        <div className={styles.rosterIcon}>{googleDriveIcon}</div>
+      )}
+      {services.gitHub ? (
+        <div className={styles.rosterIcon}>{checkmark}</div>
+      ) : (
+        <div className={styles.rosterIcon}>{gitHubIcon}</div>
+      )}
+    </div>
+  );
 
-    if (isNewMember) {
-      here = (
-        <div className={styles.rosterIconContainer}>
-          <div className={styles.rosterIcon}>{slackIcon}</div>
-          {services.googleDrive ? <div className={styles.rosterIcon}>{checkmark}</div> : <div className={styles.rosterIcon}>{googleDriveIcon}</div>}
-          {services.gitHub ? <div className={styles.rosterIcon}>{checkmark}</div> : <div className={styles.rosterIcon}>{gitHubIcon}</div>}
-        </div>
-      );
-    } else {
-      here = (
-        <div className={styles.rosterIconContainer}>
-          <div className={styles.rosterIcon}>{checkmark}</div>
-          {services.googleDrive ? <div className={styles.rosterIcon}>{checkmark}</div> : <div className={styles.rosterIcon}>{googleDriveIcon}</div>}
-          {services.gitHub ? <div className={styles.rosterIcon}>{checkmark}</div> : <div className={styles.rosterIcon}>{gitHubIcon}</div>}
-          {/* <DashboardButton>{slackIcon}</DashboardButton> */}
-        </div>
-      );
-    }
-    
-
-    return (
-        <Fragment>
-            <div className={styles.attendeeTableBoxLeft}>
-                <div className={styles.attendeeTableText}>{name}</div>
-            </div>
-            <div className={styles.attendeeTableBoxCenter}>
-                <span className={styles.attendeeTableText}>{role}</span>
-            </div>
-            <div className={styles.attendeeTableBoxCenter}>{here}</div>
-        </Fragment>
-    );
+  return (
+    <Fragment>
+      <div className={styles.attendeeTableBoxLeft}>
+        <div className={styles.attendeeTableText}>{name}</div>
+      </div>
+      <div className={styles.attendeeTableBoxCenter}>
+        <span className={styles.attendeeTableText}>{role}</span>
+      </div>
+      <div className={styles.attendeeTableBoxCenter}>{here}</div>
+    </Fragment>
+  );
 };
 
 export default RosterTableRow;
 
-
 // will eventually need to attribute icons:
-//  checkmark 
+//  checkmark
 //  Icons made by <a href="https://www.flaticon.com/authors/kiranshastry"
 //  title="Kiranshastry">Kiranshastry</a> from <a
 //  href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
