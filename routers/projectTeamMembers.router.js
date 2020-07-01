@@ -52,16 +52,17 @@ router.get("/projectowner/:id", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-  ProjectTeamMember.create(req.body)
-    .then((teamMember) => {
-      res.sendStatus(201);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.sendStatus(400).json({
-        message: `/POST Internal server error: ${err}`,
-      });
-    });
+    ProjectTeamMember
+        .create(req.body)
+        .then((teamMember) => {
+            res.status(201).json(teamMember);
+        })
+        .catch((err) => {
+            console.log(err);
+            res.sendStatus(400).json({
+                message: `/POST Internal server error: ${err}`,
+            });
+        });
 });
 
 router.patch("/:id", (req, res) => {
