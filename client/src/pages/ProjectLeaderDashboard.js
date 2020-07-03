@@ -169,7 +169,14 @@ const ProjectLeaderDashboard = () => {
             return response;
           }
         })
+        // .then((user) => {
+        // check if user is already on the roster
+        // compare user.projects to project._id; check if project._id is included in user.projects array -> need array to be populated
+        // if they are not equal stop function and set error message "Already on roster"
+        // else return the response and continue function
+        // })
         .then((user) => {
+          console.log("user", user);
           if (user === false) {
             return false;
           } else {
