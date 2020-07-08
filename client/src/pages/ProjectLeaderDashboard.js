@@ -129,10 +129,10 @@ const ProjectLeaderDashboard = () => {
 
     if (email === "") {
       setIsError(true);
-      setErrorMessage("Please don't leave the field blank.");
+      setErrorMessage("Please don't leave the field blank");
     } else if (!email.includes("@") || !email.includes(".")) {
       setIsError(true);
-      setErrorMessage("Please format the email address correctly.");
+      setErrorMessage("Please format the email address correctly");
     } else {
       await addToRoster(email);
       await setForceRerender(!forceRerender);
@@ -158,22 +158,21 @@ const ProjectLeaderDashboard = () => {
         .then((response) => {
           if (response === false) {
             setIsError(true);
-            setErrorMessage("Email not found.");
+            setErrorMessage("Email not found");
 
             return response;
           } else {
             return response;
           }
         })
-        // .then((user) => {
-        // check if user is already on the roster
-        // compare user.projects to project._id; check if project._id is included in user.projects array -> need array to be populated
-        // if they are not equal stop function and set error message "Already on roster"
-        // else return the response and continue function
-        // })
         .then((user) => {
           console.log("user", user);
           if (user === false) {
+            return false;
+          } else if (user.projects.includes(project._id)) {
+            setIsError(true);
+            setErrorMessage("Already on roster");
+
             return false;
           } else {
             addMember(user);
