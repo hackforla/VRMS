@@ -18,10 +18,11 @@ const AdminDashboard = (props) => {
   //STATE
   const [nextEvent, setNextEvent] = useState([]);
   const [isCheckInReady, setIsCheckInReady] = useState();
-  const [volunteers, setVolunteers] = useState(null);
-  //const [totalVolunteers, setTotalVolunteers] = useState(null);
+  const [users, setUsers] = useState(null);
+  const [totalUsers, setTotalUsers] = useState(null);
   const [locationsTotal, setLocationsTotal] = useState({});
   const [uniqueLocations, setUniqueLocations] = useState(null);
+
   const [volunteersSignedIn, setVolunteersSignedIn] = useState({});
   const [volunteeredHours, setVolunteeredHours] = useState({});
   const [averagedHours, setAveragedHours] = useState({});
@@ -219,6 +220,19 @@ const AdminDashboard = (props) => {
     return result;
   }
 
+  function setDonutCharts(valueFromSelect){
+    // Display data depending on value from select
+    if(valueFromSelect === defaultChartType){
+      setVolunteersToChart(totalVolunteersByEventType);
+      setVolunteeredHoursToChart(totalVolunteerHoursByEventType);
+      setAvgHoursToChart(totalVolunteerAvgHoursByEventType);
+    } else if (valueFromSelect === "Hacknight Only"){
+      setVolunteersToChart(totalVolunteersByHacknightProp);
+      setVolunteeredHoursToChart(totalVolunteerHoursByHacknightProp);
+      setAvgHoursToChart(totalVolunteerAvgHoursByHacknightProp);
+    }
+  }
+
   /* Prev calc */
   function findUniqueLocations(events) {
     let returnObj = events.reduce(
@@ -324,27 +338,6 @@ const AdminDashboard = (props) => {
     setAveragedHours(returnObj);
   }
 
-  function setDonutCharts(
-    targetBrigade,
-    immediateUniqueLocations = uniqueLocations,
-    immediateLocationsTotal = locationsTotal
-  ) {
-    findVolunteersSignedIn(
-      targetBrigade,
-      immediateUniqueLocations,
-      immediateLocationsTotal
-    );
-    findVolunteeredHours(
-      targetBrigade,
-      immediateUniqueLocations,
-      immediateLocationsTotal
-    );
-    findAveragedHours(
-      targetBrigade,
-      immediateUniqueLocations,
-      immediateLocationsTotal
-    );
-  }
   async function getUsers() {
     const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
@@ -358,8 +351,8 @@ const AdminDashboard = (props) => {
       });
       const usersJson = await users.json();
 
-      setVolunteers(usersJson);
-      setTotalVolunteers(usersJson);
+      setUsers(usersJson);
+      setTotalUsers(usersJson);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -439,7 +432,8 @@ const AdminDashboard = (props) => {
       // setIsLoading(!isLoading);
     }
   }
-  const handleBrigadeChange = (e) => {
+
+  const handleFilterChange = (e) => {
     setDonutCharts(e.currentTarget.value);
   };
 
@@ -459,53 +453,55 @@ const AdminDashboard = (props) => {
             </p>
           </div>
 
-          {isLoading ? <img src={Loading} alt="Logo" /> : (
-            <UpcomingEvent
-              isCheckInReady={isCheckInReady}
-              nextEvent={nextEvent}
-              setCheckInReady={setCheckInReady}
-            />
+          {isLoading ? (
+              <Loading />
+          ) : (
+              <UpcomingEvent
+                  isCheckInReady={isCheckInReady}
+                  nextEvent={nextEvent}
+                  setCheckInReady={setCheckInReady}
+              />
           )}
 
           {isLoading ? (
-            <img src={Loading} alt="Logo" />
+              <Loading />
           ) : (
-            <EventOverview
-              handleBrigadeChange={handleBrigadeChange}
-              uniqueLocations={uniqueLocations}
-            />
+              <EventOverview
+                  handleFilterChange={handleFilterChange}
+                  uniqueLocations={chartTypes}
+              />
           )}
 
           {isLoading ? (
-            <Loading />
+              <Loading />
           ) : (
-            <DonutChartContainer
-              chartName={"Total Volunteers"}
-              data={volunteersSignedIn}
-            />
+              <DonutChartContainer
+                  chartName={"Total Volunteers"}
+                  data={totalVolunteers}
+              />
           )}
 
           {isLoading ? (
-            <Loading />
+              <Loading />
           ) : (
-            <DonutChartContainer
-              chartName={"Total Volunteer Hours"}
-              data={volunteeredHours}
-            />
+              <DonutChartContainer
+                  chartName={"Total Volunteer Hours"}
+                  data={totalVolunteerHours}
+              />
           )}
-          
+
           {isLoading ? (
-            <Loading />
+              <Loading />
           ) : (
-            <DonutChartContainer
-              chartName={"Avg. Hours Per Volunteer"}
-              data={averagedHours}
-            />
+              <DonutChartContainer
+                  chartName={"Average Hours Per Volunteer"}
+                  data={totalVolunteerAvgHours}
+              />
           )}
         </div>
       </div>
     ) : (
-      <Redirect to="/login" />
+        <Redirect to="/login" />
     )
   );
 };
