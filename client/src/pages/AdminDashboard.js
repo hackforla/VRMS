@@ -37,6 +37,10 @@ const AdminDashboard = (props) => {
   const [totalVolunteerHoursByHacknightProp, setVolunteeredHoursByHacknightProp] = useState({});
   const [totalVolunteerAvgHoursByHacknightProp, setAvgHoursByHacknightProp] = useState({});
 
+  const [totalVolunteers, setVolunteersToChart] = useState({});
+  const [totalVolunteerHours, setVolunteeredHoursToChart] = useState({});
+  const [totalVolunteerAvgHours, setAvgHoursToChart] = useState({});
+
   async function getAndSetData() {
     try {
       setIsLoading(true);
@@ -156,6 +160,11 @@ const AdminDashboard = (props) => {
         totalVolunteerHoursByHacknightProp,
         hackNightUniqueLocations);
     setAvgHoursByHacknightProp(totalVolunteerAvgHoursByHacknightProp);
+
+    // Display data by default for "All" chart type
+    setVolunteersToChart(totalVolunteersByEventType);
+    setVolunteeredHoursToChart(totalVolunteerHoursByEventType);
+    setAvgHoursToChart(totalVolunteerAvgHoursByEventType);
   }
 
   function extractVolunteersSignedInByProperty(events, users, uniqueTypes, propName){
