@@ -11,6 +11,9 @@ import Loading from "../components/presentational/donutChartLoading";
 
 const AdminDashboard = (props) => {
   const auth = useAuth();
+  const defaultChartType = "All Events";
+  let uniqueEventTypes = new Set();
+  let hackNightUniqueLocations = new Set();
 
   //STATE
   const [nextEvent, setNextEvent] = useState([]);
@@ -31,6 +34,9 @@ const AdminDashboard = (props) => {
       const checkInsJson = await checkIns.json();
       const events = await fetch("/api/events");
       const eventsJson = await events.json();
+
+      processData(eventsJson, checkInsJson);
+
       let locationKeys = findUniqueLocationsKeys(eventsJson);
       let uniqueLocations = findUniqueLocations(eventsJson);
       let uniqueUsers = findUniqueUsers(
@@ -54,6 +60,13 @@ const AdminDashboard = (props) => {
     }
   }
 
+  function processData(allEvents, allCheckIns){
+    let processedEvents = processEvents(allEvents);
+    let usersByEvent = collectUsersByEvent(allCheckIns);
+    prepareDataForCharts(processedEvents, usersByEvent, defaultChartType);
+  }
+
+  /* Prev calc */
   function findUniqueLocations(events) {
     let returnObj = events.reduce(
       (acc, cur) => {
