@@ -111,6 +111,18 @@ const AdminDashboard = (props) => {
     setChartTypes(chartTypes);
   }
 
+  function collectUsersByEvent(allCheckIns){
+    let eventCollection = new Map();
+    for(let checkIn of allCheckIns){
+      if(eventCollection.has(checkIn.eventId)){
+        eventCollection.get(checkIn.eventId).push(checkIn);
+      } else{
+        eventCollection.set(checkIn.eventId, [checkIn]);
+      }
+    }
+    return eventCollection;
+  }
+
 
   /* Prev calc */
   function findUniqueLocations(events) {
