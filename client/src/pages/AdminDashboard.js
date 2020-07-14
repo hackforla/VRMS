@@ -30,8 +30,10 @@ const AdminDashboard = (props) => {
   const [chartTypes, setChartTypes] = useState(null);
 
   const [totalVolunteersByEventType, setVolunteersSignedInByEventType] = useState({});
+  const [totalVolunteerHoursByEventType, setVolunteeredHoursByEventType] = useState({});
 
   const [totalVolunteersByHacknightProp, setVolunteersSignedInByHacknightProp] = useState({});
+  const [totalVolunteerHoursByHacknightProp, setVolunteeredHoursByHacknightProp] = useState({});
 
   async function getAndSetData() {
     try {
@@ -133,6 +135,12 @@ const AdminDashboard = (props) => {
     setVolunteersSignedInByEventType(totalVolunteersByEventType);
     let totalVolunteersByHacknightProp = extractVolunteersSignedInByProperty(events, users, hackNightUniqueLocations, 'hacknight');
     setVolunteersSignedInByHacknightProp(totalVolunteersByHacknightProp);
+
+    // Data for 2 chart 'total hours'
+    let totalVolunteerHoursByEventType = findTotalVolunteerHours(events, users, uniqueEventTypes, 'eventType');
+    setVolunteeredHoursByEventType(totalVolunteerHoursByEventType);
+    let totalVolunteerHoursByHacknightProp = findTotalVolunteerHours(events, users, hackNightUniqueLocations, 'hacknight');
+    setVolunteeredHoursByHacknightProp(totalVolunteerHoursByHacknightProp);
   }
 
   function extractVolunteersSignedInByProperty(events, users, uniqueTypes, propName){
@@ -149,6 +157,26 @@ const AdminDashboard = (props) => {
       let usersCount = users.get(eventId).length;
       let existingUsers = result[type];
       result[type] = usersCount + existingUsers;
+    }
+    return result;
+  }
+
+  function findTotalVolunteerHours(events, users, uniqueTypes, propName){
+    let result = {};
+    let type;
+    uniqueTypes.forEach(el => result[el] = parseInt('0'));
+
+    for (let eventId of users.keys()) {
+      if(propName === 'eventType'){
+        type = events.get(eventId).eventType;
+      } else if (propName === 'hacknight' && typeof events.get(eventId).hacknight !== 'undefined'){
+        type = events.get(eventId).hacknight;
+      }
+
+      let eventDuration = events.get(eventId).hours;
+      let usersAmount = users.get(eventId).length;
+      let existingHours = result[type];
+      result[type] = existingHours + (eventDuration * usersAmount);
     }
     return result;
   }
