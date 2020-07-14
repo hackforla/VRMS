@@ -66,6 +66,42 @@ const AdminDashboard = (props) => {
     prepareDataForCharts(processedEvents, usersByEvent, defaultChartType);
   }
 
+  function processEvents(allEvents) {
+    let events = new Map();
+
+    for (let event of allEvents){
+      // Process legacy data with undefined 'hours' property because initially an event length was 3 hours
+      if(!event.hours){
+        event.hours = 3;
+      }
+
+      // Define unique event types and process events without 'eventType' property
+      if(event.eventType){
+        processEventTypes(event, 'eventType', uniqueEventTypes);
+      } else {
+        // Find events without 'eventType' property (30 events) and assign it
+        event.eventType = 'Hacknight';
+      }
+
+      // Extract events with 'hacknight' property & find unique locations in it
+      if(event.hacknight){
+        processEventTypes(event, 'hacknight', hackNightUniqueLocations);
+      }
+      events.set(event._id, event);
+    }
+    createChartTypes();
+    return events;
+  }
+
+  function processEventTypes(event, propName, uniqueTypes){
+    const capitalize = (str, lower = false) =>
+        (lower ? str.toLowerCase() : str).replace(/(?:^|\s|["'([{])+\S/g, match => match.toUpperCase());
+    let type = capitalize(event[propName], true);
+    event[propName] = type;
+    uniqueTypes.add(type);
+  }
+
+
   /* Prev calc */
   function findUniqueLocations(events) {
     let returnObj = events.reduce(
