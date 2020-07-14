@@ -31,9 +31,11 @@ const AdminDashboard = (props) => {
 
   const [totalVolunteersByEventType, setVolunteersSignedInByEventType] = useState({});
   const [totalVolunteerHoursByEventType, setVolunteeredHoursByEventType] = useState({});
+  const [totalVolunteerAvgHoursByEventType, setAvgHoursByEventType] = useState({});
 
   const [totalVolunteersByHacknightProp, setVolunteersSignedInByHacknightProp] = useState({});
   const [totalVolunteerHoursByHacknightProp, setVolunteeredHoursByHacknightProp] = useState({});
+  const [totalVolunteerAvgHoursByHacknightProp, setAvgHoursByHacknightProp] = useState({});
 
   async function getAndSetData() {
     try {
@@ -141,6 +143,19 @@ const AdminDashboard = (props) => {
     setVolunteeredHoursByEventType(totalVolunteerHoursByEventType);
     let totalVolunteerHoursByHacknightProp = findTotalVolunteerHours(events, users, hackNightUniqueLocations, 'hacknight');
     setVolunteeredHoursByHacknightProp(totalVolunteerHoursByHacknightProp);
+
+    //  Data for 3 chart 'total average hours'
+    let totalVolunteerAvgHoursByEventType = findAverageVolunteerHours(
+        totalVolunteersByEventType,
+        totalVolunteerHoursByEventType,
+        uniqueEventTypes);
+    setAvgHoursByEventType(totalVolunteerAvgHoursByEventType);
+
+    let totalVolunteerAvgHoursByHacknightProp = findAverageVolunteerHours(
+        totalVolunteersByHacknightProp,
+        totalVolunteerHoursByHacknightProp,
+        hackNightUniqueLocations);
+    setAvgHoursByHacknightProp(totalVolunteerAvgHoursByHacknightProp);
   }
 
   function extractVolunteersSignedInByProperty(events, users, uniqueTypes, propName){
@@ -181,6 +196,19 @@ const AdminDashboard = (props) => {
     return result;
   }
 
+  function findAverageVolunteerHours(totalVolunteers, totalVolunteerHours, uniqueTypes){
+    let result = {};
+    uniqueTypes.forEach(el => result[el] = parseInt('0'));
+
+    for(let eventType of uniqueTypes.keys()){
+      let hours = totalVolunteerHours[eventType];
+      let volunteers = totalVolunteers[eventType];
+      let averageHours = (hours / volunteers);
+      if(!Number.isInteger(averageHours)) averageHours = +averageHours.toFixed(2);
+      volunteers > 0 ? result[eventType] = averageHours : result[eventType] = 0;
+    }
+    return result;
+  }
 
   /* Prev calc */
   function findUniqueLocations(events) {
