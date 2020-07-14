@@ -27,6 +27,8 @@ const AdminDashboard = (props) => {
   const [averagedHours, setAveragedHours] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
+  const [chartTypes, setChartTypes] = useState(null);
+
   async function getAndSetData() {
     try {
       setIsLoading(true);
@@ -99,6 +101,14 @@ const AdminDashboard = (props) => {
     let type = capitalize(event[propName], true);
     event[propName] = type;
     uniqueTypes.add(type);
+  }
+
+  function createChartTypes(){
+    let chartTypes = {
+      "All Events": "",
+      "Hacknight Only": ""
+    };
+    setChartTypes(chartTypes);
   }
 
 
