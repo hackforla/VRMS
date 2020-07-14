@@ -19,7 +19,7 @@ const AdminDashboard = (props) => {
   const [nextEvent, setNextEvent] = useState([]);
   const [isCheckInReady, setIsCheckInReady] = useState();
   const [volunteers, setVolunteers] = useState(null);
-  const [totalVolunteers, setTotalVolunteers] = useState(null);
+  //const [totalVolunteers, setTotalVolunteers] = useState(null);
   const [locationsTotal, setLocationsTotal] = useState({});
   const [uniqueLocations, setUniqueLocations] = useState(null);
   const [volunteersSignedIn, setVolunteersSignedIn] = useState({});
@@ -28,6 +28,10 @@ const AdminDashboard = (props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [chartTypes, setChartTypes] = useState(null);
+
+  const [totalVolunteersByEventType, setVolunteersSignedInByEventType] = useState({});
+
+  const [totalVolunteersByHacknightProp, setVolunteersSignedInByHacknightProp] = useState({});
 
   async function getAndSetData() {
     try {
@@ -121,6 +125,32 @@ const AdminDashboard = (props) => {
       }
     }
     return eventCollection;
+  }
+
+  function prepareDataForCharts(events, users){
+    // Data for 1 chart 'total volunteers'
+    let totalVolunteersByEventType = extractVolunteersSignedInByProperty(events, users, uniqueEventTypes, 'eventType');
+    setVolunteersSignedInByEventType(totalVolunteersByEventType);
+    let totalVolunteersByHacknightProp = extractVolunteersSignedInByProperty(events, users, hackNightUniqueLocations, 'hacknight');
+    setVolunteersSignedInByHacknightProp(totalVolunteersByHacknightProp);
+  }
+
+  function extractVolunteersSignedInByProperty(events, users, uniqueTypes, propName){
+    let result = {};
+    let type;
+    uniqueTypes.forEach(el => result[el] = parseInt('0'));
+    for (let eventId of users.keys()) {
+      if(propName === 'eventType'){
+        type = events.get(eventId).eventType;
+      } else if (propName === 'hacknight' && typeof events.get(eventId).hacknight !== 'undefined'){
+        type = events.get(eventId).hacknight;
+      }
+
+      let usersCount = users.get(eventId).length;
+      let existingUsers = result[type];
+      result[type] = usersCount + existingUsers;
+    }
+    return result;
   }
 
 
