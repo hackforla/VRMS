@@ -170,13 +170,7 @@ const ProjectLeaderDashboard = () => {
           }
         })
         .then((user) => {
-          console.log("user", user);
           if (user === false) {
-            return false;
-          } else if (user.projects.includes(project._id)) {
-            setIsError(true);
-            setErrorMessage("Already on roster");
-
             return false;
           } else {
             checkIfOnRoster(user);
