@@ -287,7 +287,7 @@ const AdminDashboard = (props) => {
     }
   }
 
-  const handleFilterChange = (e) => {
+  const handleChartTypeChange = (e) => {
     setDonutCharts(e.currentTarget.value);
   };
 
@@ -321,8 +321,8 @@ const AdminDashboard = (props) => {
               <Loading />
           ) : (
               <EventOverview
-                  handleFilterChange={handleFilterChange}
-                  uniqueLocations={chartTypes}
+                  handleChartTypeChange={handleChartTypeChange}
+                  chartTypes={chartTypes}
               />
           )}
 
