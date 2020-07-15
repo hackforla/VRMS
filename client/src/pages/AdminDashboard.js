@@ -59,7 +59,7 @@ const AdminDashboard = (props) => {
   function processData(allEvents, allCheckIns){
     let processedEvents = processEvents(allEvents);
     let usersByEvent = collectUsersByEvent(allCheckIns);
-    prepareDataForCharts(processedEvents, usersByEvent, defaultChartType);
+    prepareDataForCharts(processedEvents, usersByEvent);
   }
 
   function processEvents(allEvents) {
@@ -152,17 +152,18 @@ const AdminDashboard = (props) => {
   function extractVolunteersSignedInByProperty(events, users, uniqueTypes, propName){
     let result = {};
     let type;
+
     uniqueTypes.forEach(el => result[el] = parseInt('0'));
     for (let eventId of users.keys()) {
       if(propName === 'eventType'){
         type = events.get(eventId).eventType;
-      } else if (propName === 'hacknight' && typeof events.get(eventId).hacknight !== 'undefined'){
-        type = events.get(eventId).hacknight;
+        result[type] = users.get(eventId).length + result[type];
       }
 
-      let usersCount = users.get(eventId).length;
-      let existingUsers = result[type];
-      result[type] = usersCount + existingUsers;
+      if(propName === 'hacknight' && typeof events.get(eventId).hacknight !== 'undefined'){
+        type = events.get(eventId).hacknight;
+        result[type] = users.get(eventId).length + result[type];
+      }
     }
     return result;
   }
@@ -175,14 +176,13 @@ const AdminDashboard = (props) => {
     for (let eventId of users.keys()) {
       if(propName === 'eventType'){
         type = events.get(eventId).eventType;
-      } else if (propName === 'hacknight' && typeof events.get(eventId).hacknight !== 'undefined'){
-        type = events.get(eventId).hacknight;
+        result[type] = result[type] + (events.get(eventId).hours * users.get(eventId).length);
       }
 
-      let eventDuration = events.get(eventId).hours;
-      let usersAmount = users.get(eventId).length;
-      let existingHours = result[type];
-      result[type] = existingHours + (eventDuration * usersAmount);
+      if (propName === 'hacknight' && typeof events.get(eventId).hacknight !== 'undefined'){
+        type = events.get(eventId).hacknight;
+        result[type] = result[type] + (events.get(eventId).hours * users.get(eventId).length);
+      }
     }
     return result;
   }
