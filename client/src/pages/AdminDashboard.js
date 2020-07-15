@@ -18,29 +18,27 @@ const AdminDashboard = (props) => {
   //STATE
   const [nextEvent, setNextEvent] = useState([]);
   const [isCheckInReady, setIsCheckInReady] = useState();
-  const [users, setUsers] = useState(null);
-  const [totalUsers, setTotalUsers] = useState(null);
-  const [locationsTotal, setLocationsTotal] = useState({});
-  const [uniqueLocations, setUniqueLocations] = useState(null);
-
-  const [volunteersSignedIn, setVolunteersSignedIn] = useState({});
-  const [volunteeredHours, setVolunteeredHours] = useState({});
-  const [averagedHours, setAveragedHours] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
+  const [volunteers, setVolunteers] = useState(null);
+  const [allVolunteers, setAllVolunteers] = useState(null);
 
   const [chartTypes, setChartTypes] = useState(null);
 
+  // Volunteers SignedIn By Event Type
   const [totalVolunteersByEventType, setVolunteersSignedInByEventType] = useState({});
   const [totalVolunteerHoursByEventType, setVolunteeredHoursByEventType] = useState({});
   const [totalVolunteerAvgHoursByEventType, setAvgHoursByEventType] = useState({});
 
+  // Volunteers SignedIn By Hacknight Property
   const [totalVolunteersByHacknightProp, setVolunteersSignedInByHacknightProp] = useState({});
   const [totalVolunteerHoursByHacknightProp, setVolunteeredHoursByHacknightProp] = useState({});
   const [totalVolunteerAvgHoursByHacknightProp, setAvgHoursByHacknightProp] = useState({});
 
+  // Volunteers To Chart
   const [totalVolunteers, setVolunteersToChart] = useState({});
   const [totalVolunteerHours, setVolunteeredHoursToChart] = useState({});
   const [totalVolunteerAvgHours, setAvgHoursToChart] = useState({});
+
+  const [isLoading, setIsLoading] = useState(false);
 
   async function getAndSetData() {
     try {
@@ -51,23 +49,6 @@ const AdminDashboard = (props) => {
       const eventsJson = await events.json();
 
       processData(eventsJson, checkInsJson);
-
-      let locationKeys = findUniqueLocationsKeys(eventsJson);
-      let uniqueLocations = findUniqueLocations(eventsJson);
-      let uniqueUsers = findUniqueUsers(
-        locationKeys,
-        uniqueLocations,
-        checkInsJson
-      );
-      let totalUsers = findTotalUsers(
-        locationKeys,
-        uniqueLocations,
-        checkInsJson
-      );
-
-      setUniqueLocations(uniqueUsers);
-      setLocationsTotal(totalUsers);
-      setDonutCharts("All", uniqueUsers, totalUsers);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -233,111 +214,6 @@ const AdminDashboard = (props) => {
     }
   }
 
-  /* Prev calc */
-  function findUniqueLocations(events) {
-    let returnObj = events.reduce(
-      (acc, cur) => {
-        acc[cur.hacknight] = [];
-        return acc;
-      },
-      { All: [] }
-    );
-    return returnObj;
-  }
-
-  function findUniqueLocationsKeys(events) {
-    let returnObj = events.reduce((acc, cur) => {
-      acc[cur._id] = cur.hacknight;
-      return acc;
-    }, {});
-
-    return returnObj;
-  }
-
-  function findUniqueUsers(locationKeys, uniqueLocations, checkInsJson) {
-    let returnObj = JSON.parse(JSON.stringify(uniqueLocations));
-    checkInsJson.forEach((cur) => {
-      let userLocation = locationKeys[cur.eventId];
-      let userId = cur.userId;
-
-      if (!returnObj[userLocation].includes(userId)) {
-        returnObj[userLocation].push(userId);
-      }
-    });
-    return returnObj;
-  }
-  function findTotalUsers(locationKeys, uniqueLocations, checkInsJson) {
-    let returnObj = JSON.parse(JSON.stringify(uniqueLocations));
-    checkInsJson.forEach((cur) => {
-      let userLocation = locationKeys[cur.eventId];
-      let userId = cur.userId;
-
-      returnObj[userLocation].push(userId);
-    });
-    return returnObj;
-  }
-
-  function findVolunteersSignedIn(
-    targetBrigade,
-    immediateUniqueLocations = uniqueLocations,
-    immediateLocationsTotal = locationsTotal
-  ) {
-    let returnObj = {};
-    if (targetBrigade !== "All") {
-      returnObj[targetBrigade] = immediateUniqueLocations[targetBrigade].length;
-    } else {
-      for (let keys in immediateUniqueLocations) {
-        returnObj[keys] = immediateUniqueLocations[keys].length;
-      }
-      delete returnObj.All;
-    }
-    setVolunteersSignedIn(returnObj);
-  }
-  function findVolunteeredHours(
-    targetBrigade,
-    immediateUniqueLocations = uniqueLocations,
-    immediateLocationsTotal = locationsTotal
-  ) {
-    let returnObj = {};
-
-    if (targetBrigade !== "All") {
-      returnObj[targetBrigade] =
-        immediateUniqueLocations[targetBrigade].length * 3;
-    } else {
-      for (let keys in immediateUniqueLocations) {
-        returnObj[keys] = immediateUniqueLocations[keys].length * 3;
-      }
-      delete returnObj.All;
-    }
-    setVolunteeredHours(returnObj);
-  }
-
-  function findAveragedHours(
-    targetBrigade,
-    immediateUniqueLocations = uniqueLocations,
-    immediateLocationsTotal = locationsTotal
-  ) {
-    let returnObj = {};
-
-    if (targetBrigade !== "All") {
-      returnObj[targetBrigade] =
-        Math.round(
-          (100 * (immediateUniqueLocations[targetBrigade].length * 3)) /
-            immediateLocationsTotal[targetBrigade].length
-        ) / 100;
-    } else {
-      for (let keys in immediateUniqueLocations) {
-        returnObj[keys] =
-          Math.round(
-            (100 * (immediateUniqueLocations[keys].length * 3)) /
-              immediateLocationsTotal[keys].length
-          ) / 100;
-      }
-      delete returnObj.All;
-    }
-    setAveragedHours(returnObj);
-  }
-
   async function getUsers() {
     const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
@@ -351,8 +227,8 @@ const AdminDashboard = (props) => {
       });
       const usersJson = await users.json();
 
-      setUsers(usersJson);
-      setTotalUsers(usersJson);
+      setVolunteers(usersJson);
+      setAllVolunteers(usersJson);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -360,30 +236,7 @@ const AdminDashboard = (props) => {
       console.log(error);
     }
   }
-  async function setCheckInReady(e, nextEventId) {
-    e.preventDefault();
 
-    try {
-      setIsLoading(true);
-
-      await fetch(`/api/events/${nextEventId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }).then((response) => {
-        if (response.ok) {
-          setIsCheckInReady(!isCheckInReady);
-        }
-      });
-      setIsLoading(false);
-    } catch (error) {
-      setIsLoading(false);
-
-      // setIsError(error);
-      // setIsLoading(!isLoading);
-    }
-  }
   async function getNextEvent() {
     try {
       setIsLoading(true);
@@ -412,6 +265,7 @@ const AdminDashboard = (props) => {
       console.log(error);
     }
   }
+
   async function setCheckInReady(e, nextEventId) {
     e.preventDefault();
 
