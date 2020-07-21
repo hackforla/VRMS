@@ -32,9 +32,8 @@ const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
   // console.log('ATTENDEES', attendees);
 
   const gDriveClickHandler = (email, fileId) => {
-    console.log("RUNNING CLICK HANDLER");
     //Hardcoding. remove to get user email and fileID as normal
-    email = "Matt.Tapper.gmail@com";
+    email = email;
     fileId = fileId;
     const bodyObject = {
       email: email,
