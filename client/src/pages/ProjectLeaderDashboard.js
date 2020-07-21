@@ -44,7 +44,6 @@ const ProjectLeaderDashboard = () => {
         const eventsJson = await events.json();
         setIsCheckInReady(eventsJson.checkInReady);
         setNextEvent([eventsJson]);
-        // console.log('NEXT EVENT', eventsJson);
       }
     } catch (err) {
       console.log(err);
@@ -54,13 +53,11 @@ const ProjectLeaderDashboard = () => {
   async function getRoster() {
     try {
       if (project && project.projectId) {
-        console.log("ProjectID", project.projectId);
         const roster = await fetch(
           `/api/projectteammembers/${project.projectId._id}`
         );
         const rosterJson = await roster.json();
         setRoster(rosterJson);
-        console.log("ROSTERJSON", rosterJson);
 
         setRosterProjectId(project.projectId.googleDriveId);
       }
