@@ -174,6 +174,13 @@ const ProjectLeaderDashboard = () => {
             return false;
           } else {
             checkIfOnRoster(user);
+          }
+        })
+        .then((user) => {
+          if (user === false) {
+            return false;
+          } else {
+            checkIfOnRoster(user);
             console.log("isOnRoster", isOnRoster);
             if (isOnRoster === true) {
               console.log("on roster", user);
@@ -210,6 +217,29 @@ const ProjectLeaderDashboard = () => {
         setErrorMessage("Already on roster");
         console.log("onTeamJson True", onTeamJson);
       }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function checkIfOnRoster(user) {
+    try {
+      return await fetch(
+        `/api/projectteammembers/${project.projecId}/${user._id}`
+      )
+        .then((res) => {
+          if (res === false) {
+            setIsError(true);
+            setErrorMessage("Already on roster");
+
+            return res;
+          } else {
+            return res;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } catch (error) {
       console.log(error);
     }
