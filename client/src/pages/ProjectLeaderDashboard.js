@@ -169,7 +169,37 @@ const ProjectLeaderDashboard = () => {
           if (user === false) {
             return false;
           } else {
+            checkIfOnRoster(user);
+          }
+        })
+        .then((user) => {
+          if (user === false) {
+            return false;
+          } else {
             addMember(user);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function checkIfOnRoster(user) {
+    try {
+      return await fetch(
+        `/api/projectteammembers/${project.projecId}/${user._id}`
+      )
+        .then((res) => {
+          if (res === false) {
+            setIsError(true);
+            setErrorMessage("Already on roster");
+
+            return res;
+          } else {
+            return res;
           }
         })
         .catch((err) => {
