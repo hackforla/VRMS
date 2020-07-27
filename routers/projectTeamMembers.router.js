@@ -32,6 +32,23 @@ router.get("/:id", (req, res) => {
     });
 });
 
+router.get("/:id/:userId", (req, res) => {
+  ProjectTeamMember.find({
+		projectId: req.params.id,
+		userId: req.params.userId
+  })
+		.populate("userId")
+    .then((teamMembers) => {
+      res.status(200).json(teamMembers);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(400).json({
+        message: `/GET Internal server error:  ${err}`,
+      });
+    });
+});
+
 router.get("/projectowner/:id", (req, res) => {
   const id = req.params.id;
 
