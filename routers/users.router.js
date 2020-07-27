@@ -60,20 +60,6 @@ router.get('/:id', (req, res) => {
         });
 });
 
-router.get('/project/:projectId', (req, res) => {
-    User
-        .find({ projects: req.params.projectId })
-        .then(user => {
-            res.json(user);
-        })
-        .catch(err => {
-            console.log(err);
-            res.sendStatus(500).json({
-                message: `/GET Internal server error: ${err}`
-            })
-        });
-});
-
 router.patch('/:id', (req, res) => {
     const { headers } = req;
     const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
