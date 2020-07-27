@@ -173,7 +173,7 @@ const ProjectLeaderDashboard = () => {
           }
         })
         .then((user) => {
-          if (user === false) {
+          if (user) {
             return false;
           } else {
             addMember(user);
@@ -193,7 +193,7 @@ const ProjectLeaderDashboard = () => {
         `/api/projectteammembers/${project.projecId}/${user._id}`
       )
         .then((res) => {
-          if (res === false) {
+          if (res) {
             setIsError(true);
             setErrorMessage("Already on roster");
 
