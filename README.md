@@ -150,7 +150,7 @@ From the app root `vrms/`, we `npm install` to setup the `package.json` for the 
 
 Create an `.env` file at the root of the `client/` folder, and paste the contents below inside:
 
-```REACT_APP_FIREBASE_DEV_REDIRECT_URL=http://localhost:3000/handleauth
+```
 REACT_APP_FIREBASE_API_KEY=AIzaSyCVcv2k05DLqX5-1I4f0RTSylGHKpR6B3s
 REACT_APP_FIREBASE_AUTH_DOMAIN=vrms-7c0c5.firebaseapp.com
 REACT_APP_FIREBASE_DATABASE_URL=https://vrms-7c0c5.firebaseio.com
@@ -159,6 +159,8 @@ REACT_APP_FIREBASE_STORAGE_BUCKET=vrms-7c0c5.appspot.com
 REACT_APP_FIREBASE_MESSAGING_SENDER_ID=167430906380
 REACT_APP_FIREBASE_APP_ID=1:167430906380:web:77edf6cdcd5e691db90429
 REACT_APP_FIREBASE_MEASUREMENT_ID=G-TMGK2Y2BQZ
+REACT_APP_CUSTOM_REQUEST_HEADER=nAb3kY-S%qE#4!d
+REACT_APP_FIREBASE_DEV_REDIRECT_URL=http://localhost:3000/handleauth
 ```
 
 `cd ..` back to the app root.
@@ -171,10 +173,11 @@ Now, back to the command line:
 
 Copy/paste the following inside:
 
-```API_HOST=http://localhost:4000
+```
 APP_SERVER_PORT=4000
 REACT_APP_PORT=3000
 DATABASE_URL=mongodb+srv://testuser2:Riy4gVoo3RYzLJEB@cluster0-haogu.mongodb.net/testdb?retryWrites=true&w=majority
+CUSTOM_REQUEST_HEADER=nAb3kY-S%qE#4!d
 ```
 
 `touch .gitignore` (if not included) 
