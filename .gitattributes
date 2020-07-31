@@ -1,2 +1,6 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# Auto detect text files and handle it automatically
+*        text=auto
+
+# Perform LF normalization for .scss files due to resolve-url-loader issue
+*.scss   text eol=lf
+*.scss   text eol=lf
