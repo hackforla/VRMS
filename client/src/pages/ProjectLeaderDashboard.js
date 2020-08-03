@@ -152,7 +152,6 @@ const ProjectLeaderDashboard = () => {
       })
         .then((res) => {
           if (res.ok) {
-
             return res.json();
           }
 
@@ -165,7 +164,6 @@ const ProjectLeaderDashboard = () => {
 
             return response;
           } else {
-
             return response;
           }
         })
@@ -174,21 +172,14 @@ const ProjectLeaderDashboard = () => {
             return false;
           } else {
             checkIfOnRoster(user);
-          }
-        })
-        .then((user) => {
-          if (user) {
-            return false;
-          } else {
-            checkIfOnRoster(user);
             console.log("isOnRoster", isOnRoster);
             if (isOnRoster === true) {
               console.log("on roster", user);
-  
+
               return false;
             } else {
               console.log("not on roster", user);
-  
+
               addMember(user);
             }
           }
@@ -217,29 +208,6 @@ const ProjectLeaderDashboard = () => {
         setErrorMessage("Already on roster");
         console.log("onTeamJson True", onTeamJson);
       }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async function checkIfOnRoster(user) {
-    try {
-      return await fetch(
-        `/api/projectteammembers/${project.projecId}/${user._id}`
-      )
-        .then((res) => {
-          if (res) {
-            setIsError(true);
-            setErrorMessage("Already on roster");
-
-            return res;
-          } else {
-            return res;
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     } catch (error) {
       console.log(error);
     }
