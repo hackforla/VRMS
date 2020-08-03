@@ -162,7 +162,6 @@ const ProjectLeaderDashboard = () => {
           if (response === false) {
             setIsError(true);
             setErrorMessage("Email not found");
-
             return response;
           } else {
 
@@ -216,8 +215,9 @@ const ProjectLeaderDashboard = () => {
   }
 
   async function addMember(user) {
+    // console.log("user 2", user);
     const parameters = {
-      userId: user._id,
+      userId: user[0].userId._id,
       projectId: project.projectId,
       roleOnProject: user.currentRole,
     };
