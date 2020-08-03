@@ -127,6 +127,7 @@ const ProjectLeaderDashboard = () => {
     e.preventDefault();
     setIsError(false);
     setIsSuccess(false);
+    setIsOnRoster(false);
 
     if (email === "") {
       setIsError(true);
@@ -151,6 +152,7 @@ const ProjectLeaderDashboard = () => {
       })
         .then((res) => {
           if (res.ok) {
+
             return res.json();
           }
 
@@ -160,9 +162,10 @@ const ProjectLeaderDashboard = () => {
           if (response === false) {
             setIsError(true);
             setErrorMessage("Email not found");
-            console.log("response", response);
+
             return response;
           } else {
+
             return response;
           }
         })
@@ -171,17 +174,16 @@ const ProjectLeaderDashboard = () => {
             return false;
           } else {
             checkIfOnRoster(user);
-          }
-        })
-        .then((onTeam) => {
-          if (onTeam) {
-            console.log("user 1", onTeam);
-
-            return false;
-          } else {
-            console.log("user 2", onTeam);
-
-            addMember(onTeam);
+            console.log("isOnRoster", isOnRoster);
+            if (isOnRoster === true) {
+              console.log("on roster", user);
+  
+              return false;
+            } else {
+              console.log("not on roster", user);
+  
+              addMember(user);
+            }
           }
         })
         .catch((err) => {
@@ -193,23 +195,20 @@ const ProjectLeaderDashboard = () => {
   }
 
   async function checkIfOnRoster(user) {
-    // console.log("user 1", user);
-
     try {
       const onTeam = await fetch(
         `/api/projectteammembers/project/${project.projectId._id}/${user._id}`
       );
-      console.log("onTeam", onTeam);
       const onTeamJson = await onTeam.json();
 
-      if (onTeamJson) {
+      if (!onTeamJson) {
+        console.log("onTeamJson False", onTeamJson);
+        setIsOnRoster(false);
+      } else {
+        setIsOnRoster(true);
         setIsError(true);
         setErrorMessage("Already on roster");
         console.log("onTeamJson True", onTeamJson);
-        return false;
-      } else {
-        console.log("onTeamJson False", onTeamJson);
-        return onTeamJson;
       }
     } catch (error) {
       console.log(error);
@@ -217,9 +216,8 @@ const ProjectLeaderDashboard = () => {
   }
 
   async function addMember(user) {
-    // console.log("user 2", user);
     const parameters = {
-      userId: user[0].userId._id,
+      userId: user._id,
       projectId: project.projectId,
       roleOnProject: user.currentRole,
     };
