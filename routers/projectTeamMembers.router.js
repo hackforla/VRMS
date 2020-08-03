@@ -34,12 +34,16 @@ router.get("/:id", (req, res) => {
 
 router.get("/project/:id/:userId", (req, res) => {
   ProjectTeamMember.find({
-		projectId: req.params.id,
-		userId: req.params.userId
+    projectId: req.params.id,
+    userId: req.params.userId
   })
-		.populate("userId")
+    .populate("userId")
     .then((teamMember) => {
-      res.status(200).json(teamMember);
+      if (!teamMember.length) {
+        res.json(false);
+      } else {
+        res.json(teamMember);
+      }
     })
     .catch((err) => {
       console.log(err);
@@ -69,17 +73,16 @@ router.get("/projectowner/:id", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-    ProjectTeamMember
-        .create(req.body)
-        .then((teamMember) => {
-            res.status(201).json(teamMember);
-        })
-        .catch((err) => {
-            console.log(err);
-            res.sendStatus(400).json({
-                message: `/POST Internal server error: ${err}`,
-            });
-        });
+  ProjectTeamMember.create(req.body)
+    .then((teamMember) => {
+      res.status(201).json(teamMember);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(400).json({
+        message: `/POST Internal server error: ${err}`,
+      });
+    });
 });
 
 router.patch("/:id", (req, res) => {
