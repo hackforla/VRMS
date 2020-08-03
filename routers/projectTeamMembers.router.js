@@ -32,14 +32,14 @@ router.get("/:id", (req, res) => {
     });
 });
 
-router.get("/:id/:userId", (req, res) => {
+router.get("/project/:id/:userId", (req, res) => {
   ProjectTeamMember.find({
 		projectId: req.params.id,
 		userId: req.params.userId
   })
 		.populate("userId")
-    .then((teamMembers) => {
-      res.status(200).json(teamMembers);
+    .then((teamMember) => {
+      res.status(200).json(teamMember);
     })
     .catch((err) => {
       console.log(err);
