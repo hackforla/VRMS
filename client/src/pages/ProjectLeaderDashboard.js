@@ -215,9 +215,8 @@ const ProjectLeaderDashboard = () => {
   }
 
   async function addMember(user) {
-    // console.log("user 2", user);
     const parameters = {
-      userId: user[0].userId._id,
+      userId: user._id,
       projectId: project.projectId,
       roleOnProject: user.currentRole,
     };
