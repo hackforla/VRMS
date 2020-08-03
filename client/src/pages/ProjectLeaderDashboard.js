@@ -21,6 +21,7 @@ const ProjectLeaderDashboard = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
   const [rosterProjectId, setRosterProjectId] = useState("");
+  const [isOnRoster, setIsOnRoster] = useState(false);
 
   async function getProjectFromUserId() {
     try {
@@ -159,7 +160,7 @@ const ProjectLeaderDashboard = () => {
           if (response === false) {
             setIsError(true);
             setErrorMessage("Email not found");
-
+            console.log("response", response);
             return response;
           } else {
             return response;
@@ -172,11 +173,15 @@ const ProjectLeaderDashboard = () => {
             checkIfOnRoster(user);
           }
         })
-        .then((user) => {
-          if (user) {
+        .then((onTeam) => {
+          if (onTeam) {
+            console.log("user 1", onTeam);
+
             return false;
           } else {
-            addMember(user);
+            console.log("user 2", onTeam);
+
+            addMember(onTeam);
           }
         })
         .catch((err) => {
@@ -188,31 +193,33 @@ const ProjectLeaderDashboard = () => {
   }
 
   async function checkIfOnRoster(user) {
-    try {
-      return await fetch(
-        `/api/projectteammembers/${project.projecId}/${user._id}`
-      )
-        .then((res) => {
-          if (res) {
-            setIsError(true);
-            setErrorMessage("Already on roster");
+    // console.log("user 1", user);
 
-            return res;
-          } else {
-            return res;
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    try {
+      const onTeam = await fetch(
+        `/api/projectteammembers/project/${project.projectId._id}/${user._id}`
+      );
+      console.log("onTeam", onTeam);
+      const onTeamJson = await onTeam.json();
+
+      if (onTeamJson) {
+        setIsError(true);
+        setErrorMessage("Already on roster");
+        console.log("onTeamJson True", onTeamJson);
+        return false;
+      } else {
+        console.log("onTeamJson False", onTeamJson);
+        return onTeamJson;
+      }
     } catch (error) {
       console.log(error);
     }
   }
 
   async function addMember(user) {
+    // console.log("user 2", user);
     const parameters = {
-      userId: user._id,
+      userId: user[0].userId._id,
       projectId: project.projectId,
       roleOnProject: user.currentRole,
     };
