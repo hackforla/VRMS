@@ -30,6 +30,30 @@ const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
   );
 
   // console.log('ATTENDEES', attendees);
+  const slackTestButton = () => {
+    console.log("FRONT SLACK TEST");
+    fetch("api/slack/test", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        console.log("FIRST THEN", res);
+        if (res.status !== 200) {
+          return res.json().then((res) => {
+            throw new Error(res.message);
+          });
+        }
+        return res.json();
+      })
+      .then((res) => {
+        console.log("Second THEN", res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const gDriveClickHandler = (email, fileId) => {
     //Hardcoding. remove to get user email and fileID as normal
@@ -62,7 +86,6 @@ const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
       .catch((err) => {
         console.log(err);
       });
-    console.log("AFTER");
   };
 
   const gitHubClickHandler = (
@@ -106,6 +129,13 @@ const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
 
   return (
     <div className={styles.attendeeTable}>
+      <button
+        onClick={() => {
+          slackTestButton();
+        }}
+      >
+        SlackTest
+      </button>
       <div className={styles.attendeeTableBoxCenter}>
         <span className={styles.attendeeTableTitle}>name</span>
       </div>
