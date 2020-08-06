@@ -24,7 +24,7 @@
     align-self: center;
     width: 80%;
     margin-top: 0px;
-    margin-bottom: 8vh;
+    margin-bottom: 2vh;
 }
 
 .home-button {
@@ -34,17 +34,36 @@
     border: 3px solid black;
     border-radius: 6px;
     height: 40px;
-    margin-top: 12px;
     padding: 0px 6px;
     font-size: 18px;
     font-weight: bold;
     z-index: 1;
     transition: all .3s ease-in-out;
+    margin-top: 12px;
 
     &:hover {
         background-color: black;
         color: white;
     }
+}
+
+.new-profile-button {
+    margin-top: 36px;
+    margin-bottom: 36px;
+}
+
+.home-button-light {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 24px;
+    margin-top: 4px;
+    padding: 0px 2px;
+    font-size: 12px;
+    font-weight: bold;
+    text-decoration: underline;
+    z-index: 1;
+    transition: all .3s ease-in-out;
 }
 
 .disabled {
@@ -90,14 +109,14 @@
     .form-row {
         max-width: 350px;
         width: 350px;
-        margin: 6px 0px;
+        margin: 2px 0px;
 
         .form-input-select {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-content: center;
-            margin: 4px;
+            margin: 2px;
 
             label {
                 font-size: 18px;
@@ -115,11 +134,11 @@
     }
 }
 
-.radio-buttons {
-    display: flex;
-    justify-content: space-around;
-    margin: 8px;
-}
+// .radio-buttons {
+//     display: flex;
+//     justify-content: space-around;
+//     margin: 8px;
+// }
 
 .select-meeting-dropdown:-webkit-autofill,
 .select-meeting-dropdown:-webkit-autofill:hover,
@@ -143,7 +162,7 @@
     background-color: inherit;
     border: 3px solid black;
     border-radius: 0px;
-    margin: 8px;
+    margin: 6px 6px 0px 6px;
 
     option {
         padding: 100px;

@@ -34,6 +34,7 @@ const routes = [
     { path: "/returning", name: "returning", Component: ReturningUser },
     { path: "/login", name: "login", Component: AdminLogin },
     { path: "/checkIn/:userType", name: "checkIn", Component: CheckInForm },
+    { path: "/newProfile", name: "newProfile", Component: CheckInForm },
     { path: "/success", name: "success", Component: Success },
     { path: "/handleauth", name: "handleauth", Component: HandleAuth },
     { path: "/emailsent", name: "emailsent", Component: EmailSent },
@@ -43,30 +44,25 @@ const routes = [
         name: "pldashboard",
         Component: ProjectLeaderDashboard,
     },
-    { path: "/add/:item", name: "addnew", Component: AddNew },
+    { path: "/add/:item", name: "addnew", Component: AddNew }
 ];
 
 const App = () => {
-    return (
-        <AuthProvider>
-            <div className="app">
-                <div className="app-container">
-                    <Navbar />
-                    <main role="main" className="main">
-                        {routes.map(({ path, Component }) => (
-                            <Route
-                                key={path}
-                                exact
-                                path={path}
-                                component={Component}
-                            />
-                        ))}
-                    </main>
-                    <Footer />
-                </div>
-            </div>
-        </AuthProvider>
-    );
+  return (
+    <AuthProvider>
+      <div className="app">
+        <div className="app-container">
+          <Navbar />
+          <main role="main" className="main">
+            {routes.map(({ path, Component }) => (
+              <Route key={path} exact path={path} component={Component} />
+            ))}
+          </main>
+          <Footer />
+        </div>
+      </div>
+    </AuthProvider>
+  );
 };
 
 export default App;

@@ -5,7 +5,8 @@ const { CheckIn } = require("../models/checkIn.model");
 
 // GET /api/checkins/
 router.get("/", (req, res) => {
-    CheckIn.find()
+    CheckIn
+        .find()
         .then((checkIns) => {
             res.json(checkIns);
         })
@@ -18,7 +19,8 @@ router.get("/", (req, res) => {
 });
 
 router.get("/:id", (req, res) => {
-    CheckIn.findById(req.params.id)
+    CheckIn
+        .findById(req.params.id)
         .then((checkIn) => {
             res.json(checkIn);
         })
@@ -37,8 +39,8 @@ router.get("/findEvent/:id", (req, res) => {
             path: "userId",
             model: "User",
         })
-        .then((checkIn) => {
-            res.status(200).json(checkIn);
+        .then((checkIns) => {
+            res.status(200).json(checkIns);
         })
         .catch((err) => {
             console.log(err);
@@ -49,7 +51,8 @@ router.get("/findEvent/:id", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-    CheckIn.create(req.body)
+    CheckIn
+        .create(req.body)
         .then((checkIn) => {
             res.sendStatus(201);
         })

@@ -1,147 +1,111 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../../sass/ProjectLeaderDashboard.module.scss";
 import AttendeeTableRow from "./AttendeeTableRow";
-import ls from "local-storage";
+import ProjectTeamMemberApi from "../../services/projectTeamMember-api-service";
 
-const AttendeeTable = ({ attendees, activeMeeting }) => {
-    const gDriveClickHandler  = (email) => {
-        const bodyObject = {
-            // temporary placeholder email
-            email: "mbirdyw@gmail.com",
-            file: "10_KYe3pbZqiq6reeLA8zDDeIlz-4PxWM",
+const AttendeeTable = ({ attendees, activeMeeting, projectId, setRoster, roster }) => {
+    console.log('ATTENDEETABLE ATTENDEES', attendees);
+    console.log("roster", roster.find(person => person.userId.name.lastName === "test"));
+    const [sortedAttendees, setSortedAttendees] = useState(null);
+
+    const addToRoster = async (userId, index) => {
+        const newMember = {
+            userId,
+            projectId,
         };
-        fetch("api/grantpermission/googleDrive", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(bodyObject),
-        })
-            .then((res) => {
-                if (res.status !== 200) {
-                    return res.json().then((res) => {
-                        throw new Error(res.message);
-                    });
-                }
-                return res.json();
+
+        await ProjectTeamMemberApi.postMember(newMember)
+            .then(newTeamMember => {
+                // Create a deep copy of the roster and add the new member...
+                const newRoster = roster.map(object => {
+                    return {...object}
+                });
+
+                newTeamMember.userId = sortedAttendees.notOnTeam[index].userId;
+                console.log({newTeamMember});
+                newRoster.push(newTeamMember);
+                console.log({newRoster});
+                // ... so that you're able to update the state in a way that
+                // triggers a rerender
+                setRoster(newRoster);
+                console.log("ok i ran");
             })
-            .then((res) => {
-                console.log(res);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+            .catch(error => console.log(error));
     };
 
-    const gitHubClickHandler = (githubHandle, projectName, accessLevel = 'manager') => {
-        // ******************** pbtag -- allow PL to add githubHandle if not
-        // already there 
-        // if (!githubHandle) {
-        // }
+    function sortAttendees() {
+        if (!attendees.length || !roster.length) return;
 
-        const bodyObject = {
-            // temporary placeholder handle + repoName
-            handle: "testingphoebe",
-            teamName: "vrms", //projectName, no where to pull that from currently, event object doesn't provide project name
-            accessLevel
-        };
-        fetch("api/grantpermission/gitHub", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(bodyObject),
-        })
-            .then((res) => {
-                if (res.status !== 200) {
-                    return res.json().then((res) => {
-                        throw new Error(res.message);
-                    });
-                }
-                return res.json();
-            })
-            .then((res) => {
-                console.log(res);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        const attendeesOnRoster = [];
+        const attendeesNotOnRoster = []; 
+              
+        attendees.map((attendee, index) => {
+            const currAttendee = { ...attendee };
+      
+            const isOnRoster = Boolean(roster.find(teamMember => 
+              teamMember.userId._id === attendee.userId._id));
+            
+            currAttendee.isOnRoster = isOnRoster;
+            isOnRoster 
+                ? attendeesOnRoster.push(currAttendee) 
+                : attendeesNotOnRoster.push(currAttendee);
+        });
+      
+        setSortedAttendees({
+            onTeam: attendeesOnRoster,
+            notOnTeam: attendeesNotOnRoster,
+        });
     };
+
+    useEffect(() => {
+        sortAttendees();
+    }, [attendees, roster]);
 
     return (
         <div className={styles.attendeeTable}>
-            <div className={styles.attendeeTableBoxLeft}>
+            <div className={styles.attendeeTableBoxCenter}>
                 <span className={styles.attendeeTableTitle}>name</span>
             </div>
             <div className={styles.attendeeTableBoxCenter}>
                 <span className={styles.attendeeTableTitle}>role</span>
             </div>
             <div className={styles.attendeeTableBoxCenter}>
-                <span className={styles.attendeeTableTitle}>here?</span>
+                <span className={styles.attendeeTableTitle}>On Roster</span>
             </div>
-            {activeMeeting &&
-                attendees
-                    .filter((attendee) => {
-                        return attendee.userId.newMember;
-                    })
-                    .map((attendee) => {
-                        return (
-                            <AttendeeTableRow
-                                key={Math.random()}
-                                name={
-                                    attendee.userId.name.firstName +
-                                    " " +
-                                    attendee.userId.name.lastName
-                                }
-                                role={attendee.userId.currentRole}
-                                isNewMember={true}
-                                gDriveClicked={() => gDriveClickHandler(attendee.userId.email)}
-                                gitHubClicked={() => gitHubClickHandler(attendee.userId.githubHandle)}
-                            ></AttendeeTableRow>
-                        );
-                    })}
-            {activeMeeting &&
-                attendees
-                    .filter((attendee) => {
-                        return (
-                            !attendee.userId.newMember && attendee.userId.name.firstName !== "test"
-                        );
-                    })
-                    .map((attendee) => {
-                        return (
-                            <AttendeeTableRow
-                                key={Math.random()}
-                                name={
-                                    attendee.userId.name.firstName +
-                                    " " +
-                                    attendee.userId.name.lastName
-                                }
-                                role={attendee.userId.currentRole}
-                                present={true}
-                            ></AttendeeTableRow>
-                        );
-                    })}
-            {activeMeeting &&
-                attendees
-                    .filter((attendee) => {
-                        return (
-                            !attendee.userId.newMember && attendee.userId.name.firstName === "test"
-                        );
-                    })
-                    .map((attendee) => {
-                        return (
-                            <AttendeeTableRow
-                                key={Math.random()}
-                                name={
-                                    attendee.userId.name.firstName +
-                                    " " +
-                                    attendee.userId.name.lastName
-                                }
-                                role={attendee.userId.currentRole}
-                                present={false}
-                            ></AttendeeTableRow>
-                        );
-                    })}
+
+            {sortedAttendees && (
+                sortedAttendees.notOnTeam.map((attendee, index) => {
+                    return (
+                        <AttendeeTableRow
+                            key={Math.random()}
+                            name={
+                                attendee.userId.name.firstName +
+                                " " +
+                                attendee.userId.name.lastName
+                            }
+                            role={attendee.userId.currentRole}
+                            postUser={() => addToRoster(attendee.userId._id, index)}
+                        ></AttendeeTableRow>
+                    );
+                })
+            )}
+
+            {sortedAttendees && (
+                sortedAttendees.onTeam.map((attendee) => {
+                    return (
+                        <AttendeeTableRow
+                            key={Math.random()}
+                            name={
+                                attendee.userId.name.firstName +
+                                " " +
+                                attendee.userId.name.lastName
+                            }
+                            isProjectTeamMember={true}
+                            role={attendee.userId.currentRole}
+                        ></AttendeeTableRow>
+                    );
+                })
+            )}
         </div>
     );
 };
