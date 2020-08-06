@@ -23,14 +23,30 @@ $gainsboro-color: #d9d9d9;
     background-color: #FAFAFA;
 }
 
+.flex {
+    display: flex;
+}
+
 .dashboard-header-text-small {
     font-size: 18px;
     margin: 0px;
     padding: 0px;
 }
 
+.dashboard-header-text-medium {
+    font-size: 22px;
+    margin: 0px;
+    padding: 0px;
+}
+
 .dashboard-header-text-large {
     font-size: 28px;
+    margin: 0px;
+    padding: 0px;
+}
+
+.dashboard-header-text-oversize {
+    font-size: 36px;
     margin: 0px;
     padding: 0px;
 }
@@ -47,6 +63,25 @@ $gainsboro-color: #d9d9d9;
         background-color: red;
         border: 2px solid red;
     }
+}
+
+.active-event-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: green;
+    margin-right: 8px;
+}
+
+.tab-selector {
+    font-size: 14px;
+    padding: 8px 0px;
+    width: 35% !important;
+}
+
+.tab-selected {
+    border-bottom: 2px solid black;
+    font-weight: bold;
 }
 
 .dashboard-warning {

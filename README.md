@@ -148,18 +148,7 @@ If you completed the Git steps above, you should be ready with your local fork l
 
 From the app root `vrms/`, we `npm install` to setup the `package.json` for the Node server, then `cd client/` and `npm install` again to setup the `package.json` for the React front end. This might take a minute or two.
 
-Create an `.env` file at the root of the `client/` folder, and paste the contents below inside:
-
-```REACT_APP_FIREBASE_DEV_REDIRECT_URL=http://localhost:3000/handleauth
-REACT_APP_FIREBASE_API_KEY=AIzaSyCVcv2k05DLqX5-1I4f0RTSylGHKpR6B3s
-REACT_APP_FIREBASE_AUTH_DOMAIN=vrms-7c0c5.firebaseapp.com
-REACT_APP_FIREBASE_DATABASE_URL=https://vrms-7c0c5.firebaseio.com
-REACT_APP_FIREBASE_PROJECT_ID=vrms-7c0c5
-REACT_APP_FIREBASE_STORAGE_BUCKET=vrms-7c0c5.appspot.com
-REACT_APP_FIREBASE_MESSAGING_SENDER_ID=167430906380
-REACT_APP_FIREBASE_APP_ID=1:167430906380:web:77edf6cdcd5e691db90429
-REACT_APP_FIREBASE_MEASUREMENT_ID=G-TMGK2Y2BQZ
-```
+Create an `.env` file at the root of the `client/` folder, and ask one of the developers for the necessary variables.
 
 `cd ..` back to the app root.
 
