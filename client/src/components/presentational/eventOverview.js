@@ -1,14 +1,14 @@
 import React from "react";
 
 const eventOverview = props => {
-  let eventsByType = [];
-  for (let key in props.chartTypes) {
-    eventsByType.push(key);
+  let brigades = [];
+  for (let keys in props.uniqueLocations) {
+    brigades.push(keys);
   }
 
   return (
     <div className="dashboard-header">
-      <p className="dashboard-header-text-large">Events Overview</p>
+      <p className="dashboard-header-text-large">HackforLA Overview</p>
 
       <form
         className="form-stats"
@@ -18,17 +18,17 @@ const eventOverview = props => {
         <div className="stats-form-row">
           <div className="stats-form-input-text">
             <div className="stat-select">
-              <label htmlFor="whichBrigade">Chart By Event Type:</label>
+              <label htmlFor="whichBrigade">Location:</label>
               <select
                 name="whichBrigade"
                 aria-label="topic"
-                onChange={props.handleChartTypeChange}
+                onChange={props.handleBrigadeChange}
                 required
               >
-                {eventsByType.map((eventByType, index) => {
+                {brigades.map((brigade, index) => {
                   return (
-                    <option key={index} value={eventByType}>
-                      {eventByType}
+                    <option key={index} value={brigade}>
+                      {brigade}
                     </option>
                   );
                 })}

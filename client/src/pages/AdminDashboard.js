@@ -11,33 +11,17 @@ import Loading from "../components/presentational/donutChartLoading";
 
 const AdminDashboard = (props) => {
   const auth = useAuth();
-  const defaultChartType = "All Events";
-  let uniqueEventTypes = new Set();
-  let hackNightUniqueLocations = new Set();
 
   //STATE
   const [nextEvent, setNextEvent] = useState([]);
   const [isCheckInReady, setIsCheckInReady] = useState();
   const [volunteers, setVolunteers] = useState(null);
-  const [allVolunteers, setAllVolunteers] = useState(null);
-
-  const [chartTypes, setChartTypes] = useState(null);
-
-  // Volunteers SignedIn By Event Type
-  const [totalVolunteersByEventType, setVolunteersSignedInByEventType] = useState({});
-  const [totalVolunteerHoursByEventType, setVolunteeredHoursByEventType] = useState({});
-  const [totalVolunteerAvgHoursByEventType, setAvgHoursByEventType] = useState({});
-
-  // Volunteers SignedIn By Hacknight Property
-  const [totalVolunteersByHacknightProp, setVolunteersSignedInByHacknightProp] = useState({});
-  const [totalVolunteerHoursByHacknightProp, setVolunteeredHoursByHacknightProp] = useState({});
-  const [totalVolunteerAvgHoursByHacknightProp, setAvgHoursByHacknightProp] = useState({});
-
-  // Volunteers To Chart
-  const [totalVolunteers, setVolunteersToChart] = useState({});
-  const [totalVolunteerHours, setVolunteeredHoursToChart] = useState({});
-  const [totalVolunteerAvgHours, setAvgHoursToChart] = useState({});
-
+  const [totalVolunteers, setTotalVolunteers] = useState(null);
+  const [locationsTotal, setLocationsTotal] = useState({});
+  const [uniqueLocations, setUniqueLocations] = useState(null);
+  const [volunteersSignedIn, setVolunteersSignedIn] = useState({});
+  const [volunteeredHours, setVolunteeredHours] = useState({});
+  const [averagedHours, setAveragedHours] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
   async function getAndSetData() {
@@ -47,8 +31,22 @@ const AdminDashboard = (props) => {
       const checkInsJson = await checkIns.json();
       const events = await fetch("/api/events");
       const eventsJson = await events.json();
+      let locationKeys = findUniqueLocationsKeys(eventsJson);
+      let uniqueLocations = findUniqueLocations(eventsJson);
+      let uniqueUsers = findUniqueUsers(
+        locationKeys,
+        uniqueLocations,
+        checkInsJson
+      );
+      let totalUsers = findTotalUsers(
+        locationKeys,
+        uniqueLocations,
+        checkInsJson
+      );
 
-      processData(eventsJson, checkInsJson);
+      setUniqueLocations(uniqueUsers);
+      setLocationsTotal(totalUsers);
+      setDonutCharts("All", uniqueUsers, totalUsers);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -56,164 +54,131 @@ const AdminDashboard = (props) => {
     }
   }
 
-  function processData(allEvents, allCheckIns){
-    let processedEvents = processEvents(allEvents);
-    let usersByEvent = collectUsersByEvent(allCheckIns);
-    prepareDataForCharts(processedEvents, usersByEvent);
+  function findUniqueLocations(events) {
+    let returnObj = events.reduce(
+      (acc, cur) => {
+        acc[cur.hacknight] = [];
+        return acc;
+      },
+      { All: [] }
+    );
+    return returnObj;
   }
 
-  function processEvents(allEvents) {
-    let events = new Map();
+  function findUniqueLocationsKeys(events) {
+    let returnObj = events.reduce((acc, cur) => {
+      acc[cur._id] = cur.hacknight;
+      return acc;
+    }, {});
 
-    for (let event of allEvents){
-      // Process legacy data with undefined 'hours' property because initially an event length was 3 hours
-      if(!event.hours){
-        event.hours = 3;
-      }
+    return returnObj;
+  }
 
-      // Define unique event types and process events without 'eventType' property
-      if(event.eventType){
-        processEventTypes(event, 'eventType', uniqueEventTypes);
-      } else {
-        // Find events without 'eventType' property (30 events) and assign it
-        event.eventType = 'Hacknight';
-      }
+  function findUniqueUsers(locationKeys, uniqueLocations, checkInsJson) {
+    let returnObj = JSON.parse(JSON.stringify(uniqueLocations));
+    checkInsJson.forEach((cur) => {
+      let userLocation = locationKeys[cur.eventId];
+      let userId = cur.userId;
 
-      // Extract events with 'hacknight' property & find unique locations in it
-      if(event.hacknight){
-        processEventTypes(event, 'hacknight', hackNightUniqueLocations);
+      if (!returnObj[userLocation].includes(userId)) {
+        returnObj[userLocation].push(userId);
       }
-      events.set(event._id, event);
+    });
+    return returnObj;
+  }
+  function findTotalUsers(locationKeys, uniqueLocations, checkInsJson) {
+    let returnObj = JSON.parse(JSON.stringify(uniqueLocations));
+    checkInsJson.forEach((cur) => {
+      let userLocation = locationKeys[cur.eventId];
+      let userId = cur.userId;
+
+      returnObj[userLocation].push(userId);
+    });
+    return returnObj;
+  }
+
+  function findVolunteersSignedIn(
+    targetBrigade,
+    immediateUniqueLocations = uniqueLocations,
+    immediateLocationsTotal = locationsTotal
+  ) {
+    let returnObj = {};
+    if (targetBrigade !== "All") {
+      returnObj[targetBrigade] = immediateUniqueLocations[targetBrigade].length;
+    } else {
+      for (let keys in immediateUniqueLocations) {
+        returnObj[keys] = immediateUniqueLocations[keys].length;
+      }
+      delete returnObj.All;
     }
-    createChartTypes();
-    return events;
+    setVolunteersSignedIn(returnObj);
   }
+  function findVolunteeredHours(
+    targetBrigade,
+    immediateUniqueLocations = uniqueLocations,
+    immediateLocationsTotal = locationsTotal
+  ) {
+    let returnObj = {};
 
-  function processEventTypes(event, propName, uniqueTypes){
-    const capitalize = (str, lower = false) =>
-        (lower ? str.toLowerCase() : str).replace(/(?:^|\s|["'([{])+\S/g, match => match.toUpperCase());
-    let type = capitalize(event[propName], true);
-    event[propName] = type;
-    uniqueTypes.add(type);
-  }
-
-  function createChartTypes(){
-    let chartTypes = {
-      "All Events": "",
-      "Hacknight Only": ""
-    };
-    setChartTypes(chartTypes);
-  }
-
-  function collectUsersByEvent(allCheckIns){
-    let eventCollection = new Map();
-    for(let checkIn of allCheckIns){
-      if(eventCollection.has(checkIn.eventId)){
-        eventCollection.get(checkIn.eventId).push(checkIn);
-      } else{
-        eventCollection.set(checkIn.eventId, [checkIn]);
+    if (targetBrigade !== "All") {
+      returnObj[targetBrigade] =
+        immediateUniqueLocations[targetBrigade].length * 3;
+    } else {
+      for (let keys in immediateUniqueLocations) {
+        returnObj[keys] = immediateUniqueLocations[keys].length * 3;
       }
+      delete returnObj.All;
     }
-    return eventCollection;
+    setVolunteeredHours(returnObj);
   }
 
-  function prepareDataForCharts(events, users){
-    // Data for 1 chart 'total volunteers'
-    let totalVolunteersByEventType = extractVolunteersSignedInByProperty(events, users, uniqueEventTypes, 'eventType');
-    setVolunteersSignedInByEventType(totalVolunteersByEventType);
-    let totalVolunteersByHacknightProp = extractVolunteersSignedInByProperty(events, users, hackNightUniqueLocations, 'hacknight');
-    setVolunteersSignedInByHacknightProp(totalVolunteersByHacknightProp);
+  function findAveragedHours(
+    targetBrigade,
+    immediateUniqueLocations = uniqueLocations,
+    immediateLocationsTotal = locationsTotal
+  ) {
+    let returnObj = {};
 
-    // Data for 2 chart 'total hours'
-    let totalVolunteerHoursByEventType = findTotalVolunteerHours(events, users, uniqueEventTypes, 'eventType');
-    setVolunteeredHoursByEventType(totalVolunteerHoursByEventType);
-    let totalVolunteerHoursByHacknightProp = findTotalVolunteerHours(events, users, hackNightUniqueLocations, 'hacknight');
-    setVolunteeredHoursByHacknightProp(totalVolunteerHoursByHacknightProp);
-
-    //  Data for 3 chart 'total average hours'
-    let totalVolunteerAvgHoursByEventType = findAverageVolunteerHours(
-        totalVolunteersByEventType,
-        totalVolunteerHoursByEventType,
-        uniqueEventTypes);
-    setAvgHoursByEventType(totalVolunteerAvgHoursByEventType);
-
-    let totalVolunteerAvgHoursByHacknightProp = findAverageVolunteerHours(
-        totalVolunteersByHacknightProp,
-        totalVolunteerHoursByHacknightProp,
-        hackNightUniqueLocations);
-    setAvgHoursByHacknightProp(totalVolunteerAvgHoursByHacknightProp);
-
-    // Display data by default for "All" chart type
-    setVolunteersToChart(totalVolunteersByEventType);
-    setVolunteeredHoursToChart(totalVolunteerHoursByEventType);
-    setAvgHoursToChart(totalVolunteerAvgHoursByEventType);
-  }
-
-  function extractVolunteersSignedInByProperty(events, users, uniqueTypes, propName){
-    let result = {};
-    let type;
-
-    uniqueTypes.forEach(el => result[el] = parseInt('0'));
-    for (let eventId of users.keys()) {
-      if(propName === 'eventType'){
-        type = events.get(eventId).eventType;
-        result[type] = users.get(eventId).length + result[type];
+    if (targetBrigade !== "All") {
+      returnObj[targetBrigade] =
+        Math.round(
+          (100 * (immediateUniqueLocations[targetBrigade].length * 3)) /
+            immediateLocationsTotal[targetBrigade].length
+        ) / 100;
+    } else {
+      for (let keys in immediateUniqueLocations) {
+        returnObj[keys] =
+          Math.round(
+            (100 * (immediateUniqueLocations[keys].length * 3)) /
+              immediateLocationsTotal[keys].length
+          ) / 100;
       }
-
-      if(propName === 'hacknight' && typeof events.get(eventId).hacknight !== 'undefined'){
-        type = events.get(eventId).hacknight;
-        result[type] = users.get(eventId).length + result[type];
-      }
+      delete returnObj.All;
     }
-    return result;
+    setAveragedHours(returnObj);
   }
 
-  function findTotalVolunteerHours(events, users, uniqueTypes, propName){
-    let result = {};
-    let type;
-    uniqueTypes.forEach(el => result[el] = parseInt('0'));
-
-    for (let eventId of users.keys()) {
-      if(propName === 'eventType'){
-        type = events.get(eventId).eventType;
-        result[type] = result[type] + (events.get(eventId).hours * users.get(eventId).length);
-      }
-
-      if (propName === 'hacknight' && typeof events.get(eventId).hacknight !== 'undefined'){
-        type = events.get(eventId).hacknight;
-        result[type] = result[type] + (events.get(eventId).hours * users.get(eventId).length);
-      }
-    }
-    return result;
+  function setDonutCharts(
+    targetBrigade,
+    immediateUniqueLocations = uniqueLocations,
+    immediateLocationsTotal = locationsTotal
+  ) {
+    findVolunteersSignedIn(
+      targetBrigade,
+      immediateUniqueLocations,
+      immediateLocationsTotal
+    );
+    findVolunteeredHours(
+      targetBrigade,
+      immediateUniqueLocations,
+      immediateLocationsTotal
+    );
+    findAveragedHours(
+      targetBrigade,
+      immediateUniqueLocations,
+      immediateLocationsTotal
+    );
   }
-
-  function findAverageVolunteerHours(totalVolunteers, totalVolunteerHours, uniqueTypes){
-    let result = {};
-    uniqueTypes.forEach(el => result[el] = parseInt('0'));
-
-    for(let eventType of uniqueTypes.keys()){
-      let hours = totalVolunteerHours[eventType];
-      let volunteers = totalVolunteers[eventType];
-      let averageHours = (hours / volunteers);
-      if(!Number.isInteger(averageHours)) averageHours = +averageHours.toFixed(2);
-      volunteers > 0 ? result[eventType] = averageHours : result[eventType] = 0;
-    }
-    return result;
-  }
-
-  function setDonutCharts(valueFromSelect){
-    // Display data depending on value from select
-    if(valueFromSelect === defaultChartType){
-      setVolunteersToChart(totalVolunteersByEventType);
-      setVolunteeredHoursToChart(totalVolunteerHoursByEventType);
-      setAvgHoursToChart(totalVolunteerAvgHoursByEventType);
-    } else if (valueFromSelect === "Hacknight Only"){
-      setVolunteersToChart(totalVolunteersByHacknightProp);
-      setVolunteeredHoursToChart(totalVolunteerHoursByHacknightProp);
-      setAvgHoursToChart(totalVolunteerAvgHoursByHacknightProp);
-    }
-  }
-
   async function getUsers() {
     const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
@@ -228,7 +193,7 @@ const AdminDashboard = (props) => {
       const usersJson = await users.json();
 
       setVolunteers(usersJson);
-      setAllVolunteers(usersJson);
+      setTotalVolunteers(usersJson);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -236,7 +201,30 @@ const AdminDashboard = (props) => {
       console.log(error);
     }
   }
+  async function setCheckInReady(e, nextEventId) {
+    e.preventDefault();
 
+    try {
+      setIsLoading(true);
+
+      await fetch(`/api/events/${nextEventId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((response) => {
+        if (response.ok) {
+          setIsCheckInReady(!isCheckInReady);
+        }
+      });
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+
+      // setIsError(error);
+      // setIsLoading(!isLoading);
+    }
+  }
   async function getNextEvent() {
     try {
       setIsLoading(true);
@@ -265,7 +253,6 @@ const AdminDashboard = (props) => {
       console.log(error);
     }
   }
-
   async function setCheckInReady(e, nextEventId) {
     e.preventDefault();
 
@@ -286,8 +273,7 @@ const AdminDashboard = (props) => {
       // setIsLoading(!isLoading);
     }
   }
-
-  const handleChartTypeChange = (e) => {
+  const handleBrigadeChange = (e) => {
     setDonutCharts(e.currentTarget.value);
   };
 
@@ -307,55 +293,53 @@ const AdminDashboard = (props) => {
             </p>
           </div>
 
-          {isLoading ? (
-              <Loading />
-          ) : (
-              <UpcomingEvent
-                  isCheckInReady={isCheckInReady}
-                  nextEvent={nextEvent}
-                  setCheckInReady={setCheckInReady}
-              />
+          {isLoading ? <img src={Loading} alt="Logo" /> : (
+            <UpcomingEvent
+              isCheckInReady={isCheckInReady}
+              nextEvent={nextEvent}
+              setCheckInReady={setCheckInReady}
+            />
           )}
 
           {isLoading ? (
-              <Loading />
+            <img src={Loading} alt="Logo" />
           ) : (
-              <EventOverview
-                  handleChartTypeChange={handleChartTypeChange}
-                  chartTypes={chartTypes}
-              />
+            <EventOverview
+              handleBrigadeChange={handleBrigadeChange}
+              uniqueLocations={uniqueLocations}
+            />
           )}
 
           {isLoading ? (
-              <Loading />
+            <Loading />
           ) : (
-              <DonutChartContainer
-                  chartName={"Total Volunteers"}
-                  data={totalVolunteers}
-              />
+            <DonutChartContainer
+              chartName={"Total Volunteers"}
+              data={volunteersSignedIn}
+            />
           )}
 
           {isLoading ? (
-              <Loading />
+            <Loading />
           ) : (
-              <DonutChartContainer
-                  chartName={"Total Volunteer Hours"}
-                  data={totalVolunteerHours}
-              />
+            <DonutChartContainer
+              chartName={"Total Volunteer Hours"}
+              data={volunteeredHours}
+            />
           )}
-
+          
           {isLoading ? (
-              <Loading />
+            <Loading />
           ) : (
-              <DonutChartContainer
-                  chartName={"Average Hours Per Volunteer"}
-                  data={totalVolunteerAvgHours}
-              />
+            <DonutChartContainer
+              chartName={"Avg. Hours Per Volunteer"}
+              data={averagedHours}
+            />
           )}
         </div>
       </div>
     ) : (
-        <Redirect to="/login" />
+      <Redirect to="/login" />
     )
   );
 };
