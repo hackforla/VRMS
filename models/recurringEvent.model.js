@@ -38,7 +38,7 @@ recurringEventSchema.methods.serialize = function() {
             state: this.location.state,
             country: this.location.country
         },
-        hacknight: this.hacknight,
+        hacknight: [this.hacknight],
         brigade: this.brigade,
         eventType: this.eventType,
         description: this.eventDescription,
