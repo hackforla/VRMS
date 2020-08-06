@@ -146,49 +146,15 @@ Verify with `node -v` and `npm -v` respectively.
 
 If you completed the Git steps above, you should be ready with your local fork loaded in your code editor of choice. Check your remotes again with `git remote -v` to make sure you're good to go. 
 
-From the app root `vrms/`, we `npm install` to setup the `package.json` for the Node server, then `cd client/` and `npm install` again to setup the `package.json` for the React front end. This might take a minute or two.
+From the app root `vrms/`, run `npm install` to setup the `package.json` for the Node server, then `cd client/` and run `npm install` again to setup the `package.json` for the React front end. This might take a minute or two.
 
-Create an `.env` file at the root of the `client/` folder, and paste the contents below inside:
+Create `.env` files:
+* in the project root folder `vrms/` for back-end.
+* in the `vrms/client/` folder for front-end.
 
-```
-REACT_APP_FIREBASE_API_KEY=AIzaSyCVcv2k05DLqX5-1I4f0RTSylGHKpR6B3s
-REACT_APP_FIREBASE_AUTH_DOMAIN=vrms-7c0c5.firebaseapp.com
-REACT_APP_FIREBASE_DATABASE_URL=https://vrms-7c0c5.firebaseio.com
-REACT_APP_FIREBASE_PROJECT_ID=vrms-7c0c5
-REACT_APP_FIREBASE_STORAGE_BUCKET=vrms-7c0c5.appspot.com
-REACT_APP_FIREBASE_MESSAGING_SENDER_ID=167430906380
-REACT_APP_FIREBASE_APP_ID=1:167430906380:web:77edf6cdcd5e691db90429
-REACT_APP_FIREBASE_MEASUREMENT_ID=G-TMGK2Y2BQZ
-REACT_APP_CUSTOM_REQUEST_HEADER=nAb3kY-S%qE#4!d
-REACT_APP_FIREBASE_DEV_REDIRECT_URL=http://localhost:3000/handleauth
-```
+Then paste the content from the [document](https://docs.google.com/document/d/1yDF6UmyO-MPNrl3y_Mw0mkm_WaixlSkXzWbudCzHXDY/edit?usp=sharing).
 
-`cd ..` back to the app root.
-
-Take a second to review the `server.js` file here. It is a blueprint for the back end, so please familiarize yourself with it. You'll see folders for the database collection models, routes for the API, and a config file which loads the necessary environment variables. 
-
-Now, back to the command line:
-
-`touch .env` to create a file for your environment variables.
-
-Copy/paste the following inside:
-
-```
-APP_SERVER_PORT=4000
-REACT_APP_PORT=3000
-DATABASE_URL=mongodb+srv://testuser2:Riy4gVoo3RYzLJEB@cluster0-haogu.mongodb.net/testdb?retryWrites=true&w=majority
-CUSTOM_REQUEST_HEADER=nAb3kY-S%qE#4!d
-```
-
-`touch .gitignore` (if not included) 
-
-Copy/paste again so it looks like this:
-
-```/node_modules
-npm-debug.log
-.DS_Store
-/*.env
-```
+Take a second to review the `server.js` file in the `vrms/` folder. It is a blueprint for the back end, so please familiarize yourself with it. You'll see folders for the database collection models, routes for the API, and a config file which loads the necessary environment variables. 
 
 Make sure you're at the app root, and run:
 
