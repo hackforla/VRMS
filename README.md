@@ -152,7 +152,7 @@ Create `.env` files:
 * in the project root folder `vrms/` for back-end.
 * in the `vrms/client/` folder for front-end.
 
-Then paste the content from the [document](https://docs.google.com/document/d/1yDF6UmyO-MPNrl3y_Mw0mkm_WaixlSkXzWbudCzHXDY/edit?usp=sharing).
+Then paste the content from the [document](https://docs.google.com/document/d/1yDF6UmyO-MPNrl3y_Mw0mkm_WaixlSkXzWbudCzHXDY/edit?usp=sharing). It is accessible for the project team members only.
 
 Take a second to review the `server.js` file in the `vrms/` folder. It is a blueprint for the back end, so please familiarize yourself with it. You'll see folders for the database collection models, routes for the API, and a config file which loads the necessary environment variables. 
 
