@@ -30,6 +30,7 @@ const ProjectLeaderDashboard = () => {
       );
       const projectJson = await project.json();
       setProject(projectJson);
+      console.log("projectJson", projectJson);
     } catch (error) {
       console.log(error);
     }
@@ -42,7 +43,9 @@ const ProjectLeaderDashboard = () => {
         const events = await fetch(
           `/api/events/nexteventbyproject/${project.projectId._id}`
         );
+        console.log("events", events);
         const eventsJson = await events.json();
+        console.log("eventsJson", eventsJson);
         setIsCheckInReady(eventsJson.checkInReady);
         setNextEvent([eventsJson]);
         // console.log('NEXT EVENT', eventsJson);
@@ -59,6 +62,7 @@ const ProjectLeaderDashboard = () => {
           `/api/projectteammembers/${project.projectId._id}`
         );
         const rosterJson = await roster.json();
+        console.log("rosterJson", rosterJson);
         setRoster(rosterJson);
         setRosterProjectId(project.projectId.googleDriveId);
       }
@@ -70,6 +74,7 @@ const ProjectLeaderDashboard = () => {
   async function getAttendees() {
     try {
       if (nextEvent && nextEvent[0]._id) {
+        console.log("nextEvent", nextEvent);
         const id = nextEvent[0]._id;
         const attendees = await fetch(`/api/checkins/findEvent/${id}`);
         const attendeesJson = await attendees.json();
