@@ -3,6 +3,8 @@ const router = express.Router();
 const { App } = require("@slack/bolt");
 const cron = require("node-cron");
 
+//https://api.slack.com/web
+
 const app = new App({
   token: "xoxb-1273107934163-1285590347713-IFD6nYKd3E59NMKy3rdr1WSu",
   signingSecret: "4c1f11f5986ab05b95a796b7897e87c3",
@@ -18,6 +20,7 @@ cron.schedule("* * * * 1", () => {});
 //Finds Id number of channel
 router.get("/findId", (req, res) => {
   findConversation("vrms");
+  findEvent();
   publishMessage();
 });
 
@@ -71,5 +74,11 @@ async function publishMessage1(id, text) {
   } catch (error) {
     console.error(error);
   }
+}
+
+async function findEvent() {
+  const events = await fetch("/api/events");
+  const eventsJson = await events.json();
+  console.log(eventsJson);
 }
 module.exports = router;
