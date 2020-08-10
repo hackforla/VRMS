@@ -21,7 +21,6 @@ const ProjectLeaderDashboard = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
   const [rosterProjectId, setRosterProjectId] = useState("");
-  const [isOnRoster, setIsOnRoster] = useState(false);
 
   async function getProjectFromUserId() {
     try {
@@ -30,7 +29,6 @@ const ProjectLeaderDashboard = () => {
       );
       const projectJson = await project.json();
       setProject(projectJson);
-      console.log("projectJson", projectJson);
     } catch (error) {
       console.log(error);
     }
@@ -43,9 +41,7 @@ const ProjectLeaderDashboard = () => {
         const events = await fetch(
           `/api/events/nexteventbyproject/${project.projectId._id}`
         );
-        console.log("events", events);
         const eventsJson = await events.json();
-        console.log("eventsJson", eventsJson);
         setIsCheckInReady(eventsJson.checkInReady);
         setNextEvent([eventsJson]);
         // console.log('NEXT EVENT', eventsJson);
@@ -62,7 +58,6 @@ const ProjectLeaderDashboard = () => {
           `/api/projectteammembers/${project.projectId._id}`
         );
         const rosterJson = await roster.json();
-        console.log("rosterJson", rosterJson);
         setRoster(rosterJson);
         setRosterProjectId(project.projectId.googleDriveId);
       }
@@ -74,7 +69,6 @@ const ProjectLeaderDashboard = () => {
   async function getAttendees() {
     try {
       if (nextEvent && nextEvent[0]._id) {
-        console.log("nextEvent", nextEvent);
         const id = nextEvent[0]._id;
         const attendees = await fetch(`/api/checkins/findEvent/${id}`);
         const attendeesJson = await attendees.json();
@@ -132,7 +126,6 @@ const ProjectLeaderDashboard = () => {
     e.preventDefault();
     setIsError(false);
     setIsSuccess(false);
-    setIsOnRoster(false);
 
     if (email === "") {
       setIsError(true);
@@ -159,14 +152,12 @@ const ProjectLeaderDashboard = () => {
           if (res.ok) {
             return res.json();
           }
-
           throw new Error(res.statusText);
         })
         .then((response) => {
           if (response === false) {
             setIsError(true);
             setErrorMessage("Email not found");
-
             return response;
           } else {
             return response;
@@ -177,16 +168,6 @@ const ProjectLeaderDashboard = () => {
             return false;
           } else {
             checkIfOnRoster(user);
-            console.log("isOnRoster", isOnRoster);
-            if (isOnRoster === true) {
-              console.log("on roster", user);
-
-              return false;
-            } else {
-              console.log("not on roster", user);
-
-              addMember(user);
-            }
           }
         })
         .catch((err) => {
@@ -205,13 +186,10 @@ const ProjectLeaderDashboard = () => {
       const onTeamJson = await onTeam.json();
 
       if (!onTeamJson) {
-        console.log("onTeamJson False", onTeamJson);
-        setIsOnRoster(false);
+        addMember(user);
       } else {
-        setIsOnRoster(true);
         setIsError(true);
         setErrorMessage("Already on roster");
-        console.log("onTeamJson True", onTeamJson);
       }
     } catch (error) {
       console.log(error);
@@ -251,7 +229,6 @@ const ProjectLeaderDashboard = () => {
   }, []);
 
   useEffect(() => {
-    console.log("getAttendees() called");
     getAttendees();
   }, [nextEvent]);
 
