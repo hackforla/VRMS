@@ -4,8 +4,6 @@ import { Link } from "react-router-dom";
 import "../../sass/Home.scss";
 
 const CheckInButtons = (props) => {
-  // console.log(props.events);
-
   return (
     <>
       <Link

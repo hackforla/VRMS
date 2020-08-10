@@ -1,31 +1,34 @@
 const express = require("express");
 const router = express.Router();
 const { App } = require("@slack/bolt");
+const cron = require("node-cron");
+
 const app = new App({
   token: "xoxb-1273107934163-1285590347713-IFD6nYKd3E59NMKy3rdr1WSu",
   signingSecret: "4c1f11f5986ab05b95a796b7897e87c3",
 });
 
-(async () => {
-  // Start your app
-  await app.start(3001);
+//Checks DB every monday (1) for slack messages to schedule this week
+cron.schedule("* * * * 1", () => {});
 
-  console.log("⚡️ Bolt app is running!");
+(async () => {
+  await app.start(3001);
 })();
 
-// GET /api/recurringevents/
-router.get("/test", (req, res) => {
-  // const { query } = req;
-
+//Finds Id number of channel
+router.get("/findId", (req, res) => {
   findConversation("vrms");
   publishMessage();
 });
 
+//uses Id number to send message to said channel
+router.post("/postMeeting/:id", (req, res) => {
+  publishMessage1();
+});
+
 async function findConversation(name) {
   try {
-    // Call the conversations.list method using the built-in WebClient
     const result = await app.client.conversations.list({
-      // The token you used to initialize your app
       token: "xoxb-1273107934163-1285590347713-IFD6nYKd3E59NMKy3rdr1WSu",
     });
 
@@ -33,9 +36,7 @@ async function findConversation(name) {
       if (channel.name === name) {
         conversationId = channel.id;
 
-        // Print result
         console.log("Found conversation ID: " + conversationId);
-        // Break from for loop
         break;
       }
     }
@@ -46,16 +47,26 @@ async function findConversation(name) {
 
 async function publishMessage(id, text) {
   try {
-    // Call the chat.postMessage method using the built-in WebClient
     const result = await app.client.chat.postMessage({
-      // The token you used to initialize your app
       token: "xoxb-1273107934163-1285590347713-IFD6nYKd3E59NMKy3rdr1WSu",
       channel: "C017L4PFAA3",
       text: "Slack Message Publish",
-      // You could also use a blocks[] array to send richer content
     });
 
-    // Print result, which includes information about the message (like TS)
+    console.log(result);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function publishMessage1(id, text) {
+  try {
+    const result = await app.client.chat.postMessage({
+      token: "xoxb-1273107934163-1285590347713-IFD6nYKd3E59NMKy3rdr1WSu",
+      channel: id,
+      text: text,
+    });
+
     console.log(result);
   } catch (error) {
     console.error(error);
