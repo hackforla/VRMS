@@ -34,7 +34,7 @@ router.get("/:id", (req, res) => {
 
 router.get("/findEvent/:id", (req, res) => {
     CheckIn
-        .find({ eventId: req.params.id })
+        .find({ eventId: req.params.id, userId: { $ne: 'undefined'} })
         .populate({
             path: "userId",
             model: "User",
@@ -44,7 +44,7 @@ router.get("/findEvent/:id", (req, res) => {
         })
         .catch((err) => {
             console.log(err);
-            res.sendStatus(400).json({
+            res.sendStatus(500).json({
                 message: "/GET Internal server error: " + err,
             });
         });
