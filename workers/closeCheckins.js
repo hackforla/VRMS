@@ -56,9 +56,11 @@ module.exports = (cron, fetch) => {
     async function runTask() {
         console.log("Closing check-ins");
 
-        const eventsToClose = await sortAndFilterEvents();
-        // console.log(eventsToClose);
-        await closeCheckins(eventsToClose);
+        const eventsToClose = await sortAndFilterEvents()
+            .catch(err => {console.log(err)});
+
+        await closeCheckins(eventsToClose)
+            .catch(err => {console.log(err)});
 
         console.log("Check-ins closed");
     };
