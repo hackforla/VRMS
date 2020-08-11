@@ -1,0 +1,60 @@
+// This file store any variables (based on the style guide) that will be used throughout styles
+
+// COLOR PALETTE VARIABLES
+$light-primary-color: #FFFFFF;
+$light-secondary-color: #F2F2F2;
+$dark-primary-color: #000000;
+$dark-secondary-color: #3D5A6C;
+$dark-gray-primary-color: #32373B;
+$dark-gray-secondary-color: #4A5859;
+$light-gray-primary-color: #D6D3CE;
+$accent-primary-color: #FA114F;
+$accent-secondary-color: #F4B860;
+
+
+// TYPOGRAPHY VARIABLES
+// Font primary styles
+$font-primary: open-sans;
+$font-color-primary: $dark-primary-color;
+$font-size-primary: 14px;
+$line-height-primary: 20px;
+$letter-sp-primary: 0.5px;
+
+// Header styles
+// Main Page Header (h1)
+$header-main-size: 1.72em;  // h1, 24px
+$header-main-line-height: 1;
+$header-main-letter-spacing: 0.045em;
+$header-main-text-transform: uppercase;
+
+// Header Colors
+$header-main-dark-color: $dark-primary-color;
+$header-secondary-dark-color: $dark-secondary-color;
+$header-secondary-light-color: $light-gray-primary-color;
+
+// Header Font Weights
+$header-main-font-weight: bold;
+$header-secondary-font-weight: 600;
+
+// Header Sizes
+$header-section-size: 1.72em;  // h2, 24px
+$header-medium-size: 1.29em;  // h3, 18px
+$header-small-size: 1.07em;  // h4, 15px
+$header-extra-small-size: 1em;  // h5, 14px
+
+// Menu
+$menu-font-size: 1.7em;
+$menu-line-height: 2.35em;
+
+// Link
+$link-font-size: 1.29em;
+$link-color: $font-color-primary;
+$link-font-weight: bold;
+$link-line-height: 1.30em;
+
+// Button
+$button-primary-bg-color: $dark-secondary-color;
+$button-primary-color: $light-primary-color;
+$button-primary-font-size: 1.071em;
+$button-secondary-bg-color: $light-primary-color;
+$button-secondary-color: $dark-secondary-color;
