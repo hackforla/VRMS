@@ -1,0 +1,42 @@
+// This file store any generic styles for elements in the app
+// Should have selectors or classes, no ids for selectors
+
+@import "./_variables";
+
+button{
+  color: $button-primary-color;
+  background-color: $button-primary-bg-color;
+  font-size: $button-primary-font-size;
+  letter-spacing: $letter-sp-primary;
+  line-height: 1;
+  padding: 9px 20px;
+  border-radius: 20px;
+  border: 1.5px solid $button-primary-bg-color;
+  text-transform: uppercase;
+  text-decoration: none;
+  margin: 0 auto;
+  outline: none;
+  cursor: pointer;
+  transition: .3s ease;
+  &:hover{
+    background-color: $button-primary-color;
+    color: $button-primary-bg-color;
+  }
+}
+
+.square-btn{
+  @extend button;
+  border-radius: 0;
+  text-transform: capitalize;
+  font-weight: bold;
+  color: $button-secondary-color;
+  background-color: $button-secondary-bg-color;
+  border: 1px solid $button-secondary-color;
+  padding: 11px 7px;
+  line-height: 20px;
+  &:hover{
+    background-color: $button-secondary-color;
+    color: $button-secondary-bg-color;
+  }
+  margin: 10px auto;
+}
