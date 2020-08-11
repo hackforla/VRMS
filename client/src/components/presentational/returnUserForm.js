@@ -27,6 +27,7 @@ const ReturnUserForm = (props) => {
                 onChange={props.handleInputChange}
                 aria-label="Email Address"
                 required
+                autoComplete="email"
               />
             </div>
             <p>
