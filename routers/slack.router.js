@@ -2,26 +2,29 @@ const express = require("express");
 const router = express.Router();
 const { App } = require("@slack/bolt");
 const cron = require("node-cron");
+const { Event } = require("../models/event.model");
+const { Project } = require("../models/project.model");
 
 //https://api.slack.com/web
 
 const app = new App({
-  token: "xoxb-1273107934163-1285590347713-IFD6nYKd3E59NMKy3rdr1WSu",
+  token: "xoxb-1273107934163-1285590347713-T4jPga74wL2iddE1J1r5w6a0",
   signingSecret: "4c1f11f5986ab05b95a796b7897e87c3",
 });
 
 //Checks DB every monday (1) for slack messages to schedule this week
-cron.schedule("* * * * 1", () => {});
+// cron.schedule("* * * * 1", () => {});
 
 (async () => {
   await app.start(3001);
+  console.log("Connected to Slack");
 })();
 
 //Finds Id number of channel
 router.get("/findId", (req, res) => {
-  findConversation("vrms");
-  findEvent();
   publishMessage();
+  findEvent();
+  // findProject();
 });
 
 //uses Id number to send message to said channel
@@ -32,7 +35,7 @@ router.post("/postMeeting/:id", (req, res) => {
 async function findConversation(name) {
   try {
     const result = await app.client.conversations.list({
-      token: "xoxb-1273107934163-1285590347713-IFD6nYKd3E59NMKy3rdr1WSu",
+      token: "xoxb-1273107934163-1285590347713-T4jPga74wL2iddE1J1r5w6a0",
     });
 
     for (var channel of result.channels) {
@@ -76,9 +79,33 @@ async function publishMessage1(id, text) {
   }
 }
 
-async function findEvent() {
-  const events = await fetch("/api/events");
-  const eventsJson = await events.json();
-  console.log(eventsJson);
+async function findEvent(req, res) {
+  Event.find({})
+    .then((events) => {
+      console.log("EVENTS", events);
+      res.json(events);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(500).json({
+        message: `/GET Internal server error: ${err}`,
+      });
+    });
+}
+
+async function findProject(req, res) {
+  Project.find({})
+    .then((project) => {
+      project.forEach((cur) => {
+        console.log("PROJECT", cur.name);
+      });
+      res.json(project);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(500).json({
+        message: `/GET Internal server error: ${err}`,
+      });
+    });
 }
 module.exports = router;

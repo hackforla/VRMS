@@ -1,3 +1,10 @@
+/****** Color Vars for Charts *********/
+$teal-blue-color: #3f7589;
+$prussian-blue-color: #172d47;
+$french-raspberry-color: #bd3346;
+$spanish-gray-color: #999999;
+$gainsboro-color: #d9d9d9;
+
 .dashboard {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -6,7 +13,7 @@
     -webkit-box-direction: normal;
         -ms-flex-direction: column;
             flex-direction: column;
-    overflow: scroll;
+    overflow-y: scroll;
 }
 
 .dashboard-header {

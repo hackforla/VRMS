@@ -196,6 +196,7 @@ const ProjectLeaderDashboard = () => {
   }, []);
 
   useEffect(() => {
+    console.log('getAttendees() called');
     getAttendees();
   }, [nextEvent]);
 
@@ -266,7 +267,9 @@ const ProjectLeaderDashboard = () => {
                   changeTable={changeTable}
                   attendees={attendees}
                   roster={roster}
+                  setRoster={setRoster}
                   attendeeOrRoster={attendeeOrRoster}
+                  projectId={project._id}
                   RosterProjectId={rosterProjectId}
                 />
               )}

@@ -12,7 +12,10 @@ const projectDashboardContainer = (props) => {
       {props.attendeeOrRoster ? (
         <AttendeeTable
           attendees={props.attendees}
+          setRoster={props.setRoster}
+          roster={props.roster}
           activeMeeting={true}
+          projectId={props.projectId}
         ></AttendeeTable>
       ) : (
         <RosterTable

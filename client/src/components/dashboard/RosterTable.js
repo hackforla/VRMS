@@ -30,7 +30,7 @@ const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
   );
 
   const slackTestButton = () => {
-    fetch("api/slack/test", {
+    fetch("api/slack/findId", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -135,7 +135,7 @@ const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
           <div className={styles.rosterIcon}>{gitHubIcon}</div>
         </div>
       </div>
-      {attendees &&
+      {/* {attendees &&
         attendees.map((attendee) => {
           return (
             <RosterTableRow
@@ -161,7 +161,7 @@ const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
               }}
             ></RosterTableRow>
           );
-        })}
+        })} */}
     </div>
   );
 };

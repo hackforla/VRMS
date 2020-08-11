@@ -5,25 +5,22 @@
   justify-content: center;
   align-content: center;
   overflow: hidden;
+  max-height: 90vh;
+  margin: 5vh 0;
 }
 
 .app-container {
   position: relative;
-  height: 100%;
   max-width: 500px;
   width: 100%;
-  padding-left: 24px;
-  padding-right: 24px;
-  padding-bottom: 24px;
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
-  // background-color: rgb(250, 17, 79);
   background-color: white;
   overflow: hidden;
+  border-radius: 10px;
+  padding: 15px;
 }
 
 .main {
-  height: 100%;
+  height: calc(90vh - 160px);
 }
 
 .flexcenter-container {
@@ -45,6 +42,6 @@
 
 @media (max-width: 500px) {
   .app-container {
-    margin-bottom: 15vh;
+    margin: 0 15px;
   }
 }
