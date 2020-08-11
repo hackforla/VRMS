@@ -1,3 +1,12 @@
+// This file that imports all main scss files
+// Should be activated after removing styles from index.scss
+/*@import "sass/_variables";
+@import "sass/_mixins";
+@import "sass/_keyframes";
+@import "sass/_main";
+@import "sass/_elements";*/
+
+// Code below should be removed after switched to new UI
 .app {
   height: 100%;
   width: 100vw;
