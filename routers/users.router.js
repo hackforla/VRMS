@@ -60,7 +60,6 @@ router.get('/:id', (req, res) => {
         });
 });
 
-
 router.patch('/:id', (req, res) => {
     const { headers } = req;
     const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;

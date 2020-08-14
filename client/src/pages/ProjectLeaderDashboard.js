@@ -57,6 +57,14 @@ const ProjectLeaderDashboard = () => {
           `/api/projectteammembers/${project.projectId._id}`
         );
         const rosterJson = await roster.json();
+        // temporary function that fixes outdated data
+        rosterJson.forEach((item) => {
+          if (!item.userId.name) {
+            item.userId.name = {};
+            item.userId.name.firstName = item.userId.firstName;
+            item.userId.name.lastName = item.userId.lastName; 
+          }
+        });
         setRoster(rosterJson);
 
         setRosterProjectId(project.projectId.googleDriveId);
@@ -112,10 +120,10 @@ const ProjectLeaderDashboard = () => {
 
     if (email === "") {
       setIsError(true);
-      setErrorMessage("Please don't leave the field blank.");
+      setErrorMessage("Please don't leave the field blank");
     } else if (!email.includes("@") || !email.includes(".")) {
       setIsError(true);
-      setErrorMessage("Please format the email address correctly.");
+      setErrorMessage("Please format the email address correctly");
     } else {
       await addToRoster(email);
       await setForceRerender(!forceRerender);
@@ -133,16 +141,15 @@ const ProjectLeaderDashboard = () => {
       })
         .then((res) => {
           if (res.ok) {
+
             return res.json();
           }
-
           throw new Error(res.statusText);
         })
         .then((response) => {
           if (response === false) {
             setIsError(true);
-            setErrorMessage("Email not found.");
-
+            setErrorMessage("Email not found");
             return response;
           } else {
             return response;
@@ -152,12 +159,30 @@ const ProjectLeaderDashboard = () => {
           if (user === false) {
             return false;
           } else {
-            addMember(user);
+            checkIfOnRoster(user);
           }
         })
         .catch((err) => {
           console.log(err);
         });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function checkIfOnRoster(user) {
+    try {
+      const onTeam = await fetch(
+        `/api/projectteammembers/project/${project.projectId._id}/${user._id}`
+      );
+      const onTeamJson = await onTeam.json();
+
+      if (!onTeamJson) {
+        addMember(user);
+      } else {
+        setIsError(true);
+        setErrorMessage("Already on roster");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -196,7 +221,6 @@ const ProjectLeaderDashboard = () => {
   }, []);
 
   useEffect(() => {
-    console.log('getAttendees() called');
     getAttendees();
   }, [nextEvent]);
 

@@ -39,7 +39,7 @@ const AddTeamMember = (props) => {
                     </button>
                 </div>
                 </form>
-                {props.isSuccess ? <p className="addmember-success">User Added.</p> : null}
+                {props.isSuccess ? <p className="addmember-success">User Added</p> : null}
                 <div className="addmember-warning">{props.isError ? props.errorMessage : null}</div>
             </div>
         </div>
