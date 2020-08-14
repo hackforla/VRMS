@@ -58,6 +58,14 @@ const ProjectLeaderDashboard = () => {
           `/api/projectteammembers/${project.projectId._id}`
         );
         const rosterJson = await roster.json();
+        // temporary function that fixes outdated data
+        rosterJson.forEach((item) => {
+          if (!item.userId.name) {
+            item.userId.name = {};
+            item.userId.name.firstName = item.userId.firstName;
+            item.userId.name.lastName = item.userId.lastName; 
+          }
+        });
         setRoster(rosterJson);
         setRosterProjectId(project.projectId.googleDriveId);
       }
