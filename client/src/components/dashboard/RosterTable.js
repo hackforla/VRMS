@@ -29,18 +29,33 @@ const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
     />
   );
 
-  // console.log('ATTENDEES', attendees);
+  const slackTestButton = () => {
+    fetch("api/slack/findId", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (res.status !== 200) {
+          return res.json().then((res) => {
+            throw new Error(res.message);
+          });
+        }
+        return res.json();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const gDriveClickHandler = (email, fileId) => {
-    console.log("RUNNING CLICK HANDLER");
-    //Hardcoding. remove to get user email and fileID as normal
-    email = "Matt.Tapper.gmail@com";
+    email = email;
     fileId = fileId;
     const bodyObject = {
       email: email,
       file: fileId,
     };
-    console.log("BODYOBJECt", bodyObject);
     fetch("api/grantpermission/googleDrive", {
       method: "POST",
       headers: {
@@ -49,7 +64,6 @@ const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
       body: JSON.stringify(bodyObject),
     })
       .then((res) => {
-        console.log("FIRST THEN", res);
         if (res.status !== 200) {
           return res.json().then((res) => {
             throw new Error(res.message);
@@ -57,13 +71,10 @@ const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
         }
         return res.json();
       })
-      .then((res) => {
-        console.log("Second THEN", res);
-      })
+
       .catch((err) => {
         console.log(err);
       });
-    console.log("AFTER");
   };
 
   const gitHubClickHandler = (
@@ -97,9 +108,6 @@ const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
         }
         return res.json();
       })
-      .then((res) => {
-        console.log(res);
-      })
       .catch((err) => {
         console.log(err);
       });
@@ -107,6 +115,13 @@ const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
 
   return (
     <div className={styles.attendeeTable}>
+      <button
+        onClick={() => {
+          slackTestButton();
+        }}
+      >
+        SlackTest
+      </button>
       <div className={styles.attendeeTableBoxCenter}>
         <span className={styles.attendeeTableTitle}>name</span>
       </div>
@@ -120,7 +135,7 @@ const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
           <div className={styles.rosterIcon}>{gitHubIcon}</div>
         </div>
       </div>
-      {attendees &&
+      {/* {attendees &&
         attendees.map((attendee) => {
           return (
             <RosterTableRow
@@ -146,7 +161,7 @@ const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
               }}
             ></RosterTableRow>
           );
-        })}
+        })} */}
     </div>
   );
 };

@@ -44,7 +44,6 @@ const ProjectLeaderDashboard = () => {
         const eventsJson = await events.json();
         setIsCheckInReady(eventsJson.checkInReady);
         setNextEvent([eventsJson]);
-        // console.log('NEXT EVENT', eventsJson);
       }
     } catch (err) {
       console.log(err);
@@ -59,6 +58,7 @@ const ProjectLeaderDashboard = () => {
         );
         const rosterJson = await roster.json();
         setRoster(rosterJson);
+
         setRosterProjectId(project.projectId.googleDriveId);
       }
     } catch (error) {
@@ -72,24 +72,7 @@ const ProjectLeaderDashboard = () => {
         const id = nextEvent[0]._id;
         const attendees = await fetch(`/api/checkins/findEvent/${id}`);
         const attendeesJson = await attendees.json();
-        // console.log('GETATTENDEES', attendeesJson);
         setAttendees(attendeesJson);
-
-        // const dates = eventsJson.map((event) => {
-        //     return Date.parse(event.date);
-        // });
-
-        // const nextDate = new Date(Math.max.apply(null, dates));
-        // // console.log(nextDate);
-        // const nextDateUtc = new Date(nextDate).toISOString();
-
-        // const nextEvent = eventsJson.filter((event) => {
-        //     const eventDate = new Date(event.date).toISOString();
-        //     return eventDate === nextDateUtc;
-        // });
-
-        // setIsCheckInReady(nextEvent[0].checkInReady);
-        // setNextEvent(nextEvent);
       }
     } catch (error) {
       console.log(error);
