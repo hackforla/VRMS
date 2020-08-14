@@ -21,7 +21,6 @@ const ProjectLeaderDashboard = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
   const [rosterProjectId, setRosterProjectId] = useState("");
-  const [isOnRoster, setIsOnRoster] = useState(false);
 
   async function getProjectFromUserId() {
     try {
@@ -127,7 +126,6 @@ const ProjectLeaderDashboard = () => {
     e.preventDefault();
     setIsError(false);
     setIsSuccess(false);
-    setIsOnRoster(false);
 
     if (email === "") {
       setIsError(true);
