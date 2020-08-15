@@ -1,10 +1,5 @@
-// This file that imports all main scss files
-// Should be activated after removing styles from index.scss
-/*@import "sass/_variables";
-@import "sass/_mixins";
-@import "sass/_keyframes";
-@import "sass/_main";
-@import "sass/_elements";*/
+// Activate NEW UI styles, and remove styles from index.scss
+//@import "sass-new-ui/_main.scss";
 
 // Code below should be removed after switched to new UI
 .app {
