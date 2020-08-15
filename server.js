@@ -51,6 +51,7 @@ const grantPermissionRouter = require("./routers/grantpermission.router");
 const projectsRouter = require("./routers/projects.router");
 const recurringEventsRouter = require("./routers/recurringEvents.router");
 const projectTeamMembersRouter = require("./routers/projectTeamMembers.router");
+const slackRouter = require("./routers/slack.router");
 
 app.use("/api/events", eventsRouter);
 app.use("/api/checkins", checkInsRouter);
@@ -62,7 +63,7 @@ app.use("/api/grantpermission", grantPermissionRouter);
 app.use("/api/projects", projectsRouter);
 app.use("/api/recurringevents", recurringEventsRouter);
 app.use("/api/projectteammembers", projectTeamMembersRouter);
-
+app.use("/api/slack", slackRouter);
 const CLIENT_BUILD_PATH = path.join(__dirname, "./client/build");
 
 // Serve static files from the React frontend app

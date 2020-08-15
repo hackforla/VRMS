@@ -32,6 +32,27 @@ router.get("/:id", (req, res) => {
     });
 });
 
+router.get("/project/:id/:userId", (req, res) => {
+  ProjectTeamMember.find({
+    projectId: req.params.id,
+    userId: req.params.userId
+  })
+    .populate("userId")
+    .then((teamMember) => {
+      if (!teamMember.length) {
+        res.json(false);
+      } else {
+        res.json(teamMember);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(400).json({
+        message: `/GET Internal server error:  ${err}`,
+      });
+    });
+});
+
 router.get("/projectowner/:id", (req, res) => {
   const id = req.params.id;
 
@@ -52,17 +73,16 @@ router.get("/projectowner/:id", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-    ProjectTeamMember
-        .create(req.body)
-        .then((teamMember) => {
-            res.status(201).json(teamMember);
-        })
-        .catch((err) => {
-            console.log(err);
-            res.sendStatus(400).json({
-                message: `/POST Internal server error: ${err}`,
-            });
-        });
+  ProjectTeamMember.create(req.body)
+    .then((teamMember) => {
+      res.status(201).json(teamMember);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(400).json({
+        message: `/POST Internal server error: ${err}`,
+      });
+    });
 });
 
 router.patch("/:id", (req, res) => {
