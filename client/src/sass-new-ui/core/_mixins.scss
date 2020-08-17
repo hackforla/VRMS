@@ -1,0 +1,8 @@
+// This file store any mixins (style snippets) that will be used over and over
+
+// Example
+@mixin transform($property) {
+  -webkit-transform: $property;
+  -ms-transform: $property;
+  transform: $property;
+}
