@@ -263,12 +263,11 @@ $gainsboro-color: #d9d9d9;
     select {
         max-width: 150px;
         min-width: 150px;
-        margin: 0px;
+        margin: 0;
         padding: 6px 12px;
         font-size: 14px;
         font-weight: normal;
         color: rgb(250, 17, 79);
-        background-color: inherit;
         border: 2px solid rgb(250, 17, 79);
         border-radius: 6px;
         background-color: #FFFFFF;
