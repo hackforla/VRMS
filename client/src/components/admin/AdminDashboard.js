@@ -4,10 +4,12 @@ import { Redirect } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 
 import "../../sass/Dashboard.scss";
+import "./AdminDashboard.scss";
+
 import UpcomingEvent from "../presentational/upcomingEvent";
-import EventOverview from "../presentational/eventOverview";
-import DonutChartContainer from "../presentational/donutChartContainer";
-import Loading from "../presentational/donutChartLoading";
+import EventOverview from "./eventOverview";
+import DonutChartContainer from "./donutChartContainer";
+import Loading from "./donutChartLoading";
 
 const AdminDashboard = (props) => {
   const auth = useAuth();
@@ -300,11 +302,11 @@ const AdminDashboard = (props) => {
   return (
     auth && auth.user ? (
       <div className="flex-container">
-        <div className="dashboard">
-          <div className="dashboard-header">
-            <p className="dashboard-header-text-small">
-              You have an event coming up:
-            </p>
+        <div className="dashboard admin-dashboard-wrap">
+
+          <div className="header-admin-dashboard">
+            <h2 className="header-stats">Stats by Location - Volunteer Hours</h2>
+            <p className="dashboard-header-text-small">You have an event coming up:</p>
           </div>
 
           {isLoading ? (
