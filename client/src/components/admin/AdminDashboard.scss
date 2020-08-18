@@ -1,0 +1,24 @@
+.admin-dashboard-wrap {
+  padding: 10px;
+}
+
+.header-admin-dashboard {
+    margin: 20px 0;
+}
+
+.header-stats {
+  font-size: 20px;
+  line-height: 1;
+  color: #000000;
+  margin: 0 auto 60px;
+  font-weight: normal;
+  text-transform: none;
+  text-align: center;
+}
+
+.stat-select {
+  select {
+    max-width: 160px;
+    min-width: 160px;
+  }
+}
