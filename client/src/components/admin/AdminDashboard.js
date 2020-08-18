@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 
-import useAuth from "../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
 
-import "../sass/Dashboard.scss";
-import UpcomingEvent from "../components/presentational/upcomingEvent";
-import EventOverview from "../components/presentational/eventOverview";
-import DonutChartContainer from "../components/presentational/donutChartContainer";
-import Loading from "../components/presentational/donutChartLoading";
+import "../../sass/Dashboard.scss";
+import UpcomingEvent from "../presentational/upcomingEvent";
+import EventOverview from "../presentational/eventOverview";
+import DonutChartContainer from "../presentational/donutChartContainer";
+import Loading from "../presentational/donutChartLoading";
 
 const AdminDashboard = (props) => {
   const auth = useAuth();
