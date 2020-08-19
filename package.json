@@ -2,40 +2,14 @@
   "name": "vrms-server",
   "version": "0.3.0",
   "description": "VRMS Server",
-  "main": "server.js",
   "scripts": {
-    "test": "mocha",
-    "start": "node server.js",
-    "dev": "nodemon server.js",
-    "client": "npm run start --prefix client",
-    "dev-new": "concurrently \"cd backend && npm run dev\" \"cd client && npm run start\"",
-    "heroku-postbuild": "cd client && npm install && npm run build"
-  },
-  "author": "sarL3y",
-  "license": "ISC",
-  "devDependencies": {
-    "chai": "^4.2.0",
-    "concurrently": "^5.1.0",
-    "debug": "^4.1.1",
-    "mocha": "^6.2.3",
-    "supertest": "^4.0.2"
+    "start": "concurrently \"cd backend && npm run start\" \"cd client && npm run start\"",
+    "backend": "cd backend && npm run dev",
+    "client": "cd client && npm run start",
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd client && npm run start\""
   },
   "dependencies": {
-    "@slack/bolt": "^2.2.3",
-    "async": "^3.2.0",
-    "body-parser": "^1.19.0",
-    "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "googleapis": "^39.2.0",
-    "helmet": "^3.22.0",
-    "mongoose": "^5.9.7",
-    "morgan": "^1.10.0",
-    "node-cron": "^2.0.3",
-    "node-fetch": "^2.6.0",
-    "nodemon": "^2.0.2"
+    "concurrently": "^5.3.0"
   },
-  "directories": {
-    "test": "test"
-  }
+  "proxy": "http://localhost:4000/"
 }
