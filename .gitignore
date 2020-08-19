@@ -6,3 +6,5 @@ npm-debug.log
 client/.env
 .env
 /.idea
+test.db
+globalConfig.json
