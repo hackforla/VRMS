@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const cors = require('cors');
 
-const { RecurringEvent } = require('../models/recurringEvent.model');
+const RecurringEvent = require('../models/recurringEvent.model');
 
 // GET /api/recurringevents/
 router.get('/', cors(), (req, res) => {
