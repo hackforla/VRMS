@@ -77,11 +77,11 @@ module.exports = (cron, fetch) => {
 
                     const eventToCreate = {
                         name: filteredEvents[i].name && filteredEvents[i].name,
-                        location: {
-                            city: filteredEvents[i].location.city && filteredEvents[i].location.city,
-                            state: filteredEvents[i].location.state && filteredEvents[i].location.state,
-                            country: filteredEvents[i].location.country && filteredEvents[i].location.country
-                        },
+                        // location: {
+                        //     city: filteredEvents[i].location.city && filteredEvents[i].location.city,
+                        //     state: filteredEvents[i].location.state && filteredEvents[i].location.state,
+                        //     country: filteredEvents[i].location.country && filteredEvents[i].location.country
+                        // },
                         hacknight: filteredEvents[i].hacknight && filteredEvents[i].hacknight,
                         eventType: filteredEvents[i].eventType && filteredEvents[i].eventType,
                         description: filteredEvents[i].eventDescription && filteredEvents[i].eventDescription,
@@ -166,7 +166,7 @@ module.exports = (cron, fetch) => {
     //     runTask();
     // }, 5000);
 
-    const scheduledTask = cron.schedule('*/10 7-18 * * *', () => {
+    const scheduledTask = cron.schedule('* * * * *', () => {
         runTask();
     });
 
