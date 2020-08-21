@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { Question } = require('../models/question.model');
+const Question = require('../models/question.model');
 
 // GET /api/questions/
 router.get('/', (req, res) => {
