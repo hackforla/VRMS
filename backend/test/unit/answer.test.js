@@ -5,7 +5,7 @@ const dbHandler = require("../db-handler");
 beforeAll(async () => await dbHandler.connect());
 afterAll(async () => await dbHandler.closeDatabase());
 
-describe("Answer Model saves the correct field types", () => {
+describe("Answer Model saves the correct values", () => {
   const submittedAnswer = {
     question: {
       questionID: "question_questionID",

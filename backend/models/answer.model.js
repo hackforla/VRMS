@@ -14,7 +14,7 @@ const answerSchema = mongoose.Schema({
   createdDate: { type: Date, default: Date.now },
 });
 
-questionSchema.methods.serialize = function () {
+answerSchema.methods.serialize = function () {
   return {
     id: this._id,
     question: {
