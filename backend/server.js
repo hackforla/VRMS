@@ -7,6 +7,7 @@ const { DATABASE_URL, PORT } = require("./config/database");
 // Required convention for mongoose - https://stackoverflow.com/a/51862948/5900471
 mongoose.Promise = global.Promise;
 
+let server;
 async function runServer(databaseUrl = DATABASE_URL, port = PORT) {
   await mongoose
     .connect(databaseUrl, {
@@ -17,7 +18,7 @@ async function runServer(databaseUrl = DATABASE_URL, port = PORT) {
     })
     .catch((err) => err);
 
-  app
+  server = app
     .listen(port, () => {
       console.log(
         `Mongoose connected from runServer() and is listening on ${port}`
