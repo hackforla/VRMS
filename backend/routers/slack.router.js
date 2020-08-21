@@ -16,7 +16,7 @@ const app = new App({
 // cron.schedule("* * * * 1", () => {});
 
 (async () => {
-  await app.start(3001);
+  // await app.start(3001);
   console.log("Connected to Slack");
 })();
 
