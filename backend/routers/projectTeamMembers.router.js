@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { ProjectTeamMember } = require("../models/projectTeamMember.model");
+const ProjectTeamMember = require("../models/projectTeamMember.model");
 
 // GET /api/projectteammembers/
 router.get("/", (req, res) => {
@@ -35,7 +35,7 @@ router.get("/:id", (req, res) => {
 router.get("/project/:id/:userId", (req, res) => {
   ProjectTeamMember.find({
     projectId: req.params.id,
-    userId: req.params.userId
+    userId: req.params.userId,
   })
     .populate("userId")
     .then((teamMember) => {

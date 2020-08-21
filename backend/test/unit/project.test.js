@@ -13,7 +13,6 @@ describe("Project Model saves the correct values", () => {
       githubIdentifier: "VRMS",
       projectStatus: "Active", // Active, Completed, or Paused
       location: "Remote", // DTLA, Westside, South LA, or Remote (hacknight)
-      //teamMembers: { type: String },                    // commented since we should be able to get this from Project Team Members table
       createdDate: 1594023390039, // date/time project was created
       completedDate: 1594023390039, // only if Status = Completed, date/time completed
       githubUrl: "https://github.com/hackforla/VRMS", // link to main repo
