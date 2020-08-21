@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 const { App } = require("@slack/bolt");
 const cron = require("node-cron");
-const { Event } = require("../models/event.model");
-const { Project } = require("../models/project.model");
+const Event = require("../models/event.model");
+const Project = require("../models/project.model");
 
 //https://api.slack.com/web
 
