@@ -1,4 +1,4 @@
-// tests/db-handler.js
+// tests/db-handler.js - The setup and teardown methods for the test instance of MongoDB.
 
 const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
