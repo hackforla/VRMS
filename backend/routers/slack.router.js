@@ -15,10 +15,13 @@ const app = new App({
 //Checks DB every monday (1) for slack messages to schedule this week
 // cron.schedule("* * * * 1", () => {});
 
-(async () => {
-  // await app.start(3001);
-  console.log("Connected to Slack");
-})();
+// TODO: Refactor this server out of the router. This server instance is breaking the tests.
+if (process.env.NODE_ENV !== "test") {
+  (async () => {
+    // await app.start(3001);
+    console.log("Connected to Slack");
+  })();
+}
 
 //Finds Id number of channel
 router.get("/findId", (req, res) => {
