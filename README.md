@@ -140,18 +140,18 @@ git reset --hard vrms/master
 
 ## Get up and running
 
-1. Have (Node)[https://nodejs.org/en/download/] locally installed:
+1. Have (Node)[https://nodejs.org/en/download/] installed locally:
     - Verify with `node -v` and `npm -v` respectively.
 
-1. Verify that you have the git remote repositories configured locally (see). 
+1. Verify that you have the git remote repositories configured: 
     - Verify that the output of `git remote -v` shows your local repo and the upstream vrms repo. 
 
-1. Install the node packages needed in each directory.
+1. Install the node packages needed in each directory:
     - `cd vrms/` and run `npm install`
     - `cd client` and run `npm install`
     - `cd ../backend` and run `npm install`
 
-1. Create `.env` files in both the frontend and backend:
+1. Create `.env` files in both the frontend and backend directories:
     - `touch vrms/backend/.env`
     - `touch vrms/client/.env`
     - Then paste the content from the [document](https://docs.google.com/document/d/1yDF6UmyO-MPNrl3y_Mw0mkm_WaixlSkXzWbudCzHXDY/edit?usp=sharing). It is accessible for the project team members only.
@@ -171,7 +171,7 @@ The application uses MongoDB and the team has a few databases dependent on the e
     1. Navigate to the [Get up and running](#get-up-and-running) section and find the credentials link. 
     1. Add the mongoDB credential listed in the `DATABASE_URL` variable to your `backend/.env` file.
 
-1. Localhost test database: Create your own database and connect to it. This database will be empty when you log in and you will need to add your own data. follow this [tutorial](https://zellwk.com/blog/local-mongodb/) for an in depth look on how to setup a local copy of mongodb
+1. Localhost test database: Create your own database on your laptop and connect to it. This database will be empty and you will need to add your own data. follow this [tutorial](https://zellwk.com/blog/local-mongodb/) for an in depth look on how to setup a local copy of mongodb.
     1. Download mongoDB.
     1. Setup a local mongoDB cluster.
     1. Get the connection string.
