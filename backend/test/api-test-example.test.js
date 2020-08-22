@@ -10,6 +10,9 @@ const Event = require("../models/event.model.js");
  */
 beforeAll(async () => await dbHandler.connect());
 
+// Uncomment out the line below to clear out the DB of Users between tests.
+// afterEach(async () => await Event.remove({}));
+
 /**
  * Remove and close the db and server.
  */
