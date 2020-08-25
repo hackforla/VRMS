@@ -18,7 +18,9 @@
     "concurrently": "^5.1.0",
     "debug": "^4.1.1",
     "jest": "^26.4.0",
-    "supertest": "^4.0.2"
+    "supertest": "^4.0.2",
+    "why-is-node-running": "^2.2.0",
+    "nodemon": "^2.0.2"
   },
   "dependencies": {
     "@slack/bolt": "^2.2.3",
@@ -33,9 +35,7 @@
     "mongoose": "^5.10.0",
     "morgan": "^1.10.0",
     "node-cron": "^2.0.3",
-    "node-fetch": "^2.6.0",
-    "nodemon": "^2.0.2",
-    "why-is-node-running": "^2.2.0"
+    "node-fetch": "^2.6.0"
   },
   "directories": {
     "test": "test"
