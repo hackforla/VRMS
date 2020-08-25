@@ -8,3 +8,4 @@ client/.env
 /.idea
 test.db
 globalConfig.json
+videos/

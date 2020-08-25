@@ -18,7 +18,7 @@ const app = new App({
 // TODO: Refactor this server out of the router. This server instance is breaking the tests.
 if (process.env.NODE_ENV !== "test") {
   (async () => {
-    await app.start(3001);
+    await app.start(3002);
     console.log("Connected to Slack");
   })();
 }
