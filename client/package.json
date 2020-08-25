@@ -4,6 +4,7 @@
   "description": "VRMS Client",
   "homepage": "https://www.vrms.io",
   "dependencies": {
+    "@babel/plugin-transform-react-jsx-self": "^7.10.4",
     "classnames": "^2.2.6",
     "d3": "^5.15.1",
     "firebase": "^7.15.1",
@@ -22,7 +23,6 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "test:jest": "jest",
     "eject": "react-scripts eject",
     "heroku-postbuild": "npm run build"
   },
@@ -45,10 +45,6 @@
   "author": "sarL3y",
   "license": "ISC",
   "devDependencies": {
-    "@babel/preset-env": "^7.11.0",
-    "@babel/preset-react": "^7.10.4",
-    "babel-jest": "^26.3.0",
-    "jest": "^26.4.2",
     "react-test-renderer": "^16.13.1"
   }
 }
