@@ -159,9 +159,16 @@ git reset --hard vrms/master
 1. Take a second to review the `server.js` file in the `vrms/backend` folder. It is a blueprint for the back end, so please familiarize yourself with it. You'll see folders for the database collection models, routes for the API, and a config file which loads the necessary environment variables. 
 
 1. Start the local development servers (frontend & backend).
-    - Navigate to the root of the application `vrms/` and run `npm run dev-start`
+    - Navigate to the root of the application `vrms/` and run `npm run dev`
 
 You should now have a live app. Happy hacking.
+
+## Running Tests
+
+The VRMS application has a variety of tests written for the application. Review the `package.json` file in any directory
+and look for the `test` scripts.
+
+To run all of the tests run `npm run test:all` from the root folder.
 
 ## Configure your database
 
