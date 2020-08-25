@@ -1,7 +1,7 @@
 const url = "http://localhost:3000";
 
-describe("My First Test", () => {
-  it("Visits the main page", () => {
+describe("Homepage", () => {
+  it("User has login button", () => {
     cy.visit(url);
     cy.contains("LOGIN");
   });
