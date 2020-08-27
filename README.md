@@ -12,7 +12,7 @@ We are currently in the initial planning phase after delivering a prototype to t
 
 This is a Full Stack web app, built with:
 - [React](https://reactjs.org/docs/getting-started.html)
-- Node/[Express](https://expressjs.com/en/starter/installing.html)
+- [Node](https://nodejs.org/en/) / [Express](https://expressjs.com/en/starter/installing.html)
 - [MongoDB](https://docs.mongodb.com/manual/tutorial/getting-started/)
 - [Heroku](https://devcenter.heroku.com/categories/reference)
 
@@ -140,23 +140,27 @@ git reset --hard vrms/master
 
 ## Get up and running
 
-1. Have (Node)[https://nodejs.org/en/download/] installed locally:
+1. Have [Node](https://nodejs.org/en/download/) and NPM installed locally:
     - Verify with `node -v` and `npm -v` respectively.
 
+1. Install [Yarn](https://classic.yarnpkg.com/en/docs/install/#mac-stable): an improved package manager
+    - Verify with `yarn --version`
+
 1. Verify that you have the git remote repositories configured: 
-    - Verify that the output of `git remote -v` shows your local repo and the upstream vrms repo. 
+    - Verify that the output of `git remote -v` shows your local repo as origin and the upstream vrms repo. 
 
 1. Install the node packages needed in each directory:
-    - `cd vrms/` and run `npm install`
-    - `cd client` and run `npm install`
-    - `cd ../backend` and run `npm install`
+    - `cd vrms/` and run `yarn install`
+    - `cd client` and run `yarn install`
+    - `cd ../backend` and run `yarn install`
 
-1. Create `.env` files in both the frontend and backend directories:
+1. Add your required environment variables for the frontend and backend directories:
     - `touch vrms/backend/.env`
     - `touch vrms/client/.env`
     - Then paste the content from the [document](https://docs.google.com/document/d/1yDF6UmyO-MPNrl3y_Mw0mkm_WaixlSkXzWbudCzHXDY/edit?usp=sharing). It is accessible for the project team members only.
+    - *Please note that the `ports` for the frontend and backend are set in this location*
 
-1. Take a second to review the `server.js` file in the `vrms/backend` folder. It is a blueprint for the back end, so please familiarize yourself with it. You'll see folders for the database collection models, routes for the API, and a config file which loads the necessary environment variables. 
+1. Take a second to review the `app.js` and `server.js` files in the `vrms/backend` folder. These two files are a  blueprint for the back end, so please familiarize yourself with it. You'll see folders for the database collection models, routes for the API, and a config file which loads the necessary environment variables. 
 
 1. Start the local development servers (frontend & backend).
     - Navigate to the root of the application `vrms/` and run `npm run dev`
@@ -166,13 +170,13 @@ You should now have a live app. Happy hacking.
 ## Running Tests
 
 The VRMS application has a variety of tests written for the application. Review the `package.json` file in any directory
-and look for the `test` scripts.
+and look for any variation of `test` scripts.
 
 To run all of the tests run `npm run test:all` from the root folder.
 
 ## Configure your database
 
-The application uses MongoDB and the team has a few databases dependent on the environment. Below are instructions on how to connect to the different databases used for development.
+The application uses MongoDB and the team has a few databases for differing environments. Below are instructions on how to connect to the different databases used for development.
 
 1. Staging test database: This database is maintained by the team. Post in the #vrms-dev channel to see who has access if you have any issues. This db has data useful for developming 
     1. Navigate to the [Get up and running](#get-up-and-running) section and find the credentials link. 
