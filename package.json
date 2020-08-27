@@ -6,17 +6,19 @@
     "start": "concurrently \"cd backend && npm run start\" \"cd client && npm run start\"",
     "dev:api": "cd backend && npm run dev",
     "dev:client": "cd client && npm run start",
-    "dev": "concurrently \"npm run dev:api\" \"npm run dev:client\"",
-    "cy:run": "cypress run",
-    "test:cy": "NODE_ENV=test start-test dev:api 4000 dev:client 3000 cy:run",
+    "dev": "dotenv -e backend/.env -e client/.env concurrently \"npm run dev:api\" \"npm run dev:client\"",
+    "cy:run": "dotenv -e client/.env -- cross-var cross-env CYPRESS_baseUrl=%CLIENT_URL% cypress run",
+    "test:cy": "dotenv -e ./backend/.env -e ./client/.env cross-var start-test dev:api %BACKEND_PORT% dev:client %CLIENT_PORT% cy:run",
     "test:backend": "cd backend && npm run test",
     "test:client": "cd client && npm run test",
-    "test:all": "npm run test:client && npm run test:backend && npm run test:cy"
+    "test:all": "NODE_ENV=test npm run test:client && npm run test:backend && npm run test:cy"
   },
   "dependencies": {
-    "concurrently": "^5.3.0"
+    "concurrently": "^5.3.0",
+    "cross-env": "^7.0.2",
+    "cross-var": "^1.1.0",
+    "dotenv-cli": "^3.2.0"
   },
-  "proxy": "http://127.0.0.1:4000/",
   "devDependencies": {
     "cypress": "^5.0.0",
     "start-server-and-test": "^1.11.3"
