@@ -8,8 +8,8 @@ const { Project } = require("../models/project.model");
 //https://api.slack.com/web
 
 const app = new App({
-  token: "xoxb-1273107934163-1285590347713-T4jPga74wL2iddE1J1r5w6a0",
-  signingSecret: "4c1f11f5986ab05b95a796b7897e87c3",
+  token: process.env.SLACK_BOT_TOKEN,
+  signingSecret: process.env.SLACK_SIGNING_SECRET,
 });
 
 //Checks DB every monday (1) for slack messages to schedule this week
