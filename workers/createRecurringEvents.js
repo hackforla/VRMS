@@ -77,11 +77,6 @@ module.exports = (cron, fetch) => {
 
                     const eventToCreate = {
                         name: filteredEvents[i].name && filteredEvents[i].name,
-                        location: {
-                            city: filteredEvents[i].location.city && filteredEvents[i].location.city,
-                            state: filteredEvents[i].location.state && filteredEvents[i].location.state,
-                            country: filteredEvents[i].location.country && filteredEvents[i].location.country
-                        },
                         hacknight: filteredEvents[i].hacknight && filteredEvents[i].hacknight,
                         eventType: filteredEvents[i].eventType && filteredEvents[i].eventType,
                         description: filteredEvents[i].eventDescription && filteredEvents[i].eventDescription,
@@ -90,6 +85,13 @@ module.exports = (cron, fetch) => {
                         startTime: filteredEvents[i].startTime && newEventDate,
                         endTime: filteredEvents[i].endTime && newEndTime,
                         hours: filteredEvents[i].hours && filteredEvents[i].hours
+                    } 
+                    if (filteredEvents.hasOwnProperty("location")) {
+                        eventToCreate.location = {
+                            city: filteredEvents[i].location.city && filteredEvents[i].location.city,
+                            state: filteredEvents[i].location.state && filteredEvents[i].location.state,
+                            country: filteredEvents[i].location.country && filteredEvents[i].location.country
+                        };
                     }
                     // console.log(eventToCreate);
                     const created = await createEvent(eventToCreate);
