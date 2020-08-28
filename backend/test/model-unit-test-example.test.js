@@ -1,4 +1,4 @@
-// tests/product.test.js
+// Unit Test Example - This is for instructional purposes on writing a backend unit test.
 
 const mongoose = require("mongoose");
 const dbHandler = require("./db-handler");

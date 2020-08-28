@@ -1,4 +1,9 @@
-// tests/db-handler.js - The setup and teardown methods for the test instance of MongoDB.
+/* tests/db-handler.js - The setup and teardown methods for the test instance of MongoDB.
+This file should be imported and used in all backend unit, integration, and other tests.
+
+The reason that the backend unit tests are in a single directory is largely to make
+development easier to import this file. 
+*/
 
 const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");

@@ -1,3 +1,5 @@
+// API Test Example file - This is for instructional purposes on writing an API integration test.
+
 const supertest = require("supertest");
 const app = require("../app");
 const request = supertest(app);
