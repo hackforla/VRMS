@@ -121,6 +121,7 @@ const AdminLogin = (props) => {
                                     // aria-label="topic"
                                     onChange={e => handleInputChange(e)}
                                     aria-label="Email Address"
+                                    data-test="input-email"
                                     autoComplete="none"
                                     required="required"
                                 /> 
@@ -136,6 +137,7 @@ const AdminLogin = (props) => {
                         <button
                             onClick={e => handleLogin(e)}
                             className="login-button"
+                            data-test="login-btn"
                         >
                             LOGIN
                         </button>
