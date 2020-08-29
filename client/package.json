@@ -24,7 +24,7 @@
     "react-scripts": "^3.4.1"
   },
   "scripts": {
-    "start": "dotenv -e .env -- cross-var cross-env PORT=%CLIENT_PORT% react-scripts start",
+    "start": "dotenv -e .env -e ../backend/.env -- cross-var cross-env PORT=%CLIENT_PORT% react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --watchAll=false",
     "test:watch": "react-scripts test",
