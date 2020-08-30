@@ -61,11 +61,9 @@ const CLIENT_BUILD_PATH = path.join(__dirname, "../client/build");
 // Serve static files from the React frontend app
 app.use(express.static(path.join(CLIENT_BUILD_PATH)));
 
-// Anything that doesn't match the above, send back index.html
+// 404 for all non-defined endpoints.
 app.get("*", (req, res) => {
-  const index = path.join(CLIENT_BUILD_PATH, "index.html");
-
-  res.sendFile(index);
+  res.sendStatus(404);
 });
 
 module.exports = app;
