@@ -4,9 +4,14 @@
   "description": "VRMS Client",
   "homepage": "https://www.vrms.io",
   "dependencies": {
+    "@babel/plugin-transform-react-jsx-self": "^7.10.4",
     "classnames": "^2.2.6",
+    "cross-env": "^7.0.2",
+    "cross-var": "^1.1.0",
     "d3": "^5.15.1",
+    "dotenv-cli": "^3.2.0",
     "firebase": "^7.15.1",
+    "http-proxy-middleware": "^1.0.5",
     "local-storage": "^2.0.0",
     "mathjs": "^6.6.2",
     "minimist": "^1.2.3",
@@ -19,16 +24,16 @@
     "react-scripts": "^3.4.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "dotenv -e .env -e ../backend/.env -- cross-var cross-env PORT=%CLIENT_PORT% react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --watchAll=false",
+    "test:watch": "react-scripts test",
     "eject": "react-scripts eject",
     "heroku-postbuild": "npm run build"
   },
   "eslintConfig": {
     "extends": "react-app"
   },
-  "proxy": "http://localhost:4000",
   "browserslist": {
     "production": [
       ">0.2%",
@@ -42,5 +47,8 @@
     ]
   },
   "author": "sarL3y",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "react-test-renderer": "^16.13.1"
+  }
 }

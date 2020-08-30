@@ -2,40 +2,26 @@
   "name": "vrms-server",
   "version": "0.3.0",
   "description": "VRMS Server",
-  "main": "server.js",
   "scripts": {
-    "test": "mocha",
-    "start": "node server.js",
-    "dev": "nodemon server.js",
-    "client": "npm run start --prefix client",
-    "dev-start": "concurrently \"npm run dev\" \"npm run client\"",
-    "heroku-postbuild": "cd client && npm install && npm run build"
-  },
-  "author": "sarL3y",
-  "license": "ISC",
-  "devDependencies": {
-    "chai": "^4.2.0",
-    "concurrently": "^5.1.0",
-    "debug": "^4.1.1",
-    "mocha": "^6.2.3",
-    "supertest": "^4.0.2"
+    "start": "concurrently \"cd backend && npm run start\" \"cd client && npm run start\"",
+    "dev:api": "cd backend && npm run dev",
+    "dev:client": "cd client && npm run start",
+    "dev": "dotenv -e backend/.env -e client/.env concurrently \"npm run dev:api\" \"npm run dev:client\"",
+    "cy:open": "dotenv -e client/.env -- cross-var cross-env CYPRESS_baseUrl=%CLIENT_URL% cypress open",
+    "cy:run": "dotenv -e client/.env -- cross-var cross-env CYPRESS_baseUrl=%CLIENT_URL% cypress run --headed",
+    "test:cy": "dotenv -e ./backend/.env -e ./client/.env cross-var start-test dev:api %BACKEND_PORT% dev:client %CLIENT_PORT% cy:run",
+    "test:backend": "cd backend && npm run test",
+    "test:client": "cd client && npm run test",
+    "test:all": "NODE_ENV=test npm run test:client && npm run test:backend && npm run test:cy"
   },
   "dependencies": {
-    "@slack/bolt": "^2.2.3",
-    "async": "^3.2.0",
-    "body-parser": "^1.19.0",
-    "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "googleapis": "^39.2.0",
-    "helmet": "^3.22.0",
-    "mongoose": "^5.9.7",
-    "morgan": "^1.10.0",
-    "node-cron": "^2.0.3",
-    "node-fetch": "^2.6.0",
-    "nodemon": "^2.0.4"
+    "concurrently": "^5.3.0",
+    "cross-env": "^7.0.2",
+    "cross-var": "^1.1.0",
+    "dotenv-cli": "^3.2.0"
   },
-  "directories": {
-    "test": "test"
+  "devDependencies": {
+    "cypress": "^5.0.0",
+    "start-server-and-test": "^1.11.3"
   }
 }

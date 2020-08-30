@@ -1,7 +1,12 @@
-/node_modules
+
+node_modules/
 npm-debug.log
 .DS_Store
 /*.env
 client/.env
 .env
 /.idea
+test.db
+globalConfig.json
+videos/
+screenshots/
