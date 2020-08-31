@@ -45,17 +45,13 @@ module.exports = (cron, fetch) => {
                 // console.log("Event Day: ", eventDay);
                 return (eventDay === TODAY);
             });
-            // console.log("Today's events: ", filteredEvents);
-
-            // console.log('TODAY_DATE for filter: ', TODAY_DATE)
-
             // For each recurring event, check to see if an event already
             // exists for it and do something if true/false. Can't use
             // forEach function with async/await.
-            for (let i = 0; i < filteredEvents.length; i++) {
-                const eventExists = await checkIfEventExists(filteredEvents[i].name);
+            for (filteredEvent of filteredEvents) {
+                const eventExists = await checkIfEventExists(filteredEvent.name);
                 // console.log('Event exists? ', eventExists);
-                const eventDate = new Date(filteredEvents[i].date);
+                const eventDate = new Date(filteredEvent.date);
 
                 if (eventExists) {
                     console.log("Not going to run ceateEvent");
@@ -71,27 +67,28 @@ module.exports = (cron, fetch) => {
                     const dateToday = TODAY_DATE.getDate();
 
                     const newEventDate = new Date(yearToday, monthToday, dateToday, hours, minutes, seconds, milliseconds);
-                    // console.log('Today Date: ', newEventDate, '\n');
 
-                    const newEndTime = new Date(yearToday, monthToday, dateToday, hours + filteredEvents[i].hours, minutes, seconds, milliseconds)
+                    const newEndTime = new Date(yearToday, monthToday, dateToday, hours + filteredEvent.hours, minutes, seconds, milliseconds)
 
                     const eventToCreate = {
-                        name: filteredEvents[i].name && filteredEvents[i].name,
-                        location: {
-                            city: filteredEvents[i].location.city && filteredEvents[i].location.city,
-                            state: filteredEvents[i].location.state && filteredEvents[i].location.state,
-                            country: filteredEvents[i].location.country && filteredEvents[i].location.country
-                        },
-                        hacknight: filteredEvents[i].hacknight && filteredEvents[i].hacknight,
-                        eventType: filteredEvents[i].eventType && filteredEvents[i].eventType,
-                        description: filteredEvents[i].eventDescription && filteredEvents[i].eventDescription,
-                        project: filteredEvents[i].project && filteredEvents[i].project,
-                        date: filteredEvents[i].date && newEventDate,
-                        startTime: filteredEvents[i].startTime && newEventDate,
-                        endTime: filteredEvents[i].endTime && newEndTime,
-                        hours: filteredEvents[i].hours && filteredEvents[i].hours
+                        name: filteredEvent.name && filteredEvent.name,
+                        hacknight: filteredEvent.hacknight && filteredEvent.hacknight,
+                        eventType: filteredEvent.eventType && filteredEvent.eventType,
+                        description: filteredEvent.eventDescription && filteredEvent.eventDescription,
+                        project: filteredEvent.project && filteredEvent.project,
+                        date: filteredEvent.date && newEventDate,
+                        startTime: filteredEvent.startTime && newEventDate,
+                        endTime: filteredEvent.endTime && newEndTime,
+                        hours: filteredEvent.hours && filteredEvent.hours
+                    } 
+                    if (filteredEvent.hasOwnProperty("location")) {
+                        eventToCreate.location = {
+                            city: filteredEvent.location.city && filteredEvent.location.city,
+                            state: filteredEvent.location.state && filteredEvent.location.state,
+                            country: filteredEvent.location.country && filteredEvent.location.country
+                        };
                     }
-                    // console.log(eventToCreate);
+    
                     const created = await createEvent(eventToCreate);
                     console.log(created);
                 };
@@ -106,7 +103,6 @@ module.exports = (cron, fetch) => {
         if (events && events.length > 0) {
             const filteredEvents = events.filter(event => {
                 const eventDate = new Date(event.date);
-                // console.log("Event Date: ", eventDate);
                 const year = eventDate.getFullYear();
                 const month = eventDate.getMonth();
                 const date = eventDate.getDate();
@@ -114,9 +110,7 @@ module.exports = (cron, fetch) => {
                 const yearToday = TODAY_DATE.getFullYear();
                 const monthToday = TODAY_DATE.getMonth();
                 const dateToday = TODAY_DATE.getDate();
-                // console.log("Event: ", year, month, date);
-                // console.log("Today: ", yearToday, monthToday, dateToday);
-                // console.log((year === yearToday && month === monthToday && date === dateToday && eventName === event.name));
+               
                 return (year === yearToday && month === monthToday && date === dateToday && eventName === event.name);
             });
             console.log("Events already created: ", filteredEvents);
@@ -126,7 +120,6 @@ module.exports = (cron, fetch) => {
     
     const createEvent = async (event) => {
         if(event) {
-            // console.log('Creating event: ', event);
             const jsonEvent = JSON.stringify(event);
             const options = {
                 method: "POST",
@@ -141,7 +134,6 @@ module.exports = (cron, fetch) => {
                 const response = await fetch(`${URL}/api/events/`, options); 
                 const resJson = await response.json();
                 return resJson;
-                // console.log(resJson);
             } catch (error) {
                 console.log(error);
             };
@@ -151,20 +143,13 @@ module.exports = (cron, fetch) => {
     async function runTask() {
         console.log("Creating today's events");
 
-        // console.log('Fetching events...');
         await fetchEvents();
-        // console.log('Fetching recurring events...');
         await fetchRecurringEvents();
-        // console.log('Filtering and creating...');
         await filterAndCreateEvents();
 
         console.log("Today's events are created");
     
     };
-
-    // setTimeout(() => {
-    //     runTask();
-    // }, 5000);
 
     const scheduledTask = cron.schedule('*/10 7-18 * * *', () => {
         runTask();
