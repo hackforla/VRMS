@@ -1,9 +1,7 @@
-const Answer = require("../../models/answer.model");
-const dbHandler = require("../db-handler");
+const Answer = require("./answer.model");
 
-// Required database setup and teardown
-beforeAll(async () => await dbHandler.connect());
-afterAll(async () => await dbHandler.closeDatabase());
+const { setupDB } = require("../setup-test");
+setupDB("answer-model");
 
 describe("Answer Model saves the correct values", () => {
   const submittedAnswer = {

@@ -1,9 +1,7 @@
-const Question = require("../../models/question.model");
-const dbHandler = require("../db-handler");
+const Question = require("./question.model");
 
-// Required database setup and teardown
-beforeAll(async () => await dbHandler.connect());
-afterAll(async () => await dbHandler.closeDatabase());
+const { setupDB } = require("../setup-test");
+setupDB("question-model");
 
 // Please add and expand on this simple test.
 describe("Question Model saves the correct values", () => {
