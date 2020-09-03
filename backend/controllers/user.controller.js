@@ -32,6 +32,7 @@ exports.createUser = (req, res) => {
       lastName: req.body.lastName,
     },
     email: req.body.email,
+    accessLevel: "user",
   });
 
   user.save((err, user) => {
@@ -39,49 +40,22 @@ exports.createUser = (req, res) => {
       res.status(500).send({ message: err });
       return;
     }
+    Role.findOne({ name: "APP_USER" }, (err, role) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
 
-    if (req.body.roles) {
-      Role.find(
-        {
-          name: { $in: req.body.roles },
-        },
-        (err, roles) => {
-          if (err) {
-            res.status(500).send({ message: err });
-            return;
-          }
-
-          user.roles = roles.map((role) => role._id);
-          user.save((err) => {
-            if (err) {
-              res.status(500).send({ message: err });
-              return;
-            }
-
-            res.send({
-              message: "User was registered successfully with specified role!",
-            });
-          });
-        }
-      );
-    } else {
-      Role.findOne({ name: "APP_USER" }, (err, role) => {
+      user.roles = [role._id];
+      user.save((err) => {
         if (err) {
           res.status(500).send({ message: err });
           return;
         }
 
-        user.roles = [role._id];
-        user.save((err) => {
-          if (err) {
-            res.status(500).send({ message: err });
-            return;
-          }
-
-          res.send({ message: "User was registered successfully!" });
-        });
+        res.send({ message: "User was registered successfully!" });
       });
-    }
+    });
   });
 };
 

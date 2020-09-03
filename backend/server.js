@@ -71,16 +71,6 @@ function initial() {
 
         console.log("added 'moderator' to roles collection");
       });
-
-      new Role({
-        name: "APP_SUPER_ADMIN",
-      }).save((err) => {
-        if (err) {
-          console.log("error", err);
-        }
-
-        console.log("added 'admin' to roles collection");
-      });
     }
   });
 }
