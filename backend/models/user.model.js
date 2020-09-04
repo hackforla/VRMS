@@ -10,12 +10,6 @@ const userSchema = mongoose.Schema({
   },
   email: { type: String, unique: true },
   accessLevel: { type: String, default: "user" },
-  roles: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Role",
-    },
-  ],
   createdDate: { type: Date, default: Date.now },
   currentRole: { type: String }, // will remove but need to update check-in form
   desiredRole: { type: String }, // will remove but need to update check-in form

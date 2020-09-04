@@ -15,6 +15,4 @@ db.recurringEvent = require("./recurringEvent.model");
 db.role = require("./role.model");
 db.user = require("./user.model");
 
-db.ROLES = ["user", "admin", "moderator"];
-
 module.exports = db;
