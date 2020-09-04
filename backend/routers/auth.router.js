@@ -15,7 +15,7 @@ router.use(function (req, res, next) {
 router.post(
   "/signup",
   [
-    userController.validate("signupUser"),
+    userController.validateCreateUserAPICall,
     verifySignUp.checkDuplicateEmail,
     verifySignUp.checkRolesExisted,
   ],

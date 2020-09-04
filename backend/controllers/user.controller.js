@@ -7,25 +7,25 @@ var jwt = require("jsonwebtoken");
 
 const { body, validationResult } = require("express-validator");
 
-exports.validate = (method) => {
-  switch (method) {
-    case "signupUser": {
-      return [
-        body("name.firstName").not().isEmpty().trim().escape(),
-        body("name.lastName").not().isEmpty().trim().escape(),
-        body("email", "Invalid email").exists().isEmail().normalizeEmail(),
-      ];
-    }
-  }
-};
+exports.validateCreateUserAPICall = async (req, res, next) => {
+  await body("name.firstName").not().isEmpty().trim().escape().run(req);
+  await body("name.lastName").not().isEmpty().trim().escape().run(req);
+  await body("email", "Invalid email")
+    .exists()
+    .isEmail()
+    .normalizeEmail()
+    .run(req);
 
-exports.createUser = (req, res) => {
   // Finds the validation errors in this request and wraps them in an object with handy functions
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
   }
+  next();
+};
+
+exports.createUser = (req, res) => {
   const user = new User({
     name: {
       firstName: req.body.firstName,
