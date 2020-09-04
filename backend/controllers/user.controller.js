@@ -1,13 +1,66 @@
-const config = require("../config/auth.config");
-const db = require("../models");
-const User = db.user;
-const Role = db.role;
+const CONFIG = require("../config/auth.config");
+const DB = require("../models");
+const emailController = require("./email.controller");
+const User = DB.user;
 
 var jwt = require("jsonwebtoken");
 
 const { body, validationResult } = require("express-validator");
 
-exports.validateCreateUserAPICall = async (req, res, next) => {
+function generateAccessToken(user) {
+  // expires after half and hour (1800 seconds = 30 minutes)
+  return jwt.sign({ id: user.id }, CONFIG.SECRET, { expiresIn: "1800s" });
+}
+
+function createUser(req, res) {
+  const user = new User({
+    name: {
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+    },
+    email: req.body.email,
+    accessLevel: "user",
+  });
+
+  user.save((err, user) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    } else {
+      return res
+        .status(200)
+        .send({ message: "User was registered successfully!" });
+    }
+  });
+
+  const jsonToken = generateAccessToken(user);
+  emailController.sendUserEmailSigninLink(req.body.email, jsonToken);
+}
+
+function signin(req, res) {
+  const { email } = req.body;
+  console.log(email);
+
+  User.findOne({ email })
+    .then((user) => {
+      if (!user) {
+        res.status(401).send({ message: "User not authorized" });
+      } else {
+        const jsonToken = generateAccessToken(user);
+        emailController.sendUserEmailSigninLink(req.body.email, jsonToken);
+        return res
+          .status(200)
+          .send({ message: "User login link sent to email!" });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+
+      res.status(400).send({ message: "User email not found." });
+    });
+}
+
+async function validateCreateUserAPICall(req, res, next) {
   await body("name.firstName").not().isEmpty().trim().escape().run(req);
   await body("name.lastName").not().isEmpty().trim().escape().run(req);
   await body("email", "Invalid email")
@@ -23,71 +76,29 @@ exports.validateCreateUserAPICall = async (req, res, next) => {
     return res.status(422).json({ errors: errors.array() });
   }
   next();
+}
+
+async function validateSigninUserAPICall(req, res, next) {
+  await body("email", "Invalid email")
+    .exists()
+    .isEmail()
+    .normalizeEmail()
+    .run(req);
+
+  // Finds the validation errors in this request and wraps them in an object with handy functions
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+  next();
+}
+
+userController = {
+  validateCreateUserAPICall,
+  validateSigninUserAPICall,
+  createUser,
+  signin,
 };
 
-exports.createUser = (req, res) => {
-  const user = new User({
-    name: {
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-    },
-    email: req.body.email,
-    accessLevel: "user",
-  });
-
-  user.save((err, user) => {
-    if (err) {
-      res.status(500).send({ message: err });
-      return;
-    }
-    Role.findOne({ name: "APP_USER" }, (err, role) => {
-      if (err) {
-        res.status(500).send({ message: err });
-        return;
-      }
-
-      user.roles = [role._id];
-      user.save((err) => {
-        if (err) {
-          res.status(500).send({ message: err });
-          return;
-        }
-
-        res.send({ message: "User was registered successfully!" });
-      });
-    });
-  });
-};
-
-exports.signin = (req, res) => {
-  User.findOne({
-    email: req.body.email,
-  })
-    .populate("roles", "-__v")
-    .exec((err, user) => {
-      if (err) {
-        res.status(500).send({ message: err });
-        return;
-      }
-
-      if (!user) {
-        return res.status(404).send({ message: "User Not found." });
-      }
-
-      var token = jwt.sign({ id: user.id }, config.secret, {
-        expiresIn: 86400, // 24 hours
-      });
-
-      var authorities = [];
-
-      for (let i = 0; i < user.roles.length; i++) {
-        authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
-      }
-      res.status(200).send({
-        id: user._id,
-        email: user.email,
-        roles: authorities,
-        accessToken: token,
-      });
-    });
-};
+module.exports = userController;

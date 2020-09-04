@@ -1,4 +1,4 @@
-const { verifySignUp } = require("../middleware");
+const { verifyUser } = require("../middleware");
 const userController = require("../controllers/user.controller");
 
 const express = require("express");
@@ -14,14 +14,14 @@ router.use(function (req, res, next) {
 
 router.post(
   "/signup",
-  [
-    userController.validateCreateUserAPICall,
-    verifySignUp.checkDuplicateEmail,
-    verifySignUp.checkRolesExisted,
-  ],
+  [userController.validateCreateUserAPICall, verifyUser.checkDuplicateEmail],
   userController.createUser
 );
 
-router.post("/signin", userController.signin);
+router.post(
+  "/signin",
+  [userController.validateSigninUserAPICall, verifyUser.isAdmin],
+  userController.signin
+);
 
 module.exports = router;

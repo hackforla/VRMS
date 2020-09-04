@@ -72,7 +72,6 @@ describe("Test user can sign up through API", () => {
       email: "test@test.com",
     };
 
-    const goodUserDataJSON = JSON.stringify(goodUserData);
     const res = await request
       .post("/api/auth/signup")
       .send(goodUserData)
@@ -109,5 +108,90 @@ describe("Test user can sign up through API", () => {
     expect(JSON.parse(res2.text).message).toEqual(
       "Failed! Email is already in use!"
     );
+  });
+});
+
+describe("Test user can sign in through API", () => {
+  test("A POST with an admin user returns a 200 and sends a Magic Link.", async () => {
+    // Test Data
+
+    // Create user in DB
+    const goodUserData = {
+      name: {
+        firstName: "Free",
+        lastName: "Mason",
+      },
+      email: "test@test.com",
+      accessLevel: "admin",
+    };
+    await User.create(goodUserData);
+
+    // POST to the DB with that same data.
+    const res = await request
+      .post("/api/auth/signin")
+      .send(goodUserData)
+      .set("Accept", "application/json");
+
+    expect(res.status).toBe(200);
+    expect(JSON.parse(res.text).message).toEqual(
+      "User login link sent to email!"
+    );
+  });
+
+  test("A POST with an non admin user returns 401 and helpful error message.", async () => {
+    // Test Data
+
+    // Create user in DB
+    const notValidPermission = {
+      name: {
+        firstName: "Free",
+        lastName: "Mason",
+      },
+      email: "test@test.com",
+      accessLevel: "user",
+    };
+    await User.create(notValidPermission);
+
+    // POST to the DB with that same data.
+    const res = await request
+      .post("/api/auth/signin")
+      .send(notValidPermission)
+      .set("Accept", "application/json");
+
+    expect(res.status).toBe(401);
+    expect(JSON.parse(res.text).message).toEqual("Invalid permissions");
+  });
+
+  test("A POST with non-valid email returns a 422 and a helpful error message.", async () => {
+    // Test Data
+
+    // Create user in DB
+    const notValidEmailPayload = {
+      name: {
+        firstName: "Free",
+        lastName: "Mason",
+      },
+      email: "test",
+      accessLevel: "admin",
+    };
+    await User.create(notValidEmailPayload);
+
+    // POST to the DB with that same data.
+    const res = await request
+      .post("/api/auth/signin")
+      .send(notValidEmailPayload)
+      .set("Accept", "application/json");
+
+    expect(res.status).toBe(422);
+    const errorMessage = JSON.parse(res.text);
+
+    expect(errorMessage.errors).toEqual([
+      {
+        value: "test",
+        msg: "Invalid email",
+        param: "email",
+        location: "body",
+      },
+    ]);
   });
 });
