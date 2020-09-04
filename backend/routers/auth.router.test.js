@@ -5,39 +5,10 @@ const request = supertest(app);
 const { setupDB } = require("../setup-test");
 setupDB("api-auth");
 
-// const authRouter = require("./auth.router");
-
 const CONFIG = require("../config/auth.config");
 
 const db = require("../models");
 const User = db.user;
-const Role = db.role;
-
-function setupDBRoles() {
-  Role.collection.estimatedDocumentCount((err, count) => {
-    if (!err && count === 0) {
-      new Role({
-        name: "APP_USER",
-      }).save((err) => {
-        if (err) {
-          console.log("error", err);
-        }
-
-        console.log("added 'user' to roles collection");
-      });
-
-      new Role({
-        name: "APP_ADMIN",
-      }).save((err) => {
-        if (err) {
-          console.log("error", err);
-        }
-
-        console.log("added 'moderator' to roles collection");
-      });
-    }
-  });
-}
 
 // API Tests
 describe("Test that we can create a user using /user routes", () => {
@@ -48,7 +19,7 @@ describe("Test that we can create a user using /user routes", () => {
       email: "test@test.com",
     };
     let headers = {};
-    headers["x-customrequired-header"] = CONFIG.custom_request_header;
+    headers["x-customrequired-header"] = CONFIG.CUSTOM_REQUEST_HEADER;
 
     // Add an event with a project using the API.
     const res = await request
@@ -94,7 +65,7 @@ describe("Test user can sign up through API", () => {
     ]);
   });
   test("A POST valid data should return a 200 and success message.", async () => {
-    setupDBRoles();
+    // setupDBRoles();
     // Test Data
     const goodUserData = {
       name: { firstName: "testname", lastName: "testlast" },
@@ -113,7 +84,6 @@ describe("Test user can sign up through API", () => {
     );
   });
   test("A POST of an already used email returns a 400 and an error message.", async () => {
-    setupDBRoles();
     // Test Data
     const userOneWithSameEmail = {
       name: { firstName: "one", lastName: "two" },
