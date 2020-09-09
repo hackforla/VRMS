@@ -1,15 +1,12 @@
 const supertest = require("supertest");
-const app = require("../../app");
+const app = require("../app");
 const request = supertest(app);
 
-const dbHandler = require("../db-handler");
+const { setupDB } = require("../setup-test");
+setupDB("api-events");
 
-const Event = require("../../models/event.model.js");
-const Project = require("../../models/project.model.js");
-
-beforeAll(async () => await dbHandler.connect());
-// afterEach(async () => await Event.remove({}));
-afterAll(async () => await dbHandler.closeDatabase());
+const db = require("../models");
+const Event = db.event;
 
 // API Tests
 describe("Test add data with POST and then retrieve the data with GET", () => {

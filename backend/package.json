@@ -18,9 +18,9 @@
     "concurrently": "^5.1.0",
     "debug": "^4.1.1",
     "jest": "^26.4.0",
+    "nodemon": "^2.0.2",
     "supertest": "^4.0.2",
-    "why-is-node-running": "^2.2.0",
-    "nodemon": "^2.0.2"
+    "why-is-node-running": "^2.2.0"
   },
   "dependencies": {
     "@slack/bolt": "^2.2.3",
@@ -29,13 +29,15 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "googleapis": "^39.2.0",
+    "express-validator": "^6.6.1",
+    "googleapis": "^59.0.0",
     "helmet": "^3.22.0",
     "mongodb-memory-server": "^6.6.4",
     "mongoose": "^5.10.0",
     "morgan": "^1.10.0",
     "node-cron": "^2.0.3",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.0",
+    "nodemailer": "^6.4.11"
   },
   "directories": {
     "test": "test"

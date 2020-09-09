@@ -1,9 +1,7 @@
-const Project = require("../../models/project.model");
-const dbHandler = require("../db-handler");
+const Project = require("./project.model");
 
-// Required database setup and teardown
-beforeAll(async () => await dbHandler.connect());
-afterAll(async () => await dbHandler.closeDatabase());
+const { setupDB } = require("../setup-test");
+setupDB("project-model");
 
 describe("Project Model saves the correct values", () => {
   test("Save a model instance and then read from the db", async (done) => {
