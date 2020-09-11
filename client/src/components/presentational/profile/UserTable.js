@@ -10,7 +10,7 @@ const UserTable = ({ context }) => {
                 <tbody>
                     <tr>
                         <th className="user-data__header">Name</th>
-                        <td className="user-data__info user-data">{user.name}</td>
+                        <td className="user-data__info user-data">{user.name.firstName+ " " + user.name.lastName}</td>
                     </tr>
                     <tr>
                         <th className="user-data__header">Email</th>
@@ -27,11 +27,11 @@ const UserTable = ({ context }) => {
                         <td className="user-data__info">{user.slack}</td>
                     </tr>):("")}
 
-                    {user.desiredRoles ? 
+                    {user.desiredRole ? 
                     (<tr>
                         <th className="user-data__header">Desired Roles</th>
                         <td className="user-data__info user-data__info--flex">
-                            {user.desiredRoles.map((option, index)=> (<ProfileOption key={index} option={option} removeOption={()=>removeOption("desiredRoles", option)}/>))}
+                            <ProfileOption option={user.desiredRole} removeOption={()=>removeOption("desiredRoles")}/>
                         </td>
                     </tr>):("")}
 

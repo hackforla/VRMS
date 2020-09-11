@@ -23,8 +23,9 @@ app.use(morgan("dev"));
 // Hide sensitive Header data
 // app.use(helmet());
 
-// Cross-Origin-Resource-Sharing
-// app.use(cors());
+//Cross-Origin-Resource-Sharing
+const cors = require('cors');
+app.use(cors());
 
 // WORKERS
 const runOpenCheckinWorker = require("./workers/openCheckins")(cron, fetch);
