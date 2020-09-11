@@ -1,15 +1,9 @@
-import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
 
-// import useAuth from '../hooks/useAuth';
-// import { authContext } from '../context/authContext';
-import Firebase from '../firebase';
-import useAuth from '../hooks/useAuth';
+import useAuth from "../hooks/useAuth";
 
-import '../sass/AdminLogin.scss';
-// import '../sass/HomeContainer-media-queries.scss';
-
-
+import "../sass/AdminLogin.scss";
 
 const AdminLogin = (props) => {
     const auth = useAuth();

@@ -2,8 +2,6 @@ import React from "react";
 import { AuthProvider } from "./context/authContext";
 import { Route, Redirect, Switch } from "react-router-dom";
 
-import Firebase from "./firebase";
-
 import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";

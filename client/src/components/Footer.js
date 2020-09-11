@@ -1,7 +1,5 @@
 import React from 'react';
 
-import Firebase from '../firebase';
-
 import pkg from '../../package.json';
 import useAuth from '../hooks/useAuth';
 
@@ -12,8 +10,9 @@ const Footer = () => {
 
     const handleLogout = (e) => {
         e.preventDefault();
-        console.log('Trying to logout here!');
-        Firebase.logout();
+        // TODO: re-implement logout without firebase
+
+
     };
 
     return (

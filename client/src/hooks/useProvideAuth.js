@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
 
-import Firebase from '../firebase';
-
 export default function useProvideAuth() {
-    const [isAdmin, setIsAdmin] = useState(null);
-    const [user, setUser] = useState();
+  const [isAdmin, setIsAdmin] = useState(null);
+  const [user, setUser] = useState();
 
   async function checkUser() {
     try {
@@ -13,7 +11,7 @@ export default function useProvideAuth() {
         headers: {
           "Content-Type": "application/json",
         },
-        });
+      });
       setUser(response.status === 200);
       setIsAdmin(response.status === 200);
     } catch (err) {
@@ -26,5 +24,5 @@ export default function useProvideAuth() {
     console.log("-->user: ", user);
   }, [user, isAdmin]);
 
-    return { user, isAdmin };
+  return { user, isAdmin };
 }
