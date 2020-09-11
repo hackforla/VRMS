@@ -7,6 +7,7 @@ const cron = require("node-cron");
 const fetch = require("node-fetch");
 const morgan = require("morgan");
 const path = require("path");
+const cookieParser = require("cookie-parser");
 
 require("dotenv").config();
 
@@ -16,6 +17,9 @@ const app = express();
 // Required to view Request Body (req.body) in JSON
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Used to save JWT token from MagicLink
+app.use(cookieParser());
 
 // HTTP Request Logger
 app.use(morgan("dev"));

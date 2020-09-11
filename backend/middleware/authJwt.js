@@ -10,14 +10,21 @@ function verifyToken(req, res, next) {
 
   jwt.verify(token, CONFIG.SECRET, (err, decoded) => {
     if (err) {
-      return res.status(401).send({ message: "Unauthorized!" });
+
+function verifyCookie(req, res, next) {
+  jwt.verify(req.cookies.token, CONFIG.SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).send({ message: err });
     }
     req.userId = decoded.id;
+    req.role = decoded.accessLevel;
+
     next();
   });
 }
 
 const authJwt = {
   verifyToken,
+  verifyCookie,
 };
 module.exports = authJwt;
