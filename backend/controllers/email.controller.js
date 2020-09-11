@@ -47,16 +47,16 @@ async function mailServer(email, token) {
   }
   const appUrl = process.env.REACT_APP_PROXY;
   const encodedToken = encodeURIComponent(token);
-  const emailLink = `https://tinyurl.com/2drxdk/auth/me?token=${encodedToken}`;
+  const emailLink = `https://tinyurl.com/nyqxd/handleauth?token=${encodedToken}&signIn=true`;
   const encodedUri = encodeURI(emailLink);
   const mailOptions = {
     from: EMAIL_ACCOUNT,
     to: email,
     subject: "VRMS Magic link 🎩 !",
-    html: `<a href=${encodedUri}>
+    html: `<a href=${emailLink}>
         LOGIN HERE
       </a>`,
-    text: `Magic link: ${encodedUri}`,
+    text: `Magic link: ${emailLink}`,
   };
 
   if (process.env.NODE_ENV === "test") {
