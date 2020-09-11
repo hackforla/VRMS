@@ -21,7 +21,6 @@ export default function useProvideAuth() {
 
   useEffect(() => {
     checkUser();
-    console.log("-->user: ", user);
   }, [user, isAdmin]);
 
   return { user, isAdmin };

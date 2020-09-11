@@ -83,7 +83,6 @@ function verifySignIn(req, res) {
 }
 
 function verifyMe(req, res) {
-  console.log("-->req.userId: ", req.userId);
   res.send(200);
 }
 

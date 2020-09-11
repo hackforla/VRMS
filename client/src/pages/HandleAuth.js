@@ -19,7 +19,6 @@ const HandleAuth = (props) => {
         },
       });
       const body = await response;
-      console.log("-->response: ", body);
       setMagicLink(response.status === 200);
     } catch (error) {
       console.log(error);
