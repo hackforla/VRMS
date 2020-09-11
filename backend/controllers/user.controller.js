@@ -9,7 +9,9 @@ const { body, validationResult } = require("express-validator");
 
 function generateAccessToken(user) {
   // expires after half and hour (1800 seconds = 30 minutes)
-  return jwt.sign({ id: user.id }, CONFIG.SECRET, { expiresIn: "1800s" });
+  return jwt.sign({ id: user.id, role: user.accessLevel }, CONFIG.SECRET, {
+    expiresIn: `${CONFIG.TOKEN_EXPIRATION_SEC}s`,
+  });
 }
 
 function createUser(req, res) {
@@ -60,6 +62,31 @@ function signin(req, res) {
     });
 }
 
+function verifySignIn(req, res) {
+  let token = req.headers["x-access-token"] || req.headers["authorization"];
+
+  if (!token) {
+    return res.status(403).send({ message: "Auth token is not supplied" });
+  }
+  if (token.startsWith("Bearer ")) {
+    // Remove Bearer from string
+    token = token.slice(7, token.length);
+  }
+
+  jwt.verify(token, CONFIG.SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).send({ message: err });
+    }
+    res.cookie("token", token, { httpOnly: true });
+    res.sendStatus(200);
+  });
+}
+
+function verifyMe(req, res) {
+  console.log("-->req.userId: ", req.userId);
+  res.send(200);
+}
+
 async function validateCreateUserAPICall(req, res, next) {
   await body("name.firstName").not().isEmpty().trim().escape().run(req);
   await body("name.lastName").not().isEmpty().trim().escape().run(req);
@@ -99,6 +126,8 @@ userController = {
   validateSigninUserAPICall,
   createUser,
   signin,
+  verifySignIn,
+  verifyMe,
 };
 
 module.exports = userController;

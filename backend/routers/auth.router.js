@@ -1,4 +1,4 @@
-const { verifyUser } = require("../middleware");
+const { authJwt, verifyUser } = require("../middleware");
 const userController = require("../controllers/user.controller");
 
 const express = require("express");
@@ -20,8 +20,12 @@ router.post(
 
 router.post(
   "/signin",
-  [userController.validateSigninUserAPICall, verifyUser.isAdmin],
+  [userController.validateSigninUserAPICall, verifyUser.isAdminByEmail],
   userController.signin
 );
+
+router.post("/verify-signin", userController.verifySignIn);
+
+router.post("/me", [authJwt.verifyCookie], userController.verifyMe);
 
 module.exports = router;

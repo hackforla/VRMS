@@ -14,7 +14,7 @@ function checkDuplicateEmail(req, res, next) {
   });
 }
 
-function isAdmin(req, res, next) {
+function isAdminByEmail(req, res, next) {
   User.findOne({ email: req.body.email }).then((user) => {
     if (!user) {
       res.status(400).send({
@@ -37,7 +37,7 @@ function isAdmin(req, res, next) {
 
 const verifyUser = {
   checkDuplicateEmail,
-  isAdmin,
+  isAdminByEmail,
 };
 
 module.exports = verifyUser;
