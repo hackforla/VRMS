@@ -1,5 +1,6 @@
 import React from "react";
 import { AuthProvider } from "./context/authContext";
+import { UserProvider } from './context/userContext';
 import { Route, Redirect, Switch } from "react-router-dom";
 
 import Firebase from "./firebase";
@@ -68,4 +69,9 @@ const App = () => {
   );
 };
 
-export default App;
+export default ((WrappedComponent)=>()=> (
+    <AuthProvider>
+      <UserProvider>
+        <WrappedComponent />
+      </UserProvider>
+    </AuthProvider>))(App);

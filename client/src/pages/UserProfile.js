@@ -5,8 +5,7 @@ import UserEvents from '../components/presentational/profile/UserEvents';
 import UserTeams from '../components/presentational/profile/UserTeams';
 import { UserProvider, UserContext } from '../context/userContext';
 
-const UserProfile = (props) => {
-    const { user, setUser, removeOption, events, teams } = props.context;
+const UserProfile = ({ user, setUser, removeOption, events, teams }) => {
     useEffect(() => {
         fetch('http://localhost:6999/api/users/5e1d2346316d2f00172ef066')
             .then(res => res.json())
@@ -35,11 +34,9 @@ const UserProfile = (props) => {
 export default (function (WrappedComponent) {
     return (props) => {
         return (
-        <UserProvider {...props}>
-            <UserContext.Consumer>
-                    {(context) => (<WrappedComponent context={context}/>)}
-            </UserContext.Consumer>
-        </UserProvider>
+        <UserContext.Consumer>
+            {(context) => (<WrappedComponent {...context}/>)}
+        </UserContext.Consumer>
         )
     }
 })(UserProfile);
