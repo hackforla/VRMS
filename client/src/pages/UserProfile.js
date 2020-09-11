@@ -5,7 +5,7 @@ import UserEvents from '../components/presentational/profile/UserEvents';
 import UserTeams from '../components/presentational/profile/UserTeams';
 import { UserProvider, UserContext } from '../context/userContext';
 
-const Profile = (props) => {
+const UserProfile = (props) => {
     const { user, setUser, removeOption, events, teams } = props.context;
     useEffect(() => {
         fetch('http://localhost:6999/api/users/5e1d2346316d2f00172ef066')
@@ -32,18 +32,15 @@ const Profile = (props) => {
     )
 };
 
-function Wrapper(WrappedComponent) {
-    const UserProfile = (props) => {
+export default (function (WrappedComponent) {
+    return (props) => {
         return (
-        <UserProvider>
+        <UserProvider {...props}>
             <UserContext.Consumer>
                     {(context) => (<WrappedComponent context={context}/>)}
             </UserContext.Consumer>
         </UserProvider>
         )
     }
-    return UserProfile;
-}
-
-export default Wrapper(Profile);
+})(UserProfile);
     
