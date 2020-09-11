@@ -35,7 +35,7 @@ export default (function (WrappedComponent) {
     return (props) => {
         return (
         <UserContext.Consumer>
-            {(context) => (<WrappedComponent {...context}/>)}
+            {(context) => (<WrappedComponent {...props} {...context}/>)}
         </UserContext.Consumer>
         )
     }
