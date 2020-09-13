@@ -1,7 +1,6 @@
 import React, { Fragment } from "react";
 import styles from "../../sass/ProjectLeaderDashboard.module.scss";
-import DashboardButton from "./DashboardButton";
-import ls from "local-storage";
+import DashboardButton from './DashboardButton';
 
 const AttendeeTableRow = ({ name, role, isProjectTeamMember, postUser }) => {
     let here = null;

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import { HeaderBarTextOnly } from '../components/Header';
 import AddEvent from '../components/addNew/AddEvent';
-import { UserProvider, UserContext } from '../context/userContext';
+import { UserProvider } from '../context/userContext';
 import useAuth from '../hooks/useAuth';
 import '../sass/AddNew.scss';
 

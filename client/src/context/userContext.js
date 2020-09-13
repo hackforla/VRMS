@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState } from 'react';
 
 export const UserContext = createContext();
 
@@ -13,15 +13,14 @@ export const UserProvider = ({ children }) => {
         availability: ["Mon PM", "Thurs PM"]
     });
 
-    const [events, setEvents] = useState([
-        {
+    const events = {
             name: "VRMS Team Meeting",
             time: "04/13, 7PM",
             url: ""
-        }
-    ]);
+        };
 
-    const [teams, setTeams ] = useState([
+
+    const teams = [
         {
             name: 'VRMS',
             status: 'Active'
@@ -30,7 +29,7 @@ export const UserProvider = ({ children }) => {
             name: 'Where2Vote2018',
             status: 'Inactive'
         }
-    ])
+    ]
 
     const removeOption = (category, optionToRemove) => {
         const updatedUser = { ...user }

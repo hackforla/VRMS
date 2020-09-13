@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import CheckInButtons from "../components/presentational/CheckInButtons";
-import CreateNewProfileButton from "../components/presentational/CreateNewProfileButton";
-import ls from "local-storage";
+import CreateNewProfileButton from '../components/presentational/CreateNewProfileButton';
 
 import "../sass/Home.scss";
 

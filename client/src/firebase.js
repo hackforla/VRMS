@@ -1,8 +1,5 @@
-import React from 'react';
-import app from "firebase/app";
+import app from 'firebase/app';
 import "firebase/auth";
-
-import { Redirect } from 'react-router-dom';
 
 // Firebase configuration
 const firebaseConfig = {

@@ -39,7 +39,7 @@ const AttendeeTable = ({ attendees, activeMeeting, projectId, setRoster, roster 
         const attendeesOnRoster = [];
         const attendeesNotOnRoster = []; 
               
-        attendees.map((attendee, index) => {
+        attendees.map((attendee) => {
             const currAttendee = { ...attendee };
       
             const isOnRoster = Boolean(roster.find(teamMember => 

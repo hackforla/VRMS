@@ -1,7 +1,4 @@
 import React, { useEffect } from 'react';
-// import { Link } from 'react-router-dom';
-
-import Firebase from '../firebase';
 
 import useAuth from '../hooks/useAuth';
 

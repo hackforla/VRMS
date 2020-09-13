@@ -3,8 +3,7 @@ import styles from "../sass/ProjectLeaderDashboard.module.scss";
 import UpcomingEvent from "../components/presentational/upcomingEvent";
 import ProjectDashboardContainer from "../components/presentational/projectDashboardContainer";
 import DashboardButton from "../components/dashboard/DashboardButton";
-import ProjectInfo from "../components/dashboard/ProjectInfo";
-import { Link } from "react-router-dom";
+import ProjectInfo from '../components/dashboard/ProjectInfo';
 
 import "../sass/Dashboard.scss";
 
