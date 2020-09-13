@@ -3,7 +3,9 @@ import { useState, useEffect } from 'react';
 import Firebase from '../firebase';
 
 export default function useProvideAuth() {
-    const [isAdmin, setIsAdmin] = useState(null);
+    // TODO: Remove this statement and replace with magic link rendering. Until we have 
+    // a functional admin variable, the admin page will not render for the user.
+    const isAdmin = false;
     const [user, setUser] = useState();
 
     useEffect(() => {
@@ -21,7 +23,7 @@ export default function useProvideAuth() {
             };
         });
         
-    }, []);
+    }, [user]);
 
     // console.log(user);
 
