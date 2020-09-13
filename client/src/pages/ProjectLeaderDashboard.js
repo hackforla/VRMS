@@ -17,70 +17,17 @@ const ProjectLeaderDashboard = () => {
   const [attendeeOrRoster, setAttendeeOrRoster] = useState(true);
   const [forceRerender, setForceRerender] = useState(true);
   const [isError, setIsError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
-  const [rosterProjectId, setRosterProjectId] = useState("");
+  const [rosterProjectId, setRosterProjectId] = useState('');
 
   async function getProjectFromUserId() {
     try {
       const project = await fetch(
-        "/api/projectteammembers/projectowner/5e2790b06dc5b4ed0bc1df56"
+        '/api/projectteammembers/projectowner/5e2790b06dc5b4ed0bc1df56'
       );
       const projectJson = await project.json();
       setProject(projectJson);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async function getNextEvent() {
-    // event id temporarily hard coded so actual check in data would be listed
-    try {
-      if (project && project.projectId) {
-        const events = await fetch(
-          `/api/events/nexteventbyproject/${project.projectId._id}`
-        );
-        const eventsJson = await events.json();
-        setIsCheckInReady(eventsJson.checkInReady);
-        setNextEvent([eventsJson]);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  async function getRoster() {
-    try {
-      if (project && project.projectId) {
-        const roster = await fetch(
-          `/api/projectteammembers/${project.projectId._id}`
-        );
-        const rosterJson = await roster.json();
-        // temporary function that fixes outdated data
-        rosterJson.forEach((item) => {
-          if (!item.userId.name) {
-            item.userId.name = {};
-            item.userId.name.firstName = item.userId.firstName;
-            item.userId.name.lastName = item.userId.lastName; 
-          }
-        });
-        setRoster(rosterJson);
-
-        setRosterProjectId(project.projectId.googleDriveId);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async function getAttendees() {
-    try {
-      if (nextEvent && nextEvent[0]._id) {
-        const id = nextEvent[0]._id;
-        const attendees = await fetch(`/api/checkins/findEvent/${id}`);
-        const attendeesJson = await attendees.json();
-        setAttendees(attendeesJson);
-      }
     } catch (error) {
       console.log(error);
     }
@@ -90,9 +37,9 @@ const ProjectLeaderDashboard = () => {
     e.preventDefault();
     try {
       await fetch(`/api/events/${nextEventId}`, {
-        method: "PATCH",
+        method: 'PATCH',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       }).then((response) => {
         if (response.ok) {
@@ -108,21 +55,17 @@ const ProjectLeaderDashboard = () => {
     setAttendeeOrRoster(e);
   }
 
-  async function getDashboardInfo() {
-    await getProjectFromUserId();
-  }
-
   const handleSubmit = async (e, email) => {
     e.preventDefault();
     setIsError(false);
     setIsSuccess(false);
 
-    if (email === "") {
+    if (email === '') {
       setIsError(true);
       setErrorMessage("Please don't leave the field blank");
-    } else if (!email.includes("@") || !email.includes(".")) {
+    } else if (!email.includes('@') || !email.includes('.')) {
       setIsError(true);
-      setErrorMessage("Please format the email address correctly");
+      setErrorMessage('Please format the email address correctly');
     } else {
       await addToRoster(email);
       await setForceRerender(!forceRerender);
@@ -131,16 +74,15 @@ const ProjectLeaderDashboard = () => {
 
   async function addToRoster(email) {
     try {
-      return await fetch("/api/checkuser", {
-        method: "POST",
+      return await fetch('/api/checkuser', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email }),
       })
         .then((res) => {
           if (res.ok) {
-
             return res.json();
           }
           throw new Error(res.statusText);
@@ -148,7 +90,7 @@ const ProjectLeaderDashboard = () => {
         .then((response) => {
           if (response === false) {
             setIsError(true);
-            setErrorMessage("Email not found");
+            setErrorMessage('Email not found');
             return response;
           } else {
             return response;
@@ -180,7 +122,7 @@ const ProjectLeaderDashboard = () => {
         addMember(user);
       } else {
         setIsError(true);
-        setErrorMessage("Already on roster");
+        setErrorMessage('Already on roster');
       }
     } catch (error) {
       console.log(error);
@@ -195,10 +137,10 @@ const ProjectLeaderDashboard = () => {
     };
 
     try {
-      return await fetch("/api/projectteammembers", {
-        method: "POST",
+      return await fetch('/api/projectteammembers', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(parameters),
       })
@@ -216,18 +158,71 @@ const ProjectLeaderDashboard = () => {
   }
 
   useEffect(() => {
+    async function getDashboardInfo() {
+      await getProjectFromUserId();
+    }
     getDashboardInfo();
   }, []);
 
   useEffect(() => {
+    async function getAttendees() {
+      try {
+        if (nextEvent && nextEvent[0]._id) {
+          const id = nextEvent[0]._id;
+          const attendees = await fetch(`/api/checkins/findEvent/${id}`);
+          const attendeesJson = await attendees.json();
+          setAttendees(attendeesJson);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
     getAttendees();
   }, [nextEvent]);
 
   useEffect(() => {
+    async function getRoster() {
+      try {
+        if (project && project.projectId) {
+          const roster = await fetch(
+            `/api/projectteammembers/${project.projectId._id}`
+          );
+          const rosterJson = await roster.json();
+          // temporary function that fixes outdated data
+          rosterJson.forEach((item) => {
+            if (!item.userId.name) {
+              item.userId.name = {};
+              item.userId.name.firstName = item.userId.firstName;
+              item.userId.name.lastName = item.userId.lastName;
+            }
+          });
+          setRoster(rosterJson);
+  
+          setRosterProjectId(project.projectId.googleDriveId);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
     getRoster();
   }, [project, forceRerender]);
 
   useEffect(() => {
+    async function getNextEvent() {
+      // event id temporarily hard coded so actual check in data would be listed
+      try {
+        if (project && project.projectId) {
+          const events = await fetch(
+            `/api/events/nexteventbyproject/${project.projectId._id}`
+          );
+          const eventsJson = await events.json();
+          setIsCheckInReady(eventsJson.checkInReady);
+          setNextEvent([eventsJson]);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
     getNextEvent();
   }, [project]);
 
@@ -261,7 +256,7 @@ const ProjectLeaderDashboard = () => {
             {/* {isCheckInReady ? ( */}
             <button
               className={`tab-selector ${
-                attendeeOrRoster ? "tab-selected" : null
+                attendeeOrRoster ? 'tab-selected' : null
               }`}
               onClick={() => {
                 changeTable(true);
@@ -273,7 +268,7 @@ const ProjectLeaderDashboard = () => {
             {/* ) : null} */}
             <button
               className={`tab-selector ${
-                !attendeeOrRoster ? "tab-selected" : null
+                !attendeeOrRoster ? 'tab-selected' : null
               }`}
               onClick={() => {
                 changeTable(false);
@@ -299,13 +294,13 @@ const ProjectLeaderDashboard = () => {
 
               <div
                 className={[
-                  "dashboard-header",
+                  'dashboard-header',
                   styles.dashboardHeaderFlex,
-                ].join(" ")}
-                style={{ marginBottom: ".5rem" }}
+                ].join(' ')}
+                style={{ marginBottom: '.5rem' }}
               >
                 <p className={styles.dashboardHeadingProjectLeader}>
-                  {attendeeOrRoster ? "Meeting Participants" : "Team Roster"}
+                  {attendeeOrRoster ? 'Meeting Participants' : 'Team Roster'}
                 </p>
                 <DashboardButton>Download .csv</DashboardButton>
               </div>
