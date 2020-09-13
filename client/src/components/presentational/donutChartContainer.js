@@ -45,27 +45,27 @@ const DonutChartContainer = (props) => {
     const data = createPie(pieData);
 
     const group = d3.select(ref.current);
-    const groupWithData = group.selectAll("g.arc").data(data);
+    const groupWithData = group.selectAll('g.arc').data(data);
 
     groupWithData.exit().remove();
 
     const groupWithUpdate = groupWithData
       .enter()
-      .append("g")
-      .attr("class", "arc");
+      .append('g')
+      .attr('class', 'arc');
 
     const path = groupWithUpdate
-      .append("path")
-      .merge(groupWithData.select("path.arc"));
+      .append('path')
+      .merge(groupWithData.select('path.arc'));
 
     path
-      .attr("class", "arc")
-      .attr("d", createArc)
-      .attr("fill", (d, i) => {
+      .attr('class', 'arc')
+      .attr('d', createArc)
+      .attr('fill', (d, i) => {
         const { data } = d;
         return data.color;
       });
-  }, [props]);
+  }, [createArc, createPie, pieData]);
 
   return (
     <div className="dashboard-stats">
