@@ -1,10 +1,7 @@
 import React from "react";
 
 import AttendeeTable from "../dashboard/AttendeeTable";
-import RosterTable from "../dashboard/RosterTable";
-import { Link } from "react-router-dom";
-
-import moment from "moment";
+import RosterTable from '../dashboard/RosterTable';
 
 const projectDashboardContainer = (props) => {
   return (

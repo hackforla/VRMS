@@ -1,5 +1,4 @@
 import React, { useState, useContext } from 'react';
-import { Redirect } from 'react-router-dom';
 import moment from 'moment';
 import 'moment-recur';
 import {

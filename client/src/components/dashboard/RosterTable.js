@@ -1,7 +1,5 @@
 import React from "react";
-import styles from "../../sass/ProjectLeaderDashboard.module.scss";
-import RosterTableRow from "./RosterTableRow";
-import ls from "local-storage";
+import styles from '../../sass/ProjectLeaderDashboard.module.scss';
 
 const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
   const gitHubIcon = (
@@ -50,16 +48,14 @@ const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
   };
 
   const gDriveClickHandler = (email, fileId) => {
-    email = email;
-    fileId = fileId;
     const bodyObject = {
       email: email,
       file: fileId,
     };
-    fetch("api/grantpermission/googleDrive", {
-      method: "POST",
+    fetch('api/grantpermission/googleDrive', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(bodyObject),
     })
