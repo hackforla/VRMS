@@ -6,13 +6,13 @@ import '../sass/MagicLink.scss';
 const EmailSent = (props) => {
 
     useEffect(() => {
-        // fetchData();
-        let timer = setTimeout(() => {
-            props.history.push('/');
-        }, 10000);
+      // fetchData();
+      let timer = setTimeout(() => {
+        props.history.push('/');
+      }, 10000);
 
-        return () => clearTimeout(timer);
-    }, []);
+      return () => clearTimeout(timer);
+    }, [props]);
 
     return (
         <div className="flex-container">
