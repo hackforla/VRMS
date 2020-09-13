@@ -28,10 +28,10 @@ const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
   );
 
   const slackTestButton = () => {
-    fetch("api/slack/findId", {
-      method: "GET",
+    fetch('api/slack/findId', {
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     })
       .then((res) => {
@@ -68,42 +68,6 @@ const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
         return res.json();
       })
 
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const gitHubClickHandler = (
-    githubHandle,
-    projectName,
-    accessLevel = "manager"
-  ) => {
-    // ******************** pbtag -- allow PL to add githubHandle if not
-    // already there
-    // if (!githubHandle) {
-    // }
-
-    const bodyObject = {
-      // temporary placeholder handle + repoName
-      handle: "testingphoebe",
-      teamName: "vrms", //projectName, no where to pull that from currently, event object doesn't provide project name
-      accessLevel,
-    };
-    fetch("api/grantpermission/gitHub", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(bodyObject),
-    })
-      .then((res) => {
-        if (res.status !== 200) {
-          return res.json().then((res) => {
-            throw new Error(res.message);
-          });
-        }
-        return res.json();
-      })
       .catch((err) => {
         console.log(err);
       });
