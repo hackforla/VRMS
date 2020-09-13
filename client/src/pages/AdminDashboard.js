@@ -55,55 +55,6 @@ const AdminDashboard = (props) => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  async function getAndSetData() {
-    try {
-      setIsLoading(true);
-      const checkIns = await fetch('/api/checkins');
-      const checkInsJson = await checkIns.json();
-      const events = await fetch('/api/events');
-      const eventsJson = await events.json();
-
-      processData(eventsJson, checkInsJson);
-      setIsLoading(false);
-    } catch (error) {
-      setIsLoading(false);
-      console.log(error);
-    }
-  }
-
-  function processData(allEvents, allCheckIns) {
-    let processedEvents = processEvents(allEvents);
-    let usersByEvent = collectUsersByEvent(allCheckIns);
-    prepareDataForCharts(processedEvents, usersByEvent);
-  }
-
-  function processEvents(allEvents) {
-    let events = new Map();
-
-    for (let event of allEvents) {
-      // Process legacy data with undefined 'hours' property because initially an event length was 3 hours
-      if (!event.hours) {
-        event.hours = 3;
-      }
-
-      // Define unique event types and process events without 'eventType' property
-      if (event.eventType) {
-        processEventTypes(event, 'eventType', uniqueEventTypes);
-      } else {
-        // Find events without 'eventType' property (30 events) and assign it
-        event.eventType = 'Hacknight';
-      }
-
-      // Extract events with 'hacknight' property & find unique locations in it
-      if (event.hacknight) {
-        processEventTypes(event, 'hacknight', hackNightUniqueLocations);
-      }
-      events.set(event._id, event);
-    }
-    createChartTypes();
-    return events;
-  }
-
   function processEventTypes(event, propName, uniqueTypes) {
     const capitalize = (str, lower = false) =>
       (lower ? str.toLowerCase() : str).replace(
@@ -133,60 +84,6 @@ const AdminDashboard = (props) => {
       }
     }
     return eventCollection;
-  }
-
-  function prepareDataForCharts(events, users) {
-    // Data for 1 chart 'total volunteers'
-    let totalVolunteersByEventType = extractVolunteersSignedInByProperty(
-      events,
-      users,
-      uniqueEventTypes,
-      'eventType'
-    );
-    setVolunteersSignedInByEventType(totalVolunteersByEventType);
-    let totalVolunteersByHacknightProp = extractVolunteersSignedInByProperty(
-      events,
-      users,
-      hackNightUniqueLocations,
-      'hacknight'
-    );
-    setVolunteersSignedInByHacknightProp(totalVolunteersByHacknightProp);
-
-    // Data for 2 chart 'total hours'
-    let totalVolunteerHoursByEventType = findTotalVolunteerHours(
-      events,
-      users,
-      uniqueEventTypes,
-      'eventType'
-    );
-    setVolunteeredHoursByEventType(totalVolunteerHoursByEventType);
-    let totalVolunteerHoursByHacknightProp = findTotalVolunteerHours(
-      events,
-      users,
-      hackNightUniqueLocations,
-      'hacknight'
-    );
-    setVolunteeredHoursByHacknightProp(totalVolunteerHoursByHacknightProp);
-
-    //  Data for 3 chart 'total average hours'
-    let totalVolunteerAvgHoursByEventType = findAverageVolunteerHours(
-      totalVolunteersByEventType,
-      totalVolunteerHoursByEventType,
-      uniqueEventTypes
-    );
-    setAvgHoursByEventType(totalVolunteerAvgHoursByEventType);
-
-    let totalVolunteerAvgHoursByHacknightProp = findAverageVolunteerHours(
-      totalVolunteersByHacknightProp,
-      totalVolunteerHoursByHacknightProp,
-      hackNightUniqueLocations
-    );
-    setAvgHoursByHacknightProp(totalVolunteerAvgHoursByHacknightProp);
-
-    // Display data by default for "All" chart type
-    setVolunteersToChart(totalVolunteersByEventType);
-    setVolunteeredHoursToChart(totalVolunteerHoursByEventType);
-    setAvgHoursToChart(totalVolunteerAvgHoursByEventType);
   }
 
   function extractVolunteersSignedInByProperty(
@@ -329,9 +226,112 @@ const AdminDashboard = (props) => {
   };
 
   useEffect(() => {
+    async function getAndSetData() {
+      try {
+        setIsLoading(true);
+        const checkIns = await fetch('/api/checkins');
+        const checkInsJson = await checkIns.json();
+        const events = await fetch('/api/events');
+        const eventsJson = await events.json();
+  
+        processData(eventsJson, checkInsJson);
+        setIsLoading(false);
+      } catch (error) {
+        setIsLoading(false);
+        console.log(error);
+      }
+    }
+
+    function processData(allEvents, allCheckIns) {
+      let processedEvents = processEvents(allEvents);
+      let usersByEvent = collectUsersByEvent(allCheckIns);
+      prepareDataForCharts(processedEvents, usersByEvent);
+    }
+
+    function processEvents(allEvents) {
+      let events = new Map();
+  
+      for (let event of allEvents) {
+        // Process legacy data with undefined 'hours' property because initially an event length was 3 hours
+        if (!event.hours) {
+          event.hours = 3;
+        }
+  
+        // Define unique event types and process events without 'eventType' property
+        if (event.eventType) {
+          processEventTypes(event, 'eventType', uniqueEventTypes);
+        } else {
+          // Find events without 'eventType' property (30 events) and assign it
+          event.eventType = 'Hacknight';
+        }
+  
+        // Extract events with 'hacknight' property & find unique locations in it
+        if (event.hacknight) {
+          processEventTypes(event, 'hacknight', hackNightUniqueLocations);
+        }
+        events.set(event._id, event);
+      }
+      createChartTypes();
+      return events;
+    }
+
+    function prepareDataForCharts(events, users) {
+      // Data for 1 chart 'total volunteers'
+      let totalVolunteersByEventType = extractVolunteersSignedInByProperty(
+        events,
+        users,
+        uniqueEventTypes,
+        'eventType'
+      );
+      setVolunteersSignedInByEventType(totalVolunteersByEventType);
+      let totalVolunteersByHacknightProp = extractVolunteersSignedInByProperty(
+        events,
+        users,
+        hackNightUniqueLocations,
+        'hacknight'
+      );
+      setVolunteersSignedInByHacknightProp(totalVolunteersByHacknightProp);
+  
+      // Data for 2 chart 'total hours'
+      let totalVolunteerHoursByEventType = findTotalVolunteerHours(
+        events,
+        users,
+        uniqueEventTypes,
+        'eventType'
+      );
+      setVolunteeredHoursByEventType(totalVolunteerHoursByEventType);
+      let totalVolunteerHoursByHacknightProp = findTotalVolunteerHours(
+        events,
+        users,
+        hackNightUniqueLocations,
+        'hacknight'
+      );
+      setVolunteeredHoursByHacknightProp(totalVolunteerHoursByHacknightProp);
+  
+      //  Data for 3 chart 'total average hours'
+      let totalVolunteerAvgHoursByEventType = findAverageVolunteerHours(
+        totalVolunteersByEventType,
+        totalVolunteerHoursByEventType,
+        uniqueEventTypes
+      );
+      setAvgHoursByEventType(totalVolunteerAvgHoursByEventType);
+  
+      let totalVolunteerAvgHoursByHacknightProp = findAverageVolunteerHours(
+        totalVolunteersByHacknightProp,
+        totalVolunteerHoursByHacknightProp,
+        hackNightUniqueLocations
+      );
+      setAvgHoursByHacknightProp(totalVolunteerAvgHoursByHacknightProp);
+  
+      // Display data by default for "All" chart type
+      setVolunteersToChart(totalVolunteersByEventType);
+      setVolunteeredHoursToChart(totalVolunteerHoursByEventType);
+      setAvgHoursToChart(totalVolunteerAvgHoursByEventType);
+    }
+
     getAndSetData();
     getNextEvent();
-  }, [getAndSetData]);
+  }, [hackNightUniqueLocations, uniqueEventTypes]);
 
   return auth && auth.user ? (
     <div className="flex-container">
