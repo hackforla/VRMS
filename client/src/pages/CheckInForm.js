@@ -252,38 +252,6 @@ const CheckInForm = props => {
     // }
   };
 
-  const submitNewProfile = (userForm) => {
-    // First, create a new user in the user collection
-    const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
-
-    fetch('/api/users', {
-      method: 'POST',
-      body: JSON.stringify(userForm),
-      headers: {
-        'Content-Type': 'application/json',
-        'x-customrequired-header': headerToSend,
-      },
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-
-        throw new Error(res.statusText);
-      })
-      .then((responseId) => {
-        if (responseId.includes('E11000')) {
-          setIsError(true);
-          setErrorMessage('Email address is already in use.');
-        } else {
-          props.history.push(`/success`);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   // const submitReturningUserForm = (email) => {
   //     // First, create a new user in the user collection
 
@@ -417,71 +385,6 @@ const CheckInForm = props => {
       // SUBMIT all of the user's info from the userForm object
       if (ready) {
         submitForm(userForm);
-      }
-
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-      setIsLoading(false);
-    }
-  };
-
-  const createNewProfile = (e) => {
-    e.preventDefault();
-
-    const firstAttended = `${month} ${year}`;
-
-    // SET all of the user's info from useState objects
-    const userForm = {
-      name: {
-        firstName,
-        lastName,
-      },
-      ...formInput,
-      newMember,
-      firstAttended,
-    };
-
-    let ready = true;
-
-    try {
-      setIsLoading(true);
-
-      if (
-        userForm.name.firstName === '' ||
-        userForm.name.lastName === '' ||
-        userForm.email === '' ||
-        userForm.currentRole === '' ||
-        userForm.desiredRole === '' ||
-        firstAttended === ''
-      ) {
-        setIsError(true);
-        setErrorMessage("Please don't leave any fields blank");
-        ready = false;
-      }
-
-      const currYear = parseInt(moment().format('YYYY'));
-      const currMonth = parseInt(moment().format('MM'));
-      const yearJoined = parseInt(year);
-      // extra date info needed to be recognized as a date
-      const monthJoined = parseInt(moment(month + ' 9, 2020').format('MM'));
-      // console.log(currYear, currMonth, yearJoined, monthJoined);
-      if (
-        yearJoined > currYear ||
-        (yearJoined === currYear && monthJoined > currMonth)
-      ) {
-        setIsError(true);
-        setErrorMessage(
-          "You can't set a date in the future... Please try again."
-        );
-        ready = false;
-      }
-
-      // console.log(isFormReady);
-
-      // SUBMIT all of the user's info from the userForm object
-      if (ready) {
-        submitNewProfile(userForm);
       }
 
       setIsLoading(false);
