@@ -38,19 +38,7 @@ const Event = (props) => {
     //     }
     // }
 
-    async function fetchEvent() {
-        
-        try {
-            const res = await fetch(`/api/events/${props.match.params.id}`);
-            const resJson = await res.json();
-            
-            setEvent(resJson);
-            setIsCheckInReady(resJson.checkInReady);
-
-        } catch(error) {
-            // setIsError(error);
-        }
-    }
+    
 
     async function setCheckInReady(e) {
         e.preventDefault();
@@ -79,9 +67,24 @@ const Event = (props) => {
     }
 
     useEffect(() => {
-        fetchEvent();
-        // fetchRsvps();
-    }, [isLoading, isCheckInReady]);
+        
+        async function fetchEvent() {
+        
+            try {
+                const res = await fetch(`/api/events/${props.match.params.id}`);
+                const resJson = await res.json();
+                
+                setEvent(resJson);
+                setIsCheckInReady(resJson.checkInReady);
+
+            } catch(error) {
+                // setIsError(error);
+            }
+        }
+
+      fetchEvent();
+      // fetchRsvps();
+    }, [isLoading, isCheckInReady, props.match.params.id]);
 
     return (
         <div className="flex-container">
