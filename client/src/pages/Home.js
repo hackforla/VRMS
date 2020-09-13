@@ -6,23 +6,19 @@ import "../sass/Home.scss";
 
 const Home = (props) => {
     const [events, setEvents] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
     const [event, setEvent] = useState("--SELECT ONE--");
 
     async function fetchEvents() {
         try {
-            setIsLoading(true);
-            const res = await fetch("/api/events?checkInReady=true");
-            const resJson = await res.json();
-            await resJson.unshift("--SELECT ONE--");
+          const res = await fetch('/api/events?checkInReady=true');
+          const resJson = await res.json();
+          await resJson.unshift('--SELECT ONE--');
 
-            setEvents(resJson);
-            setIsLoading(false);
+          setEvents(resJson);
         } catch (error) {
-            console.log(error);
-            setIsLoading(false);
-            // setIsError(error);
-            // alert(error);
+          console.log(error);
+          // setIsError(error);
+          // alert(error);
         }
     }
 
