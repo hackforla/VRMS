@@ -4,6 +4,7 @@
   "description": "VRMS Backend",
   "main": "server.js",
   "scripts": {
+    "lint": "eslint .",
     "test": "jest",
     "test:watch": "jest --watch",
     "start": "node server.js",
@@ -17,6 +18,9 @@
     "@shelf/jest-mongodb": "^1.1.5",
     "concurrently": "^5.1.0",
     "debug": "^4.1.1",
+    "eslint": "^7.9.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0",
     "jest": "^26.4.0",
     "nodemon": "^2.0.2",
     "supertest": "^4.0.2",
