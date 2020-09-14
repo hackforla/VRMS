@@ -508,7 +508,6 @@ const CheckInForm = props => {
           reasons={reasons}
           project={project}
           handleProjectChange={handleProjectChange}
-          isLoading={isLoading}
           submitReturning={submitReturning}
           //   yearhandleYearChange={yearhandleYearChange}
         />
