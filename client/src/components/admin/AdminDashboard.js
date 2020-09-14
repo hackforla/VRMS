@@ -11,6 +11,9 @@ import EventOverview from "./eventOverview";
 import DonutChartContainer from "./donutChartContainer";
 import Loading from "./donutChartLoading";
 
+import TabsContainer from "../../common/tabs";
+import Tab from "../../common/tabs/tab";
+
 const AdminDashboard = (props) => {
   const auth = useAuth();
   const defaultChartType = "All Events";
@@ -68,18 +71,19 @@ const AdminDashboard = (props) => {
     let events = new Map();
 
     for (let event of allEvents){
+      if (!event) continue;
+
       // Process legacy data with undefined 'hours' property because initially an event length was 3 hours
       if(!event.hours){
-        event.hours = 3;
+        event.hours = parseInt('3');
       }
 
       // Define unique event types and process events without 'eventType' property
-      if(event.eventType){
-        processEventTypes(event, 'eventType', uniqueEventTypes);
-      } else {
+      if(!event.eventType){
         // Find events without 'eventType' property (30 events) and assign it
         event.eventType = 'Hacknight';
       }
+      processEventTypes(event, 'eventType', uniqueEventTypes);
 
       // Extract events with 'hacknight' property & find unique locations in it
       if(event.hacknight){
@@ -110,10 +114,13 @@ const AdminDashboard = (props) => {
   function collectUsersByEvent(allCheckIns){
     let eventCollection = new Map();
     for(let checkIn of allCheckIns){
-      if(eventCollection.has(checkIn.eventId)){
-        eventCollection.get(checkIn.eventId).push(checkIn);
-      } else{
-        eventCollection.set(checkIn.eventId, [checkIn]);
+
+      if(checkIn.eventId !== null){
+        if(eventCollection.has(checkIn.eventId)){
+          eventCollection.get(checkIn.eventId).push(checkIn);
+        } else{
+          eventCollection.set(checkIn.eventId, [checkIn]);
+        }
       }
     }
     return eventCollection;
@@ -157,12 +164,12 @@ const AdminDashboard = (props) => {
 
     uniqueTypes.forEach(el => result[el] = parseInt('0'));
     for (let eventId of users.keys()) {
-      if(propName === 'eventType'){
+      if(propName === 'eventType' && !!events.get(eventId)){
         type = events.get(eventId).eventType;
         result[type] = users.get(eventId).length + result[type];
       }
 
-      if(propName === 'hacknight' && typeof events.get(eventId).hacknight !== 'undefined'){
+      if(!!events.get(eventId) && propName === 'hacknight' && typeof events.get(eventId).hacknight !== 'undefined'){
         type = events.get(eventId).hacknight;
         result[type] = users.get(eventId).length + result[type];
       }
@@ -176,12 +183,12 @@ const AdminDashboard = (props) => {
     uniqueTypes.forEach(el => result[el] = parseInt('0'));
 
     for (let eventId of users.keys()) {
-      if(propName === 'eventType'){
+      if(!!events.get(eventId) && propName === 'eventType'){
         type = events.get(eventId).eventType;
         result[type] = result[type] + (events.get(eventId).hours * users.get(eventId).length);
       }
 
-      if (propName === 'hacknight' && typeof events.get(eventId).hacknight !== 'undefined'){
+      if (!!events.get(eventId) && propName === 'hacknight' && typeof events.get(eventId).hacknight !== 'undefined'){
         type = events.get(eventId).hacknight;
         result[type] = result[type] + (events.get(eventId).hours * users.get(eventId).length);
       }
@@ -319,41 +326,50 @@ const AdminDashboard = (props) => {
               />
           )}
 
-          {isLoading ? (
-              <Loading />
-          ) : (
-              <EventOverview
-                  handleChartTypeChange={handleChartTypeChange}
-                  chartTypes={chartTypes}
-              />
-          )}
+        <TabsContainer active={0}>
+            <Tab title="Table Report">
+              <p>1st tab for a table report</p>
+            </Tab>
 
-          {isLoading ? (
-              <Loading />
-          ) : (
-              <DonutChartContainer
-                  chartName={"Total Volunteers"}
-                  data={totalVolunteers}
-              />
-          )}
+            <Tab title="Donut Chart Report">
+              {isLoading ? (
+                  <Loading />
+              ) : (
+                  <EventOverview
+                      handleChartTypeChange={handleChartTypeChange}
+                      chartTypes={chartTypes}
+                  />
+              )}
 
-          {isLoading ? (
-              <Loading />
-          ) : (
-              <DonutChartContainer
-                  chartName={"Total Volunteer Hours"}
-                  data={totalVolunteerHours}
-              />
-          )}
+              {isLoading ? (
+                  <Loading />
+              ) : (
+                  <DonutChartContainer
+                      chartName={"Total Volunteers"}
+                      data={totalVolunteers}
+                  />
+              )}
 
-          {isLoading ? (
-              <Loading />
-          ) : (
-              <DonutChartContainer
-                  chartName={"Average Hours Per Volunteer"}
-                  data={totalVolunteerAvgHours}
-              />
-          )}
+              {isLoading ? (
+                  <Loading />
+              ) : (
+                  <DonutChartContainer
+                      chartName={"Total Volunteer Hours"}
+                      data={totalVolunteerHours}
+                  />
+              )}
+
+              {isLoading ? (
+                  <Loading />
+              ) : (
+                  <DonutChartContainer
+                      chartName={"Average Hours Per Volunteer"}
+                      data={totalVolunteerAvgHours}
+                  />
+              )}
+            </Tab>
+          </TabsContainer>
+
         </div>
       </div>
     ) : (
