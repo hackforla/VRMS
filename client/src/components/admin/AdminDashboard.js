@@ -311,24 +311,33 @@ const AdminDashboard = (props) => {
       <div className="flex-container">
         <div className="dashboard admin-dashboard-wrap">
 
-          <div className="header-admin-dashboard">
-            <h2 className="header-stats">Stats by Location - Volunteer Hours</h2>
-            <p className="dashboard-header-text-small">You have an event coming up:</p>
+          <div className="admin-header">
+            <h1>Stats by Location - Volunteer Hours</h1>
           </div>
 
-          {isLoading ? (
-              <Loading />
-          ) : (
-              <UpcomingEvent
-                  isCheckInReady={isCheckInReady}
-                  nextEvent={nextEvent}
-                  setCheckInReady={setCheckInReady}
-              />
-          )}
+          {!isLoading ? (
+              <div className="event-header">You have 1 upcoming event:</div>
+              ) : null}
+
+          <div className="admin-upcoming-event">
+            {isLoading ? (
+                <Loading />
+            ) : (
+                <UpcomingEvent
+                    isCheckInReady={isCheckInReady}
+                    nextEvent={nextEvent}
+                    setCheckInReady={setCheckInReady}
+                />
+            )}
+          </div>
 
         <TabsContainer active={0}>
             <Tab title="Table Report">
-              <p>1st tab for a table report</p>
+              {isLoading ? (
+                  <Loading />
+              ) : (
+                  <p>1st tab for a table report</p>
+              )}
             </Tab>
 
             <Tab title="Donut Chart Report">

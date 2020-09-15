@@ -1,23 +1,26 @@
 .tab-header{
+  display: flex;
+  justify-content: center;
   list-style: none;
   padding: 0;
   margin-bottom: 0;
   li{
-    display: inline-block;
     width: 50%;
     text-align: center;
+    font-size: 15px;
+    line-height: 1;
     margin-left: 0;
     padding: 10px;
-    border-bottom: 2px solid #eee;
-    transition: all .5s;
-    font-family: 'Open Sans', sans-serif;
+    border-bottom: 2px solid #3D5A6C;
+    transition: all .3s;
     font-weight: 300;
     cursor: pointer;
-    color: #aaa;
     &.selected{
-      border-bottom: 2px solid #337ab7;
-      color: #444;
+      border-bottom: 2px solid #3D5A6C;
+      color: #FFFFFF;
       font-weight: bold;
+      background: #3D5A6C;
+      border-radius: 10px 10px 0 0;
     }
   }
 }
