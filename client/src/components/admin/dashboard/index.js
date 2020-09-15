@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Redirect } from "react-router-dom";
-
 import useAuth from "../../../hooks/useAuth";
-
-import "../../../sass/Dashboard.scss";
-import "./index.scss";
-
 import UpcomingEvent from "../../presentational/upcomingEvent";
 import EventOverview from "../eventOverview";
 import DonutChartContainer from "../donutChartContainer";
 import Loading from "../donutChartLoading";
-
 import TabsContainer from "../../../common/tabs";
 import Tab from "../../../common/tabs/tab";
+import "../../../sass/Dashboard.scss";
+import "./index.scss";
 
 const AdminDashboard = () => {
   const auth = useAuth();
@@ -33,10 +29,10 @@ const AdminDashboard = () => {
   const [totalVolunteerHoursByEventType, setVolunteeredHoursByEventType] = useState({});
   const [totalVolunteerAvgHoursByEventType, setAvgHoursByEventType] = useState({});
 
-  // Volunteers SignedIn By Hacknight Property
-  const [totalVolunteersByHacknightProp, setVolunteersSignedInByHacknightProp] = useState({});
-  const [totalVolunteerHoursByHacknightProp, setVolunteeredHoursByHacknightProp] = useState({});
-  const [totalVolunteerAvgHoursByHacknightProp, setAvgHoursByHacknightProp] = useState({});
+  // Volunteers SignedIn By HackNight Property
+  const [totalVolunteersByHackNightProp, setVolunteersSignedInByHackNightProp] = useState({});
+  const [totalVolunteerHoursByHackNightProp, setVolunteeredHoursByHackNightProp] = useState({});
+  const [totalVolunteerAvgHoursByHackNightProp, setAvgHoursByHackNightProp] = useState({});
 
   // Volunteers To Chart
   const [totalVolunteers, setVolunteersToChart] = useState({});
@@ -52,7 +48,6 @@ const AdminDashboard = () => {
       const checkInsJson = await checkIns.json();
       const events = await fetch("/api/events");
       const eventsJson = await events.json();
-
       processData(eventsJson, checkInsJson);
       setIsLoading(false);
     } catch (error) {
@@ -128,16 +123,38 @@ const AdminDashboard = () => {
 
   function prepareDataForCharts(events, users){
     // Data for 1 chart 'total volunteers'
-    let totalVolunteersByEventType = extractVolunteersSignedInByProperty(events, users, uniqueEventTypes, 'eventType');
+    let totalVolunteersByEventType = extractVolunteersSignedInByProperty(
+        events,
+        users,
+        uniqueEventTypes,
+        'eventType'
+    );
     setVolunteersSignedInByEventType(totalVolunteersByEventType);
-    let totalVolunteersByHacknightProp = extractVolunteersSignedInByProperty(events, users, hackNightUniqueLocations, 'hacknight');
-    setVolunteersSignedInByHacknightProp(totalVolunteersByHacknightProp);
+
+    let totalVolunteersByHackNightProp = extractVolunteersSignedInByProperty(
+        events,
+        users,
+        hackNightUniqueLocations,
+        'hacknight'
+    );
+    setVolunteersSignedInByHackNightProp(totalVolunteersByHackNightProp);
 
     // Data for 2 chart 'total hours'
-    let totalVolunteerHoursByEventType = findTotalVolunteerHours(events, users, uniqueEventTypes, 'eventType');
+    let totalVolunteerHoursByEventType = findTotalVolunteerHours(
+        events,
+        users,
+        uniqueEventTypes,
+        'eventType'
+    );
     setVolunteeredHoursByEventType(totalVolunteerHoursByEventType);
-    let totalVolunteerHoursByHacknightProp = findTotalVolunteerHours(events, users, hackNightUniqueLocations, 'hacknight');
-    setVolunteeredHoursByHacknightProp(totalVolunteerHoursByHacknightProp);
+
+    let totalVolunteerHoursByHackNightProp = findTotalVolunteerHours(
+        events,
+        users,
+        hackNightUniqueLocations,
+        'hacknight'
+    );
+    setVolunteeredHoursByHackNightProp(totalVolunteerHoursByHackNightProp);
 
     //  Data for 3 chart 'total average hours'
     let totalVolunteerAvgHoursByEventType = findAverageVolunteerHours(
@@ -146,11 +163,11 @@ const AdminDashboard = () => {
         uniqueEventTypes);
     setAvgHoursByEventType(totalVolunteerAvgHoursByEventType);
 
-    let totalVolunteerAvgHoursByHacknightProp = findAverageVolunteerHours(
-        totalVolunteersByHacknightProp,
-        totalVolunteerHoursByHacknightProp,
+    let totalVolunteerAvgHoursByHackNightProp = findAverageVolunteerHours(
+        totalVolunteersByHackNightProp,
+        totalVolunteerHoursByHackNightProp,
         hackNightUniqueLocations);
-    setAvgHoursByHacknightProp(totalVolunteerAvgHoursByHacknightProp);
+    setAvgHoursByHackNightProp(totalVolunteerAvgHoursByHackNightProp);
 
     // Display data by default for "All" chart type
     setVolunteersToChart(totalVolunteersByEventType);
@@ -217,9 +234,9 @@ const AdminDashboard = () => {
       setVolunteeredHoursToChart(totalVolunteerHoursByEventType);
       setAvgHoursToChart(totalVolunteerAvgHoursByEventType);
     } else if (valueFromSelect === "Hacknight Only"){
-      setVolunteersToChart(totalVolunteersByHacknightProp);
-      setVolunteeredHoursToChart(totalVolunteerHoursByHacknightProp);
-      setAvgHoursToChart(totalVolunteerAvgHoursByHacknightProp);
+      setVolunteersToChart(totalVolunteersByHackNightProp);
+      setVolunteeredHoursToChart(totalVolunteerHoursByHackNightProp);
+      setAvgHoursToChart(totalVolunteerAvgHoursByHackNightProp);
     }
   }
 
@@ -241,7 +258,6 @@ const AdminDashboard = () => {
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-
       console.log(error);
     }
   }
@@ -249,10 +265,8 @@ const AdminDashboard = () => {
   async function getNextEvent() {
     try {
       setIsLoading(true);
-
       const events = await fetch("/api/events");
       const eventsJson = await events.json();
-
       const dates = eventsJson.map((event) => {
         return Date.parse(event.date);
       });
@@ -270,7 +284,6 @@ const AdminDashboard = () => {
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-
       console.log(error);
     }
   }
@@ -291,8 +304,6 @@ const AdminDashboard = () => {
       });
     } catch (error) {
       console.log(error);
-      // setIsError(error);
-      // setIsLoading(!isLoading);
     }
   }
 
