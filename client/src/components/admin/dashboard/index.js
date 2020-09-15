@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 
-import useAuth from "../../hooks/useAuth";
+import useAuth from "../../../hooks/useAuth";
 
-import "../../sass/Dashboard.scss";
-import "./AdminDashboard.scss";
+import "../../../sass/Dashboard.scss";
+import "./index.scss";
 
-import UpcomingEvent from "../presentational/upcomingEvent";
-import EventOverview from "./eventOverview";
-import DonutChartContainer from "./donutChartContainer";
-import Loading from "./donutChartLoading";
+import UpcomingEvent from "../../presentational/upcomingEvent";
+import EventOverview from "../eventOverview";
+import DonutChartContainer from "../donutChartContainer";
+import Loading from "../donutChartLoading";
 
-import TabsContainer from "../../common/tabs";
-import Tab from "../../common/tabs/tab";
+import TabsContainer from "../../../common/tabs";
+import Tab from "../../../common/tabs/tab";
 
-const AdminDashboard = (props) => {
+const AdminDashboard = () => {
   const auth = useAuth();
   const defaultChartType = "All Events";
   let uniqueEventTypes = new Set();

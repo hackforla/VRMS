@@ -7,7 +7,7 @@ import Firebase from "./firebase";
 import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import AdminDashboard from "./components/admin/AdminDashboard";
+import AdminDashboard from "./components/admin/dashboard";
 import UserDashboard from "./pages/UserDashboard";
 import UserProfile from "./pages/UserProfile";
 import Event from "./pages/Event";
