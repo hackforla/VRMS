@@ -13,8 +13,8 @@ const timeTrackerSchema = mongoose.Schema({
   },
   category: { type: String }, // picklist with 4 options: Development, Design/UX, Product/Project Management, Other
   notes: { type: String },
-	startDate: { type: Date },
-	endDate: { type: Date },
+  startDate: { type: Date },
+  endDate: { type: Date },
 });
 
 timeTrackerSchema.methods.serialize = function () {
@@ -24,8 +24,8 @@ timeTrackerSchema.methods.serialize = function () {
       userId: this.user.userId,
     },
     selectedAnswer: this.selectedAnswer,
-		startDate: this.startDate,
-		endDate: this.endDate,
+    startDate: this.startDate,
+    endDate: this.endDate,
   };
 };
 
