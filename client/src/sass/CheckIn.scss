@@ -134,11 +134,10 @@ input[type=radio] {
     height: 40px;
     margin-top: 20px;
     margin-bottom: 36px;
-    border: 3px solid black;
-    border-radius: 4px;
-    font-weight: bold;
-
     button {
+        border: 3px solid black;
+        border-radius: 4px;
+        font-weight: bold;
         font-size: 18px;
         font-weight: bold;
         transition: all .3s ease-in-out;
@@ -147,6 +146,12 @@ input[type=radio] {
             background-color: black;
             color: white;
         }
+        &:disabled {
+            color: #bbb;
+            border-color: #bbb;
+            pointer-events: none;
+        }
+        
     }
 }
 

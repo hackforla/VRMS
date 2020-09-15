@@ -1,38 +1,9 @@
-# version: '3'
-# services:
 
-#   ###############
-#   # NODE SERVER #
-#   ###############
-#   server:
-#     build:
-#       context: .
-#       dockerfile: Dockerfile
-#     expose:
-#       - "3000"
-#       - "4000"
-#     volumes: 
-#       - .:/usr/src/app
-#     environment:
-#       API_HOST: "http://localhost:4000"
-#     ports:
-#       - "3000:4000"
+version: '3'
 
-#   #############
-#   # REACT APP #
-#   #############
-#   # web:
-#   #   build: ./client
-#   #   expose:
-#   #     - "3000"
-#   #   environment:
-#   #     - REACT_APP_PORT="3000"
-#   #   ports:
-#   #     - "3000:3000"
-#   #   volumes:
-#   #     - ./client/src:/client/src
-#   #     - ./client/public:/client/public
-#   #   links: 
-#   #     - server
-    
-  
+services:
+  mailhog:
+    image: mailhog/mailhog  
+    ports: 
+      - 1025:1025 # smtp server
+      - 8025:8025 # web ui

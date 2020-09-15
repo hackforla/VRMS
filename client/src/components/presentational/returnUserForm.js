@@ -51,7 +51,7 @@ const ReturnUserForm = (props) => {
                   type="submit"
                   className="form-check-in-submit"
                   onClick={(e) => props.checkEmail(e)}
-                  disabled={!!!props.formInput.email}
+                  disabled={!props.formInput.email || props.formInput.email===""}
                 >
                   CHECK IN
                 </button>
