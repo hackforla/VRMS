@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "lint": "eslint .",
+    "prettier": "prettier --check .",
     "test": "jest",
     "test:watch": "jest --watch",
     "start": "node server.js",
@@ -16,13 +17,19 @@
   "license": "ISC",
   "devDependencies": {
     "@shelf/jest-mongodb": "^1.1.5",
+    "babel-eslint": "^10.1.0",
     "concurrently": "^5.1.0",
     "debug": "^4.1.1",
     "eslint": "^7.9.0",
+    "eslint-config-airbnb": "^18.2.0",
     "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-react": "^7.20.6",
     "jest": "^26.4.0",
     "nodemon": "^2.0.2",
+    "prettier": "^2.1.1",
+    "pretty-quick": "^3.0.2",
     "supertest": "^4.0.2",
     "why-is-node-running": "^2.2.0"
   },
