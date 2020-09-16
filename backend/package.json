@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "lint": "eslint .",
-    "prettier": "prettier --check .",
+    "format": "prettier --check .",
     "test": "jest",
     "test:watch": "jest --watch",
     "start": "node server.js",
