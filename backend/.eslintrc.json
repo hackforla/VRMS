@@ -16,5 +16,10 @@
     "react/jsx-filename-extension": ["off"],
     "react/prop-types": ["warn"],
     "no-return-assign": ["off"]
+  },
+  "settings": {
+    "react": {
+      "version": "999.999.999"
+    }
   }
 }
