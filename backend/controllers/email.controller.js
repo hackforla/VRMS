@@ -1,8 +1,7 @@
 const nodemailer = require('nodemailer');
 const { google } = require('googleapis');
-const OAuth2 = google.auth.OAuth2;
 
-const jwt = require('jsonwebtoken');
+const { OAuth2 } = google.auth;
 
 const CLIENT_ID = process.env.GMAIL_CLIENT_ID;
 const SECRET_ID = process.env.GMAIL_SECRET_ID;
@@ -41,7 +40,7 @@ async function mailServer(email, token) {
         clientId: CLIENT_ID,
         clientSecret: SECRET_ID,
         refreshToken: REFRESH_TOKEN,
-        accessToken: accessToken,
+        accessToken,
       },
     });
   }

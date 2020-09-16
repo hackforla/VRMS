@@ -1,9 +1,10 @@
 const CONFIG = require('../config/auth.config');
 const DB = require('../models');
 const emailController = require('./email.controller');
+
 const User = DB.user;
 
-var jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
 const { body, validationResult } = require('express-validator');
 
@@ -25,7 +26,7 @@ function createUser(req, res) {
   user.save((err, user) => {
     if (err) {
       res.status(500).send({ message: err });
-      return;
+      
     } else {
       return res.status(200).send({ message: 'User was registered successfully!' });
     }

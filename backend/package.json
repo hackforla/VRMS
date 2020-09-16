@@ -44,6 +44,7 @@
     "express-validator": "^6.6.1",
     "googleapis": "^59.0.0",
     "helmet": "^3.22.0",
+    "jsonwebtoken": "^8.5.1",
     "mongodb-memory-server": "^6.6.4",
     "mongoose": "^5.10.0",
     "morgan": "^1.10.0",
