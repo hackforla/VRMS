@@ -1,5 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Loading from '../donutChartLoading';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import '../../../common/datepicker/index.scss';
+import './index.scss';
 
 const LocationTableReport = ({eventTypeStats, hackNightTypeStats}) => {
     const headerGroups = ['Location', 'Volunteers', 'Hours', 'Avg Hours'];
@@ -10,6 +14,11 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats}) => {
     let totalForAllEvents = [];
     let totalForHackNight = [];
     let isLoading = true;
+
+    // Datepicker
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
+    const [isDatepicker, showDatepicker] = useState(false);
 
     prepareDataForReport(
         eventTypeStats,
@@ -55,66 +64,109 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats}) => {
         if(dataForAllEventsReport.length > 0 && dataForHackNightReport.length > 0) isLoading = false;
     }
 
+    function handleClick () {
+        isDatepicker ? showDatepicker(false) : showDatepicker(true);
+    }
+
     return (
         <div className="table-report-wrap">
             {!isLoading ? (
                 <div className="admin-table-report">
-                    <div>All Events By Event Type</div>
-                    <table className="admin-table">
-                        <thead>
-                        <tr>
-                            {headerGroups.map(header => (
-                                <th>{header}</th>
-                            ))}
-                        </tr>
-                        </thead>
+                    <button
+                        className="filter-button"
+                        type="button"
+                        onClick={() => handleClick()}
+                    >
+                        Set Filter
+                    </button>
 
-                        <tbody>
-                        {dataForAllEventsReport.map((event, i) => (
-                            <tr key={`event.location-${i}`}>
-                                <td>{event.location}</td>
-                                <td>{event.totalVolunteers}</td>
-                                <td>{event.totalVolunteerHours}</td>
-                                <td>{event.totalVolunteerAvgHours}</td>
+                    {isDatepicker ? (
+                        <div className="datepicker-section">
+                            <div className="datepicker-wrap">
+                                <p className="datepicker-name">Start</p>
+                                <DatePicker
+                                    placeholderText='Start date range'
+                                    selected={startDate}
+                                    onChange={date => setStartDate(date)}
+                                    selectsStart
+                                    startDate={startDate}
+                                    endDate={endDate}
+                                />
+                            </div>
+
+                            <div className="datepicker-wrap">
+                                <p className="datepicker-name">End</p>
+                                <DatePicker
+                                    placeholderText='End data range'
+                                    selected={endDate}
+                                    onChange={date => setEndDate(date)}
+                                    selectsEnd
+                                    startDate={startDate}
+                                    endDate={endDate}
+                                    minDate={startDate}
+                                />
+                            </div>
+                        </div>
+                    ) : null }
+
+                    <div className="stats-section">
+                        <div className="table-header">All Events By Event Type</div>
+                        <table className="admin-table">
+                            <thead>
+                            <tr key={`all-events-header`}>
+                                {headerGroups.map(header => (
+                                    <th>{header}</th>
+                                ))}
                             </tr>
-                        ))}
+                            </thead>
 
-                        <tr key={`all-events-total`}>
-                            <td>Total</td>
-                            {totalForAllEvents.map(total => (
-                                <td>{total}</td>
+                            <tbody>
+                            {dataForAllEventsReport.map((event, i) => (
+                                <tr key={`event.location-${i}`}>
+                                    <td>{event.location}</td>
+                                    <td>{event.totalVolunteers}</td>
+                                    <td>{event.totalVolunteerHours}</td>
+                                    <td>{event.totalVolunteerAvgHours}</td>
+                                </tr>
                             ))}
-                        </tr>
-                        </tbody>
-                    </table>
 
-                    <div>HackNight Events Only</div>
-                    <table className="admin-table">
-                        <thead>
-                        <tr>
-                            {headerGroups.map(header => (
-                                <th>{header}</th>
-                            ))}
-                        </tr>
-                        </thead>
-
-                        <tbody>
-                        {dataForHackNightReport.map((event, i) => (
-                            <tr key={`event.location-${i}`}>
-                                <td>{event.location}</td>
-                                <td>{event.totalVolunteers}</td>
-                                <td>{event.totalVolunteerHours}</td>
-                                <td>{event.totalVolunteerAvgHours}</td>
+                            <tr key={`all-events-total`}>
+                                <td>Total</td>
+                                {totalForAllEvents.map(total => (
+                                    <td>{total}</td>
+                                ))}
                             </tr>
-                        ))}
-                        <tr key={`hack-night-total`}>
-                            <td>Total</td>
-                            {totalForHackNight.map(total => (
-                                <td>{total}</td>
+                            </tbody>
+                        </table>
+
+                        <div className="table-header">HackNight Only</div>
+                        <table className="admin-table">
+                            <thead>
+                            <tr key={`hack-night-total`}>
+                                {headerGroups.map(header => (
+                                    <th>{header}</th>
+                                ))}
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            {dataForHackNightReport.map((event, i) => (
+                                <tr key={`event.location-${i}`}>
+                                    <td>{event.location}</td>
+                                    <td>{event.totalVolunteers}</td>
+                                    <td>{event.totalVolunteerHours}</td>
+                                    <td>{event.totalVolunteerAvgHours}</td>
+                                </tr>
                             ))}
-                        </tr>
-                        </tbody>
-                    </table>
+                            <tr key={`hack-night-total`}>
+                                <td>Total</td>
+                                {totalForHackNight.map(total => (
+                                    <td>{total}</td>
+                                ))}
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             ) : <Loading /> }
         </div>
