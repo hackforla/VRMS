@@ -1,12 +1,13 @@
-const CONFIG = require('../config/auth.config');
-const DB = require('../models');
+const { body, validationResult } = require('express-validator');
+const jwt = require('jsonwebtoken');
+
 const emailController = require('./email.controller');
+const CONFIG = require('../config/auth.config');
+
+const DB = require('../models');
 
 const User = DB.user;
 
-const jwt = require('jsonwebtoken');
-
-const { body, validationResult } = require('express-validator');
 
 function generateAccessToken(user) {
   // expires after half and hour (1800 seconds = 30 minutes)
@@ -23,13 +24,13 @@ function createUser(req, res) {
     accessLevel: 'user',
   });
 
-  user.save((err, user) => {
+  // eslint-disable-next-line
+  user.save((err, usr) => {
     if (err) {
-      res.status(500).send({ message: err });
-      
-    } else {
+      return res.status(500).send({ message: err });
+    } 
       return res.status(200).send({ message: 'User was registered successfully!' });
-    }
+    
   });
 
   const jsonToken = generateAccessToken(user);
@@ -43,17 +44,16 @@ function signin(req, res) {
   User.findOne({ email })
     .then((user) => {
       if (!user) {
-        res.status(401).send({ message: 'User not authorized' });
-      } else {
-        const jsonToken = generateAccessToken(user);
-        emailController.sendUserEmailSigninLink(req.body.email, jsonToken);
-        return res.status(200).send({ message: 'User login link sent to email!' });
+        return res.status(401).send({ message: 'User not authorized' });
       }
+      const jsonToken = generateAccessToken(user);
+      emailController.sendUserEmailSigninLink(req.body.email, jsonToken);
+      return res.status(200).send({ message: 'User login link sent to email!' });
     })
     .catch((err) => {
       console.log(err);
 
-      res.status(400).send({ message: 'User email not found.' });
+      return res.status(400).send({ message: 'User email not found.' });
     });
 }
 
@@ -68,7 +68,7 @@ async function validateCreateUserAPICall(req, res, next) {
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
   }
-  next();
+  return next();
 }
 
 async function validateSigninUserAPICall(req, res, next) {
@@ -80,10 +80,10 @@ async function validateSigninUserAPICall(req, res, next) {
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
   }
-  next();
+  return next();
 }
 
-userController = {
+const userController = {
   validateCreateUserAPICall,
   validateSigninUserAPICall,
   createUser,

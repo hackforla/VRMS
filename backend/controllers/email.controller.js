@@ -44,7 +44,6 @@ async function mailServer(email, token) {
       },
     });
   }
-  const appUrl = process.env.REACT_APP_PROXY;
   const encodedToken = encodeURIComponent(token);
   const emailLink = `https://tinyurl.com/2drxdk/auth/me?token=${encodedToken}`;
   const encodedUri = encodeURI(emailLink);
@@ -60,12 +59,22 @@ async function mailServer(email, token) {
 
   if (process.env.NODE_ENV === 'test') {
     smtpTransport.sendMail(mailOptions, (error, response) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log(response);
+      }
+      
       console.log('email sent');
       smtpTransport.close();
     });
   } else {
     smtpTransport.sendMail(mailOptions, (error, response) => {
-      error ? console.log(error) : console.log(response);
+      if (error) {
+        console.log(error);
+      } else {
+        console.log(response);
+      }
       smtpTransport.close();
     });
   }
