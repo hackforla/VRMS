@@ -1,13 +1,16 @@
 const supertest = require('supertest');
 const app = require('../app');
+
 const request = supertest(app);
 
 const { setupDB } = require('../setup-test');
+
 setupDB('api-auth');
 
 const CONFIG = require('../config/auth.config');
 
 const db = require('../models');
+
 const User = db.user;
 
 // API Tests
@@ -18,7 +21,7 @@ describe('Test that we can create a user using /user routes', () => {
       name: { firstName: 'test_first', lastName: 'test_last' },
       email: 'test@test.com',
     };
-    let headers = {};
+    const headers = {};
     headers['x-customrequired-header'] = CONFIG.CUSTOM_REQUEST_HEADER;
 
     // Add an event with a project using the API.
@@ -89,7 +92,7 @@ describe('Test user can sign up through API', () => {
       email: 'test@test.com',
     };
 
-    const _ = await request
+    await request
       .post('/api/auth/signup')
       .send(userOneWithSameEmail)
       .set('Accept', 'application/json');
