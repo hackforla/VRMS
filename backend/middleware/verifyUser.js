@@ -1,4 +1,5 @@
 const db = require('../models');
+
 const User = db.user;
 
 function checkDuplicateEmail(req, res, next) {
