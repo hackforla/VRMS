@@ -7,6 +7,7 @@ import DonutChartContainer from "../donutChartContainer";
 import Loading from "../donutChartLoading";
 import TabsContainer from "../../../common/tabs";
 import Tab from "../../../common/tabs/tab";
+import LocationTableReport from "../reports";
 import "../../../sass/Dashboard.scss";
 import "./index.scss";
 
@@ -347,7 +348,19 @@ const AdminDashboard = () => {
               {isLoading ? (
                   <Loading />
               ) : (
-                  <p>1st tab for a table report</p>
+                  <LocationTableReport
+                      eventTypeStats={[
+                        totalVolunteersByEventType,
+                        totalVolunteerHoursByEventType,
+                        totalVolunteerAvgHoursByEventType
+                      ]}
+
+                      hackNightTypeStats={[
+                        totalVolunteersByHackNightProp,
+                        totalVolunteerHoursByHackNightProp,
+                        totalVolunteerAvgHoursByHackNightProp
+                      ]}
+                  />
               )}
             </Tab>
 
