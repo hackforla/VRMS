@@ -20,10 +20,10 @@ const AdminDashboard = () => {
   //STATE
   const [nextEvent, setNextEvent] = useState([]);
   const [isCheckInReady, setIsCheckInReady] = useState();
-  const [volunteers, setVolunteers] = useState(null);
-  const [allVolunteers, setAllVolunteers] = useState(null);
 
   const [chartTypes, setChartTypes] = useState(null);
+  const [processedEvents, setEvents] = useState(null);
+  const [processedUsers, setUsers] = useState(null);
 
   // Volunteers SignedIn By Event Type
   const [totalVolunteersByEventType, setVolunteersSignedInByEventType] = useState({});
@@ -60,7 +60,9 @@ const AdminDashboard = () => {
   function processData(allEvents, allCheckIns){
     let processedEvents = processEvents(allEvents);
     let usersByEvent = collectUsersByEvent(allCheckIns);
-    prepareDataForCharts(processedEvents, usersByEvent);
+    setEvents(processedEvents);
+    setUsers(usersByEvent);
+    prepareDataForDonutCharts(processedEvents, usersByEvent);
   }
 
   function processEvents(allEvents) {
@@ -122,7 +124,7 @@ const AdminDashboard = () => {
     return eventCollection;
   }
 
-  function prepareDataForCharts(events, users){
+  function prepareDataForDonutCharts(events, users){
     // Data for 1 chart 'total volunteers'
     let totalVolunteersByEventType = extractVolunteersSignedInByProperty(
         events,
@@ -241,28 +243,6 @@ const AdminDashboard = () => {
     }
   }
 
-  async function getUsers() {
-    const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
-
-    try {
-      setIsLoading(true);
-      const users = await fetch("/api/users", {
-        headers: {
-          "Content-Type": "application/json",
-          "x-customrequired-header": headerToSend,
-        },
-      });
-      const usersJson = await users.json();
-
-      setVolunteers(usersJson);
-      setAllVolunteers(usersJson);
-      setIsLoading(false);
-    } catch (error) {
-      setIsLoading(false);
-      console.log(error);
-    }
-  }
-
   async function getNextEvent() {
     try {
       setIsLoading(true);
@@ -315,7 +295,6 @@ const AdminDashboard = () => {
   useEffect(() => {
     getAndSetData();
     getNextEvent();
-    getUsers();
   }, []);
 
   return (
@@ -359,6 +338,11 @@ const AdminDashboard = () => {
                         totalVolunteersByHackNightProp,
                         totalVolunteerHoursByHackNightProp,
                         totalVolunteerAvgHoursByHackNightProp
+                      ]}
+
+                      processedData={[
+                        processedEvents,
+                        processedUsers
                       ]}
                   />
               )}
