@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Loading from '../donutChartLoading';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../../../common/datepicker/index.scss';
 import './index.scss';
 
-const LocationTableReport = ({eventTypeStats, hackNightTypeStats}) => {
+const LocationTableReport = ({eventTypeStats, hackNightTypeStats, processedData}) => {
     const headerGroups = ['Location', 'Volunteers', 'Hours', 'Avg Hours'];
     let dataForAllEventsReport = [];
     let dataForHackNightReport = [];
@@ -31,7 +31,7 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats}) => {
         dataForHackNightReport
     );
 
-    function prepareDataForReport (data, types, dataForReport) {
+    function prepareDataForReport(data, types, dataForReport) {
         for (const [key] of Object.entries(data[0])) {
             let newStat = {};
             newStat.location = key;
@@ -49,23 +49,28 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats}) => {
         calculateTotalResults(data, types);
     }
 
-    function calculateTotalResults (data, types) {
+    function calculateTotalResults(data, types) {
        for (let i = 0; i < data.length; i++) {
            let total = 0;
            for (const [key, value] of Object.entries(data[i])) {
-               total += Math.round(100 * value) / 100;
+               const res = total + value;
+               total = Math.round(100 * res) / 100;
            }
            types === eventTypes ? totalForAllEvents.push(total) : totalForHackNight.push(total);
        }
        displayStats();
     }
 
-    function displayStats () {
+    function displayStats() {
         if(dataForAllEventsReport.length > 0 && dataForHackNightReport.length > 0) isLoading = false;
     }
 
-    function handleClick () {
+    function handleClick() {
         isDatepicker ? showDatepicker(false) : showDatepicker(true);
+    }
+
+    function handleChangeStartDate (date) {
+        setStartDate(date);
     }
 
     return (
@@ -87,7 +92,7 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats}) => {
                                 <DatePicker
                                     placeholderText='Start date range'
                                     selected={startDate}
-                                    onChange={date => setStartDate(date)}
+                                    onChange={date => handleChangeStartDate(date)}
                                     selectsStart
                                     startDate={startDate}
                                     endDate={endDate}
@@ -113,57 +118,62 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats}) => {
                         <div className="table-header">All Events By Event Type</div>
                         <table className="admin-table">
                             <thead>
-                            <tr key={`all-events-header`}>
+                            <tr>
                                 {headerGroups.map(header => (
-                                    <th>{header}</th>
+                                    <th key={header}>{header}</th>
                                 ))}
                             </tr>
                             </thead>
 
                             <tbody>
-                            {dataForAllEventsReport.map((event, i) => (
-                                <tr key={`event.location-${i}`}>
-                                    <td>{event.location}</td>
-                                    <td>{event.totalVolunteers}</td>
-                                    <td>{event.totalVolunteerHours}</td>
-                                    <td>{event.totalVolunteerAvgHours}</td>
+                            {dataForAllEventsReport.map((event) => (
+                                <tr key={`events-${event.location}`}>
+                                    <td key={event.location}>{event.location}</td>
+                                    <td key={event.totalVolunteers}>{event.totalVolunteers}</td>
+                                    <td key={event.totalVolunteerHours}>{event.totalVolunteerHours}</td>
+                                    <td key={event.totalVolunteerAvgHours}>{event.totalVolunteerAvgHours}</td>
                                 </tr>
                             ))}
 
-                            <tr key={`all-events-total`}>
-                                <td>Total</td>
-                                {totalForAllEvents.map(total => (
-                                    <td>{total}</td>
-                                ))}
-                            </tr>
+                            {totalForAllEvents.length > 0 ? (
+                                <tr>
+                                    <td key={`events-total`}>Total</td>
+                                    {totalForAllEvents.map((total, i) => (
+                                        <td key={`${headerGroups[i]}-events-total`}>{total}</td>
+                                    ))}
+                                </tr>
+                            ) : null }
                             </tbody>
                         </table>
 
                         <div className="table-header">HackNight Only</div>
                         <table className="admin-table">
                             <thead>
-                            <tr key={`hack-night-total`}>
+                            <tr>
                                 {headerGroups.map(header => (
-                                    <th>{header}</th>
+                                    <th key={header}>{header}</th>
                                 ))}
                             </tr>
                             </thead>
 
                             <tbody>
-                            {dataForHackNightReport.map((event, i) => (
-                                <tr key={`event.location-${i}`}>
-                                    <td>{event.location}</td>
-                                    <td>{event.totalVolunteers}</td>
-                                    <td>{event.totalVolunteerHours}</td>
-                                    <td>{event.totalVolunteerAvgHours}</td>
+                            {dataForHackNightReport.map((event) => (
+                                <tr key={`hack-night-${event.location}`}>
+                                    <td key={event.location}>{event.location}</td>
+                                    <td key={event.totalVolunteers}>{event.totalVolunteers}</td>
+                                    <td key={event.totalVolunteerHours}>{event.totalVolunteerHours}</td>
+                                    <td key={event.totalVolunteerAvgHours}>{event.totalVolunteerAvgHours}</td>
                                 </tr>
                             ))}
-                            <tr key={`hack-night-total`}>
-                                <td>Total</td>
-                                {totalForHackNight.map(total => (
-                                    <td>{total}</td>
-                                ))}
-                            </tr>
+
+                            {totalForHackNight.length > 0 ? (
+                                <tr>
+                                    <td key={`hack-night-total`}>Total</td>
+                                    {totalForHackNight.map((total, i) => (
+                                        <td key={`${headerGroups[i]}-hack-total`}>{total}</td>
+                                    ))}
+                                </tr>
+                            ) : null }
                             </tbody>
                         </table>
                     </div>
