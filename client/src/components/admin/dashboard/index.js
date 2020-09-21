@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Redirect } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 import UpcomingEvent from "../../presentational/upcomingEvent";
@@ -18,12 +18,16 @@ const AdminDashboard = () => {
   let hackNightUniqueLocations = new Set();
 
   //STATE
+  // Next Event
   const [nextEvent, setNextEvent] = useState([]);
-  const [isCheckInReady, setIsCheckInReady] = useState();
+  const [isCheckInReady, setIsCheckInReady] = useState(false);
 
+  // Charts
   const [chartTypes, setChartTypes] = useState(null);
-  const [processedEvents, setEvents] = useState(null);
-  const [processedUsers, setUsers] = useState(null);
+
+  // Processed events, checkins
+  const [processedEvents, setProcessedEvents] = useState({});
+  const [processedCheckins, setCheckins] = useState({});
 
   // Volunteers SignedIn By Event Type
   const [totalVolunteersByEventType, setVolunteersSignedInByEventType] = useState({});
@@ -40,16 +44,15 @@ const AdminDashboard = () => {
   const [totalVolunteerHours, setVolunteeredHoursToChart] = useState({});
   const [totalVolunteerAvgHours, setAvgHoursToChart] = useState({});
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   async function getAndSetData() {
     try {
-      setIsLoading(true);
-      const checkIns = await fetch("/api/checkins");
-      const checkInsJson = await checkIns.json();
-      const events = await fetch("/api/events");
-      const eventsJson = await events.json();
-      processData(eventsJson, checkInsJson);
+      const eventsRes = await fetch("/api/events");
+      const events = await eventsRes.json();
+      const checkinsRes = await fetch("/api/checkins");
+      const checkins = await checkinsRes.json();
+      processData(events, checkins);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -57,18 +60,16 @@ const AdminDashboard = () => {
     }
   }
 
-  function processData(allEvents, allCheckIns){
-    let processedEvents = processEvents(allEvents);
-    let usersByEvent = collectUsersByEvent(allCheckIns);
-    setEvents(processedEvents);
-    setUsers(usersByEvent);
-    prepareDataForDonutCharts(processedEvents, usersByEvent);
+  function processData(events, checkins) {
+    const processedEvents = processEvents(events);
+    const checkinsByEvent = collectCheckinsByEventId(checkins);
+    prepareDataForDonutCharts(processedEvents, checkinsByEvent);
   }
 
-  function processEvents(allEvents) {
-    let events = new Map();
+  function processEvents(rowEvents) {
+    const events = {};
 
-    for (let event of allEvents){
+    for (let event of rowEvents){
       if (!event) continue;
 
       // Process legacy data with undefined 'hours' property because initially an event length was 3 hours
@@ -84,51 +85,52 @@ const AdminDashboard = () => {
       processEventTypes(event, 'eventType', uniqueEventTypes);
 
       // Extract events with 'hacknight' property & find unique locations in it
-      if(event.hacknight){
+      if (event.hacknight) {
         processEventTypes(event, 'hacknight', hackNightUniqueLocations);
       }
-      events.set(event._id, event);
+      events[event._id] = event;
     }
-    createChartTypes();
+    setProcessedEvents({...events});
     return events;
   }
 
   function processEventTypes(event, propName, uniqueTypes){
     const capitalize = (str, lower = false) =>
-        (lower ? str.toLowerCase() : str).replace(/(?:^|\s|["'([{])+\S/g, match => match.toUpperCase());
+        (lower ? str.toLowerCase() : str)
+            .replace(/(?:^|\s|["'([{])+\S/g, match => match.toUpperCase());
     let type = capitalize(event[propName], true);
     event[propName] = type;
     uniqueTypes.add(type);
   }
 
-  function createChartTypes(){
+  function collectCheckinsByEventId(rowCheckins){
+    const checkins = {};
+    for (let checkin of rowCheckins) {
+      if(checkin.eventId !== null){
+        if (typeof checkins[checkin.eventId] !== 'undefined'){
+          checkins[checkin.eventId].push(checkin);
+        } else {
+          checkins[checkin.eventId] = [checkin];
+        }
+      }
+    }
+    setCheckins({...checkins});
+    return checkins;
+  }
+
+  function createChartTypes() {
     let chartTypes = {
-      "All Events": "",
-      "Hacknight Only": ""
+      'All Events': '',
+      'Hacknight Only': ''
     };
     setChartTypes(chartTypes);
   }
 
-  function collectUsersByEvent(allCheckIns){
-    let eventCollection = new Map();
-    for(let checkIn of allCheckIns){
-
-      if(checkIn.eventId !== null){
-        if(eventCollection.has(checkIn.eventId)){
-          eventCollection.get(checkIn.eventId).push(checkIn);
-        } else{
-          eventCollection.set(checkIn.eventId, [checkIn]);
-        }
-      }
-    }
-    return eventCollection;
-  }
-
-  function prepareDataForDonutCharts(events, users){
+  function prepareDataForDonutCharts(events, checkins) {
     // Data for 1 chart 'total volunteers'
     let totalVolunteersByEventType = extractVolunteersSignedInByProperty(
         events,
-        users,
+        checkins,
         uniqueEventTypes,
         'eventType'
     );
@@ -136,7 +138,7 @@ const AdminDashboard = () => {
 
     let totalVolunteersByHackNightProp = extractVolunteersSignedInByProperty(
         events,
-        users,
+        checkins,
         hackNightUniqueLocations,
         'hacknight'
     );
@@ -145,7 +147,7 @@ const AdminDashboard = () => {
     // Data for 2 chart 'total hours'
     let totalVolunteerHoursByEventType = findTotalVolunteerHours(
         events,
-        users,
+        checkins,
         uniqueEventTypes,
         'eventType'
     );
@@ -153,7 +155,7 @@ const AdminDashboard = () => {
 
     let totalVolunteerHoursByHackNightProp = findTotalVolunteerHours(
         events,
-        users,
+        checkins,
         hackNightUniqueLocations,
         'hacknight'
     );
@@ -178,65 +180,67 @@ const AdminDashboard = () => {
     setAvgHoursToChart(totalVolunteerAvgHoursByEventType);
   }
 
-  function extractVolunteersSignedInByProperty(events, users, uniqueTypes, propName){
+  function extractVolunteersSignedInByProperty(events, checkins, uniqueTypes, propName) {
     let result = {};
     let type;
 
     uniqueTypes.forEach(el => result[el] = parseInt('0'));
-    for (let eventId of users.keys()) {
-      if(propName === 'eventType' && !!events.get(eventId)){
-        type = events.get(eventId).eventType;
-        result[type] = users.get(eventId).length + result[type];
+    for (const [key] of Object.entries(checkins)) {
+      // key is eventId
+      if (propName === 'eventType' && !!events[key]) {
+        type = events[key].eventType;
+        result[type] = checkins[key].length + result[type];
       }
 
-      if(!!events.get(eventId) && propName === 'hacknight' && typeof events.get(eventId).hacknight !== 'undefined'){
-        type = events.get(eventId).hacknight;
-        result[type] = users.get(eventId).length + result[type];
+      if (!!events[key] && propName === 'hacknight' && typeof events[key].hacknight !== 'undefined') {
+        type = events[key].hacknight;
+        result[type] = checkins[key].length + result[type];
       }
     }
     return result;
   }
 
-  function findTotalVolunteerHours(events, users, uniqueTypes, propName){
+  function findTotalVolunteerHours(events, checkins, uniqueTypes, propName) {
     let result = {};
     let type;
     uniqueTypes.forEach(el => result[el] = parseInt('0'));
 
-    for (let eventId of users.keys()) {
-      if(!!events.get(eventId) && propName === 'eventType'){
-        type = events.get(eventId).eventType;
-        result[type] = result[type] + (events.get(eventId).hours * users.get(eventId).length);
+    for (const [key] of Object.entries(checkins)) {
+      if(!!events[key] && propName === 'eventType'){
+        type = events[key].eventType;
+        const eventHours = result[type] + (events[key].hours * checkins[key].length);
+        result[type] = Math.round(100 * eventHours) / 100;
       }
 
-      if (!!events.get(eventId) && propName === 'hacknight' && typeof events.get(eventId).hacknight !== 'undefined'){
-        type = events.get(eventId).hacknight;
-        result[type] = result[type] + (events.get(eventId).hours * users.get(eventId).length);
+      if (!!events[key] && propName === 'hacknight' && typeof events[key].hacknight !== 'undefined') {
+        type = events[key].hacknight;
+        const hackHours = result[type] + (events[key].hours * checkins[key].length);
+        result[type] = Math.round(100 * hackHours) / 100;
       }
     }
     return result;
   }
 
-  function findAverageVolunteerHours(totalVolunteers, totalVolunteerHours, uniqueTypes){
+  function findAverageVolunteerHours(totalVolunteers, totalVolunteerHours, uniqueTypes) {
     let result = {};
     uniqueTypes.forEach(el => result[el] = parseInt('0'));
-
-    for(let eventType of uniqueTypes.keys()){
+    for (let eventType of uniqueTypes.keys()) {
       let hours = totalVolunteerHours[eventType];
       let volunteers = totalVolunteers[eventType];
       let averageHours = (hours / volunteers);
-      if(!Number.isInteger(averageHours)) averageHours = +averageHours.toFixed(2);
+      if (!Number.isInteger(averageHours)) averageHours = +averageHours.toFixed(2);
       volunteers > 0 ? result[eventType] = averageHours : result[eventType] = 0;
     }
     return result;
   }
 
-  function setDonutCharts(valueFromSelect){
+  function setDonutCharts(valueFromSelect) {
     // Display data depending on value from select
-    if(valueFromSelect === defaultChartType){
+    if (valueFromSelect === defaultChartType) {
       setVolunteersToChart(totalVolunteersByEventType);
       setVolunteeredHoursToChart(totalVolunteerHoursByEventType);
       setAvgHoursToChart(totalVolunteerAvgHoursByEventType);
-    } else if (valueFromSelect === "Hacknight Only"){
+    } else if (valueFromSelect === 'Hacknight Only') {
       setVolunteersToChart(totalVolunteersByHackNightProp);
       setVolunteeredHoursToChart(totalVolunteerHoursByHackNightProp);
       setAvgHoursToChart(totalVolunteerAvgHoursByHackNightProp);
@@ -246,7 +250,7 @@ const AdminDashboard = () => {
   async function getNextEvent() {
     try {
       setIsLoading(true);
-      const events = await fetch("/api/events");
+      const events = await fetch('/api/events');
       const eventsJson = await events.json();
       const dates = eventsJson.map((event) => {
         return Date.parse(event.date);
@@ -274,9 +278,9 @@ const AdminDashboard = () => {
 
     try {
       await fetch(`/api/events/${nextEventId}`, {
-        method: "PATCH",
+        method: 'PATCH',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': "application/json",
         },
       }).then((response) => {
         if (response.ok) {
@@ -293,105 +297,103 @@ const AdminDashboard = () => {
   };
 
   useEffect(() => {
-    getAndSetData();
-    getNextEvent();
+    getAndSetData().then(() => createChartTypes());
+    getNextEvent().then();
   }, []);
 
-  return (
-    auth && auth.user ? (
-      <div className="flex-container">
-        <div className="dashboard admin-dashboard-wrap">
+  return auth && auth.user ? (
+    <div className="flex-container">
+      <div className="dashboard admin-dashboard-wrap">
 
-          <div className="admin-header">
-            <h1>Stats by Location - Volunteer Hours</h1>
-          </div>
-
-          {!isLoading ? (
-              <div className="event-header">You have 1 upcoming event:</div>
-              ) : null}
-
-          <div className="admin-upcoming-event">
-            {isLoading ? (
-                <Loading />
-            ) : (
-                <UpcomingEvent
-                    isCheckInReady={isCheckInReady}
-                    nextEvent={nextEvent}
-                    setCheckInReady={setCheckInReady}
-                />
-            )}
-          </div>
-
-        <TabsContainer active={0}>
-            <Tab title="Table Report">
-              {isLoading ? (
-                  <Loading />
-              ) : (
-                  <LocationTableReport
-                      eventTypeStats={[
-                        totalVolunteersByEventType,
-                        totalVolunteerHoursByEventType,
-                        totalVolunteerAvgHoursByEventType
-                      ]}
-
-                      hackNightTypeStats={[
-                        totalVolunteersByHackNightProp,
-                        totalVolunteerHoursByHackNightProp,
-                        totalVolunteerAvgHoursByHackNightProp
-                      ]}
-
-                      processedData={[
-                        processedEvents,
-                        processedUsers
-                      ]}
-                  />
-              )}
-            </Tab>
-
-            <Tab title="Donut Chart Report">
-              {isLoading ? (
-                  <Loading />
-              ) : (
-                  <EventOverview
-                      handleChartTypeChange={handleChartTypeChange}
-                      chartTypes={chartTypes}
-                  />
-              )}
-
-              {isLoading ? (
-                  <Loading />
-              ) : (
-                  <DonutChartContainer
-                      chartName={"Total Volunteers"}
-                      data={totalVolunteers}
-                  />
-              )}
-
-              {isLoading ? (
-                  <Loading />
-              ) : (
-                  <DonutChartContainer
-                      chartName={"Total Volunteer Hours"}
-                      data={totalVolunteerHours}
-                  />
-              )}
-
-              {isLoading ? (
-                  <Loading />
-              ) : (
-                  <DonutChartContainer
-                      chartName={"Average Hours Per Volunteer"}
-                      data={totalVolunteerAvgHours}
-                  />
-              )}
-            </Tab>
-          </TabsContainer>
-
-        </div>
+      <div className="admin-header">
+        <h1>Stats by Location - Volunteer Hours</h1>
       </div>
+
+      {!isLoading ? (
+          <div className="event-header">You have 1 upcoming event:</div>
+          ) : null}
+
+      <div className="admin-upcoming-event">
+        {isLoading ? (
+            <Loading />
+        ) : (
+            <UpcomingEvent
+                isCheckInReady={isCheckInReady}
+                nextEvent={nextEvent}
+                setCheckInReady={setCheckInReady}
+            />
+        )}
+      </div>
+
+    <TabsContainer active={0}>
+        <Tab title="Table Report">
+          {isLoading ? (
+              <Loading />
+          ) : (
+              <LocationTableReport
+                  eventTypeStats={[
+                    totalVolunteersByEventType,
+                    totalVolunteerHoursByEventType,
+                    totalVolunteerAvgHoursByEventType
+                  ]}
+
+                  hackNightTypeStats={[
+                    totalVolunteersByHackNightProp,
+                    totalVolunteerHoursByHackNightProp,
+                    totalVolunteerAvgHoursByHackNightProp
+                  ]}
+
+                  processedData={[
+                    processedEvents,
+                    processedCheckins
+                  ]}
+              />
+          )}
+        </Tab>
+
+        <Tab title="Donut Chart Report">
+          {isLoading ? (
+              <Loading />
+          ) : (
+              <EventOverview
+                  handleChartTypeChange={handleChartTypeChange}
+                  chartTypes={chartTypes}
+              />
+          )}
+
+          {isLoading ? (
+              <Loading />
+          ) : (
+              <DonutChartContainer
+                  chartName={"Total Volunteers"}
+                  data={totalVolunteers}
+              />
+          )}
+
+          {isLoading ? (
+              <Loading />
+          ) : (
+              <DonutChartContainer
+                  chartName={"Total Volunteer Hours"}
+                  data={totalVolunteerHours}
+              />
+          )}
+
+          {isLoading ? (
+              <Loading />
+          ) : (
+              <DonutChartContainer
+                  chartName={"Average Hours Per Volunteer"}
+                  data={totalVolunteerAvgHours}
+              />
+          )}
+        </Tab>
+      </TabsContainer>
+
+    </div>
+    </div>
     ) : (
-        <Redirect to="/login" />
-    )
+    <Redirect to="/login" />
   );
 };
 
