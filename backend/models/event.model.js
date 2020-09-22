@@ -23,6 +23,7 @@ const eventSchema = mongoose.Schema({
     createdDate: { type: Date, default: Date.now },     // date/time event was created
     updatedDate: { type: Date, default: Date.now },     // date/time event was last updated
     checkInReady: { type: Boolean, default: false },    // is the event open for check-ins?
+    videoConferenceLink: { type: String },              // can be same or different from project
     owner: {
         ownerId: { type: Number }                       // id of user who created event
     },
@@ -50,6 +51,7 @@ eventSchema.methods.serialize = function() {
         hours: this.hours,
         createdDate: this.createdDate,
         checkInReady: this.checkInReady,
+        videoConferenceLink: this.videoConferenceLink,
         owner: {
             ownerId: this.owner.ownerId
         },
