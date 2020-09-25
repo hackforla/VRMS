@@ -4,6 +4,8 @@ RUN mkdir /srv/backend && chown node:node /srv/backend
 
 WORKDIR /srv/backend
 
+USER node
+
 COPY --chown=node:node package.json yarn.lock ./
 
 RUN yarn install --silent
