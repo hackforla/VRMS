@@ -1,9 +1,22 @@
-
-version: '3'
+version: "3.8"
 
 services:
+  backend:
+    build:
+      context: ./backend
+      target: development
+    command: yarn run dev
+    volumes:
+      - ./backend:/srv/backend
+      - backend_node_modules:/srv/backend/node_modules
+    ports:
+      - "4000:4000"
+
   mailhog:
-    image: mailhog/mailhog  
-    ports: 
+    image: mailhog/mailhog
+    ports:
       - 1025:1025 # smtp server
       - 8025:8025 # web ui
+
+volumes:
+  backend_node_modules:
