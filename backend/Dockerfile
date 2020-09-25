@@ -18,6 +18,6 @@ USER node
 
 WORKDIR /srv/backend
 
-COPY --chown=node:node package.json yarn.lock ./
+COPY --from=development --chown=root:root /srv/backend/node_modules ./node_modules
 
 COPY . .
