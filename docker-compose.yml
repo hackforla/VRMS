@@ -9,8 +9,37 @@ services:
     volumes:
       - ./backend:/srv/backend
       - backend_node_modules:/srv/backend/node_modules
+    # expose:
+    #   - "4000"
+    #   - "3000"
+    # ports:
+    #   - "4000:4000"
+
+  client:
+    build:
+      context: ./client
+      target: development
+    command: yarn run start
+    volumes:
+      - ./client:/srv/client
+      - client_node_modules:/srv/client/node_modules
+    # expose:
+    #   - "3000"
+    #   - "4000"
+    # ports:
+    #   - "3000:3000"
+    # depends_on:
+    #   - backend
+    stdin_open: true
+    restart: on-failure
+
+  nginx:
+    restart: always
+    build:
+      dockerfile: Dockerfile.nginx
+      context: ./nginx
     ports:
-      - "4000:4000"
+      - "8082:80"
 
   mailhog:
     image: mailhog/mailhog
@@ -19,4 +48,7 @@ services:
       - 8025:8025 # web ui
 
 volumes:
+  client_node_modules:
   backend_node_modules:
+# networks:
+#   gateway: {}
