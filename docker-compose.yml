@@ -9,11 +9,15 @@ services:
     volumes:
       - ./backend:/srv/backend
       - backend_node_modules:/srv/backend/node_modules
-    # expose:
-    #   - "4000"
-    #   - "3000"
-    # ports:
-    #   - "4000:4000"
+    expose:
+      - "4000"
+      - "27017"
+    ports:
+      - "4000:4000"
+      - "27017:27017"
+    restart: on-failure
+    networks:
+      - gateway
 
   client:
     build:
@@ -23,15 +27,15 @@ services:
     volumes:
       - ./client:/srv/client
       - client_node_modules:/srv/client/node_modules
-    # expose:
-    #   - "3000"
-    #   - "4000"
-    # ports:
-    #   - "3000:3000"
-    # depends_on:
-    #   - backend
+    expose:
+      - "3000"
+      - "4000"
+    ports:
+      - "3000:3000"
     stdin_open: true
     restart: on-failure
+    networks:
+      - gateway
 
   nginx:
     restart: always
@@ -39,16 +43,27 @@ services:
       dockerfile: Dockerfile.nginx
       context: ./nginx
     ports:
-      - "8082:80"
+      - "5000:80"
+    networks:
+      - gateway
+    depends_on:
+      - client
+      - backend
 
   mailhog:
     image: mailhog/mailhog
     ports:
       - 1025:1025 # smtp server
       - 8025:8025 # web ui
+    depends_on:
+      - client
+      - backend
+    networks:
+      - gateway
+
+networks:
+  gateway: {}
 
 volumes:
   client_node_modules:
   backend_node_modules:
-# networks:
-#   gateway: {}
