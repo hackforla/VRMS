@@ -139,7 +139,7 @@ git fetch vrms
 git reset --hard vrms/master
 ```
 
-## Get up and running
+## Get up and running (locally)
 
 1. Have [Node](https://nodejs.org/en/download/) and NPM installed locally:
 
@@ -172,6 +172,15 @@ git reset --hard vrms/master
    - Navigate to the root of the application `vrms/` and run `npm run dev`
 
 You should now have a live app. Happy hacking.
+
+## Get up and running (Docker alternative)
+
+1. [Download docker](https://docs.docker.com/get-docker/) to your machine.
+1. Start docker locally.
+1. Navigate to the root directory.
+1. Run `docker-compose build`.
+1. Run `docker-compose up`.
+1. Navigate to the port for the NGINX container listed in the docker-compose.yml file.
 
 ## Running Tests
 
