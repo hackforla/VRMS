@@ -14,6 +14,7 @@ import "./index.scss";
 const AdminDashboard = () => {
   const auth = useAuth();
   const defaultChartType = "All Events";
+  const eventsArr = [];
   let uniqueEventTypes = new Set();
   let hackNightUniqueLocations = new Set();
 
@@ -26,8 +27,8 @@ const AdminDashboard = () => {
   const [chartTypes, setChartTypes] = useState(null);
 
   // Processed events, checkins
-  const [processedEvents, setProcessedEvents] = useState({});
-  const [processedCheckins, setCheckins] = useState({});
+  const [processedEvents, setProcessedEvents] = useState([]);
+  const [processedCheckins, setCheckins] = useState(null);
 
   // Volunteers SignedIn By Event Type
   const [totalVolunteersByEventType, setVolunteersSignedInByEventType] = useState({});
@@ -46,11 +47,11 @@ const AdminDashboard = () => {
 
   const [isLoading, setIsLoading] = useState(true);
 
-  async function getAndSetData() {
+  async function getAndSetData(signal) {
     try {
-      const eventsRes = await fetch("/api/events");
+      const eventsRes = await fetch("/api/events", signal);
       const events = await eventsRes.json();
-      const checkinsRes = await fetch("/api/checkins");
+      const checkinsRes = await fetch("/api/checkins", signal);
       const checkins = await checkinsRes.json();
       processData(events, checkins);
       setIsLoading(false);
@@ -62,6 +63,7 @@ const AdminDashboard = () => {
 
   function processData(events, checkins) {
     const processedEvents = processEvents(events);
+    setProcessedEvents([...eventsArr]);
     const checkinsByEvent = collectCheckinsByEventId(checkins);
     prepareDataForDonutCharts(processedEvents, checkinsByEvent);
   }
@@ -69,7 +71,7 @@ const AdminDashboard = () => {
   function processEvents(rowEvents) {
     const events = {};
 
-    for (let event of rowEvents){
+    for (let event of rowEvents) {
       if (!event) continue;
 
       // Process legacy data with undefined 'hours' property because initially an event length was 3 hours
@@ -89,12 +91,12 @@ const AdminDashboard = () => {
         processEventTypes(event, 'hacknight', hackNightUniqueLocations);
       }
       events[event._id] = event;
+      eventsArr.push(event);
     }
-    setProcessedEvents({...events});
     return events;
   }
 
-  function processEventTypes(event, propName, uniqueTypes){
+  function processEventTypes(event, propName, uniqueTypes) {
     const capitalize = (str, lower = false) =>
         (lower ? str.toLowerCase() : str)
             .replace(/(?:^|\s|["'([{])+\S/g, match => match.toUpperCase());
@@ -103,11 +105,11 @@ const AdminDashboard = () => {
     uniqueTypes.add(type);
   }
 
-  function collectCheckinsByEventId(rowCheckins){
+  function collectCheckinsByEventId(rowCheckins) {
     const checkins = {};
     for (let checkin of rowCheckins) {
-      if(checkin.eventId !== null){
-        if (typeof checkins[checkin.eventId] !== 'undefined'){
+      if (checkin.eventId !== null) {
+        if (typeof checkins[checkin.eventId] !== 'undefined') {
           checkins[checkin.eventId].push(checkin);
         } else {
           checkins[checkin.eventId] = [checkin];
@@ -228,7 +230,9 @@ const AdminDashboard = () => {
       let hours = totalVolunteerHours[eventType];
       let volunteers = totalVolunteers[eventType];
       let averageHours = (hours / volunteers);
-      if (!Number.isInteger(averageHours)) averageHours = +averageHours.toFixed(2);
+      if (!Number.isInteger(averageHours)) {
+        averageHours = Math.round(100 * averageHours) / 100;
+      }
       volunteers > 0 ? result[eventType] = averageHours : result[eventType] = 0;
     }
     return result;
@@ -247,10 +251,10 @@ const AdminDashboard = () => {
     }
   }
 
-  async function getNextEvent() {
+  async function getNextEvent(signal) {
     try {
       setIsLoading(true);
-      const events = await fetch('/api/events');
+      const events = await fetch('/api/events', signal);
       const eventsJson = await events.json();
       const dates = eventsJson.map((event) => {
         return Date.parse(event.date);
@@ -296,9 +300,21 @@ const AdminDashboard = () => {
     setDonutCharts(e.currentTarget.value);
   };
 
+  const handleFilteredData = (filteredEvents) => {
+    const prepEvents = processEvents(filteredEvents);
+    prepareDataForDonutCharts(prepEvents, processedCheckins);
+  }
+
   useEffect(() => {
-    getAndSetData().then(() => createChartTypes());
-    getNextEvent().then();
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+
+    getAndSetData({signal: signal}).then(() => createChartTypes());
+    getNextEvent({signal: signal}).then();
+
+    return function cleanup() {
+      abortController.abort();
+    }
   }, []);
 
   return auth && auth.user ? (
@@ -343,10 +359,9 @@ const AdminDashboard = () => {
                     totalVolunteerAvgHoursByHackNightProp
                   ]}
 
-                  processedData={[
-                    processedEvents,
-                    processedCheckins
-                  ]}
+                  processedEvents={processedEvents}
+
+                  handleFilteredData={handleFilteredData}
               />
           )}
         </Tab>
@@ -390,7 +405,7 @@ const AdminDashboard = () => {
         </Tab>
       </TabsContainer>
 
-    </div>
+      </div>
     </div>
     ) : (
     <Redirect to="/login" />
