@@ -15,6 +15,9 @@
   margin: 20px 0 5px;
   padding: 5px;
   border-radius: 7px 7px 0 0;
+  &.m-t-small{
+    margin-top: 10px;
+  }
 }
 
 .admin-table{
@@ -35,23 +38,31 @@
 }
 
 .filter-button{
-  background-color: #FFFFFF;
-  border: 1px solid lightgray;
+  background-color: #3D5A6C;
+  color: #FFFFFF;
+  border: 1px solid #3D5A6C;
   border-radius: 20px;
   line-height: 1;
   padding: 10px 20px;
   margin: 0 auto;
   transition: .3s ease;
-  max-width: 125px;
-  min-width: 125px;
+  max-width: 160px;
+  min-width: 160px;
   height: auto;
   font-family: 'Open Sans', sans-serif;
   font-size: 15px;
   &:hover{
-    background-color: lightgray;
+    background-color: #FFFFFF;
+    color: #3D5A6C
   }
 }
 
 .dashboard-chart-container img{
   max-width: 90px;
+}
+
+.time-description{
+  font-size: 13px;
+  text-align: right;
+  margin-top: 10px;
 }
