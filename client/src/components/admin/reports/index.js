@@ -43,7 +43,17 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats, handleFiltered
                 types.push(key);
             }
         }
+        setLocation(data, dataForReport);
         calculateTotalResults(data, types);
+    }
+
+    function setLocation(data, dataForReport) {
+        for (const [key] of Object.entries(data[0])) {
+            let newStat = {};
+            newStat.location = key;
+            newStat.id = Math.floor(Math.random() * 100);
+            dataForReport.push(newStat);
+        }
     }
 
     function calculateTotalResults(data, types) {
