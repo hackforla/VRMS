@@ -89,7 +89,7 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats, handleFiltered
                 totalForAllEvents.push(total);
             }
 
-            if (types === eventTypes) {
+            if (types === hackNightTypes) {
                 totalForHackNight.push(total);
             }
         }
