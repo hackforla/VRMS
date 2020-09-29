@@ -80,19 +80,19 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats, handleFiltered
 
     function calculateTotalResults(data, types) {
         for (let i = 0; i < data.length; i++) {
-           let total = 0;
-           for (const [_, value] of Object.entries(data[i])) {
-               const res = total + value;
-               total = Math.round(100 * res) / 100;
-           }
-           if (types === eventTypes) {
-               totalForAllEvents.push(total);
-           }
+            let total = 0;
+            for (const [_, value] of Object.entries(data[i])) {
+                const res = total + value;
+                total = Math.round(100 * res) / 100;
+            }
+            if (types === eventTypes) {
+                totalForAllEvents.push(total);
+            }
 
-           if (types === eventTypes) {
-               totalForHackNight.push(total);
-           }
-       }
+            if (types === eventTypes) {
+                totalForHackNight.push(total);
+            }
+        }
         displayStats();
     }
 
@@ -119,17 +119,17 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats, handleFiltered
         setEndTextDate(newDate);
     }
 
+    function sortEventsByDate(processedEvents) {
+        //The array is sorted from earliest to oldest events (Jan 2020)
+        sortedEventsByDate = processedEvents.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    }
+
     function handleCalculateStatsBtn() {
         isLoading = true;
         showDatepicker(!isDatepicker);
         showFilterButton(!isFilterButton);
         setFilterState(true);
         extractEventsByCustomTimePeriod();
-    }
-
-    function sortEventsByDate(processedEvents) {
-        //The array is sorted from earliest to oldest events (Jan 2020)
-        sortedEventsByDate = processedEvents.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     }
 
     function extractEventsByCustomTimePeriod() {
@@ -163,132 +163,132 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats, handleFiltered
                         </button>
                     ) : null }
 
-           {isDatepicker ? (
-               <div className="datepicker-section">
-                   <div className="datepicker-wrap">
-                       <p className="datepicker-name">Start</p>
-                       <DatePicker
-                           placeholderText='Start date range'
-                           selected={startDate}
-                           onChange={date => handleChangeStartDate(date)}
-                           selectsStart
-                           startDate={startDate}
-                           endDate={endDate}
-                           maxDate={endDate}
-                       />
-                   </div>
+                    {isDatepicker ? (
+                        <div className="datepicker-section">
+                            <div className="datepicker-wrap">
+                                <p className="datepicker-name">Start</p>
+                                <DatePicker
+                                    placeholderText='Start date range'
+                                    selected={startDate}
+                                    onChange={date => handleChangeStartDate(date)}
+                                    selectsStart
+                                    startDate={startDate}
+                                    endDate={endDate}
+                                    maxDate={endDate}
+                                />
+                            </div>
 
-                   <div className="datepicker-wrap">
-                       <p className="datepicker-name">End</p>
-                       <DatePicker
-                           placeholderText='End data range'
-                           selected={endDate}
-                           onChange={date => handleChangeEndDate(date)}
-                           selectsEnd
-                           startDate={startDate}
-                           endDate={endDate}
-                           maxDate={new Date()}
-                       />
-                   </div>
+                            <div className="datepicker-wrap">
+                                <p className="datepicker-name">End</p>
+                                <DatePicker
+                                    placeholderText='End data range'
+                                    selected={endDate}
+                                    onChange={date => handleChangeEndDate(date)}
+                                    selectsEnd
+                                    startDate={startDate}
+                                    endDate={endDate}
+                                    maxDate={new Date()}
+                                />
+                            </div>
 
-                   <button
-                       className="filter-button"
-                       type="button"
-                       onClick={(event) => handleCalculateStatsBtn(event)}
-                   >
-                       Calculate Stats
-                   </button>
-               </div>
-           ) : null }
+                            <button
+                                className="filter-button"
+                                type="button"
+                                onClick={(event) => handleCalculateStatsBtn(event)}
+                            >
+                                Calculate Stats
+                            </button>
+                        </div>
+                    ) : null }
 
-           <div className="stats-section">
-               <div className="time-description">
-                   <span>Stats calculated by: </span>
-                   {!isFiltered ? (
-                       <span>all time</span>
-                   ) : (
-                       <span>
+                    <div className="stats-section">
+                        <div className="time-description">
+                            <span>Stats calculated by: </span>
+                            {!isFiltered ? (
+                                <span>all time</span>
+                            ) : (
+                                <span>
                            <span>{startTextDate}</span>
                            <span> - </span>
                            <span>{endTextDate}</span>
                        </span>
-                   )}
-               </div>
+                            )}
+                        </div>
 
-               <div className="table-header m-t-small">All Events By Event Type</div>
-               {isStatsByLocation ? (
-                   <table className="admin-table">
-                       <thead>
-                       <tr>
-                           {headerGroups.map(header => (
-                               <th key={header}>{header}</th>
-                           ))}
-                       </tr>
-                       </thead>
+                        <div className="table-header m-t-small">All Events By Event Type</div>
+                        {isStatsByLocation ? (
+                            <table className="admin-table">
+                                <thead>
+                                <tr>
+                                    {headerGroups.map(header => (
+                                        <th key={header}>{header}</th>
+                                    ))}
+                                </tr>
+                                </thead>
 
-                       <tbody>
-                       {dataForAllEventsReport.map((event) => (
-                           <tr key={`events-${event.location}`}>
-                               <td key={`${event.location + event.id}`}>{event.location}</td>
-                               <td key={`v-${event.totalVolunteers + event.id}`}>{event.totalVolunteers}</td>
-                               <td key={`h-${event.totalVolunteerHours + event.id}`}>{event.totalVolunteerHours}</td>
-                               <td key={`ha-${event.totalVolunteerAvgHours + event.id}`}>{event.totalVolunteerAvgHours}</td>
-                           </tr>
-                       ))}
+                                <tbody>
+                                {dataForAllEventsReport.map((event) => (
+                                    <tr key={`events-${event.location}`}>
+                                        <td key={`${event.location + event.id}`}>{event.location}</td>
+                                        <td key={`v-${event.totalVolunteers + event.id}`}>{event.totalVolunteers}</td>
+                                        <td key={`h-${event.totalVolunteerHours + event.id}`}>{event.totalVolunteerHours}</td>
+                                        <td key={`ha-${event.totalVolunteerAvgHours + event.id}`}>{event.totalVolunteerAvgHours}</td>
+                                    </tr>
+                                ))}
 
-                       {totalForAllEvents ? (
-                           <tr>
-                               <td key={`events-total`}>Total</td>
-                               {totalForAllEvents.map((total, i) => (
-                                   <td key={`${headerGroups[i]}-events-total`}>{total}</td>
-                               ))}
-                           </tr>
-                       ) : null }
-                       </tbody>
-                   </table>
-               ) : (
-                   <div>No data for calculation stats</div>
-               )}
+                                {totalForAllEvents ? (
+                                    <tr>
+                                        <td key={`events-total`}>Total</td>
+                                        {totalForAllEvents.map((total, i) => (
+                                            <td key={`${headerGroups[i]}-events-total`}>{total}</td>
+                                        ))}
+                                    </tr>
+                                ) : null }
+                                </tbody>
+                            </table>
+                        ) : (
+                            <div>No data for calculation stats</div>
+                        )}
 
 
-               <div className="table-header">HackNight Only</div>
-               {isStatsByHackNight ? (
-                   <table className="admin-table">
-                       <thead>
-                       <tr>
-                           {headerGroups.map(header => (
-                               <th key={header}>{header}</th>
-                           ))}
-                       </tr>
-                       </thead>
+                        <div className="table-header">HackNight Only</div>
+                        {isStatsByHackNight ? (
+                            <table className="admin-table">
+                                <thead>
+                                <tr>
+                                    {headerGroups.map(header => (
+                                        <th key={header}>{header}</th>
+                                    ))}
+                                </tr>
+                                </thead>
 
-                       <tbody>
-                       {isStatsByHackNight && dataForHackNightReport.map((event) => (
-                           <tr key={`hack-night-${event.location}`}>
-                               <td key={`${event.location + event.id}`}>{event.location}</td>
-                               <td key={`tv-${event.totalVolunteers + event.id}`}>{event.totalVolunteers}</td>
-                               <td key={`th-${event.totalVolunteerHours + event.id}`}>{event.totalVolunteerHours}</td>
-                               <td key={`ah-${event.totalVolunteerAvgHours + event.id}`}>{event.totalVolunteerAvgHours}</td>
-                           </tr>
-                       ))}
+                                <tbody>
+                                {isStatsByHackNight && dataForHackNightReport.map((event) => (
+                                    <tr key={`hack-night-${event.location}`}>
+                                        <td key={`${event.location + event.id}`}>{event.location}</td>
+                                        <td key={`tv-${event.totalVolunteers + event.id}`}>{event.totalVolunteers}</td>
+                                        <td key={`th-${event.totalVolunteerHours + event.id}`}>{event.totalVolunteerHours}</td>
+                                        <td key={`ah-${event.totalVolunteerAvgHours + event.id}`}>{event.totalVolunteerAvgHours}</td>
+                                    </tr>
+                                ))}
 
-                       {totalForHackNight ? (
-                           <tr>
-                               <td key={`hack-night-total`}>Total</td>
-                               {totalForHackNight.map((total, i) => (
-                                   <td key={`${headerGroups[i]}-hack-total`}>{total}</td>
-                               ))}
-                           </tr>
-                       ) : null }
-                       </tbody>
-                   </table>
-               ) : (
-                   <div>No data for calculation stats</div>
-               )}
-           </div>
-       </div>
-    ) : <Loading /> }
-    </div>
+                                {totalForHackNight ? (
+                                    <tr>
+                                        <td key={`hack-night-total`}>Total</td>
+                                        {totalForHackNight.map((total, i) => (
+                                            <td key={`${headerGroups[i]}-hack-total`}>{total}</td>
+                                        ))}
+                                    </tr>
+                                ) : null }
+                                </tbody>
+                            </table>
+                        ) : (
+                            <div>No data for calculation stats</div>
+                        )}
+                    </div>
+                </div>
+            ) : <Loading /> }
+        </div>
     );
 };
 
