@@ -44,6 +44,7 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats, handleFiltered
             }
         }
         setLocation(data, dataForReport);
+        setStatsByLocation(data, dataForReport, types);
         calculateTotalResults(data, types);
     }
 
@@ -54,6 +55,24 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats, handleFiltered
             newStat.id = Math.floor(Math.random() * 100);
             dataForReport.push(newStat);
         }
+    }
+
+    function setStatsByLocation(data, dataForReport, types) {
+        data.forEach((obj, statIndex) => {
+            types.forEach((location, locationIndex) => {
+                if (statIndex === 0) {
+                    dataForReport[locationIndex].totalVolunteers = obj[location];
+                }
+
+                if (statIndex === 1) {
+                    dataForReport[locationIndex].totalVolunteerHours = obj[location];
+                }
+
+                if (statIndex === 2) {
+                    dataForReport[locationIndex].totalVolunteerAvgHours = obj[location];
+                }
+            })
+        })
     }
 
     function calculateTotalResults(data, types) {
