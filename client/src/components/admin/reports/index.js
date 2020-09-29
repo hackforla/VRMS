@@ -22,6 +22,8 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats, handleFiltered
     const [endDate, setEndDate] = useState(new Date());
     const [isDatepicker, showDatepicker] = useState(false);
     const [isFilterButton, showFilterButton] = useState(true);
+    const [startTextDate, setStartTextDate] = useState(new Date().toLocaleDateString("en-US"));
+    const [endTextDate, setEndTextDate] = useState(new Date().toLocaleDateString("en-US"));
 
     prepareDataForReport(
         eventTypeStats,
@@ -102,6 +104,18 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats, handleFiltered
     function handleSetFilterBtn() {
         showDatepicker(!isDatepicker);
         showFilterButton(!isFilterButton);
+    }
+
+    function handleChangeStartDate(date) {
+        let newDate = new Date(date).toLocaleDateString("en-US");
+        setStartDate(date);
+        setStartTextDate(newDate);
+    }
+
+    function handleChangeEndDate(date) {
+        let newDate = new Date(date).toLocaleDateString("en-US");
+        setEndDate(date);
+        setEndTextDate(newDate);
     }
 
     function sortEventsByDate(processedEvents) {
