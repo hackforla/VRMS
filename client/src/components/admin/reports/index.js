@@ -22,6 +22,7 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats, handleFiltered
     const [endDate, setEndDate] = useState(new Date());
     const [isDatepicker, showDatepicker] = useState(false);
     const [isFilterButton, showFilterButton] = useState(true);
+    const [isFiltered, setFilterState] = useState(false);
     const [startTextDate, setStartTextDate] = useState(new Date().toLocaleDateString("en-US"));
     const [endTextDate, setEndTextDate] = useState(new Date().toLocaleDateString("en-US"));
 
@@ -118,9 +119,34 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats, handleFiltered
         setEndTextDate(newDate);
     }
 
+    function handleCalculateStatsBtn() {
+        isLoading = true;
+        showDatepicker(!isDatepicker);
+        showFilterButton(!isFilterButton);
+        setFilterState(true);
+        extractEventsByCustomTimePeriod();
+    }
+
     function sortEventsByDate(processedEvents) {
         //The array is sorted from earliest to oldest events (Jan 2020)
         sortedEventsByDate = processedEvents.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    }
+
+    function extractEventsByCustomTimePeriod() {
+        dataForAllEventsReport = [];
+        dataForHackNightReport = [];
+        totalForAllEvents = [];
+        totalForHackNight = [];
+        const filteredEvents = [];
+        sortedEventsByDate.forEach(event => {
+            const date = new Date(event.date);
+            if (date.getTime() >= new Date(startDate).getTime() && date.getTime() <= new Date(endDate.getTime())) {
+                filteredEvents.push(event);
+            }
+        })
+        setStartDate(new Date());
+        setEndDate(new Date());
+        handleFilteredData(filteredEvents);
     }
 
     return (
