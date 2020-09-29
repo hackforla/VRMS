@@ -14,6 +14,7 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats, handleFiltered
     let hackNightTypes = [];
     let totalForAllEvents = [];
     let totalForHackNight = [];
+    let sortedEventsByDate = [];
     let isStatsByLocation = true;
     let isStatsByHackNight = true;
 
@@ -33,6 +34,8 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats, handleFiltered
         hackNightTypes,
         dataForHackNightReport
     );
+
+    sortEventsByDate(processedEvents);
 
     function prepareDataForReport(data, types, dataForReport) {
         if (types.length === 0) {
@@ -70,6 +73,11 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats, handleFiltered
     function handleSetFilterBtn() {
         showDatepicker(!isDatepicker);
         showFilterButton(!isFilterButton);
+    }
+
+    function sortEventsByDate(processedEvents) {
+        //The array is sorted from earliest to oldest events (Jan 2020)
+        sortedEventsByDate = processedEvents.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     }
 
     return (
