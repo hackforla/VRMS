@@ -38,22 +38,24 @@
 }
 
 .filter-button{
-  background-color: #3D5A6C;
-  color: #FFFFFF;
-  border: 1px solid #3D5A6C;
+  color: #3D5A6C;
+  border: 1px solid lightgray;
   border-radius: 20px;
   line-height: 1;
   padding: 10px 20px;
   margin: 0 auto;
   transition: .3s ease;
-  max-width: 160px;
-  min-width: 160px;
+  max-width: 120px;
+  min-width: 120px;
   height: auto;
   font-family: 'Open Sans', sans-serif;
   font-size: 15px;
+  &.calc-button{
+    max-width: 150px;
+    min-width: 150px;
+  }
   &:hover{
-    background-color: #FFFFFF;
-    color: #3D5A6C
+    background-color: #3d5a6c47;
   }
 }
 

@@ -192,7 +192,7 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats, handleFiltered
                             </div>
 
                             <button
-                                className="filter-button"
+                                className="filter-button calc-button"
                                 type="button"
                                 onClick={(event) => handleCalculateStatsBtn(event)}
                             >
