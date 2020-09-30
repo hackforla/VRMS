@@ -1,0 +1,68 @@
+.admin-dashboard-wrap {
+  padding: 10px;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.admin-header {
+  color: #000000;
+  margin: 20px auto;
+  h1{
+    font-size: 24px;
+    line-height: 1;
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: normal;
+  }
+}
+
+.event-header {
+  font-size: 17px;
+  font-weight: bold;
+  margin: 15px 0 5px;
+}
+
+.admin-upcoming-event{
+  margin: 0 0 35px;
+
+  .dashboard-chart-container img{
+    max-width: 90px;
+  }
+
+  .warning-event {
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+    .event-name {
+      font-size: 15px;
+      font-weight: bold;
+    }
+    .event-info{
+      font-size: 14px;
+    }
+  }
+
+  .checkin-toggle {
+    color: #3D5A6C;
+    background-color: #FFFFFF;
+    border: 1px solid #3D5A6C;
+    border-radius: 20px;
+    line-height: 1;
+    padding: 10px 20px;
+    margin: 0 auto;
+    transition: .3s ease;
+    max-width: 170px;
+    min-width: 170px;
+    height: auto;
+    &:hover{
+      background-color: #3D5A6C;
+      color: #FFFFFF;
+    }
+  }
+}
+
+.stat-select {
+  select {
+    max-width: 160px;
+    min-width: 160px;
+  }
+}
