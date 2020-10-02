@@ -193,7 +193,7 @@ To run all of the tests run `npm run test:all` from the root folder.
 
 The application uses MongoDB and the team has a few databases for differing environments. Below are instructions on how to connect to the different databases used for development.
 
-1. Shared Staging Development database: This database is maintained by the team. Post inthe #vrms-dev channel to see who has access if you have any issues. This db has data useful for developming
+1. Shared Staging Development database: This database is maintained by the team. Post in the #vrms-dev channel to see who has access if you have any issues. This db has data useful for developming
 
    1. Navigate to the [Get up and running](#get-up-and-running) section and find the credentials link.
    1. Add the mongoDB credential listed in the `DATABASE_URL` variable to your `backend/.env` file.
