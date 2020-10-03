@@ -4,7 +4,7 @@ services:
   backend:
     build:
       context: ./backend
-      target: development
+      target: api-development
     command: yarn run dev
     volumes:
       - ./backend:/srv/backend
@@ -22,7 +22,7 @@ services:
   client:
     build:
       context: ./client
-      target: development
+      target: client-development
     command: yarn run start
     volumes:
       - ./client:/srv/client

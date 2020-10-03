@@ -1,27 +1,21 @@
-FROM node:14.11.0 AS development
-
+FROM node:14.11.0 AS client-development
 RUN mkdir /srv/client && chown node:node /srv/client
-
 WORKDIR /srv/client
-
 USER node
-
+RUN mkdir -p node_modules
 COPY --chown=node:node package.json yarn.lock ./
-
 RUN yarn install --silent
 
-RUN mkdir -p node_modules
+FROM node:14.11.0-slim AS client-builder
+USER node
+WORKDIR /srv/client
+COPY --from=client-development /srv/client/node_modules node_modules
+COPY . .
+USER root
+RUN npm run build
 
-# # TODO: Fix production application. We are currently serving static frontend assets from the backend. 
-# FROM node:14.11.0-slim AS production
-
-# USER node
-
-# WORKDIR /srv/client
-
-# COPY --from=development --chown=root:root /srv/backend/.env /srv/backend 
-# COPY --from=development --chown=root:root /srv/client/.env /srv/backend 
-
-# COPY . .
-
-# CMD ["node", "index.js"]
+FROM nginx as client-production
+EXPOSE 3000
+COPY /nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY --from=client-builder /srv/client /usr/share/nginx/html/
+CMD ["nginx", "-g", "daemon off;"]
