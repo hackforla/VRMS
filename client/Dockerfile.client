@@ -17,5 +17,5 @@ RUN npm run build
 FROM nginx as client-production
 EXPOSE 3000
 COPY /nginx/default.conf /etc/nginx/conf.d/default.conf
-COPY --from=client-builder /srv/client /usr/share/nginx/html/
+COPY --from=client-builder /srv/client/build /usr/share/nginx/html/
 CMD ["nginx", "-g", "daemon off;"]
