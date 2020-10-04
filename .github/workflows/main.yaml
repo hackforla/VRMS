@@ -1,19 +1,39 @@
+name: Build VMRS App
 on:
-    push:
-      branches: [development]
-    pull_request:
-      branches: [development]
+  push:
+    branches: [development]
+  pull_request:
+    branches: [development]
 
 jobs:
-    hello_world_job:
-        runs-on: ubuntu-latest
-        name: A job to say hello
-        steps:
-        - name: Hello world action step
-            id: hello
-            uses: actions/hello-world-docker-action@v1
-            with:
-            who-to-greet: "Nick"
-        # Use the output from the `hello` step
-        - name: Get the output time
-            run: echo "The time was ${{ steps.hello.outputs.time }}"
+  # Label of the container job
+  runner-job:
+    # You must use a Linux environment when using service containers or container jobs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+      - uses: actions/checkout@v2
+      - name: Say something
+        run: |
+          echo "A little less ${message}"
+          echo "A little more action"
+      - name: Build the docker-compose stack
+        run: docker-compose up -d
+      - name: Check running containers
+        run: docker ps -a
+      - name: Run frontend test suite
+        run: docker-compose run --rm client npm run test
+      - name: Run backend test suite
+        run: docker-compose run --rm backend npm run test
+
+    # # Service containers to run with `runner-job`
+    # services:
+    #   # Label used to access the service container
+    #   redis:
+    #     # Docker Hub image
+    #     image: node:14.11.0
+    #     #
+    #     ports:
+    #       # Opens tcp port 6379 on the host and service container
+    #       - 6379:6379
