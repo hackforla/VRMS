@@ -489,7 +489,7 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@shelf/jest-mongodb@^1.1.5":
+"@shelf/jest-mongodb@^1.2.3":
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/@shelf/jest-mongodb/-/jest-mongodb-1.2.3.tgz#7cb34f0bcb71871b0d1c8d16a4f1fdb18b1620df"
   integrity sha512-RGECov7b9anpHqrEoegYeZFWN3WEOw/3hPu3fQUi4gnNIGH0jyMVCQd4DgB37n2aoEWFfe7Kq59aQUrgIQRITA==
@@ -4438,7 +4438,7 @@ mongodb-memory-server@6.6.7:
   dependencies:
     mongodb-memory-server-core "6.6.7"
 
-mongodb-memory-server@^6.6.4:
+mongodb-memory-server@^6.9.0:
   version "6.9.0"
   resolved "https://registry.yarnpkg.com/mongodb-memory-server/-/mongodb-memory-server-6.9.0.tgz#b8266442b1e10f855044cf13c6a047378c9e573e"
   integrity sha512-3KvmVlMqjrzCO8J+Mq71fMRc3YwvA202ptaXhNV08oBsUk5rMkES7c6AIlp3uY7CcdomkoxpiJD7fjLv2Jx8QA==
