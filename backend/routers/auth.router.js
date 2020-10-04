@@ -1,11 +1,6 @@
-<<<<<<< HEAD
-const { authJwt, verifyUser } = require("../middleware");
-const userController = require("../controllers/user.controller");
-=======
 const express = require('express');
 const { verifyUser } = require('../middleware');
 const userController = require('../controllers/user.controller');
->>>>>>> development
 
 const router = express.Router();
 
