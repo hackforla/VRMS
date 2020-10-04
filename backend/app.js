@@ -61,11 +61,7 @@ app.use("/api/projects", projectsRouter);
 app.use("/api/recurringevents", recurringEventsRouter);
 app.use("/api/projectteammembers", projectTeamMembersRouter);
 app.use("/api/slack", slackRouter);
-app.use("/api/auth", authRouter);
-const CLIENT_BUILD_PATH = path.join(__dirname, "../client/build");
-
-// Serve static files from the React frontend app
-app.use(express.static(path.join(CLIENT_BUILD_PATH)));
+app.use('/api/auth', authRouter);
 
 // 404 for all non-defined endpoints.
 app.get("*", (req, res) => {
