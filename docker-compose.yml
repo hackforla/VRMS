@@ -4,7 +4,8 @@ services:
   backend:
     build:
       context: ./backend
-      target: development
+      dockerfile: Dockerfile.api
+      target: api-development
     command: yarn run dev
     volumes:
       - ./backend:/srv/backend
@@ -22,7 +23,8 @@ services:
   client:
     build:
       context: ./client
-      target: development
+      dockerfile: Dockerfile.client
+      target: client-development
     command: yarn run start
     volumes:
       - ./client:/srv/client

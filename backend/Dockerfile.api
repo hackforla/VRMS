@@ -1,23 +1,16 @@
-FROM node:14.11.0 AS development
-
+FROM node:14.11.0 AS api-development
 RUN mkdir /srv/backend && chown node:node /srv/backend
-
 WORKDIR /srv/backend
-
 USER node
-
 COPY --chown=node:node package.json yarn.lock ./
-
 RUN yarn install --silent
-
 RUN mkdir -p node_modules
 
-FROM node:14.11.0-slim AS production
-
+FROM node:14.11.0-slim AS api-production
+EXPOSE 4000
 USER node
-
 WORKDIR /srv/backend
-
-COPY --from=development --chown=root:root /srv/backend/node_modules ./node_modules
-
+COPY --from=api-development /srv/backend/node_modules ./node_modules
 COPY . .
+CMD ["npm", "run", "dev"]
+
