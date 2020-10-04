@@ -1,5 +1,10 @@
 on: [push]
 
+  push:
+    branches:
+      - development
+      - github_actions
+
 jobs:
   hello_world_job:
     runs-on: ubuntu-latest
