@@ -13,10 +13,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Say something
-        run: |
-          echo "A little less ${message}"
-          echo "A little more action"
       - name: Build the backend container
         run: docker-compose build backend
       - name: Run backend test suite
