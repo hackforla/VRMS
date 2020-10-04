@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import DatePicker from 'react-datepicker';
 import Loading from '../donutChartLoading';
+import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../../../common/datepicker/index.scss';
 import './index.scss';
