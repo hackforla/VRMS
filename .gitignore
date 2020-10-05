@@ -9,3 +9,4 @@ client/.env
 test.db
 videos/
 screenshots/
+globalConfig.json
