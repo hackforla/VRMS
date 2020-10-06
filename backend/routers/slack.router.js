@@ -12,9 +12,6 @@ const app = new App({
   signingSecret: process.env.SLACK_SIGNING_SECRET,
 });
 
-//Checks DB every monday (1) for slack messages to schedule this week
-// cron.schedule("* * * * 1", () => {});
-
 // TODO: Refactor this server out of the router. This server instance is breaking the tests.
 if (process.env.NODE_ENV !== "test") {
   (async () => {
@@ -24,69 +21,29 @@ if (process.env.NODE_ENV !== "test") {
 }
 
 //Finds Id number of channel
-router.get("/findId", (req, res) => {
-  publishMessage();
-  findEvent();
-  // findProject();
-});
+router.get("/findId",
+  findEvent,
+  scheduleMeetings
+);
 
-//uses Id number to send message to said channel
-router.post("/postMeeting/:id", (req, res) => {
-  publishMessage1();
-});
+async function scheduleMeetings(req, res, next) {
+  console.log('SCHEDULING MEETINGS', res.locals.events)
+  res.locals.events.forEach((cur) => {
+    scheduleMeeting(cur)
+  })
 
-async function findConversation(name) {
-  try {
-    const result = await app.client.conversations.list({
-      token: process.env.SLACK_BOT_TOKEN,
-    });
-
-    for (var channel of result.channels) {
-      if (channel.name === name) {
-        conversationId = channel.id;
-
-        console.log("Found conversation ID: " + conversationId);
-        break;
-      }
-    }
-  } catch (error) {
-    console.error(error);
-  }
 }
 
-async function publishMessage(id, text) {
-  try {
-    const result = await app.client.chat.postMessage({
-      token: process.env.SLACK_BOT_TOKEN,
-      channel: process.env.SLACK_CHANNEL_ID,
-      text: "Slack Message Publish",
-    });
-
-    console.log(result);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-async function publishMessage1(id, text) {
-  try {
-    const result = await app.client.chat.postMessage({
-      token: process.env.SLACK_BOT_TOKEN,
-      channel: id,
-      text: text,
-    });
-
-    console.log(result);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-async function findEvent(req, res) {
-  Event.find({})
+async function findEvent(req, res, next) {
+  let currentDate = new Date
+  currentDate = currentDate - 5000000
+  Event.find({ date: { $gt: currentDate } })
+    .populate("project")
     .then((events) => {
-      console.log("EVENTS", events);
-      res.json(events);
+      console.log('EVENTS', events)
+      res.locals.events = events
+      next()
+
     })
     .catch((err) => {
       console.log(err);
@@ -96,19 +53,29 @@ async function findEvent(req, res) {
     });
 }
 
-async function findProject(req, res) {
-  Project.find({})
-    .then((project) => {
-      project.forEach((cur) => {
-        console.log("PROJECT", cur.name);
-      });
-      res.json(project);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.sendStatus(500).json({
-        message: `/GET Internal server error: ${err}`,
-      });
+async function scheduleMeeting(cur) {
+  console.log('SCHEDULING MEETING')
+  try {
+
+    let eventName = cur.name
+    let eventChannel = cur.project.slackUrl
+    let projectName = cur.project.name
+    let scheduledPostTime = cur.startTime - 1800000
+    scheduledPostTime = new Date(scheduledPostTime)
+    eventChannel = eventChannel.split('/')
+    eventChannel = eventChannel[4]
+
+    const result = await app.client.chat.scheduleMessage({
+      token: process.env.SLACK_OAUTH_TOKEN,
+      channel: eventChannel,
+      text: `Hello ${projectName} members! The ${eventName} will be starting in 30 minutes!`,
+      post_at: scheduledPostTime
+
     });
+    console.log('RESULT', result)
+  } catch (error) {
+    console.error(error);
+  }
 }
+
 module.exports = router;
