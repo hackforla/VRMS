@@ -21,7 +21,7 @@ if (process.env.NODE_ENV !== "test") {
 }
 
 //Finds Id number of channel
-router.get("/findId",
+router.post("/scheduleMessages",
   findEvent,
   scheduleMeetings
 );
