@@ -27,7 +27,6 @@ router.post("/scheduleMessages",
 );
 
 async function scheduleMeetings(req, res, next) {
-  console.log('SCHEDULING MEETINGS', res.locals.events)
   res.locals.events.forEach((cur) => {
     scheduleMeeting(cur)
   })
@@ -36,14 +35,12 @@ async function scheduleMeetings(req, res, next) {
 
 async function findEvent(req, res, next) {
   let currentDate = new Date
-  currentDate = currentDate - 5000000
   Event.find({ date: { $gt: currentDate } })
     .populate("project")
     .then((events) => {
       console.log('EVENTS', events)
       res.locals.events = events
       next()
-
     })
     .catch((err) => {
       console.log(err);
@@ -54,9 +51,7 @@ async function findEvent(req, res, next) {
 }
 
 async function scheduleMeeting(cur) {
-  console.log('SCHEDULING MEETING')
   try {
-
     let eventName = cur.name
     let eventChannel = cur.project.slackUrl
     let projectName = cur.project.name
@@ -72,7 +67,7 @@ async function scheduleMeeting(cur) {
       post_at: scheduledPostTime
 
     });
-    console.log('RESULT', result)
+
   } catch (error) {
     console.error(error);
   }

@@ -32,7 +32,6 @@ const runCloseCheckinWorker = require("./workers/closeCheckins")(cron, fetch);
 const runCreateRecurringEventsWorker = require("./workers/createRecurringEvents")(cron, fetch);
 const runSlackBot = require("./workers/slackbot")(cron, fetch);
 const scheduleEventMessages = require('./workers/scheduleEventMessages')(cron, fetch);
-console.log('APP', process.env)
 // ROUTES
 const eventsRouter = require("./routers/events.router");
 const checkInsRouter = require("./routers/checkIns.router");
