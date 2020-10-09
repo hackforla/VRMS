@@ -1,0 +1,66 @@
+{
+  "name": "vrms-client-mvp-04",
+  "version": "0.4.0",
+  "description": "VRMS Client MVP",
+  "author": "OlgaBilogurova",
+  "homepage": "https://www.vrms.io",
+  "license": "ISC",
+  "private": true,
+  "dependencies": {
+    "@babel/plugin-transform-react-jsx-self": "^7.10.4",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "classnames": "^2.2.6",
+    "cross-env": "^7.0.2",
+    "cross-var": "^1.1.0",
+    "d3": "^5.15.1",
+    "dotenv-cli": "^3.2.0",
+    "http-proxy-middleware": "^1.0.5",
+    "local-storage": "^2.0.0",
+    "mathjs": "^6.6.2",
+    "minimist": "^1.2.3",
+    "moment": "^2.24.0",
+    "moment-recur": "^1.0.7",
+    "node-sass": "^4.14.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-scripts": "3.4.3",
+    "typescript": "^4.0.3"
+  },
+  "scripts": {
+    "start": "dotenv -e .env -e ../backend/.env -- cross-var cross-env PORT=%CLIENT_PORT% react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --watchAll=false",
+    "test:watch": "react-scripts test",
+    "eject": "react-scripts eject",
+    "heroku-postbuild": "npm run build"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.20.6",
+    "eslint-plugin-react-hooks": "^4.1.2",
+    "prettier": "^2.1.1",
+    "react-test-renderer": "^16.13.1"
+  }
+}
