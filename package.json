@@ -4,6 +4,7 @@
   "description": "VRMS Server",
   "scripts": {
     "start": "concurrently \"cd backend && npm run start\" \"cd client && npm run start\"",
+    "mvp": "concurrently \"cd backend && npm run start\" \"cd client-mvp-04 && npm run start\"",
     "dev:api": "cd backend && npm run dev",
     "dev:client": "cd client && npm run start",
     "dev": "dotenv -e backend/.env -e client/.env concurrently \"npm run dev:api\" \"npm run dev:client\"",
