@@ -6,7 +6,9 @@ VRMS MVP 0.4 - a client application for MVP 0.4 features development.
 
 - [React](https://reactjs.org/docs/getting-started.html)
 - [Redux](https://redux.js.org/introduction/getting-started)
-- [SASS](https://sass-lang.com/guide)
+- [Sass](https://sass-lang.com/guide)
+- [Jest](https://jestjs.io/)
+- [React Testing Library](https://testing-library.com/docs/react-testing-library/intro)
 
 ## How to contribute
 
