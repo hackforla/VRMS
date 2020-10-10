@@ -26,7 +26,7 @@ You should now have a live app.
 To run all `client-mvp-04` tests:
 
 - Navigate to the `client-mvp-04` directory
-- Run `npm test`
+- Run `npm test` or `npm run test`
 
 You should now see all existing tests are passing.
 
