@@ -32,6 +32,7 @@ jobs:
         with:
           context: ./backend
           file: ./backend/Dockerfile.api
+          target: api-production
           platforms: linux/amd64
           push: true
           tags: |
@@ -42,6 +43,7 @@ jobs:
           context: ./client
           file: ./client/Dockerfile.client
           platforms: linux/amd64
+          target: client-production
           stdin_open: true
           push: true
           tags: |
