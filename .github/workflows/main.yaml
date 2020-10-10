@@ -6,7 +6,7 @@ on:
     branches: [development]
 
 jobs:
-  run-unit-tests:
+  test-and-push-docker:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -18,11 +18,6 @@ jobs:
         run: docker-compose build client
       - name: Run frontend test suite
         run: docker-compose run --rm client yarn run test
-  ci:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
