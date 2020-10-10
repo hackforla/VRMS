@@ -1,13 +1,15 @@
-.App {
+@import "sass/_main.scss";
+
+.app-container {
   text-align: center;
 }
 
-.App-logo {
+.app-logo {
   height: 40vmin;
   pointer-events: none;
 }
 
-.App-header {
+.app-header {
   background-color: #FFFFFF;
   min-height: 100vh;
   display: flex;
