@@ -30,7 +30,7 @@ To run all `client-mvp-04` tests:
 - Navigate to the `client-mvp-04` directory
 - Run `npm test` or `npm run test`
 
-You should now see all existing tests are passing.
+You should now see all existing tests passed.
 
 ![Passed tests](src/assets/images/readme/tests-passed.png)
 
