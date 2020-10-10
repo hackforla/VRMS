@@ -1,7 +1,0 @@
-// This file store any keyframes or animations for the app
-@import "_mixins";
-
-// Example
-.box {
-  @include transform(rotate(60deg));
-}
