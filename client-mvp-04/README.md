@@ -30,6 +30,6 @@ To run all `client-mvp-04` tests:
 
 You should now see all existing tests are passing.
 
-![Passed tests](src/images/readme/tests-passed.png)
+![Passed tests](src/assets/images/readme/tests-passed.png)
 
 Let's create a better version of the VRMS MVP 0.4!
