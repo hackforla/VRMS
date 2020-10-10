@@ -35,7 +35,7 @@ jobs:
       - name: Build and push backend
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./backend
           file: ./backend/Dockerfile.api
           platforms: linux/amd64
           push: true
@@ -44,16 +44,17 @@ jobs:
       - name: Build and push client
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./client
           file: ./client/Dockerfile.client
           platforms: linux/amd64
+          stdin_open: true
           push: true
           tags: |
             vrmsdeploy/vrms:client
       - name: Build and push nginx
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./nginx
           file: ./nginx/Dockerfile.nginx
           platforms: linux/amd64
           push: true
