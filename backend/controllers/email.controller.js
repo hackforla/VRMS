@@ -45,7 +45,7 @@ async function mailServer(email, token) {
     });
   }
   const encodedToken = encodeURIComponent(token);
-  const emailLink = `https://tinyurl.com/nyqxd/handleauth?token=${encodedToken}&signIn=true`;
+  const emailLink = `https://tinyurl.com/2894wz/handleauth?token=${encodedToken}&signIn=true`;
   const encodedUri = encodeURI(emailLink);
   const mailOptions = {
     from: EMAIL_ACCOUNT,
