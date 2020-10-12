@@ -33,7 +33,7 @@ services:
       - "3000"
       - "4000"
     ports:
-      - "3000:3000"
+      - "3002:3000"
     stdin_open: true
     restart: on-failure
     networks:
@@ -45,7 +45,7 @@ services:
       dockerfile: Dockerfile.nginx
       context: ./nginx
     ports:
-      - "5000:80"
+      - "3000:80"
     networks:
       - gateway
     depends_on:
