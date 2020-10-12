@@ -4,6 +4,7 @@
   "description": "VRMS Server",
   "scripts": {
     "start": "concurrently \"cd backend && npm run start\" \"cd client && npm run start\"",
+    "mvp": "concurrently \"cd backend && npm run start\" \"cd client-mvp-04 && npm run start\"",
     "dev:api": "cd backend && npm run dev",
     "dev:client": "cd client && npm run start",
     "dev": "dotenv -e backend/.env -e client/.env concurrently \"npm run dev:api\" \"npm run dev:client\"",
@@ -12,7 +13,8 @@
     "test:cy": "dotenv -e ./backend/.env -e ./client/.env cross-var start-test dev:api %BACKEND_PORT% dev:client %CLIENT_PORT% cy:run",
     "test:backend": "cd backend && npm run test",
     "test:client": "cd client && npm run test",
-    "test:all": "NODE_ENV=test npm run test:client && npm run test:backend && npm run test:cy"
+    "test:client-mvp": "cd client-mvp-04 && npm run test",
+    "test:all": "NODE_ENV=test npm run test:client && npm run test:client-mvp && npm run test:backend && npm run test:cy"
   },
   "dependencies": {
     "concurrently": "^5.3.0",

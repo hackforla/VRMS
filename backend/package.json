@@ -16,7 +16,7 @@
   "author": "sarL3y",
   "license": "ISC",
   "devDependencies": {
-    "@shelf/jest-mongodb": "^1.1.5",
+    "@shelf/jest-mongodb": "^1.2.3",
     "babel-eslint": "^10.1.0",
     "concurrently": "^5.1.0",
     "debug": "^4.1.1",
@@ -46,7 +46,7 @@
     "googleapis": "^59.0.0",
     "helmet": "^3.22.0",
     "jsonwebtoken": "^8.5.1",
-    "mongodb-memory-server": "^6.6.4",
+    "mongodb-memory-server": "^6.9.0",
     "mongoose": "^5.10.0",
     "morgan": "^1.10.0",
     "node-cron": "^2.0.3",
