@@ -14,7 +14,7 @@
     "test:backend": "cd backend && npm run test",
     "test:client": "cd client && npm run test",
     "test:client-mvp": "cd client-mvp-04 && npm run test",
-    "test:all": "NODE_ENV=test npm run test:client && npm run test:client-mvp && npm run test:backend && npm run test:cy"
+    "test:all": "cross-env NODE_ENV=test npm run test:client && npm run test:client-mvp && npm run test:backend && npm run test:cy"
   },
   "dependencies": {
     "concurrently": "^5.3.0",
