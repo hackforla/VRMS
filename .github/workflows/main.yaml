@@ -6,7 +6,7 @@ on:
     branches: [development]
 
 jobs:
-  test-and-push-docker:
+  run-unit-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
