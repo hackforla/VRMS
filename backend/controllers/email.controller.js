@@ -59,17 +59,17 @@ async function mailServer(email, token) {
 
   const localhostEmail = async () => {
     await smtpTransport.sendMail(mailOptions, (error, response) => {
-      console.log('email sent');
+      console.log("email sent");
       smtpTransport.close();
     });
-  };
+  }
 
   const prodEmail = async () => {
     await smtpTransport.sendMail(mailOptions, (error, response) => {
       error ? console.log(error) : console.log(response);
       smtpTransport.close();
     });
-  };
+  }
 
   if (process.env.NODE_ENV === 'test') {
     localhostEmail();

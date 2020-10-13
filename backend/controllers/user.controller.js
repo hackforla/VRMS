@@ -84,7 +84,7 @@ function verifyMe(req, res) {
 async function validateCreateUserAPICall(req, res, next) {
   await body('name.firstName').not().isEmpty().trim().escape().run(req);
   await body('name.lastName').not().isEmpty().trim().escape().run(req);
-  await body('email', 'Invalid email').exists().isEmail().normalizeEmail().run(req);
+  await body('email', 'Invalid email').exists().isEmail().normalizeEmail({ gmail_remove_dots: false }).run(req);
 
   // Finds the validation errors in this request and wraps them in an object with handy functions
   const errors = validationResult(req);
@@ -96,7 +96,7 @@ async function validateCreateUserAPICall(req, res, next) {
 }
 
 async function validateSigninUserAPICall(req, res, next) {
-  await body('email', 'Invalid email').exists().isEmail().normalizeEmail().run(req);
+  await body('email', 'Invalid email').exists().isEmail().normalizeEmail({ gmail_remove_dots: false }).run(req);
 
   // Finds the validation errors in this request and wraps them in an object with handy functions
   const errors = validationResult(req);
