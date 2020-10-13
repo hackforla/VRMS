@@ -43,8 +43,8 @@ on:
             push: true
             tags: |
               vrmsdeploy/vrms:backend
-        - name: Client digest
-          run: echo ${{ steps.client_build.outputs.digest }}
+        - name: Backend digest
+          run: echo ${{ steps.backend_build.outputs.digest }}
         - name: Build and push nginx
           uses: docker/build-push-action@v2
           id: nginx_build
@@ -55,7 +55,7 @@ on:
             push: true
             tags: |
               vrmsdeploy/vrms:nginx
-        - name: Client digest
+        - name: Nginx digest
           run: echo ${{ steps.nginx_build.outputs.digest }}
         
           
