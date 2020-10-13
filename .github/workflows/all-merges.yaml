@@ -5,7 +5,7 @@ on:
       - development
 
   push-docker-container:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
       runs-on: ubuntu-latest
         - name: Set up QEMU
           uses: docker/setup-qemu-action@v1
