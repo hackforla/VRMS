@@ -57,26 +57,24 @@ async function mailServer(email, token) {
     text: `Magic link: ${emailLink}`,
   };
 
-  if (process.env.NODE_ENV === 'test') {
-    smtpTransport.sendMail(mailOptions, (error, response) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log(response);
-      }
-
+  const localhostEmail = async () => {
+    await smtpTransport.sendMail(mailOptions, (error, response) => {
       console.log('email sent');
       smtpTransport.close();
     });
-  } else {
-    smtpTransport.sendMail(mailOptions, (error, response) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log(response);
-      }
+  };
+
+  const prodEmail = async () => {
+    await smtpTransport.sendMail(mailOptions, (error, response) => {
+      error ? console.log(error) : console.log(response);
       smtpTransport.close();
     });
+  };
+
+  if (process.env.NODE_ENV === 'test') {
+    localhostEmail();
+  } else {
+    prodEmail();
   }
 }
 
