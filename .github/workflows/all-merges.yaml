@@ -3,19 +3,6 @@ on:
   pull_request:
     branches:
       - development
-jobs:
-  run-unit-tests:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Build the backend container
-        run: docker-compose -f docker-compose-ci.yaml build backend
-      - name: Run backend test suite
-        run: docker-compose -f docker-compose-ci.yaml run --rm backend yarn run test --testPathIgnorePatterns=routers
-      - name: Build the frontend container
-        run: docker-compose build client
-      - name: Run frontend test suite
-        run: docker-compose run --rm client yarn run test
 
   push-docker-container:
     if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
