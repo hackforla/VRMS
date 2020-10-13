@@ -7,14 +7,14 @@ const eventOverview = props => {
   }
 
   return (
-    <div className="dashboard-header">
-      <p className="dashboard-header-text-large">Events Overview</p>
+    <div className="header-admin-dashboard">
 
       <form
         className="form-stats"
         autoComplete="off"
         onSubmit={e => e.preventDefault()}
       >
+
         <div className="stats-form-row">
           <div className="stats-form-input-text">
             <div className="stat-select">

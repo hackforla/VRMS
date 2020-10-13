@@ -7,6 +7,6 @@ client/.env
 .env
 /.idea
 test.db
-globalConfig.json
 videos/
 screenshots/
+globalConfig.json
