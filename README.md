@@ -157,12 +157,14 @@ git reset --hard vrms/master
 
    - `cd vrms/` and run `yarn install`
    - `cd client` and run `yarn install`
+   - `cd client-mvp-04` and run `yarn install`
    - `cd ../backend` and run `yarn install`
 
 1. Add your required environment variables for the frontend and backend directories:
 
    - `touch vrms/backend/.env`
    - `touch vrms/client/.env`
+   - `touch vrms/client-mvp-04/.env`
    - Then paste the content from the [document](https://docs.google.com/document/d/1yDF6UmyO-MPNrl3y_Mw0mkm_WaixlSkXzWbudCzHXDY/edit?usp=sharing). It is accessible for the project team members only.
    - _Please note that the `ports` for the frontend and backend are set in this location_
 
