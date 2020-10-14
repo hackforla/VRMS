@@ -5,9 +5,6 @@ import './App.scss';
 import  { Provider } from 'react-redux';
 import configureStore from './store/configureStore';
 
-
-
-
 function App() {
   const store = configureStore();
   return (
@@ -21,7 +18,5 @@ function App() {
     </Provider>
   );
 }
-
-
 
 export default App;
