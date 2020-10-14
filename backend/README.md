@@ -16,32 +16,19 @@ You will need to be in the backend directory for this to work.
 
 To maintain idempotent tests, we have opted to use in memory test databases. Jest, like
 most test runners, has hooks or methods for you to call before or after tests. We can 
-call the `beforeAll` and `afterAll` methods setup and tear down our database before each
-test. 
+can setup our db and tear it down by importing the `setupDB` module.
 
     ```js
     // You will need to require the db-handler file.
-    const dbHandler = require("./db-handler");
+    const { setupDB } = require("../setup-test");
 
-    // Call the dbHanlder methods in your beforeAll and afterAll methods.
-    beforeAll(async () => await dbHandler.connect());
-    afterAll(async () => await dbHandler.closeDatabase());
+    // You will need to name the in memory DB for this test. 
+    setupDB("api-auth");
     ```
 
-In addition to hooks to call after the file is completed, Jest also has hooks/methods to
-call before and after each test case. **At this time, the `dbHandler` method for clearing
-the database does not work, so you can remove each collection manually if needed. 
-
-    ```js
-    // You will need to require the db-handler file.
-    const dbHandler = require("./db-handler");
-
-    // You will need to get the Model.
-    const Event = require("../models/event.model.js");
-
-    // Then you can delete the Collection in the db beforeAll or afterAll.
-    afterEach(async () => await Event.remove({}));
-    ```
+If you are unsure of where to start, then find a test that does something similar to your
+aims. Copy, tweak, and run that test until you have your desired outcome. Also make sure
+to give your test it's own name.
 
 ### Unit Tests
 

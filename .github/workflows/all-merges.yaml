@@ -1,23 +1,14 @@
 name: Build VMRS App
 on:
-  push:
-    branches: [development]
   pull_request:
     branches: [development]
 
 jobs:
-  test-and-push-docker:
+  push-docker-container:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
     steps:
       - uses: actions/checkout@v2
-      - name: Build the backend container
-        run: docker-compose -f docker-compose-ci.yaml build backend
-      - name: Run backend test suite
-        run: docker-compose -f docker-compose-ci.yaml run --rm backend yarn run test --testPathIgnorePatterns=routers
-      - name: Build the frontend container
-        run: docker-compose build client
-      - name: Run frontend test suite
-        run: docker-compose run --rm client yarn run test
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
@@ -27,17 +18,8 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build and push backend
-        uses: docker/build-push-action@v2
-        with:
-          context: ./backend
-          file: ./backend/Dockerfile.api
-          target: api-production
-          platforms: linux/amd64
-          push: true
-          tags: |
-            vrmsdeploy/vrms:backend
       - name: Build and push client
+        id: client_build
         uses: docker/build-push-action@v2
         with:
           context: ./client
@@ -48,8 +30,25 @@ jobs:
           push: true
           tags: |
             vrmsdeploy/vrms:client
+      - name: Client digest
+        run: echo ${{ steps.client_build.outputs.digest }}
+      - name: Build and push backend
+        id: backend_build
+        uses: docker/build-push-action@v2
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile.api
+          platforms: linux/amd64
+          target: api-production
+          stdin_open: true
+          push: true
+          tags: |
+            vrmsdeploy/vrms:backend
+      - name: Backend digest
+        run: echo ${{ steps.backend_build.outputs.digest }}
       - name: Build and push nginx
         uses: docker/build-push-action@v2
+        id: nginx_build
         with:
           context: ./nginx
           file: ./nginx/Dockerfile.nginx
@@ -57,5 +56,5 @@ jobs:
           push: true
           tags: |
             vrmsdeploy/vrms:nginx
-      - name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
+      - name: Nginx digest
+        run: echo ${{ steps.nginx_build.outputs.digest }}

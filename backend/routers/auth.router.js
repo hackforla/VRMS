@@ -1,5 +1,5 @@
 const express = require('express');
-const { verifyUser } = require('../middleware');
+const { authJwt, verifyUser } = require('../middleware');
 const userController = require('../controllers/user.controller');
 
 const router = express.Router();
@@ -17,9 +17,13 @@ router.post(
 );
 
 router.post(
-  '/signin',
-  [userController.validateSigninUserAPICall, verifyUser.isAdmin],
-  userController.signin,
+  "/signin",
+  [userController.validateSigninUserAPICall, verifyUser.isAdminByEmail],
+  userController.signin
 );
+
+router.post("/verify-signin", userController.verifySignIn);
+
+router.post('/me', [authJwt.verifyCookie], userController.verifyMe);
 
 module.exports = router;
