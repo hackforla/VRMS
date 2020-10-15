@@ -21,7 +21,7 @@ function createUser(req, res) {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
     },
-    email: req.body.email,
+    email: req.body.email.toLowerCase(),
     accessLevel: 'user',
   });
 
