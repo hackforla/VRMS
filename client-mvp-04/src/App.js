@@ -1,22 +1,27 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.scss';
+import Header from './components/header';
 
-import  { Provider } from 'react-redux';
+import { Provider } from 'react-redux';
 import configureStore from './store/configureStore';
 
-function App() {
+const App = () => {
   const store = configureStore();
   return (
     <Provider store={store}>
-      <div className="app-container">
-        <header className="app-header">
-          <img src={logo} className="app-logo" alt="logo" />
-          <h1>VRMS</h1>
-        </header>
+      <div className="app">
+        <div className="app-container">
+          <Header />
+
+          <main>
+            <h1>VRMS</h1>
+          </main>
+
+          <footer></footer>
+        </div>
       </div>
     </Provider>
   );
-}
+};
 
 export default App;
