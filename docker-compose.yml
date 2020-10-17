@@ -2,6 +2,7 @@ version: "3.8"
 
 services:
   backend:
+    env_file: ./backend/.env
     build:
       context: ./backend
       dockerfile: Dockerfile.api
@@ -21,6 +22,7 @@ services:
       - gateway
 
   client:
+    env_file: ./client/.env
     build:
       context: ./client
       dockerfile: Dockerfile.client
