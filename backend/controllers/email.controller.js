@@ -68,9 +68,7 @@ async function sendMail(smtpTransport, email, token) {
   };
 
   let info = await smtpTransport.sendMail(mailOptions);
-  // console.log('Message sent: %s', info.messageId);
-
-  // await smtpTransport.close();
+  console.log('Message sent: %s', info.messageId);
 };
 
 async function mailServer(email, token) {
