@@ -9,7 +9,28 @@ const morgan = require("morgan");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 
+// Import environment variables
 require("dotenv").config();
+
+// Verify environment variables
+require('assert-env')([
+  'CUSTOM_REQUEST_HEADER',
+  'SLACK_OAUTH_TOKEN',
+  'SLACK_BOT_TOKEN',
+  'SLACK_TEAM_ID',
+  'SLACK_CHANNEL_ID',
+  'SLACK_CLIENT_ID',
+  'SLACK_CLIENT_SECRET',
+  'SLACK_SIGNING_SECRET',
+  'BACKEND_PORT',
+  'REACT_APP_PROXY',
+  'CUSTOM_REQUEST_HEADER',
+  'GMAIL_CLIENT_ID',
+  'GMAIL_SECRET_ID',
+  'GMAIL_REFRESH_TOKEN',
+  'GMAIL_EMAIL',
+]);
+ 
 
 // Create a new application using the Express framework
 const app = express();
