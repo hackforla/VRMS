@@ -1,6 +1,5 @@
 const nodemailer = require('nodemailer');
 const { google } = require('googleapis');
-const { resolveConfig } = require('prettier');
 
 const { OAuth2 } = google.auth;
 
@@ -20,7 +19,7 @@ const emailCientToken = async () => {
   oauth2Client.setCredentials({
     refresh_token: REFRESH_TOKEN,
   });
-  accessToken = oauth2Client.getAccessToken();
+  const accessToken = oauth2Client.getAccessToken();
   return accessToken;
 };
 
@@ -67,15 +66,12 @@ async function sendMail(smtpTransport, email, token) {
     text: `Magic link: ${emailLink}`,
   };
 
-  smtpTransport.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log('error is ' + error);
-      resolve(false); // or use rejcet(false) but then you will have to handle errors
-    } else {
-      console.log('Email sent: ' + info.response);
-      resolve(true);
-    }
-  });
+  try {
+    const info = await smtpTransport.sendMail(mailOptions);
+    console.log('Message sent: %s', info.messageId);
+  } catch (err) {
+    console.log('err:', err);
+  }
 };
 
 async function mailServer(email, token) {
