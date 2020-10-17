@@ -2,7 +2,8 @@ const { body, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 
 const emailController = require('./email.controller');
-const CONFIG = require('../config/auth.config');
+const CONFIG = require('../config/');
+const AUTH = CONFIG.AUTH_CONFIG;
 
 const DB = require('../models');
 
@@ -10,8 +11,8 @@ const User = DB.user;
 
 function generateAccessToken(user) {
   // expires after half and hour (1800 seconds = 30 minutes)
-  return jwt.sign({ id: user.id, role: user.accessLevel }, CONFIG.SECRET, {
-    expiresIn: `${CONFIG.TOKEN_EXPIRATION_SEC}s`,
+  return jwt.sign({ id: user.id, role: user.accessLevel }, AUTH.SECRET, {
+    expiresIn: `${AUTH.TOKEN_EXPIRATION_SEC}s`,
   });
 }
 
