@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const emailController = require('./email.controller');
-const { CONFIG_AUTH } = require('../config/');
+const { CONFIG_AUTH } = require('../config');
 
 const { User } = require('../models');
 
@@ -65,13 +65,13 @@ function verifySignIn(req, res) {
     token = token.slice(7, token.length);
   }
 
-  jwt.verify(token, CONFIG_AUTH.SECRET, (err, decoded) => {
-    if (err) {
-      return res.status(401).send({ message: err });
-    }
+  try {
+    const decode = jwt.verify(token, CONFIG_AUTH.SECRET);
     res.cookie('token', token, { httpOnly: true });
-    res.sendStatus(200);
-  });
+    return res.sendStatus(200);
+  } catch (err) {
+    return res.status(401).send({ message: err });
+  }
 }
 
 function verifyMe(req, res) {
