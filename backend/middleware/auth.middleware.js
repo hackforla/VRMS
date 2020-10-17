@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
-const CONFIG = require('../config');
-const AUTH = CONFIG.AUTH_CONFIG;
+const { CONFIG_AUTH } = require('../config');
 
 function verifyToken(req, res, next) {
   let token = req.headers['x-access-token'] || req.headers['authorization'];
@@ -13,7 +12,7 @@ function verifyToken(req, res, next) {
     token = token.slice(7, token.length);
   }
 
-  jwt.verify(token, AUTH.SECRET, (err, decoded) => {
+  jwt.verify(token, CONFIG_AUTH.SECRET, (err, decoded) => {
     if (err) {
       return res.status(401).send({ message: err });
     }
@@ -25,7 +24,7 @@ function verifyToken(req, res, next) {
 }
 
 function verifyCookie(req, res, next) {
-  jwt.verify(req.cookies.token, AUTH.SECRET, (err, decoded) => {
+  jwt.verify(req.cookies.token, CONFIG_AUTH.SECRET, (err, decoded) => {
     if (err) {
       return res.status(401).send({ message: err });
     }

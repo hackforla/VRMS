@@ -1,18 +1,15 @@
-const { body, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 
 const emailController = require('./email.controller');
-const CONFIG = require('../config/');
-const AUTH = CONFIG.AUTH_CONFIG;
-
+const { CONFIG_AUTH } = require('../config/');
 const DB = require('../models');
 
 const User = DB.user;
 
 function generateAccessToken(user) {
   // expires after half and hour (1800 seconds = 30 minutes)
-  return jwt.sign({ id: user.id, role: user.accessLevel }, AUTH.SECRET, {
-    expiresIn: `${AUTH.TOKEN_EXPIRATION_SEC}s`,
+  return jwt.sign({ id: user.id, role: user.accessLevel }, CONFIG_AUTH.SECRET, {
+    expiresIn: `${CONFIG_AUTH.TOKEN_EXPIRATION_SEC}s`,
   });
 }
 
@@ -82,35 +79,8 @@ function verifyMe(req, res) {
   res.send(200);
 }
 
-async function validateCreateUserAPICall(req, res, next) {
-  await body('name.firstName').not().isEmpty().trim().escape().run(req);
-  await body('name.lastName').not().isEmpty().trim().escape().run(req);
-  await body('email', 'Invalid email').exists().isEmail().normalizeEmail({ gmail_remove_dots: false }).run(req);
-
-  // Finds the validation errors in this request and wraps them in an object with handy functions
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
-  }
-  return next();
-}
-
-async function validateSigninUserAPICall(req, res, next) {
-  await body('email', 'Invalid email').exists().isEmail().normalizeEmail({ gmail_remove_dots: false }).run(req);
-
-  // Finds the validation errors in this request and wraps them in an object with handy functions
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
-  }
-  return next();
-}
 
 const userController = {
-  validateCreateUserAPICall,
-  validateSigninUserAPICall,
   createUser,
   signin,
   verifySignIn,

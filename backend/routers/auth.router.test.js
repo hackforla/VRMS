@@ -7,9 +7,7 @@ const { setupDB } = require('../setup-test');
 
 setupDB('api-auth');
 
-const CONFIG = require('../config/');
-const AUTH = CONFIG.AUTH_CONFIG;
-
+const { CONFIG_AUTH } = require('../config/');
 const db = require('../models');
 
 const User = db.user;
@@ -23,7 +21,7 @@ describe('Test that we can create a user using /user routes', () => {
       email: 'test@test.com',
     };
     const headers = {};
-    headers['x-customrequired-header'] = AUTH.CUSTOM_REQUEST_HEADER;
+    headers['x-customrequired-header'] = CONFIG_AUTH.CUSTOM_REQUEST_HEADER;
 
     // Add an event with a project using the API.
     const res = await request.post('/api/users').send(submittedData).set(headers);
