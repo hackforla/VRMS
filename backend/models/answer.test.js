@@ -1,4 +1,4 @@
-const Answer = require("./answer.model");
+const { Answer } = require('./answer.model');
 
 const { setupDB } = require("../setup-test");
 setupDB("answer-model");

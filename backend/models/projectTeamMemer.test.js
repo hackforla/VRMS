@@ -1,4 +1,4 @@
-const ProjectTeamMember = require("./projectTeamMember.model");
+const { ProjectTeamMember } = require('./projectTeamMember.model');
 
 const { setupDB } = require("../setup-test");
 setupDB("projectTeamMember-model");

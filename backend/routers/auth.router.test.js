@@ -1,16 +1,12 @@
 const supertest = require('supertest');
 const app = require('../app');
-
 const request = supertest(app);
 
 const { setupDB } = require('../setup-test');
-
 setupDB('api-auth');
 
 const { CONFIG_AUTH } = require('../config/');
-const db = require('../models');
-
-const User = db.user;
+const { User } = require('../models');
 
 // API Tests
 describe('Test that we can create a user using /user routes', () => {

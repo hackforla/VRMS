@@ -1,4 +1,4 @@
-const RecurringEvent = require("./recurringEvent.model");
+const { RecurringEvent } = require('./recurringEvent.model');
 
 const { setupDB } = require("../setup-test");
 setupDB("recurringEvent-model");

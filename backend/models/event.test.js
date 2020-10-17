@@ -1,4 +1,4 @@
-const Event = require("./event.model");
+const { Event } = require('./event.model');
 
 const { setupDB } = require("../setup-test");
 setupDB("event-model");

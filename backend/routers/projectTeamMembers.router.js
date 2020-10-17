@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const ProjectTeamMember = require("../models/projectTeamMember.model");
+const { ProjectTeamMember } = require('../models/projectTeamMember.model');
 
 // GET /api/projectteammembers/
 router.get("/", (req, res) => {

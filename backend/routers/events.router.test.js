@@ -5,8 +5,7 @@ const request = supertest(app);
 const { setupDB } = require("../setup-test");
 setupDB("api-events");
 
-const db = require("../models");
-const Event = db.event;
+const { Event } = require('../models');
 
 // API Tests
 describe("Test add data with POST and then retrieve the data with GET", () => {

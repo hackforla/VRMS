@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const CheckIn = require("../models/checkIn.model");
+const { CheckIn } = require('../models/checkIn.model');
 
 // GET /api/checkins/
 router.get("/", (req, res) => {

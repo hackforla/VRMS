@@ -2,9 +2,8 @@ const jwt = require('jsonwebtoken');
 
 const emailController = require('./email.controller');
 const { CONFIG_AUTH } = require('../config/');
-const DB = require('../models');
 
-const User = DB.user;
+const { User } = require('../models');
 
 function generateAccessToken(user) {
   // expires after half and hour (1800 seconds = 30 minutes)

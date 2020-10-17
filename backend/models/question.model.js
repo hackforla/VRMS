@@ -31,7 +31,7 @@ questionSchema.methods.serialize = function() {
 
 const Question = mongoose.model('Question', questionSchema);
 
-module.exports = Question;
+module.exports = { Question };
 
 
 

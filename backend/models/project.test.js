@@ -1,4 +1,4 @@
-const Project = require("./project.model");
+const { Project } = require('./project.model');
 
 const { setupDB } = require("../setup-test");
 setupDB("project-model");

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const Event = require("../models/event.model");
+const { Event } = require('../models/event.model');
 
 // GET /api/events/
 router.get("/", (req, res) => {
