@@ -75,10 +75,10 @@ async function sendMail(smtpTransport, email, token) {
 
 async function mailServer(email, token) {
   let smtpTransport;
-  if (process.env.NODE_ENV === 'production') {
-    smtpTransport = await createProdSMTPTransport();
-  } else {
+  if (process.env.NODE_ENV === 'development') {
     smtpTransport = await createDockerSMTPSTransport();
+  } else {
+    smtpTransport = await createProdSMTPTransport();
   }
 
   sendMail(smtpTransport, email, token).catch(console.error);
