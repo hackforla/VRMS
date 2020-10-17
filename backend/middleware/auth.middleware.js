@@ -36,8 +36,8 @@ function verifyCookie(req, res, next) {
   });
 }
 
-const authMiddleware = {
+const verifyAuth = {
   verifyToken,
   verifyCookie,
 };
-module.exports = authMiddleware;
+module.exports = verifyAuth;
