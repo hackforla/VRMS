@@ -65,7 +65,7 @@ function verifySignIn(req, res) {
     token = token.slice(7, token.length);
   }
 
-  jwt.verify(token, CONFIG.SECRET, (err, decoded) => {
+  jwt.verify(token, CONFIG_AUTH.SECRET, (err, decoded) => {
     if (err) {
       return res.status(401).send({ message: err });
     }
