@@ -4,20 +4,16 @@ const router = express.Router();
 const { Event } = require('../models/event.model');
 
 // GET /api/events/
-router.get("/", (req, res) => {
+router.get('/', async (req, res) => {
   const { query } = req;
-
-  Event.find(query.checkInReady === "true" ? query : undefined)
-    .populate("project")
-    .then((events) => {
-      res.json(events);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.sendStatus(500).json({
-        message: `/GET Internal server error: ${err}`,
-      });
+  try {
+    const events = await Event.find().exec();
+    res.json(events);
+  } catch (err) {
+    res.sendStatus(500).json({
+      message: `/GET Internal server error: ${err.stack}`,
     });
+  }
 });
 
 router.post("/", (req, res) => {
