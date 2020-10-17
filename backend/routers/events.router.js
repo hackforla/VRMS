@@ -7,7 +7,7 @@ const { Event } = require('../models/event.model');
 router.get('/', async (req, res) => {
   const { query } = req;
   try {
-    const events = await Event.find().exec();
+    const events = await Event.find(query).exec();
     res.json(events);
   } catch (err) {
     res.sendStatus(500).json({
