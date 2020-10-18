@@ -31,12 +31,11 @@ function createUser(req, res) {
   });
 
   const jsonToken = generateAccessToken(user);
-  emailController.sendUserEmailSigninLink(req.body.email, jsonToken);
+  emailController.sendLoginLink(req.body.email, jsonToken);
 }
 
 function signin(req, res) {
   const { email } = req.body;
-  console.log(email);
 
   User.findOne({ email })
     .then((user) => {
@@ -44,7 +43,7 @@ function signin(req, res) {
         return res.status(401).send({ message: 'User not authorized' });
       }
       const jsonToken = generateAccessToken(user);
-      emailController.sendUserEmailSigninLink(req.body.email, jsonToken);
+      emailController.sendLoginLink(req.body.email, jsonToken);
       return res.status(200).send({ message: 'User login link sent to email!' });
     })
     .catch((err) => {

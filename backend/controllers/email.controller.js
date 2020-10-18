@@ -72,8 +72,8 @@ async function sendEmailByTransport(smtpTransport, email, subject, message = '',
   const mailOptions = {
     from: EMAIL_ACCOUNT,
     to: email,
-    subject: subject,
-    html: html,
+    subject,
+    html,
     text: message,
   };
 
@@ -95,7 +95,7 @@ const getEmailTransport = () => {
   return smtpTransport;
 };
 
-const sendEmail = (email, subject, message = '', html = '') => {
+function sendEmail(email, subject, message = '', html = '') {
   const smtpTransport = getEmailTransport();
   // As we are using async/await with nodemailer, then we have to catch the promise.
   // See the nodemailer docs for using async/await https://nodemailer.com/about/
@@ -113,7 +113,7 @@ async function sendLoginLink(email, authToken) {
   const encodedUri = encodeURI(emailLink);
   const subject = 'Login to VRMS!'
   const htmlMessage = `<a href=${encodedUri}>Login to VRMS</a>`
-  sendEmail(email, subject, message='', html=htmlMessage)
+  sendEmail(email, subject, '', htmlMessage);
 
 }
 
