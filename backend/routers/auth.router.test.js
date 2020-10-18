@@ -8,6 +8,19 @@ setupDB('api-auth');
 const { CONFIG_AUTH } = require('../config/');
 const { User } = require('../models');
 
+
+
+// Create mock for emailController
+const sendMailMock = jest.fn() 
+jest.mock('../controllers/email.controller');
+const mockEmailController = require('../controllers/email.controller');
+mockEmailController.sendUserEmailSigninLink.mockReturnValue({ sendMail: sendMailMock });
+
+beforeEach(() => {
+  sendMailMock.mockClear();
+  mockEmailController.sendUserEmailSigninLink.mockClear();
+});
+
 // API Tests
 describe('Test that we can create a user using /user routes', () => {
   test('POST a user and retrieve that user from /user', async () => {
