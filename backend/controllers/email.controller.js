@@ -24,7 +24,7 @@ const getAccessTokenForGmailAccount = () => {
   return accessToken;
 };
 
-/** Sends emails to Mailhog docker container when developing.
+/** Sets up emails to be sent to the Mailhog docker container.
  * 
  * The Mailhog container must be available for this to succeed.
 */
@@ -40,7 +40,7 @@ const createMailhogSMTPSTransport = () => {
   return smtpTransport;
 };
 
-/** Sends emails through Gmail account. 
+/** Sets up emails to be sent through Gmail. 
  * 
  * This allows us to use a Gmail account as our outgoing email. You can log 
  * into this email account to see that the sent messages includes your email.
@@ -64,22 +64,17 @@ const createGmailSMTPTransport = () =>  {
 };
 
 /** Send user signin link to their email.
- *  
- * - Email sent from smtpTransport. 
+ *
+ * - Email sent from smtpTransport.
  * - Uses React frontend redirect mechanism.
  * */
-async function sendSigninEmailByTransport(smtpTransport, email, token) {
-  const encodedToken = encodeURIComponent(token);
-  const emailLink = `https://tinyurl.com/nyqxd/handleauth?token=${encodedToken}&signIn=true`;
-  const encodedUri = encodeURI(emailLink);
+async function sendEmailByTransport(smtpTransport, email, subject, message = '', html = '') {
   const mailOptions = {
     from: EMAIL_ACCOUNT,
     to: email,
-    subject: 'VRMS Magic link 🎩 !',
-    html: `<a href=${encodedUri}>
-        LOGIN HERE
-      </a>`,
-    text: `Magic link: ${emailLink}`,
+    subject: subject,
+    html: html,
+    text: message,
   };
 
   try {
@@ -100,15 +95,31 @@ const getEmailTransport = () => {
   return smtpTransport;
 };
 
-const sendUserEmailSigninLink = (email, token) => {
+const sendEmail = (email, subject, message = '', html = '') => {
   const smtpTransport = getEmailTransport();
   // As we are using async/await with nodemailer, then we have to catch the promise.
   // See the nodemailer docs for using async/await https://nodemailer.com/about/
-  sendSigninEmailByTransport(smtpTransport, email, token).catch(console.error);
+  sendEmailByTransport(smtpTransport, email, subject, message, html).catch(console.error);
 };
 
+/** Send user signin link to their email.
+ *  
+ * - Requires a token is provided.
+ * - Relies on the React frontend redirect mechanism.
+ * */
+async function sendLoginLink(email, authToken) {
+  const encodedToken = encodeURIComponent(authToken);
+  const emailLink = `https://tinyurl.com/nyqxd/handleauth?token=${encodedToken}&signIn=true`;
+  const encodedUri = encodeURI(emailLink);
+  const subject = 'Login to VRMS!'
+  const htmlMessage = `<a href=${encodedUri}>Login to VRMS</a>`
+  sendEmail(email, subject, message='', html=htmlMessage)
+
+}
+
 const emailController = {
-  sendUserEmailSigninLink,
+  sendLoginLink,
+  sendEmail,
 };
 module.exports = emailController;
 

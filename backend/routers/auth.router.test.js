@@ -14,11 +14,11 @@ const { User } = require('../models');
 const sendMailMock = jest.fn() 
 jest.mock('../controllers/email.controller');
 const mockEmailController = require('../controllers/email.controller');
-mockEmailController.sendUserEmailSigninLink.mockReturnValue({ sendMail: sendMailMock });
+mockEmailController.sendLoginLink.mockReturnValue({ sendMail: sendMailMock });
 
 beforeEach(() => {
   sendMailMock.mockClear();
-  mockEmailController.sendUserEmailSigninLink.mockClear();
+  mockEmailController.sendLoginLink.mockClear();
 });
 
 // API Tests
