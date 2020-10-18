@@ -9,7 +9,8 @@ const REFRESH_TOKEN = process.env.GMAIL_REFRESH_TOKEN;
 const EMAIL_ACCOUNT = process.env.GMAIL_EMAIL;
 
 
-const emailCientToken = async () => {
+/** Create an access token to use Google Gmail account as our SMTP provider. */
+const getAccessTokenForGmailAccount = () => {
   const oauth2Client = new OAuth2(
     CLIENT_ID, // ClientID
     SECRET_ID, // Client Secret
@@ -23,8 +24,11 @@ const emailCientToken = async () => {
   return accessToken;
 };
 
-const createDockerSMTPSTransport = async () => {
-  // Send mail to Mailhog Docker container
+/** Sends emails to Mailhog docker container when developing.
+ * 
+ * The Mailhog container must be available for this to succeed.
+*/
+const createMailhogSMTPSTransport = () => {
   const smtpTransport = nodemailer.createTransport({
     host: 'mailhog',
     port: 1025,
@@ -36,8 +40,15 @@ const createDockerSMTPSTransport = async () => {
   return smtpTransport;
 };
 
-const createProdSMTPTransport = async () => {
-  const accessToken = await emailCientToken();
+/** Sends emails through Gmail account. 
+ * 
+ * This allows us to use a Gmail account as our outgoing email. You can log 
+ * into this email account to see that the sent messages includes your email.
+ * 
+ * This requires setting up the Gmail account for use. https://tinyurl.com/y4farjwt
+*/
+const createGmailSMTPTransport = () =>  {
+  const accessToken = getAccessTokenForGmailAccount();
   const smtpTransport = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -52,7 +63,12 @@ const createProdSMTPTransport = async () => {
   return smtpTransport;
 };
 
-async function sendMail(smtpTransport, email, token) {
+/** Send user signin link to their email.
+ *  
+ * - Email sent from smtpTransport. 
+ * - Uses React frontend redirect mechanism.
+ * */
+async function sendSigninEmailByTransport(smtpTransport, email, token) {
   const encodedToken = encodeURIComponent(token);
   const emailLink = `https://tinyurl.com/nyqxd/handleauth?token=${encodedToken}&signIn=true`;
   const encodedUri = encodeURI(emailLink);
@@ -74,19 +90,21 @@ async function sendMail(smtpTransport, email, token) {
   }
 };
 
-async function mailServer(email, token) {
+/** Returns the appropriate email transport. */
+const getEmailTransport = () => {
   let smtpTransport;
   if (process.env.NODE_ENV === 'development') {
-    smtpTransport = await createDockerSMTPSTransport();
-  } else {
-    smtpTransport = await createProdSMTPTransport();
+    smtpTransport = createMailhogSMTPSTransport();
   }
+  smtpTransport = createGmailSMTPTransport();
+  return smtpTransport;
+};
 
-  sendMail(smtpTransport, email, token).catch(console.error);
-}
-
-const sendUserEmailSigninLink = async (email, token) => {
-  await mailServer(email, token);
+const sendUserEmailSigninLink = (email, token) => {
+  const smtpTransport = getEmailTransport();
+  // As we are using async/await with nodemailer, then we have to catch the promise.
+  // See the nodemailer docs for using async/await https://nodemailer.com/about/
+  sendSigninEmailByTransport(smtpTransport, email, token).catch(console.error);
 };
 
 const emailController = {
