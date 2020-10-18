@@ -13,12 +13,13 @@ function generateAccessToken(user) {
 }
 
 function createUser(req, res) {
+  const { firstName, lastName, email } = req.body;
   const user = new User({
     name: {
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
+      firstName: firstName,
+      lastName: lastName,
     },
-    email: req.body.email,
+    email: email,
     accessLevel: 'user',
   });
 
