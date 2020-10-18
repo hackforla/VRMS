@@ -55,6 +55,7 @@ function signin(req, res) {
 }
 
 function verifySignIn(req, res) {
+  // eslint-disable-next-line dot-notation
   let token = req.headers['x-access-token'] || req.headers['authorization'];
 
   if (!token) {
@@ -66,7 +67,7 @@ function verifySignIn(req, res) {
   }
 
   try {
-    const decode = jwt.verify(token, CONFIG_AUTH.SECRET);
+    jwt.verify(token, CONFIG_AUTH.SECRET);
     res.cookie('token', token, { httpOnly: true });
     return res.sendStatus(200);
   } catch (err) {
