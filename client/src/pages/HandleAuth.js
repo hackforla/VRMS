@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Redirect } from "react-router-dom";
 
 import "../sass/MagicLink.scss";
 
@@ -31,16 +32,16 @@ const HandleAuth = (props) => {
 
   let text;
   if (isMagicLinkValid == true) {
-    text = <p>Magic link is valid</p>;
+    return <Redirect to="/admin" />
   } else {
-    text = <p>Magic link is NOT valid</p>;
+    return (
+      <div className="flex-container">
+        <div>Sorry, magic link is not valid</div>
+      </div>
+    );
   }
 
-  return (
-    <div className="flex-container">
-      <div>{text}</div>
-    </div>
-  );
+  
 };
 
 export default HandleAuth;
