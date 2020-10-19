@@ -9,6 +9,9 @@ $light-gray-primary-color: #D6D3CE;
 $accent-primary-color: #FA114F;
 $accent-secondary-color: #F4B860;
 
+// Additional accent colors
+$accent-blue-color: #2F80ED;
+
 // FONT COLOR
 $font-color-primary: $dark-primary-color;
 
@@ -25,3 +28,7 @@ $button-secondary-color: $dark-secondary-color;
 
 // LINK COLORS
 $link-color: $dark-primary-color;
+$link-accent-color: $accent-blue-color;
+
+// APP BORDER COLOR
+$border-color: rgba(0, 0, 0, 0.4);
