@@ -6,20 +6,19 @@ button{
   font-size: $button-primary-font-size;
   color: $button-primary-color;
   background-color: $button-primary-bg-color;
-  border: 1px solid $button-primary-bg-color;
-  border-radius: 20px;
-  letter-spacing: $letter-sp;
+  border: 1px solid $border-color;
+  border-radius: 40px;
   line-height: 1;
-  padding: 9px 20px;
+  padding: 7px 37.5px;
   text-transform: uppercase;
   text-decoration: none;
-  margin: 0 auto;
+  margin: 20px auto;
   outline: none;
   cursor: pointer;
   transition: .3s ease;
   &:hover{
-    background-color: $button-primary-color;
-    color: $button-primary-bg-color;
+    background-color: $light-secondary-color;
+    border: 1px solid $light-secondary-color;
   }
 }
 
@@ -28,14 +27,15 @@ button{
   border-radius: 0;
   text-transform: capitalize;
   font-weight: $font-bold;
-  color: $button-secondary-color;
-  background-color: $button-secondary-bg-color;
-  border: 1px solid $button-secondary-color;
-  padding: 11px 7px;
+  font-size: 15px;
+  letter-spacing: $letter-sp;
+  background-color: $button-primary-bg-color;
+  border: 1px solid rgba(0, 0, 0, 0.7);
+  padding: 10px;
   line-height: 20px;
   &:hover{
-    background-color: $button-secondary-color;
-    color: $button-secondary-bg-color;
+    background-color: $button-primary-color;
+    color: $button-primary-bg-color;
   }
   margin: 10px auto;
 }
