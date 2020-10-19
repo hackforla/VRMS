@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.scss';
 import Header from './components/header';
+import Footer from './components/footer';
 
 import { Provider } from 'react-redux';
 import configureStore from './store/configureStore';
@@ -17,7 +18,7 @@ const App = () => {
             <h1>VRMS</h1>
           </main>
 
-          <footer></footer>
+          <Footer />
         </div>
       </div>
     </Provider>
