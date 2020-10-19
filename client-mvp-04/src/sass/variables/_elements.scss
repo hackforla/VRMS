@@ -1,4 +1,5 @@
 @import "_typography";
+@import "colors";
 
 // Menu
 $menu-font-size: 1.7em;
@@ -11,3 +12,6 @@ $link-line-height: 1.30em;
 
 // Button
 $button-primary-font-size: 1.071em;
+
+// Border
+$border-primary: 1px solid $border-color;

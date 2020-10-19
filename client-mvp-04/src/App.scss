@@ -15,8 +15,13 @@
   min-width: 320px;
   max-height: 896px;
   height: 100vh;
-  border: 1px solid rgba(0, 0, 0, 0.4);
+  border: $border-primary;
   box-sizing: border-box;
   text-align: center;
   overflow: hidden;
+}
+
+main {
+  max-height: 575px;
+  height: 575px;
 }
