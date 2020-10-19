@@ -33,3 +33,44 @@ describe("Test add data with POST and then retrieve the data with GET", () => {
     done();
   });
 });
+
+describe('Event by ID', () => {
+  test('Can return event by ID from the API', async (done) => {
+    // Test Data
+    const submittedData = {
+      name: 'eventName',
+      location: {
+        // should we include address here?
+        city: 'Los Angeles',
+        state: 'California',
+        country: 'USA',
+      },
+      hacknight: 'Online', // DTLA, Westside, South LA, Online
+      eventType: 'Workshop', // Project Meeting, Orientation, Workshop
+      description: 'A workshop to do stuff',
+      date: 1594023390039,
+      startTime: 1594023390039, // start date and time of the event
+      endTime: 1594023390039, // end date and time of the event
+      hours: 2, // length of the event in hours
+      createdDate: 1594023390039, // date/time event was created
+      updatedDate: 1594023390039, // date/time event was last updated
+      checkInReady: false, // is the event open for check-ins?
+      owner: {
+        ownerId: 33, // id of user who created event
+      },
+    };
+
+    // Create Event by DB
+    const dbCreatedevent = await Event.create(submittedData);
+    const dbCreatedeventId = dbCreatedevent.id;
+    const dbCreatedEventIdURL = `/api/events/${dbCreatedeventId}`;
+
+    // Retrieve and compare the the values using the API.
+    const response = await request.get(dbCreatedEventIdURL);
+    expect(response.statusCode).toBe(200);
+    const apiRetrievedEvent = await response.body;
+    expect(apiRetrievedEvent._id).toEqual(dbCreatedeventId);
+
+    done();
+  });
+});
