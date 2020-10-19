@@ -36,7 +36,7 @@ const HandleAuth = (props) => {
   } else {
     return (
       <div className="flex-container">
-        <div>Sorry, magic link is not valid</div>
+        <div>Sorry, the link is not valid.</div>
       </div>
     );
   }
