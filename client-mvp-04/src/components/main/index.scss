@@ -3,7 +3,7 @@
 .app-main {
   max-height: 575px;
   height: 575px;
-  padding: 35px 100px 200px;
+  padding: 35px 100px 145px;
 
   .app-name, .app-title {
     font-size: 5.14em;
@@ -14,10 +14,34 @@
   }
 
   .app-title {
-    margin: 15px 0 30px;
+    margin: 15px 0 60px;
     font-size: $header-h1-size;
     line-height: 27px;
     font-weight: $font-regular;
     text-align: left;
+  }
+
+  .main-button,
+  .main-text,
+  .main-link {
+    display: flex;
+    justify-content: center;
+  }
+
+  .main-text {
+    font-size: 1.072em;
+    line-height: 1;
+    font-weight: $font-bold;
+  }
+
+  .main-link {
+    font-size: 0.93em;
+    line-height: 1.4;
+    font-weight: $link-font-weight;
+    text-transform: $header-h1-text-transform;
+    color: $accent-blue-color;
+    margin: 20px auto;
+    letter-spacing: 0;
+    cursor: pointer;
   }
 }
