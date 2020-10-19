@@ -2,6 +2,7 @@ import React from 'react';
 import './App.scss';
 import Header from './components/header';
 import Footer from './components/footer';
+import Main from './components/main';
 
 import { Provider } from 'react-redux';
 import configureStore from './store/configureStore';
@@ -14,9 +15,7 @@ const App = () => {
         <div className="app-container">
           <Header />
 
-          <main>
-            <h1>VRMS</h1>
-          </main>
+          <Main />
 
           <Footer />
         </div>

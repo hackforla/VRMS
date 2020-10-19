@@ -1,0 +1,23 @@
+@import "../../sass/_main.scss";
+
+.app-main {
+  max-height: 575px;
+  height: 575px;
+  padding: 35px 100px 200px;
+
+  .app-name, .app-title {
+    font-size: 5.14em;
+    line-height: $header-h1-line-height;
+    letter-spacing: 1px;
+    font-weight: $header-bold;
+    text-transform: $header-h1-text-transform;
+  }
+
+  .app-title {
+    margin: 15px 0 30px;
+    font-size: $header-h1-size;
+    line-height: 27px;
+    font-weight: $font-regular;
+    text-align: left;
+  }
+}
