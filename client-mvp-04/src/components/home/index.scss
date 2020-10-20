@@ -1,19 +1,18 @@
 @import "../../sass/_main.scss";
 
-.app-main {
-  max-height: 575px;
-  height: 575px;
+.home-container {
   padding: 35px 100px 145px;
 
-  .app-name, .app-title {
+  .home-name, .home-title {
     font-size: 5.14em;
+    color: $header-main-dark-color;
     line-height: $header-h1-line-height;
     letter-spacing: 1px;
     font-weight: $header-bold;
     text-transform: $header-h1-text-transform;
   }
 
-  .app-title {
+  .home-title {
     margin: 15px 0 60px;
     font-size: $header-h1-size;
     line-height: 27px;
@@ -21,20 +20,25 @@
     text-align: left;
   }
 
-  .main-button,
-  .main-text,
-  .main-link {
+  .home-button,
+  .home-text,
+  .home-link {
     display: flex;
     justify-content: center;
   }
 
-  .main-text {
+  .home-button {
+    font-size: 13px;
+    line-height: 18px;
+  }
+
+  .home-text {
     font-size: 1.072em;
     line-height: 1;
     font-weight: $font-bold;
   }
 
-  .main-link {
+  .home-link {
     font-size: 0.93em;
     line-height: 1.4;
     font-weight: $link-font-weight;
