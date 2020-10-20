@@ -1,31 +1,27 @@
-import React, { useState, useEffect } from 'react';
-
-import Firebase from '../firebase';
+import { useState, useEffect } from "react";
 
 export default function useProvideAuth() {
-    const [isAdmin, setIsAdmin] = useState(null);
-    const [user, setUser] = useState();
+  const [isAdmin, setIsAdmin] = useState(null);
+  const [user, setUser] = useState();
 
-    useEffect(() => {
-        if (!user) {
-            Firebase.login();
-        };
-        
-        Firebase.auth.onAuthStateChanged(user => {
-            // console.log('Handling auth change with ', user);
+  async function checkUser() {
+    try {
+      const response = await fetch("/api/auth/me", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      setUser(response.status === 200);
+      setIsAdmin(response.status === 200);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
-            if (user) {
-                setUser(user);
-            } else {
-                setUser(null);
-            };
-        });
-        
-    }, []);
+  useEffect(() => {
+    checkUser();
+  }, [user, isAdmin]);
 
-    // console.log(user);
-
-    // return { user, isAdmin, login };
-    return { user, isAdmin };
-};
-
+  return { user, isAdmin };
+}

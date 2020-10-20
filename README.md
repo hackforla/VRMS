@@ -157,19 +157,26 @@ git reset --hard vrms/master
 
    - `cd vrms/` and run `yarn install`
    - `cd client` and run `yarn install`
+   - `cd client-mvp-04` and run `yarn install`
    - `cd ../backend` and run `yarn install`
 
 1. Add your required environment variables for the frontend and backend directories:
 
    - `touch vrms/backend/.env`
    - `touch vrms/client/.env`
+   - `touch vrms/client-mvp-04/.env`
    - Then paste the content from the [document](https://docs.google.com/document/d/1yDF6UmyO-MPNrl3y_Mw0mkm_WaixlSkXzWbudCzHXDY/edit?usp=sharing). It is accessible for the project team members only.
    - _Please note that the `ports` for the frontend and backend are set in this location_
 
 1. Take a second to review the `app.js` and `server.js` files in the `vrms/backend` folder. These two files are a blueprint for the back end, so please familiarize yourself with it. You'll see folders for the database collection models, routes for the API, and a config file which loads the necessary environment variables.
 
 1. Start the local development servers (frontend & backend).
+   
+   To run `client`:
    - Navigate to the root of the application `vrms/` and run `npm run dev`
+   
+   To run `client-mvp-04`:
+   - Navigate to the root of the application `vrms/` and run `npm run mvp`
 
 You should now have a live app. Happy hacking.
 

@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
 const { google } = require('googleapis');
+const { resolveConfig } = require('prettier');
 
 const { OAuth2 } = google.auth;
 
@@ -8,7 +9,8 @@ const SECRET_ID = process.env.GMAIL_SECRET_ID;
 const REFRESH_TOKEN = process.env.GMAIL_REFRESH_TOKEN;
 const EMAIL_ACCOUNT = process.env.GMAIL_EMAIL;
 
-async function mailServer(email, token) {
+
+const emailCientToken = async () => {
   const oauth2Client = new OAuth2(
     CLIENT_ID, // ClientID
     SECRET_ID, // Client Secret
@@ -18,34 +20,42 @@ async function mailServer(email, token) {
   oauth2Client.setCredentials({
     refresh_token: REFRESH_TOKEN,
   });
-  const accessToken = oauth2Client.getAccessToken();
+  accessToken = oauth2Client.getAccessToken();
+  return accessToken;
+};
 
-  let smtpTransport;
-  if (process.env.NODE_ENV === 'test') {
-    // Send mail to Mailhog Docker container
-    smtpTransport = nodemailer.createTransport({
-      host: '127.0.0.1',
-      port: 1025,
-      auth: {
-        user: 'user',
-        pass: 'password',
-      },
-    });
-  } else {
-    smtpTransport = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        type: 'OAuth2',
-        user: EMAIL_ACCOUNT,
-        clientId: CLIENT_ID,
-        clientSecret: SECRET_ID,
-        refreshToken: REFRESH_TOKEN,
-        accessToken,
-      },
-    });
-  }
+const createDockerSMTPSTransport = async () => {
+  // Send mail to Mailhog Docker container
+  const smtpTransport = nodemailer.createTransport({
+    host: 'mailhog',
+    port: 1025,
+    auth: {
+      user: 'user',
+      pass: 'password',
+    },
+  });
+  return smtpTransport;
+};
+
+const createProdSMTPTransport = async () => {
+  const accessToken = await emailCientToken();
+  const smtpTransport = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      type: 'OAuth2',
+      user: EMAIL_ACCOUNT,
+      clientId: CLIENT_ID,
+      clientSecret: SECRET_ID,
+      refreshToken: REFRESH_TOKEN,
+      accessToken,
+    },
+  });
+  return smtpTransport;
+};
+
+async function sendMail(smtpTransport, email, token) {
   const encodedToken = encodeURIComponent(token);
-  const emailLink = `https://tinyurl.com/2drxdk/auth/me?token=${encodedToken}`;
+  const emailLink = `https://tinyurl.com/nyqxd/handleauth?token=${encodedToken}&signIn=true`;
   const encodedUri = encodeURI(emailLink);
   const mailOptions = {
     from: EMAIL_ACCOUNT,
@@ -54,32 +64,30 @@ async function mailServer(email, token) {
     html: `<a href=${encodedUri}>
         LOGIN HERE
       </a>`,
-    text: `Magic link: ${encodedUri}`,
+    text: `Magic link: ${emailLink}`,
   };
 
-  if (process.env.NODE_ENV === 'test') {
-    smtpTransport.sendMail(mailOptions, (error, response) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log(response);
-      }
-      
-      console.log('email sent');
-      smtpTransport.close();
-    });
+  let info = await smtpTransport.sendMail(mailOptions);
+  console.log('Message sent: %s', info.messageId);
+};
+
+async function mailServer(email, token) {
+  let smtpTransport;
+  if (process.env.NODE_ENV === 'development') {
+    smtpTransport = await createDockerSMTPSTransport();
   } else {
-    smtpTransport.sendMail(mailOptions, (error, response) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log(response);
-      }
-      smtpTransport.close();
-    });
+    smtpTransport = await createProdSMTPTransport();
   }
+
+  sendMail(smtpTransport, email, token).catch(console.error);
 }
 
-exports.sendUserEmailSigninLink = async (email, token) => {
+const sendUserEmailSigninLink = async (email, token) => {
   await mailServer(email, token);
 };
+
+const emailController = {
+  sendUserEmailSigninLink,
+};
+module.exports = emailController;
+
