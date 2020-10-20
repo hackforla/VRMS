@@ -1,0 +1,26 @@
+@import "../../sass/_main.scss";
+
+.error-container {
+  padding: 120px 30px;
+
+  .error-content, .error-status {
+    line-height: 30px;
+    color: $dark-primary-color;
+    font-weight: normal;
+  }
+
+  .error-content {
+    margin: 10px 0 15px;
+  }
+
+  .error-status {
+    font-size: 60px;
+    line-height: 1.2;
+    font-weight: bold;
+  }
+
+  .redirect-link {
+    font-size: 18px;
+    color: $accent-blue-color;
+  }
+}
