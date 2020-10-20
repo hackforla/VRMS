@@ -2,24 +2,32 @@ import React from 'react';
 import './App.scss';
 import Header from './components/header';
 import Footer from './components/footer';
-import Main from './components/main';
-
 import { Provider } from 'react-redux';
 import configureStore from './store/configureStore';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Routes } from './routes';
 
 const App = () => {
   const store = configureStore();
   return (
     <Provider store={store}>
-      <div className="app">
-        <div className="app-container">
-          <Header />
+      <Router>
+        <div className="app">
+          <div className="app-container">
+            <Header />
 
-          <Main />
+            <main role="main" className="app-main">
+              <Switch>
+                {Routes.map(({ path, key, component }) => (
+                  <Route key={key} path={path} component={component} exact />
+                ))}
+              </Switch>
+            </main>
 
-          <Footer />
+            <Footer />
+          </div>
         </div>
-      </div>
+      </Router>
     </Provider>
   );
 };
