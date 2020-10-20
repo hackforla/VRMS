@@ -1,0 +1,11 @@
+@import "../../sass/_main.scss";
+
+.dummy-container {
+  padding: 215px 30px;
+
+  .dummy-content {
+    line-height: 30px;
+    color: $dark-primary-color;
+    font-weight: normal;
+  }
+}
