@@ -3,20 +3,16 @@ const router = express.Router();
 
 const { Event } = require('../models/event.model');
 
-// GET /api/events/
-router.get('/', async (req, res) => {
-  const { query } = req;
-  try {
-    const events = await Event.find(query).exec();
-    res.json(events);
-  } catch (err) {
-    res.sendStatus(500).json({
-      message: `/GET Internal server error: ${err.stack}`,
-    });
-  }
-});
+const { EventController } = require('../controllers')
+// Display list of all Eents.
+router.get('/', EventController.event_list);
 
-router.post("/", (req, res) => {
+// Display Event by id.
+router.get('/:id', EventController.event_by_id);
+
+router.get('create', EventController.create);
+
+router.post('/', (req, res) => {
   const newEvent = req.body;
 
   Event.create(newEvent, function (err, event) {
