@@ -117,8 +117,6 @@ async function findProject(req, res) {
     });
 }
 
-
-
 //============= SLACKBOT FOR SENDING NEW USERS MESSAGES AND REMINDERS ==============
 
 //----------------- FETCH LIST OF NEW USERS (LESS THAN 30 DAYS) --------------------
@@ -157,53 +155,28 @@ function checkStartDate(userCreatedDate) {
   return diffDays;
 }
 
-
-// Check status of user - using their userId and looking through the checkIn model for their userId
-async function userActivity(userList) {
+function findAndDmChat(userEmailList) {
   try {
-    let newUsersList = findNewUsers()
-    let toMessageList = [];
-    
-    return toMessageList;
-  }
-  catch (error) {
-    console.error(error);
-  }
-}
-//userActivity(); 
+    const userSlackIds = Promise.all(userEmailList.map(async(userEmail) => {
+      let result = await app.client.users.lookupByEmail({
+        // The token you used to initialize your app
+        token: process.env.SLACK_BOT_TOKEN,
+        email: userEmail
+      });
+      let userSlackID = result.user.id;  
+      
+      //return result.user.id;
+      
+      let fileName = '../assets/1newMember.md';
+      let textData = fs.readFileSync(fileName,'utf8');
 
-
-//------------MESSAGE USER FROM MARKDOWN BASED ON STATUS(ACTIVE/INACTIVE) -------------
-//based on user ID, will send user a DM from the bot with a message
-async function botDmChat() {
-  try {
-    
-    //using conversations.open to find user's conversation object
-    //TO DO: MAKE USER_ID DYNAMIC BASED ON DATABASE INFO/FUNCTION TO QUERY WHO TO MESSAGE
-    const userConversations = await app.client.conversations.open({
-      token: process.env.SLACK_BOT_TOKEN,
-      users: process.env.USER_ID
-    });
-    
-    //extracting user's DM id from conversation object
-    let userDmId = userConversations.channel.id;
-    
-    //grabbing user's name from user object api
-      let userObj = await app.client.users.info({
-      token: process.env.SLACK_BOT_TOKEN,
-      users: process.env.USER_ID
-    });
-    let userName = userObj.users[0].real_name;
-    let fileName = ''
-    let textData = fs.readFileSync(fileName,'utf8');
-
-    //using user userDmId to send message to user
-    const sendUserMsgObj = await app.client.chat.postMessage({
-      token: process.env.SLACK_BOT_TOKEN,
-      channel: userDmId,
-      mrkdown: true,
-      text: textData
-    });
+      const sendUserMsgObj = app.client.chat.postMessage({
+        token: process.env.SLACK_BOT_TOKEN,
+        channel: userSlackID,
+        mrkdown: true,
+        text: textData
+      });      
+    }))     
   }
   catch (error) {
     console.error(error);
