@@ -1,5 +1,6 @@
 import React from 'react';
 import './index.scss';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -12,7 +13,13 @@ const Footer = () => {
             Used for streamlining onboarding to new projects, find helpful
             meeting details, track your contributions, and maintain a profile of
             your skills and professional development.
-            <span className="tooltip-link">More details here.</span>
+            <Link
+              key={'footer-page'}
+              to={'/page'}
+              className="tooltip-link redirect-link"
+            >
+              More details here.
+            </Link>
           </div>
         </div>
       </div>
