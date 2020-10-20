@@ -72,3 +72,7 @@ a {
     text-decoration: underline;
   }
 }
+
+a.redirect-link:hover {
+  text-decoration: none;
+}
