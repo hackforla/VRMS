@@ -3,6 +3,29 @@ const router = express.Router();
 
 const { Project } = require('../models/project.model');
 
+const { ProjectController } = require('../controllers');
+
+// Display list of all Projects GET.
+router.get('/', ProjectController.project_list);
+
+// Create new Project with POST.
+router.post('/create', ProjectController.create);
+
+// Display Project by id with GET.
+router.get('/:id', ProjectController.project_by_id);
+
+// Delete Project by id with POST.
+router.post('/:id/destroy', ProjectController.destroy);
+
+// Update Project by id with PUT.
+router.post('/:id/update', ProjectController.update);
+
+// Display upcoming Event with GET.
+router.get('/:id/nextevent', ProjectController.next_event);
+
+// Get Project members list by GET
+router.get('/:id/members', ProjectController.project_member_list);
+
 // GET /api/projects/
 router.get("/", (req, res) => {
   // const { headers } = req;
