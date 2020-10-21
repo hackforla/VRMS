@@ -148,3 +148,29 @@ describe('DELETE', () => {
     done();
   });
 });
+
+describe('MEMBERS', () => {
+  test('Delete Event by ID', async (done) => {
+    // Test Data
+    const submittedData = {
+      name: 'eventName',
+    };
+
+    // Submit an event
+    const res = await request
+      .post('/api/events/create')
+      .set('Accept', 'application/json')
+      .send(submittedData);
+    expect(res.status).not.toBe(404);
+
+    // Delete the event
+    const res2 = await request
+      .post(`/api/events/${res.body._id}/destroy/`)
+      .set('Accept', 'application/json')
+      .send(submittedData);
+    expect(res2.status).toBe(200);
+
+    done();
+  });
+});
+
