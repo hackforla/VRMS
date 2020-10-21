@@ -1,6 +1,6 @@
 const { Project } = require('../models');
 
-async function getAllBooks() {
+async function getAllProjects() {
   try {
     const projects = await Project.findOne({}).exec();
     return projects;
