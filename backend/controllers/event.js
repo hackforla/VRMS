@@ -2,7 +2,7 @@ const { Event } = require('../models');
 
 const EventController = {};
 
-EventController.event_list = function (req, res) {
+EventController.event_list = async function (req, res) {
   const { query } = req;
 
   try {
@@ -13,6 +13,7 @@ EventController.event_list = function (req, res) {
       message: `/GET Internal server error: ${err.stack}`,
     });
   }
+
 };
 
 EventController.event_by_id = async function (req, res) {
@@ -28,15 +29,47 @@ EventController.event_by_id = async function (req, res) {
   }
 };
 
-EventController.create = function (req, res) {
-  res.send('NOT IMPLEMENTED: Event create POST');
+EventController.create = async function (req, res) {
+  const { body } = req;
+
+  try {
+    const event = await Event.create(body);
+    return res.status(200).json(event)
+  } catch (err) {
+    return res.status(500).send({
+      message: `/GET Internal server error: ${err}`,
+    });
+  }
 };
 
-EventController.destroy = function (req, res) {
-  res.send('NOT IMPLEMENTED: Event destroy POST');
+EventController.destroy = async function (req, res) {
+  const { id } = req.params
+
+  try {
+    const event = await Event.findByIdAndDelete(id);
+    return res.status(200).json(event)
+  } catch (err) {
+    return res.status(500).send({
+      message: `/GET Internal server error: ${err}`,
+    });
+  }
+  
 };
 
-EventController.update = function (req, res) {
+EventController.update = async function (req, res) {
+  const { id } = req.params
+
+  try {
+    const event = await Event.findByIdAndDelete(id);
+    return res.status(200).json(event)
+  } catch (err) {
+    return res.status(500).send({
+      message: `/GET Internal server error: ${err}`,
+    });
+  }
+};
+
+EventController.event_member_list = function (req, res) {
   res.send('NOT IMPLEMENTED: Event list UPDATE');
 };
 

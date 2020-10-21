@@ -1,16 +1,30 @@
 const express = require("express");
 const router = express.Router();
+const bodyParser = require('body-parser');
+router.use(bodyParser.json());
 
 const { Event } = require('../models/event.model');
+const { EventController } = require('../controllers');
 
-const { EventController } = require('../controllers')
+
 // Display list of all Eents.
 router.get('/', EventController.event_list);
 
-// Display Event by id.
+// Create new Event with POST.
+router.post('/create', EventController.create);
+
+// Display Event by id with GET.
 router.get('/:id', EventController.event_by_id);
 
-router.get('create', EventController.create);
+// Delete Event by id with POST.
+router.post('/:id/destroy', EventController.destroy);
+
+// Update Event by id with PUT.
+router.post('/:id/update', EventController.update);
+
+// Get Event members by GET
+router.get('/:id/members', EventController.event_member_list);
+
 
 router.post('/', (req, res) => {
   const newEvent = req.body;
@@ -19,24 +33,10 @@ router.post('/', (req, res) => {
     if (err) {
       res.send(err);
     }
-
     res.send(event);
   });
 });
 
-router.get("/:id", (req, res) => {
-  Event.findById(req.params.id)
-    .populate("project")
-    .then((event) => {
-      res.json(event);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.sendStatus(500).json({
-        message: `/GET Internal server error: ${err}`,
-      });
-    });
-});
 
 router.get("/nexteventbyproject/:id", (req, res) => {
   Event.find({ project: req.params.id })

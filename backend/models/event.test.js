@@ -1,21 +1,21 @@
-const { Event } = require('./event.model');
-
-const { setupDB } = require("../setup-test");
+const { setupDB } = require('../setup-test');
 setupDB("event-model");
 
-describe("Event Model saves the correct values", () => {
-  test("Save a model instance and then read from the db", async (done) => {
+const { Event } = require('./event.model');
+
+describe('CREATE', () => {
+  test('Can create a complex Event', async (done) => {
     const submittedData = {
-      name: "eventName",
+      name: 'eventName',
       location: {
         // should we include address here?
-        city: "Los Angeles",
-        state: "California",
-        country: "USA",
+        city: 'Los Angeles',
+        state: 'California',
+        country: 'USA',
       },
-      hacknight: "Online", // DTLA, Westside, South LA, Online
-      eventType: "Workshop", // Project Meeting, Orientation, Workshop
-      description: "A workshop to do stuff",
+      hacknight: 'Online', // DTLA, Westside, South LA, Online
+      eventType: 'Workshop', // Project Meeting, Orientation, Workshop
+      description: 'A workshop to do stuff',
       date: 1594023390039,
       startTime: 1594023390039, // start date and time of the event
       endTime: 1594023390039, // end date and time of the event
@@ -36,4 +36,15 @@ describe("Event Model saves the correct values", () => {
     expect(savedData.startTime === submittedData.startTime);
     done();
   });
+
+  test('Can create a simple Event', async (done) => {
+    const submittedData = { name: 'testEvent' };
+    await Event.create(submittedData);
+    const savedDataArray = await Event.find();
+    const savedData = savedDataArray[0];
+    expect(savedData.name === 'testEvent');
+    done();
+  });
 });
+
+describe('Cannot save simple data', () => {});
