@@ -9,7 +9,6 @@ const { CONFIG_AUTH } = require('../config/');
 const { User } = require('../models');
 
 
-
 // Create mock for emailController
 const sendMailMock = jest.fn() 
 jest.mock('../controllers/email.controller');
@@ -22,8 +21,8 @@ beforeEach(() => {
 });
 
 // API Tests
-describe('Test that we can create a user using /user routes', () => {
-  test('POST a user and retrieve that user from /user', async () => {
+describe('CREATE User', () => {
+  test('Create user with POST to /users', async () => {
     // Test Data
     const submittedData = {
       name: { firstName: 'test_first', lastName: 'test_last' },
@@ -49,10 +48,27 @@ describe('Test that we can create a user using /user routes', () => {
     const APIData = response.body[0];
     expect(APIData.name === submittedData.name);
   });
+
+  test('Create user with POST to /auth/signup', async () => {
+    // setupDBRoles();
+    // Test Data
+    const goodUserData = {
+      name: { firstName: 'testname', lastName: 'testlast' },
+      email: 'test@test.com',
+    };
+
+    const res = await request
+      .post('/api/auth/signup')
+      .send(goodUserData)
+      .set('Accept', 'application/json');
+
+    expect(res.status).toBe(200);
+    expect(JSON.parse(res.text).message).toEqual('User was registered successfully!');
+  });
 });
 
-describe('Test user can sign up through API', () => {
-  test('A POST with invalid name data should return a 400 and error message.', async () => {
+describe('SIGNUP Validation', () => {
+  test('Invalid data returns 422', async () => {
     // Test Data
     const badUserData = {
       firstName: 'test_first',
@@ -72,23 +88,8 @@ describe('Test user can sign up through API', () => {
       { msg: 'Invalid value', param: 'name.lastName', location: 'body' },
     ]);
   });
-  test('A POST valid data should return a 200 and success message.', async () => {
-    // setupDBRoles();
-    // Test Data
-    const goodUserData = {
-      name: { firstName: 'testname', lastName: 'testlast' },
-      email: 'test@test.com',
-    };
 
-    const res = await request
-      .post('/api/auth/signup')
-      .send(goodUserData)
-      .set('Accept', 'application/json');
-
-    expect(res.status).toBe(200);
-    expect(JSON.parse(res.text).message).toEqual('User was registered successfully!');
-  });
-  test('A POST of an already used email returns a 400 and an error message.', async () => {
+  test('Existing user returns 400', async () => {
     // Test Data
     const userOneWithSameEmail = {
       name: { firstName: 'one', lastName: 'two' },
@@ -113,10 +114,11 @@ describe('Test user can sign up through API', () => {
     expect(res2.status).toBe(400);
     expect(JSON.parse(res2.text).message).toEqual('Failed! Email is already in use!');
   });
+
 });
 
-describe('Test user can sign in through API', () => {
-  test('A POST with an admin user returns a 200 and sends a Magic Link.', async () => {
+describe('SIGNIN User', () => {
+  test('User can signin and returns 200', async () => {
     // Test Data
 
     // Create user in DB
@@ -139,8 +141,10 @@ describe('Test user can sign in through API', () => {
     expect(res.status).toBe(200);
     expect(JSON.parse(res.text).message).toEqual('User login link sent to email!');
   });
+});
 
-  test('A POST with an non admin user returns 401 and helpful error message.', async () => {
+describe('SIGNIN Validation', () => {
+  test('Non admin user returns 401', async () => {
     // Test Data
 
     // Create user in DB
@@ -164,7 +168,7 @@ describe('Test user can sign in through API', () => {
     expect(JSON.parse(res.text).message).toEqual('Invalid permissions');
   });
 
-  test('A POST with non-valid email returns a 422 and a helpful error message.', async () => {
+  test('A non-valid email return 422', async () => {
     // Test Data
 
     // Create user in DB
@@ -196,4 +200,4 @@ describe('Test user can sign in through API', () => {
       },
     ]);
   });
-});
+})
