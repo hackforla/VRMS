@@ -53,9 +53,9 @@ const createProdSMTPTransport = async () => {
   return smtpTransport;
 };
 
-async function sendMail(smtpTransport, email, token) {
+async function sendMail(smtpTransport, email, token, origin) {
   const encodedToken = encodeURIComponent(token);
-  const emailLink = `https://tinyurl.com/nyqxd/handleauth?token=${encodedToken}&signIn=true`;
+  const emailLink = `${origin}/handleauth?token=${encodedToken}&signIn=true`;
   const encodedUri = encodeURI(emailLink);
   const mailOptions = {
     from: EMAIL_ACCOUNT,
@@ -71,7 +71,7 @@ async function sendMail(smtpTransport, email, token) {
   console.log('Message sent: %s', info.messageId);
 };
 
-async function mailServer(email, token) {
+async function mailServer(email, token, origin) {
   let smtpTransport;
   if (process.env.NODE_ENV === 'development') {
     smtpTransport = await createDockerSMTPSTransport();
@@ -79,11 +79,11 @@ async function mailServer(email, token) {
     smtpTransport = await createProdSMTPTransport();
   }
 
-  sendMail(smtpTransport, email, token).catch(console.error);
+  sendMail(smtpTransport, email, token, origin).catch(console.error);
 }
 
-const sendUserEmailSigninLink = async (email, token) => {
-  await mailServer(email, token);
+const sendUserEmailSigninLink = async (email, token, origin) => {
+  await mailServer(email, token, origin);
 };
 
 const emailController = {
