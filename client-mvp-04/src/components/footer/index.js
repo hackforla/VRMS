@@ -1,6 +1,6 @@
 import React from 'react';
 import './index.scss';
-import { Link } from 'react-router-dom';
+import RedirectLink from '../../common/link';
 
 const Footer = () => {
   return (
@@ -13,13 +13,12 @@ const Footer = () => {
             Used for streamlining onboarding to new projects, find helpful
             meeting details, track your contributions, and maintain a profile of
             your skills and professional development.
-            <Link
+            <RedirectLink
               key={'footer-page'}
-              to={'/page'}
-              className="tooltip-link redirect-link"
-            >
-              More details here.
-            </Link>
+              path={'/page'}
+              className={`tooltip-link`}
+              content={`More details here.`}
+            />
           </div>
         </div>
       </div>

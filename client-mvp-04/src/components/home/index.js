@@ -1,7 +1,7 @@
 import React from 'react';
 import './index.scss';
-import { Link } from 'react-router-dom';
 import Button from '../../common/button';
+import RedirectLink from '../../common/link';
 
 const Home = () => {
   return (
@@ -9,15 +9,18 @@ const Home = () => {
       <h1 className="home-name">VRMS</h1>
       <h2 className="home-title">Volunteer Relationship Management System</h2>
 
-      <Link to={'/page'} className="redirect-link">
-        <Button content={`Sign in`} className={`home-button`} />
-      </Link>
+      <RedirectLink
+        path={'/page'}
+        content={<Button content={`Sign in`} className={`home-button`} />}
+      />
 
       <span className="home-text">or</span>
 
-      <Link to="/page" className="home-link redirect-link">
-        create account
-      </Link>
+      <RedirectLink
+        path={'/page'}
+        content={'create account'}
+        className={'home-link'}
+      />
     </section>
   );
 };
