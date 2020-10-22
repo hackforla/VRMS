@@ -7,6 +7,7 @@ setupDB("api-events");
 
 const { Event } = require('../models');
 
+
 // API Tests
 describe('CREATE', () => {
   test('Create Event', async (done) => {
@@ -96,7 +97,7 @@ describe('READ', () => {
 });
 
 describe('UPDATE', () => {
-  test('Update Event by ID', async (done) => {
+  test('PUT Update Event by ID', async (done) => {
     // Test Data
     const submittedData = {
       name: 'originalEventName',
@@ -115,7 +116,7 @@ describe('UPDATE', () => {
 
     // Update the event
     const res2 = await request
-      .post(`/api/events/${res.body._id}/update/`)
+      .put(`/api/events/${res.body._id}/update/`)
       .set('Accept', 'application/json')
       .send(updatedDataPayload);
     expect(res2.status).toBe(200);

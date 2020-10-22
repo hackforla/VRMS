@@ -7,9 +7,9 @@ EventController.event_list = async function (req, res) {
 
   try {
     const events = await Event.find(query).exec();
-    res.json(events);
+    return res.json(events);
   } catch (err) {
-    res.sendStatus(500).json({
+    return res.sendStatus(500).json({
       message: `/GET Internal server error: ${err.stack}`,
     });
   }
@@ -17,13 +17,13 @@ EventController.event_list = async function (req, res) {
 };
 
 EventController.event_by_id = async function (req, res) {
-  const { id } = req.params;
+  const { EventId } = req.params;
 
   try {
-    const events = await Event.findById(id).populate('project');
-    res.json(events);
+    const events = await Event.findById(EventId).populate('project');
+    return res.json(events);
   } catch (err) {
-    res.sendStatus(500).json({
+    return res.sendStatus(500).json({
       message: `/GET Internal server error: ${err}`,
     });
   }
@@ -43,10 +43,10 @@ EventController.create = async function (req, res) {
 };
 
 EventController.destroy = async function (req, res) {
-  const { id } = req.params
+  const { EventId } = req.params;
 
   try {
-    const event = await Event.findByIdAndDelete(id);
+    const event = await Event.findByIdAndDelete(EventId);
     return res.status(200).json(event)
   } catch (err) {
     return res.status(500).send({
@@ -57,10 +57,10 @@ EventController.destroy = async function (req, res) {
 };
 
 EventController.update = async function (req, res) {
-  const { id } = req.params
+  const { EventId } = req.params;
 
   try {
-    const event = await Event.findByIdAndDelete(id);
+    const event = await Event.findByIdAndDelete(EventId);
     return res.status(200).json(event)
   } catch (err) {
     return res.status(500).send({
@@ -70,7 +70,7 @@ EventController.update = async function (req, res) {
 };
 
 EventController.event_member_list = function (req, res) {
-  res.send('NOT IMPLEMENTED: Event list UPDATE');
+  return res.send('NOT IMPLEMENTED: Event list UPDATE');
 };
 
 module.exports = EventController;

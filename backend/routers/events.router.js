@@ -12,16 +12,16 @@ router.get('/', EventController.event_list);
 router.post('/create', EventController.create);
 
 // Display Event by id with GET.
-router.get('/:id', EventController.event_by_id);
+router.get('/:EventId', EventController.event_by_id);
 
 // Delete Event by id with POST.
-router.post('/:id/destroy', EventController.destroy);
+router.post('/:EventId/destroy', EventController.destroy);
 
 // Update Event by id with PUT.
-router.post('/:id/update', EventController.update);
+router.put('/:EventId/update', EventController.update);
 
 // Get Event members by GET
-router.get('/:id/members', EventController.event_member_list);
+router.get('/:EventId/members', EventController.event_member_list);
 
 
 router.post('/', (req, res) => {
@@ -50,6 +50,7 @@ router.get("/nexteventbyproject/:id", (req, res) => {
     });
 });
 
+// TODO: Refactor out from client and remove in favor of /events/:EventID/update
 router.patch("/:id", (req, res) => {
   Event.findById(req.params.id, function (err, event) {
     event.checkInReady = !event.checkInReady;
