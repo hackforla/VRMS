@@ -12,19 +12,19 @@ router.get('/', ProjectController.project_list);
 router.post('/create', ProjectController.create);
 
 // Display Project by id with GET.
-router.get('/:id', ProjectController.project_by_id);
+router.get('/:ProjectId', ProjectController.project_by_id);
 
 // Delete Project by id with POST.
-router.post('/:id/destroy', ProjectController.destroy);
+router.post('/:ProjectId/destroy', ProjectController.destroy);
 
 // Update Project by id with PUT.
-router.post('/:id/update', ProjectController.update);
+router.post('/:ProjectId/update', ProjectController.update);
 
 // Display upcoming Event with GET.
-router.get('/:id/nextevent', ProjectController.next_event);
+router.get('/:ProjectId/nextevent', ProjectController.next_event);
 
 // Get Project members list by GET
-router.get('/:id/members', ProjectController.project_member_list);
+router.get('/:ProjectId/members', ProjectController.project_member_list);
 
 // GET /api/projects/
 router.get("/", (req, res) => {
