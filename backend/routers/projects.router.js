@@ -9,16 +9,16 @@ const { ProjectController } = require('../controllers');
 router.get('/', ProjectController.project_list);
 
 // Create new Project with POST.
-router.post('/create', ProjectController.create);
+router.post('/', ProjectController.create);
 
 // Display Project by id with GET.
 router.get('/:ProjectId', ProjectController.project_by_id);
 
-// Delete Project by id with POST.
-router.post('/:ProjectId/destroy', ProjectController.destroy);
-
 // Update Project by id with PUT.
-router.post('/:ProjectId/update', ProjectController.update);
+router.patch('/:ProjectId', ProjectController.update);
+
+// Delete Project by id with POST.
+router.delete('/:ProjectId', ProjectController.destroy);
 
 // Display upcoming Event with GET.
 router.get('/:ProjectId/nextevent', ProjectController.next_event);
