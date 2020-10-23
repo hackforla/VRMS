@@ -6,12 +6,10 @@ ProjectController.project_list = async function (req, res) {
   const { query } = req;
 
   try {
-    const events = await Project.find(query);
-    return res.json(events);
+    const projects = await Project.find(query);
+    return res.status(200).send(projects);
   } catch (err) {
-    return res.sendStatus(500).json({
-      message: `/GET Internal server error: ${err.stack}`,
-    });
+    return res.sendStatus(400);
   }
 };
 
@@ -20,32 +18,51 @@ ProjectController.create = async function (req, res) {
 
   try {
     const newProject = await Project.create(body);
-    return res.json(newProject);
+    return res.status(201).send(newProject);
   } catch (err) {
-    return res.status(500).send({
-      message: `/GET Internal server error: ${err}`,
-    });
+    return res.sendStatus(400);
   }
 };
 
-ProjectController.project_by_id = function (req, res) {
-  return res.send('NOT IMPLEMENTED: Read Project by id GET');
+ProjectController.project_by_id = async function (req, res) {
+  const { ProjectId } = req.params;
+
+  try {
+    const project = await Project.findById(ProjectId);
+    return res.status(200).send(project);
+  } catch (err) {
+    return res.sendStatus(400);
+  }
 };
 
-ProjectController.update = function (req, res) {
-  return res.send('NOT IMPLEMENTED: Update Project by id PUT');
+ProjectController.update = async function (req, res) {
+  const { ProjectId } = req.params;
+
+  try {
+    const project = await Project.findOneAndUpdate(ProjectId, req.body);
+    return res.status(200).send(project);
+  } catch (err) {
+    return res.sendStatus(400);
+  }
 };
 
-ProjectController.destroy = function (req, res) {
-  return res.send('NOT IMPLEMENTED: Delete Project by id POST');
+ProjectController.destroy = async function (req, res) {
+  const { ProjectId } = req.params;
+
+  try {
+    const project = await Project.findByIdAndDelete(ProjectId);
+    return res.status(200).send(project);
+  } catch (err) {
+    return res.sendStatus(400);
+  }
 };
 
 ProjectController.next_event = function (req, res) {
-  return res.send('NOT IMPLEMENTED: Get next Project for Project GET');
+  return res.sendStatus('NOT IMPLEMENTED: Get next Project for Project GET');
 };
 
 ProjectController.project_member_list = function (req, res) {
-  return res.send('NOT IMPLEMENTED: Get next Project for Project GET');
+  return res.sendStatus('NOT IMPLEMENTED: Get next Project for Project GET');
 };
 
 
