@@ -3,6 +3,7 @@ const router = express.Router();
 
 const { CheckIn } = require('../models/checkIn.model');
 
+
 // GET /api/checkins/
 router.get("/", (req, res) => {
   CheckIn.find()

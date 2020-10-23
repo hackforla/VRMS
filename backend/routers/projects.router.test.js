@@ -7,10 +7,8 @@ setupDB('api-projects');
 
 const { Project } = require('../models');
 
-beforeEach(async () => {});
-
 describe('CREATE', () => {
-  test('Create a Project with POST to /api/projects/create/', async (done) => {
+  test('Create a Project with POST to /api/projects/', async (done) => {
     // Test Data
     const submittedData = {
       name: 'projectName',
