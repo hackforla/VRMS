@@ -1,5 +1,4 @@
 const express = require("express");
-const express = require("express");
 const router = express.Router();
 const { App } = require("@slack/bolt");
 const cron = require("node-cron");
@@ -82,7 +81,7 @@ async function publishMessage1(id, text) {
     });
 
     console.log(result);
-  } catch (error) {
+    } catch (error) {
     console.error(error);
   }
 }
@@ -120,28 +119,59 @@ async function findProject(req, res) {
 //============= SLACKBOT FOR SENDING NEW USERS MESSAGES AND REMINDERS ==============
 
 //----------------- FETCH LIST OF NEW USERS (LESS THAN 30 DAYS) --------------------
+router.post("/msgNewUsers", (req, res) => {
+  getUsers()
+  //msgNewUsers();
+});
+
 //function to return list of users who are less than 30days new to HFLA
-async function findNewUsers(req, res) {
-  let newUserList = [];
-  User.find({})
-    .then((user) => {
-      user.forEach((cur) => {
-        let accountAge = checkStartDate(cur.createdDate);
-        if (accountAge <= 30) {
-          newUserList.push(cur);
-        }
-      });
-      //res.json(User);
+async function getUsers() {
+  let newMembersList = [];
+  await User.find({})
+    .then(data => {
+      return data;
     })
-    .catch((err) => {
-      console.log(err);
-      res.sendStatus(500).json({
-        message: `Error: ${err}`,
-      });
-    });
-    return newUserList;
+    .then(data => {
+      data.forEach((cur) => {
+        if(checkStartDate(cur.createdDate) < 30) {
+          newMembersList.push(cur);
+          //console.log(cur);
+        }
+      })
+  })
+  return newMembersList;
 }
-console.log(findNewUsers());
+
+console.log(getUsers());
+
+
+//function to check how long a user has been with the org (according to the date they created their VRMS account)
+//let newUserList = [];
+// function findNewUsers() {
+//   let newUserList = [];
+//   try {
+//     let result = async () =>  {
+//       User.find({})
+//         .then((user) => {
+//           user.forEach((cur) => {
+//             let accountAge = checkStartDate(cur.createdDate);
+//             //console.log(accountAge);
+//             if (accountAge <= 30) {
+//               newUserList.push(cur);
+//             }
+//           });
+//         })
+//     }
+//     // console.log(newUserList)
+//     //return newUserList;
+//   }
+//   catch(err) {
+//     console.log(err);
+//   }
+//   console.log(newUserList)
+//   return newUserList;
+// }
+// console.log(findNewUsers());
 
 //function to check how long a user has been with the org (according to the date they created their VRMS account)
 function checkStartDate(userCreatedDate) {
