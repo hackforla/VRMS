@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
 
-const { User } = require('../models/user.model');
-
 const { UserController } = require('../controllers');
 
 // Get list of Users with GET

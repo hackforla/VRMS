@@ -108,10 +108,10 @@ UserController.createUser = function (req, res) {
   const { firstName, lastName, email } = req.body;
   const user = new User({
     name: {
-      firstName: firstName,
-      lastName: lastName,
+      firstName,
+      lastName,
     },
-    email: email,
+    email,
     accessLevel: 'user',
   });
 
