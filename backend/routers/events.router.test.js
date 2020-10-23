@@ -18,10 +18,10 @@ describe('CREATE', () => {
 
     // Submit an event
     const res = await request
-      .post('/api/events/create')
+      .post('/api/events/')
       .set('Accept', 'application/json')
       .send(submittedData);
-    expect(res.status).not.toBe(404);
+    expect(res.status).toBe(201);
 
     // Retrieve that event
     const databaseEventQuery = await Event.find();
@@ -41,7 +41,7 @@ describe('READ', () => {
     };
 
     // Add an event with a project using the API.
-    const res = await request.post('/api/events').send(submittedData);
+    const res = await request.post('/api/events/').send(submittedData);
 
     // Retrieve and compare the the Event values using the DB.
     const databaseEventQuery = await Event.find();
@@ -50,7 +50,7 @@ describe('READ', () => {
     expect(databaseEvent.createdDate === submittedData.createdDate);
 
     // Retrieve and compare the the values using the API.
-    const response = await request.get('/api/events');
+    const response = await request.get('/api/events/');
     expect(response.statusCode).toBe(200);
     const APIData = response.body[0];
     expect(APIData.createdDate === submittedData.createdDate);
@@ -97,7 +97,7 @@ describe('READ', () => {
 });
 
 describe('UPDATE', () => {
-  test('PUT Update Event by ID', async (done) => {
+  test('Update Event by ID with PATCH', async (done) => {
     // Test Data
     const submittedData = {
       name: 'originalEventName',
@@ -105,10 +105,10 @@ describe('UPDATE', () => {
 
     // Submit an event
     const res = await request
-      .post('/api/events/create')
+      .post('/api/events/')
       .set('Accept', 'application/json')
       .send(submittedData);
-    expect(res.status).not.toBe(404);
+    expect(res.status).toBe(201);
 
     const updatedDataPayload = {
       name: 'updateEventName',
@@ -116,7 +116,7 @@ describe('UPDATE', () => {
 
     // Update the event
     const res2 = await request
-      .put(`/api/events/${res.body._id}/update/`)
+      .patch(`/api/events/${res.body._id}`)
       .set('Accept', 'application/json')
       .send(updatedDataPayload);
     expect(res2.status).toBe(200);
@@ -126,7 +126,7 @@ describe('UPDATE', () => {
 });
 
 describe('DELETE', () => {
-  test('Delete Event by ID', async (done) => {
+  test('Delete Event by ID with DELETE', async (done) => {
     // Test Data
     const submittedData = {
       name: 'eventName',
@@ -134,44 +134,15 @@ describe('DELETE', () => {
 
     // Submit an event
     const res = await request
-      .post('/api/events/create')
+      .post('/api/events/')
       .set('Accept', 'application/json')
       .send(submittedData);
-    expect(res.status).not.toBe(404);
+    expect(res.status).toBe(201);
 
     // Delete the event
-    const res2 = await request
-      .post(`/api/events/${res.body._id}/destroy/`)
-      .set('Accept', 'application/json')
-      .send(submittedData);
+    const res2 = await request.delete(`/api/events/${res.body._id}/`);
     expect(res2.status).toBe(200);
 
     done();
   });
 });
-
-describe('MEMBERS', () => {
-  test('Delete Event by ID', async (done) => {
-    // Test Data
-    const submittedData = {
-      name: 'eventName',
-    };
-
-    // Submit an event
-    const res = await request
-      .post('/api/events/create')
-      .set('Accept', 'application/json')
-      .send(submittedData);
-    expect(res.status).not.toBe(404);
-
-    // Delete the event
-    const res2 = await request
-      .post(`/api/events/${res.body._id}/destroy/`)
-      .set('Accept', 'application/json')
-      .send(submittedData);
-    expect(res2.status).toBe(200);
-
-    done();
-  });
-});
-

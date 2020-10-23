@@ -7,11 +7,9 @@ EventController.event_list = async function (req, res) {
 
   try {
     const events = await Event.find(query).exec();
-    return res.json(events);
+    return res.status(200).send(events);
   } catch (err) {
-    return res.sendStatus(500).json({
-      message: `/GET Internal server error: ${err.stack}`,
-    });
+    return res.sendStatus(400);
   }
 
 };
@@ -21,11 +19,9 @@ EventController.event_by_id = async function (req, res) {
 
   try {
     const events = await Event.findById(EventId).populate('project');
-    return res.json(events);
+    return res.status(200).send(events);
   } catch (err) {
-    return res.sendStatus(500).json({
-      message: `/GET Internal server error: ${err}`,
-    });
+    return res.sendStatus(400);
   }
 };
 
@@ -34,11 +30,9 @@ EventController.create = async function (req, res) {
 
   try {
     const event = await Event.create(body);
-    return res.status(200).json(event)
+    return res.status(201).send(event);
   } catch (err) {
-    return res.status(500).send({
-      message: `/GET Internal server error: ${err}`,
-    });
+    return res.sendStatus(400);
   }
 };
 
@@ -47,11 +41,9 @@ EventController.destroy = async function (req, res) {
 
   try {
     const event = await Event.findByIdAndDelete(EventId);
-    return res.status(200).json(event)
+    return res.status(200).send(event);
   } catch (err) {
-    return res.status(500).send({
-      message: `/GET Internal server error: ${err}`,
-    });
+    return res.sendStatus(400);
   }
   
 };
@@ -60,12 +52,10 @@ EventController.update = async function (req, res) {
   const { EventId } = req.params;
 
   try {
-    const event = await Event.findByIdAndDelete(EventId);
-    return res.status(200).json(event)
+    const event = await Event.findByIdAndUpdate(EventId, req.body);
+    return res.status(200).send(event);
   } catch (err) {
-    return res.status(500).send({
-      message: `/GET Internal server error: ${err}`,
-    });
+    return res.sendStatus(400);
   }
 };
 
