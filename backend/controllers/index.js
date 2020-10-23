@@ -1,11 +1,11 @@
-const emailController = require('./email.controller');
+const EmailController = require('./email.controller');
 const EventController = require('./event.controller');
-const userController = require('./user.controller');
+const UserController = require('./user.controller');
 const ProjectController = require('./project.controller');
 
 module.exports = {
-  emailController,
+  EmailController,
   EventController,
-  userController,
+  UserController,
   ProjectController,
 };

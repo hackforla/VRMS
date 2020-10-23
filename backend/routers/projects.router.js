@@ -20,11 +20,11 @@ router.patch('/:ProjectId', ProjectController.update);
 // Delete Project by id with POST.
 router.delete('/:ProjectId', ProjectController.destroy);
 
-// Display list of Project Event with GET.
-router.get('/:ProjectId/upcomingevents', ProjectController.event_list);
+// // Display list of Project Event with GET.
+// router.get('/:ProjectId/upcomingevents', ProjectController.event_list);
 
-// Get Project members list by GET
-router.get('/:ProjectId/members', ProjectController.member_list);
+// // Get Project members list by GET
+// router.get('/:ProjectId/members', ProjectController.member_list);
 
 
 module.exports = router;

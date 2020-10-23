@@ -9,7 +9,7 @@ const { CONFIG_AUTH } = require('../config/');
 const { User } = require('../models');
 
 
-// Create mock for emailController
+// Create mock for EmailController
 const sendMailMock = jest.fn() 
 jest.mock('../controllers/email.controller');
 const mockEmailController = require('../controllers/email.controller');

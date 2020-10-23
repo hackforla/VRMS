@@ -117,9 +117,9 @@ async function sendLoginLink(email, authToken) {
 
 }
 
-const emailController = {
+const EmailController = {
   sendLoginLink,
   sendEmail,
 };
-module.exports = emailController;
+module.exports = EmailController;
 

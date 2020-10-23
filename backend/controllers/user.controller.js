@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const emailController = require('./email.controller');
+const EmailController = require('./email.controller');
 const { CONFIG_AUTH } = require('../config');
 
 const { User } = require('../models');
@@ -32,7 +32,7 @@ function createUser(req, res) {
   });
 
   const jsonToken = generateAccessToken(user);
-  emailController.sendLoginLink(req.body.email, jsonToken);
+  EmailController.sendLoginLink(req.body.email, jsonToken);
 }
 
 function signin(req, res) {
@@ -44,7 +44,7 @@ function signin(req, res) {
         return res.status(401).send({ message: 'User not authorized' });
       }
       const jsonToken = generateAccessToken(user);
-      emailController.sendLoginLink(req.body.email, jsonToken);
+      EmailController.sendLoginLink(req.body.email, jsonToken);
       return res.status(200).send({ message: 'User login link sent to email!' });
     })
     .catch((err) => {
@@ -80,11 +80,11 @@ function verifyMe(req, res) {
 }
 
 
-const userController = {
+const UserController = {
   createUser,
   signin,
   verifySignIn,
   verifyMe,
 };
 
-module.exports = userController;
+module.exports = UserController;
