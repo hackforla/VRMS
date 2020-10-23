@@ -5,40 +5,97 @@ const { CONFIG_AUTH } = require('../config');
 
 const { User } = require('../models');
 
+const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
 
 const UserController = {};
 
-// // Get list of Users with GET
-// UserController.user_list = async function (req, res) {
-//   return res.sendStatus('NOT IMPLEMENTED: Get next Project for Project GET');
-// };
+// Get list of Users with GET
+UserController.user_list = async function (req, res) {
+  const { headers } = req;
+  const { query } = req;
 
-// // Get User by id with GET
-// UserController.user_by_id = async function (req, res) {
-//   return res.sendStatus('NOT IMPLEMENTED: Get next Project for Project GET');
-// };
+  if (headers['x-customrequired-header'] !== expectedHeader) {
+    return res.sendStatus(403);
+  }
+
+  try {
+    const user = await User.find(query);
+    return res.status(200).send(user);
+  } catch (err) {
+    return res.sendStatus(400);
+  }
+};
+
+// Get User by id with GET
+UserController.user_by_id = async function (req, res) {
+  const { headers } = req;
+  const { UserId } = req.params;
+
+  if (headers['x-customrequired-header'] !== expectedHeader) {
+    return res.sendStatus(403);
+  }
+
+  try {
+    const user = await User.findById(UserId);
+    return res.status(200).send(user);
+  } catch (err) {
+    return res.sendStatus(400);
+  }
+};
 
 // Add User with POST
 UserController.create = async function (req, res) {
   const { headers } = req;
 
-  if (headers['x-customrequired-header'] !== process.env.CUSTOM_REQUEST_HEADER) {
-    return res.sendStatus(401);
-  } 
+  if (headers['x-customrequired-header'] !== expectedHeader) {
+    return res.sendStatus(403);
+  }
 
   try {
-    const user = User.create(req.body);
-    return res.status(201).send(user)
-  } catch (err){
-    return res.sendStatus(400)
+    const user = await User.create(req.body);
+    return res.status(201).send(user);
+  } catch (err) {
+    return res.sendStatus(400);
   }
- 
 };
 
-// // Update User with PATCH
-// UserController.update = async function (req, res) {
-//   return res.sendStatus('NOT IMPLEMENTED: Get next Project for Project GET');
-// };
+// Update User with PATCH
+UserController.user_update = async function (req, res) {
+  const { headers } = req;
+  const { UserId } = req.params;
+
+  console.log('-->FUCK:');
+
+  if (headers['x-customrequired-header'] !== expectedHeader) {
+    return res.sendStatus(403);
+  }
+
+  try {
+    const user = await User.findOneAndUpdate(UserId, req.body);
+    console.log('-->user: ', user);
+    return res.status(200).send(user);
+  } catch (err) {
+    return res.sendStatus(400);
+  }
+};
+
+// Add User with POST
+UserController.user_delete = async function (req, res) {
+  const { headers } = req;
+  const { UserId } = req.params;
+
+  if (headers['x-customrequired-header'] !== expectedHeader) {
+    return res.sendStatus(403);
+  }
+
+  try {
+    const user = await User.findByIdAndDelete(UserId);
+    return res.status(200).send(user);
+  } catch (err) {
+    return res.sendStatus(400);
+  }
+};
+
 
 function generateAccessToken(user) {
   // expires after half and hour (1800 seconds = 30 minutes)
