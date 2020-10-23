@@ -6,7 +6,7 @@ EventController.event_list = async function (req, res) {
   const { query } = req;
 
   try {
-    const events = await Event.find(query).exec();
+    const events = await Event.find(query);
     return res.status(200).send(events);
   } catch (err) {
     return res.sendStatus(400);

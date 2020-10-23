@@ -15,7 +15,7 @@ router.post('/', ProjectController.create);
 router.get('/:ProjectId', ProjectController.project_by_id);
 
 // Update Project by id with PATCH.
-router.patch('/:ProjectId', ProjectController.update);
+router.patch('/:ProjectId', ProjectController.update_project);
 
 // Delete Project by id with POST.
 router.delete('/:ProjectId', ProjectController.destroy);
