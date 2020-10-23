@@ -1,6 +1,6 @@
 import React from 'react';
 import './index.scss';
-import RedirectLink from '../../common/link';
+import RedirectLink from '../common/link';
 
 const Footer = () => {
   return (
@@ -14,7 +14,7 @@ const Footer = () => {
             meeting details, track your contributions, and maintain a profile of
             your skills and professional development.
             <RedirectLink
-              key={'footer-page'}
+              linkKey={'footer-page'}
               path={'/page'}
               className={`tooltip-link`}
               content={`More details here.`}

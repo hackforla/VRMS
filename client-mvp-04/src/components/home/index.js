@@ -1,7 +1,7 @@
 import React from 'react';
 import './index.scss';
-import Button from '../../common/button';
-import RedirectLink from '../../common/link';
+import Button from '../common/button';
+import RedirectLink from '../common/link';
 
 const Home = () => {
   return (
@@ -12,6 +12,7 @@ const Home = () => {
       <RedirectLink
         path={'/page'}
         content={<Button content={`Sign in`} className={`home-button`} />}
+        linkKey={'sign-in-link'}
       />
 
       <span className="home-text">or</span>
@@ -20,6 +21,7 @@ const Home = () => {
         path={'/page'}
         content={'create account'}
         className={'home-link'}
+        linkKey={'create-account-link'}
       />
     </section>
   );

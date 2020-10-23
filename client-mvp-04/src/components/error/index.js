@@ -1,6 +1,6 @@
 import React from 'react';
 import './index.scss';
-import RedirectLink from '../../common/link';
+import RedirectLink from '../common/link';
 
 const Error = () => {
   return (
@@ -8,7 +8,7 @@ const Error = () => {
       <span className="error-status">404</span>
       <h2 className="error-content">Oops! Page not found!</h2>
       <RedirectLink
-        key={'error-home'}
+        linkKey={'error-home'}
         path={'/'}
         className={'redirect-link'}
         content={'Back to Homepage'}
