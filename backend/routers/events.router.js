@@ -8,16 +8,16 @@ const { EventController } = require('../controllers');
 // Display list of all Eents.
 router.get('/', EventController.event_list);
 
-// Create new Event with POST.
+// Create a new Event with POST.
 router.post('/', EventController.create);
 
 // Display Event by id with GET.
 router.get('/:EventId', EventController.event_by_id);
 
-// Delete Event by id with POST.
+// Delete Event by id with DELETE.
 router.delete('/:EventId', EventController.destroy);
 
-// Update Event by id with PUT.
+// Update Event by id with PATCH.
 router.patch('/:EventId', EventController.update);
 
 // Get Event members by GET

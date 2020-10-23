@@ -57,11 +57,11 @@ ProjectController.destroy = async function (req, res) {
   }
 };
 
-ProjectController.next_event = function (req, res) {
+ProjectController.event_list = function (req, res) {
   return res.sendStatus('NOT IMPLEMENTED: Get next Project for Project GET');
 };
 
-ProjectController.project_member_list = function (req, res) {
+ProjectController.member_list = function (req, res) {
   return res.sendStatus('NOT IMPLEMENTED: Get next Project for Project GET');
 };
 

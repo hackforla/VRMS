@@ -5,7 +5,7 @@ const { Project } = require('../models/project.model');
 
 const { ProjectController } = require('../controllers');
 
-// Display list of all Projects GET.
+// Display list of all Projects with GET.
 router.get('/', ProjectController.project_list);
 
 // Create new Project with POST.
@@ -14,91 +14,17 @@ router.post('/', ProjectController.create);
 // Display Project by id with GET.
 router.get('/:ProjectId', ProjectController.project_by_id);
 
-// Update Project by id with PUT.
+// Update Project by id with PATCH.
 router.patch('/:ProjectId', ProjectController.update);
 
 // Delete Project by id with POST.
 router.delete('/:ProjectId', ProjectController.destroy);
 
-// Display upcoming Event with GET.
-router.get('/:ProjectId/nextevent', ProjectController.next_event);
+// Display list of Project Event with GET.
+router.get('/:ProjectId/upcomingevents', ProjectController.event_list);
 
 // Get Project members list by GET
-router.get('/:ProjectId/members', ProjectController.project_member_list);
+router.get('/:ProjectId/members', ProjectController.member_list);
 
-// GET /api/projects/
-router.get("/", (req, res) => {
-  // const { headers } = req;
-  // const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
-
-  // if (headers['x-customrequired-header'] !== expectedHeader) {
-  //     res.sendStatus(401);
-  // } else {
-  Project.find()
-    .then((projects) => {
-      if (!projects) {
-        res.json(false);
-      } else {
-        res.json(projects);
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      res.sendStatus(500).json({
-        message: `/GET Internal server error: ${err}`,
-      });
-    });
-  // };
-});
-
-router.get("/:id", (req, res) => {
-  Project.findById(req.params.id)
-    .then((project) => {
-      res.json(project);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.sendStatus(500).json({
-        message: `/GET Internal server error: ${err}`,
-      });
-    });
-});
-
-router.patch("/:id", (req, res) => {
-  const { headers } = req;
-  // const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
-
-  // if (headers['x-customrequired-header'] !== expectedHeader) {
-  //     res.sendStatus(401);
-  // } else {
-  Project.findByIdAndUpdate(req.params.id, req.body)
-    .then((edit) => res.json(req.params.id))
-    .catch((err) =>
-      res.status(500).json({
-        error: "Couldn't edit form... Try again.",
-      })
-    );
-  // };
-});
-
-router.post("/", (req, res) => {
-  // const { headers } = req;
-  // const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
-
-  // if (headers['x-customrequired-header'] !== expectedHeader) {
-  //     res.sendStatus(401);
-  // } else {
-  Project.create(req.body, function (err, project) {
-    if (err) {
-      console.log(err.errmsg);
-      res.json(err.errmsg);
-    } else {
-      const { id } = project;
-      console.log("Created with id: " + id);
-      res.status(201).json(id);
-    }
-  });
-  // }
-});
 
 module.exports = router;

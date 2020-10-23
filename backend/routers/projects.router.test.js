@@ -74,8 +74,6 @@ describe('UPDATE', () => {
       .set('Accept', 'application/json')
       .send(updatedDataPayload);
     expect(res2.status).toBe(200);
-    console.log('-->res2: ', res2)
-
 
     // Get project
     const res3 = await request.get(`/api/projects/${res.body._id}`);
@@ -84,7 +82,7 @@ describe('UPDATE', () => {
     const APIData = res3.body;
     expect(APIData.name).toBe(updatedDataPayload.name);
     done();
-});
+  });
 });
 
 describe('DELETE', () => {
