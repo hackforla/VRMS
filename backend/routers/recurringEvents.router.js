@@ -61,7 +61,7 @@ router.patch('/:id', (req, res) => {
         })
         .catch(err => {
             console.log(err);
-            return res.sendStatus(500);
+            return res.sendStatus(503);
         });
 });
 
