@@ -3,31 +3,26 @@ const router = express.Router();
 
 const { CheckIn } = require('../models/checkIn.model');
 
-
 // GET /api/checkins/
-router.get("/", (req, res) => {
+router.get('/', (req, res) => {
   CheckIn.find()
     .then((checkIns) => {
-      res.json(checkIns);
+      res.status(200).send(checkIns);
     })
     .catch((err) => {
       console.log(err);
-      res.sendStatus(400).json({
-        message: `/GET Internal server error:  ${err}`,
-      });
+      res.sendStatus(400);
     });
 });
 
 router.get("/:id", (req, res) => {
   CheckIn.findById(req.params.id)
     .then((checkIn) => {
-      res.json(checkIn);
+      res.status(200).send(checkIn);
     })
     .catch((err) => {
       console.log(err);
-      res.sendStatus(400).json({
-        message: `/GET Internal server error:  ${err}`,
-      });
+      res.sendStatus(400);
     });
 });
 
@@ -38,13 +33,11 @@ router.get("/findEvent/:id", (req, res) => {
       model: "User",
     })
     .then((checkIns) => {
-      res.status(200).json(checkIns);
+      res.status(200).send(checkIns);
     })
     .catch((err) => {
       console.log(err);
-      res.sendStatus(500).json({
-        message: "/GET Internal server error: " + err,
-      });
+      res.sendStatus(400);
     });
 });
 
@@ -55,9 +48,7 @@ router.post("/", (req, res) => {
     })
     .catch((err) => {
       console.log(err);
-      res.sendStatus(400).json({
-        message: `/POST Internal server error: ${err}`,
-      });
+      res.sendStatus(400);
     });
 });
 
