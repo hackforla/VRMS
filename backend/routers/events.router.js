@@ -32,9 +32,7 @@ router.get("/nexteventbyproject/:id", (req, res) => {
     })
     .catch((err) => {
       console.log(err);
-      res.sendStatus(500).json({
-        message: `/GET Internal server error: ${err}`,
-      });
+      res.sendStatus(500);
     });
 });
 
