@@ -16,7 +16,7 @@ const App = () => {
           <div className="app-container">
             <Header />
 
-            <main role="main" className="app-main">
+            <main data-testid="main" role="main" className="app-main">
               <Switch>
                 {Routes.map(({ path, key, component }) => (
                   <Route key={key} path={path} component={component} exact />

@@ -4,7 +4,7 @@ import RedirectLink from '../common/link';
 
 const Footer = () => {
   return (
-    <footer className="app-footer">
+    <footer data-testid="footer" className="app-footer">
       <div className="text-block">
         <span>VRMS</span> was developed by Hack for LA
         <div className="tooltip">

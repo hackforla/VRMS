@@ -5,11 +5,13 @@ import RedirectLink from '../common/link';
 
 const Header = () => {
   return (
-    <header className="app-header">
+    <header data-testid="header" className="app-header">
       <RedirectLink
         linkKey={'header-home-link'}
         path={'/'}
-        content={<img src={logo} className="app-logo" alt="logo" />}
+        content={
+          <img data-testid="logo" src={logo} className="app-logo" alt="logo" />
+        }
       />
     </header>
   );
