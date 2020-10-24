@@ -168,5 +168,4 @@ UserController.verifyMe = function (req, res) {
   res.send(200);
 };
 
-
 module.exports = UserController;

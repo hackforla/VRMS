@@ -64,5 +64,4 @@ ProjectController.member_list = function (req, res) {
   return res.sendStatus('NOT IMPLEMENTED: Get next Project for Project GET');
 };
 
-
 module.exports = ProjectController;
