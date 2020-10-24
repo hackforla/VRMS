@@ -163,8 +163,6 @@ describe('SIGNIN Validation', () => {
   });
 
   test('A non-valid email return 403', async () => {
-    // Test Data
-
     // Create user in DB
     const notValidEmailPayload = {
       name: {
