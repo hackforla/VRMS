@@ -13,13 +13,11 @@ router.get('/', cors(), (req, res) => {
         .find()
         .populate('project')
         .then(recurringEvents => {
-            res.json(recurringEvents);
+            return res.status(200).send(recurringEvents);
         })
         .catch(err => {
             console.log(err);
-            res.sendStatus(500).json({
-                message: `/GET Internal server error: ${err}`
-            })
+            return res.sendStatus(400);
         });
 });
 
@@ -27,13 +25,11 @@ router.post('/', (req, res) => {
     RecurringEvent
         .create(req.body)
         .then(recurrentEvent => {
-            res.sendStatus(201);
+            return res.sendStatus(201);
         })
         .catch(err => {
             console.log(err);
-            res.sendStatus(400).json({
-                message: `/POST Internal server error: ${err}`
-            })
+            return res.sendStatus(400);
         });
 });
 
@@ -41,13 +37,11 @@ router.get('/:id', (req, res) => {
     RecurringEvent
         .findById(req.params.id)
         .then(recurringEvent => {
-            res.json(recurringEvent);
+            return res.status(200).send(recurringEvent);
         })
         .catch(err => {
             console.log(err);
-            res.sendStatus(500).json({
-                message: `/GET Internal server error: ${err}`
-            })
+            return res.sendStatus(400);
         });
 });
 
@@ -58,18 +52,16 @@ router.patch('/:id', (req, res) => {
 
             recurringEvent.save(err => {
                 if (err) {
-                    console.log(err);
+                    return res.sendStatus(400);
                 }
             })
         })
         .then(recurringEvent => {
-            res.sendStatus(204)
+            return res.status(200).send(recurringEvent);
         })
         .catch(err => {
             console.log(err);
-            res.sendStatus(500).json({
-                message: `/PATCH Couldn't set check-in: ${err}`
-            })
+            return res.sendStatus(500);
         });
 });
 
