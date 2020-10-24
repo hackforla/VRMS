@@ -93,22 +93,23 @@ UserController.user_delete = async function (req, res) {
   }
 };
 
-
 function generateAccessToken(user) {
   // expires after half and hour (1800 seconds = 30 minutes)
   return jwt.sign({ id: user.id, role: user.accessLevel }, CONFIG_AUTH.SECRET, {
     expiresIn: `${CONFIG_AUTH.TOKEN_EXPIRATION_SEC}s`,
   });
-};
+}
 
 UserController.createUser = function (req, res) {
   const { firstName, lastName, email } = req.body;
+  const { origin } = req.headers;
+
   const user = new User({
     name: {
       firstName,
       lastName,
     },
-    email,
+    email: email.toLowerCase(),
     accessLevel: 'user',
   });
 
@@ -121,11 +122,13 @@ UserController.createUser = function (req, res) {
   });
 
   const jsonToken = generateAccessToken(user);
-  EmailController.sendLoginLink(req.body.email, jsonToken);
+
+  EmailController.sendLoginLink(req.body.email, jsonToken, req.cookie, origin);
 };
 
 UserController.signin = function (req, res) {
   const { email } = req.body;
+  const { origin } = req.headers;
 
   User.findOne({ email })
     .then((user) => {
@@ -133,7 +136,7 @@ UserController.signin = function (req, res) {
         return res.status(401).send({ message: 'User not authorized' });
       }
       const jsonToken = generateAccessToken(user);
-      EmailController.sendLoginLink(req.body.email, jsonToken);
+      EmailController.sendLoginLink(req.body.email, jsonToken, req.cookie, origin);
       return res.status(200).send({ message: 'User login link sent to email!' });
     })
     .catch((err) => {

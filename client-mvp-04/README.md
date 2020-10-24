@@ -1,6 +1,6 @@
 # VRMS - MVP 0.4
 
-VRMS MVP 0.4 - a client application for MVP 0.4 features development.
+VRMS MVP 0.4 is a client application for MVP 0.4 features development.
 
 ## Technologies
 
@@ -16,9 +16,11 @@ Please follow instructions from `vrms/README.md`.
 
 ## Get up and running (locally)
 
-1. Make sure that you've done 6 steps from a similar section `vrms/README.md`.  
+1. Make sure that you've done 6 steps from the similar section `vrms/README.md`.
+ 
+2. Make sure you added the required environment variables (`.env`) for the `client-mvp-04` and `backend` directories. 
 
-1. Start the local development servers (frontend & backend).
+3. Start the local development servers (frontend & backend).
    - Navigate to the root of the application `vrms/` and run `npm run mvp`
 
 You should now have a live app.
