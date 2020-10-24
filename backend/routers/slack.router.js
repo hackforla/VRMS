@@ -86,13 +86,11 @@ async function findEvent(req, res) {
   Event.find({})
     .then((events) => {
       console.log("EVENTS", events);
-      res.json(events);
+      return res.status(200).send(events);
     })
     .catch((err) => {
       console.log(err);
-      res.sendStatus(500).json({
-        message: `/GET Internal server error: ${err}`,
-      });
+      return res.sendStatus(400)
     });
 }
 
@@ -102,13 +100,11 @@ async function findProject(req, res) {
       project.forEach((cur) => {
         console.log("PROJECT", cur.name);
       });
-      res.json(project);
+      return res.status(200).send(project);
     })
     .catch((err) => {
       console.log(err);
-      res.sendStatus(500).json({
-        message: `/GET Internal server error: ${err}`,
-      });
+      return res.sendStatus(400);
     });
 }
 module.exports = router;
