@@ -10,7 +10,7 @@ function verifyToken(req, res, next) {
     token = token.slice(7, token.length);
   }
   if (!token) {
-    return res.status(403);
+    return res.sendStatus(403);
   }
 
   try {
@@ -19,14 +19,14 @@ function verifyToken(req, res, next) {
     req.userId = decoded.id;
     return next();
   } catch (err) {
-    return res.status(401).send({ message: err });
+    return res.sendStatus(401);
   }
 }
 
 function verifyCookie(req, res, next) {
   jwt.verify(req.cookies.token, CONFIG_AUTH.SECRET, (err, decoded) => {
     if (err) {
-      return res.status(401).send({ message: err });
+      return res.sendStatus(401);
     }
     req.userId = decoded.id;
     req.role = decoded.accessLevel;

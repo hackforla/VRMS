@@ -111,7 +111,6 @@ describe('SIGNUP Validation', () => {
       .set('Accept', 'application/json');
 
     expect(res2.status).toBe(400);
-    expect(JSON.parse(res2.text).message).toEqual('Failed! Email is already in use!');
   });
 
 });
@@ -161,7 +160,6 @@ describe('SIGNIN Validation', () => {
       .set('Accept', 'application/json');
 
     expect(res.status).toBe(401);
-    expect(JSON.parse(res.text).message).toEqual('Invalid permissions');
   });
 
   test('A non-valid email return 403', async () => {
