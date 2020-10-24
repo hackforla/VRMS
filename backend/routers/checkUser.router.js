@@ -3,7 +3,7 @@ const router = express.Router();
 
 const { User } = require('../models/user.model');
 
-// Get a list of checkUser
+// TODO: Refactor checkuser and test. Consider moving to auth.
 
 // GET /api/checkuser/
 router.post('/', (req, res) => {
@@ -11,7 +11,7 @@ router.post('/', (req, res) => {
     console.log(email);
     
     if(email === "undefined") {
-        return res.sendStatus(412).json({ message: "user email is required"})
+        return res.sendStatus(400);
     }
 
     if(email) {
@@ -19,35 +19,33 @@ router.post('/', (req, res) => {
             .findOne({email})
             .then(user => {
                 if (!user) {
-                    res.json(false);
+                    return res.sendStatus(400);
                 } else {
-                    res.json(user);
+                    return res.status(200).send(user);
                 }
             })
             .catch(err => {
                 console.log(err);
 
-                res.sendStatus(500).json({
-                    message: `/GET Internal server error: ${err}`
-                })
+                return res.sendStatus(400);
             });
     } else {
-        res.json({ message: "Enter the email address you used to check-in last time."});
+      // TODO: Refactor as path is not called, or tested.
+      res.json({ message: 'Enter the email address you used to check-in last time.' });
     }
     
 });
 
 router.get('/:id', (req, res) => {
+    // TODO: Refactor and test
     User
         .findById(req.params.id)
         .then(user => {
-            res.json(user);
+            return res.status(200).send(user);
         })
         .catch(err => {
             console.log(err);
-            res.sendStatus(500).json({
-                message: `/GET Internal server error: ${err}`
-            })
+            res.sendStatus(400);
         });
 });
 
