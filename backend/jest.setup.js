@@ -6,3 +6,6 @@ jest.mock('./workers/openCheckins');
 jest.mock('./workers/closeCheckins');
 jest.mock('./workers/createRecurringEvents');
 jest.mock('./workers/slackbot');
+
+// Be able to use Env variables in Github Actions
+require('dotenv').config();
