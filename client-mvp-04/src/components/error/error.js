@@ -1,10 +1,10 @@
 import React from 'react';
-import './index.scss';
-import RedirectLink from '../common/link';
+import './error.scss';
+import RedirectLink from '../common/link/link';
 
 const Error = () => {
   return (
-    <section className="error-container">
+    <section data-testid="error" className="error-container">
       <span className="error-status">404</span>
       <h2 className="error-content">Oops! Page not found!</h2>
       <RedirectLink
