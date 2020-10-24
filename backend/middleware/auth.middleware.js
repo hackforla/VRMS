@@ -10,11 +10,11 @@ function verifyToken(req, res, next) {
     token = token.slice(7, token.length);
   }
   if (!token) {
-    return res.status(403).send({ message: 'Auth token is not supplied' });
+    return res.status(403);
   }
 
   try {
-    jwt.verify(token, CONFIG_AUTH.SECRET);
+    const decoded = jwt.verify(token, CONFIG_AUTH.SECRET);
     res.cookie('token', token, { httpOnly: true });
     req.userId = decoded.id;
     return next();

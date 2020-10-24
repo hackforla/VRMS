@@ -64,15 +64,12 @@ UserController.user_update = async function (req, res) {
   const { headers } = req;
   const { UserId } = req.params;
 
-  console.log('-->FUCK:');
-
   if (headers['x-customrequired-header'] !== expectedHeader) {
     return res.sendStatus(403);
   }
 
   try {
     const user = await User.findOneAndUpdate(UserId, req.body);
-    console.log('-->user: ', user);
     return res.status(200).send(user);
   } catch (err) {
     return res.sendStatus(400);
