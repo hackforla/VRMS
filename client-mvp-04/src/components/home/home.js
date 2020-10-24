@@ -5,7 +5,7 @@ import RedirectLink from '../common/link/link';
 
 const Home = () => {
   return (
-    <section className="home-container">
+    <section data-testid="home" className="home-container">
       <h1 className="home-name">VRMS</h1>
       <h2 className="home-title">Volunteer Relationship Management System</h2>
 
