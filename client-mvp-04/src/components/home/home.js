@@ -1,7 +1,7 @@
 import React from 'react';
-import './index.scss';
-import Button from '../common/button';
-import RedirectLink from '../common/link';
+import './home.scss';
+import Button from '../common/button/button';
+import RedirectLink from '../common/link/link';
 
 const Home = () => {
   return (

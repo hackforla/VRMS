@@ -1,6 +1,6 @@
-import Home from '../components/home';
-import Dummy from '../components/dummy';
-import Error from '../components/error';
+import Home from '../components/home/home';
+import Dummy from '../components/dummy/dummy';
+import Error from '../components/error/error';
 
 export const Routes = [
   {

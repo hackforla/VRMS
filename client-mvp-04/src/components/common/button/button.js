@@ -1,5 +1,5 @@
 import React from 'react';
-import './index.scss';
+import './button.scss';
 
 const Button = ({ content, className }) => {
   return (

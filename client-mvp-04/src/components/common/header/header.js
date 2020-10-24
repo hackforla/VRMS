@@ -1,7 +1,7 @@
 import React from 'react';
-import './index.scss';
-import logo from '../../assets/images/logo.svg';
-import RedirectLink from '../common/link';
+import './header.scss';
+import logo from '../../../assets/images/logo.svg';
+import RedirectLink from '../link/link';
 
 const Header = () => {
   return (

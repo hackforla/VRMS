@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from './index';
+import Button from './button';
 import { render, cleanup } from '@testing-library/react';
 
 afterEach(cleanup);

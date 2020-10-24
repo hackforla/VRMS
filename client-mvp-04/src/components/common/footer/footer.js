@@ -1,6 +1,6 @@
 import React from 'react';
-import './index.scss';
-import RedirectLink from '../common/link';
+import './footer.scss';
+import RedirectLink from '../link/link';
 
 const Footer = () => {
   return (
@@ -9,7 +9,7 @@ const Footer = () => {
         <span>VRMS</span> was developed by Hack for LA
         <div className="tooltip">
           <span className="tooltip-icon">i</span>
-          <div className="tooltip-content">
+          <div data-testid="tooltip" className="tooltip-content">
             Used for streamlining onboarding to new projects, find helpful
             meeting details, track your contributions, and maintain a profile of
             your skills and professional development.

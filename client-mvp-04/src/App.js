@@ -1,9 +1,9 @@
 import React from 'react';
 import './App.scss';
-import Header from './components/header';
-import Footer from './components/footer';
+import Header from './components/common/header/header';
+import Footer from './components/common/footer/footer';
 import { Provider } from 'react-redux';
-import configureStore from './store/configureStore';
+import configureStore from './store/store';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Routes } from './routes';
 
