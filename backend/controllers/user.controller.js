@@ -60,7 +60,7 @@ UserController.create = async function (req, res) {
 };
 
 // Update User with PATCH
-UserController.user_update = async function (req, res) {
+UserController.update = async function (req, res) {
   const { headers } = req;
   const { UserId } = req.params;
 
@@ -77,7 +77,7 @@ UserController.user_update = async function (req, res) {
 };
 
 // Add User with POST
-UserController.user_delete = async function (req, res) {
+UserController.delete = async function (req, res) {
   const { headers } = req;
   const { UserId } = req.params;
 
