@@ -58,8 +58,7 @@ app.use(morgan("dev"));
 
 // ROUTES
 const eventsRouter = require("./routers/events.router");
-const checkInsRouter = require("./routers/checkIns.router");
-const answersRouter = require("./routers/answers.router");
+const checkInsRouter = require('./routers/checkIns.router');
 const usersRouter = require("./routers/users.router");
 const questionsRouter = require("./routers/questions.router");
 const checkUserRouter = require("./routers/checkUser.router");
@@ -72,8 +71,7 @@ const authRouter = require("./routers/auth.router");
 
 app.use('/api/auth', authRouter);
 app.use("/api/events", eventsRouter);
-app.use("/api/checkins", checkInsRouter);
-app.use("/api/answers", answersRouter);
+app.use('/api/checkins', checkInsRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/questions", questionsRouter);
 app.use("/api/checkuser", checkUserRouter);

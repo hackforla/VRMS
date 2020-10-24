@@ -1,4 +1,3 @@
-const { Answer } = require('./answer.model');
 const { CheckIn } = require('./checkIn.model');
 const { Event } = require('./event.model');
 const { Project } = require('./project.model');
@@ -12,7 +11,6 @@ const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
 module.exports = {
-  Answer,
   CheckIn,
   Event,
   Project,
