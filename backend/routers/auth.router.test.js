@@ -67,7 +67,7 @@ describe('CREATE User', () => {
 });
 
 describe('SIGNUP Validation', () => {
-  test('Invalid data returns 422', async () => {
+  test('Invalid data to /api/auth/signup returns 403', async () => {
     // Test Data
     const badUserData = {
       firstName: 'test_first',
@@ -79,7 +79,7 @@ describe('SIGNUP Validation', () => {
       .send(badUserData)
       .set('Accept', 'application/json');
 
-    expect(res.status).toBe(422);
+    expect(res.status).toBe(403);
     const errorMessage = JSON.parse(res.text);
 
     expect(errorMessage.errors).toEqual([
@@ -164,7 +164,7 @@ describe('SIGNIN Validation', () => {
     expect(JSON.parse(res.text).message).toEqual('Invalid permissions');
   });
 
-  test('A non-valid email return 422', async () => {
+  test('A non-valid email return 403', async () => {
     // Test Data
 
     // Create user in DB
@@ -184,7 +184,7 @@ describe('SIGNIN Validation', () => {
       .send(notValidEmailPayload)
       .set('Accept', 'application/json');
 
-    expect(res.status).toBe(422);
+    expect(res.status).toBe(403);
     const errorMessage = JSON.parse(res.text);
 
     expect(errorMessage.errors).toEqual([

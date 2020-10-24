@@ -13,7 +13,7 @@ async function validateCreateUserAPICall(req, res, next) {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
+    return res.status(403).json({ errors: errors.array() });
   }
   return next();
 }
@@ -29,7 +29,7 @@ async function validateSigninUserAPICall(req, res, next) {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
+    return res.status(403).json({ errors: errors.array() });
   }
   return next();
 }
