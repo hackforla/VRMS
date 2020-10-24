@@ -4,14 +4,14 @@ on:
     branches: [development]
 
 jobs:
-  run-unit-tests:
+  run-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Build the backend container
         run: docker-compose -f docker-compose-ci.yaml build backend
       - name: Run backend test suite
-        run: docker-compose -f docker-compose-ci.yaml run --rm backend yarn run test --testPathIgnorePatterns=routers
+        run: docker-compose -f docker-compose-ci.yaml run --rm backend yarn run test
       - name: Build the frontend container
         run: docker-compose build client
       - name: Run frontend test suite
