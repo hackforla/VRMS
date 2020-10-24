@@ -116,9 +116,9 @@ UserController.createUser = function (req, res) {
   // eslint-disable-next-line
   user.save((err, usr) => {
     if (err) {
-      return res.status(500).send({ message: err });
+      res.sendStatus(400);
     }
-    return res.status(200).send({ message: 'User was registered successfully!' });
+    res.sendStatus(201);
   });
 
   const jsonToken = generateAccessToken(user);
@@ -133,16 +133,16 @@ UserController.signin = function (req, res) {
   User.findOne({ email })
     .then((user) => {
       if (!user) {
-        return res.status(401).send({ message: 'User not authorized' });
+        return res.sendStatus(401);
       }
       const jsonToken = generateAccessToken(user);
       EmailController.sendLoginLink(req.body.email, jsonToken, req.cookie, origin);
-      return res.status(200).send({ message: 'User login link sent to email!' });
+      return res.sendStatus(200);
     })
     .catch((err) => {
       console.log(err);
 
-      return res.status(400).send({ message: 'User email not found.' });
+      return res.status(400);
     });
 };
 
@@ -155,7 +155,7 @@ UserController.verifySignIn = function (req, res) {
   }
 
   if (!token) {
-    return res.status(403).send({ message: 'Auth token is not supplied' });
+    return res.sendStatus(400);
   }
 
   try {
@@ -163,12 +163,12 @@ UserController.verifySignIn = function (req, res) {
     res.cookie('token', token, { httpOnly: true });
     return res.sendStatus(200);
   } catch (err) {
-    return res.status(401).send({ message: err });
+    return res.status(403);
   }
 };
 
 UserController.verifyMe = function (req, res) {
-  res.send(200);
+  return res.sendStatus(200);
 };
 
 module.exports = UserController;

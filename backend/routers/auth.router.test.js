@@ -62,8 +62,7 @@ describe('CREATE User', () => {
       .send(goodUserData)
       .set('Accept', 'application/json');
 
-    expect(res.status).toBe(200);
-    expect(JSON.parse(res.text).message).toEqual('User was registered successfully!');
+    expect(res.status).toBe(201);
   });
 });
 
@@ -119,8 +118,6 @@ describe('SIGNUP Validation', () => {
 
 describe('SIGNIN User', () => {
   test('User can signin and returns 200', async () => {
-    // Test Data
-
     // Create user in DB
     const goodUserData = {
       name: {
@@ -139,7 +136,6 @@ describe('SIGNIN User', () => {
       .set('Accept', 'application/json');
 
     expect(res.status).toBe(200);
-    expect(JSON.parse(res.text).message).toEqual('User login link sent to email!');
   });
 });
 
