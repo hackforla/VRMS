@@ -8,13 +8,11 @@ router.get("/", (req, res) => {
   ProjectTeamMember.find()
     .populate("userId")
     .then((teamMembers) => {
-      res.json(teamMembers);
+      return res.status(200).send(teamMembers);
     })
     .catch((err) => {
       console.log(err);
-      res.sendStatus(400).json({
-        message: `/GET Internal server error:  ${err}`,
-      });
+      return res.sendStatus(400);
     });
 });
 
@@ -22,13 +20,11 @@ router.get("/:id", (req, res) => {
   ProjectTeamMember.find({ projectId: req.params.id })
     .populate("userId")
     .then((teamMembers) => {
-      res.status(200).json(teamMembers);
+      return res.status(200).send(teamMembers);
     })
     .catch((err) => {
       console.log(err);
-      res.sendStatus(400).json({
-        message: `/GET Internal server error:  ${err}`,
-      });
+      return res.sendStatus(400);
     });
 });
 
@@ -40,16 +36,14 @@ router.get("/project/:id/:userId", (req, res) => {
     .populate("userId")
     .then((teamMember) => {
       if (!teamMember.length) {
-        res.json(false);
+        return res.sendStatus(400);
       } else {
-        res.json(teamMember);
+        return res.status(200).send(teamMember);
       }
     })
     .catch((err) => {
       console.log(err);
-      res.sendStatus(400).json({
-        message: `/GET Internal server error:  ${err}`,
-      });
+      return res.sendStatus(400);
     });
 });
 
@@ -61,27 +55,22 @@ router.get("/projectowner/:id", (req, res) => {
     .populate("projectId")
     .then((teamMember) => {
       teamMember.vrmsProjectAdmin === true
-        ? res.status(200).json(teamMember)
-        : res.status(200).json(false);
+        ? res.status(200).send(teamMember)
+        : res.status(200).send(false);
     })
     .catch((err) => {
-      console.log(err);
-      res.sendStatus(400).json({
-        message: "/GET Internal server error: " + err,
-      });
+      res.status(400).send(err);
     });
 });
 
 router.post("/", (req, res) => {
   ProjectTeamMember.create(req.body)
     .then((teamMember) => {
-      res.status(201).json(teamMember);
+      return res.status(201).send(teamMember);
     })
     .catch((err) => {
       console.log(err);
-      res.sendStatus(400).json({
-        message: `/POST Internal server error: ${err}`,
-      });
+      return res.sendStatus(400);
     });
 });
 
@@ -95,10 +84,7 @@ router.patch("/:id", (req, res) => {
   ProjectTeamMember.findByIdAndUpdate(req.params.id, req.body)
     .then((edit) => res.json(edit))
     .catch((err) =>
-      res.status(500).json({
-        error: "Couldn't edit team member... Try again.",
-      })
-    );
+      res.sendStatus(400));
   // };
 });
 
