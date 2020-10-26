@@ -1,9 +1,8 @@
 import React from 'react';
-import { cleanup, render, screen, fireEvent } from '@testing-library/react';
 import Error from './error';
-import { BrowserRouter } from 'react-router-dom';
+import { cleanup, render, screen, fireEvent } from '@testing-library/react';
+import { BrowserRouter, Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
-import { Router } from 'react-router-dom';
 
 afterEach(cleanup);
 
