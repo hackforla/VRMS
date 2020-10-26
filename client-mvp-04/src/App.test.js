@@ -1,6 +1,6 @@
 import React from 'react';
-import { render, fireEvent, screen, cleanup } from '@testing-library/react';
 import App from './App';
+import { render, screen, cleanup } from '@testing-library/react';
 
 beforeEach(() => {
   render(<App />);
@@ -9,7 +9,9 @@ afterEach(cleanup);
 
 describe('App', () => {
   test('Should render and displays name of project', () => {
+    const h1 = screen.getAllByText(/VRMS/i)[0];
     const h2 = screen.getByText(/Volunteer Relationship Management System/i);
+    expect(h1).toBeInTheDocument();
     expect(h2).toBeInTheDocument();
   });
 
@@ -25,13 +27,6 @@ describe('App', () => {
   test('Should exist `sign in` and `create account` buttons', () => {
     expect(screen.getByText('Sign in')).toBeInTheDocument();
     expect(screen.getByText('Create account')).toBeInTheDocument();
-  });
-
-  test('Should navigate to the dummy page after click on `Sign in`', () => {
-    fireEvent.click(screen.getByText('Sign in'));
-    expect(
-      screen.getByText('Sorry, this functionality is not implemented yet.')
-    ).toBeInTheDocument();
   });
 
   test('Should render with footer', () => {
