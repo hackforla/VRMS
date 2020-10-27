@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
-
-import useAuth from '../hooks/useAuth';
 
 import { ReactComponent as ClockIcon} from '../svg/Icon_Clock.svg';
 import { ReactComponent as LocationIcon} from '../svg/Icon_Location.svg';
@@ -10,7 +8,6 @@ import { ReactComponent as LocationIcon} from '../svg/Icon_Location.svg';
 import '../sass/Events.scss';
 
 const Events = (props) => {
-    const auth = useAuth();
     const [events, setEvents] = useState([]);
 
     async function fetchData() {
