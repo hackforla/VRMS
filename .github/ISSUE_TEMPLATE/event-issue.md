@@ -1,5 +1,5 @@
 ---
-name: Event cnanges issue
+name: Event Changes issue
 about: Creating a task that requested creating a new or changing existing event
 title: ''
 labels: ''
