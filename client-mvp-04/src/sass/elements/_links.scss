@@ -1,0 +1,50 @@
+@import "../variables";
+
+.join-link {
+  font-weight: $font-bold;
+  font-size: 24px;
+  display: inline-flex;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: .2s ease;
+
+  .join-plus {
+    margin-left: 15px;
+    font-size: 42px;
+    line-height: 22px;
+    font-weight: normal;
+  }
+
+  &:hover {
+    text-decoration: none;
+    border-bottom: 2px solid $dark-primary-color;
+  }
+}
+
+.project-link {
+  font-weight: $font-bold;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 50px;
+  cursor: pointer;
+  transition: .2s ease;
+
+  .project-link-icon {
+    width: 50px;
+    height: 50px;
+    border: 1px solid rgba(0, 0, 0, 0.35);
+    box-sizing: border-box;
+    border-radius: 6px;
+  }
+
+  .project-link-name {
+    margin-left: 35px;
+    line-height: 35px;
+    border-bottom: 2px solid transparent;
+    &:hover {
+      border-bottom: 2px solid $dark-primary-color;
+    }
+  }
+}
