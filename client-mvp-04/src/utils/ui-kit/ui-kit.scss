@@ -1,0 +1,35 @@
+.kit-container {
+  .kit-title {
+    font-size: 28px;
+    font-weight: bold;
+    background: lightgray;
+    line-height: 2;
+  }
+
+  .kit-sec-title {
+    font-size: 26px;
+    margin: 35px 0 10px;
+    background: #74acf6;
+    color: white;
+    line-height: 2;
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  .dev-comment {
+    line-height: 1.5;
+    font-style: italic;
+    padding: 5px 0;
+    background: lightgray;
+    display: flex;
+    border-radius: 0 0 6px 6px;
+    border-top: 2px solid darkgray;
+    justify-content: center;
+    margin: 5px 5px 25px;
+  }
+
+  button {
+    display: flex;
+  }
+}
