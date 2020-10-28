@@ -13,16 +13,34 @@
   max-width: 414px;
   width: 100%;
   min-width: 320px;
-  max-height: 896px;
-  height: 100vh;
+  height: 896px;
+  position: relative;
   border: 1px solid $border-color;
   box-sizing: border-box;
   text-align: center;
   overflow: hidden;
+  padding: 10px;
 }
 
 .app-main {
-  max-height: 575px;
-  height: 575px;
+  height: 628px;
+  width: 100%;
   overflow-y: scroll;
+  box-sizing: content-box;
+  // Hide scrollbar using overflow-y: scroll
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    &::-webkit-scrollbar { /* WebKit */
+      display: none;  /* Safari and Chrome */
+    }
+}
+
+@media (max-height: 896px) {
+  .app-container {
+    height: 100vh;
+  }
+
+  .app-main {
+    height: calc(100vh - 160px);
+  }
 }

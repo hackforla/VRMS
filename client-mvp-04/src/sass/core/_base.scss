@@ -1,6 +1,6 @@
 @import "../variables";
 
-body{
+body {
   margin: 0;
   font-family: $font-family;
   font-weight: $font-regular;
@@ -14,45 +14,45 @@ code {
   font-family: $font-family;
 }
 
-h1, h2, h3, h4, h5{
+h1, h2, h3, h4, h5 {
   color: $header-color;
   font-style: $font-regular;
   line-height: 1;
   letter-spacing: 0;
 }
 
-h1{
+h1 {
   font-size: $h1-size;
   text-transform: $h1-text-transform;
   letter-spacing: $h1-letter-sp;
   font-weight: $h1-weight-bold;
 }
 
-h2{
+h2 {
   font-size: $h2-size;
   font-weight: $h2-weight-semi-bold;
 }
 
-h3{
+h3 {
   font-size: $h3-size;
   font-weight: $h3-weight-bold;
 }
 
-h4{
+h4 {
   font-size: $h4-size;
   text-transform: $h4-text-transform;
   font-weight: $h4-weight-bold;
   line-height: $h4-line-height;
 }
 
-h5{
+h5 {
   font-size: $h5-size;
   letter-spacing: $h5-letter-sp;
   font-weight: $h5-weight-semi-bold;
   line-height: $h5-line-height;
 }
 
-p, span{
+p, span {
   line-height: $line-height;
   letter-spacing: $letter-sp;
 }
@@ -63,7 +63,7 @@ a {
   color: $link-color;
   font-size: $link-font-size;
   font-weight: $link-font-weight;
-  &:hover{
+  &:hover {
     text-decoration: underline;
   }
 }

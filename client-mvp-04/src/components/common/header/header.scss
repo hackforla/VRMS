@@ -1,5 +1,6 @@
 .app-header {
-  padding: 83px 0 35px;
+  padding: 73px 0 10px;
+  height: 194px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -10,4 +11,11 @@
   cursor: pointer;
   height: 111px;
   width: 172px;
+}
+
+@media (max-height: 896px) {
+  .app-header {
+    padding: 10px 0;
+    height: 105px;
+  }
 }
