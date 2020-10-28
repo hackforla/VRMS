@@ -1,4 +1,4 @@
-@import "../../sass/_main.scss";
+@import "../../sass/variables";
 
 .error-container {
   padding: 120px 30px;
@@ -21,6 +21,6 @@
 
   .redirect-link {
     font-size: 18px;
-    color: $accent-blue-color;
+    color: $accent-royal-blue-color;
   }
 }
