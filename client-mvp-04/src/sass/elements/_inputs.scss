@@ -1,0 +1,44 @@
+@import "../variables";
+
+.text-field-container {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  max-width: 246px;
+  width: 100%;
+
+  input {
+    width: 100%;
+    font-size: 16px;
+    line-height: 20px;
+    color: $dark-primary-color;
+    padding: 10.5px 30px;
+    border: 1px solid $dark-secondary-color;
+    &::placeholder {
+      color: $gray-color;
+    }
+    &:focus {
+      border: 1px solid $dark-primary-color;
+      outline: none;
+    }
+  }
+}
+
+.text-field-icon-container {
+  @extend .text-field-container;
+  position: relative;
+  max-width: 290px;
+
+  input {
+    padding: 15.5px 13px 15.5px 50px;
+    line-height: 22px;
+  }
+
+  .text-field-icon {
+    width: 27px;
+    height: auto;
+    position: absolute;
+    left: 14px;
+    top: 14px;
+  }
+}
