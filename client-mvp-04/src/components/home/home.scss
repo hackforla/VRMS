@@ -1,20 +1,19 @@
-@import "../../sass/_main.scss";
+@import "../../sass/variables";
 
 .home-container {
   padding: 35px 100px 145px;
 
   .home-name, .home-title {
     font-size: 5.14em;
-    color: $header-main-dark-color;
-    line-height: $header-h1-line-height;
+    color: $header-color;
     letter-spacing: 1px;
-    font-weight: $header-bold;
-    text-transform: $header-h1-text-transform;
+    font-weight: $font-bold;
+    text-transform: $h1-text-transform;
   }
 
   .home-title {
     margin: 15px 0 60px;
-    font-size: $header-h1-size;
+    font-size: $h1-size;
     line-height: 27px;
     font-weight: $font-regular;
     text-align: left;
@@ -36,8 +35,8 @@
     font-size: 0.93em;
     line-height: 1.4;
     font-weight: $link-font-weight;
-    text-transform: $header-h1-text-transform;
-    color: $accent-blue-color;
+    text-transform: $h1-text-transform;
+    color: $accent-royal-blue-color;
     margin: 20px auto;
     letter-spacing: 0;
     cursor: pointer;
