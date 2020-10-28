@@ -15,7 +15,7 @@
   min-width: 320px;
   max-height: 896px;
   height: 100vh;
-  border: $border-primary;
+  border: 1px solid $border-color;
   box-sizing: border-box;
   text-align: center;
   overflow: hidden;
@@ -24,4 +24,5 @@
 .app-main {
   max-height: 575px;
   height: 575px;
+  overflow-y: scroll;
 }
