@@ -20,7 +20,7 @@ const Home = () => {
       <RedirectLink
         path={'/page'}
         content={'Create account'}
-        className={'create-link'}
+        className={'accent-link'}
         linkKey={'create-account-link'}
       />
     </section>

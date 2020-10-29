@@ -1,11 +1,10 @@
 @import "../../sass/variables";
 
 .dummy-container {
-  padding: 215px 30px;
+  padding: 215px 30px 100px;
 
   .dummy-content {
     line-height: 30px;
-    color: $dark-primary-color;
     font-weight: normal;
   }
 }

@@ -57,13 +57,13 @@ const DevUiKit = () => {
 
         <a
           key={'create-link'}
-          className={'redirect-link create-link'}
+          className={'redirect-link accent-link'}
           href={'/'}
         >
           CREATE ACCOUNT
         </a>
         <p className={'dev-comment'}>
-          Create Link: 13px, bold, $accent-royal-blue-color
+          Accent Link: 13px, bold, $accent-royal-blue-color
         </p>
 
         <a

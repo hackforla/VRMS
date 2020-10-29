@@ -10,8 +10,8 @@ const Error = () => {
       <RedirectLink
         linkKey={'error-home'}
         path={'/'}
-        className={'redirect-link'}
-        content={'Back to Homepage'}
+        className={'accent-link'}
+        content={'Go to Homepage'}
       />
     </section>
   );
