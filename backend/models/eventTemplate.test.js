@@ -16,7 +16,6 @@ describe("Event Template Model saves the correct values", () => {
       isActive: true,
       isOnline: true,
       location: {
-        // should we include address here?
         addressLine1: "addy 1",
         addressLine2: "addy 2",
         city: "Los Angeles",
