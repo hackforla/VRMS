@@ -2,7 +2,7 @@
   .kit-title {
     font-size: 28px;
     font-weight: bold;
-    background: lightgray;
+    background: #e5e3e3;
     line-height: 2;
   }
 
@@ -21,15 +21,11 @@
     line-height: 1.5;
     font-style: italic;
     padding: 5px 0;
-    background: lightgray;
+    background: #e5e3e3;
     display: flex;
     border-radius: 0 0 6px 6px;
     border-top: 2px solid darkgray;
     justify-content: center;
     margin: 5px 5px 25px;
-  }
-
-  button {
-    display: flex;
   }
 }

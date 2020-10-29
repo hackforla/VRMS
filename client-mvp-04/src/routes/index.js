@@ -2,7 +2,7 @@ import Home from '../components/home/home';
 import Dummy from '../components/dummy/dummy';
 import Error from '../components/error/error';
 
-import DevUiKit from '../utils/ui-kit/ui-kit';
+import DevUiKit from '../utils/uiKit/uiKit';
 
 export const Routes = [
   {

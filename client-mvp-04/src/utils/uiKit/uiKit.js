@@ -1,10 +1,11 @@
 import React from 'react';
-import './ui-kit.scss';
+import './uiKit.scss';
 import Button from '../../components/common/button/button';
 import confirmIcon from '../../assets/images/icons/confirm.svg';
 import homeIcon from '../../assets/images/icons/home.png';
 import projectIcon from '../../assets/images/icons/311.png';
 import gitHubIcon from '../../assets/images/icons/github.png';
+import RedirectLink from '../../components/common/link/link';
 
 /***** DEV-UI-KIT FOR DEVELOPMENT ONLY *****/
 /*UI KIT helps devs determine, which UI elements will be used throughout
@@ -45,12 +46,37 @@ const DevUiKit = () => {
         <h1 className={'kit-sec-title'}>*** TEXT / LINKS ***</h1>
         <p>Text content</p>
         <p className={'dev-comment'}>Main text: 'Open Sans', 14px, regular</p>
+
         <p className={'italic'}>Text content</p>
         <p className={'dev-comment'}>Main text: 'Open Sans', 14px, italic</p>
+
         <a key={'default-link'} href={'/'}>
           Link to click here
         </a>
         <p className={'dev-comment'}>Default Link: 14px, semi-bold</p>
+
+        <a
+          key={'create-link'}
+          className={'redirect-link create-link'}
+          href={'/'}
+        >
+          CREATE ACCOUNT
+        </a>
+        <p className={'dev-comment'}>
+          Create Link: 13px, bold, $accent-royal-blue-color
+        </p>
+
+        <a
+          key={'tooltip-link'}
+          className={'redirect-link tooltip-link'}
+          href={'/'}
+        >
+          More details here
+        </a>
+        <p className={'dev-comment'}>
+          Tooltip Link: 10px, bold, $link-accent-color
+        </p>
+
         <a className={'join-link'} href={'/'}>
           Join new project <span className={'join-plus'}>+</span>
         </a>
@@ -89,6 +115,26 @@ const DevUiKit = () => {
         <p className={'dev-comment'}>
           Confirm button, use with class .btn-confirm
         </p>
+      </div>
+
+      {/*** TOOLTIP ***/}
+      <div className={'tooltip-container'}>
+        <h1 className={'kit-sec-title'}>*** TOOLTIP ***</h1>
+        <div className="tooltip">
+          <span className="tooltip-icon">i</span>
+          <div data-testid="tooltip" className="tooltip-content">
+            Used for streamlining onboarding to new projects, find helpful
+            meeting details, track your contributions, and maintain a profile of
+            your skills and professional development.
+            <RedirectLink
+              linkKey={'footer-page'}
+              path={'/page'}
+              className={`tooltip-link`}
+              content={` More details here.`}
+            />
+          </div>
+        </div>
+        <p className={'dev-comment'}>Tooltip, works on hover</p>
       </div>
 
       {/*** MENU ***/}
