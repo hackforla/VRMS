@@ -29,9 +29,9 @@ describe("Event Template Model saves the correct values", () => {
     await EventTemplate.create(submittedData);
     const savedDataArray = await EventTemplate.find();
     const savedData = savedDataArray[0];
-    expect(savedData.name === submittedData.name);
-    expect(savedData.location.city === submittedData.location.city);
-    expect(savedData.startTime === submittedData.startTime);
+    expect(savedData.name).toBe(submittedData.name);
+    expect(savedData.location.city).toBe(submittedData.location.city);
+    expect(savedData.startTime.getTime()).toBe(submittedData.startTime);
     done();
   });
 });
