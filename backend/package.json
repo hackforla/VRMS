@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "@slack/bolt": "^2.2.3",
+    "assert-env": "^0.6.0",
     "async": "^3.2.0",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",

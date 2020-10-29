@@ -1054,6 +1054,11 @@ asn1@~0.2.3:
   dependencies:
     safer-buffer "~2.1.0"
 
+assert-env@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/assert-env/-/assert-env-0.6.0.tgz#93f7657a27a17b288b19f56e72122d15bbc1e384"
+  integrity sha1-k/dleieheyiLGfVuchItFbvB44Q=
+
 assert-plus@1.0.0, assert-plus@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/assert-plus/-/assert-plus-1.0.0.tgz#f12e0f3c5d77b0b1cdd9146942e4e96c1e4dd525"

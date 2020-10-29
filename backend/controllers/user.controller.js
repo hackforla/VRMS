@@ -21,7 +21,7 @@ function createUser(req, res) {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
     },
-    email: req.body.email,
+    email: req.body.email.toLowerCase(),
     accessLevel: 'user',
   });
 
@@ -34,7 +34,8 @@ function createUser(req, res) {
   });
 
   const jsonToken = generateAccessToken(user);
-  emailController.sendUserEmailSigninLink(req.body.email, jsonToken);
+  const {origin} = req.headers;
+  emailController.sendUserEmailSigninLink(req.body.email, jsonToken, req.cookie, origin);
 }
 
 function signin(req, res) {
@@ -47,7 +48,8 @@ function signin(req, res) {
         return res.status(401).send({ message: 'User not authorized' });
       }
       const jsonToken = generateAccessToken(user);
-      emailController.sendUserEmailSigninLink(req.body.email, jsonToken);
+      const {origin} = req.headers;
+      emailController.sendUserEmailSigninLink(req.body.email, jsonToken, origin);
       return res.status(200).send({ message: 'User login link sent to email!' });
     })
     .catch((err) => {
