@@ -13,6 +13,8 @@ button {
   margin: 20px auto;
   outline: none;
   transition: .3s ease;
+  display: flex;
+  justify-content: center;
   &:hover{
     background-color: $concrete-color;
   }

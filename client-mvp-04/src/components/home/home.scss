@@ -1,44 +1,28 @@
 @import "../../sass/variables";
 
 .home-container {
-  padding: 30px 100px;
+  padding: 40px 90px;
 
-  .home-name, .home-title {
-    font-size: 5.14em;
-    color: $header-color;
-    letter-spacing: 1px;
-    font-weight: $font-bold;
-    text-transform: $h1-text-transform;
+  .home-name {
+    font-size: 72px;
   }
 
   .home-title {
-    margin: 15px 0 60px;
-    font-size: $h1-size;
+    margin: 26px 0 83px;
     line-height: 27px;
     font-weight: $font-regular;
     text-align: left;
+    text-transform: uppercase;
   }
 
-  .home-text,
-  .home-link {
-    display: flex;
-    justify-content: center;
+  .home-button {
+    padding: 6px 40px;
   }
 
   .home-text {
-    font-size: 1.072em;
-    line-height: 1;
+    display: flex;
+    justify-content: center;
+    font-size: 15px;
     font-weight: $font-bold;
-  }
-
-  .home-link {
-    font-size: 0.93em;
-    line-height: 1.4;
-    font-weight: $link-font-weight;
-    text-transform: $h1-text-transform;
-    color: $accent-royal-blue-color;
-    margin: 20px auto;
-    letter-spacing: 0;
-    cursor: pointer;
   }
 }
