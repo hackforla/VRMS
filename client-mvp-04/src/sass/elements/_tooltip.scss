@@ -59,3 +59,36 @@
     border-top-color: $light-primary-color;
   }
 }
+
+@media (max-width: 400px) {
+  .tooltip-content {
+    width: 198px;
+    right: calc(50% - 70px);
+    &:before {
+      left: 124px;
+    }
+    &:after {
+      left: 125px;
+    }
+  }
+}
+
+@media (max-width: 374px) {
+  .tooltip {
+    display: block;
+    margin: 8px auto 0;
+  }
+
+  .tooltip-content {
+    width: 203px;
+    bottom: 137px;
+    margin-left: -190px;
+    right: calc(50% - 101.5px);
+    &:before {
+      left: 91px;
+    }
+    &:after {
+      left: 92px;
+    }
+  }
+}

@@ -79,3 +79,9 @@ a {
 .italic {
   font-style: $font-italic;
 }
+
+@media (max-width: 374px) {
+  h2 {
+    font-size: 22px;
+  }
+}

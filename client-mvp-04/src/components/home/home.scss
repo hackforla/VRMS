@@ -26,3 +26,28 @@
     font-weight: $font-bold;
   }
 }
+
+@media (max-width: 400px) {
+  .home-container {
+    padding: 40px 70px;
+  }
+
+  .home-container .home-title {
+    margin: 18px 0 40px;
+  }
+
+  .home-container .home-name {
+    font-size: 68px;
+    text-align: left;
+  }
+}
+
+@media (max-width: 350px) {
+  .home-container {
+    padding: 15px 52px;
+  }
+
+  .home-container .home-title {
+    margin: 15px 0 35px;
+  }
+}

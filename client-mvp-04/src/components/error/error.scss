@@ -20,3 +20,9 @@
     font-weight: $font-semi-bold;
   }
 }
+
+@media (max-width: 400px) {
+  .error-container {
+    padding: 0 10px;
+  }
+}

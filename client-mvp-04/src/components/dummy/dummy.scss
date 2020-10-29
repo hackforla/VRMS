@@ -8,3 +8,9 @@
     font-weight: normal;
   }
 }
+
+@media (max-width: 400px) {
+  .dummy-container {
+    padding: 0 10px;
+  }
+}

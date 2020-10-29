@@ -19,3 +19,9 @@
     height: 105px;
   }
 }
+
+@media (max-width: 400px) {
+ .app-header {
+   padding: 0;
+ }
+}

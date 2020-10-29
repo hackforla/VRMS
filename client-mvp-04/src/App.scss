@@ -44,3 +44,17 @@
     height: calc(100vh - 160px);
   }
 }
+
+@media (max-width: 400px) {
+  .app-main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 374px) {
+  .app-main {
+    height: calc(100vh - 180px);
+  }
+}
