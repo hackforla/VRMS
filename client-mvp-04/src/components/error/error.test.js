@@ -33,7 +33,7 @@ describe('Error', () => {
       </Router>
     );
     expect(screen.getByText('Oops! Page not found!')).toBeInTheDocument();
-    expect(screen.getByTestId('link')).toHaveTextContent('Back to Homepage');
+    expect(screen.getByTestId('link')).toHaveTextContent('Go to Homepage');
     expect(screen.getByTestId('link')).toHaveAttribute('href', '/');
     fireEvent.click(screen.getByTestId('link'));
     expect(history.location.pathname).toBe('/');
