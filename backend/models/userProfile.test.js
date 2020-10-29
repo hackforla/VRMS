@@ -59,10 +59,10 @@ describe("UserProfile Model saves the correct values", () => {
     await UserProfile.create(submittedData);
     const savedDataArray = await UserProfile.find();
     const savedData = savedDataArray[0];
-    expect(savedData.firstName === submittedData.firstName);
-    expect(savedData.github.username === submittedData.github.username);
-    expect(savedData.onboardingStatus.googleAccount 
-      === submittedData.onboardingStatus.googleAccount);
+    expect(savedData.firstName).toBe(submittedData.firstName);
+    expect(savedData.github.username).toBe(submittedData.github.username);
+    expect(savedData.onboardingStatus.googleAccount)
+    .toBe(submittedData.onboardingStatus.googleAccount);
     done();
   });
 });
