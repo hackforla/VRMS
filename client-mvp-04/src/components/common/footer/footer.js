@@ -17,7 +17,7 @@ const Footer = () => {
               linkKey={'footer-page'}
               path={'/page'}
               className={`tooltip-link`}
-              content={`More details here.`}
+              content={` More details here.`}
             />
           </div>
         </div>
