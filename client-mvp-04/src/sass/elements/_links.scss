@@ -1,5 +1,33 @@
 @import "../variables";
 
+.redirect-link {
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.create-link {
+  display: flex;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: $font-bold;
+  text-transform: uppercase;
+  color: $link-accent-color;
+  margin: 20px auto;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.tooltip-link {
+  color: $link-accent-color;
+  font-size: 10px;
+  line-height: 14px;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 .join-link {
   font-weight: $font-bold;
   font-size: 24px;
