@@ -137,6 +137,7 @@ const AdminLogin = (props) => {
             onClick={(e) => handleLogin(e)}
             className="login-button"
             data-test="login-btn"
+            disabled={!email || email===""}
           >
             LOGIN
           </button>
