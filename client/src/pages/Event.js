@@ -9,6 +9,8 @@ const Event = (props) => {
     const [isLoading, setIsLoading] = useState(false);
     const [event, setEvent] = useState([]);
     const [isCheckInReady, setIsCheckInReady] = useState();
+    const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
+
     // const [isError, setIsError] = useState(null);
     // const [selected, setSelected] = useState('checkIns');
     // const [rsvps, setRsvps] = useState([]);
@@ -41,7 +43,11 @@ const Event = (props) => {
     async function fetchEvent() {
         
         try {
-            const res = await fetch(`/api/events/${props.match.params.id}`);
+            const res = await fetch(`/api/events/${props.match.params.id}`, {
+                    headers: {
+                        "x-customrequired-header": headerToSend
+                    }
+                });
             const resJson = await res.json();
             
             setEvent(resJson);
@@ -61,7 +67,8 @@ const Event = (props) => {
             await fetch(`/api/events/${props.match.params.id}`, {
                 method: 'PATCH',
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "x-customrequired-header": headerToSend
                 },
                 // body: JSON.stringify(payload)
             })

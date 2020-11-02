@@ -21,11 +21,16 @@ const ProjectLeaderDashboard = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
   const [rosterProjectId, setRosterProjectId] = useState("");
+  const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
   async function getProjectFromUserId() {
     try {
       const project = await fetch(
-        "/api/projectteammembers/projectowner/5e2790b06dc5b4ed0bc1df56"
+        "/api/projectteammembers/projectowner/5e2790b06dc5b4ed0bc1df56", {
+            headers: {
+                "x-customrequired-header": headerToSend
+            }
+        }
       );
       const projectJson = await project.json();
       setProject(projectJson);
@@ -39,7 +44,11 @@ const ProjectLeaderDashboard = () => {
     try {
       if (project && project.projectId) {
         const events = await fetch(
-          `/api/events/nexteventbyproject/${project.projectId._id}`
+          `/api/events/nexteventbyproject/${project.projectId._id}`, {
+            headers: {
+                "x-customrequired-header": headerToSend
+            }
+          } 
         );
         const eventsJson = await events.json();
         setIsCheckInReady(eventsJson.checkInReady);
@@ -54,7 +63,11 @@ const ProjectLeaderDashboard = () => {
     try {
       if (project && project.projectId) {
         const roster = await fetch(
-          `/api/projectteammembers/${project.projectId._id}`
+          `/api/projectteammembers/${project.projectId._id}`, {
+              headers: {
+                  "x-customrequired-header": headerToSend
+              }
+          }
         );
         const rosterJson = await roster.json();
         // temporary function that fixes outdated data
@@ -78,7 +91,11 @@ const ProjectLeaderDashboard = () => {
     try {
       if (nextEvent && nextEvent[0]._id) {
         const id = nextEvent[0]._id;
-        const attendees = await fetch(`/api/checkins/findEvent/${id}`);
+        const attendees = await fetch(`/api/checkins/findEvent/${id}`, {
+            headers: {
+                "x-customrequired-header": headerToSend
+            }
+          });
         const attendeesJson = await attendees.json();
         setAttendees(attendeesJson);
       }
@@ -94,6 +111,7 @@ const ProjectLeaderDashboard = () => {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          "x-customrequired-header": headerToSend
         },
       }).then((response) => {
         if (response.ok) {
@@ -136,6 +154,7 @@ const ProjectLeaderDashboard = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "x-customrequired-header": headerToSend
         },
         body: JSON.stringify({ email }),
       })
@@ -173,7 +192,11 @@ const ProjectLeaderDashboard = () => {
   async function checkIfOnRoster(user) {
     try {
       const onTeam = await fetch(
-        `/api/projectteammembers/project/${project.projectId._id}/${user._id}`
+        `/api/projectteammembers/project/${project.projectId._id}/${user._id}`, {
+          headers: {
+            "x-customrequired-header": headerToSend
+          }
+        }
       );
       const onTeamJson = await onTeam.json();
 
@@ -200,6 +223,7 @@ const ProjectLeaderDashboard = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "x-customrequired-header": headerToSend
         },
         body: JSON.stringify(parameters),
       })

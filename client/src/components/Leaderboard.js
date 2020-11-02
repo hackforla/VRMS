@@ -8,9 +8,9 @@ const Leaderboard = (props) => {
     const [users, setUsers] = useState(null);
     const [checkIns, setCheckIns] = useState(null);
     // const [isError, setIsError] = useState(false);
+    const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
     async function fetchUsers() {
-        const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
         try {
             const users = await fetch('/api/users', {
@@ -29,7 +29,11 @@ const Leaderboard = (props) => {
 
     async function fetchCheckIns() {
         try {
-            const checkIns = await fetch('/api/checkins');
+            const checkIns = await fetch('/api/checkins', {
+                headers: {
+                    "x-customrequired-header": headerToSend
+                }
+            });
             const checkInsJson = await checkIns.json();
 
             setCheckIns(checkInsJson);

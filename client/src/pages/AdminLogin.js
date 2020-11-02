@@ -15,6 +15,8 @@ const AdminLogin = (props) => {
 
   const handleInputChange = (e) => setEmail(e.currentTarget.value);
 
+  const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
+
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -38,6 +40,7 @@ const AdminLogin = (props) => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+              "x-customrequired-header": headerToSend
             },
             body: JSON.stringify({ email: email }),
           }).then((res) => {
@@ -61,6 +64,7 @@ const AdminLogin = (props) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "x-customrequired-header": headerToSend
         },
         body: JSON.stringify({ email }),
       })
