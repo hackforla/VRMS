@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
-
-import useAuth from '../hooks/useAuth';
 
 import { ReactComponent as ClockIcon} from '../svg/Icon_Clock.svg';
 import { ReactComponent as LocationIcon} from '../svg/Icon_Location.svg';
@@ -10,10 +8,7 @@ import { ReactComponent as LocationIcon} from '../svg/Icon_Location.svg';
 import '../sass/Events.scss';
 
 const Events = (props) => {
-    const auth = useAuth();
-    // const [isLoading, setIsLoading] = useState(false);
     const [events, setEvents] = useState([]);
-    // const [isError, setIsError] = useState(false);
 
     async function fetchData() {
         try {
@@ -32,11 +27,13 @@ const Events = (props) => {
     }, []);
 
     return (
-        // auth && auth.user ? (
             <div className="flexcenter-container">
                 <div className="events-list">
                     <ul>
                         {events.map((event, index) => {
+                            const event_city = event.location && event.location.city || 'TBD'
+                            const event_state = event.location && event.location.state || 'TBD'
+                            
                             return (
                                 <li key={index}>
                                     <div key={index} className="list-event-container">
@@ -50,8 +47,9 @@ const Events = (props) => {
                                                         <p className="event-info-text">{moment(event.date).format('ddd, MMM D @ h:mm a')}</p>
                                                     </div>
                                                     <div className="event-info-wrapper">
-                                                        <LocationIcon />
-                                                        <p className="event-info-text">{event.location.city}, {event.location.state}</p>
+                                                        <LocationIcon />                                
+                                                        <p className="event-info-text">{event_city}, {event_state}</p>
+                                                        
                                                     </div>
                                                 </div>
                                                 <div className="event-details-container">
@@ -66,9 +64,6 @@ const Events = (props) => {
                     </ul>
                 </div>
             </div>
-        // ) : (
-        //     <Redirect to="/login" />
-        // )
     )
 };
 
