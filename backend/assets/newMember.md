@@ -1,1 +1,3 @@
-Thanks for joining Hack for LA! Checkout our projects here: <hackforla.org | hackforla.org>. Feel free to slack the team leads/project manager to get started on a project. Or if you're not sure, introduce yourself (as well as a short description of your interests and skillsets) in the 'new-joiner-orientation' channel, and a helpful member of the HFLA will assist you with finding the right project for you.
+Thanks for joining Hack for LA! Checkout our projects here: <hackforla.org | hackforla.org>. Feel free to slack the team leads/project manager to get started on a project. 
+
+If you're not sure of what projects to join, feel free to introduce yourself (and include a short description of your interests and skillsets) in the <https://app.slack.com/client/T04502KQX/C04S7PNCU |new-joiner-orientation> channel, and a helpful member of the HFLA will assist you with finding the right project for you.

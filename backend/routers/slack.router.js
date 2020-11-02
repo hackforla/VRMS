@@ -6,9 +6,8 @@ const Event = require("../models/event.model");
 const Project = require("../models/project.model");
 const User = require("../models/user.model");
 const CheckIn = require("../models/checkIn.model");
+const fs = require('fs');
 
-
-//https://api.slack.com/web
 
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
@@ -118,100 +117,60 @@ async function findProject(req, res) {
 
 //============= SLACKBOT FOR SENDING NEW USERS MESSAGES AND REMINDERS ==============
 
-//----------------- FETCH LIST OF NEW USERS (LESS THAN 30 DAYS) --------------------
-router.post("/msgNewUsers", (req, res) => {
-  getUsers()
-  //msgNewUsers();
-});
-
-//function to return list of users who are less than 30days new to HFLA
+//FETCH LIST OF NEW USERS (LESS THAN 30 DAYS) 
 async function getUsers() {
-  let newMembersList = [];
-  await User.find({})
-    .then(data => {
-      return data;
-    })
-    .then(data => {
-      data.forEach((cur) => {
-        if(checkStartDate(cur.createdDate) < 30) {
-          newMembersList.push(cur);
-          //console.log(cur);
-        }
-      })
-  })
-  return newMembersList;
+  //querying to find users that were created in the last 30 days
+  const currentDate = new Date();
+  const thirtyDaysPrior = new Date().setDate(currentDate.getDate() - 30);
+  const thirtyDaysISO = new Date(thirtyDaysPrior).toISOString();
+  
+  const query = {createdDate: {$gte: thirtyDaysISO }}
+  
+  const users = await User.find(query);
+  return users;
 }
 
-console.log(getUsers());
+console.log("DM Chat:", findAndDmChat());
 
-
-//function to check how long a user has been with the org (according to the date they created their VRMS account)
-//let newUserList = [];
-// function findNewUsers() {
-//   let newUserList = [];
-//   try {
-//     let result = async () =>  {
-//       User.find({})
-//         .then((user) => {
-//           user.forEach((cur) => {
-//             let accountAge = checkStartDate(cur.createdDate);
-//             //console.log(accountAge);
-//             if (accountAge <= 30) {
-//               newUserList.push(cur);
-//             }
-//           });
-//         })
-//     }
-//     // console.log(newUserList)
-//     //return newUserList;
-//   }
-//   catch(err) {
-//     console.log(err);
-//   }
-//   console.log(newUserList)
-//   return newUserList;
-// }
-// console.log(findNewUsers());
-
-//function to check how long a user has been with the org (according to the date they created their VRMS account)
-function checkStartDate(userCreatedDate) {
-  let userStartDate = userCreatedDate;
-  let userStartparsed = Date.parse(userStartDate);
-  
-  let dateNow = new Date();
-  let diff = dateNow - userStartparsed;
-  let diffDays = diff/1000/60/60/24;
-  
-  return diffDays;
-}
-
-function findAndDmChat(userEmailList) {
+// MESSAGES LIST OF USERS WE GOT FROM getUsers() VIA SLACKBOT
+async function findAndDmChat() {
   try {
-    const userSlackIds = Promise.all(userEmailList.map(async(userEmail) => {
-      let result = await app.client.users.lookupByEmail({
-        // The token you used to initialize your app
-        token: process.env.SLACK_BOT_TOKEN,
-        email: userEmail
-      });
-      let userSlackID = result.user.id;  
-      
-      //return result.user.id;
-      
-      let fileName = '../assets/1newMember.md';
-      let textData = fs.readFileSync(fileName,'utf8');
+    const potentialSlackUsers = await getUsers();
+    const actualSlackUsers = [];
 
+    //find users who are in our slack
+    for (let user of potentialSlackUsers) {
+      console.log("Email:", user.email)
+      try {
+        let result = await app.client.users.lookupByEmail({
+          token: process.env.SLACK_BOT_TOKEN,
+          email: user.email
+        });
+        let userSlackID = result.user.id;  
+        actualSlackUsers.push(userSlackID);
+        console.log("SlackID:", userSlackID);
+      } 
+      catch (err) {
+        console.log("User is not on Slack");
+      }
+    }
+ 
+    const fileName = './assets/newMember.md';
+    const textData = fs.readFileSync(fileName,'utf8');
+    
+    //send Slack users msg from Slackbot
+    for (let slackUser of actualSlackUsers) {
       const sendUserMsgObj = app.client.chat.postMessage({
         token: process.env.SLACK_BOT_TOKEN,
-        channel: userSlackID,
+        channel: slackUser,
         mrkdown: true,
         text: textData
       });      
-    }))     
-  }
-  catch (error) {
-    console.error(error);
+      sendUserMsgObj();
+    }  
+  } catch(error) {
+    console.log(error);
   }
 }
-
 
 module.exports = router;
