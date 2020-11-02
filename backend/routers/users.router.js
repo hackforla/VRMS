@@ -6,12 +6,8 @@ const User = require('../models/user.model');
 // GET /api/users/
 router.get('/', (req, res) => {
     const { query } = req;
-    const { headers } = req;
-    const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
-
-    if (headers['x-customrequired-header'] !== expectedHeader) {
-        res.sendStatus(401);
-    } else if (query.email) {
+   
+    if (query.email) {
         User
         .findOne(query)
         .then(user => {
@@ -61,48 +57,38 @@ router.get('/:id', (req, res) => {
 });
 
 router.patch('/:id', (req, res) => {
-    const { headers } = req;
-    const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
 
     // Return 412 status if no userId
     if (req.params.id === "undefined") {
         return res.status(412).json({ error: "user id required" })
     }
     
-    if (headers['x-customrequired-header'] !== expectedHeader) {
-        res.sendStatus(401);
-    } else {
-        User
-        .findByIdAndUpdate(req.params.id, req.body)
-        .then(edit => res.json(req.params.id))
-        .catch(err =>
-            res.status(500).json({
-                error: 'Couldn\'t edit form... Try again.'
-            }));
-    }
+    User
+    .findByIdAndUpdate(req.params.id, req.body)
+    .then(edit => res.json(req.params.id))
+    .catch(err =>
+        res.status(500).json({
+            error: 'Couldn\'t edit form... Try again.'
+        }));
+    
 });
 
 router.post('/', (req, res) => {
-    const { headers } = req;
-    const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
     
-    if (headers['x-customrequired-header'] !== expectedHeader) {
-        res.sendStatus(401);
-    } else {
         let { email } = req.body;
         let { firstName } = req.body.name;
 
-        User
-            .create(req.body, function (err, user) {
-                if (err) {
-                    console.log(err.errmsg);
-                    res.json(err.errmsg);
-                } else {
-                    const { id } = user;
-                    console.log('Created with id: ' + id);
-                    res.status(201).json(id);
-                }
-            })
+    User
+        .create(req.body, function (err, user) {
+            if (err) {
+                console.log(err.errmsg);
+                res.json(err.errmsg);
+            } else {
+                const { id } = user;
+                console.log('Created with id: ' + id);
+                res.status(201).json(id);
+            }
+        })
             // .then(user => {
             //     .json({ id: res.body.id })
             // })
@@ -140,7 +126,7 @@ router.post('/', (req, res) => {
             //         code: 500,
             //         message: 'Internal server error while creating User'});
             // });
-    }
+    
 
     // const requiredFields = ['firstName', 'email'];
     // const missingField = requiredFields.find(

@@ -9,6 +9,9 @@ const morgan = require("morgan");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 
+const customRequestHeaderName = 'x-customrequired-header';
+const dontCheckCustomRequestHeaderApis = ["GET::/api/recurringevents"];
+
 // Import environment variables
 require("dotenv").config();
 
@@ -70,6 +73,37 @@ const recurringEventsRouter = require("./routers/recurringEvents.router");
 const projectTeamMembersRouter = require("./routers/projectTeamMembers.router");
 const slackRouter = require("./routers/slack.router");
 const authRouter = require("./routers/auth.router");
+
+// Check that clients to the API are sending the custom request header on all methods
+// except for ones described in the dontCheckCustomRequestHeaderApis array
+app.use(function customHeaderCheck (req, res, next) {
+
+  // console.log(`Path: ${  req.path  } Method: ${  req.method}`);
+
+  let pathToCheck = req.path;
+
+  if(pathToCheck.endsWith("/")){
+    pathToCheck = pathToCheck.substr(0, pathToCheck.length-1);
+  }
+
+  const key = `${req.method}::${pathToCheck}`;
+  // console.log(`key: ${  key  }`);
+  if(!dontCheckCustomRequestHeaderApis.includes(key)) 
+  {
+    // console.log(`CUSTOM HEADER CHECKING FOR KEY: ${key}`);
+    const { headers } = req;
+    const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
+
+    if (headers[customRequestHeaderName] !== expectedHeader) {
+      // console.log("CUSTOM HEADER NOT FOUND");
+      res.sendStatus(401);
+    } else {
+      // console.log("CUSTOM HEADER WAS FOUND");
+      next();
+    }
+  }
+  
+})
 
 app.use("/api/events", eventsRouter);
 app.use("/api/checkins", checkInsRouter);

@@ -5,12 +5,6 @@ const Project = require("../models/project.model");
 
 // GET /api/projects/
 router.get("/", (req, res) => {
-  // const { headers } = req;
-  // const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
-
-  // if (headers['x-customrequired-header'] !== expectedHeader) {
-  //     res.sendStatus(401);
-  // } else {
   Project.find()
     .then((projects) => {
       if (!projects) {
@@ -41,13 +35,7 @@ router.get("/:id", (req, res) => {
     });
 });
 
-router.patch("/:id", (req, res) => {
-  const { headers } = req;
-  // const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
-
-  // if (headers['x-customrequired-header'] !== expectedHeader) {
-  //     res.sendStatus(401);
-  // } else {
+router.patch("/:id", (req, res) => { 
   Project.findByIdAndUpdate(req.params.id, req.body)
     .then((edit) => res.json(req.params.id))
     .catch((err) =>
@@ -59,12 +47,6 @@ router.patch("/:id", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-  // const { headers } = req;
-  // const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
-
-  // if (headers['x-customrequired-header'] !== expectedHeader) {
-  //     res.sendStatus(401);
-  // } else {
   Project.create(req.body, function (err, project) {
     if (err) {
       console.log(err.errmsg);
