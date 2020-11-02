@@ -46,6 +46,12 @@
   }
 }
 
+@media (max-width: 414px) {
+  .app-container {
+    border: none;
+  }
+}
+
 @media (max-width: 400px) {
   .app-main {
     display: flex;
