@@ -24,3 +24,12 @@
   font-weight: bold;
   font-style: normal;
 }
+
+@font-face {
+  font-family: 'Open Sans';
+  src: url("../../assets/fonts/open-sans/opensans-italic.woff2") format("woff2"),
+  url("../../assets/fonts/open-sans/opensans-italic.woff") format("woff"),
+  url("../../assets/fonts/open-sans/opensans-italic.ttf") format("ttf");
+  font-weight: bold;
+  font-style: italic;
+}

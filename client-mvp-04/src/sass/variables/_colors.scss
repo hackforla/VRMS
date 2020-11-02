@@ -1,27 +1,30 @@
 // COLOR PALETTE VARIABLES
 $light-primary-color: #FFFFFF;
-$light-secondary-color: #F2F2F2;
+$concrete-color: #f2f2f2;
+$silver-color: #C4C4C4;
+$gray-color: #828282;
 $dark-primary-color: #000000;
-$dark-secondary-color: #3D5A6C;
-$dark-gray-primary-color: #32373B;
-$dark-gray-secondary-color: #4A5859;
-$light-gray-primary-color: #D6D3CE;
-$accent-primary-color: #FA114F;
-$accent-secondary-color: #F4B860;
+$dark-secondary-color: rgba(0, 0, 0, 0.4);
+$accent-royal-blue-color: #2F80ED;
+$accent-burnt-sienna-color: #EB5757;
+$accent-eucalyptus-color: #219653;
+$accent-torch-red-color: #FA114F;
 
 // FONT COLOR
-$font-color-primary: $dark-primary-color;
+$font-color: $dark-primary-color;
 
 // HEADER COLORS
-$header-main-dark-color: $dark-primary-color;
-$header-secondary-dark-color: $dark-secondary-color;
-$header-secondary-light-color: $light-gray-primary-color;
+$header-color: $dark-primary-color;
 
 // BUTTON COLORS
-$button-primary-bg-color: $dark-secondary-color;
-$button-primary-color: $light-primary-color;
-$button-secondary-bg-color: $light-primary-color;
-$button-secondary-color: $dark-secondary-color;
+$button-primary-color: $dark-primary-color; 
+$button-primary-bg-color: $light-primary-color;
+$button-accent-color: $light-primary-color;
+$button-accent-bg-color: $accent-eucalyptus-color;
 
 // LINK COLORS
 $link-color: $dark-primary-color;
+$link-accent-color: $accent-royal-blue-color;
+
+// APP BORDER COLOR
+$border-color: $dark-secondary-color;
