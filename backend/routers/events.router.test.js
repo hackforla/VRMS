@@ -1,5 +1,7 @@
 const supertest = require("supertest");
 const app = require("../app");
+const CONFIG = require('../config/auth.config');
+
 const request = supertest(app);
 
 const { setupDB } = require("../setup-test");
@@ -17,8 +19,11 @@ describe("Test add data with POST and then retrieve the data with GET", () => {
       checkinReady: true,
     };
 
+    const headers = {};
+    headers['x-customrequired-header'] = CONFIG.CUSTOM_REQUEST_HEADER;
+
     // Add an event with a project using the API.
-    const res = await request.post("/api/events").send(submittedData);
+    const res = await (await request.post("/api/events").send(submittedData)).set(headers);
 
     // Retrieve and compare the the Event values using the DB.
     const databaseEventQuery = await Event.find();

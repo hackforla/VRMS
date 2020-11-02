@@ -51,10 +51,15 @@ describe('Test user can sign up through API', () => {
       lastName: 'test_last',
       email: 'test@test.com',
     };
+
+    const headers = {};
+    headers['x-customrequired-header'] = CONFIG.CUSTOM_REQUEST_HEADER;
+    headers.Accept = 'application/json';
+
     const res = await request
       .post('/api/auth/signup')
       .send(badUserData)
-      .set('Accept', 'application/json');
+      .set(headers);
 
     expect(res.status).toBe(422);
     const errorMessage = JSON.parse(res.text);
@@ -72,10 +77,14 @@ describe('Test user can sign up through API', () => {
       email: 'test@test.com',
     };
 
+    const headers = {};
+    headers['x-customrequired-header'] = CONFIG.CUSTOM_REQUEST_HEADER;
+    headers.Accept = 'application/json';
+
     const res = await request
       .post('/api/auth/signup')
       .send(goodUserData)
-      .set('Accept', 'application/json');
+      .set(headers);;
 
     expect(res.status).toBe(200);
     expect(JSON.parse(res.text).message).toEqual('User was registered successfully!');
@@ -92,15 +101,19 @@ describe('Test user can sign up through API', () => {
       email: 'test@test.com',
     };
 
+    const headers = {};
+    headers['x-customrequired-header'] = CONFIG.CUSTOM_REQUEST_HEADER;
+    headers.Accept = 'application/json';
+
     await request
       .post('/api/auth/signup')
       .send(userOneWithSameEmail)
-      .set('Accept', 'application/json');
+      .set(headers);;
 
     const res2 = await request
       .post('/api/auth/signup')
       .send(userTwoWithSameEmail)
-      .set('Accept', 'application/json');
+      .set(headers);
 
     expect(res2.status).toBe(400);
     expect(JSON.parse(res2.text).message).toEqual('Failed! Email is already in use!');
@@ -122,11 +135,15 @@ describe('Test user can sign in through API', () => {
     };
     await User.create(goodUserData);
 
+    const headers = {};
+    headers['x-customrequired-header'] = CONFIG.CUSTOM_REQUEST_HEADER;
+    headers.Accept = 'application/json';
+
     // POST to the DB with that same data.
     const res = await request
       .post('/api/auth/signin')
       .send(goodUserData)
-      .set('Accept', 'application/json');
+      .set(headers);;
 
     expect(res.status).toBe(200);
     expect(JSON.parse(res.text).message).toEqual('User login link sent to email!');
@@ -146,11 +163,15 @@ describe('Test user can sign in through API', () => {
     };
     await User.create(notValidPermission);
 
+    const headers = {};
+    headers['x-customrequired-header'] = CONFIG.CUSTOM_REQUEST_HEADER;
+    headers.Accept = 'application/json';
+
     // POST to the DB with that same data.
     const res = await request
       .post('/api/auth/signin')
       .send(notValidPermission)
-      .set('Accept', 'application/json');
+      .set(headers);;
 
     expect(res.status).toBe(401);
     expect(JSON.parse(res.text).message).toEqual('Invalid permissions');
@@ -170,11 +191,15 @@ describe('Test user can sign in through API', () => {
     };
     await User.create(notValidEmailPayload);
 
+    const headers = {};
+    headers['x-customrequired-header'] = CONFIG.CUSTOM_REQUEST_HEADER;
+    headers.Accept = 'application/json';
+
     // POST to the DB with that same data.
     const res = await request
       .post('/api/auth/signin')
       .send(notValidEmailPayload)
-      .set('Accept', 'application/json');
+      .set(headers);;
 
     expect(res.status).toBe(422);
     const errorMessage = JSON.parse(res.text);
