@@ -1,22 +1,35 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.scss';
+import Header from './components/common/header/header';
+import Footer from './components/common/footer/footer';
+import { Provider } from 'react-redux';
+import configureStore from './store/store';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Routes } from './routes';
 
-import  { Provider } from 'react-redux';
-import configureStore from './store/configureStore';
-
-function App() {
+const App = () => {
   const store = configureStore();
   return (
     <Provider store={store}>
-      <div className="app-container">
-        <header className="app-header">
-          <img src={logo} className="app-logo" alt="logo" />
-          <h1>VRMS</h1>
-        </header>
-      </div>
+      <Router>
+        <div className="app">
+          <div className="app-container">
+            <Header />
+
+            <main data-testid="main" role="main" className="app-main">
+              <Switch>
+                {Routes.map(({ path, key, component }) => (
+                  <Route key={key} path={path} component={component} exact />
+                ))}
+              </Switch>
+            </main>
+
+            <Footer />
+          </div>
+        </div>
+      </Router>
     </Provider>
   );
-}
+};
 
 export default App;

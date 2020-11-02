@@ -1,0 +1,28 @@
+@import "../../sass/variables";
+
+.error-container {
+  padding: 120px 30px 50px;
+
+  .error-content {
+    margin: 10px 0 15px;
+    font-weight: $font-regular;
+  }
+
+  .error-status {
+    font-size: 70px;
+    line-height: 1.2;
+    font-weight: bold;
+  }
+
+  .accent-link {
+    text-transform: capitalize;
+    font-size: 17px;
+    font-weight: $font-semi-bold;
+  }
+}
+
+@media (max-width: 400px) {
+  .error-container {
+    padding: 0 10px;
+  }
+}
