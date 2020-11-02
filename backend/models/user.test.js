@@ -31,9 +31,9 @@ describe("Question Model saves the correct values", () => {
     await User.create(submittedData);
     const savedDataArray = await User.find();
     const savedData = savedDataArray[0];
-    expect(savedData.name.firstName === submittedData.name.firstName);
-    expect(savedData.currentRole === submittedData.currentRole);
-    expect(savedData.desiredJobTitle === submittedData.desiredJobTitle);
+    expect(savedData.name.firstName).toBe(submittedData.name.firstName);
+    expect(savedData.currentRole).toBe(submittedData.currentRole);
+    expect(savedData.desiredJobTitle).toBe(submittedData.desiredJobTitle);
     done();
   });
 });
