@@ -1,12 +1,10 @@
-@import "../variables/_colors";
-@import "../variables/_typography";
-@import "../variables/_elements";
+@import "../variables";
 
-body{
+body {
   margin: 0;
   font-family: $font-family;
   font-weight: $font-regular;
-  color: $font-color-primary;
+  color: $font-color;
   font-size: $font-size;
   line-height: 1;
   overflow: hidden;
@@ -16,45 +14,45 @@ code {
   font-family: $font-family;
 }
 
-h1, h2, h3, h4, h5{
-  font-size: $header-h1-size;
-  color: $header-main-dark-color;
-  line-height: $header-h1-line-height;
-  font-weight: $header-bold;
+h1, h2, h3, h4, h5 {
+  color: $header-color;
+  font-style: $font-regular;
+  line-height: 1;
+  letter-spacing: 0;
 }
 
-h1{
-  text-transform: $header-h1-text-transform;
-  letter-spacing: $header-h1-letter-sp;
+h1 {
+  font-size: $h1-size;
+  text-transform: $h1-text-transform;
+  letter-spacing: $h1-letter-sp;
+  font-weight: $h1-weight-bold;
 }
 
-h2{
-  font-size: $header-h2-size;
-  color: $header-secondary-dark-color;
+h2 {
+  font-size: $h2-size;
+  font-weight: $h2-weight-semi-bold;
 }
 
-h3{
-  font-size: $header-h3-size;
-  &.header-h3-light{
-    color: $header-secondary-light-color;
-  }
-  &.header-h3-sec-dark{
-    color: $header-secondary-dark-color;
-    font-weight: $header-semi-bold;
-  }
+h3 {
+  font-size: $h3-size;
+  font-weight: $h3-weight-bold;
 }
 
-h4{
-  font-size: $header-h4-size;
-  text-transform: $header-h1-text-transform;
+h4 {
+  font-size: $h4-size;
+  text-transform: $h4-text-transform;
+  font-weight: $h4-weight-bold;
+  line-height: $h4-line-height;
 }
 
-h5{
-  font-size: $header-h5-size;
-  font-weight: $header-semi-bold;
+h5 {
+  font-size: $h5-size;
+  letter-spacing: $h5-letter-sp;
+  font-weight: $h5-weight-semi-bold;
+  line-height: $h5-line-height;
 }
 
-p, span{
+p, span {
   line-height: $line-height;
   letter-spacing: $letter-sp;
 }
@@ -62,13 +60,28 @@ p, span{
 a {
   margin: 0;
   padding: 0;
-  text-decoration: none;
   color: $link-color;
   font-size: $link-font-size;
   font-weight: $link-font-weight;
-  line-height: $link-line-height;
-  cursor: pointer;
-  &:hover{
+  &:hover {
     text-decoration: underline;
+  }
+}
+
+.bold {
+  font-weight: $h2-weight-bold;
+}
+
+.regular {
+  font-weight: $h3-weight-regular;
+}
+
+.italic {
+  font-style: $font-italic;
+}
+
+@media (max-width: 374px) {
+  h2 {
+    font-size: 22px;
   }
 }

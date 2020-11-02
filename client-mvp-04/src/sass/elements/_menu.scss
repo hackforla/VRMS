@@ -1,0 +1,28 @@
+@import "../variables";
+
+.menu-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 40px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: .2s ease;
+
+  .menu-icon {
+    box-sizing: border-box;
+    width: 40px;
+    height: 40px;
+  }
+
+  .menu-name {
+    font-size: $menu-font-size;
+    line-height: $menu-line-height;
+    letter-spacing: $menu-letter-sp;
+    margin-left: 17px;
+  }
+
+  &:hover {
+    border-bottom: 2px solid $dark-primary-color;
+  }
+}

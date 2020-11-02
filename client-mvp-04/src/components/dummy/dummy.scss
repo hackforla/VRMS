@@ -1,0 +1,16 @@
+@import "../../sass/variables";
+
+.dummy-container {
+  padding: 215px 30px 100px;
+
+  .dummy-content {
+    line-height: 30px;
+    font-weight: normal;
+  }
+}
+
+@media (max-width: 400px) {
+  .dummy-container {
+    padding: 0 10px;
+  }
+}
