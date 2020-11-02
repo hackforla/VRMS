@@ -1,41 +1,56 @@
-@import "../variables/colors";
-@import "../variables/typography";
-@import "../variables/elements";
+@import "../variables";
 
-button{
+button {
   font-size: $button-primary-font-size;
   color: $button-primary-color;
   background-color: $button-primary-bg-color;
-  border: 1px solid $button-primary-bg-color;
-  border-radius: 20px;
-  letter-spacing: $letter-sp;
+  border: 1px solid $border-color;
+  border-radius: 40px;
   line-height: 1;
-  padding: 9px 20px;
+  padding: 6px 20px;
   text-transform: uppercase;
   text-decoration: none;
-  margin: 0 auto;
+  margin: 20px auto;
   outline: none;
-  cursor: pointer;
   transition: .3s ease;
+  display: flex;
+  justify-content: center;
   &:hover{
-    background-color: $button-primary-color;
-    color: $button-primary-bg-color;
+    background-color: $concrete-color;
   }
 }
 
-.btn-square{
+.btn-accent {
   @extend button;
-  border-radius: 0;
-  text-transform: capitalize;
-  font-weight: $font-bold;
-  color: $button-secondary-color;
-  background-color: $button-secondary-bg-color;
-  border: 1px solid $button-secondary-color;
-  padding: 11px 7px;
-  line-height: 20px;
-  &:hover{
-    background-color: $button-secondary-color;
-    color: $button-secondary-bg-color;
+  color: $button-accent-color;
+  background-color: $button-accent-bg-color;
+  border-color: $button-accent-bg-color;
+  &:hover {
+    background-color: $concrete-color;
+    border-color: $border-color;
+    color: $button-primary-color;
   }
-  margin: 10px auto;
+}
+
+.btn-square {
+  @extend button;
+  font-size: 18px;
+  border-radius: 0;
+  text-transform: none;
+  font-weight: $font-bold;
+  padding: 10px 25px;
+}
+
+.btn-confirm {
+  @extend button;
+  font-size: 16px;
+  text-transform: none;
+  padding: 13px 28px 12px 58px;
+  border-radius: 6px;
+  position: relative;
+  .btn-icon {
+    position: absolute;
+    left: 12px;
+    top: 11px;
+  }
 }

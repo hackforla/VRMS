@@ -1,21 +1,67 @@
 @import "sass/_main.scss";
 
-.app-container {
-  text-align: center;
-}
-
-.app-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-.app-header {
-  background-color: #FFFFFF;
-  min-height: 100vh;
+.app{
+  height: 100vh;
+  width: 100vw;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: #282c34;
+  align-items: center;
+  overflow: hidden;
+}
+
+.app-container {
+  max-width: 414px;
+  width: 100%;
+  min-width: 320px;
+  height: 896px;
+  position: relative;
+  border: 1px solid $border-color;
+  box-sizing: border-box;
+  text-align: center;
+  overflow: hidden;
+  padding: 10px;
+  border-radius: 30px;
+}
+
+.app-main {
+  height: 628px;
+  width: 100%;
+  overflow-y: scroll;
+  box-sizing: content-box;
+  // Hide scrollbar using overflow-y: scroll
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    &::-webkit-scrollbar { /* WebKit */
+      display: none;  /* Safari and Chrome */
+    }
+}
+
+@media (max-height: 896px) {
+  .app-container {
+    height: 100vh;
+  }
+
+  .app-main {
+    height: calc(100vh - 160px);
+  }
+}
+
+@media (max-width: 414px) {
+  .app-container {
+    border: none;
+  }
+}
+
+@media (max-width: 400px) {
+  .app-main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 374px) {
+  .app-main {
+    height: calc(100vh - 180px);
+  }
 }

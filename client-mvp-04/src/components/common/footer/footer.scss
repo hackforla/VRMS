@@ -1,0 +1,29 @@
+@import "../../../sass/variables";
+
+.app-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0 30px;
+  height: 54px;
+
+  .text-block {
+    span {
+      font-weight: $font-bold;
+    }
+  }
+}
+
+@media (max-height: 896px) {
+  .app-footer {
+    padding: 10px 0;
+    height: 35px;
+  }
+}
+
+@media (max-width: 374px) {
+  .app-footer {
+    height: 55px;
+  }
+}

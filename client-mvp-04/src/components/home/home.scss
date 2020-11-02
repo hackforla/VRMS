@@ -1,0 +1,53 @@
+@import "../../sass/variables";
+
+.home-container {
+  padding: 40px 90px;
+
+  .home-name {
+    font-size: 72px;
+  }
+
+  .home-title {
+    margin: 26px 0 83px;
+    line-height: 27px;
+    font-weight: $font-regular;
+    text-align: left;
+    text-transform: uppercase;
+  }
+
+  .home-button {
+    padding: 6px 40px;
+  }
+
+  .home-text {
+    display: flex;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: $font-bold;
+  }
+}
+
+@media (max-width: 400px) {
+  .home-container {
+    padding: 40px 70px;
+  }
+
+  .home-container .home-title {
+    margin: 18px 0 40px;
+  }
+
+  .home-container .home-name {
+    font-size: 68px;
+    text-align: left;
+  }
+}
+
+@media (max-width: 350px) {
+  .home-container {
+    padding: 15px 52px;
+  }
+
+  .home-container .home-title {
+    margin: 15px 0 35px;
+  }
+}
