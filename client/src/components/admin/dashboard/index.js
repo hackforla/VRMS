@@ -325,9 +325,13 @@ const AdminDashboard = () => {
         <h1>Stats by Location - Volunteer Hours</h1>
       </div>
 
-      {!isLoading && !isCheckInReady ? (
-        <div className="event-header">You have 1 upcoming event:</div>
-      ) : null}
+        {!isLoading && nextEvent.length ? (
+          !isCheckInReady ? (
+            <div className="event-header">You have 1 upcoming event:</div>
+          ) : (
+            <div className="event-header">Current event:</div>
+          )
+        ) : null}
 
       <div className="admin-upcoming-event">
         {isLoading ? (
