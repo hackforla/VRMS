@@ -59,7 +59,7 @@ recurringEventSchema.methods.serialize = function() {
 
 const RecurringEvent = mongoose.model('RecurringEvent', recurringEventSchema);
 
-module.exports = RecurringEvent;
+module.exports = { RecurringEvent };
 
 
 

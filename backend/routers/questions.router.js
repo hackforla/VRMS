@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const Question = require('../models/question.model');
+const { Question } = require('../models/question.model');
+
 
 // GET /api/questions/
 router.get('/', (req, res) => {
@@ -10,13 +11,11 @@ router.get('/', (req, res) => {
     Question
         .find()
         .then(questions => {
-            res.json(questions);
+            return res.status(200).send(questions);
         })
         .catch(err => {
             console.log(err);
-            res.sendStatus(500).json({
-                message: `/GET Internal server error: ${err}`
-            })
+            return res.sendStatus(400);
         });
 });
 
@@ -25,13 +24,11 @@ router.post('/', (req, res) => {
     Question
         .create(req.body)
         .then(question => {
-            res.sendStatus(201);
+            return res.sendStatus(201);
         })
         .catch(err => {
             console.log(err);
-            res.sendStatus(400).json({
-                message: `/POST Internal server error: ${err}`
-            })
+            return res.sendStatus(400);
         });
 });
 
@@ -40,13 +37,11 @@ router.get('/:id', (req, res) => {
     Question
         .findById(req.params.id)
         .then(event => {
-            res.json(event);
+            return res.status(200).send(event);
         })
         .catch(err => {
             console.log(err);
-            res.sendStatus(500).json({
-                message: `/GET Internal server error: ${err}`
-            })
+            return res.sendStatus(400);
         });
 });
 

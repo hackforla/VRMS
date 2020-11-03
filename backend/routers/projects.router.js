@@ -1,63 +1,16 @@
 const express = require("express");
 const router = express.Router();
 
-const Project = require("../models/project.model");
+const { ProjectController } = require('../controllers');
 
-// GET /api/projects/
-router.get("/", (req, res) => {
-  Project.find()
-    .then((projects) => {
-      if (!projects) {
-        res.json(false);
-      } else {
-        res.json(projects);
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      res.sendStatus(500).json({
-        message: `/GET Internal server error: ${err}`,
-      });
-    });
-  // };
-});
+// The base is /api/projects
+router.get('/', ProjectController.project_list);
 
-router.get("/:id", (req, res) => {
-  Project.findById(req.params.id)
-    .then((project) => {
-      res.json(project);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.sendStatus(500).json({
-        message: `/GET Internal server error: ${err}`,
-      });
-    });
-});
+router.post('/', ProjectController.create);
 
-router.patch("/:id", (req, res) => { 
-  Project.findByIdAndUpdate(req.params.id, req.body)
-    .then((edit) => res.json(req.params.id))
-    .catch((err) =>
-      res.status(500).json({
-        error: "Couldn't edit form... Try again.",
-      })
-    );
-  // };
-});
+router.get('/:ProjectId', ProjectController.project_by_id);
 
-router.post("/", (req, res) => {
-  Project.create(req.body, function (err, project) {
-    if (err) {
-      console.log(err.errmsg);
-      res.json(err.errmsg);
-    } else {
-      const { id } = project;
-      console.log("Created with id: " + id);
-      res.status(201).json(id);
-    }
-  });
-  // }
-});
+router.patch('/:ProjectId', ProjectController.update);
+
 
 module.exports = router;

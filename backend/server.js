@@ -1,17 +1,16 @@
 const app = require("./app");
 const mongoose = require("mongoose");
 
-const db = require("./models");
-const Role = db.role;
+const { Role } = require("./models");
 
 // Load config variables
-const { DATABASE_URL, PORT } = require("./config/database");
+const { CONFIG_DB } = require('./config/');
 
 // Required convention for mongoose - https://stackoverflow.com/a/51862948/5900471
 mongoose.Promise = global.Promise;
 
 let server;
-async function runServer(databaseUrl = DATABASE_URL, port = PORT) {
+async function runServer(databaseUrl = CONFIG_DB.DATABASE_URL, port = CONFIG_DB.PORT) {
   await mongoose
     .connect(databaseUrl, {
       useNewUrlParser: true,

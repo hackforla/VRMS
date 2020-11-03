@@ -9,7 +9,14 @@ const DonutChartContainer = (props) => {
   const pieNames = [];
   let count = 0;
   let total = 0;
-  const chartColors = ['#3f7589', '#172d47', '#bd3346', '#999999', '#d9d9d9'];
+  const chartColors = [
+    '#3f7589',
+    '#172d47',
+    '#bd3346',
+    '#999999',
+    '#d9d9d9',
+    '#c88a95',
+  ];
 
   for (let key in props.data) {
     let newValue = props.data[key];
