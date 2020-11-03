@@ -4,6 +4,7 @@ const router = express.Router();
 const { ProjectController } = require('../controllers');
 const { verifyUser } = require('../middleware');
 
+// The base is /api/projects
 // Display list of all Projects with GET.
 router.get('/', ProjectController.project_list);
 

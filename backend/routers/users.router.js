@@ -3,6 +3,7 @@ const router = express.Router();
 
 const { UserController } = require('../controllers');
 
+// The base is /api/users
 // Get list of Users with GET
 router.get('/', UserController.user_list);
 

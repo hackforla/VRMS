@@ -4,8 +4,8 @@ const router = express.Router();
 const { Event } = require('../models/event.model');
 const { EventController } = require('../controllers');
 
-
-// Display list of all Eents.
+// The root is /api/events
+// Display list of all Eents with GET.
 router.get('/', EventController.event_list);
 
 // Create a new Event with POST.
