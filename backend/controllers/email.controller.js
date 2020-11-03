@@ -27,7 +27,7 @@ const getAccessTokenForGmailAccount = () => {
  *
  * The Mailhog container must be available for this to succeed.
  */
-const createMailhogSMTPTransport = () => {
+const createMailhogSmtpTransport = () => {
   const smtpTransport = nodemailer.createTransport({
     host: 'mailhog',
     port: 1025,
@@ -88,7 +88,7 @@ async function sendEmailByTransport(smtpTransport, email, subject, message = '',
 const getEmailTransport = () => {
   let smtpTransport;
   if (process.env.NODE_ENV === 'development') {
-    smtpTransport = createMailhogSMTPTransport();
+    smtpTransport = createMailhogSmtpTransport();
     return smtpTransport;
   }
   smtpTransport = createGmailSMTPTransport();
