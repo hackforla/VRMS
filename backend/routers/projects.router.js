@@ -2,19 +2,14 @@ const express = require("express");
 const router = express.Router();
 
 const { ProjectController } = require('../controllers');
-const { verifyUser } = require('../middleware');
 
 // The base is /api/projects
-// Display list of all Projects with GET.
 router.get('/', ProjectController.project_list);
 
-// Create new Project with POST.
 router.post('/', ProjectController.create);
 
-// Display Project by id with GET.
 router.get('/:ProjectId', ProjectController.project_by_id);
 
-// Update Project by id with PATCH.
 router.patch('/:ProjectId', ProjectController.update);
 
 // Delete Project by id with POST.

@@ -5,22 +5,17 @@ const { Event } = require('../models/event.model');
 const { EventController } = require('../controllers');
 
 // The root is /api/events
-// Display list of all Eents with GET.
 router.get('/', EventController.event_list);
 
-// Create a new Event with POST.
 router.post('/', EventController.create);
 
-// Display Event by id with GET.
 router.get('/:EventId', EventController.event_by_id);
 
-// Delete Event by id with DELETE.
 router.delete('/:EventId', EventController.destroy);
 
-// Update Event by id with PATCH.
 router.patch('/:EventId', EventController.update);
 
-// TODO: Refactor to the /api/projects
+// TODO: Refactor and remove
 router.get("/nexteventbyproject/:id", (req, res) => {
   Event.find({ project: req.params.id })
     .populate("project")

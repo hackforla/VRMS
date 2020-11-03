@@ -11,6 +11,7 @@ router.use(function (req, res, next) {
   next();
 });
 
+// The root is /api/auth
 router.post(
   '/signup',
   [authAPIValidator.validateCreateUserAPICall, verifyUser.checkDuplicateEmail],
