@@ -1,4 +1,4 @@
-const Project = require("./project.model");
+const { Project } = require('./project.model');
 
 const { setupDB } = require("../setup-test");
 setupDB("project-model");
@@ -23,6 +23,56 @@ describe("Project Model saves the correct values", () => {
     expect(savedData.name === submittedData.name);
     expect(savedData.githubIdentifier === submittedData.githubIdentifier);
     expect(savedData.githubUrl === submittedData.githubUrl);
+    done();
+  });
+});
+
+describe('CREATE/READ', () => {
+  test('Create Project with Mongoose model', async (done) => {
+    const submittedData = {
+      name: 'projectTest',
+    };
+
+    await Project.create(submittedData);
+    const savedDataArray = await Project.find();
+    const savedData = savedDataArray[0];
+    expect(savedData.name === submittedData.name);
+    done();
+  });
+});
+
+describe('UPDATE', () => {
+  test('Update Project with Mongoose model', async (done) => {
+    const submittedData = {
+      name: 'projectTest',
+    };
+
+    await Project.create(submittedData);
+    const savedDataArray = await Project.find();
+    const savedData = savedDataArray[0];
+    expect(savedData.name === submittedData.name);
+
+    const updatedData = { name: 'updatedEventName' };
+
+    const updatedProject = await Project.findOneAndUpdate(submittedData, updatedData);
+    expect(updatedProject.name === updatedData.name);
+    done();
+  });
+});
+
+describe('DELETE', () => {
+  test('Delete Project with Mongoose model', async (done) => {
+    const submittedData = {
+      name: 'projectTest',
+    };
+
+    await Project.create(submittedData);
+    const savedDataArray = await Project.find();
+    const savedData = savedDataArray[0];
+    expect(savedData.name === submittedData.name);
+
+    const deleteData = await Project.deleteOne(submittedData);
+    expect(deleteData.ok).toBe(1);
     done();
   });
 });

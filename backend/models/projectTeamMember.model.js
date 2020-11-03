@@ -46,4 +46,4 @@ projectTeamMemberSchema.methods.serialize = function() {
 
 const ProjectTeamMember = mongoose.model('ProjectTeamMember', projectTeamMemberSchema);
 
-module.exports = ProjectTeamMember;
+module.exports = { ProjectTeamMember };

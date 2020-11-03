@@ -1,18 +1,22 @@
+const { CheckIn } = require('./checkIn.model');
+const { Event } = require('./event.model');
+const { Project } = require('./project.model');
+const { ProjectTeamMember } = require('./projectTeamMember.model');
+const { Question } = require('./question.model');
+const { RecurringEvent } = require('./recurringEvent.model');
+const { Role } = require('./role.model');
+const { User } = require('./user.model');
+
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
-const db = {};
-
-db.mongoose = mongoose;
-
-db.answer = require("./answer.model");
-db.checkin = require("./checkIn.model");
-db.event = require("./event.model");
-db.project = require("./project.model");
-db.projectTeamMember = require("./projectTeamMember.model");
-db.question = require("./question.model");
-db.recurringEvent = require("./recurringEvent.model");
-db.role = require("./role.model");
-db.user = require("./user.model");
-
-module.exports = db;
+module.exports = {
+  CheckIn,
+  Event,
+  Project,
+  ProjectTeamMember,
+  Question,
+  RecurringEvent,
+  Role,
+  User,
+};

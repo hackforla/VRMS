@@ -1,4 +1,4 @@
-const Checkin = require("./checkIn.model");
+const { CheckIn } = require('./checkIn.model');
 
 const { setupDB } = require("../setup-test");
 setupDB("checkin-model");
@@ -12,8 +12,8 @@ describe("Checkin Model saves the correct values", () => {
       createdDate: 1594023390039,
     };
 
-    await Checkin.create(submittedCheckinData);
-    const savedCheckinDataArray = await Checkin.find();
+    await CheckIn.create(submittedCheckinData);
+    const savedCheckinDataArray = await CheckIn.find();
     const savedCheckinData = savedCheckinDataArray[0];
     expect(savedCheckinData.userId === submittedCheckinData.userId);
     expect(savedCheckinData.eventId === submittedCheckinData.eventId);
