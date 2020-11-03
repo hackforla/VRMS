@@ -22,17 +22,5 @@ router.delete('/:ProjectId', ProjectController.destroy);
 // Display list of Project Event with GET.
 router.get('/:ProjectId/upcomingevents', ProjectController.event_list);
 
-// TODO: Implement Get Project members list with GET
-router.get('/:ProjectId/members', [verifyUser.isAdminByEmail], ProjectController.member_list);
-
-// TODO: Implement Add a Project members with POST
-router.post('/:ProjectId/members', [verifyUser.isAdminByEmail], ProjectController.add_member);
-
-// TODO: Implement Get a Project member with GET
-router.get('/:ProjectId/members/:MemberId', [verifyUser.isAdminByEmail], ProjectController.member_by_id);
-
-// TODO: Implement Remove a Project member with POST
-router.delete('/:ProjectId/members/:MemberId', [verifyUser.isAdminByEmail], ProjectController.remove_member);
-
 
 module.exports = router;

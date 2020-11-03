@@ -60,25 +60,4 @@ ProjectController.event_list = function (req, res) {
   return res.sendStatus('NOT IMPLEMENTED: Get next Project for Project GET');
 };
 
-// Get a list of members of a project
-ProjectController.member_list = function (req, res) {
-  return res.sendStatus('NOT IMPLEMENTED: Get next Project for Project GET');
-};
-
-// Add a Project members with POST
-ProjectController.add_member = function (req, res) {
-  return res.sendStatus('NOT IMPLEMENTED: Get next Project for Project GET');
-}
-
-// Get a Project members by GET
-ProjectController.member_by_id = function (req, res) {
-  return res.sendStatus('NOT IMPLEMENTED: Get next Project for Project GET');
-}
-
-// Remove a member from a Project with POST
-ProjectController.remove_member = function (req, res) {
-  return res.sendStatus('NOT IMPLEMENTED: Get next Project for Project GET');
-}
-
-
 module.exports = ProjectController;
