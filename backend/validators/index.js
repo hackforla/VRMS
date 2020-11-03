@@ -1,5 +1,5 @@
-const authAPIValidator = require('./user.api.validator');
+const authApiValidator = require('./user.api.validator');
 
 module.exports = {
-  authAPIValidator,
+  authApiValidator,
 };

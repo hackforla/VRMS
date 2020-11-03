@@ -34,9 +34,9 @@ async function validateSigninUserAPICall(req, res, next) {
   return next();
 }
 
-const authAPIValidator = {
+const authApiValidator = {
   validateCreateUserAPICall,
   validateSigninUserAPICall,
 };
 
-module.exports = authAPIValidator;
+module.exports = authApiValidator;

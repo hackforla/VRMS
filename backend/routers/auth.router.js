@@ -1,7 +1,7 @@
 const express = require('express');
 const { AuthUtil, verifyUser } = require('../middleware');
 const { UserController } = require('../controllers/');
-const { authAPIValidator } = require('../validators');
+const { authApiValidator } = require('../validators');
 
 const router = express.Router();
 
@@ -14,13 +14,13 @@ router.use(function (req, res, next) {
 // The root is /api/auth
 router.post(
   '/signup',
-  [authAPIValidator.validateCreateUserAPICall, verifyUser.checkDuplicateEmail],
+  [authApiValidator.validateCreateUserAPICall, verifyUser.checkDuplicateEmail],
   UserController.createUser,
 );
 
 router.post(
   '/signin',
-  [authAPIValidator.validateSigninUserAPICall, verifyUser.isAdminByEmail],
+  [authApiValidator.validateSigninUserAPICall, verifyUser.isAdminByEmail],
   UserController.signin,
 );
 
