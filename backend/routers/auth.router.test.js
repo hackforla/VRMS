@@ -13,6 +13,10 @@ const db = require('../models');
 
 const User = db.user;
 
+const headers = {};
+headers['x-customrequired-header'] = CONFIG.CUSTOM_REQUEST_HEADER;
+headers.Accept = 'application/json';
+
 // API Tests
 describe('Test that we can create a user using /user routes', () => {
   test('POST a user and retrieve that user from /user', async () => {
@@ -21,9 +25,7 @@ describe('Test that we can create a user using /user routes', () => {
       name: { firstName: 'test_first', lastName: 'test_last' },
       email: 'test@test.com',
     };
-    const headers = {};
-    headers['x-customrequired-header'] = CONFIG.CUSTOM_REQUEST_HEADER;
-
+  
     // Add an event with a project using the API.
     const res = await request.post('/api/users').send(submittedData).set(headers);
 
@@ -52,11 +54,7 @@ describe('Test user can sign up through API', () => {
       email: 'test@test.com',
     };
 
-    const headers = {};
-    headers['x-customrequired-header'] = CONFIG.CUSTOM_REQUEST_HEADER;
-    headers.Accept = 'application/json';
-
-    const res = await request
+     const res = await request
       .post('/api/auth/signup')
       .send(badUserData)
       .set(headers);
@@ -77,14 +75,10 @@ describe('Test user can sign up through API', () => {
       email: 'test@test.com',
     };
 
-    const headers = {};
-    headers['x-customrequired-header'] = CONFIG.CUSTOM_REQUEST_HEADER;
-    headers.Accept = 'application/json';
-
     const res = await request
       .post('/api/auth/signup')
       .send(goodUserData)
-      .set(headers);;
+      .set(headers);
 
     expect(res.status).toBe(200);
     expect(JSON.parse(res.text).message).toEqual('User was registered successfully!');
@@ -101,14 +95,10 @@ describe('Test user can sign up through API', () => {
       email: 'test@test.com',
     };
 
-    const headers = {};
-    headers['x-customrequired-header'] = CONFIG.CUSTOM_REQUEST_HEADER;
-    headers.Accept = 'application/json';
-
     await request
       .post('/api/auth/signup')
       .send(userOneWithSameEmail)
-      .set(headers);;
+      .set(headers);
 
     const res2 = await request
       .post('/api/auth/signup')
@@ -135,15 +125,11 @@ describe('Test user can sign in through API', () => {
     };
     await User.create(goodUserData);
 
-    const headers = {};
-    headers['x-customrequired-header'] = CONFIG.CUSTOM_REQUEST_HEADER;
-    headers.Accept = 'application/json';
-
     // POST to the DB with that same data.
     const res = await request
       .post('/api/auth/signin')
       .send(goodUserData)
-      .set(headers);;
+      .set(headers);
 
     expect(res.status).toBe(200);
     expect(JSON.parse(res.text).message).toEqual('User login link sent to email!');
@@ -163,15 +149,11 @@ describe('Test user can sign in through API', () => {
     };
     await User.create(notValidPermission);
 
-    const headers = {};
-    headers['x-customrequired-header'] = CONFIG.CUSTOM_REQUEST_HEADER;
-    headers.Accept = 'application/json';
-
     // POST to the DB with that same data.
     const res = await request
       .post('/api/auth/signin')
       .send(notValidPermission)
-      .set(headers);;
+      .set(headers);
 
     expect(res.status).toBe(401);
     expect(JSON.parse(res.text).message).toEqual('Invalid permissions');
@@ -191,15 +173,11 @@ describe('Test user can sign in through API', () => {
     };
     await User.create(notValidEmailPayload);
 
-    const headers = {};
-    headers['x-customrequired-header'] = CONFIG.CUSTOM_REQUEST_HEADER;
-    headers.Accept = 'application/json';
-
     // POST to the DB with that same data.
     const res = await request
       .post('/api/auth/signin')
       .send(notValidEmailPayload)
-      .set(headers);;
+      .set(headers);
 
     expect(res.status).toBe(422);
     const errorMessage = JSON.parse(res.text);
