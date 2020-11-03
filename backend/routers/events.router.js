@@ -20,9 +20,6 @@ router.delete('/:EventId', EventController.destroy);
 // Update Event by id with PATCH.
 router.patch('/:EventId', EventController.update);
 
-// TODO: Implement Get Event members by GET
-router.get('/:EventId/members', EventController.event_member_list);
-
 // TODO: Refactor to the /api/projects
 router.get("/nexteventbyproject/:id", (req, res) => {
   Event.find({ project: req.params.id })

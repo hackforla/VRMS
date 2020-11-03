@@ -59,8 +59,5 @@ EventController.update = async function (req, res) {
   }
 };
 
-EventController.event_member_list = function (req, res) {
-  return res.send('NOT IMPLEMENTED: Event list UPDATE');
-};
 
 module.exports = EventController;
