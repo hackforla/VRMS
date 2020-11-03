@@ -100,7 +100,7 @@ app.use(function customHeaderCheck (req, res, next) {
     }
   }
   
-})
+});
 
 app.use('/api/auth', authRouter);
 app.use("/api/events", eventsRouter);
