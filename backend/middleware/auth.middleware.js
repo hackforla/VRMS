@@ -35,8 +35,8 @@ function verifyCookie(req, res, next) {
   });
 }
 
-const verifyAuth = {
+const AuthUtil = {
   verifyToken,
   verifyCookie,
 };
-module.exports = verifyAuth;
+module.exports = AuthUtil;
