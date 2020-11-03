@@ -6,6 +6,11 @@ const { setupDB } = require('../setup-test');
 setupDB('api-projects');
 
 const { Project } = require('../models');
+const CONFIG = require('../config/auth.config');
+
+const headers = {};
+headers['x-customrequired-header'] = CONFIG.CUSTOM_REQUEST_HEADER;
+headers.Accept = 'application/json';
 
 describe('CREATE', () => {
   test('Create a Project with POST to /api/projects/', async (done) => {
@@ -17,7 +22,7 @@ describe('CREATE', () => {
     // Submit a project
     const res = await request
       .post('/api/projects/')
-      .set('Accept', 'application/json')
+      .set(headers)
       .send(submittedData);
     expect(res.status).toBe(201);
     done();
@@ -34,12 +39,12 @@ describe('READ', () => {
       // Submit a project
       const res = await request
         .post('/api/projects/')
-        .set('Accept', 'application/json')
+        .set(headers)
         .send(submittedData);
       expect(res.status).toBe(201);
 
       // Get all projects
-      const res2 = await request.get('/api/projects/');
+      const res2 = await request.get('/api/projects/').set(headers);
       expect(res2.status).toBe(200);
 
       const APIData = res2.body[0];
@@ -58,7 +63,7 @@ describe('UPDATE', () => {
     // Submit a project
     const res = await request
       .post('/api/projects/')
-      .set('Accept', 'application/json')
+      .set(headers)
       .send(submittedData);
     expect(res.status).toBe(201);
 
@@ -69,12 +74,12 @@ describe('UPDATE', () => {
     // Update project
     const res2 = await request
       .patch(`/api/projects/${res.body._id}`)
-      .set('Accept', 'application/json')
+      .set(headers)
       .send(updatedDataPayload);
     expect(res2.status).toBe(200);
 
     // Get project
-    const res3 = await request.get(`/api/projects/${res.body._id}`);
+    const res3 = await request.get(`/api/projects/${res.body._id}`).set(headers);
     expect(res3.status).toBe(200);
 
     const APIData = res3.body;
@@ -93,12 +98,12 @@ describe('DELETE', () => {
     // Submit a project
     const res = await request
       .post('/api/projects/')
-      .set('Accept', 'application/json')
+      .set(headers)
       .send(submittedData);
     expect(res.status).toBe(201);
 
     // Delete project
-    const res2 = await request.patch(`/api/projects/${res.body._id}`);
+    const res2 = await request.patch(`/api/projects/${res.body._id}`).set(headers);
     expect(res2.status).toBe(200);
     done();
 });

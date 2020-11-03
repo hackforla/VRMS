@@ -9,6 +9,9 @@ setupDB("api-events");
 
 const { Event } = require('../models');
 
+const headers = {};
+headers['x-customrequired-header'] = CONFIG.CUSTOM_REQUEST_HEADER;
+headers.Accept = 'application/json';
 
 // API Tests
 describe('CREATE', () => {
@@ -21,7 +24,7 @@ describe('CREATE', () => {
     // Submit an event
     const res = await request
       .post('/api/events/')
-      .set('Accept', 'application/json')
+      .set(headers)
       .send(submittedData);
     expect(res.status).toBe(201);
 
@@ -41,12 +44,9 @@ describe('READ', () => {
       createdDate: '2020-05-20T21:16:44.498Z',
       checkinReady: true,
     };
-
-    const headers = {};
-    headers['x-customrequired-header'] = CONFIG.CUSTOM_REQUEST_HEADER;
-
+    
     // Add an event with a project using the API.
-    const res = await (await request.post("/api/events").send(submittedData)).set(headers);
+    const res = await request.post("/api/events").send(submittedData).set(headers);
 
     // Retrieve and compare the the Event values using the DB.
     const databaseEventQuery = await Event.find();
@@ -55,7 +55,7 @@ describe('READ', () => {
     expect(databaseEvent.createdDate === submittedData.createdDate);
 
     // Retrieve and compare the the values using the API.
-    const response = await request.get('/api/events/');
+    const response = await request.get('/api/events/').set(headers);
     expect(response.statusCode).toBe(200);
     const APIData = response.body[0];
     expect(APIData.createdDate === submittedData.createdDate);
@@ -92,7 +92,7 @@ describe('READ', () => {
     const dbCreatedEventIdURL = `/api/events/${dbCreatedeventId}`;
 
     // Retrieve and compare the the values using the API.
-    const response = await request.get(dbCreatedEventIdURL);
+    const response = await request.get(dbCreatedEventIdURL).set(headers);
     expect(response.statusCode).toBe(200);
     const apiRetrievedEvent = await response.body;
     expect(apiRetrievedEvent._id).toEqual(dbCreatedeventId);
@@ -111,7 +111,7 @@ describe('UPDATE', () => {
     // Submit an event
     const res = await request
       .post('/api/events/')
-      .set('Accept', 'application/json')
+      .set(headers)
       .send(submittedData);
     expect(res.status).toBe(201);
 
@@ -122,7 +122,7 @@ describe('UPDATE', () => {
     // Update the event
     const res2 = await request
       .patch(`/api/events/${res.body._id}`)
-      .set('Accept', 'application/json')
+      .set(headers)
       .send(updatedDataPayload);
     expect(res2.status).toBe(200);
 
@@ -140,12 +140,12 @@ describe('DELETE', () => {
     // Submit an event
     const res = await request
       .post('/api/events/')
-      .set('Accept', 'application/json')
+      .set(headers)
       .send(submittedData);
     expect(res.status).toBe(201);
 
     // Delete the event
-    const res2 = await request.delete(`/api/events/${res.body._id}/`);
+    const res2 = await request.delete(`/api/events/${res.body._id}/`).set(headers);
     expect(res2.status).toBe(200);
 
     done();

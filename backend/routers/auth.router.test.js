@@ -21,7 +21,7 @@ beforeEach(() => {
 });
 
 const headers = {};
-headers['x-customrequired-header'] = CONFIG.CUSTOM_REQUEST_HEADER;
+headers['x-customrequired-header'] = CONFIG_AUTH.CUSTOM_REQUEST_HEADER;
 headers.Accept = 'application/json';
 
 // API Tests
@@ -62,7 +62,7 @@ describe('CREATE User', () => {
     const res = await request
       .post('/api/auth/signup')
       .send(goodUserData)
-      .set('Accept', 'application/json');
+      .set(headers);
 
     expect(res.status).toBe(201);
   });
