@@ -56,8 +56,5 @@ ProjectController.destroy = async function (req, res) {
   }
 };
 
-ProjectController.event_list = function (req, res) {
-  return res.sendStatus('NOT IMPLEMENTED: Get next Project for Project GET');
-};
 
 module.exports = ProjectController;

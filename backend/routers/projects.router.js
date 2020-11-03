@@ -12,11 +12,5 @@ router.get('/:ProjectId', ProjectController.project_by_id);
 
 router.patch('/:ProjectId', ProjectController.update);
 
-// Delete Project by id with POST.
-router.delete('/:ProjectId', ProjectController.destroy);
-
-// Display list of Project Event with GET.
-router.get('/:ProjectId/upcomingevents', ProjectController.event_list);
-
 
 module.exports = router;

@@ -12,7 +12,6 @@ const SCOPES = ["https://www.googleapis.com/auth/drive"];
 const githubOrganization = "testvrms";
 
 // GET /api/grantpermission/googleDrive
-
 router.post("/googleDrive", async (req, res) => {
   let credentials = JSON.parse(process.env.GOOGLECREDENTIALS);
 
