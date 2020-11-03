@@ -89,6 +89,7 @@ const getEmailTransport = () => {
   let smtpTransport;
   if (process.env.NODE_ENV === 'development') {
     smtpTransport = createMailhogSMTPTransport();
+    return smtpTransport;
   }
   smtpTransport = createGmailSMTPTransport();
   return smtpTransport;
