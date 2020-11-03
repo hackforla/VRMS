@@ -21,5 +21,7 @@ EXAMPLE: Monday, 7:30pm, 2 hours
 https://www.hackforla.org/projects/vrms
 
 ### Who should we contact on your team (via Slack) for user acceptance testing
-Channel name: 
-Slack handle:
+Slack Channel #name: 
+Slack @handle:
+<hr />
+### Instructions
