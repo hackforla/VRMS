@@ -98,8 +98,7 @@ describe('DELETE', () => {
     expect(res.status).toBe(201);
 
     // Delete project
-    const res2 = await request
-      .delete(`/api/projects/${res.body._id}`);
+    const res2 = await request.patch(`/api/projects/${res.body._id}`);
     expect(res2.status).toBe(200);
     done();
 });
