@@ -46,7 +46,7 @@ const createMailhogSmtpTransport = () => {
  *
  * This requires setting up the Gmail account for use. https://tinyurl.com/y4farjwt
  */
-const createGmailSMTPTransport = () => {
+const createGmailSmtpTransport = () => {
   const accessToken = getAccessTokenForGmailAccount();
   const smtpTransport = nodemailer.createTransport({
     service: 'gmail',
@@ -91,7 +91,7 @@ const getEmailTransport = () => {
     smtpTransport = createMailhogSmtpTransport();
     return smtpTransport;
   }
-  smtpTransport = createGmailSMTPTransport();
+  smtpTransport = createGmailSmtpTransport();
   return smtpTransport;
 };
 
