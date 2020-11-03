@@ -130,7 +130,8 @@ async function getUsers() {
   return users;
 }
 
-console.log("DM Chat:", findAndDmChat());
+//To Do: Need to link function to cron so it can run daily
+//console.log("DM Chat:", findAndDmChat());
 
 // MESSAGES LIST OF USERS WE GOT FROM getUsers() VIA SLACKBOT
 async function findAndDmChat() {
