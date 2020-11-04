@@ -1,0 +1,34 @@
+@import "../../sass/variables";
+
+.login-container {
+  padding: 40px 60px;
+
+  .text-field-container {
+    margin-top: 76px;
+  }
+
+  .login-button {
+    margin: 50px 10px 20px auto;
+  }
+}
+
+@media (max-width: 400px) {
+  .login-container {
+    padding: 25px 52px;
+
+    .login-button {
+      margin: 40px 0 20px auto;
+    }
+
+    .text-field-container {
+      margin-top: 55px;
+    }
+  }
+}
+
+@media (max-width: 350px) {
+  .login-container {
+
+  }
+}
+

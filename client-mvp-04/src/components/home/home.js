@@ -10,7 +10,7 @@ const Home = () => {
       <Title />
 
       <RedirectLink
-        path={'/sign-in'}
+        path={'/login'}
         content={<Button content={`Sign in`} className={`home-button`} />}
         linkKey={'sign-in-link'}
       />
