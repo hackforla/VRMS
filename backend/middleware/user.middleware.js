@@ -1,15 +1,9 @@
-const db = require('../models');
-
-const User = db.user;
+const { User } = require('../models');
 
 function checkDuplicateEmail(req, res, next) {
   User.findOne({ email: req.body.email }).then((user) => {
     if (user) {
-      res.status(400).send({
-        message: 'Failed! Email is already in use!',
-      });
-
-      return;
+      return res.sendStatus(400);
     }
     next();
   });
@@ -18,19 +12,13 @@ function checkDuplicateEmail(req, res, next) {
 function isAdminByEmail(req, res, next) {
   User.findOne({ email: req.body.email }).then((user) => {
     if (!user) {
-      res.status(400).send({
-        message: 'User does not exist',
-      });
+      return res.sendStatus(400);
     } else {
       const role = user.accessLevel;
       if (role === 'admin') {
         next();
       } else {
-        next(
-          res.status(401).send({
-            message: 'Invalid permissions',
-          }),
-        );
+        next(res.sendStatus(401));
       }
     }
   });

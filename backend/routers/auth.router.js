@@ -1,6 +1,7 @@
 const express = require('express');
-const { authJwt, verifyUser } = require('../middleware');
-const userController = require('../controllers/user.controller');
+const { AuthUtil, verifyUser } = require('../middleware');
+const { UserController } = require('../controllers/');
+const { authApiValidator } = require('../validators');
 
 const router = express.Router();
 
@@ -10,20 +11,21 @@ router.use(function (req, res, next) {
   next();
 });
 
+// The root is /api/auth
 router.post(
   '/signup',
-  [userController.validateCreateUserAPICall, verifyUser.checkDuplicateEmail],
-  userController.createUser,
+  [authApiValidator.validateCreateUserAPICall, verifyUser.checkDuplicateEmail],
+  UserController.createUser,
 );
 
 router.post(
-  "/signin",
-  [userController.validateSigninUserAPICall, verifyUser.isAdminByEmail],
-  userController.signin
+  '/signin',
+  [authApiValidator.validateSigninUserAPICall, verifyUser.isAdminByEmail],
+  UserController.signin,
 );
 
-router.post("/verify-signin", userController.verifySignIn);
+router.post('/verify-signin', UserController.verifySignIn);
 
-router.post('/me', [authJwt.verifyCookie], userController.verifyMe);
+router.post('/me', [AuthUtil.verifyCookie], UserController.verifyMe);
 
 module.exports = router;

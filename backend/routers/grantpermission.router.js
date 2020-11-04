@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const fs = require("fs");
+
 const { google } = require("googleapis");
-const async = require("async");
-// require("dotenv").config();
+const async = require('async');
 const fetch = require("node-fetch");
 
 const SCOPES = ["https://www.googleapis.com/auth/drive"];
@@ -12,15 +12,12 @@ const SCOPES = ["https://www.googleapis.com/auth/drive"];
 const githubOrganization = "testvrms";
 
 // GET /api/grantpermission/googleDrive
-
 router.post("/googleDrive", async (req, res) => {
   let credentials = JSON.parse(process.env.GOOGLECREDENTIALS);
 
   //checks if email and file to change are in req.body
   if (!req.body.email || !req.body.file) {
-    return res
-      .status(500)
-      .send({ message: "Error, no email or file specified!" });
+    return res.sendStatus(400);
   }
 
   const { client_secret, client_id, redirect_uris } = credentials;
@@ -57,10 +54,10 @@ router.post("/googleDrive", async (req, res) => {
       const successObject = { message: "Success!" };
       return res.status(200).send(successObject);
     } else {
-      return res.status(500).send({ message: result.message });
+      return res.sendStatus(400);
     }
   } catch (err) {
-    return res.status(500).send({ message: err.message });
+    return res.sendStatus(500);
   }
 });
 
@@ -124,7 +121,7 @@ router.post("/gitHub", async (req, res) => {
 
     return res.status(200).send(result);
   } catch (err) {
-    return res.status(500).send({ message: err.message });
+    return res.status(400);
   }
 });
 
@@ -139,10 +136,9 @@ router.post("/", async (req, res) => {
     );
 
     // sends back error if credentials files cannot be read
-    if (err)
-      return res.status(500).send({
-        message: "Error loading client secret file:" + err.message,
-      });
+    if (err) {
+      return res.sendStatus(400);
+    }
 
     let token;
     let setToken = false;
@@ -152,15 +148,14 @@ router.post("/", async (req, res) => {
       try {
         const tokenResult = await sendToken(oAuth2Client, req.body.code);
         if (!tokenResult.success) {
-          return res.status(500).send({ message: tokenResult.message });
+          return res.sendStatus(400);
         } else {
           console.log(tokenResult);
           token = tokenResult.token;
           setToken = true;
         }
       } catch (err) {
-        console.log("THIS ERROR", err);
-        return res.status(500).send({ message: err.message });
+        return res.sendStatus(400);
       }
       // if token is already placed into body request
     } else if (req.body.token) {
@@ -185,11 +180,11 @@ router.post("/", async (req, res) => {
             return res.status(200).send(successObject);
           }
         } else {
-          return res.status(500).send({ message: result.message });
+          return res.sendStatus(400);
         }
       } catch (err) {
         console.log(err.message);
-        return res.status(500).send({ message: err.message });
+        return res.sendStatus(400);
       }
     } else {
       // returns a URL for the user to give permission

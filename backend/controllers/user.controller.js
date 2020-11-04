@@ -1,121 +1,174 @@
-const { body, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 
-const emailController = require('./email.controller');
-const CONFIG = require('../config/auth.config');
+const EmailController = require('./email.controller');
+const { CONFIG_AUTH } = require('../config');
 
-const DB = require('../models');
+const { User } = require('../models');
 
-const User = DB.user;
+const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
+
+const UserController = {};
+
+// Get list of Users with GET
+UserController.user_list = async function (req, res) {
+  const { headers } = req;
+  const { query } = req;
+
+  if (headers['x-customrequired-header'] !== expectedHeader) {
+    return res.sendStatus(403);
+  }
+
+  try {
+    const user = await User.find(query);
+    return res.status(200).send(user);
+  } catch (err) {
+    return res.sendStatus(400);
+  }
+};
+
+// Get User by id with GET
+UserController.user_by_id = async function (req, res) {
+  const { headers } = req;
+  const { UserId } = req.params;
+
+  if (headers['x-customrequired-header'] !== expectedHeader) {
+    return res.sendStatus(403);
+  }
+
+  try {
+    const user = await User.findById(UserId);
+    return res.status(200).send(user);
+  } catch (err) {
+    return res.sendStatus(400);
+  }
+};
+
+// Add User with POST
+UserController.create = async function (req, res) {
+  const { headers } = req;
+
+  if (headers['x-customrequired-header'] !== expectedHeader) {
+    return res.sendStatus(403);
+  }
+
+  try {
+    const user = await User.create(req.body);
+    return res.status(201).send(user);
+  } catch (err) {
+    return res.sendStatus(400);
+  }
+};
+
+// Update User with PATCH
+UserController.update = async function (req, res) {
+  const { headers } = req;
+  const { UserId } = req.params;
+
+  if (headers['x-customrequired-header'] !== expectedHeader) {
+    return res.sendStatus(403);
+  }
+
+  try {
+    const user = await User.findOneAndUpdate(UserId, req.body);
+    return res.status(200).send(user);
+  } catch (err) {
+    return res.sendStatus(400);
+  }
+};
+
+// Add User with POST
+UserController.delete = async function (req, res) {
+  const { headers } = req;
+  const { UserId } = req.params;
+
+  if (headers['x-customrequired-header'] !== expectedHeader) {
+    return res.sendStatus(403);
+  }
+
+  try {
+    const user = await User.findByIdAndDelete(UserId);
+    return res.status(200).send(user);
+  } catch (err) {
+    return res.sendStatus(400);
+  }
+};
 
 function generateAccessToken(user) {
   // expires after half and hour (1800 seconds = 30 minutes)
-  return jwt.sign({ id: user.id, role: user.accessLevel }, CONFIG.SECRET, {
-    expiresIn: `${CONFIG.TOKEN_EXPIRATION_SEC}s`,
+  return jwt.sign({ id: user.id, role: user.accessLevel }, CONFIG_AUTH.SECRET, {
+    expiresIn: `${CONFIG_AUTH.TOKEN_EXPIRATION_SEC}s`,
   });
 }
 
-function createUser(req, res) {
+UserController.createUser = function (req, res) {
+  const { firstName, lastName, email } = req.body;
+  const { origin } = req.headers;
+
   const user = new User({
     name: {
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
+      firstName,
+      lastName,
     },
-    email: req.body.email.toLowerCase(),
+    email: email.toLowerCase(),
     accessLevel: 'user',
   });
 
   // eslint-disable-next-line
   user.save((err, usr) => {
     if (err) {
-      return res.status(500).send({ message: err });
+      res.sendStatus(400);
     }
-    return res.status(200).send({ message: 'User was registered successfully!' });
+    res.sendStatus(201);
   });
 
   const jsonToken = generateAccessToken(user);
-  const {origin} = req.headers;
-  emailController.sendUserEmailSigninLink(req.body.email, jsonToken, req.cookie, origin);
-}
 
-function signin(req, res) {
+  EmailController.sendLoginLink(req.body.email, jsonToken, req.cookie, origin);
+};
+
+UserController.signin = function (req, res) {
   const { email } = req.body;
-  console.log(email);
+  const { origin } = req.headers;
 
   User.findOne({ email })
     .then((user) => {
       if (!user) {
-        return res.status(401).send({ message: 'User not authorized' });
+        return res.sendStatus(401);
       }
       const jsonToken = generateAccessToken(user);
-      const {origin} = req.headers;
-      emailController.sendUserEmailSigninLink(req.body.email, jsonToken, origin);
-      return res.status(200).send({ message: 'User login link sent to email!' });
+      EmailController.sendLoginLink(req.body.email, jsonToken, req.cookie, origin);
+      return res.sendStatus(200);
     })
     .catch((err) => {
       console.log(err);
 
-      return res.status(400).send({ message: 'User email not found.' });
+      return res.status(400);
     });
-}
+};
 
-function verifySignIn(req, res) {
+UserController.verifySignIn = function (req, res) {
+  // eslint-disable-next-line dot-notation
   let token = req.headers['x-access-token'] || req.headers['authorization'];
-
-  if (!token) {
-    return res.status(403).send({ message: 'Auth token is not supplied' });
-  }
   if (token.startsWith('Bearer ')) {
     // Remove Bearer from string
     token = token.slice(7, token.length);
   }
 
-  jwt.verify(token, CONFIG.SECRET, (err, decoded) => {
-    if (err) {
-      return res.status(401).send({ message: err });
-    }
+  if (!token) {
+    return res.sendStatus(400);
+  }
+
+  try {
+    jwt.verify(token, CONFIG_AUTH.SECRET);
     res.cookie('token', token, { httpOnly: true });
-    res.sendStatus(200);
-  });
-}
-
-function verifyMe(req, res) {
-  res.send(200);
-}
-
-async function validateCreateUserAPICall(req, res, next) {
-  await body('name.firstName').not().isEmpty().trim().escape().run(req);
-  await body('name.lastName').not().isEmpty().trim().escape().run(req);
-  await body('email', 'Invalid email').exists().isEmail().normalizeEmail({ gmail_remove_dots: false }).run(req);
-
-  // Finds the validation errors in this request and wraps them in an object with handy functions
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
+    return res.sendStatus(200);
+  } catch (err) {
+    return res.status(403);
   }
-  return next();
-}
-
-async function validateSigninUserAPICall(req, res, next) {
-  await body('email', 'Invalid email').exists().isEmail().normalizeEmail({ gmail_remove_dots: false }).run(req);
-
-  // Finds the validation errors in this request and wraps them in an object with handy functions
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
-  }
-  return next();
-}
-
-const userController = {
-  validateCreateUserAPICall,
-  validateSigninUserAPICall,
-  createUser,
-  signin,
-  verifySignIn,
-  verifyMe,
 };
 
-module.exports = userController;
+UserController.verifyMe = function (req, res) {
+  return res.sendStatus(200);
+};
+
+module.exports = UserController;
