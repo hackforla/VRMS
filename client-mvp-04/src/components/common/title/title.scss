@@ -19,19 +19,19 @@
 @media (max-width: 400px) {
   .title-container {
     margin: 0;
-  }
 
-  .home-container .title-long {
-    margin-top: 18px;
-  }
+    .title-long {
+      margin-top: 18px;
+    }
 
-  .home-container .title-short {
-    font-size: 68px;
+    .title-short {
+      font-size: 68px;
+    }
   }
 }
 
 @media (max-width: 350px) {
-  .home-container .title-long {
+  .title-container .title-long {
     margin: 15px;
   }
 }

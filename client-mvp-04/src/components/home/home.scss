@@ -7,18 +7,11 @@
     padding: 6px 40px;
     margin-top: 83px;
   }
-
-  .home-text {
-    display: flex;
-    justify-content: center;
-    font-size: 15px;
-    font-weight: $font-bold;
-  }
 }
 
 @media (max-width: 400px) {
   .home-container {
-    padding: 40px 70px;
+    padding: 25px 52px;
 
     .home-button {
       margin-top: 40px;
