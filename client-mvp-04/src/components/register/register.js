@@ -18,7 +18,7 @@ const Register = (props) => {
             checkUserByEmail();
         } else {
             setErrorMessage(
-                <p className="error-msg">
+                <p className="error-msg" data-testid="error-msg">
                     *Please enter a valid email address
                 </p>
             );
@@ -28,10 +28,7 @@ const Register = (props) => {
 
     const checkUserByEmail = async () => {
 
-        console.log('checking user by email');
-
         try {
-
             const res = await fetch(`${process.env.REACT_APP_PROXY}/api/checkuser`, {
                 method: "POST",
                 headers: {
@@ -41,14 +38,11 @@ const Register = (props) => {
             });
 
             const user = await res.json();
-            console.log(user);
-
-
             if (user === false) {
                 props.history.push('/page');
             } else {
                 setErrorMessage(
-                    <p className="error-msg">
+                    <p className="error-msg" data-testid="error-msg">
                         *You already have an account for that email
                         address. Want to <Link
                             path='/page'
@@ -61,7 +55,6 @@ const Register = (props) => {
                     </p>
                 );
             }
-
         } catch (error) {
             alert(error);
         }

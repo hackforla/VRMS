@@ -36,7 +36,7 @@ describe('Home', () => {
     expect(history.location.pathname).toBe('/page');
   });
 
-  test('Should navigate to dummy page after click on `Create account` button', () => {
+  test('Should navigate to create account page after click on `Create account` button', () => {
     const history = createMemoryHistory();
     render(
       <Router history={history}>
@@ -44,8 +44,8 @@ describe('Home', () => {
       </Router>
     );
     expect(screen.getByText('Create account')).toBeInTheDocument();
-    expect(screen.getAllByTestId('link')[1]).toHaveAttribute('href', '/page');
+    expect(screen.getAllByTestId('link')[1]).toHaveAttribute('href', '/register');
     fireEvent.click(screen.getAllByTestId('link')[1]);
-    expect(history.location.pathname).toBe('/page');
+    expect(history.location.pathname).toBe('/register');
   });
 });
