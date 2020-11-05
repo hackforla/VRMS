@@ -1,6 +1,7 @@
 import Home from '../components/home/home';
 import Dummy from '../components/dummy/dummy';
 import Error from '../components/error/error';
+import Register from '../components/register/register'; 
 
 import DevUiKit from '../utils/uiKit/uiKit';
 
@@ -20,6 +21,11 @@ export const Routes = [
     path: '/dev-ui-kit',
     key: 'dev-ui-kit',
     component: DevUiKit,
+  },
+  {
+    path: '/register',
+    key: 'create-account-link',
+    component: Register,
   },
   {
     key: 'error',

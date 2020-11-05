@@ -18,7 +18,7 @@ const Home = () => {
       <span className="home-text">or</span>
 
       <RedirectLink
-        path={'/page'}
+        path={'/register'}
         content={'Create account'}
         className={'accent-link'}
         linkKey={'create-account-link'}

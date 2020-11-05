@@ -8,6 +8,7 @@ const fetch = require("node-fetch");
 const morgan = require("morgan");
 const path = require("path");
 const cookieParser = require("cookie-parser");
+const cors = require('cors');
 
 // Import environment variables
 require("dotenv").config();
@@ -49,7 +50,7 @@ app.use(morgan("dev"));
 // app.use(helmet());
 
 // Cross-Origin-Resource-Sharing
-// app.use(cors());
+app.use(cors());
 
 // WORKERS
 const runOpenCheckinWorker = require("./workers/openCheckins")(cron, fetch);
