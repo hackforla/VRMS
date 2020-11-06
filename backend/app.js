@@ -92,10 +92,9 @@ app.use(function customHeaderCheck (req, res, next) {
     const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
 
     if (headers[customRequestHeaderName] !== expectedHeader) {
-      // console.log("CUSTOM HEADER NOT FOUND");
+      console.log("REQUEST SHOULD CONTAIN CUSTOM HEADER BUT IT ISN'T FOUND");
       res.sendStatus(401);
     } else {
-      // console.log("CUSTOM HEADER WAS FOUND");
       next();
     }
   }
