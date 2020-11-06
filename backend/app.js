@@ -72,10 +72,8 @@ const slackRouter = require("./routers/slack.router");
 const authRouter = require("./routers/auth.router");
 
 // Check that clients to the API are sending the custom request header on all methods
-// except for ones described in the dontCheckCustomRequestHeaderApis array
+// except for ones described in the dontCheckCustomRequestHeaderApis array.
 app.use(function customHeaderCheck (req, res, next) {
-
-  // console.log(`Path: ${  req.path  } Method: ${  req.method}`);
 
   let pathToCheck = req.path;
 
@@ -84,10 +82,9 @@ app.use(function customHeaderCheck (req, res, next) {
   }
 
   const key = `${req.method}::${pathToCheck}`;
-  // console.log(`key: ${  key  }`);
+
   if(!dontCheckCustomRequestHeaderApis.includes(key)) 
   {
-    // console.log(`CUSTOM HEADER CHECKING FOR KEY: ${key}`);
     const { headers } = req;
     const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
 
