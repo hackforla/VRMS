@@ -20,6 +20,10 @@ beforeEach(() => {
   mockEmailController.sendLoginLink.mockClear();
 });
 
+const headers = {};
+headers['x-customrequired-header'] = CONFIG_AUTH.CUSTOM_REQUEST_HEADER;
+headers.Accept = 'application/json';
+
 // API Tests
 describe('CREATE User', () => {
   test('Create user with POST to /users', async () => {
@@ -28,9 +32,7 @@ describe('CREATE User', () => {
       name: { firstName: 'test_first', lastName: 'test_last' },
       email: 'test@test.com',
     };
-    const headers = {};
-    headers['x-customrequired-header'] = CONFIG_AUTH.CUSTOM_REQUEST_HEADER;
-
+  
     // Add an event with a project using the API.
     const res = await request.post('/api/users').send(submittedData).set(headers);
 
@@ -60,7 +62,7 @@ describe('CREATE User', () => {
     const res = await request
       .post('/api/auth/signup')
       .send(goodUserData)
-      .set('Accept', 'application/json');
+      .set(headers);
 
     expect(res.status).toBe(201);
   });
@@ -74,10 +76,11 @@ describe('SIGNUP Validation', () => {
       lastName: 'test_last',
       email: 'test@test.com',
     };
-    const res = await request
+
+     const res = await request
       .post('/api/auth/signup')
       .send(badUserData)
-      .set('Accept', 'application/json');
+      .set(headers);
 
     expect(res.status).toBe(403);
     const errorMessage = JSON.parse(res.text);
@@ -103,12 +106,12 @@ describe('SIGNUP Validation', () => {
     await request
       .post('/api/auth/signup')
       .send(userOneWithSameEmail)
-      .set('Accept', 'application/json');
+      .set(headers);
 
     const res2 = await request
       .post('/api/auth/signup')
       .send(userTwoWithSameEmail)
-      .set('Accept', 'application/json');
+      .set(headers);
 
     expect(res2.status).toBe(400);
   });
@@ -132,7 +135,7 @@ describe('SIGNIN User', () => {
     const res = await request
       .post('/api/auth/signin')
       .send(goodUserData)
-      .set('Accept', 'application/json');
+      .set(headers);
 
     expect(res.status).toBe(200);
   });
@@ -157,7 +160,7 @@ describe('SIGNIN Validation', () => {
     const res = await request
       .post('/api/auth/signin')
       .send(notValidPermission)
-      .set('Accept', 'application/json');
+      .set(headers);
 
     expect(res.status).toBe(401);
   });
@@ -178,7 +181,7 @@ describe('SIGNIN Validation', () => {
     const res = await request
       .post('/api/auth/signin')
       .send(notValidEmailPayload)
-      .set('Accept', 'application/json');
+      .set(headers);
 
     expect(res.status).toBe(403);
     const errorMessage = JSON.parse(res.text);

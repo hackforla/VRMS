@@ -9,10 +9,15 @@ module.exports = (cron, fetch) => {
     let TODAY_DATE;
     let TODAY;
     const URL = process.env.NODE_ENV === 'prod' ? 'https://www.vrms.io' : 'http://localhost:4000';
+    const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
     const fetchEvents = async () => {
         try {
-            const res = await fetch(`${URL}/api/events/`);
+            const res = await fetch(`${URL}/api/events/`, {
+                headers: {
+                  "x-customrequired-header": headerToSend
+                }
+            });
             EVENTS = await res.json();
 
             // return EVENTS;
@@ -23,7 +28,11 @@ module.exports = (cron, fetch) => {
 
     const fetchRecurringEvents = async () => {
         try {
-            const res = await fetch(`${URL}/api/recurringevents/`);
+            const res = await fetch(`${URL}/api/recurringevents/`, {
+                headers: {
+                  "x-customrequired-header": headerToSend
+                }
+            });
             RECURRING_EVENTS = await res.json();
 
             // return resJson;
@@ -124,7 +133,8 @@ module.exports = (cron, fetch) => {
             const options = {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "x-customrequired-header": headerToSend
                 },
                 body: jsonEvent
             }

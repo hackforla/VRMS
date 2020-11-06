@@ -75,12 +75,6 @@ router.post("/", (req, res) => {
 });
 
 router.patch("/:id", (req, res) => {
-  // const { headers } = req;
-  // const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
-
-  // if (headers['x-customrequired-header'] !== expectedHeader) {
-  //     res.sendStatus(401);
-  // } else {
   ProjectTeamMember.findByIdAndUpdate(req.params.id, req.body)
     .then((edit) => res.json(edit))
     .catch((err) =>

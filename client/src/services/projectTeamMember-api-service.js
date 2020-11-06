@@ -5,11 +5,14 @@ const ProjectTeamMemberApi = {
    * other optional parameters, see projectTeamMember model
    */
   postMember(member) {
+    const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
+
     console.log({member});
     return fetch('/api/projectteammembers', {
       method: 'POST', 
       headers: {
         "Content-Type": "application/json",
+        "x-customrequired-header": headerToSend
       },
       body: JSON.stringify(member)
     })
