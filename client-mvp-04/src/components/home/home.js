@@ -3,23 +3,15 @@ import './home.scss';
 import Button from '../common/button/button';
 import RedirectLink from '../common/link/link';
 import Title from '../common/title/title';
-import { resetState } from '../../store/actions/resetActions';
-import { connect } from 'react-redux';
 
-const Home = (props) => {
+const Home = () => {
   return (
     <section data-testid="home" className="home-container">
       <Title />
 
       <RedirectLink
         path={'/login'}
-        content={
-          <Button
-            content={`Sign in`}
-            className={`home-button`}
-            onClick={() => props.dispatch(resetState())}
-          />
-        }
+        content={<Button content={`Sign in`} className={`home-button`} />}
         linkKey={'sign-in-link'}
       />
 
@@ -35,4 +27,4 @@ const Home = (props) => {
   );
 };
 
-export default connect()(Home);
+export default Home;
