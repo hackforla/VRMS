@@ -1,7 +1,7 @@
 import Home from '../components/home/home';
 import Dummy from '../components/dummy/dummy';
 import Error from '../components/error/error';
-import Login from '../components/login/login';
+import LoginContainer from '../components/login/loginContainer';
 
 import DevUiKit from '../utils/uiKit/uiKit';
 
@@ -14,7 +14,7 @@ export const Routes = [
   {
     path: '/login',
     key: 'login',
-    component: Login,
+    component: LoginContainer,
   },
   {
     path: '/page',

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Input = ({ placeholder, type, onChange }) => {
+const Input = ({ placeholder, type, onChange, autoComplete }) => {
   return (
     <div className="text-field-container">
       <input
@@ -9,6 +9,7 @@ const Input = ({ placeholder, type, onChange }) => {
         name="default-input"
         placeholder={placeholder}
         onChange={onChange}
+        autoComplete={autoComplete}
       />
     </div>
   );
