@@ -33,7 +33,7 @@ services:
       - "3000"
       - "4000"
     ports:
-      - "3001:3000"
+      - "3000:3000"
     stdin_open: true
     restart: on-failure
     networks:
@@ -53,7 +53,7 @@ services:
       - "3002"
       - "4000"
     ports:
-      - "3002:3001"
+      - "3001:3001"
     stdin_open: true
     restart: on-failure
     networks:
@@ -65,8 +65,8 @@ services:
       dockerfile: Dockerfile.nginx
       context: ./nginx
     ports:
-      - "3000:80"
-      - "3200:81"
+      - "5000:80"
+      - "5001:81"
     networks:
       - gateway
     depends_on:
@@ -78,7 +78,7 @@ services:
     image: mailhog/mailhog
     ports:
       - 1025:1025 # smtp server
-      - 8025:8025 # web ui
+      - 4100:8025 # web ui
     depends_on:
       - client
       - backend
