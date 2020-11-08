@@ -15,6 +15,8 @@ const AdminDashboard = () => {
   const auth = useAuth();
   const defaultChartType = "All Events";
   const eventsArr = [];
+  const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
+
   let uniqueEventTypes = new Set();
   let hackNightUniqueLocations = new Set();
 
@@ -49,9 +51,19 @@ const AdminDashboard = () => {
 
   async function getAndSetData(signal) {
     try {
-      const eventsRes = await fetch("/api/events", signal);
+      const eventsRes = await fetch("/api/events", {
+          headers: {
+              "x-customrequired-header": headerToSend
+          }
+        }, 
+        signal);
       const events = await eventsRes.json();
-      const checkinsRes = await fetch("/api/checkins", signal);
+      const checkinsRes = await fetch("/api/checkins", {
+          headers: {
+              "x-customrequired-header": headerToSend
+          }
+        },
+        signal);
       const checkins = await checkinsRes.json();
       processData(events, checkins);
       setIsLoading(false);

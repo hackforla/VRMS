@@ -8,11 +8,16 @@ const ReadyEvents = (props) => {
     const [isLoading, setIsLoading] = useState(false);
     const [events, setEvents] = useState([]);
     // const [isError, setIsError] = useState(null);
+    const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
     async function fetchEvent() {
         try {
             setIsLoading(true);
-            const res = await fetch("/api/events?checkInReady=true");
+            const res = await fetch("/api/events?checkInReady=true", {
+                headers: {
+                    "x-customrequired-header": headerToSend
+                }
+            });
             const resJson = await res.json();
 
             setEvents(resJson);
