@@ -3,7 +3,7 @@ RUN mkdir /srv/backend && chown node:node /srv/backend
 USER node
 WORKDIR /srv/backend
 COPY --chown=node:node package.json yarn.lock ./
-RUN yarn install --pure-lockfile
+RUN yarn install --unsafe-perms --pure-lockfile
 COPY --chown=node:node . .
 RUN mkdir -p node_modules
 
