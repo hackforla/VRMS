@@ -1,11 +1,10 @@
 FROM node:14.11.0 AS api-development
 RUN mkdir /srv/backend && chown node:node /srv/backend
 WORKDIR /srv/backend
-COPY package.json yarn.lock ./
 USER node
-RUN yarn install --pure-lockfile
-COPY --chown=node:node . .
 RUN mkdir -p node_modules
+COPY --chown=node:node package.json yarn.lock ./
+RUN yarn install --pure-lockfile
 
 FROM node:14.11.0 AS api-test
 RUN mkdir /srv/backend
