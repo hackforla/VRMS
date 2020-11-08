@@ -2,17 +2,57 @@ name: Build VMRS App
 on:
   pull_request:
     branches: [development]
+    paths-ignore:
+      - "*.md"
 
 jobs:
-  run-unit-tests:
+  test-backend-unit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Build the backend container
-        run: docker-compose -f docker-compose-ci.yaml build backend
+        run: docker-compose build backend
       - name: Run backend test suite
-        run: docker-compose -f docker-compose-ci.yaml run --rm backend yarn run test --testPathIgnorePatterns=routers
-      - name: Build the frontend container
+        run: docker-compose run --rm backend yarn run test --testPathIgnorePatterns=routers
+
+  test-backend-integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the backend container
+        run: docker-compose build backend
+      - name: Run backend test suite
+        run: docker-compose run --rm backend yarn run test backend/routers/
+        env:
+          CUSTOM_REQUEST_HEADER: ${{ secrets.CUSTOM_REQUEST_HEADER }}
+          SLACK_OAUTH_TOKEN: ${{ secrets.SLACK_OAUTH_TOKEN }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_TEAM_ID: ${{ secrets.SLACK_TEAM_ID }}
+          SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
+          SLACK_CLIENT_ID: ${{ secrets.SLACK_CLIENT_ID }}
+          SLACK_CLIENT_SECRET: ${{ secrets.SLACK_CLIENT_SECRET }}
+          SLACK_SIGNING_SECRET: ${{ secrets.SLACK_SIGNING_SECRET }}
+          BACKEND_PORT: ${{ secrets.BACKEND_PORT }}
+          REACT_APP_PROXY: ${{ secrets.REACT_APP_PROXY }}
+          GMAIL_CLIENT_ID: ${{ secrets.GMAIL_CLIENT_ID }}
+          GMAIL_SECRET_ID: ${{ secrets.GMAIL_SECRET_ID }}
+          GMAIL_REFRESH_TOKEN: ${{ secrets.GMAIL_REFRESH_TOKEN }}
+          GMAIL_EMAIL: ${{ secrets.GMAIL_EMAIL }}
+
+  test-client-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the client container
         run: docker-compose build client
-      - name: Run frontend test suite
+      - name: Run client unit test suite
         run: docker-compose run --rm client yarn run test
+
+  test-mvp-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the client mvp container
+        run: docker-compose build client-mvp-04
+      - name: Run frontend test suite
+        run: docker-compose run --rm client-mvp-04 yarn run test
