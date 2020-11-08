@@ -4,6 +4,7 @@ npm-debug.log
 .DS_Store
 /*.env
 client/.env
+globalConfig.json
 .env
 /.idea
 test.db
