@@ -10,14 +10,15 @@ jobs:
     runs-on: ubuntu-18.04
 
     steps:
+      - uses: actions/checkout@v2
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v1
         with:
           envkey_DEBUG: true
           envkey_SOME_API_KEY: "123456abcdef"
-          envkey_SECRET_KEY: ${{ secrets.GMAIL_EMAIL }}
-          # some_other_variable: foobar
-          file_name: .env
+          envkey_SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          some_other_variable: foobar
+          file_name: backend/.env
 
   # test-backend-unit:
   #   runs-on: ubuntu-latest
