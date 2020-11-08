@@ -1,7 +1,7 @@
 FROM node:14.11.0 AS api-development
+USER node
 RUN mkdir /srv/backend && chown node:node /srv/backend
 WORKDIR /srv/backend
-USER node
 COPY --chown=node:node package.json yarn.lock ./
 RUN yarn install --silent
 RUN mkdir -p node_modules
