@@ -1,9 +1,9 @@
 FROM node:14.11.0 AS api-development
 RUN mkdir /srv/backend && chown node:node /srv/backend
-USER node
 WORKDIR /srv/backend
-COPY --chown=node:node package.json yarn.lock ./
-RUN yarn install --unsafe-perms --pure-lockfile
+COPY package.json yarn.lock ./
+USER node
+RUN yarn install --pure-lockfile
 COPY --chown=node:node . .
 RUN mkdir -p node_modules
 
