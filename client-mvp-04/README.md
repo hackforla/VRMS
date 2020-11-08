@@ -34,6 +34,9 @@ To run all `client-mvp-04` tests:
 
 You should now see all existing tests passed.
 
+Testing changes from a non-member
+
+
 ![Passed tests](src/assets/images/readme/tests-passed.png)
 
 Let's create a better version of the VRMS MVP 0.4!
