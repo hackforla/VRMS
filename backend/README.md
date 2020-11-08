@@ -40,5 +40,3 @@ of a Model, or testing the boundaries on a class.
 Integration Tests are tests that verify that differing components work together. A common
 example of an integration test is to verify that data is saved correctly in the database
 based on the use of the API. 
-
-Testing changes from a non-member.
