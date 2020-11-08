@@ -6,38 +6,60 @@ on:
       - "*.md"
 
 jobs:
-  test-backend-unit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Build the backend container
-        run: docker-compose build backend
-      - name: Run backend test suite
-        run: docker-compose run --rm backend yarn run test --testPathIgnorePatterns=routers
+  test-env-file:
+    runs-on: ubuntu-18.04
 
-  test-backend-integration:
-    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Build the backend container
-        run: docker-compose build backend
-      - name: Run backend test suite
-        run: docker-compose run --rm backend yarn run test backend/routers/
-        env:
-          CUSTOM_REQUEST_HEADER: ${{ secrets.CUSTOM_REQUEST_HEADER }}
-          SLACK_OAUTH_TOKEN: ${{ secrets.SLACK_OAUTH_TOKEN }}
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-          SLACK_TEAM_ID: ${{ secrets.SLACK_TEAM_ID }}
-          SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
-          SLACK_CLIENT_ID: ${{ secrets.SLACK_CLIENT_ID }}
-          SLACK_CLIENT_SECRET: ${{ secrets.SLACK_CLIENT_SECRET }}
-          SLACK_SIGNING_SECRET: ${{ secrets.SLACK_SIGNING_SECRET }}
-          BACKEND_PORT: ${{ secrets.BACKEND_PORT }}
-          REACT_APP_PROXY: ${{ secrets.REACT_APP_PROXY }}
-          GMAIL_CLIENT_ID: ${{ secrets.GMAIL_CLIENT_ID }}
-          GMAIL_SECRET_ID: ${{ secrets.GMAIL_SECRET_ID }}
-          GMAIL_REFRESH_TOKEN: ${{ secrets.GMAIL_REFRESH_TOKEN }}
-          GMAIL_EMAIL: ${{ secrets.GMAIL_EMAIL }}
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v1
+        with:
+          envkey_DEBUG: true
+          envkey_SOME_API_KEY: "123456abcdef"
+          envkey_SECRET_KEY: ${{ secrets.GMAIL_EMAIL }}
+          some_other_variable: foobar
+          file_name: backend/.env
+
+  # test-backend-unit:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Build the backend container
+  #       run: docker-compose build backend
+  #     - name: Run backend test suite
+  #       run: docker-compose run --rm backend yarn run test --testPathIgnorePatterns=routers
+
+  # test-backend-integration:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Build an envioronment file
+  #       uses: SpicyPizza/create-envfile@v1
+  #       with:
+  #         envkey_DEBUG: false
+  #         envkey_SOME_API_KEY: "123456abcdef"
+  #         envkey_SECRET_KEY: ${{ secrets.SECRET_KEY }}
+  #         some_other_variable: foobar
+  #         file_name: backend/.env
+  #     - name: Build the backend container
+  #       run: docker-compose build backend
+  #     - name: Run backend test suite
+  #         CUSTOM_REQUEST_HEADER: ${{ secrets.CUSTOM_REQUEST_HEADER }}
+  #       run: docker-compose -e  run --rm backend yarn run test backend/routers/
+  #       env:
+  #         CUSTOM_REQUEST_HEADER: ${{ secrets.CUSTOM_REQUEST_HEADER }}
+  #         SLACK_OAUTH_TOKEN: ${{ secrets.SLACK_OAUTH_TOKEN }}
+  #         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+  #         SLACK_TEAM_ID: ${{ secrets.SLACK_TEAM_ID }}
+  #         SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
+  #         SLACK_CLIENT_ID: ${{ secrets.SLACK_CLIENT_ID }}
+  #         SLACK_CLIENT_SECRET: ${{ secrets.SLACK_CLIENT_SECRET }}
+  #         SLACK_SIGNING_SECRET: ${{ secrets.SLACK_SIGNING_SECRET }}
+  #         BACKEND_PORT: ${{ secrets.BACKEND_PORT }}
+  #         REACT_APP_PROXY: ${{ secrets.REACT_APP_PROXY }}
+  #         GMAIL_CLIENT_ID: ${{ secrets.GMAIL_CLIENT_ID }}
+  #         GMAIL_SECRET_ID: ${{ secrets.GMAIL_SECRET_ID }}
+  #         GMAIL_REFRESH_TOKEN: ${{ secrets.GMAIL_REFRESH_TOKEN }}
+  #         GMAIL_EMAIL: ${{ secrets.GMAIL_EMAIL }}
 
   test-client-unit:
     runs-on: ubuntu-latest
