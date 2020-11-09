@@ -4,6 +4,9 @@ import RosterTableRow from "./RosterTableRow";
 import ls from "local-storage";
 
 const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
+
+  const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
+
   const gitHubIcon = (
     <img
       className={styles.rosterIconImg}
@@ -34,6 +37,7 @@ const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "x-customrequired-header": headerToSend
       },
     })
       .then((res) => {
@@ -60,6 +64,7 @@ const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "x-customrequired-header": headerToSend
       },
       body: JSON.stringify(bodyObject),
     })
@@ -97,6 +102,7 @@ const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "x-customrequired-header": headerToSend
       },
       body: JSON.stringify(bodyObject),
     })

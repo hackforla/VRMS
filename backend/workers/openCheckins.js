@@ -4,10 +4,15 @@ module.exports = (cron, fetch) => {
     // and if so, open their respective check-ins
 
     const url = process.env.NODE_ENV === 'prod' ? 'https://www.vrms.io' : 'http://localhost:4000';
-    
+    const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
+
     async function fetchEvents() {    
         try {
-            const res = await fetch(`${url}/api/events`);
+            const res = await fetch(`${url}/api/events`, {
+                headers: {
+                  "x-customrequired-header": headerToSend
+                }
+            });
             const resJson = await res.json();
 
             return resJson;
@@ -37,7 +42,8 @@ module.exports = (cron, fetch) => {
                 fetch(`${url}/api/events/${event._id}`, {
                     method: "PATCH",
                     headers: {
-                      "Content-Type": "application/json"
+                      "Content-Type": "application/json",
+                      "x-customrequired-header": headerToSend
                     }
                 })
                     .then(res => {

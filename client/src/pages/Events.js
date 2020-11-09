@@ -9,10 +9,15 @@ import '../sass/Events.scss';
 
 const Events = (props) => {
     const [events, setEvents] = useState([]);
+    const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
     async function fetchData() {
         try {
-            const res = await fetch("/api/events");
+            const res = await fetch("/api/events", {
+                headers: {
+                    "x-customrequired-header": headerToSend
+                }
+            });
             const resJson = await res.json();
 
             setEvents(resJson);

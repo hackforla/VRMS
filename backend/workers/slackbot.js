@@ -1,13 +1,18 @@
 module.exports = (fetch) => {
     console.log('Hello from SlackBot');
     const token = process.env.SLACK_TOKEN;
+    const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
     let EVENTS;
 
     const fetchEvents = async () => {
         try {
             // const res = await fetch("https://vrms.io/api/events");
-            const res = await fetch("http://localhost:4000/api/events");
+            const res = await fetch("http://localhost:4000/api/events", {
+                headers: {
+                  "x-customrequired-header": headerToSend
+                }
+            });
             resJson = await res.json();
 
             const today = new Date();

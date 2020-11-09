@@ -9,11 +9,16 @@ const Home = (props) => {
     const [events, setEvents] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [event, setEvent] = useState("--SELECT ONE--");
+    const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
     async function fetchEvents() {
         try {
             setIsLoading(true);
-            const res = await fetch("/api/events?checkInReady=true");
+            const res = await fetch("/api/events?checkInReady=true", {
+                    headers: {
+                        "x-customrequired-header": headerToSend
+                    }
+                });
             const resJson = await res.json();
             await resJson.unshift("--SELECT ONE--");
 

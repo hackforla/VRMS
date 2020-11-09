@@ -5,6 +5,7 @@ import "../sass/MagicLink.scss";
 
 const HandleAuth = (props) => {
   const [isMagicLinkValid, setMagicLink] = useState(null);
+  const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
   async function isValidToken() {
     const search = props.location.search;
@@ -17,6 +18,7 @@ const HandleAuth = (props) => {
         headers: {
           "Content-Type": "application/json",
           "x-access-token": api_token,
+          "x-customrequired-header": headerToSend
         },
       });
       const body = await response;

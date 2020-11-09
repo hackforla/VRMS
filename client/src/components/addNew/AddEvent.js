@@ -18,6 +18,7 @@ import { UserContext } from '../../context/userContext';
 const AddEvent = (props) => {
 	const { projects, error, setError, setRedirectLink } = props;
 	const user = useContext(UserContext).user;
+	const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
 	// State Data
 	const [eventName, setEventName] = useState('');
@@ -171,6 +172,7 @@ const AddEvent = (props) => {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
+					"x-customrequired-header": headerToSend
 				},
 				body: ObjToSend
 			})
