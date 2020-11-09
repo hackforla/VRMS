@@ -44,7 +44,7 @@ const LoginView = ({
           <RedirectLink
             path={'/page'}
             linkKey={'create-acc-link'}
-            content={' create an account '}
+            content={' create an account'}
           />
           ?
         </p>

@@ -20,6 +20,12 @@
   }
 }
 
+@media (max-height: 896px) {
+  .login-container {
+    height: calc(100vh - 160px);
+  }
+}
+
 @media (max-width: 400px) {
   .login-container {
     padding: 25px 52px;
@@ -28,15 +34,34 @@
       margin: 40px 0 20px auto;
     }
 
+    .error-message {
+      margin: 25px 0 10px;
+    }
+
     .text-field-container {
       margin-top: 55px;
     }
   }
 }
 
-@media (max-width: 350px) {
+@media (max-width: 374px) {
   .login-container {
-
+    height: calc(100vh - 180px);
   }
 }
 
+@media (max-width: 350px) {
+  .login-container {
+    padding: 15px 25px;
+
+    .text-field-container {
+      margin-top: 25px;
+    }
+    .login-button {
+      margin: 15px 0 10px auto;
+    }
+    .error-message {
+      margin: 20px 0 5px;
+    }
+  }
+}

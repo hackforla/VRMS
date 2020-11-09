@@ -18,8 +18,6 @@
 
 @media (max-width: 400px) {
   .title-container {
-    margin: 0;
-
     .title-long {
       margin-top: 18px;
     }
@@ -31,7 +29,11 @@
 }
 
 @media (max-width: 350px) {
-  .title-container .title-long {
-    margin: 15px;
+  .title-container {
+    margin-left: 25px;
+
+    .title-long {
+      margin: 15px;
+    }
   }
 }

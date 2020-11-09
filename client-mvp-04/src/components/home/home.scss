@@ -9,19 +9,31 @@
   }
 }
 
+@media (max-height: 896px) {
+  .home-container {
+    height: calc(100vh - 160px);
+  }
+}
+
 @media (max-width: 400px) {
   .home-container {
     padding: 25px 52px;
 
     .home-button {
-      margin-top: 40px;
+      margin-top: 60px;
     }
+  }
+}
+
+@media (max-width: 374px) {
+  .home-container {
+    height: calc(100vh - 180px);
   }
 }
 
 @media (max-width: 350px) {
   .home-container {
-    padding: 15px 52px;
+    padding: 15px 25px;
 
     .home-button {
       margin-top: 35px;
