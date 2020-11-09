@@ -6,14 +6,14 @@ on:
       - "*.md"
 
 jobs:
-  # test-backend-unit:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Build the backend container
-  #       run: docker-compose build backend
-  #     - name: Run backend unit test suite
-  #       run: docker-compose run --rm backend yarn run test --testPathIgnorePatterns=routers
+  test-backend-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the backend container
+        run: docker-compose build backend
+      - name: Run backend unit test suite
+        run: docker-compose run --rm backend yarn run test --testPathIgnorePatterns=routers
 
   test-backend-integration:
     runs-on: ubuntu-18.04
@@ -42,20 +42,20 @@ jobs:
       - name: Run backend test suite
         run: docker-compose run --rm backend yarn run test backend/routers/
 
-  # test-client-unit:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Build the client container
-  #       run: docker-compose build client
-  #     - name: Run client unit test suite
-  #       run: docker-compose run --rm client yarn run test
+  test-client-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the client container
+        run: docker-compose build client
+      - name: Run client unit test suite
+        run: docker-compose run --rm client yarn run test
 
-  # test-mvp-unit:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Build the client mvp container
-  #       run: docker-compose build client-mvp-04
-  #     - name: Run frontend test suite
-  #       run: docker-compose run --rm client-mvp-04 yarn run test
+  test-mvp-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the client mvp container
+        run: docker-compose build client-mvp-04
+      - name: Run frontend test suite
+        run: docker-compose run --rm client-mvp-04 yarn run test
