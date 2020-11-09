@@ -18,8 +18,9 @@ const LoginView = ({
     <section data-testid="login" className="login-container">
       <Title />
 
-      <form onSubmit={(e) => handleSubmitForm(e)}>
+      <form data-testid="login-form" onSubmit={(e) => handleSubmitForm(e)}>
         <Input
+          dataTestid="login-input"
           placeholder={'Enter your email'}
           type={'email'}
           onChange={(e) => handleInputChange(e)}
