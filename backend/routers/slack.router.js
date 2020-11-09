@@ -7,10 +7,12 @@ const { Project } = require('../models/project.model');
 
 //https://api.slack.com/web
 
-const app = new App({
-  token: process.env.SLACK_BOT_TOKEN,
-  signingSecret: process.env.SLACK_SIGNING_SECRET,
-});
+if (process.env.NODE_ENV !== 'test') {
+    const app = new App({
+      token: process.env.SLACK_BOT_TOKEN,
+      signingSecret: process.env.SLACK_SIGNING_SECRET,
+    });
+}
 
 //Checks DB every monday (1) for slack messages to schedule this week
 // cron.schedule("* * * * 1", () => {});
