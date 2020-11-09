@@ -40,6 +40,8 @@ jobs:
       - name: Build the backend container
         run: docker-compose build backend
       - name: Run backend test suite
+        env:
+          NODE_ENV: test
         run: docker-compose run --rm backend yarn run test backend/routers/
 
   # test-client-unit:
