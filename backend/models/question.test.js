@@ -21,12 +21,12 @@ describe("Question Model saves the correct values", () => {
     await Question.create(submittedData);
     const savedDataArray = await Question.find();
     const savedData = savedDataArray[0];
-    expect(savedData.questionText === submittedData.questionText);
+    expect(savedData.questionText).toEqual(submittedData.questionText);
     expect(
-      savedData.answers.answerOneText === submittedData.answers.answerOneText
+      savedData.answers.answerOneText).toEqual(submittedData.answers.answerOneText
     );
     expect(
-      savedData.answers.answerThreeText ===
+      savedData.answers.answerThreeText).toEqual(
         submittedData.answers.answerThreeText
     );
     done();

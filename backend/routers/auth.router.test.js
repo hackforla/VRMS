@@ -33,22 +33,27 @@ describe('CREATE User', () => {
       email: 'test@test.com',
     };
   
-    // Add an event with a project using the API.
+    // Add a user using the API.
     const res = await request.post('/api/users').send(submittedData).set(headers);
 
-    expect(res.status).toBe(201);
+    expect(res.status).toEqual(201);
 
-    // Retrieve and compare the the Event values using the DB.
-    const databaseEventQuery = await User.find();
-    const databaseEvent = databaseEventQuery[0];
-    expect(databaseEvent.length >= 1);
-    expect(databaseEvent.name === submittedData.name);
+    // Retrieve and compare the the User values using the DB.
+    const databaseUserQuery = await User.find();
 
-    // Retrieve and compare the the values using the API.
+    const databaseUser = databaseUserQuery[0];
+
+    expect(databaseUserQuery.length).toBeGreaterThanOrEqual(1);
+    expect(databaseUser.name.firstName).toEqual(submittedData.name.firstName);
+    expect(databaseUser.name.lastName).toEqual(submittedData.name.lastName);
+
+    // Retrieve and compare the User values using the API.
     const response = await request.get('/api/users').set(headers);
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toEqual(200);
     const APIData = response.body[0];
-    expect(APIData.name === submittedData.name);
+    expect(APIData.name.firstName).toEqual(submittedData.name.firstName);
+    expect(APIData.name.lastName).toEqual(submittedData.name.lastName);
+
   });
 
   test('Create user with POST to /auth/signup', async () => {

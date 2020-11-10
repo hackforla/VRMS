@@ -20,9 +20,9 @@ describe("Project Model saves the correct values", () => {
     await Project.create(submittedData);
     const savedDataArray = await Project.find();
     const savedData = savedDataArray[0];
-    expect(savedData.name === submittedData.name);
-    expect(savedData.githubIdentifier === submittedData.githubIdentifier);
-    expect(savedData.githubUrl === submittedData.githubUrl);
+    expect(savedData.name).toEqual(submittedData.name);
+    expect(savedData.githubIdentifier).toEqual(submittedData.githubIdentifier);
+    expect(savedData.githubUrl).toEqual(submittedData.githubUrl);
     done();
   });
 });
@@ -36,7 +36,7 @@ describe('CREATE/READ', () => {
     await Project.create(submittedData);
     const savedDataArray = await Project.find();
     const savedData = savedDataArray[0];
-    expect(savedData.name === submittedData.name);
+    expect(savedData.name).toEqual(submittedData.name);
     done();
   });
 });
@@ -50,12 +50,14 @@ describe('UPDATE', () => {
     await Project.create(submittedData);
     const savedDataArray = await Project.find();
     const savedData = savedDataArray[0];
-    expect(savedData.name === submittedData.name);
+    expect(savedData.name).toEqual(submittedData.name);
 
     const updatedData = { name: 'updatedEventName' };
 
-    const updatedProject = await Project.findOneAndUpdate(submittedData, updatedData);
-    expect(updatedProject.name === updatedData.name);
+    const updatedProject = await Project.findOneAndUpdate({_id: savedData._id}, updatedData, 
+      {new: true});
+
+    expect(updatedProject.name).toEqual(updatedData.name);
     done();
   });
 });
@@ -69,10 +71,10 @@ describe('DELETE', () => {
     await Project.create(submittedData);
     const savedDataArray = await Project.find();
     const savedData = savedDataArray[0];
-    expect(savedData.name === submittedData.name);
+    expect(savedData.name).toEqual(submittedData.name);
 
     const deleteData = await Project.deleteOne(submittedData);
-    expect(deleteData.ok).toBe(1);
+    expect(deleteData.ok).toEqual(1);
     done();
   });
 });
