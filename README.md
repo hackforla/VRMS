@@ -15,6 +15,10 @@ This is a Full Stack web app, built with:
 - [Docker](https://www.docker.com/get-started)
 - [Github Actions](https://github.com/features/actions)
 - [AWS](https://aws.amazon.com/)
+- [Redux](https://redux.js.org/introduction/getting-started)
+- [Sass](https://sass-lang.com/guide)
+- [Jest](https://jestjs.io/)
+- [React Testing Library](https://testing-library.com/docs/react-testing-library/intro)
 
 ## Contributing
 

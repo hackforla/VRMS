@@ -1,22 +1,18 @@
 ## How to contribute
 
-If you are interested in joining the project, then please review our [Projects Board](https://github.com/hackforla/VRMS/projects/2) to see if anything interests you. If so, then please do the following.
-
-1. Review the Hack for LA Getting Started Guide https://www.hackforla.org/getting-started.
-
-1. Join the VRMS weekly meetings https://www.vrms.io/.
-
-1. Reach out to our project leads to discuss how you would like to contribute.
+If you are interested in joining the project, then please review our [Prroject Wiki](https://github.com/hackforla/VRMS/wiki/Join-the-Team) and then review our [Project Board](https://github.com/hackforla/VRMS/projects/2) to see if anything interests you.
 
 ### Committing changes overview
 
-1. Find a ticket in the [Prioritized Backlog](https://github.com/hackforla/VRMS/projects/2) and assign yourself to the ticket.
+1. Find a ticket in the [Prioritized Backlog](https://github.com/hackforla/VRMS/projects/2) and assign yourself to the ticket, and update its status as "In progress".
 
 1. Fork the repo.
 
-1. Make a branch off of `development`.
+1. Make a branch based on the `development` branch.
 
-1. Commit and push your changes to your forked repository.
+1. Develop the task solution.
+
+1. Commit and push your changes to your forked repository. Please pull the recent changes from `vrms/development` before pushing your changes.
 
 1. From the `VRMS` repository, create a Pull Request from your branch into the VRMS `developnent` branch.
 
@@ -24,7 +20,7 @@ If you are interested in joining the project, then please review our [Projects B
 
 1. Bring an update of your changes to the weekly VRMS team checkin.
 
-### Forking and cloning the repository with proper security
+### Forking and cloning the repository
 
 #### Step 1: Become a member of the repository Team
 
