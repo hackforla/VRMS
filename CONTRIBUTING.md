@@ -20,7 +20,7 @@ If you are interested in joining the project, then please review our [Projects B
 
 1. From the `VRMS` repository, create a Pull Request from your branch into the VRMS `developnent` branch.
 
-1. Any changes will need approval and merging from a project leads.
+1. Any changes will need approval and merging from a tech lead.
 
 1. Bring an update of your changes to the weekly VRMS team checkin.
 
