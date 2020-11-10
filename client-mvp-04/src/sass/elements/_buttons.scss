@@ -15,8 +15,12 @@ button {
   transition: .3s ease;
   display: flex;
   justify-content: center;
-  &:hover{
+  &:hover {
     background-color: $concrete-color;
+  }
+  &:disabled {
+    background-color: $silver-color;
+    cursor: default;
   }
 }
 

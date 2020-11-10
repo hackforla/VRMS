@@ -20,7 +20,7 @@ if (process.env.NODE_ENV !== 'test') {
 // TODO: Refactor this server out of the router. This server instance is breaking the tests.
 if (process.env.NODE_ENV !== "test") {
   (async () => {
-    await app.start(3002);
+    await app.start(4050);
     console.log("Connected to Slack");
   })();
 }
