@@ -1,4 +1,4 @@
-const headers = {
+const HEADERS = {
   'Content-Type': 'application/json',
   'x-customrequired-header': process.env.REACT_APP_CUSTOM_REQUEST_HEADER,
 };
@@ -8,7 +8,7 @@ const UserService = {
     try {
       const response = await fetch('/api/checkuser', {
         method: 'POST',
-        headers: headers,
+        headers: HEADERS,
         body: JSON.stringify({ email: email }),
       });
       return await response.json();
