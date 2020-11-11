@@ -6,7 +6,8 @@ setupDB("userProfile-model");
 
 // Please add and expand on this simple test.
 describe("UserProfile Model saves the correct values", () => {
-  test("Save a model instance and then read from the db", async (done) => {
+  // eslint-disable-next-line max-len
+  test("Save a model instance and then read from the db. Make sure you can't insert a duplicate email address", async (done) => {
     const submittedData = {
       firstName: "Test",
       lastName: "User",
@@ -63,6 +64,11 @@ describe("UserProfile Model saves the correct values", () => {
     expect(savedData.github.username).toBe(submittedData.github.username);
     expect(savedData.onboardingStatus.googleAccount)
     .toBe(submittedData.onboardingStatus.googleAccount);
+
+    // We should get an error when we try an insert a record with the same email
+    await expect(UserProfile.create(submittedData)).rejects.toThrow()
+
     done();
   });
 });
+
