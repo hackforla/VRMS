@@ -63,7 +63,7 @@ eventSchema.methods.serialize = function() {
 
 const Event = mongoose.model('Event', eventSchema);
 
-module.exports = Event;
+module.exports = { Event };
 
 
 

@@ -11,6 +11,7 @@ const AddNew = (props) => {
 	const [projects, setProjects] = useState(null);
 	const [redirectLink, setRedirectLink] = useState('');
 	const [error, setError] = useState(null);
+	const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
 	const auth = useAuth();
 
@@ -20,6 +21,7 @@ const AddNew = (props) => {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json',
+					"x-customrequired-header": headerToSend
 				},
 			})
 				.then((res) => {

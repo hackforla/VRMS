@@ -6,6 +6,8 @@ import homeIcon from '../../assets/images/icons/home.png';
 import projectIcon from '../../assets/images/icons/311.png';
 import gitHubIcon from '../../assets/images/icons/github.png';
 import RedirectLink from '../../components/common/link/link';
+import Input from '../../components/common/input/input';
+import ErrorMessage from '../../components/common/errorMessage/errorMessage';
 
 /***** DEV-UI-KIT FOR DEVELOPMENT ONLY *****/
 /*UI KIT helps devs determine, which UI elements will be used throughout
@@ -91,6 +93,11 @@ const DevUiKit = () => {
           <span className={'project-link-name'}>311 Data Project</span>
         </div>
         <p className={'dev-comment'}>Project Link: 24px, semi-bold</p>
+
+        <ErrorMessage content={'*Please enter a valid email address'} />
+        <p className={'dev-comment'}>
+          Error Message: italic, semi-bold; components/common/errorMessage
+        </p>
       </div>
 
       {/*** BUTTONS ***/}
@@ -150,14 +157,9 @@ const DevUiKit = () => {
       {/*** INPUTS ***/}
       <div className={'inputs-container'}>
         <h1 className={'kit-sec-title'}>*** INPUTS ***</h1>
-        <div className={'text-field-container'}>
-          <input
-            type="text"
-            name="text-field"
-            placeholder={'Enter your email'}
-          />
-        </div>
-        <p className={'dev-comment'}>Default Input</p>
+
+        <Input placeholder={'Enter your email'} type={'email'} />
+        <p className={'dev-comment'}>Default Input, components/common/input</p>
       </div>
 
       <div className={'text-field-icon-container'}>

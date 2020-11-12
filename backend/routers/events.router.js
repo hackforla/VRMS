@@ -1,51 +1,21 @@
 const express = require("express");
 const router = express.Router();
 
-const Event = require("../models/event.model");
+const { Event } = require('../models/event.model');
+const { EventController } = require('../controllers');
 
-// GET /api/events/
-router.get("/", (req, res) => {
-  const { query } = req;
+// The root is /api/events
+router.get('/', EventController.event_list);
 
-  Event.find(query.checkInReady === "true" ? query : undefined)
-    .populate("project")
-    .then((events) => {
-      res.json(events);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.sendStatus(500).json({
-        message: `/GET Internal server error: ${err}`,
-      });
-    });
-});
+router.post('/', EventController.create);
 
-router.post("/", (req, res) => {
-  const newEvent = req.body;
+router.get('/:EventId', EventController.event_by_id);
 
-  Event.create(newEvent, function (err, event) {
-    if (err) {
-      res.send(err);
-    }
+router.delete('/:EventId', EventController.destroy);
 
-    res.send(event);
-  });
-});
+router.patch('/:EventId', EventController.update);
 
-router.get("/:id", (req, res) => {
-  Event.findById(req.params.id)
-    .populate("project")
-    .then((event) => {
-      res.json(event);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.sendStatus(500).json({
-        message: `/GET Internal server error: ${err}`,
-      });
-    });
-});
-
+// TODO: Refactor and remove
 router.get("/nexteventbyproject/:id", (req, res) => {
   Event.find({ project: req.params.id })
     .populate("project")
@@ -54,30 +24,7 @@ router.get("/nexteventbyproject/:id", (req, res) => {
     })
     .catch((err) => {
       console.log(err);
-      res.sendStatus(500).json({
-        message: `/GET Internal server error: ${err}`,
-      });
-    });
-});
-
-router.patch("/:id", (req, res) => {
-  Event.findById(req.params.id, function (err, event) {
-    event.checkInReady = !event.checkInReady;
-
-    event.save((err) => {
-      if (err) {
-        console.log(err);
-      }
-    });
-  })
-    .then((checkIn) => {
-      res.sendStatus(204);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.sendStatus(500).json({
-        message: `/PATCH Couldn't set check-in: ${err}`,
-      });
+      res.sendStatus(500);
     });
 });
 

@@ -72,11 +72,17 @@ const CheckInForm = props => {
     "Education/STEM",
     "Fundraising"
   ];
+  
+  const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
   const fetchQuestions = async () => {
     try {
       setIsLoading(true);
-      const res = await fetch("/api/questions");
+      const res = await fetch("/api/questions", {
+        headers: {
+            "x-customrequired-header": headerToSend
+        }
+      });
       const resJson = await res.json();
 
       setQuestions(resJson);
@@ -157,7 +163,8 @@ const CheckInForm = props => {
                     method: "POST",
                     body: JSON.stringify(checkInForm),
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        "x-customrequired-header": headerToSend
                     }
                 })
                     .then(res => {
@@ -225,7 +232,8 @@ const submitReturning = (returningUser, e = null) => {
                     method: "POST",
                     body: JSON.stringify(checkInForm),
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        "x-customrequired-header": headerToSend
                     }
                 })
                 .then(res => {
@@ -523,7 +531,8 @@ const checkEmail = (e) => {
         fetch('/api/checkuser', {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "x-customrequired-header": headerToSend
             },
             body: JSON.stringify({ email: formInput.email })
         })

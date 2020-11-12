@@ -21,4 +21,4 @@ checkInSchema.methods.serialize = function () {
 
 const CheckIn = mongoose.model("CheckIn", checkInSchema);
 
-module.exports = CheckIn;
+module.exports = { CheckIn };

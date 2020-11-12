@@ -1,29 +1,38 @@
 const supertest = require('supertest');
 const app = require('../app');
-
 const request = supertest(app);
 
 const { setupDB } = require('../setup-test');
-
 setupDB('api-auth');
 
-const CONFIG = require('../config/auth.config');
+const { CONFIG_AUTH } = require('../config/');
+const { User } = require('../models');
 
-const db = require('../models');
 
-const User = db.user;
+// Create mock for EmailController
+const sendMailMock = jest.fn() 
+jest.mock('../controllers/email.controller');
+const mockEmailController = require('../controllers/email.controller');
+mockEmailController.sendLoginLink.mockReturnValue({ sendMail: sendMailMock });
+
+beforeEach(() => {
+  sendMailMock.mockClear();
+  mockEmailController.sendLoginLink.mockClear();
+});
+
+const headers = {};
+headers['x-customrequired-header'] = CONFIG_AUTH.CUSTOM_REQUEST_HEADER;
+headers.Accept = 'application/json';
 
 // API Tests
-describe('Test that we can create a user using /user routes', () => {
-  test('POST a user and retrieve that user from /user', async () => {
+describe('CREATE User', () => {
+  test('Create user with POST to /users', async () => {
     // Test Data
     const submittedData = {
       name: { firstName: 'test_first', lastName: 'test_last' },
       email: 'test@test.com',
     };
-    const headers = {};
-    headers['x-customrequired-header'] = CONFIG.CUSTOM_REQUEST_HEADER;
-
+  
     // Add an event with a project using the API.
     const res = await request.post('/api/users').send(submittedData).set(headers);
 
@@ -41,30 +50,8 @@ describe('Test that we can create a user using /user routes', () => {
     const APIData = response.body[0];
     expect(APIData.name === submittedData.name);
   });
-});
 
-describe('Test user can sign up through API', () => {
-  test('A POST with invalid name data should return a 400 and error message.', async () => {
-    // Test Data
-    const badUserData = {
-      firstName: 'test_first',
-      lastName: 'test_last',
-      email: 'test@test.com',
-    };
-    const res = await request
-      .post('/api/auth/signup')
-      .send(badUserData)
-      .set('Accept', 'application/json');
-
-    expect(res.status).toBe(422);
-    const errorMessage = JSON.parse(res.text);
-
-    expect(errorMessage.errors).toEqual([
-      { msg: 'Invalid value', param: 'name.firstName', location: 'body' },
-      { msg: 'Invalid value', param: 'name.lastName', location: 'body' },
-    ]);
-  });
-  test('A POST valid data should return a 200 and success message.', async () => {
+  test('Create user with POST to /auth/signup', async () => {
     // setupDBRoles();
     // Test Data
     const goodUserData = {
@@ -75,12 +62,36 @@ describe('Test user can sign up through API', () => {
     const res = await request
       .post('/api/auth/signup')
       .send(goodUserData)
-      .set('Accept', 'application/json');
+      .set(headers);
 
-    expect(res.status).toBe(200);
-    expect(JSON.parse(res.text).message).toEqual('User was registered successfully!');
+    expect(res.status).toBe(201);
   });
-  test('A POST of an already used email returns a 400 and an error message.', async () => {
+});
+
+describe('SIGNUP Validation', () => {
+  test('Invalid data to /api/auth/signup returns 403', async () => {
+    // Test Data
+    const badUserData = {
+      firstName: 'test_first',
+      lastName: 'test_last',
+      email: 'test@test.com',
+    };
+
+     const res = await request
+      .post('/api/auth/signup')
+      .send(badUserData)
+      .set(headers);
+
+    expect(res.status).toBe(403);
+    const errorMessage = JSON.parse(res.text);
+
+    expect(errorMessage.errors).toEqual([
+      { msg: 'Invalid value', param: 'name.firstName', location: 'body' },
+      { msg: 'Invalid value', param: 'name.lastName', location: 'body' },
+    ]);
+  });
+
+  test('Existing user returns 400', async () => {
     // Test Data
     const userOneWithSameEmail = {
       name: { firstName: 'one', lastName: 'two' },
@@ -95,22 +106,20 @@ describe('Test user can sign up through API', () => {
     await request
       .post('/api/auth/signup')
       .send(userOneWithSameEmail)
-      .set('Accept', 'application/json');
+      .set(headers);
 
     const res2 = await request
       .post('/api/auth/signup')
       .send(userTwoWithSameEmail)
-      .set('Accept', 'application/json');
+      .set(headers);
 
     expect(res2.status).toBe(400);
-    expect(JSON.parse(res2.text).message).toEqual('Failed! Email is already in use!');
   });
+
 });
 
-describe('Test user can sign in through API', () => {
-  test('A POST with an admin user returns a 200 and sends a Magic Link.', async () => {
-    // Test Data
-
+describe('SIGNIN User', () => {
+  test('User can signin and returns 200', async () => {
     // Create user in DB
     const goodUserData = {
       name: {
@@ -126,13 +135,14 @@ describe('Test user can sign in through API', () => {
     const res = await request
       .post('/api/auth/signin')
       .send(goodUserData)
-      .set('Accept', 'application/json');
+      .set(headers);
 
     expect(res.status).toBe(200);
-    expect(JSON.parse(res.text).message).toEqual('User login link sent to email!');
   });
+});
 
-  test('A POST with an non admin user returns 401 and helpful error message.', async () => {
+describe('SIGNIN Validation', () => {
+  test('Non admin user returns 401', async () => {
     // Test Data
 
     // Create user in DB
@@ -150,15 +160,12 @@ describe('Test user can sign in through API', () => {
     const res = await request
       .post('/api/auth/signin')
       .send(notValidPermission)
-      .set('Accept', 'application/json');
+      .set(headers);
 
     expect(res.status).toBe(401);
-    expect(JSON.parse(res.text).message).toEqual('Invalid permissions');
   });
 
-  test('A POST with non-valid email returns a 422 and a helpful error message.', async () => {
-    // Test Data
-
+  test('A non-valid email return 403', async () => {
     // Create user in DB
     const notValidEmailPayload = {
       name: {
@@ -174,9 +181,9 @@ describe('Test user can sign in through API', () => {
     const res = await request
       .post('/api/auth/signin')
       .send(notValidEmailPayload)
-      .set('Accept', 'application/json');
+      .set(headers);
 
-    expect(res.status).toBe(422);
+    expect(res.status).toBe(403);
     const errorMessage = JSON.parse(res.text);
 
     expect(errorMessage.errors).toEqual([
@@ -188,4 +195,4 @@ describe('Test user can sign in through API', () => {
       },
     ]);
   });
-});
+})

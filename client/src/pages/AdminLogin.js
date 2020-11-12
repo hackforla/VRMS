@@ -1,29 +1,31 @@
-import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
+import React, { useState } from 'react';
+import { Redirect } from 'react-router-dom';
 
-import useAuth from "../hooks/useAuth";
+import useAuth from '../hooks/useAuth';
 
-import "../sass/AdminLogin.scss";
+import '../sass/AdminLogin.scss';
 
 const AdminLogin = (props) => {
   const auth = useAuth();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [email, setEmail] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
+  const [email, setEmail] = useState('');
 
   const handleInputChange = (e) => setEmail(e.currentTarget.value);
+
+  const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    if (email === "") {
+    if (email === '') {
       setIsError(true);
       setErrorMessage("Please don't leave the field blank.");
-    } else if (!email.includes("@") || !email.includes(".")) {
+    } else if (!email.includes('@') || !email.includes('.')) {
       setIsError(true);
-      setErrorMessage("Please format the email address correctly.");
+      setErrorMessage('Please format the email address correctly.');
     } else {
       let isAdmin = await checkEmail(e);
 
@@ -31,18 +33,19 @@ const AdminLogin = (props) => {
         setIsError(true);
         setErrorMessage("You don't have the correct access level.");
       } else if (isAdmin === undefined || isAdmin === null) {
-        console.log("Something is wrong try again");
+        console.log('Something is wrong try again');
       } else {
         try {
-          await fetch("/api/auth/signin", {
-            method: "POST",
+          await fetch('/api/auth/signin', {
+            method: 'POST',
             headers: {
               "Content-Type": "application/json",
+              "x-customrequired-header": headerToSend
             },
             body: JSON.stringify({ email: email }),
           }).then((res) => {
             if (res.status === 200) {
-              props.history.push("/emailsent");
+              props.history.push('/emailsent');
             }
           });
         } catch (error) {
@@ -57,10 +60,11 @@ const AdminLogin = (props) => {
 
     try {
       setIsLoading(true);
-      return await fetch("/api/checkuser", {
-        method: "POST",
+      return await fetch('/api/checkuser', {
+        method: 'POST',
         headers: {
           "Content-Type": "application/json",
+          "x-customrequired-header": headerToSend
         },
         body: JSON.stringify({ email }),
       })
@@ -74,10 +78,10 @@ const AdminLogin = (props) => {
         .then((response) => {
           if (response === false) {
             setIsError(true);
-            setErrorMessage("Please enter the correct email address.");
+            setErrorMessage('Please enter the correct email address.');
 
             return response;
-          } else if (response.accessLevel !== "admin") {
+          } else if (response.accessLevel !== 'admin') {
             setIsError(true);
             setErrorMessage(
               "You don't have the correct access level to view the dashboard."
@@ -121,7 +125,7 @@ const AdminLogin = (props) => {
                 onChange={(e) => handleInputChange(e)}
                 aria-label="Email Address"
                 data-test="input-email"
-                autoComplete="none"
+                autoComplete="email"
                 required="required"
               />
             </div>
@@ -137,7 +141,7 @@ const AdminLogin = (props) => {
             onClick={(e) => handleLogin(e)}
             className="login-button"
             data-test="login-btn"
-            disabled={!email || email===""}
+            disabled={!email || email === ''}
           >
             LOGIN
           </button>

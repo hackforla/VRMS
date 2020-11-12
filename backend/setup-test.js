@@ -6,10 +6,11 @@ mongoose.promise = global.Promise;
 const { MongoMemoryServer } = require("mongodb-memory-server");
 
 async function removeAllCollections() {
-  const collections = Object.keys(mongoose.connection.collections);
+  const mongooseCollections = mongoose.connection.collections;
+  const collections = Object.keys(mongooseCollections);
   for (const collectionName of collections) {
     const collection = mongoose.connection.collections[collectionName];
-    await collection.deleteMany();
+    collection.deleteMany();
   }
 }
 

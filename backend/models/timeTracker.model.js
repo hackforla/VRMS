@@ -31,4 +31,4 @@ timeTrackerSchema.methods.serialize = function () {
 
 const TimeTracker = mongoose.model("TimeTracker", timeTrackerSchema);
 
-module.exports = TimeTracker;
+module.exports = { TimeTracker };

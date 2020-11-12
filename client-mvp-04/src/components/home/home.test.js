@@ -31,9 +31,9 @@ describe('Home', () => {
       </Router>
     );
     expect(screen.getByText('Sign in')).toBeInTheDocument();
-    expect(screen.getAllByTestId('link')[0]).toHaveAttribute('href', '/page');
+    expect(screen.getAllByTestId('link')[0]).toHaveAttribute('href', '/login');
     fireEvent.click(screen.getAllByTestId('link')[0]);
-    expect(history.location.pathname).toBe('/page');
+    expect(history.location.pathname).toBe('/login');
   });
 
   test('Should navigate to create account page after click on `Create account` button', () => {

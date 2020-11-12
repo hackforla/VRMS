@@ -2,15 +2,17 @@ const express = require("express");
 const router = express.Router();
 const { App } = require("@slack/bolt");
 const cron = require("node-cron");
-const Event = require("../models/event.model");
-const Project = require("../models/project.model");
+const { Event } = require('../models/event.model');
+const { Project } = require('../models/project.model');
 
 //https://api.slack.com/web
 
-const app = new App({
-  token: process.env.SLACK_BOT_TOKEN,
-  signingSecret: process.env.SLACK_SIGNING_SECRET,
-});
+if (process.env.NODE_ENV !== 'test') {
+    const app = new App({
+      token: process.env.SLACK_BOT_TOKEN,
+      signingSecret: process.env.SLACK_SIGNING_SECRET,
+    });
+}
 
 //Checks DB every monday (1) for slack messages to schedule this week
 // cron.schedule("* * * * 1", () => {});
@@ -18,7 +20,7 @@ const app = new App({
 // TODO: Refactor this server out of the router. This server instance is breaking the tests.
 if (process.env.NODE_ENV !== "test") {
   (async () => {
-    await app.start(3002);
+    await app.start(4050);
     console.log("Connected to Slack");
   })();
 }
@@ -86,13 +88,11 @@ async function findEvent(req, res) {
   Event.find({})
     .then((events) => {
       console.log("EVENTS", events);
-      res.json(events);
+      return res.status(200).send(events);
     })
     .catch((err) => {
       console.log(err);
-      res.sendStatus(500).json({
-        message: `/GET Internal server error: ${err}`,
-      });
+      return res.sendStatus(400)
     });
 }
 
@@ -102,13 +102,11 @@ async function findProject(req, res) {
       project.forEach((cur) => {
         console.log("PROJECT", cur.name);
       });
-      res.json(project);
+      return res.status(200).send(project);
     })
     .catch((err) => {
       console.log(err);
-      res.sendStatus(500).json({
-        message: `/GET Internal server error: ${err}`,
-      });
+      return res.sendStatus(400);
     });
 }
 module.exports = router;
