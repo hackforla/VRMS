@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import LoginView from './loginView';
 import { connect } from 'react-redux';
-import { Email } from '../../utils/validation';
+import { Email } from '../../utils/validation/validation';
 import UserService from '../../services/user.service';
 import { loginSuccess } from '../../store/actions/authActions';
 import { setUser, failUser } from '../../store/actions/userActions';
@@ -29,7 +29,6 @@ const LoginContainer = (props) => {
       setErrorMsgInvalidEmail(false);
       const userData = await UserService.getData(userEmail);
       if (userData) {
-        // user is already registered in app, update global state in store
         props.dispatch(loginSuccess());
         props.dispatch(setUser(userData));
         // while functionality isn't implemented redirect to dummy page
