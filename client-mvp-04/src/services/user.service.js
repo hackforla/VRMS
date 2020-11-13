@@ -13,7 +13,9 @@ const UserService = {
       });
       return await response.json();
     } catch (error) {
+      console.log('User is not registered in the app');
       console.log(error);
+      return null;
     }
   },
 };
