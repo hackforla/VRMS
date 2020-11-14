@@ -10,11 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        name: Make envfile
-          uses: SpicyPizza/create-envfile@v1
-          with:
-            envkey_BACKEND_PORT: ${{ secrets.BACKEND_PORT }}
-            envkey_REACT_APP_PROXY: ${{ secrets.REACT_APP_PROXY }}
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v1
+        with:
+          envkey_BACKEND_PORT: ${{ secrets.BACKEND_PORT }}
+          envkey_REACT_APP_PROXY: ${{ secrets.REACT_APP_PROXY }}
       - name: Build the backend container
         run:  docker-compose build backend
       - name: Run backend unit test suite
