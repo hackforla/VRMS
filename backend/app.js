@@ -51,7 +51,7 @@ app.use(morgan("dev"));
 // app.use(helmet());
 
 // Cross-Origin-Resource-Sharing
-app.use(cors());
+// app.use(cors());
 
 // WORKERS
 const runOpenCheckinWorker = require('./workers/openCheckins')(cron, fetch);

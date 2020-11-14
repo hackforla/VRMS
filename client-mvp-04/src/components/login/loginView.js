@@ -43,8 +43,8 @@ const LoginView = ({
         <p className={'error-message'}>
           *We don’t recognize your email address. Need to
           <RedirectLink
-            path={'/page'}
-            linkKey={'create-acc-link'}
+            path={'/create-account'}
+            linkKey={'create-account'}
             content={' create an account'}
           />
           ?

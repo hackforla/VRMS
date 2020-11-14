@@ -1,0 +1,69 @@
+@import "../../sass/variables";
+
+.createAccount-container {
+  padding: 40px 60px;
+
+  .text-field-container {
+    margin-top: 76px;
+  }
+
+  .createAccount-button {
+    margin: 50px auto 20px auto;
+    color: blue;
+    
+  }
+
+  .error-message {
+    margin: 25px 10px 10px;
+
+    .redirect-link {
+      color: $link-accent-color;
+    }
+  }
+}
+
+@media (max-height: 896px) {
+  .createAccount-container {
+    height: calc(100vh - 160px);
+  }
+}
+
+@media (max-width: 400px) {
+  .createAccount-container {
+    padding: 25px 52px;
+
+    .createAccount-button {
+      margin: 40px 0 20px auto;
+    }
+
+    .error-message {
+      margin: 25px 0 10px;
+    }
+
+    .text-field-container {
+      margin-top: 55px;
+    }
+  }
+}
+
+@media (max-width: 374px) {
+  .createAccount-container {
+    height: calc(100vh - 180px);
+  }
+}
+
+@media (max-width: 350px) {
+  .createAccount-container {
+    padding: 15px 25px;
+
+    .text-field-container {
+      margin-top: 25px;
+    }
+    .createAccount-button {
+      margin: 15px 0 10px auto;
+    }
+    .error-message {
+      margin: 20px 0 5px;
+    }
+  }
+}

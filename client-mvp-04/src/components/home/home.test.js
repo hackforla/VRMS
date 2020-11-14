@@ -44,8 +44,8 @@ describe('Home', () => {
       </Router>
     );
     expect(screen.getByText('Create account')).toBeInTheDocument();
-    expect(screen.getAllByTestId('link')[1]).toHaveAttribute('href', '/register');
+    expect(screen.getAllByTestId('link')[1]).toHaveAttribute('href', '/create-account');
     fireEvent.click(screen.getAllByTestId('link')[1]);
-    expect(history.location.pathname).toBe('/register');
+    expect(history.location.pathname).toBe('/create-account');
   });
 });
