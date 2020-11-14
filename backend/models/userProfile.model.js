@@ -7,7 +7,8 @@ const userProfileSchema = mongoose.Schema({
   lastName: { type: String },
   meetLocation: { type: String }, // HfLA locations user participates at
   timeZone: { type: String },			// user’s timezone
-  signupEmail: { type: String },	// user’s preferred contact email
+  signupEmail: { type: String, unique: true, index: true, required: true },	
+    // user’s preferred contact email
   phone: { type: String },
   isTextingAllowed: { type: Boolean}, 
   isCodeOfConductAccepted: { type: Boolean}, 
