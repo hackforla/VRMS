@@ -7,10 +7,12 @@ const { Project } = require('../models/project.model');
 
 //https://api.slack.com/web
 
-const app = new App({
-  token: process.env.SLACK_BOT_TOKEN,
-  signingSecret: process.env.SLACK_SIGNING_SECRET,
-});
+if (process.env.NODE_ENV !== 'test') {
+    const app = new App({
+      token: process.env.SLACK_BOT_TOKEN,
+      signingSecret: process.env.SLACK_SIGNING_SECRET,
+    });
+}
 
 //Checks DB every monday (1) for slack messages to schedule this week
 // cron.schedule("* * * * 1", () => {});
@@ -18,7 +20,7 @@ const app = new App({
 // TODO: Refactor this server out of the router. This server instance is breaking the tests.
 if (process.env.NODE_ENV !== "test") {
   (async () => {
-    await app.start(3002);
+    await app.start(4050);
     console.log("Connected to Slack");
   })();
 }
