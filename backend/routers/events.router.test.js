@@ -95,7 +95,7 @@ describe('READ', () => {
     const response = await request.get(dbCreatedEventIdURL).set(headers);
     expect(response.statusCode).toBe(200);
     const apiRetrievedEvent = await response.body;
-    expect(apiRetrievedEvent._id).toEqual(dbCreatedeventId);
+    expect(apiRetrievedEvent._id).toBe(dbCreatedeventId);
 
     done();
   });

@@ -31,9 +31,9 @@ describe('CREATE', () => {
     await Event.create(submittedData);
     const savedDataArray = await Event.find();
     const savedData = savedDataArray[0];
-    expect(savedData.name).toEqual( submittedData.name);
-    expect(savedData.location.city).toEqual(submittedData.location.city);
-    expect(savedData.startTime.getTime()).toEqual(submittedData.startTime);
+    expect(savedData.name).toBe( submittedData.name);
+    expect(savedData.location.city).toBe(submittedData.location.city);
+    expect(savedData.startTime.getTime()).toBe(submittedData.startTime);
     done();
   });
 
@@ -42,7 +42,7 @@ describe('CREATE', () => {
     await Event.create(submittedData);
     const savedDataArray = await Event.find();
     const savedData = savedDataArray[0];
-    expect(savedData.name).toEqual('testEvent');
+    expect(savedData.name).toBe('testEvent');
     done();
   });
 });

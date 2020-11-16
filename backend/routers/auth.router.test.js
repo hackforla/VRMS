@@ -36,7 +36,7 @@ describe('CREATE User', () => {
     // Add a user using the API.
     const res = await request.post('/api/users').send(submittedData).set(headers);
 
-    expect(res.status).toEqual(201);
+    expect(res.status).toBe(201);
 
     // Retrieve and compare the the User values using the DB.
     const databaseUserQuery = await User.find();
@@ -44,15 +44,15 @@ describe('CREATE User', () => {
     const databaseUser = databaseUserQuery[0];
 
     expect(databaseUserQuery.length).toBeGreaterThanOrEqual(1);
-    expect(databaseUser.name.firstName).toEqual(submittedData.name.firstName);
-    expect(databaseUser.name.lastName).toEqual(submittedData.name.lastName);
+    expect(databaseUser.name.firstName).toBe(submittedData.name.firstName);
+    expect(databaseUser.name.lastName).toBe(submittedData.name.lastName);
 
     // Retrieve and compare the User values using the API.
     const response = await request.get('/api/users').set(headers);
-    expect(response.statusCode).toEqual(200);
+    expect(response.statusCode).toBe(200);
     const APIData = response.body[0];
-    expect(APIData.name.firstName).toEqual(submittedData.name.firstName);
-    expect(APIData.name.lastName).toEqual(submittedData.name.lastName);
+    expect(APIData.name.firstName).toBe(submittedData.name.firstName);
+    expect(APIData.name.lastName).toBe(submittedData.name.lastName);
 
   });
 
