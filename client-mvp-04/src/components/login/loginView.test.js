@@ -32,7 +32,6 @@ describe('Login View', () => {
     expect(screen.getByTestId('login-container')).toBeInTheDocument();
     expect(screen.getByTestId('login-form')).toBeInTheDocument();
     expect(screen.getByTestId('login-input')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Enter your email')).toBeInTheDocument();
     expect(screen.getByText('Sign in')).toBeInTheDocument();
   });
 });

@@ -38,15 +38,6 @@ jest.mock('../../services/user.service', () =>
   })
 );
 
-// Mock history.push('/path')
-const mockHistoryPush = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useHistory: () => ({
-    push: mockHistoryPush,
-  }),
-}));
-
 beforeEach(() => {
   render(
     <Provider store={store}>
