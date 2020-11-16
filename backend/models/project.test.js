@@ -69,7 +69,7 @@ describe('DELETE', () => {
     };
 
     await Project.create(submittedData);
-    const savedDataArray = await Project.find();
+    const savedDataArray = await Project.find().exec();
     const savedData = savedDataArray[0];
     expect(savedData.name).toBe(submittedData.name);
 
