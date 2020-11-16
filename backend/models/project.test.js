@@ -23,6 +23,8 @@ describe("Project Model saves the correct values", () => {
     expect(savedData.name).toBe(submittedData.name);
     expect(savedData.githubIdentifier).toBe(submittedData.githubIdentifier);
     expect(savedData.githubUrl).toBe(submittedData.githubUrl);
+
+
     done();
   });
 });
@@ -48,7 +50,7 @@ describe('UPDATE', () => {
     };
 
     await Project.create(submittedData);
-    const savedDataArray = await Project.find();
+    const savedDataArray = await Project.find().exec();
     const savedData = savedDataArray[0];
     expect(savedData.name).toBe(submittedData.name);
 
