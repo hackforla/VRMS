@@ -21,10 +21,10 @@ describe("ProjectTeamMember Model saves the correct values", () => {
     await ProjectTeamMember.create(submittedData);
     const savedDataArray = await ProjectTeamMember.find();
     const savedData = savedDataArray[0];
-    expect(savedData.teamMemberStatus === submittedData.teamMemberStatus);
-    expect(savedData.joinedDate === submittedData.joinedDate);
+    expect(savedData.teamMemberStatus).toBe(submittedData.teamMemberStatus);
+    expect(savedData.joinedDate.getTime()).toBe(submittedData.joinedDate);
     expect(
-      savedData.githubPermissionLevel === submittedData.githubPermissionLevel
+      savedData.githubPermissionLevel).toBe(submittedData.githubPermissionLevel
     );
     done();
   });

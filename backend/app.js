@@ -12,7 +12,11 @@ const customRequestHeaderName = 'x-customrequired-header';
 const dontCheckCustomRequestHeaderApis = ["GET::/api/recurringevents"];
 
 // Import environment variables
-require("dotenv").config();
+const dotenv = require('dotenv');
+const dotenvExpand = require('dotenv-expand');
+
+const myEnv = dotenv.config();
+dotenvExpand(myEnv);
 
 // Verify environment variables
 require('assert-env')([

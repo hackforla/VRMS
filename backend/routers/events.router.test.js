@@ -31,8 +31,8 @@ describe('CREATE', () => {
     // Retrieve that event
     const databaseEventQuery = await Event.find();
     const databaseEvent = databaseEventQuery[0];
-    expect(databaseEvent.length >= 1);
-    expect(databaseEvent.name === submittedData.name);
+    expect(databaseEventQuery.length).toBeGreaterThanOrEqual(1);
+    expect(databaseEvent.name).toBe(submittedData.name);
     done();
   });
 });
@@ -51,14 +51,14 @@ describe('READ', () => {
     // Retrieve and compare the the Event values using the DB.
     const databaseEventQuery = await Event.find();
     const databaseEvent = databaseEventQuery[0];
-    expect(databaseEvent.length >= 1);
-    expect(databaseEvent.createdDate === submittedData.createdDate);
+    expect(databaseEventQuery.length).toBeGreaterThanOrEqual(1);
+    expect(databaseEvent.createdDate).toStrictEqual(new Date(submittedData.createdDate));
 
     // Retrieve and compare the the values using the API.
     const response = await request.get('/api/events/').set(headers);
     expect(response.statusCode).toBe(200);
     const APIData = response.body[0];
-    expect(APIData.createdDate === submittedData.createdDate);
+    expect(APIData.createdDate).toBe(submittedData.createdDate);
     done();
   });
   test('GET Event by ID', async (done) => {
@@ -95,7 +95,7 @@ describe('READ', () => {
     const response = await request.get(dbCreatedEventIdURL).set(headers);
     expect(response.statusCode).toBe(200);
     const apiRetrievedEvent = await response.body;
-    expect(apiRetrievedEvent._id).toEqual(dbCreatedeventId);
+    expect(apiRetrievedEvent._id).toBe(dbCreatedeventId);
 
     done();
   });

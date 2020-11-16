@@ -20,9 +20,11 @@ describe("Project Model saves the correct values", () => {
     await Project.create(submittedData);
     const savedDataArray = await Project.find();
     const savedData = savedDataArray[0];
-    expect(savedData.name === submittedData.name);
-    expect(savedData.githubIdentifier === submittedData.githubIdentifier);
-    expect(savedData.githubUrl === submittedData.githubUrl);
+    expect(savedData.name).toBe(submittedData.name);
+    expect(savedData.githubIdentifier).toBe(submittedData.githubIdentifier);
+    expect(savedData.githubUrl).toBe(submittedData.githubUrl);
+
+
     done();
   });
 });
@@ -36,7 +38,7 @@ describe('CREATE/READ', () => {
     await Project.create(submittedData);
     const savedDataArray = await Project.find();
     const savedData = savedDataArray[0];
-    expect(savedData.name === submittedData.name);
+    expect(savedData.name).toBe(submittedData.name);
     done();
   });
 });
@@ -48,17 +50,16 @@ describe('UPDATE', () => {
     };
 
     await Project.create(submittedData);
-    const savedDataArray = await Project.find();
+    const savedDataArray = await Project.find().exec();
     const savedData = savedDataArray[0];
-    expect(savedData.name).toEqual(submittedData.name);
+    expect(savedData.name).toBe(submittedData.name);
 
     const updatedData = { name: 'updatedEventName' };
 
-    const updatedProject = await Project.findOneAndUpdate(submittedData, updatedData, 
+    const updatedProject = await Project.findOneAndUpdate({_id: savedData._id}, updatedData, 
       {new: true});
-    
-    expect(updatedProject.name).toEqual(updatedData.name);
-    
+
+    expect(updatedProject.name).toBe(updatedData.name);
     done();
   });
 });
@@ -70,9 +71,9 @@ describe('DELETE', () => {
     };
 
     await Project.create(submittedData);
-    const savedDataArray = await Project.find();
+    const savedDataArray = await Project.find().exec();
     const savedData = savedDataArray[0];
-    expect(savedData.name === submittedData.name);
+    expect(savedData.name).toBe(submittedData.name);
 
     const deleteData = await Project.deleteOne(submittedData);
     expect(deleteData.ok).toBe(1);
