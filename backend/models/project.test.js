@@ -50,12 +50,15 @@ describe('UPDATE', () => {
     await Project.create(submittedData);
     const savedDataArray = await Project.find();
     const savedData = savedDataArray[0];
-    expect(savedData.name === submittedData.name);
+    expect(savedData.name).toEqual(submittedData.name);
 
     const updatedData = { name: 'updatedEventName' };
 
-    const updatedProject = await Project.findOneAndUpdate(submittedData, updatedData);
-    expect(updatedProject.name === updatedData.name);
+    const updatedProject = await Project.findOneAndUpdate(submittedData, updatedData, 
+      {new: true});
+    
+    expect(updatedProject.name).toEqual(updatedData.name);
+    
     done();
   });
 });
