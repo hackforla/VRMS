@@ -8,9 +8,8 @@ setupDB('api-auth');
 const { CONFIG_AUTH } = require('../config/');
 const { User } = require('../models');
 
-
 // Create mock for EmailController
-const sendMailMock = jest.fn() 
+const sendMailMock = jest.fn();
 jest.mock('../controllers/email.controller');
 const mockEmailController = require('../controllers/email.controller');
 mockEmailController.sendLoginLink.mockReturnValue({ sendMail: sendMailMock });
@@ -32,7 +31,7 @@ describe('CREATE User', () => {
       name: { firstName: 'test_first', lastName: 'test_last' },
       email: 'test@test.com',
     };
-  
+
     // Add an event with a project using the API.
     const res = await request.post('/api/users').send(submittedData).set(headers);
 
@@ -59,10 +58,7 @@ describe('CREATE User', () => {
       email: 'test@test.com',
     };
 
-    const res = await request
-      .post('/api/auth/signup')
-      .send(goodUserData)
-      .set(headers);
+    const res = await request.post('/api/auth/signup').send(goodUserData).set(headers);
 
     expect(res.status).toBe(201);
   });
@@ -77,10 +73,7 @@ describe('SIGNUP Validation', () => {
       email: 'test@test.com',
     };
 
-     const res = await request
-      .post('/api/auth/signup')
-      .send(badUserData)
-      .set(headers);
+    const res = await request.post('/api/auth/signup').send(badUserData).set(headers);
 
     expect(res.status).toBe(403);
     const errorMessage = JSON.parse(res.text);
@@ -103,19 +96,12 @@ describe('SIGNUP Validation', () => {
       email: 'test@test.com',
     };
 
-    await request
-      .post('/api/auth/signup')
-      .send(userOneWithSameEmail)
-      .set(headers);
+    await request.post('/api/auth/signup').send(userOneWithSameEmail).set(headers);
 
-    const res2 = await request
-      .post('/api/auth/signup')
-      .send(userTwoWithSameEmail)
-      .set(headers);
+    const res2 = await request.post('/api/auth/signup').send(userTwoWithSameEmail).set(headers);
 
     expect(res2.status).toBe(400);
   });
-
 });
 
 describe('SIGNIN User', () => {
@@ -135,7 +121,8 @@ describe('SIGNIN User', () => {
     const res = await request
       .post('/api/auth/signin')
       .send(goodUserData)
-      .set(headers);
+      .set(headers)
+      .set('origin', 'localhost:3000');
 
     expect(res.status).toBe(200);
   });
@@ -160,9 +147,33 @@ describe('SIGNIN Validation', () => {
     const res = await request
       .post('/api/auth/signin')
       .send(notValidPermission)
-      .set(headers);
+      .set(headers)
+      .set('origin', 'localhost:3000');
 
     expect(res.status).toBe(401);
+  });
+
+  test('Non admin user returns 200 on 3001 port', async () => {
+    // Test Data
+    // Create user in DB
+    const notValidPermission = {
+      name: {
+        firstName: 'Free',
+        lastName: 'Mason',
+      },
+      email: 'test@test.com',
+      accessLevel: 'user',
+    };
+    await User.create(notValidPermission);
+
+    // POST to the DB with that same data.
+    const res = await request
+      .post('/api/auth/signin')
+      .send(notValidPermission)
+      .set(headers)
+      .set('origin', 'localhost:3001');
+
+    expect(res.status).toBe(200);
   });
 
   test('A non-valid email return 403', async () => {
@@ -178,10 +189,7 @@ describe('SIGNIN Validation', () => {
     await User.create(notValidEmailPayload);
 
     // POST to the DB with that same data.
-    const res = await request
-      .post('/api/auth/signin')
-      .send(notValidEmailPayload)
-      .set(headers);
+    const res = await request.post('/api/auth/signin').send(notValidEmailPayload).set(headers);
 
     expect(res.status).toBe(403);
     const errorMessage = JSON.parse(res.text);
@@ -195,4 +203,4 @@ describe('SIGNIN Validation', () => {
       },
     ]);
   });
-})
+});
