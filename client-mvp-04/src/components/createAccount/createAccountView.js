@@ -1,26 +1,32 @@
 import React from 'react';
-import './login.scss';
+import './createAccount.scss';
 import Button from '../common/button/button';
 import Title from '../common/title/title';
 import Input from '../common/input/input';
 import ErrorMessage from '../common/errorMessage/errorMessage';
 import RedirectLink from '../common/link/link';
 
-const LoginView = ({
+const CreateAccountView = ({
   handleSubmitForm,
   handleInputChange,
   isDisabled,
   isEmailValid,
   errorMsgInvalidEmail,
-  errorMsgFailedEmail,
+  errorMsgRegisteredEmail,
 }) => {
   return (
-    <section data-testid="login" className="login-container">
+    <section
+      data-testid="create-account-container"
+      className="create-account-container"
+    >
       <Title />
 
-      <form data-testid="login-form" onSubmit={(e) => handleSubmitForm(e)}>
+      <form
+        data-testid="create-account-form"
+        onSubmit={(e) => handleSubmitForm(e)}
+      >
         <Input
-          dataTestid="login-input"
+          dataTestid="create-account-input"
           placeholder={'Enter your email'}
           type={'email'}
           onChange={(e) => handleInputChange(e)}
@@ -29,8 +35,8 @@ const LoginView = ({
 
         <Button
           type={'submit'}
-          content={`Sign in`}
-          className={'login-button'}
+          content={`Create Account`}
+          className={'create-account-button'}
           disabled={isDisabled}
         />
       </form>
@@ -39,14 +45,10 @@ const LoginView = ({
         <ErrorMessage content={'*Please enter a valid email address'} />
       ) : null}
 
-      {errorMsgFailedEmail ? (
+      {errorMsgRegisteredEmail ? (
         <p className={'error-message'}>
-          *We don’t recognize your email address. Need to
-          <RedirectLink
-            path={'/create-account'}
-            linkKey={'create-account'}
-            content={' create an account'}
-          />
+          *You already have an account for that email address. Want to
+          <RedirectLink path={'/login'} linkKey={'login'} content={' log in'} />
           ?
         </p>
       ) : null}
@@ -54,4 +56,4 @@ const LoginView = ({
   );
 };
 
-export default LoginView;
+export default CreateAccountView;
