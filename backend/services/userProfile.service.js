@@ -63,13 +63,3 @@ UserProfileService.getUserByEmail = async function (email) {
 }
 
 module.exports = UserProfileService;
-
-
-// const user = new User({
-//     name: {
-//       firstName,
-//       lastName,
-//     },
-//     email: email.toLowerCase(),
-//     accessLevel: 'user',
-//   });
