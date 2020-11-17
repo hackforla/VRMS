@@ -7,7 +7,6 @@ const cron = require("node-cron");
 const fetch = require("node-fetch");
 const morgan = require('morgan');
 const cookieParser = require("cookie-parser");
-const cors = require('cors');
 
 const customRequestHeaderName = 'x-customrequired-header';
 const dontCheckCustomRequestHeaderApis = ["GET::/api/recurringevents"];

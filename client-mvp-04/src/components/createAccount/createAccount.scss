@@ -1,16 +1,21 @@
 @import "../../sass/variables";
 
-.createAccount-container {
+.create-account-container {
   padding: 40px 60px;
 
   .text-field-container {
     margin-top: 76px;
   }
 
-  .createAccount-button {
+  .create-account-button {
     margin: 50px auto 20px auto;
-    color: blue;
-    
+    color: $accent-royal-blue-color;  
+    line-height: 18px;
+    font-weight: $font-bold;
+  }
+
+  .create-account-button:disabled {
+    background-color: white;
   }
 
   .error-message {
@@ -23,16 +28,16 @@
 }
 
 @media (max-height: 896px) {
-  .createAccount-container {
+  .create-account-container {
     height: calc(100vh - 160px);
   }
 }
 
 @media (max-width: 400px) {
-  .createAccount-container {
+  .create-account-container {
     padding: 25px 52px;
 
-    .createAccount-button {
+    .create-account-button {
       margin: 40px 0 20px auto;
     }
 
@@ -47,19 +52,19 @@
 }
 
 @media (max-width: 374px) {
-  .createAccount-container {
+  .create-account-container {
     height: calc(100vh - 180px);
   }
 }
 
 @media (max-width: 350px) {
-  .createAccount-container {
+  .create-account-container {
     padding: 15px 25px;
 
     .text-field-container {
       margin-top: 25px;
     }
-    .createAccount-button {
+    .create-account-button {
       margin: 15px 0 10px auto;
     }
     .error-message {

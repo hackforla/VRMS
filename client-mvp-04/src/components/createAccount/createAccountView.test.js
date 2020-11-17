@@ -63,5 +63,4 @@ describe('createAccount', () => {
 
         expect(screen.getByText('*Please enter a valid email address')).toBeInTheDocument();
     }); 
-
 });

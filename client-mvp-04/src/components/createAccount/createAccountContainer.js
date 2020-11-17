@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import CreateAccountView from './createAccountView';
-import { connect } from 'react-redux';
 import { Email } from '../../utils/validation';
 import UserService from '../../services/user.service';
-import { setUser } from '../../store/actions/userActions';
 
 const CreateAccountContainer = (props) => {
   // Local UI State
@@ -27,13 +25,11 @@ const CreateAccountContainer = (props) => {
       setIsEmailValid(true);
       setErrorMsgInvalidEmail(false);
       const userData = await UserService.getData(userEmail);
-      if ( ! userData ) {
-        // user is not registered in app, redirect to dummny page 
+      if ( !userData ) {
+        // user is not registered in app, redirect to dummy page 
         props.history.push('/page');
       } else {
-        // user is already registered in app, update global state in store
         setErrorMsgRegisteredEmail(true);
-        props.dispatch(setUser(userData));
       }
     } else {
       setIsEmailValid(false);
