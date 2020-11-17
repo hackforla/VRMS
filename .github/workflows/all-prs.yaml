@@ -17,7 +17,7 @@ jobs:
           envkey_REACT_APP_PROXY: ${{ secrets.REACT_APP_PROXY }}
           file_name: backend/.env
       - name: Build the backend container
-        run:  docker-compose build backend
+        run: docker-compose build backend
       - name: Run backend unit test suite
         run: docker-compose run --rm backend yarn run test --testPathIgnorePatterns=routers
 
@@ -45,7 +45,7 @@ jobs:
           file_name: backend/.env
       - name: Build the backend container
         run: docker-compose build backend
-      - name: Run backend test suite
+      - name: Run backend integration test suite
         run: docker-compose run --rm backend yarn run test backend/routers/
 
   test-client-unit:
@@ -63,5 +63,5 @@ jobs:
       - uses: actions/checkout@v2
       - name: Build the client mvp container
         run: docker-compose build client-mvp-04
-      - name: Run frontend test suite
+      - name: Run frontend unit test suite
         run: docker-compose run --rm client-mvp-04 yarn run test
