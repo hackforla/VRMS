@@ -17,7 +17,7 @@ jobs:
           envkey_REACT_APP_PROXY: ${{ secrets.REACT_APP_PROXY }}
           file_name: backend/.env
       - name: Build the backend container
-        run:  docker-compose build backend
+        run: docker-compose build backend
       - name: Run backend unit test suite
         run: docker-compose run --rm backend yarn run test --testPathIgnorePatterns=routers
 
