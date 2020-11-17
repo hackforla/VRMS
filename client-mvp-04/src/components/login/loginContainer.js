@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import LoginView from './loginView';
 import { connect } from 'react-redux';
-import { Email } from '../../utils/validation';
-import UserService from '../../services/user.service';
+import { Email } from '../../utils/validation/validation';
+import getUser from '../../services/user.service';
 import { loginSuccess } from '../../store/actions/authActions';
 import { setUser, failUser } from '../../store/actions/userActions';
+import { useHistory } from 'react-router-dom';
 
 const LoginContainer = (props) => {
+  const history = useHistory();
   // Local UI State
   const [isDisabled, setIsDisabled] = useState(true);
   const [userEmail, setUserEmail] = useState('');
@@ -27,13 +29,12 @@ const LoginContainer = (props) => {
     if (Email.isValid(userEmail)) {
       setIsEmailValid(true);
       setErrorMsgInvalidEmail(false);
-      const userData = await UserService.getData(userEmail);
+      const userData = await getUser(userEmail);
       if (userData) {
-        // user is already registered in app, update global state in store
         props.dispatch(loginSuccess());
         props.dispatch(setUser(userData));
         // while functionality isn't implemented redirect to dummy page
-        props.history.push('/page');
+        history.push('/page');
       } else {
         setErrorMsgFailedEmail(true);
         props.dispatch(failUser());

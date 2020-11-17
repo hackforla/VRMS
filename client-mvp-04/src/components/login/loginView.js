@@ -15,7 +15,7 @@ const LoginView = ({
   errorMsgFailedEmail,
 }) => {
   return (
-    <section data-testid="login" className="login-container">
+    <section data-testid="login-container" className="login-container">
       <Title />
 
       <form data-testid="login-form" onSubmit={(e) => handleSubmitForm(e)}>

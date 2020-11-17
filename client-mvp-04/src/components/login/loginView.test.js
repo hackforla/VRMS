@@ -25,8 +25,11 @@ describe('Login View', () => {
       />,
       { wrapper: BrowserRouter }
     );
+  });
 
-    expect(screen.getByTestId('login')).toBeInTheDocument();
+  test('Should display form with input and `Sign In` button', () => {
+    render(<LoginView />, { wrapper: BrowserRouter });
+    expect(screen.getByTestId('login-container')).toBeInTheDocument();
     expect(screen.getByTestId('login-form')).toBeInTheDocument();
     expect(screen.getByTestId('login-input')).toBeInTheDocument();
     expect(screen.getByText('Sign in')).toBeInTheDocument();
