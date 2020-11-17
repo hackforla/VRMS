@@ -6,7 +6,6 @@ import Input from '../common/input/input';
 import ErrorMessage from '../common/errorMessage/errorMessage';
 import RedirectLink from '../common/link/link';
 
-
 const CreateAccountView = ({
   handleSubmitForm,
   handleInputChange,
@@ -16,10 +15,16 @@ const CreateAccountView = ({
   errorMsgRegisteredEmail,
 }) => {
   return (
-    <section data-testid="createAccount" className="create-account-container">
+    <section
+      data-testid="create-account-container"
+      className="create-account-container"
+    >
       <Title />
 
-      <form data-testid="create-account-form" onSubmit={(e) => handleSubmitForm(e)}>
+      <form
+        data-testid="create-account-form"
+        onSubmit={(e) => handleSubmitForm(e)}
+      >
         <Input
           dataTestid="create-account-input"
           placeholder={'Enter your email'}
@@ -43,12 +48,8 @@ const CreateAccountView = ({
       {errorMsgRegisteredEmail ? (
         <p className={'error-message'}>
           *You already have an account for that email address. Want to
-          <RedirectLink
-            path={'/login'}
-            linkKey={'login'}
-            content={' log in'}
-          />
-            ?
+          <RedirectLink path={'/login'} linkKey={'login'} content={' log in'} />
+          ?
         </p>
       ) : null}
     </section>
