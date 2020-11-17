@@ -2,6 +2,8 @@ name: Build VMRS App
 on:
   pull_request:
     branches: [development]
+    paths-ignore:
+      - "*.md"
 
 jobs:
   push-docker-container:
