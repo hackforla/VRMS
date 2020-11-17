@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import CreateAccountView from './createAccountView';
-import { Email } from '../../utils/validation';
-import UserService from '../../services/user.service';
+import { Email } from '../../utils/validation/validation';
+import getUser from '../../services/user.service';
 
 const CreateAccountContainer = (props) => {
   // Local UI State
@@ -24,9 +24,9 @@ const CreateAccountContainer = (props) => {
     if (Email.isValid(userEmail)) {
       setIsEmailValid(true);
       setErrorMsgInvalidEmail(false);
-      const userData = await UserService.getData(userEmail);
-      if ( !userData ) {
-        // user is not registered in app, redirect to dummy page 
+      const userData = await getUser(userEmail);
+      if (!userData) {
+        // user is not registered in app, redirect to dummy page
         props.history.push('/page');
       } else {
         setErrorMsgRegisteredEmail(true);
@@ -46,7 +46,7 @@ const CreateAccountContainer = (props) => {
       errorMsgInvalidEmail={errorMsgInvalidEmail}
       errorMsgRegisteredEmail={errorMsgRegisteredEmail}
     />
-  );  
+  );
 };
 
-export default CreateAccountContainer; 
+export default CreateAccountContainer;
