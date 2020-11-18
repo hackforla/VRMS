@@ -8,10 +8,17 @@ const UserProfileService = {};
 UserProfileService.createUser = async function (userProfileData) {
     
     let newRecord = null;
+    
+    const inputData = userProfileData;
+
+    if(Object.prototype.hasOwnProperty.call(inputData, "signupEmail") &&
+        inputData.signupEmail) {
+        inputData.signupEmail = userProfileData.signupEmail.toLowerCase();
+    }
 
     await mongoose.connection.transaction(async () => {
     
-        newRecord = await UserProfile.create(userProfileData);
+        newRecord = await UserProfile.create(inputData);
 
         await modificationLogService.saveLog(newRecord.signupEmail, 
             newRecord._id, "UserProfile", newRecord );          

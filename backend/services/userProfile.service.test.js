@@ -9,11 +9,14 @@ describe("UserProfileService can save/update/get user profiles", () => {
   test("Save a user profile record and then retrieve it by the service", async (done) => {
 
 
-    const newRecord = {signupEmail: "foo@bar.com" };
+    const newRecordData = {signupEmail: "FOO@BAR.COM" };
 
-    const result = await userProfileService.createUser(newRecord);
+    const result = await userProfileService.createUser(newRecordData);
 
     expect(result.isNew).toBe(false);
+
+    // Verify email address was lowercased
+    expect(result.signupEmail).toBe(newRecordData.signupEmail.toLowerCase());
 
     // verify log record was created
     const logResult = await modificationLogService.getLogs(result._id, "UserProfile");
@@ -34,7 +37,7 @@ describe("UserProfileService can save/update/get user profiles", () => {
     const newRecordNoEmailDefined = {};
     const newRecordEmailNull= {signupEmail: null};
     const newRecordNoEmail = {signupEmail: "" };
-   
+
     await expect(userProfileService.createUser(newRecordNoEmailDefined)).rejects.toThrow()
     await expect(userProfileService.createUser(newRecordEmailNull)).rejects.toThrow()
     await expect(userProfileService.createUser(newRecordNoEmail)).rejects.toThrow()
