@@ -8,7 +8,7 @@ const UserProfileService = {};
 UserProfileService.createUser = async function (userProfileData) {
     
     let newRecord = null;
-    
+
     const inputData = userProfileData;
 
     if(Object.prototype.hasOwnProperty.call(inputData, "signupEmail") &&
@@ -34,13 +34,15 @@ UserProfileService.updateUser = async function (signupEmail, userProfileData) {
 
     let updatedUserProfile = null;
 
+    const inputData = userProfileData;
+
     // Don't allow updating of email address
-    delete userProfileData.signupEmail;
+    delete inputData.signupEmail;
 
     await mongoose.connection.transaction(async () => {
     
         updatedUserProfile = await UserProfile.findOneAndUpdate(signupEmail, 
-            userProfileData, {new: true, runValidators: true});
+            inputData, {new: true, runValidators: true});
 
         await modificationLogService.saveLog(updatedUserProfile.signupEmail, 
             updatedUserProfile._id, "UserProfile", updatedUserProfile );          
@@ -60,7 +62,7 @@ UserProfileService.getUser = async function (id) {
 
 UserProfileService.getUserByEmail = async function (email) {
 
-    const results = await UserProfile.findOne({signupEmail: email}); 
+    const results = await UserProfile.findOne({signupEmail: email.toLowerCase()}); 
     return results;
 }
 
