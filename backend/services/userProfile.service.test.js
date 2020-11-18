@@ -29,19 +29,15 @@ describe("UserProfileService can save/update/get user profiles", () => {
     done();
   });
 
-  test("Try and save a user profile with no email", async (done) => {
+  test("Try and create a user profile with no email. Should throw an exeception", async (done) => {
 
     const newRecordNoEmailDefined = {};
-    const resultNoEmailDefined = await userProfileService.createUser(newRecordNoEmailDefined);
-    expect(resultNoEmailDefined).toBe(null);
-
     const newRecordEmailNull= {signupEmail: null};
-    const resultEmailNull = await userProfileService.createUser(newRecordEmailNull);
-    expect(resultEmailNull).toBe(null);
-
     const newRecordNoEmail = {signupEmail: "" };
-    const resultNoEmail = await userProfileService.createUser(newRecordNoEmail);
-    expect(resultNoEmail).toBe(null);
+   
+    await expect(userProfileService.createUser(newRecordNoEmailDefined)).rejects.toThrow()
+    await expect(userProfileService.createUser(newRecordEmailNull)).rejects.toThrow()
+    await expect(userProfileService.createUser(newRecordNoEmail)).rejects.toThrow()
 
     done();
   });

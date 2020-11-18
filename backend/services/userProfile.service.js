@@ -7,20 +7,15 @@ const UserProfileService = {};
 
 UserProfileService.createUser = async function (userProfileData) {
     
-
     let newRecord = null;
 
-    if( typeof userProfileData.signupEmail !== 'undefined' &&  userProfileData.signupEmail) {
-
-        await mongoose.connection.transaction(async () => {
-        
-            newRecord = await UserProfile.create(userProfileData);
+    await mongoose.connection.transaction(async () => {
     
-            await modificationLogService.saveLog(newRecord.signupEmail, 
-                newRecord._id, "UserProfile", newRecord );          
-        });
+        newRecord = await UserProfile.create(userProfileData);
 
-    }
+        await modificationLogService.saveLog(newRecord.signupEmail, 
+            newRecord._id, "UserProfile", newRecord );          
+    });
 
     return newRecord;
     
