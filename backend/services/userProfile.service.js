@@ -5,7 +5,7 @@ const modificationLogService = require('./modificationLog.service');
 
 const UserProfileService = {};
 
-UserProfileService.createUser = async function (userProfileData) {
+UserProfileService.createUser = async function (userProfileData, authorEmail) {
     
     let newRecord = null;
 
@@ -20,7 +20,7 @@ UserProfileService.createUser = async function (userProfileData) {
     
         newRecord = await UserProfile.create(inputData);
 
-        await modificationLogService.saveLog(newRecord.signupEmail, 
+        await modificationLogService.saveLog(authorEmail, 
             newRecord._id, "UserProfile", newRecord );          
     });
 
@@ -29,7 +29,7 @@ UserProfileService.createUser = async function (userProfileData) {
 }
 
 
-UserProfileService.updateUser = async function (signupEmail, userProfileData) {
+UserProfileService.updateUser = async function (signupEmail, userProfileData, authorEmail) {
     
 
     let updatedUserProfile = null;
@@ -44,7 +44,7 @@ UserProfileService.updateUser = async function (signupEmail, userProfileData) {
         updatedUserProfile = await UserProfile.findOneAndUpdate(signupEmail, 
             inputData, {new: true, runValidators: true});
 
-        await modificationLogService.saveLog(updatedUserProfile.signupEmail, 
+        await modificationLogService.saveLog(authorEmail, 
             updatedUserProfile._id, "UserProfile", updatedUserProfile );          
     });
 

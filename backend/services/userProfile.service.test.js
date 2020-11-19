@@ -11,7 +11,7 @@ describe("UserProfileService can save/update/get user profiles", () => {
 
     const newRecordData = {signupEmail: "FOO@BAR.COM" };
 
-    const result = await userProfileService.createUser(newRecordData);
+    const result = await userProfileService.createUser(newRecordData, "creator@bar.com");
 
     expect(result.isNew).toBe(false);
 
@@ -48,7 +48,7 @@ describe("UserProfileService can save/update/get user profiles", () => {
   test("Try and update a user profile", async (done) => {
 
     const newRecord = {signupEmail: "foo@bar.com" };
-    const newRecordResult = await userProfileService.createUser(newRecord);
+    const newRecordResult = await userProfileService.createUser(newRecord, "creator@bar.com");
 
     expect(newRecordResult.firstName).toBeUndefined();
     expect(newRecordResult.lastName).toBeUndefined();
@@ -56,7 +56,7 @@ describe("UserProfileService can save/update/get user profiles", () => {
 
     const updateRecordData = {firstName: "Foo", lastName: "Bar", meetLocation: "Los Angeles"};
     const updatedRecordResult = await userProfileService.updateUser(newRecordResult.signupEmail
-      , updateRecordData);
+      , updateRecordData, "updater@bar.com");
 
     expect(updatedRecordResult.firstName).toBe(updateRecordData.firstName);
     expect(updatedRecordResult.lastName).toBe(updateRecordData.lastName);
@@ -73,7 +73,7 @@ describe("UserProfileService can save/update/get user profiles", () => {
     // Try and change email address, which is ignored
     const notAllowedUpdate = {signupEmail: "changed@email.com"};
     const notAllowedResult = await userProfileService.updateUser(newRecordResult.signupEmail
-      , notAllowedUpdate);
+      , notAllowedUpdate, "updater@bar.com");
 
     expect(notAllowedResult.signupEmail).toBe(newRecordResult.signupEmail);
 
