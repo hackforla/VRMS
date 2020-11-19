@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import LoginView from './loginView';
 import { connect } from 'react-redux';
 import { Email } from '../../utils/validation/validation';
-import getUser from '../../services/user.service';
-import { loginSuccess } from '../../store/actions/authActions';
+import { checkAuth, getUser } from '../../services/user.service';
 import { setUser, failUser } from '../../store/actions/userActions';
 import { useHistory } from 'react-router-dom';
 
 const LoginContainer = (props) => {
   const history = useHistory();
+
   // Local UI State
   const [isDisabled, setIsDisabled] = useState(true);
   const [userEmail, setUserEmail] = useState('');
@@ -30,11 +30,10 @@ const LoginContainer = (props) => {
       setIsEmailValid(true);
       setErrorMsgInvalidEmail(false);
       const userData = await getUser(userEmail);
-      if (userData) {
-        props.dispatch(loginSuccess());
+      const isAuth = await checkAuth(userEmail);
+      if (isAuth) {
         props.dispatch(setUser(userData));
-        // while functionality isn't implemented redirect to dummy page
-        history.push('/page');
+        history.push('/login/auth');
       } else {
         setErrorMsgFailedEmail(true);
         props.dispatch(failUser());
