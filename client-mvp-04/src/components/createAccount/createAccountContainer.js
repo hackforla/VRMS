@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import CreateAccountView from './createAccountView';
 import { Email } from '../../utils/validation/validation';
-import getUser from '../../services/user.service';
+import { checkUser } from '../../services/user.service';
 
 const CreateAccountContainer = (props) => {
   // Local UI State
@@ -24,7 +24,7 @@ const CreateAccountContainer = (props) => {
     if (Email.isValid(userEmail)) {
       setIsEmailValid(true);
       setErrorMsgInvalidEmail(false);
-      const userData = await getUser(userEmail);
+      const userData = await checkUser(userEmail);
       if (!userData) {
         // user is not registered in app, redirect to dummy page
         props.history.push('/page');

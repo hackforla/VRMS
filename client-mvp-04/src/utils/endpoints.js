@@ -5,4 +5,4 @@ export const HEADERS = {
 
 export const CHECK_USER = '/api/checkuser';
 export const SIGN_IN = '/api/auth/signin';
-export const AUTH_VERIFY_TOKEN = '/api/auth/verify-signin';
+export const AUTH_VERIFY_SIGN_IN = '/api/auth/verify-signin';

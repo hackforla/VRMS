@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import LoginView from './loginView';
 import { connect } from 'react-redux';
 import { Email } from '../../utils/validation/validation';
-import { checkAuth, getUser } from '../../services/user.service';
+import { checkAuth, checkUser } from '../../services/user.service';
 import { setUser, failUser } from '../../store/actions/userActions';
 import { useHistory } from 'react-router-dom';
 
@@ -29,7 +29,7 @@ const LoginContainer = (props) => {
     if (Email.isValid(userEmail)) {
       setIsEmailValid(true);
       setErrorMsgInvalidEmail(false);
-      const userData = await getUser(userEmail);
+      const userData = await checkUser(userEmail);
       const isAuth = await checkAuth(userEmail);
       if (isAuth) {
         props.dispatch(setUser(userData));
