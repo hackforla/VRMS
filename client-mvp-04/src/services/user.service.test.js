@@ -1,4 +1,5 @@
-import getUser from './user.service';
+import { checkUser } from './user.service';
+import { CHECK_USER } from '../utils/endpoints';
 
 const mockUserData = {
   name: { firstName: 'Test', lastName: 'Person' },
@@ -23,10 +24,10 @@ beforeEach(() => {
 describe('UserService', () => {
   test('Should successfully fetch user data from API', async () => {
     fetch.mockResponseOnce(JSON.stringify(mockUserData));
-    const userData = await getUser('test@gmail.com');
+    const userData = await checkUser('test@gmail.com');
     expect(userData).toMatchObject(mockUserData);
     expect(fetch).toHaveBeenCalledTimes(1);
-    expect(fetch).toHaveBeenCalledWith('/api/checkuser', {
+    expect(fetch).toHaveBeenCalledWith(CHECK_USER, {
       body: '{"email":"test@gmail.com"}',
       headers: expect.anything(), // real value is not used because of environment variable presence
       method: 'POST',
@@ -35,10 +36,10 @@ describe('UserService', () => {
 
   test('Should catch error and return null', async () => {
     fetch.mockReject(() => Promise.reject('User is not registered in the app'));
-    const userData = await getUser('wrong.email@gmail.com');
+    const userData = await checkUser('wrong.email@gmail.com');
     expect(userData).toEqual(null);
     expect(fetch).toHaveBeenCalledTimes(1);
-    expect(fetch).toHaveBeenCalledWith('/api/checkuser', {
+    expect(fetch).toHaveBeenCalledWith(CHECK_USER, {
       body: '{"email":"wrong.email@gmail.com"}',
       headers: expect.anything(), // real value is not used because of environment variable presence
       method: 'POST',
