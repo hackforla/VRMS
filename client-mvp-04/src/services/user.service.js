@@ -2,7 +2,7 @@ import {
   HEADERS,
   CHECK_USER,
   SIGN_IN,
-  AUTH_VERIFY_TOKEN,
+  AUTH_VERIFY_SIGN_IN,
 } from '../utils/endpoints';
 
 export async function checkAuth(email) {
@@ -22,7 +22,7 @@ export async function checkAuth(email) {
 
 export async function authUserWithToken(token) {
   try {
-    const response = await fetch(AUTH_VERIFY_TOKEN, {
+    const response = await fetch(AUTH_VERIFY_SIGN_IN, {
       method: 'POST',
       headers: { ...HEADERS, 'x-access-token': token },
     });
@@ -34,7 +34,7 @@ export async function authUserWithToken(token) {
   }
 }
 
-export async function getUser(email) {
+export async function checkUser(email) {
   try {
     const response = await fetch(CHECK_USER, {
       method: 'POST',
