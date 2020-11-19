@@ -6,7 +6,7 @@ import Title from '../common/title/title';
 
 const Home = () => {
   return (
-    <section data-testid="home" className="home-container">
+    <section data-testid="home" className="flex-container home">
       <Title />
 
       <RedirectLink
