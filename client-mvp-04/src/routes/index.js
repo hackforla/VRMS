@@ -5,6 +5,7 @@ import Login from '../components/login/loginContainer';
 import Auth from '../components/auth/auth';
 import HandleAuth from '../components/auth/handleAuth';
 import Dashboard from '../components/dashboard/dashboard';
+import CreateAccountContainer from '../components/createAccount/createAccountContainer';
 
 import DevUiKit from '../utils/uiKit/uiKit';
 
@@ -44,6 +45,11 @@ export const Routes = [
     path: '/dev-ui-kit',
     key: 'dev-ui-kit',
     component: DevUiKit,
+  },
+  {
+    path: '/create-account',
+    key: 'create-account',
+    component: CreateAccountContainer,
   },
   {
     key: 'error',

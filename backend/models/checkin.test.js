@@ -15,9 +15,9 @@ describe("Checkin Model saves the correct values", () => {
     await CheckIn.create(submittedCheckinData);
     const savedCheckinDataArray = await CheckIn.find();
     const savedCheckinData = savedCheckinDataArray[0];
-    expect(savedCheckinData.userId === submittedCheckinData.userId);
-    expect(savedCheckinData.eventId === submittedCheckinData.eventId);
-    expect(savedCheckinData.createdDate === submittedCheckinData.createdDate);
+    expect(savedCheckinData.userId).toBe(submittedCheckinData.userId);
+    expect(savedCheckinData.eventId).toBe(submittedCheckinData.eventId);
+    expect(savedCheckinData.createdDate.getTime()).toBe(submittedCheckinData.createdDate);
     done();
   });
 });

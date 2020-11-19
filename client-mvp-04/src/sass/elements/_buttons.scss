@@ -19,7 +19,9 @@ button {
     background-color: $concrete-color;
   }
   &:disabled {
-    background-color: $silver-color;
+    border-color: $silver-color !important;
+    background-color: $button-primary-bg-color !important;
+    color: $gray-color !important;
     cursor: default;
   }
 }
