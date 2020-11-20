@@ -1,20 +1,23 @@
 const express = require("express");
+
 const router = express.Router();
 const { App } = require("@slack/bolt");
 const cron = require("node-cron");
 const { Event } = require('../models/event.model');
 const { Project } = require('../models/project.model');
 
-//https://api.slack.com/web
+//  https://api.slack.com/web
+
+let app = null;
 
 if (process.env.NODE_ENV !== 'test') {
-    const app = new App({
+    app = new App({
       token: process.env.SLACK_BOT_TOKEN,
       signingSecret: process.env.SLACK_SIGNING_SECRET,
     });
 }
 
-//Checks DB every monday (1) for slack messages to schedule this week
+// Checks DB every monday (1) for slack messages to schedule this week
 // cron.schedule("* * * * 1", () => {});
 
 // TODO: Refactor this server out of the router. This server instance is breaking the tests.
@@ -25,14 +28,14 @@ if (process.env.NODE_ENV !== "test") {
   })();
 }
 
-//Finds Id number of channel
+// Finds Id number of channel
 router.get("/findId", (req, res) => {
   publishMessage();
   findEvent();
   // findProject();
 });
 
-//uses Id number to send message to said channel
+// uses Id number to send message to said channel
 router.post("/postMeeting/:id", (req, res) => {
   publishMessage1();
 });
@@ -43,11 +46,11 @@ async function findConversation(name) {
       token: process.env.SLACK_BOT_TOKEN,
     });
 
-    for (var channel of result.channels) {
+    for (let channel of result.channels) {
       if (channel.name === name) {
         conversationId = channel.id;
 
-        console.log("Found conversation ID: " + conversationId);
+        console.log(`Found conversation ID: ${  conversationId}`);
         break;
       }
     }
