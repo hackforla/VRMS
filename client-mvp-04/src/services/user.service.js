@@ -26,7 +26,7 @@ export async function authUserWithToken(token) {
       method: 'POST',
       headers: { ...HEADERS, 'x-access-token': token },
     });
-    return response.status === 200;
+    return await response.json();
   } catch (error) {
     console.log('User is not authorized with token');
     console.log(error);
