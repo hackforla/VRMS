@@ -6,3 +6,8 @@
   -ms-transform: $property;
   transform: $property;
 }
+
+@mixin fadeIn($property) {
+  -webkit-animation: fadeIn $property;
+  animation: fadeIn $property;
+}

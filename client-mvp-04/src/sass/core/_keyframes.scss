@@ -5,3 +5,16 @@
 .box {
   @include transform(rotate(60deg));
 }
+
+@-webkit-keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.error-message {
+  @include fadeIn(.3s);
+}
