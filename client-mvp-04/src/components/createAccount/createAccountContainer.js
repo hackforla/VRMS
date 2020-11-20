@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import CreateAccountView from './createAccountView';
 import { Email } from '../../utils/validation/validation';
 import { checkUser } from '../../services/user.service';
+import { useHistory } from 'react-router-dom';
 
-const CreateAccountContainer = (props) => {
+const CreateAccountContainer = () => {
+  const history = useHistory();
+
   // Local UI State
   const [isDisabled, setIsDisabled] = useState(true);
   const [userEmail, setUserEmail] = useState('');
@@ -27,7 +30,7 @@ const CreateAccountContainer = (props) => {
       const userData = await checkUser(userEmail);
       if (!userData) {
         // user is not registered in app, redirect to dummy page
-        props.history.push('/page');
+        history.push('/page');
       } else {
         setErrorMsgRegisteredEmail(true);
       }
