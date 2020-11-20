@@ -28,6 +28,6 @@
 }
 
 // Apply keyframes or animations to elements
-.error-message {
-  @include fade-in(.3s);
+.error-message, .resend-link-msg {
+  @include fade-in(.4s);
 }
