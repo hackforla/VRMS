@@ -69,7 +69,7 @@ UserController.update = async function (req, res) {
   }
 
   try {
-    const user = await User.findOneAndUpdate(UserId, req.body, {new: true});
+    const user = await User.findOneAndUpdate(UserId, req.body, { new: true });
     return res.status(200).send(user);
   } catch (err) {
     return res.sendStatus(400);
@@ -146,7 +146,7 @@ UserController.signin = function (req, res) {
     });
 };
 
-UserController.verifySignIn = function (req, res) {
+UserController.verifySignIn = async function (req, res) {
   // eslint-disable-next-line dot-notation
   let token = req.headers['x-access-token'] || req.headers['authorization'];
   if (token.startsWith('Bearer ')) {
@@ -159,9 +159,10 @@ UserController.verifySignIn = function (req, res) {
   }
 
   try {
-    jwt.verify(token, CONFIG_AUTH.SECRET);
+    const payload = jwt.verify(token, CONFIG_AUTH.SECRET);
+    const user = await User.findById(payload.id);
     res.cookie('token', token, { httpOnly: true });
-    return res.sendStatus(200);
+    return res.send(user);
   } catch (err) {
     return res.status(403);
   }
