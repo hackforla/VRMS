@@ -30,24 +30,24 @@
   src: url("../../assets/fonts/open-sans/opensans-italic.woff2") format("woff2"),
   url("../../assets/fonts/open-sans/opensans-italic.woff") format("woff"),
   url("../../assets/fonts/open-sans/opensans-italic.ttf") format("ttf");
-  font-weight: normal;
+  font-weight: 400;
   font-style: italic;
 }
 
 @font-face {
   font-family: 'Open Sans';
-  src: url("../../assets/fonts/open-sans/opensans-italic-semibold.woff2") format("woff2"),
-  url("../../assets/fonts/open-sans/opensans-italic-semibold.woff") format("woff"),
-  url("../../assets/fonts/open-sans/opensans-italic-semibold.ttf") format("ttf");
+  src: url("../../assets/fonts/open-sans/opensans-semibold-italic.woff2") format("woff2"),
+  url("../../assets/fonts/open-sans/opensans-semibold-italic.woff") format("woff"),
+  url("../../assets/fonts/open-sans/opensans-semibold-italic.ttf") format("ttf");
   font-weight: 600;
   font-style: italic;
 }
 
 @font-face {
   font-family: 'Open Sans';
-  src: url("../../assets/fonts/open-sans/opensans-italic-bold.woff2") format("woff2"),
-  url("../../assets/fonts/open-sans/opensans-italic-bold.woff") format("woff"),
-  url("../../assets/fonts/open-sans/opensans-italic-bold.ttf") format("ttf");
-  font-weight: bold;
+  src: url("../../assets/fonts/open-sans/opensans-bold-italic.woff2") format("woff2"),
+  url("../../assets/fonts/open-sans/opensans-bold-italic.woff") format("woff"),
+  url("../../assets/fonts/open-sans/opensans-bold-italic.ttf") format("ttf");
+  font-weight: 700;
   font-style: italic;
 }
