@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { authUserWithToken } from '../../services/user.service';
 import { connect } from 'react-redux';
 import { loginFailed, loginSuccess } from '../../store/actions/authActions';
-import { getUser } from '../../services/user.service';
 import { setUser } from '../../store/actions/userActions';
 import RedirectLink from '../common/link/link';
 import { useHistory } from 'react-router-dom';
@@ -15,14 +14,11 @@ const HandleAuth = (props) => {
     const params = new URLSearchParams(search);
     const api_token = params.get('token');
 
-    const isTokenValid = await authUserWithToken(api_token);
-    if (isTokenValid) {
+    const user = await authUserWithToken(api_token);
+    if (user) {
       props.dispatch(loginSuccess());
+      props.dispatch(setUser(user));
       history.push('/dashboard');
-      // TODO need to save get user from API and save to store
-      // TODO Blocked because currently don't have user or ser email when verify user with token
-      //const userData = await getUser(email);
-      //if (userData) props.dispatch(setUser(userData));
     } else {
       props.dispatch(loginFailed());
     }
