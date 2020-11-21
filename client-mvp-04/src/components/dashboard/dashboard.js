@@ -4,18 +4,14 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
 const Dashboard = (props) => {
-  return (
-    <>
-      {props.loggedIn && props.user ? (
-        <div className="flex-container dashboard">
-          <h2>Hi {props.user.name.firstName},</h2>
-          <br />
-          <h2>Welcome to VRMS Dashboard!</h2>
-        </div>
-      ) : (
-        <Redirect to="/" />
-      )}
-    </>
+  return props.loggedIn && props.user ? (
+    <div className="flex-container dashboard">
+      <h2>Hi {props.user.name.firstName},</h2>
+      <br />
+      <h2>Welcome to VRMS Dashboard!</h2>
+    </div>
+  ) : (
+    <Redirect to="/" />
   );
 };
 

@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { authUserWithToken } from '../../services/user.service';
 import { connect } from 'react-redux';
-import { loginFailed, loginSuccess } from '../../store/actions/authActions';
+import { loginSuccess } from '../../store/actions/authActions';
 import { setUser } from '../../store/actions/userActions';
 import RedirectLink from '../common/link/link';
 import { useHistory } from 'react-router-dom';
 
 const HandleAuth = (props) => {
   const history = useHistory();
-  const [isLoading, setIsLoading] = useState(false);
 
   async function isValidToken() {
     const search = props.location.search;
@@ -19,10 +18,6 @@ const HandleAuth = (props) => {
       props.dispatch(loginSuccess());
       props.dispatch(setUser(user));
       history.push('/dashboard');
-      setIsLoading(true);
-    } else {
-      props.dispatch(loginFailed());
-      setIsLoading(true);
     }
   }
 
@@ -30,20 +25,18 @@ const HandleAuth = (props) => {
     isValidToken().then();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return (
-    isLoading &&
-    !props.loggedIn &&
-    !props.user(
-      <div className="flex-container">
-        <h2>Sorry, this link is not valid</h2>
-        <RedirectLink
-          linkKey={'auth-link'}
-          path={'/'}
-          className={'accent-link'}
-          content={'Go to Homepage'}
-        />
-      </div>
-    )
+  return !props.loggedIn && !props.user ? (
+    <div className="flex-container">
+      <h2>Sorry, this link is not valid</h2>
+      <RedirectLink
+        linkKey={'auth-link'}
+        path={'/'}
+        className={'accent-link'}
+        content={'Go to Homepage'}
+      />
+    </div>
+  ) : (
+    <div>...Loading</div>
   );
 };
 
