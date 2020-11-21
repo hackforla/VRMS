@@ -17,32 +17,27 @@ const Auth = (props) => {
     }, 5000);
   };
 
-  return (
-    <>
-      {props.user ? (
-        <div className="flex-container auth">
-          <div className="auth-content">
-            Please verify your email via magic link in your inbox
-          </div>
+  return props.user ? (
+    <div className="flex-container auth">
+      <div className="auth-content">
+        Please verify your email via magic link in your inbox
+      </div>
 
-          <Button
-            type={'text'}
-            content={`Resend Link`}
-            className={'btn-square auth-button'}
-            onClick={() => handleButton()}
-          />
+      <Button
+        type={'text'}
+        content={`Resend Link`}
+        className={'btn-square auth-button'}
+        onClick={() => handleButton()}
+      />
 
-          {isMessageShow ? (
-            <div className="resend-link-msg">
-              A new link has been sent to your email
-            </div>
-          ) : null}
+      {isMessageShow ? (
+        <div className="resend-link-msg">
+          A new link has been sent to your email
         </div>
-      ) : (
-        <Redirect to="/login" />
-      )}
-      ;
-    </>
+      ) : null}
+    </div>
+  ) : (
+    <Redirect to="/login" />
   );
 };
 
