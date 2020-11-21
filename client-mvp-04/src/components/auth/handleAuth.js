@@ -12,9 +12,8 @@ const HandleAuth = (props) => {
   async function isValidToken() {
     const search = props.location.search;
     const params = new URLSearchParams(search);
-    const api_token = params.get('token');
-
-    const user = await authUserWithToken(api_token);
+    const token = params.get('token');
+    const user = await authUserWithToken(token);
     if (user) {
       props.dispatch(loginSuccess());
       props.dispatch(setUser(user));
@@ -26,11 +25,11 @@ const HandleAuth = (props) => {
 
   useEffect(() => {
     isValidToken().then();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
-      {!props.loggedIn ? (
+      {!props.loggedIn && !props.user ? (
         <div className="flex-container">
           <h2>Sorry, this link is not valid</h2>
           <RedirectLink
