@@ -107,12 +107,19 @@ function sendEmail(email, subject, message = '', html = '') {
  * - Requires a token is provided.
  * - Relies on the React frontend redirect mechanism.
  * */
-async function sendLoginLink(email, authToken, cookie, origin) {
+async function sendLoginLink(email, userName, authToken, cookie, origin) {
   const encodedToken = encodeURIComponent(authToken);
   const emailLink = `${origin}/handleauth?token=${encodedToken}&signIn=true`;
   const encodedUri = encodeURI(emailLink);
-  const subject = 'Login to VRMS!';
-  const htmlMessage = `<a href=${encodedUri}>Login to VRMS</a>`;
+  const subject = 'Your Hack for LA VRMS Login';
+  const htmlMessage = `
+    <div>Hi ${userName}, here's your magic link to access VRMS. It expires after 15 minutes.</div>  
+    <br>
+    <div>
+      <a href=${encodedUri} target="_blank">Click here</a> to login or paste this URL into your browser: 
+      <a href=${encodedUri} target="_blank">${encodedUri.substring(0, 32)}...</a>
+    </div>
+  `;
   sendEmail(email, subject, '', htmlMessage);
 }
 

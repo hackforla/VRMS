@@ -123,7 +123,7 @@ UserController.createUser = function (req, res) {
 
   const jsonToken = generateAccessToken(user);
 
-  EmailController.sendLoginLink(req.body.email, jsonToken, req.cookie, origin);
+  EmailController.sendLoginLink(req.body.email, user.name.firstName, jsonToken, req.cookie, origin);
 };
 
 UserController.signin = function (req, res) {
@@ -136,7 +136,13 @@ UserController.signin = function (req, res) {
         return res.sendStatus(401);
       }
       const jsonToken = generateAccessToken(user);
-      EmailController.sendLoginLink(req.body.email, jsonToken, req.cookie, origin);
+      EmailController.sendLoginLink(
+        req.body.email,
+        user.name.firstName,
+        jsonToken,
+        req.cookie,
+        origin,
+      );
       return res.sendStatus(200);
     })
     .catch((err) => {
