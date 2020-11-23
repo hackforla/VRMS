@@ -1,22 +1,20 @@
 @import "../../sass/variables";
 
-.home-container {
+.home {
   padding: 40px 60px;
 
   .home-button {
     padding: 6px 40px;
     margin-top: 83px;
   }
-}
 
-@media (max-height: 896px) {
-  .home-container {
-    height: calc(100vh - 160px);
+  .home-text {
+    text-align: center;
   }
 }
 
 @media (max-width: 400px) {
-  .home-container {
+  .home {
     padding: 25px 52px;
 
     .home-button {
@@ -25,14 +23,8 @@
   }
 }
 
-@media (max-width: 374px) {
-  .home-container {
-    height: calc(100vh - 180px);
-  }
-}
-
 @media (max-width: 350px) {
-  .home-container {
+  .home {
     padding: 15px 25px;
 
     .home-button {

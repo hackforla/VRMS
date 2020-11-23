@@ -1,8 +1,11 @@
 import Home from '../components/home/home';
 import Dummy from '../components/dummy/dummy';
 import Error from '../components/error/error';
-import CreateAccountContainer from '../components/createAccount/createAccountContainer'; 
-import LoginContainer from '../components/login/loginContainer';
+import Login from '../components/login/loginContainer';
+import Auth from '../components/auth/auth';
+import HandleAuth from '../components/auth/handleAuth';
+import Dashboard from '../components/dashboard/dashboard';
+import CreateAccountContainer from '../components/createAccount/createAccountContainer';
 
 import DevUiKit from '../utils/uiKit/uiKit';
 
@@ -15,7 +18,22 @@ export const Routes = [
   {
     path: '/login',
     key: 'login',
-    component: LoginContainer,
+    component: Login,
+  },
+  {
+    path: '/login/auth',
+    key: 'auth',
+    component: Auth,
+  },
+  {
+    path: '/handleauth',
+    key: 'handleauth',
+    component: HandleAuth,
+  },
+  {
+    path: '/dashboard',
+    key: 'dashboard',
+    component: Dashboard,
   },
   {
     path: '/page',

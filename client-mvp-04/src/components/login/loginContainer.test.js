@@ -6,7 +6,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import authReducer from '../../store/reducers/authReducer';
 import userReducer from '../../store/reducers/userReducer';
-import getUser from '../../services/user.service';
+import service from '../../services/user.service';
 
 // Mock Redux Store
 const mockStore = configureStore([]);
@@ -32,11 +32,14 @@ const mockUserData = {
   currentProject: 'VRMS',
   createdDate: '2020-11-11T03:48:46.153Z',
 };
-jest.mock('../../services/user.service', () =>
-  jest.fn().mockImplementationOnce(() => {
-    return mockUserData;
-  })
-);
+
+jest.mock('../../services/user.service', () => jest.fn());
+service.checkUser = jest.fn(() => {
+  return mockUserData;
+});
+service.checkAuth = jest.fn(() => {
+  return true;
+});
 
 beforeEach(() => {
   render(
@@ -88,6 +91,9 @@ describe('Login Container', () => {
     expect(loginInput).toBeInTheDocument();
     fireEvent.change(loginInput, { target: { value: 'test@gmail.com' } });
     fireEvent.submit(screen.getByTestId('login-form'));
-    expect(() => getUser('test@gmail.com').toMatchObject(mockUserData));
+    expect(() =>
+      service.checkUser('test@gmail.com').toMatchObject(mockUserData)
+    );
+    expect(() => service.checkAuth('test@gmail.com').toBeTruthy());
   });
 });

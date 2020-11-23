@@ -1,4 +1,4 @@
-import { SET_USER, FAIL_USER } from '../actions/types';
+import { SET_USER, FAIL_USER, GET_USER } from '../actions/types';
 
 const userInitialState = {
   user: null,
@@ -16,6 +16,8 @@ export default (state = userInitialState, { type, payload }) => {
         ...state,
         user: null,
       };
+    case GET_USER:
+      return state;
     default:
       return state;
   }

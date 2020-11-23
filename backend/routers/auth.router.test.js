@@ -10,7 +10,7 @@ const { User } = require('../models');
 
 
 // Create mock for EmailController
-const sendMailMock = jest.fn() 
+const sendMailMock = jest.fn()
 jest.mock('../controllers/email.controller');
 const mockEmailController = require('../controllers/email.controller');
 mockEmailController.sendLoginLink.mockReturnValue({ sendMail: sendMailMock });
@@ -32,7 +32,7 @@ describe('CREATE User', () => {
       name: { firstName: 'test_first', lastName: 'test_last' },
       email: 'test@test.com',
     };
-  
+
     // Add a user using the API.
     const res = await request.post('/api/users').send(submittedData).set(headers);
 
@@ -140,7 +140,8 @@ describe('SIGNIN User', () => {
     const res = await request
       .post('/api/auth/signin')
       .send(goodUserData)
-      .set(headers);
+      .set(headers)
+      .set('Origin', 'localhost');
 
     expect(res.status).toBe(200);
   });
@@ -165,7 +166,8 @@ describe('SIGNIN Validation', () => {
     const res = await request
       .post('/api/auth/signin')
       .send(notValidPermission)
-      .set(headers);
+      .set(headers)
+      .set('Origin', 'localhost');
 
     expect(res.status).toBe(401);
   });

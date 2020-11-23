@@ -1,7 +1,8 @@
 @import "../../sass/variables";
 
-.error-container {
+.error {
   padding: 120px 30px 50px;
+  align-items: center;
 
   .error-content {
     margin: 10px 0 15px;
@@ -21,8 +22,9 @@
   }
 }
 
-@media (max-width: 400px) {
-  .error-container {
-    padding: 0 10px;
+@media (max-width: 450px) {
+  .error {
+    padding: 0;
+    justify-content: center;
   }
 }

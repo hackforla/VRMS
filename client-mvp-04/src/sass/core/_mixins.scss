@@ -6,3 +6,13 @@
   -ms-transform: $property;
   transform: $property;
 }
+
+@mixin fade-in($property) {
+  -webkit-animation: fade-in $property;
+  animation: fade-in $property;
+}
+
+@mixin fade-out($property) {
+  -webkit-animation: fade-out $property;
+  animation: fade-out $property;
+}
