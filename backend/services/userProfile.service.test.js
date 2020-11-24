@@ -38,9 +38,9 @@ describe("UserProfileService can save/update/get user profiles", () => {
     const newRecordEmailNull= {signupEmail: null};
     const newRecordNoEmail = {signupEmail: "" };
 
-    await expect(userProfileService.createUser(newRecordNoEmailDefined)).rejects.toThrow()
-    await expect(userProfileService.createUser(newRecordEmailNull)).rejects.toThrow()
-    await expect(userProfileService.createUser(newRecordNoEmail)).rejects.toThrow()
+    await expect(userProfileService.createUser(newRecordNoEmailDefined)).rejects.toThrow();
+    await expect(userProfileService.createUser(newRecordEmailNull)).rejects.toThrow();
+    await expect(userProfileService.createUser(newRecordNoEmail)).rejects.toThrow();
 
     done();
   });
@@ -54,28 +54,33 @@ describe("UserProfileService can save/update/get user profiles", () => {
     expect(newRecordResult.lastName).toBeUndefined();
     expect(newRecordResult.meetLocation).toBeUndefined();
 
-    const updateRecordData = {firstName: "Foo", lastName: "Bar", meetLocation: "Los Angeles"};
-    const updatedRecordResult = await userProfileService.updateUser(newRecordResult.signupEmail
-      , updateRecordData, "updater@bar.com");
+    const updateRecordData = {signupEmail: "foo@bar.com", firstName: "Foo", lastName: "Bar", meetLocation: "Los Angeles"};
+    const updatedRecordResult = await userProfileService.updateUser(updateRecordData, "updater@bar.com");
 
     expect(updatedRecordResult.firstName).toBe(updateRecordData.firstName);
     expect(updatedRecordResult.lastName).toBe(updateRecordData.lastName);
     expect(updatedRecordResult.meetLocation).toBe(updateRecordData.meetLocation);
 
 
-    const updateRecordNoMeetLocationData = {meetLocation: null};
+    const updateRecordNoMeetLocationData = {signupEmail: "foo@bar.com", meetLocation: null};
     const updatedRecordNoMeetLocationResult = await userProfileService
-      .updateUser(newRecordResult.signupEmail, updateRecordNoMeetLocationData);
+      .updateUser(updateRecordNoMeetLocationData, "updater@bar.com");
 
 
     expect(updatedRecordNoMeetLocationResult.meetLocation).toBeNull();
 
-    // Try and change email address, which is ignored
+    // Try and change email address, which is throws error because record not found
     const notAllowedUpdate = {signupEmail: "changed@email.com"};
-    const notAllowedResult = await userProfileService.updateUser(newRecordResult.signupEmail
-      , notAllowedUpdate, "updater@bar.com");
 
-    expect(notAllowedResult.signupEmail).toBe(newRecordResult.signupEmail);
+    await expect(userProfileService.updateUser(notAllowedUpdate, "updater@bar.com"))
+      .rejects.toThrow();
+
+    // Try and update a record that doesn't exist
+    const doesntExistRecordData = {signupEmail: "doesnotexist@bar.com", firstName: "DOESNT",
+     lastName: "EXIST", meetLocation: "Anaheim"};
+
+    await expect(userProfileService.updateUser(doesntExistRecordData, "updater@bar.com"))
+    .rejects.toThrow();
 
     done();
   });
