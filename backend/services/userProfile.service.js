@@ -43,7 +43,8 @@ UserProfileService.updateUser = async function (userProfileData, authorEmail) {
     let updatedUserProfile = null;
 
     if(Object.prototype.hasOwnProperty.call(userProfileData, "signupEmail") &&
-        userProfileData.signupEmail) {
+        userProfileData.signupEmail) 
+    {
         userProfileData.signupEmail = userProfileData.signupEmail.toLowerCase();
     }
 
@@ -51,7 +52,8 @@ UserProfileService.updateUser = async function (userProfileData, authorEmail) {
     
         try
         {            
-            updatedUserProfile = await UserProfile.findOneAndUpdate({signupEmail: userProfileData.signupEmail}, 
+            updatedUserProfile = await UserProfile.findOneAndUpdate(
+                {signupEmail: userProfileData.signupEmail}, 
                 userProfileData, {new: true, runValidators: true});
     
             if(updatedUserProfile != null) 
