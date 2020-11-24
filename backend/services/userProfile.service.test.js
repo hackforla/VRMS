@@ -1,5 +1,6 @@
 const userProfileService = require('./userProfile.service');
 const modificationLogService = require('./modificationLog.service');
+const DatabaseError = require('../errors/database.error');
 
 const { setupDB } = require("../setup-test");
 
@@ -38,9 +39,10 @@ describe("UserProfileService can save/update/get user profiles", () => {
     const newRecordEmailNull= {signupEmail: null};
     const newRecordNoEmail = {signupEmail: "" };
 
-    await expect(userProfileService.createUser(newRecordNoEmailDefined)).rejects.toThrow();
-    await expect(userProfileService.createUser(newRecordEmailNull)).rejects.toThrow();
-    await expect(userProfileService.createUser(newRecordNoEmail)).rejects.toThrow();
+    await expect(userProfileService.createUser(newRecordNoEmailDefined))
+      .rejects.toThrow(DatabaseError);
+    await expect(userProfileService.createUser(newRecordEmailNull)).rejects.toThrow(DatabaseError);
+    await expect(userProfileService.createUser(newRecordNoEmail)).rejects.toThrow(DatabaseError);
 
     done();
   });
@@ -73,14 +75,14 @@ describe("UserProfileService can save/update/get user profiles", () => {
     const notAllowedUpdate = {signupEmail: "changed@email.com"};
 
     await expect(userProfileService.updateUser(notAllowedUpdate, "updater@bar.com"))
-      .rejects.toThrow();
+      .rejects.toThrow(DatabaseError);
 
     // Try and update a record that doesn't exist
     const doesntExistRecordData = {signupEmail: "doesnotexist@bar.com", firstName: "DOESNT",
      lastName: "EXIST", meetLocation: "Anaheim"};
 
     await expect(userProfileService.updateUser(doesntExistRecordData, "updater@bar.com"))
-    .rejects.toThrow();
+    .rejects.toThrow(DatabaseError);
 
     done();
   });
