@@ -12,7 +12,7 @@ const modificationLogSchema = mongoose.Schema({
     // modified object new state should be saved completely as an object
 });
 
-modificationLogSchema.index({ objectId: 1, objectType: 1 }, { unique: true });
+modificationLogSchema.index({ objectId: 1, objectType: 1 });
 
 modificationLogSchema.methods.serialize = function() {
     return {
