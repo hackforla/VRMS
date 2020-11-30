@@ -46,9 +46,12 @@ const CreateAccountView = ({
       ) : null}
 
       {errorMsgRegisteredEmail ? (
-        <p className={'error-message'}>
+        <p 
+        className={'error-message'}
+        data-testid="registered-user-error-msg"
+        >
           *You already have an account for that email address. Want to
-          <RedirectLink path={'/login'} linkKey={'login'} content={' log in'} />
+          <RedirectLink path={'/login'} linkKey={'login'} content={'log in'} />
           ?
         </p>
       ) : null}
