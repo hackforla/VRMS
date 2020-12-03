@@ -39,7 +39,7 @@ service.checkUser = jest.fn(() => {
 beforeEach(() => {
     render(
         <Provider store={store}>
-            <MemoryRouter initialEntries={['/login']}>
+            <MemoryRouter initialEntries={['/create-account']}>
                 <CreateAccountContainer />
             </MemoryRouter>
         </Provider>
@@ -94,7 +94,7 @@ describe('CreateAccount Container', () => {
         const createAccountInput = screen.getByTestId('create-account-input');
         expect(createAccountInput).toBeInTheDocument();
         fireEvent.change(createAccountInput, { target: { value: 'test@gmail.com' } });
-        fireEvent.submit(screen.getByTestId('create-account-form'));
+        fireEvent.submit(screen.getByTestId('create-account-form')); 
         expect(
             screen.getByTestId('registered-user-error-msg')
         ).toBeInTheDocument();
