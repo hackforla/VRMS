@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import CreateAccountContainer from './createAccountContainer';
 import { MemoryRouter } from 'react-router-dom';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, wait } from '@testing-library/react';
 import userReducer from '../../store/reducers/userReducer';
 import service from '../../services/user.service';
 
@@ -80,23 +80,23 @@ describe('CreateAccount Container', () => {
         ).toBeInTheDocument();
     });
 
-    test('Should get user from UserService if user registered in the app', () => {
+    test('Should get user from UserService if user registered in the app', async () => {
         const createAccountInput = screen.getByTestId('create-account-input');
         expect(createAccountInput).toBeInTheDocument();
         fireEvent.change(createAccountInput, { target: { value: 'test@gmail.com' } });
         fireEvent.submit(screen.getByTestId('create-account-form'));
-        expect(() =>
-            service.checkUser('test@gmail.com').toMatchObject(mockUserData)
-        );
+        await wait(async () => {
+            expect(() =>
+                service.checkUser('test@gmail.com').toMatchObject(mockUserData)
+            );
+        });
     });
 
-    test('Should display error message if user registered in the app', () => {
+    test('Should display error message if user registered in the app', async () => {
         const createAccountInput = screen.getByTestId('create-account-input');
         expect(createAccountInput).toBeInTheDocument();
         fireEvent.change(createAccountInput, { target: { value: 'test@gmail.com' } });
-        fireEvent.submit(screen.getByTestId('create-account-form')); 
-        expect(
-            screen.getByTestId('registered-user-error-msg')
-        ).toBeInTheDocument();
+        fireEvent.submit(screen.getByTestId('create-account-form'));
+        await screen.findByTestId('registered-user-error-msg');
     });
 });
