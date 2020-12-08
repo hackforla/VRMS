@@ -73,6 +73,28 @@ describe('Validator tests', () => {
     done();
   });
 
+  test('String is no longer than specified length', async (done) => {
+
+    const validString = "Test";
+
+    expect(Validator.isNoLonger(validString, 4)).toBeUndefined();
+
+    const nullString = null;
+
+    expect(Validator.isNoLonger(nullString, 4)).toBeUndefined();
+
+    const invalidString1 = "Test1";
+
+    expect(() => {
+      Validator.isNoLonger(invalidString1, 4);
+    }).toThrow(ValidationError);
+    
+
+    done();
+  });
+
+
+
   test('String is valid email address', async (done) => {
 
     

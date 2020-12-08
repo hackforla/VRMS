@@ -32,7 +32,7 @@ class Validator {
     {
         if(str !== null && str.length > length) 
         {
-            throw new ValidationError(`string is longer than ${length}`);
+            throw new ValidationError(`string is longer than ${length} characters`);
         }
     }
 
