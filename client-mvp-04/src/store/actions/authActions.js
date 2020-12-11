@@ -12,7 +12,7 @@ export const authSuccess = (authToken, user) => ({
 });
 export const authFail = (error) => ({ type: AUTH_FAIL, payload: error });
 
-export const getUserWithToken = (token) => {
+export const authUserWithToken = (token) => {
   return async (dispatch) => {
     dispatch(authStart);
     try {
