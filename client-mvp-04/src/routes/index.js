@@ -41,12 +41,6 @@ export const Routes = [
     component: Dummy,
   },
   {
-    // DEV-UI-KIT for Development Only
-    path: '/dev-ui-kit',
-    key: 'dev-ui-kit',
-    component: DevUiKit,
-  },
-  {
     path: '/create-account',
     key: 'create-account',
     component: CreateAccountContainer,
@@ -54,5 +48,11 @@ export const Routes = [
   {
     key: 'error',
     component: Error,
+  },
+  {
+    // DEV-UI-KIT for Development Only
+    path: '/dev-ui-kit',
+    key: 'dev-ui-kit',
+    component: DevUiKit,
   },
 ];
