@@ -1,5 +1,5 @@
 const express = require('express');
-const { AuthUtil, verifyUser } = require('../middleware');
+const { AuthUtil, verifyUser, verifyToken } = require('../middleware');
 const { UserController } = require('../controllers/');
 const { authApiValidator } = require('../validators');
 
@@ -24,7 +24,7 @@ router.post(
   UserController.signin,
 );
 
-router.post('/verify-signin', UserController.verifySignIn);
+router.post('/verify-signin', [verifyToken.isTokenValid], UserController.verifySignIn);
 
 router.post('/me', [AuthUtil.verifyCookie], UserController.verifyMe);
 
