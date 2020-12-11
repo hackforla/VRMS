@@ -1,5 +1,4 @@
 import { HEADERS, CHECK_USER, SIGN_IN } from '../utils/endpoints';
-import React from 'react';
 
 export async function checkAuth(email) {
   try {
