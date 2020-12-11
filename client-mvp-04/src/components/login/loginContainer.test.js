@@ -5,14 +5,12 @@ import LoginContainer from './loginContainer';
 import { MemoryRouter } from 'react-router-dom';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import authReducer from '../../store/reducers/authReducer';
-import userReducer from '../../store/reducers/userReducer';
 import service from '../../services/user.service';
 
 // Mock Redux Store
 const mockStore = configureStore([]);
 let store = mockStore({
   auth: authReducer,
-  user: userReducer,
 });
 store.dispatch = jest.fn();
 
