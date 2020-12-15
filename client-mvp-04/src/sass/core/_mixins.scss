@@ -1,10 +1,16 @@
 // This file store any mixins (style snippets) that will be used over and over
 
-// Example
 @mixin transform($property) {
   -webkit-transform: $property;
   -ms-transform: $property;
+  -o-transform: $property;
   transform: $property;
+}
+
+@mixin transition($property) {
+  -webkit-transition: $property;
+  -o-transition: $property;
+  transition: $property;
 }
 
 @mixin fade-in($property) {
