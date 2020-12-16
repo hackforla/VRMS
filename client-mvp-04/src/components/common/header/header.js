@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './header.scss';
 import logo from '../../../assets/images/logo.svg';
 import RedirectLink from '../link/link';
 
-const Header = () => {
-  const [isOpenMenu, setOpenMenu] = useState(false);
-
+const Header = ({ toggleMenu, isMenuOpen }) => {
   return (
     <header data-testid="header" className="app-header">
+      {/* Show for authorized user */}
       <div className="menu-button-container">
         <div
-          className={isOpenMenu ? 'active menu-button' : 'menu-button'}
-          onClick={() => setOpenMenu(!isOpenMenu)}
+          className={isMenuOpen ? 'active menu-button' : 'menu-button'}
+          onClick={() => toggleMenu()}
         >
           <span className="line" />
           <span className="line" />
