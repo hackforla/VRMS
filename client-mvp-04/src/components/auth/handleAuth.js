@@ -1,18 +1,21 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-import { authUserWithToken } from '../../store/actions/authActions';
+import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../../components/common/loader/loader';
 import { Redirect } from 'react-router-dom';
 import RedirectLink from '../common/link/link';
+import allActions from '../../store/actions';
 
 const HandleAuth = (props) => {
-  const { isLoaded, loggedIn, user, authUserWithToken } = props;
+  const loggedIn = useSelector((state) => state.auth.loggedIn);
+  const user = useSelector((state) => state.auth.user);
+  const isLoaded = useSelector((state) => state.auth.isLoaded);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const search = props.location.search;
     const params = new URLSearchParams(search);
     const token = params.get('token');
-    authUserWithToken(token);
+    dispatch(allActions.authActions.authUserWithToken(token));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return isLoaded ? (
@@ -34,18 +37,4 @@ const HandleAuth = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    loggedIn: state.auth.loggedIn,
-    user: state.auth.user,
-    isLoaded: state.auth.isLoaded,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    authUserWithToken: (token) => dispatch(authUserWithToken(token)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(HandleAuth);
+export default HandleAuth;

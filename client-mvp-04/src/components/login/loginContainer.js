@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import LoginView from './loginView';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Email } from '../../utils/validation/validation';
 import { checkAuth, checkUser } from '../../services/user.service';
-import { setUser } from '../../store/actions/authActions';
 import { useHistory } from 'react-router-dom';
+import allActions from '../../store/actions';
 
-const LoginContainer = (props) => {
+const LoginContainer = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
 
   // Local UI State
   const [isDisabled, setIsDisabled] = useState(true);
@@ -32,7 +33,7 @@ const LoginContainer = (props) => {
       const userData = await checkUser(userEmail);
       const isAuth = await checkAuth(userEmail);
       if (isAuth) {
-        props.dispatch(setUser(userData));
+        dispatch(allActions.authActions.setUser(userData));
         history.push('/login/auth');
       } else {
         setErrorMsgFailedEmail(true);
@@ -55,10 +56,4 @@ const LoginContainer = (props) => {
   );
 };
 
-const mapStateToProps = function (state) {
-  return {
-    user: state.auth.user,
-  };
-};
-
-export default connect(mapStateToProps)(LoginContainer);
+export default LoginContainer;
