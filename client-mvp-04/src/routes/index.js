@@ -47,7 +47,7 @@ export const Routes = [
     component: CreateAccountContainer,
   },
   {
-    path: '/menu',
+    path: '/dashboard/menu',
     key: 'menu',
     component: Menu,
   },
