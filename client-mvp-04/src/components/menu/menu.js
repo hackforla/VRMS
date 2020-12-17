@@ -1,24 +1,33 @@
 import React from 'react';
 import './menu.scss';
-import dashboardIcon from '../../assets/images/icons/dashboard.svg';
-import profileIcon from '../../assets/images/icons/profile.svg';
-import projectsIcon from '../../assets/images/icons/projects.svg';
-import communityIcon from '../../assets/images/icons/community.svg';
-import teamIcon from '../../assets/images/icons/team.svg';
-import adminToolsIcon from '../../assets/images/icons/adminTools.svg';
-import logoutIcon from '../../assets/images/icons/logout.svg';
+import dashboardIcon from '../../assets/images/icons/dashboard.png';
+import profileIcon from '../../assets/images/icons/profile.png';
+import projectsIcon from '../../assets/images/icons/projects.png';
+import communityIcon from '../../assets/images/icons/community.png';
+import teamIcon from '../../assets/images/icons/team.png';
+import adminToolsIcon from '../../assets/images/icons/adminTools.png';
+import logoutIcon from '../../assets/images/icons/logout.png';
 import RedirectLink from '../common/link/link';
+import { useDispatch, useSelector } from 'react-redux';
+import allActions from '../../store/actions';
 
-const Menu = ({ toggleMenu, isMenuOpen }) => {
-  return isMenuOpen ? (
+const Menu = () => {
+  const loggedIn = useSelector((state) => state.auth.loggedIn);
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
+
+  return loggedIn && user ? (
     <div className="menu-container">
       {/* Redirect the user to the dummy page while pages are not implemented */}
-      <div className="menu-item" onClick={() => toggleMenu()}>
+      <div
+        className="menu-item"
+        onClick={() => dispatch(allActions.dashboardActions.closeMenu())}
+      >
         <RedirectLink
           className="menu-item-content"
           linkKey="menu-dashboard-link"
           dataTestid="menu-dashboard-item"
-          path="/page"
+          path="/dashboard"
           content={
             <>
               <div className="icon-wrapper">
@@ -34,7 +43,10 @@ const Menu = ({ toggleMenu, isMenuOpen }) => {
         />
       </div>
 
-      <div className="menu-item" onClick={() => toggleMenu()}>
+      <div
+        className="menu-item"
+        onClick={() => dispatch(allActions.dashboardActions.closeMenu())}
+      >
         <RedirectLink
           className="menu-item-content"
           linkKey="menu-profile-link"
@@ -51,7 +63,10 @@ const Menu = ({ toggleMenu, isMenuOpen }) => {
         />
       </div>
 
-      <div className="menu-item" onClick={() => toggleMenu()}>
+      <div
+        className="menu-item"
+        onClick={() => dispatch(allActions.dashboardActions.closeMenu())}
+      >
         <RedirectLink
           className="menu-item-content"
           linkKey="menu-projects-link"
@@ -68,7 +83,10 @@ const Menu = ({ toggleMenu, isMenuOpen }) => {
         />
       </div>
 
-      <div className="menu-item" onClick={() => toggleMenu()}>
+      <div
+        className="menu-item"
+        onClick={() => dispatch(allActions.dashboardActions.closeMenu())}
+      >
         <RedirectLink
           className="menu-item-content"
           linkKey="menu-community-link"
@@ -89,7 +107,10 @@ const Menu = ({ toggleMenu, isMenuOpen }) => {
         />
       </div>
 
-      <div className="menu-item" onClick={() => toggleMenu()}>
+      <div
+        className="menu-item"
+        onClick={() => dispatch(allActions.dashboardActions.closeMenu())}
+      >
         <RedirectLink
           className="menu-item-content"
           linkKey="menu-team-link"
@@ -110,28 +131,36 @@ const Menu = ({ toggleMenu, isMenuOpen }) => {
         />
       </div>
 
-      <div className="menu-item" onClick={() => toggleMenu()}>
-        <RedirectLink
-          className="menu-item-content"
-          linkKey="menu-admin-tools-link"
-          dataTestid="menu-admin-tools-item"
-          path="/page"
-          content={
-            <>
-              <div className="icon-wrapper">
-                <img
-                  src={adminToolsIcon}
-                  className="menu-icon"
-                  alt="Admin Tools"
-                />
-              </div>
-              <span className="menu-name">Admin Tools</span>
-            </>
-          }
-        />
-      </div>
+      {user && user.accessLevel === 'admin' ? (
+        <div
+          className="menu-item"
+          onClick={() => dispatch(allActions.dashboardActions.closeMenu())}
+        >
+          <RedirectLink
+            className="menu-item-content"
+            linkKey="menu-admin-tools-link"
+            dataTestid="menu-admin-tools-item"
+            path="/page"
+            content={
+              <>
+                <div className="icon-wrapper">
+                  <img
+                    src={adminToolsIcon}
+                    className="menu-icon"
+                    alt="Admin Tools"
+                  />
+                </div>
+                <span className="menu-name">Admin Tools</span>
+              </>
+            }
+          />
+        </div>
+      ) : null}
 
-      <div className="menu-item" onClick={() => toggleMenu()}>
+      <div
+        className="menu-item"
+        onClick={() => dispatch(allActions.dashboardActions.closeMenu())}
+      >
         <RedirectLink
           className="menu-item-content"
           linkKey="menu-logout-link"

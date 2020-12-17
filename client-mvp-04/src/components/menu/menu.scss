@@ -11,8 +11,8 @@
   left: 0;
   padding: 120px 20px 40px 45px;
   text-align: left;
-  transition: .5s;
-  @include fade-in(.3s)
+  @include transition(all .5s ease-in-out);
+  @include fade-in(.3s);
 }
 
 .menu-button-container {
