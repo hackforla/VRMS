@@ -17,7 +17,7 @@ const Menu = () => {
   const dispatch = useDispatch();
 
   return loggedIn && user ? (
-    <div className="menu-container">
+    <div className="menu-container" data-testid="menu">
       {/* Redirect the user to the dummy page while pages are not implemented */}
       <div
         className="menu-item"
