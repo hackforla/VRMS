@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.scss';
 import Header from './components/common/header/header';
+import Menu from './components/menu/menu';
 import Footer from './components/common/footer/footer';
 import { Provider } from 'react-redux';
 import configureStore from './store/store';
@@ -16,7 +17,7 @@ const App = () => {
         <div className="app">
           <div className="app-container">
             <Header />
-
+            <Menu />
             <main data-testid="main" role="main" className="app-main">
               <Switch>
                 {Routes.map(({ path, key, component }) => (
@@ -24,7 +25,6 @@ const App = () => {
                 ))}
               </Switch>
             </main>
-
             <Footer />
           </div>
         </div>
