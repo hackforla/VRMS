@@ -1,4 +1,5 @@
 @import "../variables";
+@import '../../sass/core/keyframes';
 
 body {
   margin: 0;
@@ -83,6 +84,22 @@ a {
 .center {
   text-align: center;
 }
+
+.bg-overlay {
+  opacity: 0;
+  @include transition(opacity .3s ease-in-out);
+  @include transition-delay(.5s);
+  &.active {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(196, 196, 196, 0.4);
+    height: 100%;
+    opacity: 1;
+  }
+ }
 
 /* Change Autocomplete styles in Chrome*/
 input:-webkit-autofill,
