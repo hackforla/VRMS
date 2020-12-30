@@ -2,8 +2,8 @@ import React from 'react';
 import LoginContainer from './loginContainer';
 import { cleanup, fireEvent, screen } from '@testing-library/react';
 import service from '../../services/user.service';
-import { mockUserData } from '../../utils/__tests__/mocks/authMock';
-import { testRender, createTestStore } from '../../utils/__tests__/testUtils';
+import { mockUserData } from '../../utils/testUtils/mocks/authMock';
+import { testRender, createTestStore } from '../../utils/testUtils/testUtils';
 
 jest.mock('../../services/user.service', () => jest.fn());
 service.checkUser = jest.fn(() => {
