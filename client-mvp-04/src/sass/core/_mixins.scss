@@ -1,4 +1,4 @@
-// This file store any mixins (style snippets) that will be used over and over
+/*** This file store any mixins (style snippets) that will be used over and over ***/
 
 @mixin transform($property) {
   -webkit-transform: $property;
@@ -13,6 +13,19 @@
   transition: $property;
 }
 
+@mixin transition-delay($property) {
+  -webkit-transition: $property;
+  -o-transition: $property;
+  transition: $property;
+}
+
+@mixin box-shadow($property) {
+  -webkit-box-shadow: $property;
+  -moz-box-shadow: $property;
+  box-shadow: $property;
+}
+
+/*** Animation ***/
 @mixin fade-in($property) {
   -webkit-animation: fade-in $property;
   animation: fade-in $property;
