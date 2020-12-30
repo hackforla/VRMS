@@ -36,7 +36,7 @@ describe('Should display Menu if user authorized in app', () => {
     expect(screen.getByTestId('menu')).toBeInTheDocument();
   });
 
-  test('Should display 4 menu items for accessLevel: "user" and redirect to dummy page', () => {
+  test('Should display 5 menu items for accessLevel: "user" and redirect to dummy page', () => {
     expect(screen.getByTestId('menu-dashboard-item')).toBeInTheDocument();
     expect(screen.getByTestId('menu-dashboard-item')).toHaveAttribute(
       'href',
