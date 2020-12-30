@@ -47,3 +47,10 @@ export const userMockState = {
     loggedIn: true,
   },
 };
+
+export const userFailMockState = {
+  auth: {
+    ...authDefaultState,
+    loggedIn: false,
+  },
+};
