@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import './auth.scss';
 import Button from '../common/button/button';
 import { checkAuth } from '../../services/user.service';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
-const Auth = (props) => {
-  const { user } = props;
+const Auth = () => {
+  const user = useSelector((state) => state.auth.user);
   const [isMessageShow, setMessage] = useState(false);
 
   const handleButton = async () => {
@@ -42,10 +42,4 @@ const Auth = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    user: state.auth.user,
-  };
-};
-
-export default connect(mapStateToProps)(Auth);
+export default Auth;
