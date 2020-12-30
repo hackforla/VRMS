@@ -4,8 +4,8 @@ import { fireEvent, screen } from '@testing-library/react';
 import Menu from '../menu/menu';
 import { useSelector } from 'react-redux';
 import {
-  userMockState,
-  userFailMockState,
+  userAuthSuccessMockState,
+  userAuthFailMockState,
 } from '../../utils/testUtils/mocks/authMock';
 import {
   history,
@@ -21,7 +21,7 @@ jest.mock('react-redux', () => ({
 describe('Should display Menu if user authorized in app', () => {
   beforeEach(() => {
     useSelector.mockImplementation((callback) => {
-      return callback(userMockState);
+      return callback(userAuthSuccessMockState);
     });
 
     const store = createTestStore();
@@ -98,7 +98,7 @@ describe('Should display Menu if user authorized in app', () => {
 describe('Should not display Menu', () => {
   beforeEach(() => {
     useSelector.mockImplementation((callback) => {
-      return callback(userFailMockState);
+      return callback(userAuthFailMockState);
     });
 
     const store = createTestStore();
@@ -111,6 +111,5 @@ describe('Should not display Menu', () => {
 
   test('Should not display Menu if user not authorized in app', () => {
     expect(screen.queryByTestId('menu')).toBeFalsy();
-    expect(history.location.pathname).toBe('/');
   });
 });

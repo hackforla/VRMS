@@ -1,4 +1,4 @@
-// Mock userData for UserService
+/*** Mock userData for UserService ***/
 export const mockUserData = {
   name: { firstName: 'Test', lastName: 'Person' },
   accessLevel: 'user',
@@ -15,7 +15,7 @@ export const mockUserData = {
   createdDate: '2020-11-11T03:48:46.153Z',
 };
 
-// Mock auth redux store state
+/***  Mock AUTH redux store state ***/
 export const authDefaultState = {
   auth: {
     isLoaded: null,
@@ -26,7 +26,7 @@ export const authDefaultState = {
   },
 };
 
-export const userMockState = {
+export const userAuthSuccessMockState = {
   auth: {
     ...authDefaultState,
     user: {
@@ -46,11 +46,17 @@ export const userMockState = {
     },
     loggedIn: true,
   },
+  dashboard: {
+    isMenuOpen: true,
+  },
 };
 
-export const userFailMockState = {
+export const userAuthFailMockState = {
   auth: {
     ...authDefaultState,
     loggedIn: false,
+  },
+  dashboard: {
+    isMenuOpen: false,
   },
 };
