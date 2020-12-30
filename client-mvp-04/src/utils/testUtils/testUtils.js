@@ -6,7 +6,7 @@ import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import authReducer from '../../store/reducers/authReducer';
 
-const history = createMemoryHistory();
+export const history = createMemoryHistory();
 
 const TestProvider = ({ store, children }) => (
   <Provider store={store}>

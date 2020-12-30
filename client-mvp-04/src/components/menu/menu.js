@@ -35,6 +35,7 @@ const Menu = () => {
                   src={dashboardIcon}
                   className={'menu-icon'}
                   alt="dashboard"
+                  data-testid="menu-icon"
                 />
               </div>
               <span className={'menu-name'}>Dashboard</span>
