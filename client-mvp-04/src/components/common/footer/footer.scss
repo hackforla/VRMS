@@ -15,15 +15,29 @@
   }
 }
 
+.inner-footer {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 30px 40px;
+  .text-block {
+    font-size: 13px;
+    line-height: 20px;
+    text-align: left;
+  }
+}
+
+
 @media (max-height: 896px) {
-  .app-footer {
+  .app-footer,
+  .inner-footer {
     padding: 10px 0;
     height: 35px;
   }
 }
 
 @media (max-width: 374px) {
-  .app-footer {
+  .app-footer,
+  .inner-footer {
     height: 55px;
   }
 }

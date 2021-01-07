@@ -1,9 +1,17 @@
 import React from 'react';
 import './footer.scss';
 import RedirectLink from '../link/link';
+import { useSelector } from 'react-redux';
 
 const Footer = () => {
-  return (
+  const loggedIn = useSelector((state) => state.auth.loggedIn);
+  const user = useSelector((state) => state.auth.user);
+
+  return loggedIn && user ? (
+    <footer data-testid="footer" className="inner-footer">
+      <div className="text-block">Logged in as {user.email}</div>
+    </footer>
+  ) : (
     <footer data-testid="footer" className="app-footer">
       <div className="text-block">
         <span>VRMS</span> was developed by Hack for LA
