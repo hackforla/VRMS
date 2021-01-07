@@ -1,0 +1,9 @@
+@import "../../sass/variables";
+
+.notifications {
+  background-color: $concrete-color;
+  border-radius: 6px;
+  margin: 12px 0 20px;
+  padding: 14px 12px;
+  line-height: 24px;
+}
