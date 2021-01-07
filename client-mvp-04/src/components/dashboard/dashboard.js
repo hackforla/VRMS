@@ -3,10 +3,10 @@ import './dashboard.scss';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
-const Dashboard = (props) => {
-  return props.loggedIn && props.user ? (
+const Dashboard = ({ loggedIn, user }) => {
+  return loggedIn && user ? (
     <div className="flex-container dashboard">
-      <h2>Hi {props.user.name.firstName},</h2>
+      <h2>Hi {user.name.firstName},</h2>
       <br />
       <h2>Welcome to VRMS Dashboard!</h2>
     </div>
@@ -18,7 +18,7 @@ const Dashboard = (props) => {
 const mapStateToProps = function (state) {
   return {
     loggedIn: state.auth.loggedIn,
-    user: state.user.user,
+    user: state.auth.user,
   };
 };
 

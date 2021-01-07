@@ -3,7 +3,7 @@ import LoginView from './loginView';
 import { connect } from 'react-redux';
 import { Email } from '../../utils/validation/validation';
 import { checkAuth, checkUser } from '../../services/user.service';
-import { setUser, failUser } from '../../store/actions/userActions';
+import { setUser } from '../../store/actions/authActions';
 import { useHistory } from 'react-router-dom';
 
 const LoginContainer = (props) => {
@@ -36,7 +36,6 @@ const LoginContainer = (props) => {
         history.push('/login/auth');
       } else {
         setErrorMsgFailedEmail(true);
-        props.dispatch(failUser());
       }
     } else {
       setIsEmailValid(false);
@@ -58,7 +57,7 @@ const LoginContainer = (props) => {
 
 const mapStateToProps = function (state) {
   return {
-    loggedIn: state.auth.loggedIn,
+    user: state.auth.user,
   };
 };
 

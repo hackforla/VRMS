@@ -6,10 +6,11 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
 const Auth = (props) => {
+  const { user } = props;
   const [isMessageShow, setMessage] = useState(false);
 
   const handleButton = async () => {
-    const isAuth = await checkAuth(props.user.email);
+    const isAuth = await checkAuth(user.email);
     if (isAuth) setMessage(true);
 
     setTimeout(() => {
@@ -17,7 +18,7 @@ const Auth = (props) => {
     }, 5000);
   };
 
-  return props.user ? (
+  return user ? (
     <div className="flex-container auth">
       <div className="auth-content">
         Please verify your email via magic link in your inbox
@@ -41,9 +42,9 @@ const Auth = (props) => {
   );
 };
 
-const mapStateToProps = function (state) {
+const mapStateToProps = (state) => {
   return {
-    user: state.user.user,
+    user: state.auth.user,
   };
 };
 
