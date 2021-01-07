@@ -1,18 +1,19 @@
 import { AUTH_START, AUTH_SUCCESS, AUTH_FAIL, SET_USER } from './types';
 import { HEADERS, AUTH_VERIFY_SIGN_IN } from '../../utils/endpoints.js';
 
-export const authStart = () => ({ type: AUTH_START });
+const authStart = () => ({ type: AUTH_START });
 
-export const authSuccess = (authToken, user) => ({
+const authSuccess = (authToken, user) => ({
   type: AUTH_SUCCESS,
   payload: {
     user: user,
     authToken: authToken,
   },
 });
-export const authFail = (error) => ({ type: AUTH_FAIL, payload: error });
 
-export const authUserWithToken = (token) => {
+const authFail = (error) => ({ type: AUTH_FAIL, payload: error });
+
+const authUserWithToken = (token) => {
   return async (dispatch) => {
     dispatch(authStart);
     try {
@@ -30,4 +31,12 @@ export const authUserWithToken = (token) => {
   };
 };
 
-export const setUser = (user) => ({ type: SET_USER, payload: user });
+const setUser = (user) => ({ type: SET_USER, payload: user });
+
+export default {
+  authStart,
+  authSuccess,
+  authFail,
+  authUserWithToken,
+  setUser,
+};

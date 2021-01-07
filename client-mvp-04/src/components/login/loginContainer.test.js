@@ -1,35 +1,9 @@
 import React from 'react';
-import { Provider } from 'react-redux';
-import configureStore from 'redux-mock-store';
 import LoginContainer from './loginContainer';
-import { MemoryRouter } from 'react-router-dom';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
-import authReducer from '../../store/reducers/authReducer';
+import { cleanup, fireEvent, screen } from '@testing-library/react';
 import service from '../../services/user.service';
-
-// Mock Redux Store
-const mockStore = configureStore([]);
-let store = mockStore({
-  auth: authReducer,
-});
-store.dispatch = jest.fn();
-
-// Mock UserService
-const mockUserData = {
-  name: { firstName: 'Test', lastName: 'Person' },
-  accessLevel: 'user',
-  skillsToMatch: [],
-  projects: [],
-  textingOk: false,
-  _id: '5f4bfbc8e9f4f121e8c1eb42',
-  email: 'test@gmail.com',
-  currentRole: 'College Student',
-  desiredRole: 'Software Developer',
-  newMember: false,
-  attendanceReason: 'Environment',
-  currentProject: 'VRMS',
-  createdDate: '2020-11-11T03:48:46.153Z',
-};
+import { mockUserData } from '../../utils/testUtils/mocks/authMock';
+import { testRender, createTestStore } from '../../utils/testUtils/testUtils';
 
 jest.mock('../../services/user.service', () => jest.fn());
 service.checkUser = jest.fn(() => {
@@ -40,13 +14,8 @@ service.checkAuth = jest.fn(() => {
 });
 
 beforeEach(() => {
-  render(
-    <Provider store={store}>
-      <MemoryRouter initialEntries={['/login']}>
-        <LoginContainer />
-      </MemoryRouter>
-    </Provider>
-  );
+  const store = createTestStore();
+  testRender(<LoginContainer />, { store });
 });
 
 afterEach(cleanup);

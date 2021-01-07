@@ -1,4 +1,5 @@
 @import "../../sass/variables";
+@import "../../sass/core/_keyframes";
 
 .auth {
   .auth-content {
@@ -18,6 +19,7 @@
     margin-top: 60px;
     line-height: 25px;
     text-align: center;
+    @include fade-in(.4s);
   }
 }
 
