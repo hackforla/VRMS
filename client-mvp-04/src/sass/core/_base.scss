@@ -116,3 +116,24 @@ select:-webkit-autofill:focus {
   -webkit-box-shadow: none;
   transition: background-color 3000s ease-in-out 0s;
 }
+
+/* Customize scroll-bar */
+.custom-scroll-bar {
+  overflow-y: auto;
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: $concrete-color $light-primary-color; /* scroll thumb and track */
+  /* Chrome, Edge, and Safari */
+  &::-webkit-scrollbar {
+    width: 7px;
+    background-color: $light-primary-color;
+  }
+  &::-webkit-scrollbar-track {
+    border-radius: 7px;
+    background-color: $light-primary-color;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 7px;
+    background-color: $concrete-color;
+  }
+}

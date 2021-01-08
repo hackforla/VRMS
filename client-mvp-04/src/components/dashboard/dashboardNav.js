@@ -12,7 +12,7 @@ const DashboardNav = () => {
   const userProfile = useSelector((state) => state.auth.userProfile);
 
   return (
-    <div className="dashboard-nav">
+    <div className="dashboard-nav custom-scroll-bar">
       <Link
         className="redirect-link dash-nav-item"
         key="dash-profile-link"
@@ -54,7 +54,7 @@ const DashboardNav = () => {
       </Link>
 
       {userProfile && userProfile.isAdmin ? (
-        /*Display Team Join Requests for PM and Admin*/
+        /*Display Team Join Requests for PM and Admin when API will be implemented*/
         <>
           <Link
             className="redirect-link dash-nav-item"
