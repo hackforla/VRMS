@@ -1,9 +1,22 @@
 @import "../../sass/variables";
 
+.notifications-header {
+  font-weight: $font-semi-bold;
+}
+
 .notifications {
+  display: flex;
   background-color: $concrete-color;
   border-radius: 6px;
   margin: 12px 0 20px;
   padding: 14px 12px;
-  line-height: 24px;
+
+  .event-data {
+    line-height: 24px;
+  }
+
+  .checkin-btn {
+    margin: auto 0 auto auto;
+    line-height: 18px;
+  }
 }
