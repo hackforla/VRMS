@@ -1,5 +1,57 @@
-@import "../../sass/variables";
+@import '../../sass/variables';
+@import '../../sass/core/keyframes';
 
 .dashboard {
-  padding: 24px 20px 20px;
+  padding: 20px;
+  text-align: left;
+
+  .user-name {
+    text-transform: uppercase;
+    font-weight: $font-bold;
+    letter-spacing: 1px;
+    margin-bottom: 30px;
+  }
+}
+
+.dashboard-nav {
+  padding: 0 20px;
+
+  .dash-nav-item {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin: 0;
+    height: 100px;
+    padding: 0 20px 0 40px;
+    border-bottom: 1px solid #D6D3CE;
+    @include transition(.3s ease);
+    &:last-child {
+      border-bottom: none;
+    }
+    &:hover {
+      color: $accent-royal-blue-color;
+    }
+
+    .icon-wrapper {
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      vertical-align: middle;
+    }
+
+    .item-icon {
+      width: 50px;
+      height: auto;
+      vertical-align: middle;
+    }
+
+    .item-name {
+      font-size: $menu-font-size;
+      font-weight: $font-semi-bold;
+      line-height: 27px;
+      letter-spacing: 0.5px;
+      margin-left: 40px;
+      vertical-align: top;
+    }
+  }
 }
