@@ -56,3 +56,69 @@
     }
   }
 }
+
+@media (max-height: 896px), (max-width: 414px) {
+  .dashboard {
+    padding: 10px;
+    .user-name {
+      margin-bottom: 20px;
+    }
+  }
+
+  .dashboard-nav {
+    padding: 0 20px;
+    height: 390px;
+  }
+
+  .dashboard-nav .dash-nav-item {
+    height: 78px;
+    padding: 0 12px 0 30px;
+    .item-name {
+      font-size: 22px;
+      line-height: 24px;
+    }
+  }
+
+  .dashboard-nav .dash-nav-item .icon-wrapper {
+    width: 45px;
+    height: 45px;
+  }
+
+  .dashboard-nav .dash-nav-item .item-icon {
+    width: 45px;
+  }
+}
+
+@media (max-height: 667px) and (max-width: 850px) {
+  .dashboard-nav {
+    padding: 0 7px 0 0;
+    height: 230px;
+  }
+}
+
+// iphone 6/7/8
+@media (max-height: 667px) and (max-width: 414px) {
+  .dashboard-nav {
+    padding: 0 20px;
+    height: 300px;
+  }
+
+  .dashboard-nav .dash-nav-item {
+    padding: 0 20px 0 30px;
+  }
+}
+
+@media (max-width: 320px) {
+  .dashboard-nav {
+    padding: 0 7px 0 0;
+    height: 210px;
+  }
+
+  .dashboard .user-name {
+    margin-bottom: 10px;
+  }
+
+  .dashboard-nav .dash-nav-item {
+    height: 72px;
+  }
+}

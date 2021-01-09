@@ -33,11 +33,28 @@
     padding: 10px 0;
     height: 35px;
   }
+
+  .inner-footer {
+    padding: 10px 20px;
+  }
+}
+
+@media (max-width: 414px) {
+  .inner-footer {
+    padding: 5px 10px 0;
+  }
 }
 
 @media (max-width: 374px) {
-  .app-footer,
+  .app-footer, .inner-footer {
+    height: 45px;
+    padding: 5px 0 0 0;
+  }
+}
+
+@media (max-width: 320px) {
   .inner-footer {
-    height: 55px;
+    padding: 0 10px;
+    height: 30px;
   }
 }
