@@ -20,3 +20,9 @@
     line-height: 18px;
   }
 }
+
+@media (max-width: 414px) {
+  .notifications {
+    margin: 12px 0 15px;
+  }
+}

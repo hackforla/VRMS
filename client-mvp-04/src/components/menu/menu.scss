@@ -86,7 +86,7 @@
   }
 
   .menu-icon {
-    width: 100%;
+    width: 40px;
     height: auto;
     vertical-align: middle;
   }
@@ -110,7 +110,7 @@
   }
 }
 
-@media (max-width: 414px) {
+@media (max-height: 896px), (max-width: 414px) {
   .menu-container {
     padding: 80px 5px 20px 30px;
   }
