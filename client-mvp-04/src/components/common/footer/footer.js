@@ -8,7 +8,7 @@ const Footer = () => {
   const user = useSelector((state) => state.auth.user);
 
   return loggedIn && user ? (
-    <footer data-testid="footer" className="inner-footer">
+    <footer data-testid="footer-logged-in" className="inner-footer">
       <div className="text-block">Logged in as {user.email}</div>
     </footer>
   ) : (
