@@ -37,60 +37,60 @@ describe('Should display Menu if user authorized in app', () => {
   });
 
   test('Should display 5 menu items for accessLevel: "user" and redirect to dummy page', () => {
-    expect(screen.getByTestId('menu-dashboard-item')).toBeInTheDocument();
-    expect(screen.getByTestId('menu-dashboard-item')).toHaveAttribute(
+    expect(screen.getByTestId('menu-dashboard-link')).toBeInTheDocument();
+    expect(screen.getByTestId('menu-dashboard-link')).toHaveAttribute(
       'href',
       '/dashboard'
     );
-    expect(screen.getByTestId('menu-profile-item')).toBeInTheDocument();
-    expect(screen.getByTestId('menu-profile-item')).toHaveAttribute(
+    expect(screen.getByTestId('menu-profile-link')).toBeInTheDocument();
+    expect(screen.getByTestId('menu-profile-link')).toHaveAttribute(
       'href',
       '/page'
     );
-    expect(screen.getByTestId('menu-projects-item')).toBeInTheDocument();
-    expect(screen.getByTestId('menu-projects-item')).toHaveAttribute(
+    expect(screen.getByTestId('menu-projects-link')).toBeInTheDocument();
+    expect(screen.getByTestId('menu-projects-link')).toHaveAttribute(
       'href',
       '/page'
     );
-    expect(screen.getByTestId('menu-community-item')).toBeInTheDocument();
-    expect(screen.getByTestId('menu-community-item')).toHaveAttribute(
+    expect(screen.getByTestId('menu-community-link')).toBeInTheDocument();
+    expect(screen.getByTestId('menu-community-link')).toHaveAttribute(
       'href',
       '/page'
     );
-    expect(screen.getByTestId('menu-logout-item')).toBeInTheDocument();
-    expect(screen.getByTestId('menu-logout-item')).toHaveAttribute(
+    expect(screen.getByTestId('menu-logout-link')).toBeInTheDocument();
+    expect(screen.getByTestId('menu-logout-link')).toHaveAttribute(
       'href',
       '/page'
     );
   });
 
   test('Should not display "Admin Tools" menu item for accessLevel: "user"', () => {
-    expect(screen.queryByTestId('menu-admin-tools-item')).toBeFalsy();
+    expect(screen.queryByTestId('menu-admin-tools-link')).toBeFalsy();
   });
 
   test('Menu item should contain icon', () => {
-    expect(screen.getByTestId('menu-dashboard-item')).toContainElement(
-      screen.getByTestId('menu-icon')
+    expect(screen.getByTestId('menu-dashboard-link')).toContainElement(
+      screen.getByTestId('item-icon')
     );
   });
 
   test('Should redirect to dashboard page if click on "Dashboard" menu item', () => {
     expect(history.location.pathname).toBe('/');
-    expect(screen.getByTestId('menu-dashboard-item')).toHaveAttribute(
+    expect(screen.getByTestId('menu-dashboard-link')).toHaveAttribute(
       'href',
       '/dashboard'
     );
-    fireEvent.click(screen.getByTestId('menu-dashboard-item'));
+    fireEvent.click(screen.getByTestId('menu-dashboard-link'));
     expect(history.location.pathname).toBe('/dashboard');
   });
 
   test('Should redirect to dummy page if click on "Profile" menu item', () => {
     expect(history.location.pathname).toBe('/dashboard');
-    expect(screen.getByTestId('menu-profile-item')).toHaveAttribute(
+    expect(screen.getByTestId('menu-profile-link')).toHaveAttribute(
       'href',
       '/page'
     );
-    fireEvent.click(screen.getByTestId('menu-profile-item'));
+    fireEvent.click(screen.getByTestId('menu-profile-link'));
     expect(history.location.pathname).toBe('/page');
   });
 });

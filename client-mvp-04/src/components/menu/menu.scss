@@ -85,13 +85,13 @@
     vertical-align: middle;
   }
 
-  .menu-icon {
+  .item-icon {
     width: 40px;
     height: auto;
     vertical-align: middle;
   }
 
-  .menu-name {
+  .item-name {
     font-size: $menu-font-size;
     line-height: 40px;
     letter-spacing: $menu-letter-sp;
@@ -126,7 +126,7 @@
     padding: 70px 5px 20px 30px;
   }
 
-  .menu-item .menu-name {
+  .menu-item .item-name {
     margin-left: 10px;
     font-size: 22px;
   }
@@ -146,9 +146,9 @@
   .menu-item {
     margin: 25px 0;
     height: 35px;
-    .menu-name {
+    .item-name {
       font-size: 19px;
-      margin-left: 7px;
+      margin-left: 15px;
     }
   }
 
