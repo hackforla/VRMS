@@ -20,7 +20,12 @@ const DashboardNav = () => {
         to="/page"
       >
         <div className="icon-wrapper">
-          <img src={profileIcon} className="item-icon" alt="profile" />
+          <img
+            src={profileIcon}
+            className="item-icon"
+            data-testid="item-icon"
+            alt="profile"
+          />
         </div>
         <span className="item-name">Profile</span>
       </Link>

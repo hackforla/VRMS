@@ -10,8 +10,10 @@ const Dashboard = () => {
   const userProfile = useSelector((state) => state.auth.userProfile);
 
   return loggedIn && userProfile ? (
-    <div className="dashboard">
-      <h2 className="user-name">Hi, {userProfile.firstName}</h2>
+    <div className="dashboard" data-testid="dashboard">
+      <h2 className="user-name" data-testid="dash-user-name">
+        Hi, {userProfile.firstName}
+      </h2>
       <Notifications />
       <DashboardNav />
     </div>

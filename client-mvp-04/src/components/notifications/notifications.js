@@ -22,7 +22,7 @@ const Notifications = () => {
   return (
     <>
       <h3 className="notifications-header">Notifications</h3>
-      <div className="notifications">
+      <div className="notifications" data-testid="notifications">
         <div className="event-data">
           <div>{`${notifications.projectName} ${notifications.meetingName}`}</div>
           <div>{`${notifications.startTime} ${notifications.endTime}`}</div>
@@ -30,6 +30,7 @@ const Notifications = () => {
         <Button
           content={'CHECK IN'}
           className={'btn-accent checkin-btn'}
+          dataTestid={'checkin-btn'}
           onClick={() => history.push('/page')}
         />
       </div>
