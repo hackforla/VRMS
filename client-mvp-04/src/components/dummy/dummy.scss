@@ -10,7 +10,7 @@
   }
 }
 
-@media (max-width: 450px) {
+@media (max-height: 896px), (max-width: 450px) {
   .dummy {
     padding: 125px 20px 40px;
   }

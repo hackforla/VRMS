@@ -11,6 +11,7 @@ const authDefaultState = {
   loggedIn: null,
   user: null,
   error: null,
+  userProfile: null,
 };
 
 export default (state = authDefaultState, { type, payload }) => {
@@ -27,6 +28,12 @@ export default (state = authDefaultState, { type, payload }) => {
         loggedIn: true,
         authToken: payload.authToken,
         user: payload.user,
+        userProfile: {
+          firstName: payload.user.name.firstName,
+          lastName: payload.user.name.lastName,
+          signupEmail: payload.user.email,
+          isAdmin: payload.user.accessLevel === 'admin',
+        },
       };
     case AUTH_FAIL:
       return {

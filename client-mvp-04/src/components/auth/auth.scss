@@ -23,7 +23,7 @@
   }
 }
 
-@media (max-width: 350px) {
+@media (max-height: 896px), (max-width: 350px) {
   .auth {
     .auth-button {
       margin: 50px 0 0 auto;

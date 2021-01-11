@@ -29,7 +29,7 @@
   }
 }
 
-@media (max-width: 400px) {
+@media (max-height: 896px), (max-width: 400px) {
   .create-account-container {
     padding: 25px 52px;
 
@@ -47,7 +47,7 @@
   }
 }
 
-@media (max-width: 374px) {
+@media (max-height: 896px), (max-width: 374px) {
   .create-account-container {
     height: calc(100vh - 180px);
   }

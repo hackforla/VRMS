@@ -23,9 +23,11 @@ export const authDefaultState = {
     loggedIn: null,
     user: null,
     error: null,
+    userProfile: null,
   },
 };
 
+// Access Level: 'user'
 export const userAuthSuccessMockState = {
   auth: {
     ...authDefaultState,
@@ -43,6 +45,12 @@ export const userAuthSuccessMockState = {
       attendanceReason: 'Environment',
       currentProject: 'VRMS',
       createdDate: '2020-11-11T03:48:46.153Z',
+    },
+    userProfile: {
+      firstName: 'Test',
+      lastName: 'Person',
+      signupEmail: 'test@gmail.com',
+      isAdmin: false,
     },
     loggedIn: true,
   },
