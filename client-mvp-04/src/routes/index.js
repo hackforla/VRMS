@@ -6,6 +6,7 @@ import Auth from '../components/auth/auth';
 import HandleAuth from '../components/auth/handleAuth';
 import Dashboard from '../components/dashboard/dashboard';
 import CreateAccountContainer from '../components/createAccount/createAccountContainer';
+import ExpiredAuthSessionPage from '../components/auth/expiredAuthSessionPage';
 
 import DevUiKit from '../utils/uiKit/uiKit';
 
@@ -31,6 +32,11 @@ export const Routes = [
     component: HandleAuth,
   },
   {
+    path: '/auth/expired-session',
+    key: 'expiredAuthSession',
+    component: ExpiredAuthSessionPage,
+  },
+  {
     path: '/dashboard',
     key: 'dashboard',
     component: Dashboard,
@@ -41,15 +47,15 @@ export const Routes = [
     component: Dummy,
   },
   {
+    path: '/create-account',
+    key: 'create-account',
+    component: CreateAccountContainer,
+  },
+  {
     // DEV-UI-KIT for Development Only
     path: '/dev-ui-kit',
     key: 'dev-ui-kit',
     component: DevUiKit,
-  },
-  {
-    path: '/create-account',
-    key: 'create-account',
-    component: CreateAccountContainer,
   },
   {
     key: 'error',

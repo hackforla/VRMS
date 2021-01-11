@@ -2,7 +2,6 @@ import React from 'react';
 import './uiKit.scss';
 import Button from '../../components/common/button/button';
 import confirmIcon from '../../assets/images/icons/confirm.svg';
-import homeIcon from '../../assets/images/icons/home.png';
 import projectIcon from '../../assets/images/icons/311.png';
 import gitHubIcon from '../../assets/images/icons/github.png';
 import RedirectLink from '../../components/common/link/link';
@@ -142,16 +141,6 @@ const DevUiKit = () => {
           </div>
         </div>
         <p className={'dev-comment'}>Tooltip, works on hover</p>
-      </div>
-
-      {/*** MENU ***/}
-      <div className={'menu-container'}>
-        <h1 className={'kit-sec-title'}>*** MENU ***</h1>
-        <div className={'menu-item'}>
-          <img src={homeIcon} className={'menu-icon'} alt="home" />
-          <span className={'menu-name'}>Dashboard</span>
-        </div>
-        <p className={'dev-comment'}>Menu Item</p>
       </div>
 
       {/*** INPUTS ***/}

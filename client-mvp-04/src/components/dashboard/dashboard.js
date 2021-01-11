@@ -1,25 +1,25 @@
 import React from 'react';
 import './dashboard.scss';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import Notifications from '../notifications/notifications';
+import DashboardNav from './dashboardNav';
 
-const Dashboard = (props) => {
-  return props.loggedIn && props.user ? (
-    <div className="flex-container dashboard">
-      <h2>Hi {props.user.name.firstName},</h2>
-      <br />
-      <h2>Welcome to VRMS Dashboard!</h2>
+const Dashboard = () => {
+  const loggedIn = useSelector((state) => state.auth.loggedIn);
+  const userProfile = useSelector((state) => state.auth.userProfile);
+
+  return loggedIn && userProfile ? (
+    <div className="dashboard" data-testid="dashboard">
+      <h2 className="user-name" data-testid="dash-user-name">
+        Hi, {userProfile.firstName}
+      </h2>
+      <Notifications />
+      <DashboardNav />
     </div>
   ) : (
-    <Redirect to="/" />
+    <Redirect to="/auth/expired-session" />
   );
 };
 
-const mapStateToProps = function (state) {
-  return {
-    loggedIn: state.auth.loggedIn,
-    user: state.user.user,
-  };
-};
-
-export default connect(mapStateToProps)(Dashboard);
+export default Dashboard;

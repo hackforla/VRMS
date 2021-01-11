@@ -1,50 +1,31 @@
 import React, { useEffect } from 'react';
-import { authUserWithToken } from '../../services/user.service';
-import { connect } from 'react-redux';
-import { loginSuccess } from '../../store/actions/authActions';
-import { setUser } from '../../store/actions/userActions';
-import RedirectLink from '../common/link/link';
-import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import Loader from '../../components/common/loader/loader';
+import { Redirect } from 'react-router-dom';
+import allActions from '../../store/actions';
 
 const HandleAuth = (props) => {
-  const history = useHistory();
+  const loggedIn = useSelector((state) => state.auth.loggedIn);
+  const user = useSelector((state) => state.auth.user);
+  const isLoaded = useSelector((state) => state.auth.isLoaded);
+  const dispatch = useDispatch();
 
-  async function isValidToken() {
+  useEffect(() => {
     const search = props.location.search;
     const params = new URLSearchParams(search);
     const token = params.get('token');
-    const user = await authUserWithToken(token);
-    if (user) {
-      props.dispatch(loginSuccess());
-      props.dispatch(setUser(user));
-      history.push('/dashboard');
-    }
-  }
-
-  useEffect(() => {
-    isValidToken().then();
+    dispatch(allActions.authActions.authUserWithToken(token));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return !props.loggedIn && !props.user ? (
-    <div className="flex-container">
-      <h2>Sorry, this link is not valid</h2>
-      <RedirectLink
-        linkKey={'auth-link'}
-        path={'/'}
-        className={'accent-link'}
-        content={'Go to Homepage'}
-      />
-    </div>
+  return isLoaded ? (
+    loggedIn && user ? (
+      <Redirect to="/dashboard" />
+    ) : (
+      <Redirect to="/auth/expired-session" />
+    )
   ) : (
-    <div>...Loading</div>
+    <Loader />
   );
 };
 
-const mapStateToProps = function (state) {
-  return {
-    loggedIn: state.auth.loggedIn,
-    user: state.user.user,
-  };
-};
-
-export default connect(mapStateToProps)(HandleAuth);
+export default HandleAuth;

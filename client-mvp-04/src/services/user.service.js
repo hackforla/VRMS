@@ -1,9 +1,4 @@
-import {
-  HEADERS,
-  CHECK_USER,
-  SIGN_IN,
-  AUTH_VERIFY_SIGN_IN,
-} from '../utils/endpoints';
+import { HEADERS, CHECK_USER, SIGN_IN } from '../utils/endpoints';
 
 export async function checkAuth(email) {
   try {
@@ -15,20 +10,6 @@ export async function checkAuth(email) {
     return response.status === 200;
   } catch (error) {
     console.log('User is not authorized in app');
-    console.log(error);
-    return null;
-  }
-}
-
-export async function authUserWithToken(token) {
-  try {
-    const response = await fetch(AUTH_VERIFY_SIGN_IN, {
-      method: 'POST',
-      headers: { ...HEADERS, 'x-access-token': token },
-    });
-    return await response.json();
-  } catch (error) {
-    console.log('User is not authorized with token');
     console.log(error);
     return null;
   }

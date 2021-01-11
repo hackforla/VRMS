@@ -1,5 +1,5 @@
-import { checkUser, checkAuth, authUserWithToken } from './user.service';
-import { CHECK_USER, SIGN_IN, AUTH_VERIFY_SIGN_IN } from '../utils/endpoints';
+import { checkUser, checkAuth } from './user.service';
+import { CHECK_USER, SIGN_IN } from '../utils/endpoints';
 
 const mockUserData = {
   name: { firstName: 'Test', lastName: 'Person' },
@@ -70,32 +70,6 @@ describe('UserService', () => {
       expect(fetch).toHaveBeenCalledTimes(1);
       expect(fetch).toHaveBeenCalledWith(SIGN_IN, {
         body: '{"email":"wrong.email@gmail.com"}',
-        headers: expect.anything(), // real value is not used because of environment variable presence
-        method: 'POST',
-      });
-    });
-  });
-
-  describe('API call: authUserWithToken(token)', () => {
-    test('Should successfully authorize user with token and return user', async () => {
-      fetch.mockResponseOnce(JSON.stringify(mockUserData));
-      const user = await authUserWithToken('testToken');
-      expect(user).toMatchObject(mockUserData);
-      expect(fetch).toHaveBeenCalledTimes(1);
-      expect(fetch).toHaveBeenCalledWith(AUTH_VERIFY_SIGN_IN, {
-        headers: expect.anything(), // real value is not used because of environment variable presence
-        method: 'POST',
-      });
-    });
-
-    test('Should catch error and return null', async () => {
-      fetch.mockReject(() =>
-        Promise.reject('User is not authorized with token')
-      );
-      const user = await authUserWithToken('testToken');
-      expect(user).toEqual(null);
-      expect(fetch).toHaveBeenCalledTimes(1);
-      expect(fetch).toHaveBeenCalledWith(AUTH_VERIFY_SIGN_IN, {
         headers: expect.anything(), // real value is not used because of environment variable presence
         method: 'POST',
       });
