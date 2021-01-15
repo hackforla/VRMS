@@ -14,11 +14,11 @@ the application. UI elements created based on finalized v0.4 Style Guide.*/
 
 const DevUiKit = () => {
   return (
-    <div className={'kit-container'}>
+    <div className="kit-container custom-scroll-bar">
       <div className={'kit-title'}>VRMS DEV UI-KIT</div>
 
       {/*** HEADERS ***/}
-      <div className={'header-container'}>
+      <div className="header-container">
         <h1 className={'kit-sec-title'}>*** HEADERS ***</h1>
         <h1>VRMS h1</h1>
         <p className={'dev-comment'}>h1 Header: 30px, bold; Main Page Header</p>
