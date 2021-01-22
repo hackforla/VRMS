@@ -7,6 +7,7 @@ import gitHubIcon from '../../assets/images/icons/github.png';
 import RedirectLink from '../../components/common/link/link';
 import Input from '../../components/common/input/input';
 import ErrorMessage from '../../components/common/errorMessage/errorMessage';
+import ProgressBar from '../../components/common/progressBar/progressBar';
 
 /***** DEV-UI-KIT FOR DEVELOPMENT ONLY *****/
 /*UI KIT helps devs determine, which UI elements will be used throughout
@@ -160,6 +161,12 @@ const DevUiKit = () => {
         />
       </div>
       <p className={'dev-comment'}>Input with icon</p>
+
+      {/*** PROGRESS BAR ***/}
+      <div className={'progress-container'}>
+        <h1 className={'kit-sec-title'}>*** PROGRESS BAR ***</h1>
+        <ProgressBar total={6} active={3} />
+      </div>
     </div>
   );
 };
