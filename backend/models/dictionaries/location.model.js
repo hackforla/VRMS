@@ -12,6 +12,6 @@ locationSchema.methods.serialize = function() {
     };
 };
 
-const Location = mongoose.model('Project', locationSchema);
+const Location = mongoose.model('Location', locationSchema);
 
 module.exports = { Location };
