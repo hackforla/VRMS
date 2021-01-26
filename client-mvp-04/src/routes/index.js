@@ -7,6 +7,7 @@ import HandleAuth from '../components/auth/handleAuth';
 import Dashboard from '../components/dashboard/dashboard';
 import CreateAccountContainer from '../components/createAccount/createAccountContainer';
 import ExpiredAuthSessionPage from '../components/auth/expiredAuthSessionPage';
+import CodeOfConduct from '../components/onboarding/codeOfConduct/codeOfConduct';
 
 import DevUiKit from '../utils/uiKit/uiKit';
 
@@ -50,6 +51,11 @@ export const Routes = [
     path: '/create-account',
     key: 'create-account',
     component: CreateAccountContainer,
+  },
+  {
+    path: '/onboarding/code-of-conduct',
+    key: 'code-of-conduct',
+    component: CodeOfConduct,
   },
   {
     // DEV-UI-KIT for Development Only
