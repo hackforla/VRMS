@@ -1,7 +1,7 @@
 const { Location } = require('./location.model');
 const { setupDB } = require("../../setup-test");
 
-setupDB("project-model");
+setupDB("location-model");
 
 describe("Location Model saves the correct values", () => {
   test("Save a model instance and then read from the db", async (done) => {
