@@ -14,4 +14,4 @@ timeZoneSchema.methods.serialize = function() {
 
 const TimeZone = mongoose.model('TimeZone', timeZoneSchema);
 
-module.exports = { Location };
+module.exports = { TimeZone };

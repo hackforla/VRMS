@@ -1,73 +1,73 @@
-const { Location } = require('./location.model');
+const { TimeZone } = require('./timeZone.model');
 const { setupDB } = require("../../setup-test");
 
-setupDB("project-model");
+setupDB("timeZone-model");
 
-describe("Location Model saves the correct values", () => {
+describe("TimeZone Model saves the correct values", () => {
   test("Save a model instance and then read from the db", async (done) => {
     const submittedData = {
-      locations: ["location1","location2"]
+      timeZones: ["zone1","zone2"]
     };
 
-    await Location.create(submittedData);
-    const savedDataArray = await Location.find();
+    await TimeZone.create(submittedData);
+    const savedDataArray = await TimeZone.find();
     const savedData = savedDataArray[0];
-    expect(savedData.locations[0]).toBe(submittedData.locations[0]);
-    expect(savedData.locations[1]).toBe(submittedData.locations[1]);
+    expect(savedData.timeZones[0]).toBe(submittedData.timeZones[0]);
+    expect(savedData.timeZones[1]).toBe(submittedData.timeZones[1]);
 
     done();
   });
 });
 
 describe('CREATE/READ', () => {
-  test('Create Location with Mongoose model', async (done) => {
+  test('Create TimeZone with Mongoose model', async (done) => {
     const submittedData = {
-      locations: ["location1","location2"]
+      timeZones: ["zone1","zone2"]
     };
 
-    await Location.create(submittedData);
-    const savedDataArray = await Location.find();
+    await TimeZone.create(submittedData);
+    const savedDataArray = await TimeZone.find();
     const savedData = savedDataArray[0];
-    expect(savedData.locations[0]).toBe(submittedData.locations[0]);
-    expect(savedData.locations[1]).toBe(submittedData.locations[1]);
+    expect(savedData.timeZones[0]).toBe(submittedData.timeZones[0]);
+    expect(savedData.timeZones[1]).toBe(submittedData.timeZones[1]);
     done();
   });
 });
 
 describe('UPDATE', () => {
-  test('Update Location with Mongoose model', async (done) => {
+  test('Update TimeZone with Mongoose model', async (done) => {
     const submittedData = {
-      locations: ["location1","location2"]
+      timeZones: ["zone1","zone2"]
     };
 
-    await Location.create(submittedData);
-    const savedDataArray = await Location.find().exec();
+    await TimeZone.create(submittedData);
+    const savedDataArray = await TimeZone.find().exec();
     const savedData = savedDataArray[0];
-    expect(savedData.locations[0]).toBe(submittedData.locations[0]);
-    expect(savedData.locations[1]).toBe(submittedData.locations[1]);
+    expect(savedData.timeZones[0]).toBe(submittedData.timeZones[0]);
+    expect(savedData.timeZones[1]).toBe(submittedData.timeZones[1]);
 
-    const updatedData = { locations: ['location3'] };
+    const updatedData = { timeZones: ['zone3'] };
 
-    const updatedLocation = await Location.findOneAndUpdate({_id: savedData._id}, updatedData, 
+    const updatedTimeZone = await TimeZone.findOneAndUpdate({_id: savedData._id}, updatedData, 
       {new: true});
 
-    expect(updatedLocation.locations[0]).toBe(updatedData.locations[0]);
+    expect(updatedTimeZone.timeZones[0]).toBe(updatedData.timeZones[0]);
     done();
   });
 });
 
 describe('DELETE', () => {
-  test('Delete Location with Mongoose model', async (done) => {
+  test('Delete TimeZone with Mongoose model', async (done) => {
     const submittedData = {
-      locations: ['location4'] 
+      timeZones: ['zone4'] 
     };
 
-    await Location.create(submittedData);
-    const savedDataArray = await Location.find().exec();
+    await TimeZone.create(submittedData);
+    const savedDataArray = await TimeZone.find().exec();
     const savedData = savedDataArray[0];
-    expect(savedData.locations[0]).toBe(submittedData.locations[0]);
+    expect(savedData.timeZones[0]).toBe(submittedData.timeZones[0]);
 
-    const deleteData = await Location.deleteOne(submittedData);
+    const deleteData = await TimeZone.deleteOne(submittedData);
     expect(deleteData.ok).toBe(1);
     done();
   });
