@@ -1,0 +1,50 @@
+@import "../../../sass/variables";
+
+.code-of-conduct {
+  height: 581px;
+  margin: 0 30px 20px;
+  border: 1px solid $dark-secondary-color;
+  border-radius: 6px;
+  padding: 30px 10px 10px 25px;
+
+  h5 {
+    font-weight: $font-regular;
+    margin-bottom: 5px;
+  }
+
+  .code-of-conduct-content {
+    display: block;
+    padding-right: 10px;
+    height: 450px;
+    text-align: left;
+
+    p, li, span {
+      margin: 5px 0;
+      line-height: 20px;
+      font-size: 12px;
+    }
+
+    h2, h3 {
+      margin: 15px 0;
+    }
+
+    h2 {
+      font-size: 18px;
+    }
+
+    h3 {
+      font-size: 16px;
+    }
+
+    ol li{
+      list-style-type: decimal;
+      margin-left: 20px;
+    }
+
+    a {
+      color: $accent-royal-blue-color;
+      font-weight: $font-semi-bold;
+      font-size: 12px;
+    }
+  }
+}
