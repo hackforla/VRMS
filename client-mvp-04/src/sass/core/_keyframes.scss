@@ -1,11 +1,6 @@
 // This file store any keyframes or animations for the app
 @import "_mixins";
 
-// Example
-.box {
-  @include transform(rotate(60deg));
-}
-
 // Keyframes
 @-webkit-keyframes fade-in {
   from { opacity: 0; }
@@ -25,9 +20,4 @@
 @keyframes fade-out {
   from { opacity: 1; }
   to { opacity: 0; }
-}
-
-// Apply keyframes or animations to elements
-.error-message, .resend-link-msg {
-  @include fade-in(.4s);
 }

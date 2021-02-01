@@ -1,20 +1,51 @@
-import { LOGIN_SUCCESS, LOGIN_FAIL } from '../actions/types';
+import {
+  AUTH_START,
+  AUTH_SUCCESS,
+  AUTH_FAIL,
+  SET_USER,
+} from '../actions/types';
 
 const authDefaultState = {
-  loggedIn: false,
+  isLoaded: null,
+  authToken: null,
+  loggedIn: null,
+  user: null,
+  error: null,
+  userProfile: null,
 };
 
-export default (state = authDefaultState, { type }) => {
+export default (state = authDefaultState, { type, payload }) => {
   switch (type) {
-    case LOGIN_SUCCESS:
+    case AUTH_START:
       return {
         ...state,
-        loggedIn: true,
+        isLoaded: false,
       };
-    case LOGIN_FAIL:
+    case AUTH_SUCCESS:
       return {
         ...state,
+        isLoaded: true,
+        loggedIn: true,
+        authToken: payload.authToken,
+        user: payload.user,
+        userProfile: {
+          firstName: payload.user.name.firstName,
+          lastName: payload.user.name.lastName,
+          signupEmail: payload.user.email,
+          isAdmin: payload.user.accessLevel === 'admin',
+        },
+      };
+    case AUTH_FAIL:
+      return {
+        ...state,
+        isLoaded: true,
         loggedIn: false,
+        error: payload,
+      };
+    case SET_USER:
+      return {
+        ...state,
+        user: payload,
       };
     default:
       return state;
