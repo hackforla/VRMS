@@ -13,7 +13,7 @@
   }
 }
 
-@media (max-width: 400px) {
+@media (max-height: 896px), (max-width: 400px) {
   .home {
     padding: 25px 52px;
 

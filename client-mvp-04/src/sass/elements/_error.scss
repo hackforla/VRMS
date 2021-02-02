@@ -1,4 +1,5 @@
 @import "../variables";
+@import "../core/_keyframes";
 
 .error-message {
   color: $accent-burnt-sienna-color;
@@ -7,4 +8,5 @@
   font-weight: $font-semi-bold;
   text-align: left;
   display: block;
+  @include fade-in(.4s);
 }

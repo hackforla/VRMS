@@ -2,12 +2,12 @@ import React from 'react';
 import './uiKit.scss';
 import Button from '../../components/common/button/button';
 import confirmIcon from '../../assets/images/icons/confirm.svg';
-import homeIcon from '../../assets/images/icons/home.png';
 import projectIcon from '../../assets/images/icons/311.png';
 import gitHubIcon from '../../assets/images/icons/github.png';
 import RedirectLink from '../../components/common/link/link';
 import Input from '../../components/common/input/input';
 import ErrorMessage from '../../components/common/errorMessage/errorMessage';
+import ProgressBar from '../../components/common/progressBar/progressBar';
 
 /***** DEV-UI-KIT FOR DEVELOPMENT ONLY *****/
 /*UI KIT helps devs determine, which UI elements will be used throughout
@@ -15,11 +15,11 @@ the application. UI elements created based on finalized v0.4 Style Guide.*/
 
 const DevUiKit = () => {
   return (
-    <div className={'kit-container'}>
+    <div className="kit-container custom-scroll-bar">
       <div className={'kit-title'}>VRMS DEV UI-KIT</div>
 
       {/*** HEADERS ***/}
-      <div className={'header-container'}>
+      <div className="header-container">
         <h1 className={'kit-sec-title'}>*** HEADERS ***</h1>
         <h1>VRMS h1</h1>
         <p className={'dev-comment'}>h1 Header: 30px, bold; Main Page Header</p>
@@ -144,16 +144,6 @@ const DevUiKit = () => {
         <p className={'dev-comment'}>Tooltip, works on hover</p>
       </div>
 
-      {/*** MENU ***/}
-      <div className={'menu-container'}>
-        <h1 className={'kit-sec-title'}>*** MENU ***</h1>
-        <div className={'menu-item'}>
-          <img src={homeIcon} className={'menu-icon'} alt="home" />
-          <span className={'menu-name'}>Dashboard</span>
-        </div>
-        <p className={'dev-comment'}>Menu Item</p>
-      </div>
-
       {/*** INPUTS ***/}
       <div className={'inputs-container'}>
         <h1 className={'kit-sec-title'}>*** INPUTS ***</h1>
@@ -171,6 +161,12 @@ const DevUiKit = () => {
         />
       </div>
       <p className={'dev-comment'}>Input with icon</p>
+
+      {/*** PROGRESS BAR ***/}
+      <div className={'progress-container'}>
+        <h1 className={'kit-sec-title'}>*** PROGRESS BAR ***</h1>
+        <ProgressBar total={6} active={3} />
+      </div>
     </div>
   );
 };

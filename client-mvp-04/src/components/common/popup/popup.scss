@@ -1,0 +1,66 @@
+@import '../../../sass/variables';
+@import '../../../sass/core/keyframes';
+
+.popup-container {
+  position: absolute;
+  width: 286px;
+  height: 187px;
+  background: $light-primary-color;
+  z-index: 2;
+  padding: 60px 35px 50px;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  font-size: 18px;
+  line-height: 25px;
+  text-align: left;
+  @include transition(opacity .3s ease-in-out);
+  @include transition-delay(.3s);
+
+  &.open {
+    @include box-shadow(0 0 4px 1px $gray-color);
+    .popup-content {
+      opacity: 1;
+    }
+  }
+}
+
+.button-container {
+  display: block;
+  position: absolute;
+  right: 10px;
+  top: 15px;
+  z-index: 3;
+
+  .close-button {
+    padding: 3px;
+
+    .line {
+      background-color: black;
+      display: block;
+      margin: 7px auto;
+      height: 3px;
+      width: 20px;
+      border-radius: 3px;
+    }
+
+    .line:nth-child(1) {
+      @include transform(translateY(-3px) rotate(45deg));
+    }
+
+    .line:nth-child(2) {
+      @include transform(translateY(-13px) rotate(-45deg));
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.bg-overlay {
+  @include transition(opacity .3s ease-in-out);
+  @include transition-delay(.1s);
+}

@@ -160,10 +160,6 @@ UserController.verifySignIn = async function (req, res) {
     token = token.slice(7, token.length);
   }
 
-  if (!token) {
-    return res.sendStatus(400);
-  }
-
   try {
     const payload = jwt.verify(token, CONFIG_AUTH.SECRET);
     const user = await User.findById(payload.id);
