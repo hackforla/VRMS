@@ -8,7 +8,9 @@ import { useHistory } from 'react-router-dom';
 import Popup from '../../common/popup/popup';
 
 const CodeOfConduct = () => {
-  // 2nd step of onboarding process
+  /**
+   * 2nd step of onboarding process
+   */
   const history = useHistory();
   const popupContent =
     'You must agree to the Code of Conduct to participate in Hack for LA';
@@ -44,16 +46,25 @@ const CodeOfConduct = () => {
   }
 
   useEffect(() => {
-    getCodeOfConductContent().then((res) => extractTextContent(res));
+    async function fetchData() {
+      return await getCodeOfConductContent();
+    }
+    fetchData().then((markdown) => extractTextContent(markdown));
   }, []);
 
   return (
     <>
-      <div className="code-of-conduct-container">
+      <div
+        className="code-of-conduct-container"
+        data-testid="code-of-conduct-container"
+      >
         <h5>Code of conduct</h5>
 
         {isLoaded ? (
-          <Markdown className="code-of-conduct-content custom-scroll-bar">
+          <Markdown
+            className="code-of-conduct-content custom-scroll-bar"
+            data-testid="code-of-conduct-content"
+          >
             {codeOfConductText}
           </Markdown>
         ) : (
@@ -61,13 +72,22 @@ const CodeOfConduct = () => {
         )}
       </div>
 
-      <div className="code-of-conduct-buttons">
+      <div
+        className="code-of-conduct-buttons"
+        data-testid="code-of-conduct-buttons"
+      >
         <input
           type="button"
           value="Don’t Agree"
+          data-testid="dont-agree-btn"
           onClick={() => setIsPopupOpen(!isPopupOpen)}
         />
-        <input type="button" value="Agree" onClick={() => handleUserAgree()} />
+        <input
+          type="button"
+          value="Agree"
+          data-testid="agree-btn"
+          onClick={() => handleUserAgree()}
+        />
       </div>
 
       <ProgressBar total={6} active={2} />
