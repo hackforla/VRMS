@@ -5,11 +5,19 @@ const Popup = ({ content, isPopupOpen, closePopup }) => {
   return (
     <div
       className={isPopupOpen ? 'bg-overlay active' : 'bg-overlay'}
+      data-testid="bg-overlay"
       onClick={(e) => closePopup(e)}
     >
-      <div className={isPopupOpen ? 'popup-container open' : 'popup-container'}>
+      <div
+        className={isPopupOpen ? 'popup-container open' : 'popup-container'}
+        data-testid="popup-container"
+      >
         <div className="button-container">
-          <div className="close-button" id="popup-close-btn">
+          <div
+            className="close-button"
+            id="popup-close-btn"
+            data-testid="popup-close-btn"
+          >
             <span className="line" />
             <span className="line" />
           </div>
