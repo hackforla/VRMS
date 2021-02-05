@@ -83,3 +83,37 @@
     }
   }
 }
+
+@media (max-height: 740px) and (max-width: 420px) {
+  .code-of-conduct-container {
+    height: 445px;
+  }
+
+  .code-of-conduct-container .code-of-conduct-content {
+    height: 375px;
+  }
+}
+
+@media (max-height: 740px) and (max-width: 400px) {
+  .code-of-conduct-container {
+    height: 390px;
+  }
+
+  .code-of-conduct-container .code-of-conduct-content {
+    height: 314px;
+  }
+}
+
+@media (max-height: 620px) and (max-width: 896px), (max-width: 350px) {
+  .code-of-conduct-container {
+    height: 280px;
+  }
+
+  .code-of-conduct-container .code-of-conduct-content {
+    height: 217px;
+  }
+
+  .code-of-conduct-buttons input[type=button] {
+    font-size: 17px;
+  }
+}

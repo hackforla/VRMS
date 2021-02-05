@@ -59,9 +59,11 @@
   }
 }
 
-@media (max-height: 896px) and (max-width: 414px) {
+@media (max-height: 896px) and (max-width: 420px) {
   .app-container {
     height: 100vh;
+    border: none;
+    border-radius: 0;
   }
 
   .app-main {
@@ -73,19 +75,12 @@
   }
 }
 
-@media (max-width: 414px) {
-  .app-container {
-    border: none;
-    border-radius: 0;
-  }
-}
-
 @media (max-width: 400px) {
-  .app-main {
+ /* .app-main {
     display: flex;
     align-items: center;
     justify-content: center;
-  }
+  }*/
 
   .flex-container {
     padding: 60px 25px 20px;
