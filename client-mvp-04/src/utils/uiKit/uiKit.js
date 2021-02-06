@@ -7,6 +7,7 @@ import gitHubIcon from '../../assets/images/icons/github.png';
 import RedirectLink from '../../components/common/link/link';
 import Input from '../../components/common/input/input';
 import ErrorMessage from '../../components/common/errorMessage/errorMessage';
+import Checkbox from '../../components/common/checkbox/checkbox';
 
 /***** DEV-UI-KIT FOR DEVELOPMENT ONLY *****/
 /*UI KIT helps devs determine, which UI elements will be used throughout
@@ -149,7 +150,6 @@ const DevUiKit = () => {
 
         <Input placeholder={'Enter your email'} type={'email'} />
         <p className={'dev-comment'}>Default Input, components/common/input</p>
-      </div>
 
       <div className={'text-field-icon-container'}>
         <img src={gitHubIcon} className={'text-field-icon'} alt={'gitHub'} />
@@ -160,7 +160,12 @@ const DevUiKit = () => {
         />
       </div>
       <p className={'dev-comment'}>Input with icon</p>
+
+    <div className={'checkbox-container'}>
+      <Checkbox content='Checkbox Text'/>
     </div>
+    <p className={'dev-comment'}>Custom Checkbox</p>
+    </div> 
   );
 };
 
