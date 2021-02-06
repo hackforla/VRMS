@@ -1,0 +1,32 @@
+@import '../../../sass/variables';
+
+input[type='checkbox'] {
+  display: none;
+}
+
+input[type='checkbox'] + span:hover {
+  border: 1px solid $dark-primary-color;
+}
+
+input[type='checkbox'] + span {
+  display: inline-block;
+  position: relative;
+  top: -1px;
+  width: 12px;
+  height: 12px;
+  margin: -1px 0px 0 0;
+  vertical-align: middle;
+  background: white left top no-repeat;
+  border: 1px solid $gray-color;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+input[type='checkbox']:checked + span {
+  background: $accent-royal-blue-color -19px top no-repeat;
+  border-color: $accent-royal-blue-color;
+}
+
+input[type='checkbox'] + span {
+  margin-right: 4px;
+}
