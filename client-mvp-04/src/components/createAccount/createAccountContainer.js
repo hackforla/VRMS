@@ -29,8 +29,8 @@ const CreateAccountContainer = () => {
       setErrorMsgInvalidEmail(false);
       const userData = await checkUser(userEmail);
       if (!userData) {
-        // user is not registered in app, redirect to dummy page
-        history.push('/page');
+        // user is not registered in app, redirect to the 1st of onboarding
+        history.push('/onboarding/email-setup');
       } else {
         setErrorMsgRegisteredEmail(true);
       }

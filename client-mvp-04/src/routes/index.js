@@ -4,11 +4,13 @@ import Error from '../components/error/error';
 import Login from '../components/login/loginContainer';
 import Auth from '../components/auth/auth';
 import HandleAuth from '../components/auth/handleAuth';
+import ExpiredAuthSessionPage from '../components/auth/expiredAuthSessionPage';
 import Dashboard from '../components/dashboard/dashboard';
 import CreateAccountContainer from '../components/createAccount/createAccountContainer';
-import ExpiredAuthSessionPage from '../components/auth/expiredAuthSessionPage';
 import CodeOfConduct from '../components/onboarding/codeOfConduct/codeOfConduct';
+import EmailSetup from '../components/onboarding/emailSetup/emailSetup';
 
+// For development only
 import DevUiKit from '../utils/uiKit/uiKit';
 
 export const Routes = [
@@ -43,19 +45,24 @@ export const Routes = [
     component: Dashboard,
   },
   {
-    path: '/page',
-    key: 'dummy',
-    component: Dummy,
-  },
-  {
     path: '/create-account',
     key: 'create-account',
     component: CreateAccountContainer,
   },
   {
+    path: '/onboarding/email-setup',
+    key: 'email-setup',
+    component: EmailSetup,
+  },
+  {
     path: '/onboarding/code-of-conduct',
     key: 'code-of-conduct',
     component: CodeOfConduct,
+  },
+  {
+    path: '/page',
+    key: 'dummy',
+    component: Dummy,
   },
   {
     // DEV-UI-KIT for Development Only
