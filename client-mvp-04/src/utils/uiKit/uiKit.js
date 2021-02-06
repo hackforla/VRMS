@@ -151,21 +151,22 @@ const DevUiKit = () => {
         <Input placeholder={'Enter your email'} type={'email'} />
         <p className={'dev-comment'}>Default Input, components/common/input</p>
 
-      <div className={'text-field-icon-container'}>
-        <img src={gitHubIcon} className={'text-field-icon'} alt={'gitHub'} />
-        <input
-          type="text"
-          name="text-icon-field"
-          placeholder={`GitHub user name (not email)`}
-        />
-      </div>
-      <p className={'dev-comment'}>Input with icon</p>
+        <div className={'text-field-icon-container'}>
+          <img src={gitHubIcon} className={'text-field-icon'} alt={'gitHub'} />
+          <input
+            type="text"
+            name="text-icon-field"
+            placeholder={`GitHub user name (not email)`}
+          />
+        </div>
+        <p className={'dev-comment'}>Input with icon</p>
 
-    <div className={'checkbox-container'}>
-      <Checkbox content='Checkbox Text'/>
+        <div className={'checkbox-container'}>
+          <Checkbox content="Checkbox Text" />
+        </div>
+        <p className={'dev-comment'}>Custom Checkbox</p>
+      </div>
     </div>
-    <p className={'dev-comment'}>Custom Checkbox</p>
-    </div> 
   );
 };
 
