@@ -164,7 +164,7 @@ const DevUiKit = () => {
         <div className={'checkbox-container'}>
           <Checkbox content="Checkbox Text" />
         </div>
-        <p className={'dev-comment'}>Custom Checkbox</p>
+        <p className={'dev-comment'}>Custom Checkbox input</p>
       </div>
     </div>
   );
