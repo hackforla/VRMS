@@ -162,6 +162,28 @@ const DevUiKit = () => {
       </div>
       <p className={'dev-comment'}>Input with icon</p>
 
+      <label for="big-radio-button" className={'radio-button-container'}>
+        <input
+          type="radio"
+          name="big-radio-button"
+          id="big-radio-button"
+          className={'actual-radio-button'}
+        />
+        <div className={'custom-radio-button'}></div>
+      </label>
+      <p className={'dev-comment'}>Input with radio button bigger size</p>
+
+      <label for="small-radio-button" className={'radio-button-container'}>
+        <input
+          type="radio"
+          name="small-radio-button"
+          id="small-radio-button"
+          className={'actual-radio-button'}
+        />
+        <div className={'custom-small-radio-button'}></div>
+      </label>
+      <p className={'dev-comment'}>Input with radio button smaller size</p>
+
       {/*** PROGRESS BAR ***/}
       <div className={'progress-container'}>
         <h1 className={'kit-sec-title'}>*** PROGRESS BAR ***</h1>
