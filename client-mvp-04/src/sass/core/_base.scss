@@ -87,10 +87,12 @@ a {
 
 .bg-overlay {
   opacity: 0;
+  display: none;
   @include transition(opacity .3s ease-in-out);
   @include transition-delay(.5s);
   &.active {
     position: absolute;
+    display: block;
     z-index: 1;
     top: 0;
     left: 0;
