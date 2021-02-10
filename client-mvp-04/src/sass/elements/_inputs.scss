@@ -1,4 +1,4 @@
-@import "../variables";
+@import '../variables';
 
 .text-field-container {
   display: flex;
@@ -44,20 +44,14 @@
 }
 
 .radio-button-container {
-  margin: 0px;
-  padding: 0px;
   display: inline-flex;
   cursor: pointer;
   margin-right: 10px;
   .actual-radio-button {
     display: none;
-    &:checked {
-      + {
-        .custom-radio-button {
-          &:after {
-            transform: scale(1);
-          }
-        }
+    &:checked ~ .custom-radio-button {
+      &:after {
+        transform: scale(1);
       }
     }
   }
@@ -66,11 +60,11 @@
 .custom-radio-button {
   width: 17px;
   height: 17px;
-  border: 1px solid $dark-light-color;
+  border: 1px solid $radio-button-color;
   border-radius: 50%;
   margin-right: 10px;
   box-sizing: border-box;
-  padding: 3px;
+  padding: 3.25px;
   &:after {
     content: '';
     width: 100%;
@@ -86,4 +80,5 @@
   @extend .custom-radio-button;
   width: 13px;
   height: 13px;
+  padding: 2.25px;
 }
