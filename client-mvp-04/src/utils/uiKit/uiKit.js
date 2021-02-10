@@ -162,25 +162,53 @@ const DevUiKit = () => {
       </div>
       <p className={'dev-comment'}>Input with icon</p>
 
-      <label for="big-radio-button" className={'radio-button-container'}>
+      <label htmlFor="big-button-option-1" className={'radio-button-container'}>
         <input
           type="radio"
           name="big-radio-button"
-          id="big-radio-button"
+          id="big-button-option-1"
           className={'actual-radio-button'}
         />
-        <div className={'custom-radio-button'}></div>
+        <span className={'custom-radio-button'}></span>
+        Option 1
+      </label>
+      <label htmlFor="big-button-option-2" className={'radio-button-container'}>
+        <input
+          type="radio"
+          name="big-radio-button"
+          id="big-button-option-2"
+          className={'actual-radio-button'}
+        />
+        <span className={'custom-radio-button'}></span>
+        Option 2
       </label>
       <p className={'dev-comment'}>Input with radio button bigger size</p>
 
-      <label for="small-radio-button" className={'radio-button-container'}>
+      <label
+        htmlFor="small-button-option-1"
+        className={'radio-button-container'}
+      >
         <input
           type="radio"
           name="small-radio-button"
-          id="small-radio-button"
+          id="small-button-option-1"
           className={'actual-radio-button'}
         />
-        <div className={'custom-small-radio-button'}></div>
+        <span className={'custom-small-radio-button'}></span>
+        Option 1
+      </label>
+      <label
+        htmlFor="small-button-option-2"
+        className={'radio-button-container'}
+      >
+        <input
+          type="radio"
+          name="small-radio-button"
+          id="small-button-option-2"
+          className={'actual-radio-button'}
+        />
+        <span className={'custom-small-radio-button'}></span>
+        Option 2
       </label>
       <p className={'dev-comment'}>Input with radio button smaller size</p>
 
