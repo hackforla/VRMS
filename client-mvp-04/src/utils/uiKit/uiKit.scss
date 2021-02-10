@@ -1,4 +1,6 @@
 .kit-container {
+  height: 628px;
+
   .kit-title {
     font-size: 28px;
     font-weight: bold;
@@ -27,5 +29,9 @@
     border-top: 2px solid darkgray;
     justify-content: center;
     margin: 5px 0 25px;
+  }
+
+  .button-container {
+    position: static;
   }
 }
