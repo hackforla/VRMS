@@ -1,14 +1,14 @@
 // COLOR PALETTE VARIABLES
-$light-primary-color: #ffffff;
+$light-primary-color: #FFFFFF;
 $concrete-color: #f2f2f2;
-$silver-color: #c4c4c4;
+$silver-color: #C4C4C4;
 $gray-color: #828282;
 $dark-primary-color: #000000;
 $dark-secondary-color: rgba(0, 0, 0, 0.4);
-$accent-royal-blue-color: #2f80ed;
-$accent-burnt-sienna-color: #eb5757;
+$accent-royal-blue-color: #2F80ED;
+$accent-burnt-sienna-color: #EB5757;
 $accent-eucalyptus-color: #219653;
-$accent-torch-red-color: #fa114f;
+$accent-torch-red-color: #FA114F;
 
 // FONT COLOR
 $font-color: $dark-primary-color;
@@ -17,7 +17,7 @@ $font-color: $dark-primary-color;
 $header-color: $dark-primary-color;
 
 // BUTTON COLORS
-$button-primary-color: $dark-primary-color;
+$button-primary-color: $dark-primary-color; 
 $button-primary-bg-color: $light-primary-color;
 $button-accent-color: $light-primary-color;
 $button-accent-bg-color: $accent-eucalyptus-color;
@@ -30,7 +30,7 @@ $link-accent-color: $accent-royal-blue-color;
 $border-color: $dark-secondary-color;
 
 // PROGRESS BAR COLORS
-$progress-item-default-color: #d3d0cb;
+$progress-item-default-color: #D3D0CB;
 $progress-item-active-color: $accent-royal-blue-color;
 
 // INPUT COLORS
