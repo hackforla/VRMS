@@ -46,7 +46,7 @@
 .radio-button-container {
   display: inline-flex;
   cursor: pointer;
-  margin-right: 10px;
+  margin: 0px 10px 22px 0px;
   .actual-radio-button {
     display: none;
     &:checked ~ .custom-radio-button {
