@@ -161,6 +161,68 @@ const DevUiKit = () => {
         />
       </div>
       <p className={'dev-comment'}>Input with icon</p>
+      <div>
+        <label
+          htmlFor="big-button-option-1"
+          className={'radio-button-container'}
+        >
+          <input
+            type="radio"
+            name="big-radio-button"
+            id="big-button-option-1"
+            className={'actual-radio-button'}
+          />
+          <span className={'custom-radio-button'} />
+          Option 1
+        </label>
+      </div>
+      <div>
+        <label
+          htmlFor="big-button-option-2"
+          className={'radio-button-container'}
+        >
+          <input
+            type="radio"
+            name="big-radio-button"
+            id="big-button-option-2"
+            className={'actual-radio-button'}
+          />
+          <span className={'custom-radio-button'} />
+          Option 2
+        </label>
+      </div>
+      <p className={'dev-comment'}>Input with radio button bigger size</p>
+      <div>
+        <label
+          htmlFor="small-button-option-1"
+          className={'radio-button-container'}
+        >
+          <input
+            type="radio"
+            name="small-radio-button"
+            id="small-button-option-1"
+            className={'actual-radio-button'}
+          />
+          <span className={'custom-small-radio-button'} />
+          Option 1
+        </label>
+      </div>
+      <div>
+        <label
+          htmlFor="small-button-option-2"
+          className={'radio-button-container'}
+        >
+          <input
+            type="radio"
+            name="small-radio-button"
+            id="small-button-option-2"
+            className={'actual-radio-button'}
+          />
+          <span className={'custom-small-radio-button'} />
+          Option 2
+        </label>
+      </div>
+      <p className={'dev-comment'}>Input with radio button smaller size</p>
 
       {/*** PROGRESS BAR ***/}
       <div className={'progress-container'}>

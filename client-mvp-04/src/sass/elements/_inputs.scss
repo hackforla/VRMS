@@ -1,4 +1,4 @@
-@import "../variables";
+@import '../variables';
 
 .text-field-container {
   display: flex;
@@ -41,4 +41,44 @@
     left: 14px;
     top: 14px;
   }
+}
+
+.radio-button-container {
+  display: inline-flex;
+  cursor: pointer;
+  margin: 0px 10px 22px 0px;
+  .actual-radio-button {
+    display: none;
+    &:checked ~ .custom-radio-button {
+      &:after {
+        transform: scale(1);
+      }
+    }
+  }
+}
+
+.custom-radio-button {
+  width: 17px;
+  height: 17px;
+  border: 1px solid $radio-button-color;
+  border-radius: 50%;
+  margin-right: 10px;
+  box-sizing: border-box;
+  padding: 3.25px;
+  &:after {
+    content: '';
+    width: 100%;
+    height: 100%;
+    display: block;
+    background: $silver-color;
+    border-radius: 50%;
+    transform: scale(0);
+  }
+}
+
+.custom-small-radio-button {
+  @extend .custom-radio-button;
+  width: 13px;
+  height: 13px;
+  padding: 2.25px;
 }
