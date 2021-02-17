@@ -93,11 +93,15 @@ UserController.delete = async function (req, res) {
   }
 };
 
-function generateAccessToken(user) {
+function generateAccessToken(user, auth_origin) {
   // expires after half and hour (1800 seconds = 30 minutes)
-  return jwt.sign({ id: user.id, role: user.accessLevel }, CONFIG_AUTH.SECRET, {
-    expiresIn: `${CONFIG_AUTH.TOKEN_EXPIRATION_SEC}s`,
-  });
+  return jwt.sign(
+    { id: user.id, role: user.accessLevel, auth_origin: auth_origin },
+    CONFIG_AUTH.SECRET,
+    {
+      expiresIn: `${CONFIG_AUTH.TOKEN_EXPIRATION_SEC}s`,
+    },
+  );
 }
 
 UserController.createUser = function (req, res) {
@@ -127,7 +131,7 @@ UserController.createUser = function (req, res) {
 };
 
 UserController.signin = function (req, res) {
-  const { email } = req.body;
+  const { email, auth_origin } = req.body;
   const { origin } = req.headers;
 
   User.findOne({ email })
@@ -135,9 +139,10 @@ UserController.signin = function (req, res) {
       if (!user) {
         return res.sendStatus(401);
       }
-      const jsonToken = generateAccessToken(user);
+      const jsonToken = generateAccessToken(user, auth_origin);
       EmailController.sendLoginLink(
         req.body.email,
+        req.body.auth_origin,
         user.name.firstName,
         jsonToken,
         req.cookie,
@@ -162,6 +167,8 @@ UserController.verifySignIn = async function (req, res) {
 
   try {
     const payload = jwt.verify(token, CONFIG_AUTH.SECRET);
+    // TODO: remove console.log
+    console.log(payload);
     const user = await User.findById(payload.id);
     res.cookie('token', token, { httpOnly: true });
     return res.send(user);
