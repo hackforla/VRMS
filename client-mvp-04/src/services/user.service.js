@@ -1,11 +1,11 @@
 import { HEADERS, CHECK_USER, SIGN_IN } from '../utils/endpoints';
 
-export async function checkAuth(email) {
+export async function checkAuth(email, auth_origin) {
   try {
     const response = await fetch(SIGN_IN, {
       method: 'POST',
       headers: HEADERS,
-      body: JSON.stringify({ email: email }),
+      body: JSON.stringify({ email: email, auth_origin: auth_origin }),
     });
     return response.status === 200;
   } catch (error) {
@@ -15,12 +15,12 @@ export async function checkAuth(email) {
   }
 }
 
-export async function checkUser(email) {
+export async function checkUser(email, auth_origin) {
   try {
     const response = await fetch(CHECK_USER, {
       method: 'POST',
       headers: HEADERS,
-      body: JSON.stringify({ email: email }),
+      body: JSON.stringify({ email: email, auth_origin: auth_origin }),
     });
     return await response.json();
   } catch (error) {
