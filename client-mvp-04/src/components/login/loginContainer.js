@@ -5,10 +5,12 @@ import { Email } from '../../utils/validation/validation';
 import { checkAuth, checkUser } from '../../services/user.service';
 import { useHistory } from 'react-router-dom';
 import allActions from '../../store/actions';
+import { AUTH_ORIGIN } from '../../utils/constants';
 
 const LoginContainer = () => {
   const history = useHistory();
   const dispatch = useDispatch();
+  const [LOG_IN, ,] = AUTH_ORIGIN;
 
   // Local UI State
   const [isDisabled, setIsDisabled] = useState(true);
@@ -30,8 +32,8 @@ const LoginContainer = () => {
     if (Email.isValid(userEmail)) {
       setIsEmailValid(true);
       setErrorMsgInvalidEmail(false);
-      const userData = await checkUser(userEmail);
-      const isAuth = await checkAuth(userEmail);
+      const userData = await checkUser(userEmail, LOG_IN);
+      const isAuth = await checkAuth(userEmail, LOG_IN);
       if (isAuth) {
         dispatch(allActions.authActions.setUser(userData));
         history.push('/login/auth');
