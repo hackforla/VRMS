@@ -21,7 +21,7 @@ router.post('/', (req, res) => {
         if (!user) {
           return res.sendStatus(400);
         } else {
-          return res.status(200).send(user);
+          return res.status(200).send({ user: user, auth_origin: auth_origin });
         }
       })
       .catch((err) => {

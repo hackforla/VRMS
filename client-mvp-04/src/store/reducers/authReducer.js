@@ -47,7 +47,8 @@ export default (state = authDefaultState, { type, payload }) => {
     case SET_USER:
       return {
         ...state,
-        user: payload,
+        user: payload.user,
+        authOrigin: payload.auth_origin,
       };
     default:
       return state;
