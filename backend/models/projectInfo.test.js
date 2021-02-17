@@ -21,7 +21,7 @@ describe("ProjectInfo Model saves the correct values", () => {
       name: "projectTest",
       description: "An instance of a Project Info model",
       projectStatus: "Active", // Active, Completed, or Paused
-      locationZone: "Remote", // DTLA, Westside, South LA, or Remote (hacknight)
+      locationZone: "location1", 
       createdDate: 1594023390039, // date/time project was created
       completedDate: 1594023390039, // only if Status = Completed, date/time completed
       urls: {repository: "https://github.com/hackforla/VRMS"}, // link to main repo
