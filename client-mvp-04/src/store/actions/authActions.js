@@ -3,17 +3,18 @@ import { HEADERS, AUTH_VERIFY_SIGN_IN } from '../../utils/endpoints.js';
 
 const authStart = () => ({ type: AUTH_START });
 
-const authSuccess = (authToken, user) => ({
+const authSuccess = (authToken, authOrigin, user) => ({
   type: AUTH_SUCCESS,
   payload: {
     user: user,
     authToken: authToken,
+    authOrigin: authOrigin,
   },
 });
 
 const authFail = (error) => ({ type: AUTH_FAIL, payload: error });
 
-const authUserWithToken = (token) => {
+const authUserWithToken = (token, auth_origin) => {
   return async (dispatch) => {
     dispatch(authStart);
     try {
@@ -22,7 +23,7 @@ const authUserWithToken = (token) => {
         headers: { ...HEADERS, 'x-access-token': token },
       });
       const user = await response.json();
-      dispatch(authSuccess(token, user));
+      dispatch(authSuccess(token, auth_origin, user));
     } catch (error) {
       console.log('User is not authorized with token');
       console.log(error);
