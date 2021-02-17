@@ -7,15 +7,15 @@ setupDB("projectInfo-model");
 
 describe("ProjectInfo Model saves the correct values", () => {
   test("Save a model instance and then read from the db", async (done) => {
-
-    console.log('MODELS: %j', mongoose.modelNames());
-
+    
     const testData = {
       locations: ["location1","location2"]
     };
 
     await Location.create(testData);
     const test = await Location.find();
+
+    console.log('MODELS: %j', mongoose.modelNames());
 
     const submittedData = {
       name: "projectTest",
