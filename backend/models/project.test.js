@@ -50,7 +50,7 @@ describe('UPDATE', () => {
     };
 
     await Project.create(submittedData);
-    const savedDataArray = await Project.find().exec();
+    const savedDataArray = await Project.find();
     const savedData = savedDataArray[0];
     expect(savedData.name).toBe(submittedData.name);
 
