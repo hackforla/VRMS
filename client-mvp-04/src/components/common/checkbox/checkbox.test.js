@@ -1,6 +1,6 @@
 import React from 'react';
 import Checkbox from './checkbox';
-import { render, cleanup } from '@testing-library/react';
+import { render, cleanup, fireEvent, screen } from '@testing-library/react';
 
 afterEach(cleanup);
 
@@ -28,5 +28,24 @@ describe('Checkbox', () => {
     expect(getByTestId('checkbox')).toHaveClass('test-checkbox');
   });
 
-  // TODO: Write test simulating onClick event and ensure checked updates to true
+  test('Should change checked property of hidden checkbox to true when custom checkbox component is clicked', () => {
+    const props = {
+      content: 'Test Checkbox',
+      className: 'test-checkbox',
+    };
+    const { getByTestId } = render(
+      <Checkbox
+        value={props.content}
+        content={props.content}
+        className={props.className}
+      />
+    );
+
+    const hiddenCheckbox = document.getElementsByTagName('input')[0];
+    const fauxCheckbox = getByTestId('checkbox');
+
+    expect(hiddenCheckbox.checked).toBe(false);
+    fireEvent.click(fauxCheckbox);
+    expect(hiddenCheckbox.checked).toBe(true);
+  });
 });

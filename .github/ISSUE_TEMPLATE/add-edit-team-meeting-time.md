@@ -14,7 +14,7 @@ We need to add/change the team meeting time for [YOUR PROJECT NAME HERE] so it w
 - [ ] yes
 - [ ] no
 
-### List all of your meeting times (day of week, start time am/pm, duration):
+### List all of your meeting times (PST time ONLY) (day of week, start time am/pm, duration):
 EXAMPLE: Monday, 7:30pm, 2 hours
 
 ### What is your project page URL?

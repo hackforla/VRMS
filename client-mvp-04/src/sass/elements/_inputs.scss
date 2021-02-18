@@ -43,26 +43,60 @@
   }
 }
 
-/****** CHECKBOX COMPONENT STYLING ******/
+.radio-button-container {
+  display: inline-flex;
+  cursor: pointer;
+  margin: 0px 10px 22px 0px;
+  .actual-radio-button {
+    display: none;
+    &:checked ~ .custom-radio-button {
+      &:after {
+        transform: scale(1);
+      }
+    }
+  }
+}
+
+.custom-radio-button {
+  width: 17px;
+  height: 17px;
+  border: 1px solid $radio-button-color;
+  border-radius: 50%;
+  margin-right: 10px;
+  box-sizing: border-box;
+  padding: 3.25px;
+  &:after {
+    content: '';
+    width: 100%;
+    height: 100%;
+    display: block;
+    background: $silver-color;
+    border-radius: 50%;
+    transform: scale(0);
+  }
+}
+
+.custom-small-radio-button {
+  @extend .custom-radio-button;
+  width: 13px;
+  height: 13px;
+  padding: 2.25px;
+}
 
 input[type='checkbox'] {
   display: none;
-}
-
-input[type='checkbox'] + span:hover {
-  border: 1px solid $dark-primary-color;
 }
 
 input[type='checkbox'] + span {
   display: inline-block;
   position: relative;
   top: -1px;
-  width: 12px;
-  height: 12px;
+  width: 15px;
+  height: 15px;
   margin: -1px 0px 0 0;
   vertical-align: middle;
   background: white left top no-repeat;
-  border: 1px solid $gray-color;
+  border: 1px solid $dark-primary-color;
   border-radius: 3px;
   cursor: pointer;
 }

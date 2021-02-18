@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './checkbox.scss';
 
 const Checkbox = ({ content, className, dataTestid }) => {
   const [isChecked, setChecked] = useState(false);
@@ -20,7 +19,7 @@ const Checkbox = ({ content, className, dataTestid }) => {
         onChange={() => isChecked}
         value={content}
       />
-      <span></span>
+      <span />
       {content}
     </span>
   );
