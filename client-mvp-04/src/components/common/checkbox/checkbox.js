@@ -10,7 +10,7 @@ const Checkbox = ({ content, className, dataTestid }) => {
   };
 
   return (
-    <span onClick={toggleCheck}>
+    <div onClick={toggleCheck} className="checkbox-wrapper">
       <input
         type="checkbox"
         data-testid={dataTestid}
@@ -21,7 +21,7 @@ const Checkbox = ({ content, className, dataTestid }) => {
       />
       <span />
       {content}
-    </span>
+    </div>
   );
 };
 

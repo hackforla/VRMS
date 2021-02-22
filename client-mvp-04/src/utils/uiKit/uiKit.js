@@ -164,15 +164,10 @@ const DevUiKit = () => {
 
         <div className={'checkbox-container'}>
           <Checkbox content="Checkbox Text" />
-          <p className={'dev-comment'}>Custom Checkbox input</p>
-        </div>
-
-        <div className={'checkbox-container'}>
           <Checkbox content="Checkbox Text" />
-          <p className={'dev-comment'}>Custom Checkbox input</p>
         </div>
+        <p className={'dev-comment'}>Custom Checkbox</p>
 
-        <p className={'dev-comment'}>Input with icon</p>
         <div>
           <label
             htmlFor="big-button-option-1"
