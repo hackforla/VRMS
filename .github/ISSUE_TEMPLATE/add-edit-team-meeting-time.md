@@ -14,8 +14,10 @@ We need to add/change the team meeting time for [YOUR PROJECT NAME HERE] so it w
 - [ ] yes
 - [ ] no
 
-### List all of your meeting times (PST time ONLY) (day of week, start time am/pm, duration):
-EXAMPLE: Monday, 7:30pm, 2 hours
+### List all of your meeting times (PST time ONLY) (Name of project, name of team meeting, day of week, start time am/pm, duration):
+EXAMPLE: 
+- Home Unite US, Management, Saturday 12:30pm, 1 hour
+- Home Unite US, Team meeting, Tuesday 6pm, 2 hours
 
 ### What is your project page URL?
 https://www.hackforla.org/projects/vrms
