@@ -9,6 +9,7 @@ import Input from '../../components/common/input/input';
 import ErrorMessage from '../../components/common/errorMessage/errorMessage';
 import ProgressBar from '../../components/common/progressBar/progressBar';
 import Checkbox from '../../components/common/checkbox/checkbox';
+import searchIcon from '../../assets/images/icons/searchIcon.svg';
 
 /***** DEV-UI-KIT FOR DEVELOPMENT ONLY *****/
 /*UI KIT helps devs determine, which UI elements will be used throughout
@@ -231,11 +232,21 @@ const DevUiKit = () => {
         </div>
         <p className={'dev-comment'}>Input with radio button smaller size</p>
 
-        {/*** PROGRESS BAR ***/}
-        <div className={'progress-container'}>
-          <h1 className={'kit-sec-title'}>*** PROGRESS BAR ***</h1>
-          <ProgressBar total={6} active={3} />
+        <div className={'text-field-rounded-icon-container'}>
+          <input
+            type="text"
+            name="text-icon-field"
+            placeholder={`Search Reports`}
+          />
+          <img src={searchIcon} className={'text-field-icon'} alt={'search'} />
         </div>
+        <p className={'dev-comment'}>Rounded input with icon</p>
+      </div>
+
+      {/*** PROGRESS BAR ***/}
+      <div className={'progress-container'}>
+        <h1 className={'kit-sec-title'}>*** PROGRESS BAR ***</h1>
+        <ProgressBar total={6} active={3} />
       </div>
     </div>
   );

@@ -113,3 +113,31 @@ input[type='checkbox']:checked + span {
 input[type='checkbox'] + span {
   margin-right: 4px;
 }
+
+.text-field-rounded-icon-container {
+  @extend .text-field-container;
+  position: relative;
+  margin-bottom: 32px;
+  input {
+    max-width: 230px;
+    border: 2px solid $rounded-input-color;
+    border-radius: 30px;
+    padding: 6px 45px 7px 21px;
+    color: $dark-primary-color;
+    font-weight: 600;
+    font-size: 14px;
+    &:focus {
+      border: 2px solid $rounded-input-color;
+    }
+    &::placeholder {
+      color: $gray-color;
+    }
+  }
+  .text-field-icon {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    right: 18px;
+    top: 7px;
+  }
+}
