@@ -33,7 +33,8 @@ const projectSchema = mongoose.Schema({
     videoConferenceLink: { type: String },
     lookingDescription: { type: String },               // narrative on what the project is looking for
     recruitingCategories: [{ type: String }],           // same as global Skills picklist
-    partners: [{ type: String }]                        // any third-party partners on the project, e.g. City of LA
+    partners: [{ type: String }],                       // any third-party partners on the project, e.g. City of LA
+    managedByUsers: [{ type: String }]                  // Which users may manage this project.                 
 });
 
 projectSchema.methods.serialize = function() {
@@ -56,7 +57,8 @@ projectSchema.methods.serialize = function() {
         videoConferenceLink: this.videoConferenceLink,
         lookingDescription: this.lookingDescription,
         recruitingCategories: this.recruitingCategories,
-        partners: this.partners
+        partners: this.partners,
+        managedByUsers: this.managedByUsers
     };
 };
 
