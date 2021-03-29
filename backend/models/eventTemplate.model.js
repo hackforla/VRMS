@@ -6,8 +6,8 @@ mongoose.Promise = global.Promise;
 
 const eventTemplateSchema = mongoose.Schema({
     name: { type: String },
-    belongsToProjectID:{type:String}, // Ative project an event is a child of, if any (structured)
-    eventManagerID:{type:String},     // ID of user that is responsible for managing event
+    belongsToProjectID:{type:Number}, // Ative project an event is a child of, if any (structured)
+    eventManagerID:{type:Number},     // ID of user that is responsible for managing event
     locationZone: { type: mongoose.Schema.Types.ObjectId,  ref: 'TimeZone'  },                                // HfLA locations project participates at (predefined in dictionary)
     locationName:{ type: String },    // Name of event location
     description: { type: String },
@@ -37,6 +37,16 @@ eventTemplateSchema.methods.serialize = function() {
     return {
         id: this._id,
         name: this.name,
+
+        belongsToProjectID: this.belongsToProjectID,
+        eventManagerID: this.eventManagerID,
+        locationZone:this.locationZone,
+        locationName: this.locationName,
+        timeZone: this.timeZone,
+        templateID: this.templateID,
+        recurInterval: this.recurInterval,
+        monthWeek: this.monthWeek,
+
         description: this.description,
         type: this.type,
         createdDate: this.createdDate,
