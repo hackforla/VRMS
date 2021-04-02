@@ -36,6 +36,12 @@ const Navbar = (props) => {
                             <Link to="/add/event">
                                 <p className="home-link-text">ADD EVENT</p>
                             </Link>
+                            <Link to="/useradmin">
+                                <p className="home-link-text">USERS</p>
+                            </Link>
+                            <Link to="/projects">
+                                <p className="home-link-text">PROJECTS</p>
+                            </Link>
                         </>
                     ) : null}
                 </div>
