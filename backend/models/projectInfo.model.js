@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const Location = require('./dictionaries/location.model');
-const TimeZone = require('./dictionaries/timeZone.model');
+const {Location} = require('./dictionaries/location.model');
+const {TimeZone} = require('./dictionaries/timeZone.model');
 const JobRole = require('./dictionaries/jobRole.model');
 
 mongoose.Promise = global.Promise;
@@ -14,43 +14,25 @@ const projectInfoSchema = mongoose.Schema({
     description: { type: String, maxLength: 1000 },
     locationZone: {
         type: String,
-        validate: 
+        validate:  
         {
-            validator(v) {
-
-                if (v) {
-                    Location.find({}, (err, docs) => {
-                        if (err) {
-                            return err;
-                        } 
-                        return docs[0].locations.indexOf(v) >= 0;
-                    });
-                }
-                return false;
-
+            validator: async function(v){
+                let loc = await Location.find({});
+                return  loc[0].locations.indexOf(v) >= 0
             },
-            message: props => `${props.value} is not a valid phone number!`
+            message: props => `${props.value} is not a valid location`
         }  
       },
     timeZone: {
-    type: String,
-    validate: 
-        { 
-            validator(v) {
-            
-                if (v) {
-                    Location.find({}, (err, docs) => {
-                        if (err) {
-                            return err;
-                        } 
-                        return docs[0].timeZones.indexOf(v) >= 0;
-                    });
-                }
-                return false;
-
-            }, 
-            message: '{VALUE} is not a valid TimeZone'
-        }
+        type: String,
+        validate: 
+            { 
+                validator: async function(v){
+                    let timeZone = await TimeZone.find({});
+                    return  timeZone[0].timeZones.indexOf(v) >= 0;
+                }, 
+                message: '{VALUE} is not a valid TimeZone'
+            }
     },
     partner: { type: String }, 
     partnerUrl: { type: String }, 

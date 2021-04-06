@@ -11,11 +11,9 @@ describe("ProjectInfo Model saves the correct values", () => {
     const testData = {
       locations: ["location1","location2"]
     };
-
+ 
     await Location.create(testData);
-    const test = await Location.find();
-
-    console.log('MODELS: %j', mongoose.modelNames());
+    const test = await Location.find({});
 
     const submittedData = {
       name: "projectTest",
