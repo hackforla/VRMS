@@ -44,6 +44,20 @@ const Navbar = (props) => {
                             </Link>
                         </>
                     ) : null}
+
+                    {props.location.pathname ===  "/useradmin" ? (
+                        <>
+                            <Link to="/events">
+                                <p className="home-link-text">EVENTS</p>
+                            </Link>
+                            <Link to="/useradmin">
+                                <p className="home-link-text">USERS</p>
+                            </Link>
+                            <Link to="/projects">
+                                <p className="home-link-text">PROJECTS</p>
+                            </Link>
+                        </>
+                    ) : null}
                 </div>
 
                 {props.location.pathname === "/" ||

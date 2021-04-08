@@ -1,8 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import '../sass/UserManagement.scss'
+import { Link } from 'react-router-dom';
+import '../sass/UserAdmin.scss'
 
+// child of UserAdmin. Displays form to update users. 
+const EditUsers = (props) => {
+    
+    
+    return (
+        <div>Hello World!</div>
+    )
+
+};
+
+//Parent
 const UserAdmin = (props) => {
     
+    // Initialize hooks
+    const [users, setUsers] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+
     const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
     // Fetch users from db
@@ -25,28 +41,25 @@ const UserAdmin = (props) => {
         fetchData();
     }, []);
 
-    // Initialize hooks
-    const [users, setUsers] = useState([]);
-    const [searchTerm, setSearchTerm] = useState("");
-    
-    // Get users email into useable array (TEMP)
-    const userArray = [];
-    for (let us of users) {
-        //let fullName = us.name.firstName.concat(`${" "}us.name.lastName`);
-        userArray.push(us.email);
-    }
-    
     // Handle change on input
     const handleChange = event => {
         setSearchTerm(event.target.value);
     };
 
-   // Set search results 
-    const results = !searchTerm
+    const emailResults = !searchTerm
     ? []
-    : userArray.filter(user =>
-        user.toLowerCase().startsWith(searchTerm.trim())
-        );
+    : Object.values(users).filter 
+        (user => user.email.toLowerCase().startsWith(searchTerm.trim()))
+        .map((u) => <a href={`useradmin/` + u._id}>{u.email + "(" + u.name.firstName + " " + u.name.lastName + ")"}</a>)        
+    ;
+
+    const nameResults = !searchTerm
+    ? []
+    : Object.values(users).filter 
+        (user => 
+            user.name.firstName.toLowerCase().startsWith(searchTerm.trim()))
+            .map((u) => <a href={`useradmin/` + u._id}>{u.name.firstName + " " + u.name.lastName + "(" + u.email + ")"}</a>)        
+    ;
 
     return (
         <div className="Container--UserManagement">
@@ -58,11 +71,24 @@ const UserAdmin = (props) => {
                     value={searchTerm}
                     onChange={handleChange}
                 />
-                <ul>    
-                    {results.map(item => (
-                    <li>{item}</li>
-                    ))}
-                </ul>
+                {<ul>    
+                    {nameResults.map((result,index) => {
+                    return (
+                        <li key={index}>{result}</li>
+                    )})}
+                    <li>---</li>
+                    {emailResults.map((result,index) => {
+                    return (
+                        <li key={index}>{result}</li>
+                    )})}
+                </ul>}
+            </div>
+            <div className="edit-users">
+                <EditUsers>
+                    userName = {`David Rubinstein`}
+                    userTeams = {[`Food Oasis, BallotNav, HfLA Website`]}
+                </EditUsers>
+            
             </div>
         </div>
     )
