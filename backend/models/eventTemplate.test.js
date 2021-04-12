@@ -54,7 +54,6 @@ describe('Event Template Model saves the correct values', () => {
     expect(savedData.name).toBe(submittedData.name);
     expect(savedData.location.city).toBe(submittedData.location.city);
     expect(savedData.startTime.getTime()).toBe(submittedData.startTime);
-    console.log(savedData.belongsToProjectID);
     expect(savedData.belongsToProjectID.toString()).toBe(submittedData.belongsToProjectID);
     expect(savedData.eventManagerID.toString()).toBe(submittedData.eventManagerID);
     expect(savedData.timeZone).toBe(submittedData.timeZone);
