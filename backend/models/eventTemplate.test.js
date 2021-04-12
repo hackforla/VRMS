@@ -21,10 +21,10 @@ describe('Event Template Model saves the correct values', () => {
 
     const submittedData = {
       name: 'eventTemplateName',
-      belongsToProjectID: 1594023390039,
-      eventManagerID: 1594023390039,
+      belongsToProjectID: "5e1a0651741b255ddda996c4",
+      eventManagerID: "5e1a0651741b255ddda996c4",
       locationZone: 'location1',
-      locationName: 'location1',
+      locationName: 'locationRed',
       description: 'A workshop to do stuff',
       type: 'Orientation',
       createdDate: 1594023390039,
@@ -54,9 +54,9 @@ describe('Event Template Model saves the correct values', () => {
     expect(savedData.name).toBe(submittedData.name);
     expect(savedData.location.city).toBe(submittedData.location.city);
     expect(savedData.startTime.getTime()).toBe(submittedData.startTime);
-
-    expect(savedData.belongsToProjectID).toBe(submittedData.belongsToProjectID);
-    expect(savedData.eventManagerID).toBe(submittedData.eventManagerID);
+    console.log(savedData.belongsToProjectID);
+    expect(savedData.belongsToProjectID.toString()).toBe(submittedData.belongsToProjectID);
+    expect(savedData.eventManagerID.toString()).toBe(submittedData.eventManagerID);
     expect(savedData.timeZone).toBe(submittedData.timeZone);
 
     done();
