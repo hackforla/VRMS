@@ -1,36 +1,50 @@
-const EventTemplate = require("./eventTemplate.model");
+const EventTemplate = require('./eventTemplate.model');
+const { Location } = require('./dictionaries/location.model');
+const { TimeZone } = require('./dictionaries/timeZone.model');
+const { setupDB } = require('../setup-test');
+setupDB('eventTemplate-model');
 
-const { setupDB } = require("../setup-test");
-setupDB("eventTemplate-model");
+describe('Event Template Model saves the correct values', () => {
+  test('Save a model instance and then read from the db', async (done) => {
+    const testLocations = {
+      locations: ['location1', 'location2'],
+    };
+    const testTimes = {
+      timeZones: ['est', 'pst'],
+    };
 
-describe("Event Template Model saves the correct values", () => {
-  test("Save a model instance and then read from the db", async (done) => {
+    await Location.create(testLocations);
+    await Location.find({});
+
+    await TimeZone.create(testTimes);
+    await TimeZone.find({});
+
     const submittedData = {
-      name: "eventTemplateName",
+      name: 'eventTemplateName',
       belongsToProjectID: 1594023390039,
       eventManagerID: 1594023390039,
-      //locationZone: ["location1","location2"],
-      locationName:"location1",
-      description: "A workshop to do stuff",
-      type: "Orientation",
+      locationZone: 'location1',
+      locationName: 'location1',
+      description: 'A workshop to do stuff',
+      type: 'Orientation',
       createdDate: 1594023390039,
       weekDay: 1,
-      startTime: 1594023390039, 
+      startTime: 1594023390039,
       endTime: 1594023390039,
-      timeZone: "a time zone string",
+      timeZone: 'est',
       templateID: 1594023390039,
-      recurInterval: "daily",
+      recurInterval: 'daily',
       monthWeek: 4,
       isActive: true,
       isOnline: true,
       location: {
-        addressLine1: "addy 1",
-        addressLine2: "addy 2",
-        city: "Los Angeles",
-        state: "California",
-        zip: "93309",
+        addressLine1: 'addy 1',
+        addressLine2: 'addy 2',
+        city: 'Los Angeles',
+        state: 'California',
+        zip: '93309',
       },
-      videoConferenceLink: "aLink"
+      videoConferenceLink: 'aLink',
     };
 
     await EventTemplate.create(submittedData);
@@ -40,11 +54,11 @@ describe("Event Template Model saves the correct values", () => {
     expect(savedData.name).toBe(submittedData.name);
     expect(savedData.location.city).toBe(submittedData.location.city);
     expect(savedData.startTime.getTime()).toBe(submittedData.startTime);
-    
+
     expect(savedData.belongsToProjectID).toBe(submittedData.belongsToProjectID);
     expect(savedData.eventManagerID).toBe(submittedData.eventManagerID);
     expect(savedData.timeZone).toBe(submittedData.timeZone);
-    
+
     done();
   });
 });
