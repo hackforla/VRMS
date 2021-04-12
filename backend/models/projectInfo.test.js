@@ -39,52 +39,52 @@ describe("ProjectInfo Model saves the correct values", () => {
 
 describe('CREATE/READ', () => {
   test('Create ProjectInfo with Mongoose model', async (done) => {
-    // const submittedData = {
-    //   name: 'projectInfoTest',
-    // };
+    const submittedData = {
+      name: 'projectInfoTest',
+    };
 
-    // await ProjectInfo.create(submittedData);
-    // const savedDataArray = await ProjectInfo.find();
-    // const savedData = savedDataArray[0];
-    // expect(savedData.name).toBe(submittedData.name);
+    await ProjectInfo.create(submittedData);
+    const savedDataArray = await ProjectInfo.find();
+    const savedData = savedDataArray[0];
+    expect(savedData.name).toBe(submittedData.name);
     done();
   });
 });
 
 describe('UPDATE', () => {
   test('Update ProjectInfo with Mongoose model', async (done) => {
-    // const submittedData = {
-    //   name: 'projectInfoTest',
-    // };
+    const submittedData = {
+      name: 'projectInfoTest',
+    };
 
-    // await ProjectInfo.create(submittedData);
-    // const savedDataArray = await ProjectInfo.find().exec();
-    // const savedData = savedDataArray[0];
-    // expect(savedData.name).toBe(submittedData.name);
+    await ProjectInfo.create(submittedData);
+    const savedDataArray = await ProjectInfo.find().exec();
+    const savedData = savedDataArray[0];
+    expect(savedData.name).toBe(submittedData.name);
 
-    // const updatedData = { name: 'updatedEventName' };
+    const updatedData = { name: 'updatedEventName' };
 
-    // const updatedProjectInfo = await ProjectInfo.findOneAndUpdate(
-    //   {_id: savedData._id}, updatedData, {new: true});
+    const updatedProjectInfo = await ProjectInfo.findOneAndUpdate(
+      {_id: savedData._id}, updatedData, {new: true});
 
-    // expect(updatedProjectInfo.name).toBe(updatedData.name);
+    expect(updatedProjectInfo.name).toBe(updatedData.name);
     done();
   });
 });
 
 describe('DELETE', () => {
   test('Delete ProjectInfo with Mongoose model', async (done) => {
-  //   const submittedData = {
-  //     name: 'ddddd',
-  //   };
+    const submittedData = {
+      name: 'ddddd',
+    };
 
-  //   await ProjectInfo.create(submittedData);
-  //   const savedDataArray = await ProjectInfo.find().exec();
-  //   const savedData = savedDataArray[0];
-  //   expect(savedData.name).toBe(submittedData.name);
+    await ProjectInfo.create(submittedData);
+    const savedDataArray = await ProjectInfo.find().exec();
+    const savedData = savedDataArray[0];
+    expect(savedData.name).toBe(submittedData.name);
 
-  //   const deleteData = await ProjectInfo.deleteOne(submittedData);
-  //   expect(deleteData.ok).toBe(1);
+    const deleteData = await ProjectInfo.deleteOne(submittedData);
+    expect(deleteData.ok).toBe(1);
     done();
   });
 });
