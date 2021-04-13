@@ -1,54 +1,78 @@
 const locationService = require('./location.service');
-const { setupDB } = require("../setup-test");
+const { setupDB } = require('../setup-test');
+const { Location } = require('../models/dictionaries/location.model');
 
-setupDB("location-service");
+setupDB('location-service');
 
-describe("LocationService can save and retrieve locations", () => {
-  test("Save a location record and then retrieve it by the service", async (done) => {
+describe('Test LocationService.add', () => {
+  test('Add empty array should throw database error', async (done) => {
 
-    const locationsArrayFinal = ["loc1", "loc2", "loc3", "loc4", "loc5"];
 
-    const emptyArray = [];
-   
-    await locationService.add(emptyArray);
-    const savedLocationsEmpty = await locationService.getAll();
-    expect(savedLocationsEmpty.length).toEqual(0);
+    try {
+      // Add empty array
+      await locationService.add([]);
 
-    const locationsArray1 = ["loc1", "loc2", "loc3"];
-    await locationService.add(locationsArray1);
+    } catch (err) {
+      expect(err.name).toBe('DatabaseError');
+    }
+
+    done();
+  });
+  test('Add an array of location strings sucessfully adds to database', async (done) => {
+    const locationsArray = ['loc1', 'loc2', 'loc3'];
+    await locationService.add(locationsArray);
     const savedLocations = await locationService.getAll();
 
     expect(savedLocations.length).toEqual(3);
-    expect(savedLocations[0]).toEqual(locationsArray1[0]);
-    expect(savedLocations[1]).toEqual(locationsArray1[1]);
-    expect(savedLocations[2]).toEqual(locationsArray1[2]);
+    expect(savedLocations).toEqual(expect.arrayContaining(locationsArray));
 
-    // duplicate role3 should be not be inserted again
-    const locationsArray2 = ["loc3", "loc4", "loc5"];
-    await locationService.add(locationsArray2);
-    const savedLocs2 = await locationService.getAll();
+    done();
+  });
+  test('Add duplicate string to location array should skip silently', async (done) => {
+    
+    const isArrayUnique = arr => Array.isArray(arr) && new Set(arr).size === arr.length;
+    await locationService.add(['loc1', 'loc2', 'loc3']);
+    const locationsArray = ['loc3', 'loc4', 'loc5'];
+    await locationService.add(locationsArray);
+    const savedLocations = await locationService.getAll();
 
-    expect(savedLocs2.length).toEqual(5);
-    expect(savedLocs2[0]).toEqual(locationsArrayFinal[0]);
-    expect(savedLocs2[1]).toEqual(locationsArrayFinal[1]);
-    expect(savedLocs2[2]).toEqual(locationsArrayFinal[2]);
-    expect(savedLocs2[3]).toEqual(locationsArrayFinal[3]);
-    expect(savedLocs2[4]).toEqual(locationsArrayFinal[4]);
+    expect(isArrayUnique(savedLocations)).toBeTruthy();
+    expect(savedLocations.length).toEqual(5);
+    expect(savedLocations).toEqual(expect.arrayContaining(locationsArray));
 
-    // invalid array should be ignored
-    const locationsArray3 = ["    ", "role6", "role7"];
-    await locationService.add(locationsArray3);
-    const savedLocs3 = await locationService.getAll();
+    done();
+  })
+  test('Add array with whitespace string should throw database error', async (done) => {
+    
+    const locationsArray = ['    ', 'role6', 'role7'];
+    try {
+      await locationService.add(locationsArray);
+    } catch (err) {
+      expect(err.message).toBe('Validation failed: locations: An empty string is not allowed');
+      expect(err.name).toBe('DatabaseError');
+    }
 
-    expect(savedLocs3.length).toEqual(5);
-    expect(savedLocs3[0]).toEqual(locationsArrayFinal[0]);
-    expect(savedLocs3[1]).toEqual(locationsArrayFinal[1]);
-    expect(savedLocs3[2]).toEqual(locationsArrayFinal[2]);
-    expect(savedLocs3[3]).toEqual(locationsArrayFinal[3]);
-    expect(savedLocs3[4]).toEqual(locationsArrayFinal[4]);
+    done();
+  })
+});
+
+
+
+describe('Test LocationService.getAll', () => {
+  test('Should return an empty array if no location data found', async (done) => {
+    const savedLocations = await locationService.getAll();
+    expect(savedLocations.length).toBe(0)
 
     done();
 
+  })
 
-  });
-});
+  test('Should return an array of location string if data exists', async (done) => {
+    await locationService.add(['loc1', 'loc2', 'loc3']);
+    const savedLocations = await locationService.getAll();
+    expect(savedLocations.length).toBe(3)
+
+    done();
+
+  })
+})
