@@ -40,6 +40,7 @@ const routes = [
   { path: "/emailsent", name: "emailsent", Component: EmailSent },
   { path: "/events", name: "events", Component: Events },
   { path: "/useradmin", name: "useradmin", Component: UserAdmin },
+  { path: "/useradmin/:id", name: "useradmin", Component: UserAdmin },
   {
     path: "/projectleader",
     name: "pldashboard",
