@@ -3,74 +3,16 @@ import { Link } from 'react-router-dom'
 //import Select from 'react-select';
 import '../sass/UserAdmin.scss';
 
-// child of UserAdmin. Displays form to update users. 
-const EditUsers = (props) => {
-
-    // State and handler for form
-    const [projectValue, setProjectValue] = useState("");
-
-    // Handle change on input
-    const handleChange = event => {
-        setProjectValue(event.target.value);
-    };
-
-    // Prepare data for display
-    const userName = props.userToEdit.name?.firstName + " " + props.userToEdit.name?.lastName;
-    const userProjects = [props.userToEdit?.managedProjects];
-    
-    function prepareUserProjects (userProjectsByID, activeProjects ) {
-
-        activeProjects.filter(p => userProjectsByID.included(p));
-    } 
-
-    const userProjectsToDisplay = prepareUserProjects (userProjects, props.dropdownProjects);
-
-console.log(userProjects);
-
-   console.log(`User Projects ${userProjects}`);
-
-    return (
-        <div>
-            <div>Name: {userName}</div>
-            <div>Projects: 
-                <ul className="project-list">    
-                    {userProjects.map((result,index) => {
-                    return (
-                        <li key={index}>{result}</li>
-                    )})}
-                </ul>
-            </div>
-            <div>
-                {<form>
-                    <select value={projectValue} onChange={handleChange}>
-                            <option  value='default'>Select a project..</option>
-                            {props.dropdownProjects.map((result,index) => {
-                            return (
-                                <option key={index} value={result[1]}>{result[0]}</option>
-                            )})}
-                        </select>
-                    <button onClick={props.handleProjectFormSubmit}>Add a project</button>
-                    <button onClick={props.handleProjectFormCancel}>Cancel</button> 
-                </form>}
-                        
-            </div>
-            
-        </div>
-    )
-};
-
-
 //Parent
 const UserAdmin = (props) => {
     
+    const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
+
     // Initialize hooks
     const [users, setUsers] = useState([]);
     const [userToEdit, setUserToEdit] = useState({});
     const [projects, setProjects] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
-    //const [projectToAdd, setProjectToAdd] = useState("");
-
-    const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
     //functions to handle various things
 
@@ -79,8 +21,10 @@ const UserAdmin = (props) => {
     };
 
     const handleProjectFormCancel = () => {
-        console.log("form cancelled");
+        setUserToEdit({});
+        setSearchTerm("");
     };
+    
 
     // Fetch users from db
     async function fetchUsers() {
@@ -120,28 +64,27 @@ const UserAdmin = (props) => {
     }, []);
 
 
-    // Fetch single user from db
-    async function fetchUserToEdit() {
-        try {
-            const res = await fetch(`/api/users/${props.match.params.id}`, {
-                headers: {
-                    "x-customrequired-header": headerToSend
-                    }
-            });
-            const resJson = await res.json();
-            setUserToEdit(resJson);
+    // // Fetch single user from db
+    // async function fetchUserToEdit() {
+    //     try {
+    //         const res = await fetch(`/api/users/${props.match.params.id}`, {
+    //             headers: {
+    //                 "x-customrequired-header": headerToSend
+    //                 }
+    //         });
+    //         const resJson = await res.json();
+    //         setUserToEdit(resJson);
 
-        } catch(error) {
-            alert(`fetchUserToEdit: ${error}`);
-        }
-    }
+    //     } catch(error) {
+    //         alert(`fetchUserToEdit: ${error}`);
+    //     }
+    // }
 
-    useEffect( () => {
-        if (props.match.params.id) {
-            fetchUserToEdit();
-        }
-    }, [])
-
+    // useEffect( () => {
+    //     if (props.match.params.id) {
+    //         fetchUserToEdit();
+    //     }
+    // }, [])
 
     // Filter projects for dropdown
     const dropdownProjects = Object.values(projects).filter (project => project.projectStatus === 'Active')
@@ -162,18 +105,18 @@ const UserAdmin = (props) => {
     ? []
     : Object.values(users).filter 
         (user => user.email.toLowerCase().startsWith(searchTerm.trim()))
-        .map((u) => <a href={`useradmin/` + u._id}>{u.email + "(" + u.name.firstName + " " + u.name.lastName + ")"}</a>)        
+        .map((u) => <div onClick={userClickHandler(u)}>{u.email + "(" + u.name.firstName + " " + u.name.lastName + ")"}</div>)      
     ;
 
     const nameResults = !searchTerm
     ? []
     : Object.values(users).filter 
         (user => 
-            user.name.firstName.toLowerCase().startsWith(searchTerm.trim()))
-            //.map((u) => <a href={`useradmin/` + u._id}>{u.name.firstName + " " + u.name.lastName + "(" + u.email + ")"}</a>)        
+            user.name.firstName.toLowerCase().startsWith(searchTerm.trim()))      
             .map((u) => <div onClick={userClickHandler(u)}>{u.name.firstName + " " + u.name.lastName + "(" + u.email + ")"}</div>)
-            ;
+    ;
 
+    // If there is a selected user, show the edit form; else show search form
     if (Object.keys(userToEdit).length === 0) {
         return (
             <div className="Container--UserManagement">
@@ -185,7 +128,7 @@ const UserAdmin = (props) => {
                         value={searchTerm}
                         onChange={handleChange}
                     />
-                    {<ul>    
+                    {<ul className="search-results">    
                         {nameResults.map((result,index) => {
                         return (
                             <li key={index}>{result}</li>
@@ -197,7 +140,6 @@ const UserAdmin = (props) => {
                         )})}
                     </ul>}
                 </div>
-
             </div>
         )
     } else {
@@ -207,11 +149,69 @@ const UserAdmin = (props) => {
                     userToEdit = {userToEdit}
                     dropdownProjects = {dropdownProjects}
                     handleProjectFormSubmit = {handleProjectFormSubmit}
-                    handleProjectFormCancel = {handleProjectFormCancel}
+                    handleFormCancel = {handleProjectFormCancel}
                 />
             </div>
         )
     }
 };
 
+// child of UserAdmin. Displays form to update users. 
+const EditUsers = (props) => {
+
+    // State and handler for form
+    const [projectValue, setProjectValue] = useState("");
+
+    // Handle change on input
+    const handleChange = event => {
+        setProjectValue(event.target.value);
+    };
+
+    // Prepare data for display
+    const userName = props.userToEdit.name?.firstName + " " + props.userToEdit.name?.lastName;
+    const userEmail = props.userToEdit.email;
+    const userProjects = props.userToEdit.managedProjects;
+    
+    // Filter the projects to get the names of the user projects
+    function prepareUserProjects (userProjects, activeProjects ) {
+        let res = activeProjects.filter(item => userProjects.includes(item[1]));
+        return res;
+    } 
+    const userProjectsToDisplay = prepareUserProjects (userProjects, props.dropdownProjects);
+
+    //Processing
+    const cancelUser = () => {
+        props.handleFormCancel();
+    }
+
+    return (
+        <div>
+            <div>Name: {userName}</div>
+            <div>Email: {userEmail}</div> 
+            <div>Projects: 
+                <ul className="project-list">    
+                    {userProjectsToDisplay.map((result,index) => {
+                    return (
+                        <li key={index}>{result[0]}</li>
+                    )})}
+                </ul>
+            </div>
+            <div>
+                {<form>
+                    <select value={projectValue} onChange={handleChange}>
+                            <option  value='default'>Select a project..</option>
+                            {props.dropdownProjects.map((result,index) => {
+                            return (
+                                <option key={index} value={result[1]}>{result[0]}</option>
+                            )})}
+                        </select>
+                    <button onClick={props.handleProjectFormSubmit}>Add a project</button>
+                </form>}
+                <div><button onClick={cancelUser}>Cancel</button></div>
+            </div>
+        </div>
+    )
+};
+
+// Export UserAdmin
 export default UserAdmin;
