@@ -6,7 +6,7 @@ This is an ambitious project to create a system that will help us measure our hu
 
 ## Project Context
 
-We are currently in the initial planning phase after delivering a prototype to the organization's leadership. Our priorities are laying out a feature roadmap for beta and beyond, and recruiting a team of dedicated members to build the product. Time is of the essence, as each Hack Night is a new opportunity to garner valuable data which, in return, supports the organization and it's members.
+We are currently in the initial planning phase after delivering a prototype to the organization's leadership. Our priorities are laying out a feature roadmap for beta and beyond, and recruiting a team of dedicated members to build the product. Time is of the essence, as each team meeting is a new opportunity to garner valuable data which, in return, supports the organization and it's members.
 
 ## Technologies
 
@@ -19,11 +19,9 @@ This is a Full Stack web app, built with:
 
 ## How to contribute
 
-Head over to the Issues tab and see if you'd like to contribute.
+If this seems like a project you'd like to dedicate your time to, reach out to the leads on Slack or at one of our weekly meetings. You can look for the VRMS team meeting times on the [Hack for LA Project Meetings page](https://www.hackforla.org/project-meetings).
 
-If this seems like a project you'd like to dedicate your time to, reach out to the leads on Slack or at one of our weekly Hack Nights.
-
-## Using Git (If you're familiar with forking and pulling/pushing/committing, head to the next section)
+## Using Git
 
 This section discusses some tips and best practices for working with Git.
 
@@ -43,7 +41,7 @@ This section discusses some tips and best practices for working with Git.
 
 #### Step 1: Become a member of the repository Team
 
-In the `vrms` slack channel, send your GitHub name to the project manager (or on the slack channel thread) and we'll add you as a member to the GitHub repository Team.
+Send your GitHub name to the project manager, or post it in the [VRMS Slack channel](https://hackforla.slack.com/archives/CRGH5HM0Q), and we'll add you as a member to the GitHub repository Team.
 
 Once you have accepted the GitHub invite (via email or in your GitHub notifications), please do the following:
 
@@ -67,9 +65,9 @@ If you click the icon again, it will not create a new fork but instead give you 
 
 #### Step 3: Clone your online repository to your local computer
 
-For git beginners, this process will create a third copy of the repository on your local desktop.
+The following process will make a copy of the fork that you just created on your local computer.
 
-First create a new folder on your desktop that will contain `hackforla` projects.
+First create a new folder on your local computer that will contain `hackforla` projects.
 
 In your shell, navigate there then run the following commands:
 
@@ -96,50 +94,48 @@ Add another remote called `vrms` that points to the `hackforla` version of the r
 ```bash
 git remote add vrms https://github.com/hackforla/vrms.git
 ```
+Note: Understanding how git remotes work will make collaborating much easier.  You can learn more about remotes [here](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/configuring-a-remote-for-a-fork) and [here](https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes)
 
 #### Step 4: Change to a new branch
 
-For each issue, create a new branch to work in.
+Create a new branch for each issue you work on. Doing all your work on topic branches leaves your repository's main branch unmodified and greatly simplifies keeping your fork in sync with the main project. 
 
 This command will let you know available branches and which branch you're on.
-
-Star (`*`) indicates which branch you're on
 
 ```bash
 git branch
 ```
+Star (`*`) indicates which branch you're on
 
-By default you should start on the `develop` branch.
+By default you should start on the `development` branch.
 
 This command will (create and) change to a new branch:
 
 ```bash
-git checkout -b 140-fix-logo-width
+git checkout -b fix-logo-width-311
 ```
 
-We prefer that you work on a branch name that relates to the issue you're working on.
-
-The format should look like the scheme above where `140` is the issue number in GitHub, and the words are a brief description of the issue.
-
-No law of physics will break if you don't adhere to this scheme but laws of git will break if you add spaces in the branch name.
+The text after the `-b`, in the example `fix-logo-width-311`, will be the name of your new branch. Choose a branch name that relates to the issue you're working on. (No spaces!)  The format should look like the scheme above where the words are a brief description of the issue that will make sense at a glance to someone unfamiliar with the issue. 
 
 ### Incorporating changes from upstream
 
 Your fork of this repository on GitHub, and your local clone of that fork, will
-get out of sync with this (upstream) repository from time to time.
+get out of sync with the upstream repository from time to time.
 
-Assuming you have a local clone with remotes `vrms` (this repo) and `origin`
-(your GitHub fork of this repo):
+Assuming you have a local clone with remotes `vrms` (the VRMS development repo that you forked) and `origin`
+(your fork of this repo)at GitHub, you can do the following:
 
 ```bash
 # WARNING: this will erase local pending changes!
 # commit them to a different branch or use git stash
-git checkout master
+git checkout development
 git fetch vrms
-git reset --hard vrms/master
+git reset --hard vrms/development
 ```
 
-## Get up and running (locally)
+This will reset the current HEAD to match the VRMS development repository. 
+
+## Get up and running
 
 1. Have [Node](https://nodejs.org/en/download/) and NPM installed locally:
 
@@ -165,6 +161,11 @@ git reset --hard vrms/master
    - `touch vrms/backend/.env`
    - `touch vrms/client/.env`
    - `touch vrms/client-mvp-04/.env`
+    
+   Note 1: In the above example you are trying to create an empty file called `.env` in each of the listed directories: backend, client and client-mvp-04. You can use either `touch <path-to-directory> .env` or navigate to the directory and use `touch .env`
+
+   Note 2: `touch` is a Unix/Linux or Mac command; It is not available in Windows. In Windows, use a text editor (e.g. Notepad) to create an empty file and save it in each of the locations as `.env` . (If you use Windows Explorer to create the file it will create a file called `.env.txt`, which will not work.) 
+   
    - Then paste the content from the [document](https://docs.google.com/document/d/1yDF6UmyO-MPNrl3y_Mw0mkm_WaixlSkXzWbudCzHXDY/edit?usp=sharing). It is accessible for the project team members only.
    - _Please note that the `ports` for the frontend and backend are set in this location_
 
@@ -180,14 +181,6 @@ git reset --hard vrms/master
 
 You should now have a live app. Happy hacking.
 
-## Get up and running (Docker alternative)
-
-1. [Download docker](https://docs.docker.com/get-docker/) to your machine.
-1. Start docker locally.
-1. Navigate to the root directory.
-1. Run `docker-compose build`.
-1. Run `docker-compose up`.
-1. Navigate to the port for the NGINX container listed in the docker-compose.yml file.
 
 ## Running Tests
 
@@ -196,28 +189,13 @@ and look for any variation of `test` scripts.
 
 To run all of the tests run `npm run test:all` from the root folder.
 
-## Configure your database
+## Using the development database
 
-The application uses MongoDB and the team has a few databases for differing environments. Below are instructions on how to connect to the different databases used for development.
+The application uses MongoDB. We have created a shared development database using MongoDB Cloud and MongoDB Atlas.  The conection string for the development database is included in the environmental variables that you pasted into your backend/.env file in step 5 of the "Get Up and Running" setion.  If you completed that step successfully you should not need to do anything else. 
 
-1. Shared Staging Development database: This database is maintained by the team. Post in the #vrms-dev channel to see who has access if you have any issues. This db has data useful for developming
+To view and edit the development database manually, you can download [MongoDB Compass](https://www.mongodb.com/try/download/compass). To connect to the development database you will use the "DATABASE_URL" from the [document](https://docs.google.com/document/d/1yDF6UmyO-MPNrl3y_Mw0mkm_WaixlSkXzWbudCzHXDY/edit?usp=sharing) that contained the environmental variables. The string will start with "mongodb+srv://". 
 
-   1. Navigate to the [Get up and running](#get-up-and-running) section and find the credentials link.
-   1. Add the mongoDB credential listed in the `DATABASE_URL` variable to your `backend/.env` file.
-   1. The environment variable should start with `mongodb+srv://editor:SHARED_DB_URL`.
-
-1. Localhost Development database: This database requires that you setup MongoDB on your local machine. See the [tutorial](https://zellwk.com/blog/local-mongodb/) for an in depth look on how to do this.
-
-   1. Download mongoDB.
-   1. Setup a local mongoDB cluster.
-   1. Get the connection string.
-   1. Add your localhost connection string to the `DATABASE_URL` variable to your `backend/.env` file.
-   1. If you are running the application directly on your machine, then your environment variable should start with `mongodb://localhost:27017/YOUR_DB_NAME`.
-   1. If you are running the application using a docker container, then your environment variable should start with `mongodb://host.docker.internal:27017/YOUR_DB_NAME`.
-
-1. To create a local copy of a DB from a remote url, then use the backup script as seen in `utils/local_db_backup.sh`.
-
-1. Test case in-memory-MongoDB: The unit tests and integration tests create and remove an in memory database on each test run. You should not need to connect to these test databases. See the `backend/README.md` for more information.
+If you want to install a local copy to experiment with and learn more about MongoDB, you can use [this tutorial](https://zellwk.com/blog/local-mongodb/)
 
 ### Licensing _WIP_
 
