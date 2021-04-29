@@ -1,30 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'
+//import { Link } from 'react-router-dom'
 //import Select from 'react-select';
 import '../sass/UserAdmin.scss';
 
 //Parent
-const UserAdmin = (props) => {
+const UserAdmin = () => {
     
     const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
     // Initialize hooks
-    const [users, setUsers] = useState([]);
-    const [userToEdit, setUserToEdit] = useState({});
-    const [projects, setProjects] = useState([]);
-    const [searchTerm, setSearchTerm] = useState("");
-
-    //functions to handle various things
-
-    const handleProjectFormSubmit = () => {
-        console.log("form submitted");
-    };
-
-    const handleProjectFormCancel = () => {
-        setUserToEdit({});
-        setSearchTerm("");
-    };
-    
+    const [users, setUsers] = useState([]); // All users pulled from database
+    const [projects, setProjects] = useState([]); // All projects pulled from db
+    const [userToEdit, setUserToEdit] = useState({}); // The selected user that is being edited
+    const [userManagedProjects, setUserManagedProjects] = useState([]); //  The projects that the selected user is asigned
+    const [searchTerm, setSearchTerm] = useState(""); // Serch term for the user/email search
+    const [projectValue, setProjectValue] = useState("");  // State and handler for form in EditUsers
 
     // Fetch users from db
     async function fetchUsers() {
@@ -63,39 +53,7 @@ const UserAdmin = (props) => {
         fetchProjects();
     }, []);
 
-
-    // // Fetch single user from db
-    // async function fetchUserToEdit() {
-    //     try {
-    //         const res = await fetch(`/api/users/${props.match.params.id}`, {
-    //             headers: {
-    //                 "x-customrequired-header": headerToSend
-    //                 }
-    //         });
-    //         const resJson = await res.json();
-    //         setUserToEdit(resJson);
-
-    //     } catch(error) {
-    //         alert(`fetchUserToEdit: ${error}`);
-    //     }
-    // }
-
-    // useEffect( () => {
-    //     if (props.match.params.id) {
-    //         fetchUserToEdit();
-    //     }
-    // }, [])
-
-    // Filter projects for dropdown
-    const dropdownProjects = Object.values(projects).filter (project => project.projectStatus === 'Active')
-            .map((p) => [p.name, p._id])
-    ;
-
-    // Handle change on input
-    const handleChange = event => {
-        setSearchTerm(event.target.value);
-    };
-
+    // Handle click on selected user in search results
     const userClickHandler = usr => event => {
         setUserToEdit(usr);
     }
@@ -115,6 +73,71 @@ const UserAdmin = (props) => {
             user.name.firstName.toLowerCase().startsWith(searchTerm.trim()))      
             .map((u) => <div onClick={userClickHandler(u)}>{u.name.firstName + " " + u.name.lastName + "(" + u.email + ")"}</div>)
     ;
+
+    // Filter active projects for dropdown
+    const activeProjects = Object.values(projects).filter (project => project.projectStatus === 'Active')
+    .map((p) => [p._id, p.name])
+    ;
+
+    // Handle change on input in search form
+    const handleChange = event => {
+        setSearchTerm(event.target.value);
+    };
+
+    // Handle the add project form submit
+    const handleProjectFormSubmit = event => {
+        event.preventDefault();
+        
+        useEffect(() => {
+            setUserManagedProjects([...userManagedProjects, projectValue]);
+        }, []);
+
+        // Update state
+        //setUserManagedProjects([...userManagedProjects, projectValue]);
+        setProjectValue([]);
+
+        // renaming for db 
+        let managedProjects = userManagedProjects;
+        
+        // Update database
+        const url = `/api/users/${userToEdit._id}`;
+        const requestOptions = {
+            method: 'PATCH',
+            headers: {
+                "Content-Type": "application/json",
+                "x-customrequired-header": headerToSend
+            },
+            body: JSON.stringify({ managedProjects })
+        };
+
+        fetch(url, requestOptions)
+        .then(response => {
+            return response.json()
+        })
+        .then(data => console.log(data))
+        .catch(error => console.log('Form submit error', error))
+
+    };
+
+    // Handle cancel form and return to search
+    const handleProjectFormCancel = () => {
+        setUserToEdit({});
+        setSearchTerm("");
+        setUserManagedProjects([]);
+    };
+    
+    // Remove projects from db
+    const handleRemoveProject = (projectToRemove) => {
+        if (userManagedProjects.length > 0) {
+            setUserManagedProjects(userManagedProjects.filter(p => (p !== projectToRemove)));
+        } 
+    };
+
+    // This initially populates userManagedProjects upon selection of a user
+    const handleAddProject = (proj) => {
+        setUserManagedProjects(proj);
+    }
+
 
     // If there is a selected user, show the edit form; else show search form
     if (Object.keys(userToEdit).length === 0) {
@@ -147,9 +170,14 @@ const UserAdmin = (props) => {
             <div className="edit-users">
                 <EditUsers
                     userToEdit = {userToEdit}
-                    dropdownProjects = {dropdownProjects}
-                    handleProjectFormSubmit = {handleProjectFormSubmit}
+                    activeProjects = {activeProjects}
+                    userManagedProjects = {userManagedProjects}
+                    handleFormSubmit = {handleProjectFormSubmit}
                     handleFormCancel = {handleProjectFormCancel}
+                    handleAddProject = {handleAddProject}
+                    handleRemoveProject = {handleRemoveProject}
+                    projectValue = {projectValue}
+                    setProjectValue = {setProjectValue}
                 />
             </div>
         )
@@ -159,30 +187,39 @@ const UserAdmin = (props) => {
 // child of UserAdmin. Displays form to update users. 
 const EditUsers = (props) => {
 
-    // State and handler for form
-    const [projectValue, setProjectValue] = useState("");
+    // // State and handler for form
+    // const [projectValue, setProjectValue] = useState("");
 
     // Handle change on input
     const handleChange = event => {
-        setProjectValue(event.target.value);
+        props.setProjectValue(event.target.value);
+        //console.log(`target value: `, event.target.value);
     };
 
     // Prepare data for display
     const userName = props.userToEdit.name?.firstName + " " + props.userToEdit.name?.lastName;
     const userEmail = props.userToEdit.email;
-    const userProjects = props.userToEdit.managedProjects;
-    
-    // Filter the projects to get the names of the user projects
-    function prepareUserProjects (userProjects, activeProjects ) {
-        let res = activeProjects.filter(item => userProjects.includes(item[1]));
-        return res;
-    } 
-    const userProjectsToDisplay = prepareUserProjects (userProjects, props.dropdownProjects);
+    const userProjects = props.userManagedProjects || [];
+
 
     //Processing
-    const cancelUser = () => {
+    const cancelEdit = () => {
         props.handleFormCancel();
     }
+
+    // add user projects to state
+    useEffect(() => {
+        //props.handleAddProject(userProjects);
+        props.handleAddProject(props.userToEdit.managedProjects);
+    }, []);
+
+    // Prepare user projects for display by connecting the ID with the project name
+    function prepareUserProjects (userProjects, activeProjects ) {
+        let res = activeProjects.filter(item => userProjects.includes(item[0]));
+        return res;
+    } 
+
+    const userProjectsToDisplay = prepareUserProjects (userProjects, props.activeProjects);
 
     return (
         <div>
@@ -192,22 +229,27 @@ const EditUsers = (props) => {
                 <ul className="project-list">    
                     {userProjectsToDisplay.map((result,index) => {
                     return (
-                        <li key={index}>{result[0]}</li>
+                        <li key={index}>{result[1]}
+                        <button onClick={() => props.handleRemoveProject(result[0])}>(remove)</button>
+                        </li>
                     )})}
                 </ul>
             </div>
             <div>
-                {<form>
-                    <select value={projectValue} onChange={handleChange}>
+                {<form onSubmit={props.handleFormSubmit}>
+                    <select 
+                        value={props.projectValue} 
+                        onChange={handleChange}>
                             <option  value='default'>Select a project..</option>
-                            {props.dropdownProjects.map((result,index) => {
+                            {props.activeProjects.map((result,index) => {
                             return (
-                                <option key={index} value={result[1]}>{result[0]}</option>
+                                <option key={index} value={result[0]}>{result[1]}</option>
                             )})}
                         </select>
-                    <button onClick={props.handleProjectFormSubmit}>Add a project</button>
+                        <button type="submit">Submit</button>
+                    {/*<button onClick={props.handleFormSubmit}>Add a project</button> */}
                 </form>}
-                <div><button onClick={cancelUser}>Cancel</button></div>
+                <div><button onClick={cancelEdit}>Cancel</button></div>
             </div>
         </div>
     )
