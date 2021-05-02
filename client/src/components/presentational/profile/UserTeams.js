@@ -1,9 +1,7 @@
 import React from 'react';
-import ProfileOption from './ProfileOption';
 
 const UserTeams = ({ context }) => {
     const { teams } = context;
-    // console.log(context);
 
     return (
         <div className="user-events">

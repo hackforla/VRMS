@@ -81,6 +81,7 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats, handleFiltered
     function calculateTotalResults(data, types) {
         for (let i = 0; i < data.length; i++) {
             let total = 0;
+            // eslint-disable-next-line no-unused-vars
             for (const [_, value] of Object.entries(data[i])) {
                 const res = total + value;
                 total = Math.round(100 * res) / 100;

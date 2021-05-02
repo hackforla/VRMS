@@ -1,5 +1,4 @@
 import React, { useState, useContext } from 'react';
-import { Redirect } from 'react-router-dom';
 import moment from 'moment';
 import 'moment-recur';
 import {
@@ -190,6 +189,7 @@ const AddEvent = (props) => {
 		console.log('postRecurring ran');
 	};
 
+	// eslint-disable-next-line no-unused-vars
 	const getUserId = (email) => {
 		return fetch('/api/checkuser', {
 			method: 'POST',
