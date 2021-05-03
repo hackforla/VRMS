@@ -15,6 +15,7 @@ const UserAdmin = () => {
     const [userManagedProjects, setUserManagedProjects] = useState([]); //  The projects that the selected user is asigned
     const [searchTerm, setSearchTerm] = useState(""); // Serch term for the user/email search
     const [projectValue, setProjectValue] = useState("");  // State and handler for form in EditUsers
+    const [userLoaded, setUserLoaded] = useState(false);  // is a user currently loaded
 
     // Fetch users from db
     async function fetchUsers() {
@@ -84,22 +85,13 @@ const UserAdmin = () => {
         setSearchTerm(event.target.value);
     };
 
-    // Handle the add project form submit
-    const handleProjectFormSubmit = event => {
-        event.preventDefault();
-        
-        useEffect(() => {
-            setUserManagedProjects([...userManagedProjects, projectValue]);
-        }, []);
+    // Updates user projects in db
+    const updateUserDb = async () => {
 
-        // Update state
-        //setUserManagedProjects([...userManagedProjects, projectValue]);
-        setProjectValue([]);
-
-        // renaming for db 
+        // // renaming variable so it matches db name
         let managedProjects = userManagedProjects;
-        
-        // Update database
+
+        // // Update database
         const url = `/api/users/${userToEdit._id}`;
         const requestOptions = {
             method: 'PATCH',
@@ -110,17 +102,45 @@ const UserAdmin = () => {
             body: JSON.stringify({ managedProjects })
         };
 
-        fetch(url, requestOptions)
-        .then(response => {
-            return response.json()
-        })
-        .then(data => console.log(data))
-        .catch(error => console.log('Form submit error', error))
+        try {
+            const response = await fetch(url, requestOptions); 
+            const resJson = await response.json();
+            return resJson;
+        } catch (error) {
+            console.log(error);
+        }
 
+    }
+
+    // This updates the users in the database whenever userManagedProjects updates
+    useEffect(() => {
+        if (userLoaded) {
+          updateUserDb();
+        } else {
+          setUserLoaded(true);
+        }
+      }, [userManagedProjects]);
+
+
+    // Handle the add project form submit
+    const handleProjectFormSubmit = async (event) => {
+        event.preventDefault();
+
+        // If there is a value, and it's not already in state, then add to state, which will 
+        // trigger db update (see useEffect above) 
+        if (projectValue.length > 0 && projectValue != 'default' && !userManagedProjects.includes(projectValue)) {
+            setUserManagedProjects([...userManagedProjects, projectValue]);
+            setProjectValue([]);
+        } else {
+            setProjectValue([]);
+        }
     };
+
+    // Model for asynch fetch createRecurringEvents.js
 
     // Handle cancel form and return to search
     const handleProjectFormCancel = () => {
+        setUserLoaded(false);
         setUserToEdit({});
         setSearchTerm("");
         setUserManagedProjects([]);
