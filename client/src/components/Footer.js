@@ -22,7 +22,7 @@ const Footer = () => {
 
                 {auth.user ? (
                     <div className="footer-greeting">
-                        <p className="footer-text">{`Hi ${auth.user.email}`}</p>
+                        <p className="footer-text">{`Hi ${auth.user.name.firstName}`}</p>
                         <button className="logout-button" onClick={handleLogout}>{`(LOGOUT)`}</button>
                     </div>
                 ) : (
