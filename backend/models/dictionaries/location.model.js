@@ -8,7 +8,7 @@ const locationSchema = mongoose.Schema({
 });
 
 
-
+ 
 
 locationSchema.methods.serialize = function() {
     return {
