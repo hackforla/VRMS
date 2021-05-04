@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState } from 'react';
 
 export const UserContext = createContext();
 
@@ -13,6 +13,7 @@ export const UserProvider = ({ children }) => {
         availability: ["Mon PM", "Thurs PM"]
     });
 
+    // eslint-disable-next-line no-unused-vars
     const [events, setEvents] = useState([
         {
             name: "VRMS Team Meeting",
@@ -21,6 +22,7 @@ export const UserProvider = ({ children }) => {
         }
     ]);
 
+    // eslint-disable-next-line no-unused-vars
     const [teams, setTeams ] = useState([
         {
             name: 'VRMS',

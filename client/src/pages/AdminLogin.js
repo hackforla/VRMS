@@ -8,6 +8,7 @@ import '../sass/AdminLogin.scss';
 const AdminLogin = (props) => {
   const auth = useAuth();
 
+  // eslint-disable-next-line no-unused-vars
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');

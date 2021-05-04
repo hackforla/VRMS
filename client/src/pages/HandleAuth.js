@@ -21,6 +21,7 @@ const HandleAuth = (props) => {
           "x-customrequired-header": headerToSend
         },
       });
+      // eslint-disable-next-line no-unused-vars
       const body = await response;
       setMagicLink(response.status === 200);
     } catch (error) {
@@ -32,8 +33,7 @@ const HandleAuth = (props) => {
     isValidToken();
   }, []);
 
-  let text;
-  if (isMagicLinkValid == true) {
+  if (isMagicLinkValid === true) {
     return <Redirect to="/admin" />
   } else {
     return (

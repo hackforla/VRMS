@@ -8,12 +8,15 @@ import "../sass/CheckIn.scss";
 const CheckInForm = props => {
   const [isLoading, setIsLoading] = useState(false);
   // const [isFormReady, setIsFormReady] = useState(true);
+  // eslint-disable-next-line no-unused-vars
   const [isQuestionAnswered, setIsQuestionAnswered] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [questions, setQuestions] = useState([]);
   const [newOrReturning] = useState(props && props.match.params.userType);
   // const [newProfile] = useState(props && props.match.params.userType);
+
+  // eslint-disable-next-line no-unused-vars
   const [eventId, setEventId] = useState(props.location.search.slice(9, props.location.search.length));
   const [formInput, setFormInput] = useState({
     email: "",
@@ -51,6 +54,7 @@ const CheckInForm = props => {
     "DEC"
   ];
   const years = [
+    "2021",
     "2020",
     "2019",
     "2018",
@@ -435,6 +439,7 @@ const checkInNewUser = (e) => {
     }
 }
 
+// eslint-disable-next-line no-unused-vars
 const createNewProfile = (e) => {
   e.preventDefault();
 
@@ -612,7 +617,6 @@ useEffect(() => {
           reasons={reasons}
           project={project}
           handleProjectChange={handleProjectChange}
-          isLoading={isLoading}
           submitReturning={submitReturning}
           //   yearhandleYearChange={yearhandleYearChange}
         />
