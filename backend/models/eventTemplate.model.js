@@ -5,8 +5,8 @@ mongoose.Promise = global.Promise;
 
 const eventTemplateSchema = mongoose.Schema({
   name: { type: String },
-  belongsToProjectID: { type: mongoose.Schema.Types.ObjectId }, // Active project an event is a child of, if any (structured)
-  eventManagerID: { type: mongoose.Schema.Types.ObjectId}, // ID of user that is responsible for managing event
+  belongsToProjectID: { type: String }, // Active project an event is a child of, if any (structured)
+  eventManagerID: { type: String }, // ID of user that is responsible for managing event
   locationZone: {
     type: String,
     validate: {
