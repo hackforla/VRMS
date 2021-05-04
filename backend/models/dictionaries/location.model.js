@@ -4,7 +4,7 @@ mongoose.Promise = global.Promise;
 
 const locationSchema = mongoose.Schema({
 
-    locations: [String] 
+    locations: [{ type: String }]
 });
 
 
