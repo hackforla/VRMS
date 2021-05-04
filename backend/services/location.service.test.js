@@ -11,13 +11,14 @@ describe('Test LocationService.add', () => {
     try {
       // Add empty array
       await locationService.add([]);
-
     } catch (err) {
       expect(err.name).toBe('DatabaseError');
+      expect(err.message).toBe("locations array must have at least one element");
     }
 
     done();
   });
+
   test('Add an array of location strings sucessfully adds to database', async (done) => {
     const locationsArray = ['loc1', 'loc2', 'loc3'];
     await locationService.add(locationsArray);
@@ -31,30 +32,35 @@ describe('Test LocationService.add', () => {
   test('Add duplicate string to location array should skip silently', async (done) => {
     
     const isArrayUnique = arr => Array.isArray(arr) && new Set(arr).size === arr.length;
+    
     await locationService.add(['loc1', 'loc2', 'loc3']);
-    const locationsArray = ['loc3', 'loc4', 'loc5'];
-    await locationService.add(locationsArray);
+    await locationService.add(['loc3', 'loc4', 'loc5']);
+    
     const savedLocations = await locationService.getAll();
 
     expect(isArrayUnique(savedLocations)).toBeTruthy();
+    
     expect(savedLocations.length).toEqual(5);
-    expect(savedLocations).toEqual(expect.arrayContaining(locationsArray));
+    expect(savedLocations).toEqual(expect.arrayContaining(['loc1', 'loc2', 'loc3','loc4', 'loc5']));
 
     done();
-  })
+  });
+  
   test('Add array with whitespace string should throw database error', async (done) => {
     
     const locationsArray = ['    ', 'role6', 'role7'];
     try {
       await locationService.add(locationsArray);
     } catch (err) {
-      expect(err.message).toBe('Validation failed: locations: An empty string is not allowed');
       expect(err.name).toBe('DatabaseError');
+      expect(err.message).toBe("locations parameter is an array of non-empty strings");
+
     }
 
     done();
   })
-});
+
+ });
 
 
 
@@ -75,4 +81,4 @@ describe('Test LocationService.getAll', () => {
     done();
 
   })
-})
+});
