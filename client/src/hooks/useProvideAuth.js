@@ -14,8 +14,9 @@ export default function useProvideAuth() {
           "x-customrequired-header": headerToSend
         },
       });
-      setUser(response.status === 200);
-      setIsAdmin(response.status === 200);
+      const user = await response.json();
+      setUser(user);
+      setIsAdmin(user.accessLevel === 'admin');
     } catch (err) {
       console.log(err);
     }
@@ -23,7 +24,7 @@ export default function useProvideAuth() {
 
   useEffect(() => {
     checkUser();
-  }, [user, isAdmin]);
+  }, []);
 
   return { user, isAdmin };
 }
