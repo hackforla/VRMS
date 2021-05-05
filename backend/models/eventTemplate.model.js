@@ -38,7 +38,6 @@ const eventTemplateSchema = mongoose.Schema({
   weekDay: { type: Number, enum: [0, 1, 2, 3, 4, 5, 6] }, //day of the week for the meetings -? sunday, monday, tuesday, wednesday,thrursday, friday, saturday
   monthWeek: { type: Number, enum: [1, 2, 3, 4, 5] }, // 1st week, 2nd week, 3rd week, 4th week, 5th week - a month can have either 4 weeks or 5 weeks
   isActive: { type: Boolean },
-  project: { type: mongoose.Schema.Types.ObjectId, ref: 'Project' },
   isOnline: { type: Boolean },
   location: {
     addressLine1: { type: String },
