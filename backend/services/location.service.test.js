@@ -1,24 +1,22 @@
 const locationService = require('./location.service');
 const { setupDB } = require('../setup-test');
-const { Location } = require('../models/dictionaries/location.model');
 
 setupDB('location-service');
 
 describe('Test LocationService.add', () => {
-  test('Add empty array should throw database error', async (done) => {
+  test('Add empty array should throw validation error', async (done) => {
 
 
     try {
       // Add empty array
       await locationService.add([]);
     } catch (err) {
-      expect(err.name).toBe('DatabaseError');
-      expect(err.message).toBe("locations array must have at least one element");
+      expect(err.name).toBe('ValidationError');
+      expect(err.message).toBe("locations input must be of type array");
     }
 
     done();
   });
-
   test('Add an array of location strings sucessfully adds to database', async (done) => {
     const locationsArray = ['loc1', 'loc2', 'loc3'];
     await locationService.add(locationsArray);
@@ -52,8 +50,8 @@ describe('Test LocationService.add', () => {
     try {
       await locationService.add(locationsArray);
     } catch (err) {
-      expect(err.name).toBe('DatabaseError');
-      expect(err.message).toBe("locations parameter is an array of non-empty strings");
+      expect(err.name).toBe('ValidationError');
+      expect(err.message).toBe("locations array should not contain empty strings");
 
     }
 
