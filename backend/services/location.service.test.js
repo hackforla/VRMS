@@ -12,7 +12,7 @@ describe('Test LocationService.add', () => {
       await locationService.add([]);
     } catch (err) {
       expect(err.name).toBe('ValidationError');
-      expect(err.message).toBe("locations input must be of type array");
+      expect(err.message).toBe("locations input array must have at least one element");
     }
 
     done();

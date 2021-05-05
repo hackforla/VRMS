@@ -8,16 +8,16 @@ const LocationService = {};
 function validateLocations(locationsarray){
 
   if(!Array.isArray(locationsarray)){
-    throw ValidationError("locations input must be of type array");
+    throw new ValidationError("locations input must be of type array");
   }
   if(locationsarray.length  === 0){
-    throw ValidationError("locations input array must have at least one element");
+    throw new ValidationError("locations input array must have at least one element");
   }
   if( !locationsarray.every(item => (typeof item === "string")) ){
-    throw ValidationError("locations array must be an array of strings");
+    throw new ValidationError("locations array must be an array of strings");
   }
   if( !locationsarray.every( (element) => { if(element){return true} } )){
-    throw ValidationError("locations array should not contain empty strings")
+    throw new ValidationError("locations array should not contain empty strings")
   }
 
 
@@ -36,7 +36,12 @@ LocationService.add = async function (locations) {
 
   }
   catch(error){
-    throw new DatabaseError(error);
+    if(error.name == 'ValidationError'){
+      throw error
+    }
+    else{
+      throw new DatabaseError(error);
+    }
   }
 
 };
