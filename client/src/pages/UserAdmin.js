@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-//import { Link } from 'react-router-dom'
-//import Select from 'react-select';
 import '../sass/UserAdmin.scss';
 
 //Parent
@@ -64,7 +62,8 @@ const UserAdmin = () => {
     ? []
     : Object.values(users).filter 
         (user => user.email.toLowerCase().startsWith(searchTerm.trim()))
-        .map((u) => <div onClick={userClickHandler(u)}>{u.email + "(" + u.name.firstName + " " + u.name.lastName + ")"}</div>)      
+        .map((u) => <div onClick={userClickHandler(u)}>{u.email}</div>)      
+        //.map((u) => <div onClick={userClickHandler(u)}>{u.email + "(" + u.name.firstName + " " + u.name.lastName + ")"}</div>)      
     ;
 
     const nameResults = !searchTerm
@@ -72,7 +71,8 @@ const UserAdmin = () => {
     : Object.values(users).filter 
         (user => 
             user.name.firstName.toLowerCase().startsWith(searchTerm.trim()))      
-            .map((u) => <div onClick={userClickHandler(u)}>{u.name.firstName + " " + u.name.lastName + "(" + u.email + ")"}</div>)
+            .map((u) => <div onClick={userClickHandler(u)}>{u.name.firstName + " " + u.name.lastName}</div>)
+            //.map((u) => <div onClick={userClickHandler(u)}>{u.name.firstName + " " + u.name.lastName + "(" + u.email + ")"}</div>)
     ;
 
     // Filter active projects for dropdown
@@ -89,6 +89,7 @@ const UserAdmin = () => {
     const updateUserDb = async () => {
 
         // // renaming variable so it matches db name
+
         let managedProjects = userManagedProjects;
 
         // // Update database
@@ -107,7 +108,7 @@ const UserAdmin = () => {
             const resJson = await response.json();
             return resJson;
         } catch (error) {
-            console.log(error);
+            console.log(`update user error: `, error);
         }
 
     }
@@ -116,6 +117,7 @@ const UserAdmin = () => {
     useEffect(() => {
         if (userLoaded) {
           updateUserDb();
+          fetchUsers(); // Fetches users from db and resets users state.  Should eventually be replaced with function that just changes state without having to hit the db. 
         } else {
           setUserLoaded(true);
         }
@@ -135,8 +137,6 @@ const UserAdmin = () => {
             setProjectValue([]);
         }
     };
-
-    // Model for asynch fetch createRecurringEvents.js
 
     // Handle cancel form and return to search
     const handleProjectFormCancel = () => {
@@ -167,21 +167,31 @@ const UserAdmin = () => {
                     <h3>User Management</h3>
                     <input
                         type="text"
-                        placeholder="Search users..."
+                        placeholder="Search by name and email..."
                         value={searchTerm}
                         onChange={handleChange}
                     />
-                    {<ul className="search-results">    
-                        {nameResults.map((result,index) => {
-                        return (
-                            <li key={index}>{result}</li>
-                        )})}
-                        <li>---</li>
-                        {emailResults.map((result,index) => {
-                        return (
-                            <li key={index}>{result}</li>
-                        )})}
-                    </ul>}
+                    <div className="ua-row">
+                        <div className="search-column">
+                            <div>Name</div>
+                            {<ul className="search-results">    
+                                {nameResults.map((result,index) => {
+                                return (
+                                    <li key={index}>{result}</li>
+                                )})}
+                            </ul>}
+                        </div> 
+
+                        <div className="search-column">
+                            <div>Email</div>
+                            {<ul className="search-results">
+                                {emailResults.map((result,index) => {
+                                return (
+                                    <li key={index}>{result}</li>
+                                )})}
+                            </ul>}
+                        </div> 
+                    </div>
                 </div>
             </div>
         )
@@ -207,20 +217,15 @@ const UserAdmin = () => {
 // child of UserAdmin. Displays form to update users. 
 const EditUsers = (props) => {
 
-    // // State and handler for form
-    // const [projectValue, setProjectValue] = useState("");
-
     // Handle change on input
     const handleChange = event => {
         props.setProjectValue(event.target.value);
-        //console.log(`target value: `, event.target.value);
     };
 
     // Prepare data for display
     const userName = props.userToEdit.name?.firstName + " " + props.userToEdit.name?.lastName;
     const userEmail = props.userToEdit.email;
     const userProjects = props.userManagedProjects || [];
-
 
     //Processing
     const cancelEdit = () => {
@@ -229,7 +234,6 @@ const EditUsers = (props) => {
 
     // add user projects to state
     useEffect(() => {
-        //props.handleAddProject(userProjects);
         props.handleAddProject(props.userToEdit.managedProjects);
     }, []);
 
@@ -243,21 +247,41 @@ const EditUsers = (props) => {
 
     return (
         <div>
-            <div>Name: {userName}</div>
-            <div>Email: {userEmail}</div> 
-            <div>Projects: 
-                <ul className="project-list">    
-                    {userProjectsToDisplay.map((result,index) => {
-                    return (
-                        <li key={index}>{result[1]}
-                        <button onClick={() => props.handleRemoveProject(result[0])}>(remove)</button>
-                        </li>
-                    )})}
-                </ul>
+            <div className="ua-row">
+                <div className="user-display-column-left">
+                    Name: 
+                </div>
+                <div className="user-display-column-right">
+                    {userName} 
+                </div>
+            </div>
+            <div className="ua-row">
+                <div className="user-display-column-left">
+                    Email: 
+                </div>
+                <div className="user-display-column-right">
+                    {userEmail}
+                </div>
+            </div>
+            <div className="ua-row">
+                <div className="user-display-column-left">
+                    Projects: 
+                </div>
+                <div className="user-display-column-right">
+                    <ul className="project-list">    
+                        {userProjectsToDisplay.map((result,index) => {
+                        return (
+                            <li key={index}>{result[1]}
+                            <button className="button-remove" onClick={() => props.handleRemoveProject(result[0])}>(remove)</button>
+                            </li>
+                        )})}
+                    </ul>
+                </div>
             </div>
             <div>
                 {<form onSubmit={props.handleFormSubmit}>
                     <select 
+                        className="project-select"
                         value={props.projectValue} 
                         onChange={handleChange}>
                             <option  value='default'>Select a project..</option>
@@ -266,10 +290,9 @@ const EditUsers = (props) => {
                                 <option key={index} value={result[0]}>{result[1]}</option>
                             )})}
                         </select>
-                        <button type="submit">Submit</button>
-                    {/*<button onClick={props.handleFormSubmit}>Add a project</button> */}
+                        <button className="button-add" type="submit">Add project</button>
                 </form>}
-                <div><button onClick={cancelEdit}>Cancel</button></div>
+                <div><button className="button-back" onClick={cancelEdit}>Back to search</button></div>
             </div>
         </div>
     )
