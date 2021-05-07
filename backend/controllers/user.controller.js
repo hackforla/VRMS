@@ -167,8 +167,6 @@ UserController.verifySignIn = async function (req, res) {
 
   try {
     const payload = jwt.verify(token, CONFIG_AUTH.SECRET);
-    // TODO: remove console.log
-    console.log(payload);
     const user = await User.findById(payload.id);
     res.cookie('token', token, { httpOnly: true });
     return res.send(user);
