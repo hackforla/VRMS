@@ -3,9 +3,11 @@ import CreateAccountView from './createAccountView';
 import { Email } from '../../utils/validation/validation';
 import { checkUser } from '../../services/user.service';
 import { useHistory } from 'react-router-dom';
+import { AUTH_ORIGIN } from '../../utils/constants';
 
 const CreateAccountContainer = () => {
   const history = useHistory();
+  const [, ONBOARDING] = AUTH_ORIGIN;
 
   // Local UI State
   const [isDisabled, setIsDisabled] = useState(true);
@@ -27,9 +29,10 @@ const CreateAccountContainer = () => {
     if (Email.isValid(userEmail)) {
       setIsEmailValid(true);
       setErrorMsgInvalidEmail(false);
-      const userData = await checkUser(userEmail);
+      const userData = await checkUser(userEmail, ONBOARDING);
       if (!userData) {
         // user is not registered in app, redirect to the 1st of onboarding
+        // TODO: save to store auth_origin: ONBOARDING
         history.push('/onboarding/email-setup');
       } else {
         setErrorMsgRegisteredEmail(true);

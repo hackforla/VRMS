@@ -4,13 +4,15 @@ import Button from '../common/button/button';
 import { checkAuth } from '../../services/user.service';
 import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import { AUTH_ORIGIN } from '../../utils/constants';
 
 const Auth = () => {
   const user = useSelector((state) => state.auth.user);
+  const [LOG_IN, ,] = AUTH_ORIGIN;
   const [isMessageShow, setMessage] = useState(false);
 
   const handleButton = async () => {
-    const isAuth = await checkAuth(user.email);
+    const isAuth = await checkAuth(user.email, LOG_IN);
     if (isAuth) setMessage(true);
 
     setTimeout(() => {
