@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { Redirect } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { Redirect } from 'react-router-dom';
 
-import "../sass/MagicLink.scss";
+import '../sass/MagicLink.scss';
 
 const HandleAuth = (props) => {
   const [isMagicLinkValid, setMagicLink] = useState(null);
@@ -10,15 +10,15 @@ const HandleAuth = (props) => {
   async function isValidToken() {
     const search = props.location.search;
     const params = new URLSearchParams(search);
-    const api_token = params.get("token");
+    const api_token = params.get('token');
 
     try {
-      const response = await fetch("/api/auth/verify-signin", {
-        method: "POST",
+      const response = await fetch('/api/auth/verify-signin', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
-          "x-access-token": api_token,
-          "x-customrequired-header": headerToSend
+          'Content-Type': 'application/json',
+          'x-access-token': api_token,
+          'x-customrequired-header': headerToSend,
         },
       });
       const body = await response;
@@ -32,9 +32,8 @@ const HandleAuth = (props) => {
     isValidToken();
   }, []);
 
-  let text;
-  if (isMagicLinkValid == true) {
-    return <Redirect to="/admin" />
+  if (isMagicLinkValid) {
+    return <Redirect to="/admin" />;
   } else {
     return (
       <div className="flex-container">
@@ -42,8 +41,6 @@ const HandleAuth = (props) => {
       </div>
     );
   }
-
-  
 };
 
 export default HandleAuth;
