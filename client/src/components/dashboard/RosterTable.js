@@ -1,7 +1,5 @@
 import React from "react";
 import styles from "../../sass/ProjectLeaderDashboard.module.scss";
-import RosterTableRow from "./RosterTableRow";
-import ls from "local-storage";
 
 const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
 

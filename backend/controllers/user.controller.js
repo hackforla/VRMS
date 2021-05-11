@@ -175,8 +175,9 @@ UserController.verifySignIn = async function (req, res) {
   }
 };
 
-UserController.verifyMe = function (req, res) {
-  return res.sendStatus(200);
+UserController.verifyMe = async function (req, res) {
+  const user = await User.findById(req.userId);
+  return res.status(200).send(user);
 };
 
 module.exports = UserController;

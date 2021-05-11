@@ -21,6 +21,7 @@ const HandleAuth = (props) => {
           'x-customrequired-header': headerToSend,
         },
       });
+      // eslint-disable-next-line no-unused-vars
       const body = await response;
       setMagicLink(response.status === 200);
     } catch (error) {

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import CheckInButtons from "../components/presentational/CheckInButtons";
 import CreateNewProfileButton from "../components/presentational/CreateNewProfileButton";
-import ls from "local-storage";
 
 import "../sass/Home.scss";
 
 const Home = (props) => {
     const [events, setEvents] = useState([]);
+    // eslint-disable-next-line no-unused-vars
     const [isLoading, setIsLoading] = useState(false);
     const [event, setEvent] = useState("--SELECT ONE--");
     const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;

@@ -1,5 +1,4 @@
 import React from 'react';
-import ProfileOption from './ProfileOption';
 
 const UserEvents = ({ context }) => {
     const { events } = context;
