@@ -13,7 +13,7 @@
     "http-proxy-middleware": "^1.0.5",
     "js-cookie": "^2.2.1",
     "local-storage": "^2.0.0",
-    "mathjs": "^6.6.2",
+    "mathjs": "^7.5.1",
     "minimist": "^1.2.3",
     "moment": "^2.24.0",
     "moment-recur": "^1.0.7",
