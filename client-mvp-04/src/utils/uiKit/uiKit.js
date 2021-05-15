@@ -267,7 +267,7 @@ const DevUiKit = () => {
       {/*** DROPDOWN ***/}
       <div className={'dropdown-container'}>
         <h1 className={'kit-sec-title'}>*** DROPDOWN ***</h1>
-        <Dropdown data={data} setTimezone={setTimezone} />
+        <Dropdown data={data} setSelectedOption={setTimezone} />
       </div>
     </div>
   );

@@ -36,6 +36,10 @@
   }
 }
 
+.dropdown-container {
+  height: 380px;
+}
+
 @media (max-height: 900px) {
   .kit-container {
     height: calc(95vh - 160px);

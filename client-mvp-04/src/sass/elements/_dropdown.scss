@@ -1,57 +1,52 @@
 @import '../variables';
 
-.dropdown-container {
-  display: flex;
+.dropdown-wrapper {
+  display: grid;
   justify-content: center;
-  flex-direction: column;
-  .dropdown-wrapper {
-    display: grid;
+  .dropdown {
+    display: flex;
     justify-content: center;
-    .dropdown {
-      display: flex;
-      justify-content: center;
-      width: 230px;
-      border-bottom: 1px solid $dropdown-border-color;
-      margin-bottom: 14px;
-      .selected {
-        width: 100%;
-        min-height: 20px;
-        text-align: left;
-        margin: 0px 0px 6px 3px;
-        line-height: 20px;
-        overflow-wrap: break-word;
-      }
-      .arrow {
-        width: 0;
-        height: 0;
-        margin: auto 14.8px 12px 0px;
-        border-left: 5.21px solid transparent;
-        border-right: 5.19px solid transparent;
-        border-top: 8.25px solid $dark-primary-color;
-      }
+    width: 230px;
+    border-bottom: 1px solid $dropdown-border-color;
+    margin-bottom: 14px;
+    .selected {
+      width: 100%;
+      min-height: 20px;
+      text-align: left;
+      margin: 0 0 6px 3px;
+      line-height: 20px;
+      overflow-wrap: break-word;
     }
-    .option-container {
-      width: 232px;
-      border: 1px solid $dark-secondary-color;
-      border-radius: 2px;
-      .option-label {
-        display: inline-block;
-        width: 230px;
-        min-height: 34px;
-        padding: 9px 16px 5px 16px;
-        line-height: 20px;
-        overflow-wrap: break-word;
-        text-align: left;
-        &:hover {
-          background-color: $concrete-color;
-        }
-        .option {
-          display: none;
-        }
+    .arrow {
+      width: 0;
+      height: 0;
+      margin: 0 0 6px 3px;
+      border-left: 5.21px solid transparent;
+      border-right: 5.19px solid transparent;
+      border-top: 8.25px solid $dark-primary-color;
+    }
+  }
+  .option-container {
+    width: 230px;
+    border: 1px solid $dark-secondary-color;
+    border-radius: 2px;
+    .option-label {
+      display: inline-block;
+      width: 100%;
+      min-height: 34px;
+      padding: 9px 16px 5px 16px;
+      line-height: 20px;
+      overflow-wrap: break-word;
+      text-align: left;
+      &:hover {
+        background-color: $concrete-color;
+      }
+      .option {
+        display: none;
       }
     }
-    .hide {
-      display: none !important;
-    }
+  }
+  .hide {
+    display: none;
   }
 }
