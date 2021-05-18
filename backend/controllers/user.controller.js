@@ -69,7 +69,7 @@ UserController.update = async function (req, res) {
   }
 
   try {
-    const user = await User.findOneAndUpdate(UserId, req.body, { new: true });
+    const user = await User.findOneAndUpdate({_id: UserId}, req.body, { new: true });
     return res.status(200).send(user);
   } catch (err) {
     return res.sendStatus(400);

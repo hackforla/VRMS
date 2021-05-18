@@ -1,0 +1,88 @@
+
+.container--UserManagement {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    margin-bottom: 200px;
+}
+
+.edit-users {
+    margin-top: 50px;
+}
+
+.search-results {
+    cursor: pointer;
+    font-size: 12px;
+
+}
+
+.project-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.ua-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+}
+.search-column {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    flex: 1;
+  }
+
+.user-display-column-left {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 25%;
+  margin-bottom: 8px;
+}
+.user-display-column-right {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 75%;
+    margin-bottom: 8px;
+  }
+
+.button-remove {
+    width: 25%;
+    color: #fa114f;
+    font-weight: bold;
+}
+
+.project-select {
+width: 250px;
+margin: 30px 0 0 0;
+font-size: 16px;
+font-weight: bold;
+color: darkblue;
+background-color: inherit;
+border: 3px solid black;
+border-radius: 0px;
+}
+
+.button-add {
+  background-color: black;
+  width: 250px;
+  color: white;
+  font-size: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.button-back {
+  background-color: black;
+  width: 250px;
+  color: white;
+  font-size: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px 0px;
+}

@@ -19,6 +19,8 @@ import EmailSent from "./pages/EmailSent";
 import Events from "./pages/Events";
 import AddNew from "./pages/AddNew";
 import ProjectLeaderDashboard from "./pages/ProjectLeaderDashboard";
+import UserAdmin from "./pages/UserAdmin";
+
 
 import "./App.scss";
 
@@ -37,6 +39,7 @@ const routes = [
   { path: "/handleauth", name: "handleauth", Component: HandleAuth },
   { path: "/emailsent", name: "emailsent", Component: EmailSent },
   { path: "/events", name: "events", Component: Events },
+  { path: "/useradmin", name: "useradmin", Component: UserAdmin },
   {
     path: "/projectleader",
     name: "pldashboard",
