@@ -1,5 +1,5 @@
 
-.container--UserManagement {
+.container--usermanagement {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -12,9 +12,15 @@
     margin-top: 50px;
 }
 
+.results-heading {
+  font-size: 14px;
+  font-weight: bold; 
+  margin-bottom: 5px;
+}
+
 .search-results {
     cursor: pointer;
-    font-size: 12px;
+    font-size: 14px;
 
 }
 
@@ -40,13 +46,13 @@
 .user-display-column-left {
   display: flex;
   flex-direction: column;
-  flex-basis: 25%;
+  flex-basis: 15%;
   margin-bottom: 8px;
 }
 .user-display-column-right {
     display: flex;
     flex-direction: column;
-    flex-basis: 75%;
+    flex-basis: 85%;
     margin-bottom: 8px;
   }
 
@@ -85,4 +91,35 @@ border-radius: 0px;
   padding: 10px;
   border-radius: 5px;
   margin: 10px 0px;
+}
+
+.tab-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 80%;
+  margin-bottom: 20px;
+}
+
+.select-button {
+  background-color: #f1f1f1;
+  width: 175px;
+  color: #aaa;
+  font-size: 16px;
+  margin-top: 10px;
+  margin: 5px; 
+  text-align: center;
+}
+
+.selected {
+  border: 1px solid #333; 
+  color: #333;
+}
+
+.hide-results {
+  display: none;
+}
+
+.light-results {
+  color: #666
 }
