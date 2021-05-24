@@ -14,7 +14,7 @@ import ReturningUser from './pages/ReturningUser';
 import Auth from './components/auth/Auth';
 import CheckInForm from './pages/CheckInForm';
 import Success from './pages/Success';
-import HandleAuth from './pages/HandleAuth';
+import HandleAuth from './components/auth/HandleAuth';
 import EmailSent from './pages/EmailSent';
 import Events from './pages/Events';
 import AddNew from './pages/AddNew';

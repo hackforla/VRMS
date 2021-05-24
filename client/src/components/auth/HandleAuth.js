@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 
-import '../sass/MagicLink.scss';
+import '../../sass/MagicLink.scss';
 
 const HandleAuth = (props) => {
   const [isMagicLinkValid, setMagicLink] = useState(null);
