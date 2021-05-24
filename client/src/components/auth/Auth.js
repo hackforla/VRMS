@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
-import { checkUser, checkAuth } from '../services/user.service';
+import { checkUser, checkAuth } from '../../services/user.service';
 
-import useAuth from '../hooks/useAuth';
-import '../sass/AdminLogin.scss';
+import useAuth from '../../hooks/useAuth';
+import '../../sass/AdminLogin.scss';
 
 /** At the moment only users with the 'admin' accessLevel can login
  * and see the dashboard
  **/
-const AdminLogin = () => {
+const Auth = () => {
   const LOG_IN = 'LOG_IN';
   const ADMIN = 'admin';
   const pattern = /\b[a-z0-9._]+@[a-z0-9.-]+\.[a-z]{2,4}\b/i;
@@ -124,4 +124,4 @@ const AdminLogin = () => {
   );
 };
 
-export default AdminLogin;
+export default Auth;
