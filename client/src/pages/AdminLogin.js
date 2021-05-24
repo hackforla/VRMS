@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
+import { checkUser, checkAuth } from '../services/user.service';
 
 import useAuth from '../hooks/useAuth';
 import '../sass/AdminLogin.scss';
@@ -9,6 +10,10 @@ import '../sass/AdminLogin.scss';
  * and see the dashboard
  **/
 const AdminLogin = () => {
+  const LOG_IN = 'LOG_IN';
+  const ADMIN = 'admin';
+  const pattern = /\b[a-z0-9._]+@[a-z0-9.-]+\.[a-z]{2,4}\b/i;
+
   const history = useHistory();
   const auth = useAuth();
 
@@ -17,82 +22,50 @@ const AdminLogin = () => {
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const CHECK_USER = '/api/checkuser';
-  const HEADERS = {
-    'Content-Type': 'application/json',
-    'x-customrequired-header': process.env.REACT_APP_CUSTOM_REQUEST_HEADER,
-  };
-  const auth_origin = 'LOG_IN';
-  const SIGN_IN = '/api/auth/signin';
-  const ADMIN = 'admin';
-
-  const isValidEmail = (email) => {
-    const pattern = /\b[a-z0-9._]+@[a-z0-9.-]+\.[a-z]{2,4}\b/i;
-    return email.search(pattern) !== -1;
-  };
-
-  async function checkUser(email) {
-    try {
-      const response = await fetch(CHECK_USER, {
-        method: 'POST',
-        headers: HEADERS,
-        body: JSON.stringify({ email: email, auth_origin: auth_origin }),
-      });
-      return await response.json();
-    } catch (error) {
-      console.log('User is not registered in the app');
-      console.log(error);
-      return null;
-    }
-  }
-
-  async function checkAuth(email) {
-    try {
-      const response = await fetch(SIGN_IN, {
-        method: 'POST',
-        headers: HEADERS,
-        body: JSON.stringify({ email: email, auth_origin: auth_origin }),
-      });
-      return response.status === 200;
-    } catch (error) {
-      console.log('User is not authorized in app');
-      console.log(error);
-      return null;
-    }
-  }
-
-  const handleLogin = async () => {
-    if (isValidEmail(email)) {
+  const validateEmail = () => {
+    if (email.search(pattern) !== -1) {
       setIsDisabled(false);
-      const userData = await checkUser(email);
+      return true;
+    } else {
+      setIsDisabled(true);
+      showError('Please enter a valid email address');
+      return false;
+    }
+  };
+
+  const showError = (message) => {
+    setIsError(true);
+    setErrorMessage(message);
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    const isEmailValid = validateEmail();
+
+    if (isEmailValid) {
+      const userData = await checkUser(email, LOG_IN);
       if (userData) {
         if (userData.user.accessLevel !== ADMIN) {
-          setIsError(true);
-          setErrorMessage(
+          showError(
             "You don't have the correct access level to view the dashboard"
           );
           return;
         }
 
-        const isAuth = await checkAuth(email);
+        const isAuth = await checkAuth(email, LOG_IN);
         if (isAuth) {
           history.push('/emailsent');
         } else {
-          setIsError(true);
-          setErrorMessage(
+          showError(
             'We don’t recognize your email address. Please, create an account.'
           );
         }
       } else {
-        setIsError(true);
-        setErrorMessage(
+        showError(
           'We don’t recognize your email address. Please, create an account.'
         );
       }
-    } else {
-      setIsDisabled(true);
-      setIsError(true);
-      setErrorMessage('Please enter a valid email address');
     }
   };
 
@@ -100,8 +73,7 @@ const AdminLogin = () => {
     const inputValue = e.currentTarget.value.toString();
     if (!inputValue) {
       setIsDisabled(true);
-      setIsError(true);
-      setErrorMessage('Please enter a valid email address');
+      showError('Please enter a valid email address');
     } else {
       setIsDisabled(false);
       setIsError(false);
@@ -117,11 +89,7 @@ const AdminLogin = () => {
         <div className="adminlogin-headers">
           <h3>Welcome Back!</h3>
         </div>
-        <form
-          className="form-check-in"
-          autoComplete="off"
-          onSubmit={(e) => e.preventDefault()}
-        >
+        <form className="form-check-in" autoComplete="off">
           <div className="form-row">
             <div className="form-input-text">
               <label htmlFor="email">Enter your email address:</label>
