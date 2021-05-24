@@ -1,4 +1,9 @@
-import { HEADERS, CHECK_USER, SIGN_IN } from '../utils/endpoints';
+import {
+  HEADERS,
+  CHECK_USER,
+  SIGN_IN,
+  AUTH_VERIFY_SIGN_IN,
+} from '../utils/endpoints';
 
 /**
  * Method sent request to the backend to check if user exist in the DB
@@ -39,5 +44,27 @@ export async function checkAuth(email, auth_origin) {
     console.log('User is not authorized in app');
     console.log(error);
     return null;
+  }
+}
+
+/**
+ * Method sent request to the backend to check if token is valid
+ * @returns true if is valid otherwise false
+ * @param api_token token
+ */
+export async function isValidToken(api_token) {
+  try {
+    const response = await fetch(AUTH_VERIFY_SIGN_IN, {
+      method: 'POST',
+      headers: {
+        ...HEADERS,
+        'x-access-token': api_token,
+      },
+    });
+    return response.status === 200;
+  } catch (error) {
+    console.log('Token is not valid');
+    console.log(error);
+    return false;
   }
 }
