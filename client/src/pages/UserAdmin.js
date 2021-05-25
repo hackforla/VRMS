@@ -28,7 +28,8 @@ const UserAdmin = () => {
             setUsers(resJson);
 
         } catch(error) {
-            alert(`fetchUsers ${error}`);
+            console.log(`fetchUsers error: ${error}`);
+            alert("Server not responding.  Please refresh the page.");
         }
     }
 
@@ -44,7 +45,8 @@ const UserAdmin = () => {
             setProjects(resJson);
 
         } catch(error) {
-            alert(`fetchProjects: ${error}`);
+            console.log(`fetchProjects error: ${error}`);
+            alert("Server not responding.  Please refresh the page.");
         }
     }
 
@@ -90,8 +92,7 @@ const UserAdmin = () => {
     // Updates user projects in db
     const updateUserDb = async () => {
 
-        // // renaming variable so it matches db name
-
+        // Renaming variable so it matches db name
         let managedProjects = userManagedProjects;
 
         // // Update database
@@ -111,6 +112,7 @@ const UserAdmin = () => {
             return resJson;
         } catch (error) {
             console.log(`update user error: `, error);
+            alert("Server not responding.  Please try again.");
         }
 
     }
@@ -190,7 +192,7 @@ const UserAdmin = () => {
                     </div>
                     <div>
                         <div>
-                            {<ul className={searchResultType === "email" ? "search-results hide-results" : "search-results"}>    
+                            {<ul className={searchResultType === "name" ? "search-results" : "search-results hide-results"}>    
                                 {nameResults.map((result,index) => {
                                 return (
                                     <li key={index}>{result}</li>
@@ -199,7 +201,7 @@ const UserAdmin = () => {
                         </div> 
 
                         <div>
-                            {<ul className={searchResultType === "name" ? "search-results hide-results" : "search-results"}>
+                            {<ul className={searchResultType === "email" ? "search-results" : "search-results hide-results"}>
                                 {emailResults.map((result,index) => {
                                 return (
                                     <li key={index}>{result}</li>
