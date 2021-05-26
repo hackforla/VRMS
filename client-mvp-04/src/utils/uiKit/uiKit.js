@@ -69,30 +69,26 @@ const DevUiKit = () => {
         <p className="italic">Text content</p>
         <p className="dev-comment">Main text: 'Open Sans', 14px, italic</p>
 
-        <a key={'default-link'} href={'/'}>
+        <a key="default-link" href="/">
           Link to click here
         </a>
         <p className="dev-comment">Default Link: 14px, semi-bold</p>
 
-        <a key={'create-link'} className="redirect-link accent-link" href={'/'}>
+        <a key="create-link" className="redirect-link accent-link" href="/">
           CREATE ACCOUNT
         </a>
         <p className="dev-comment">
           Accent Link: 13px, bold, $accent-royal-blue-color
         </p>
 
-        <a
-          key={'tooltip-link'}
-          className="redirect-link tooltip-link"
-          href={'/'}
-        >
+        <a key="tooltip-link" className="redirect-link tooltip-link" href="/">
           More details here
         </a>
         <p className="dev-comment">
           Tooltip Link: 10px, bold, $link-accent-color
         </p>
 
-        <a className="join-link" href={'/'}>
+        <a className="join-link" href="/">
           Join new project <span className="join-plus">+</span>
         </a>
         <p className="dev-comment">Join Link: 24px, bold</p>
@@ -107,7 +103,7 @@ const DevUiKit = () => {
         </div>
         <p className="dev-comment">Project Link: 24px, semi-bold</p>
 
-        <ErrorMessage content={'*Please enter a valid email address'} />
+        <ErrorMessage content="*Please enter a valid email address" />
         <p className="dev-comment">
           Error Message: italic, semi-bold; components/common/errorMessage
         </p>
@@ -116,14 +112,14 @@ const DevUiKit = () => {
       {/*** BUTTONS ***/}
       <div className="button-container">
         <h1 className="kit-sec-title">*** BUTTONS ***</h1>
-        <Button content={`Sign In`} />
+        <Button content="Sign In" />
         <p className="dev-comment">Primary default button, use without class</p>
-        <Button content={`Sign In`} className="btn-accent" />
+        <Button content="Sign In" className="btn-accent" />
         <p className="dev-comment">Accent button, use with class .btn-accent</p>
-        <Button content={`Sign In`} className="btn-square" />
+        <Button content="Sign In" className="btn-square" />
         <p className="dev-comment">Square button, use with class .btn-square</p>
         <button className="btn-confirm">
-          <img src={confirmIcon} className="btn-icon" alt={'confirm'} />
+          <img src={confirmIcon} className="btn-icon" alt="confirm" />
           Confirm
         </button>
         <p className="dev-comment">
@@ -141,10 +137,10 @@ const DevUiKit = () => {
             meeting details, track your contributions, and maintain a profile of
             your skills and professional development.
             <RedirectLink
-              linkKey={'footer-page'}
-              path={'/page'}
+              linkKey="footer-page"
+              path="page"
               className="tooltip-link"
-              content={` More details here.`}
+              content=" More details here."
             />
           </div>
         </div>
@@ -155,15 +151,15 @@ const DevUiKit = () => {
       <div className="inputs-container">
         <h1 className="kit-sec-title">*** INPUTS ***</h1>
 
-        <Input placeholder={'Enter your email'} type={'email'} />
+        <Input placeholder="Enter your email" type="email" />
         <p className="dev-comment">Default Input, components/common/input</p>
 
         <div className="text-field-icon-container">
-          <img src={gitHubIcon} className="text-field-icon" alt={'gitHub'} />
+          <img src={gitHubIcon} className="text-field-icon" alt="gitHub" />
           <input
             type="text"
             name="text-icon-field"
-            placeholder={`GitHub user name (not email)`}
+            placeholder="GitHub user name (not email)"
           />
         </div>
         <p className="dev-comment">Input with icon</p>
@@ -241,9 +237,9 @@ const DevUiKit = () => {
           <input
             type="text"
             name="text-icon-field"
-            placeholder={`Search Reports`}
+            placeholder="Search Reports"
           />
-          <img src={searchIcon} className="text-field-icon" alt={'search'} />
+          <img src={searchIcon} className="text-field-icon" alt="search" />
         </div>
         <p className="dev-comment">Rounded input with icon</p>
       </div>
