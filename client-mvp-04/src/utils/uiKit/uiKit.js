@@ -29,6 +29,7 @@ the application. UI elements created based on finalized v0.4 Style Guide.*/
 
 const DevUiKit = () => {
   //for the dropdown section (demo purpose)
+  // eslint-disable-next-line
   const [timezone, setTimezone] = useState('');
 
   return (
