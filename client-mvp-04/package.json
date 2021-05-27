@@ -37,7 +37,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test --watchAll=false",
     "test:watch": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint ./**/*.{js,jsx}",
+    "lint:fix": "eslint ./**/*.{js,jsx} --fix"
   },
   "eslintConfig": {
     "extends": "react-app"
