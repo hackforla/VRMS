@@ -8,6 +8,7 @@ import {
 const authDefaultState = {
   isLoaded: null,
   authToken: null,
+  authOrigin: null,
   loggedIn: null,
   user: null,
   error: null,
@@ -27,6 +28,7 @@ export default (state = authDefaultState, { type, payload }) => {
         isLoaded: true,
         loggedIn: true,
         authToken: payload.authToken,
+        authOrigin: payload.authOrigin,
         user: payload.user,
         userProfile: {
           firstName: payload.user.name.firstName,
@@ -45,7 +47,8 @@ export default (state = authDefaultState, { type, payload }) => {
     case SET_USER:
       return {
         ...state,
-        user: payload,
+        user: payload.user,
+        authOrigin: payload.auth_origin,
       };
     default:
       return state;

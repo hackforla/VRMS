@@ -35,3 +35,25 @@
     position: static;
   }
 }
+
+.dropdown-container {
+  height: 380px;
+}
+
+@media (max-height: 900px) {
+  .kit-container {
+    height: calc(95vh - 160px);
+  }
+}
+
+@media (max-height: 896px) and (max-width: 420px) {
+  .kit-container {
+    height: calc(100vh - 160px);
+  }
+}
+
+@media (max-width: 374px) {
+  .kit-container {
+    height: calc(100vh - 170px);
+  }
+}

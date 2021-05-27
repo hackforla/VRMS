@@ -14,7 +14,8 @@ const HandleAuth = (props) => {
     const search = props.location.search;
     const params = new URLSearchParams(search);
     const token = params.get('token');
-    dispatch(allActions.authActions.authUserWithToken(token));
+    const auth_origin = params.get('auth_origin');
+    dispatch(allActions.authActions.authUserWithToken(token, auth_origin));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return isLoaded ? (
