@@ -23,7 +23,7 @@
 
 .navbar-buttons-container {
     font-size: 16px;
-    position: absolute;
+    position: initial;
     display: flex;
     top: 36px;
     left: 12px;
@@ -48,12 +48,13 @@
         height: 100%;
         width: auto;
         object-fit: cover;
+        position: abolute;
     }
 }
 
 .justify-right {
     position: absolute;
-    top: 12px;
+    top: 36px;
     right: 0px;
 }
 

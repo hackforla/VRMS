@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './uiKit.scss';
 import Button from '../../components/common/button/button';
 import confirmIcon from '../../assets/images/icons/confirm.svg';
@@ -10,12 +10,27 @@ import ErrorMessage from '../../components/common/errorMessage/errorMessage';
 import ProgressBar from '../../components/common/progressBar/progressBar';
 import Checkbox from '../../components/common/checkbox/checkbox';
 import searchIcon from '../../assets/images/icons/searchIcon.svg';
+import Dropdown from '../../components/common/dropdown/dropdown';
 
+//for the dropdown section (demo purpose)
+const data = {
+  timezones: [
+    'HST | Hawaii Standard Time',
+    'AKST | Alaska Standard Time',
+    'PST | Pacific Standard Time',
+    'MST | Mountain Standard Time',
+    'CST | Central Standard Time',
+    'EST | Eastern Standard Time',
+  ],
+};
 /***** DEV-UI-KIT FOR DEVELOPMENT ONLY *****/
 /*UI KIT helps devs determine, which UI elements will be used throughout
 the application. UI elements created based on finalized v0.4 Style Guide.*/
 
 const DevUiKit = () => {
+  //for the dropdown section (demo purpose)
+  const [timezone, setTimezone] = useState('');
+
   return (
     <div className="kit-container custom-scroll-bar">
       <div className={'kit-title'}>VRMS DEV UI-KIT</div>
@@ -247,6 +262,12 @@ const DevUiKit = () => {
       <div className={'progress-container'}>
         <h1 className={'kit-sec-title'}>*** PROGRESS BAR ***</h1>
         <ProgressBar total={6} active={3} />
+      </div>
+
+      {/*** DROPDOWN ***/}
+      <div className={'dropdown-container'}>
+        <h1 className={'kit-sec-title'}>*** DROPDOWN ***</h1>
+        <Dropdown data={data} setSelectedOption={setTimezone} />
       </div>
     </div>
   );

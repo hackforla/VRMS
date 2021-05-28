@@ -11,10 +11,10 @@ import UserProfile from './pages/UserProfile';
 import Event from './pages/Event';
 import NewUser from './pages/NewUser';
 import ReturningUser from './pages/ReturningUser';
-import AdminLogin from './pages/AdminLogin';
+import Auth from './components/auth/Auth';
 import CheckInForm from './pages/CheckInForm';
 import Success from './pages/Success';
-import HandleAuth from './pages/HandleAuth';
+import HandleAuth from './components/auth/HandleAuth';
 import EmailSent from './pages/EmailSent';
 import Events from './pages/Events';
 import AddNew from './pages/AddNew';
@@ -32,7 +32,7 @@ const routes = [
   { path: '/event/:id', name: 'event', Component: Event },
   { path: '/new', name: 'new', Component: NewUser },
   { path: '/returning', name: 'returning', Component: ReturningUser },
-  { path: '/login', name: 'login', Component: AdminLogin },
+  { path: '/login', name: 'login', Component: Auth },
   { path: '/checkIn/:userType', name: 'checkIn', Component: CheckInForm },
   { path: '/newProfile', name: 'newProfile', Component: CheckInForm },
   { path: '/success', name: 'success', Component: Success },

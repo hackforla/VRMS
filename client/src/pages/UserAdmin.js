@@ -14,6 +14,7 @@ const UserAdmin = () => {
     const [searchTerm, setSearchTerm] = useState(""); // Serch term for the user/email search
     const [projectValue, setProjectValue] = useState("");  // State and handler for form in EditUsers
     const [userLoaded, setUserLoaded] = useState(false);  // is a user currently loaded
+    const [searchResultType, setSearchResultType] = useState("name"); // Which results will diplay
 
     // Fetch users from db
     async function fetchUsers() {
@@ -27,7 +28,8 @@ const UserAdmin = () => {
             setUsers(resJson);
 
         } catch(error) {
-            alert(`fetchUsers ${error}`);
+            console.log(`fetchUsers error: ${error}`);
+            alert("Server not responding.  Please refresh the page.");
         }
     }
 
@@ -43,7 +45,8 @@ const UserAdmin = () => {
             setProjects(resJson);
 
         } catch(error) {
-            alert(`fetchProjects: ${error}`);
+            console.log(`fetchProjects error: ${error}`);
+            alert("Server not responding.  Please refresh the page.");
         }
     }
 
@@ -57,22 +60,23 @@ const UserAdmin = () => {
         setUserToEdit(usr);
     }
 
+
     // Get search resuts to display on page
     const emailResults = !searchTerm
     ? []
     : Object.values(users).filter 
-        (user => user.email.toLowerCase().startsWith(searchTerm.trim()))
-        .map((u) => <div onClick={userClickHandler(u)}>{u.email}</div>)      
-        //.map((u) => <div onClick={userClickHandler(u)}>{u.email + "(" + u.name.firstName + " " + u.name.lastName + ")"}</div>)      
+        (user => user.email.toLowerCase().startsWith(searchTerm.toLowerCase().trim()))
+        .sort((a,b) => a.email.localeCompare(b.email))
+        .map((u) => <div onClick={userClickHandler(u)}>{u.email + " ( " + u.name.firstName + " " + u.name.lastName + " )"}</div>)      
     ;
-
+    
     const nameResults = !searchTerm
     ? []
     : Object.values(users).filter 
         (user => 
-            user.name.firstName.toLowerCase().startsWith(searchTerm.trim()))      
-            .map((u) => <div onClick={userClickHandler(u)}>{u.name.firstName + " " + u.name.lastName}</div>)
-            //.map((u) => <div onClick={userClickHandler(u)}>{u.name.firstName + " " + u.name.lastName + "(" + u.email + ")"}</div>)
+            user.name.firstName.concat(' ', user.name.lastName).toLowerCase().startsWith(searchTerm.toLowerCase().trim()))
+            .sort((a,b) => a.name.firstName.concat(a.name.lastName).localeCompare(b.name.firstName.concat(b.name.lastName)))
+            .map((u) => <div onClick={userClickHandler(u)}>{u.name.firstName + " " + u.name.lastName + " ( " + u.email + " )"}</div>)
     ;
 
     // Filter active projects for dropdown
@@ -88,8 +92,7 @@ const UserAdmin = () => {
     // Updates user projects in db
     const updateUserDb = async () => {
 
-        // // renaming variable so it matches db name
-
+        // Renaming variable so it matches db name
         let managedProjects = userManagedProjects;
 
         // // Update database
@@ -109,6 +112,7 @@ const UserAdmin = () => {
             return resJson;
         } catch (error) {
             console.log(`update user error: `, error);
+            alert("Server not responding.  Please try again.");
         }
 
     }
@@ -117,7 +121,7 @@ const UserAdmin = () => {
     useEffect(() => {
         if (userLoaded) {
           updateUserDb();
-          fetchUsers(); // Fetches users from db and resets users state.  Should eventually be replaced with function that just changes state without having to hit the db. 
+          fetchUsers(); // Fetches users from db and resets users state.  On the off chance that there is a problem with db write, this will align state with db 
         } else {
           setUserLoaded(true);
         }
@@ -128,8 +132,7 @@ const UserAdmin = () => {
     const handleProjectFormSubmit = async (event) => {
         event.preventDefault();
 
-        // If there is a value, and it's not already in state, then add to state, which will 
-        // trigger db update (see useEffect above) 
+        // If there is a value, and it's not already in state, add to state, which will trigger db update (see useEffect above) 
         if (projectValue.length > 0 && projectValue != 'default' && !userManagedProjects.includes(projectValue)) {
             setUserManagedProjects([...userManagedProjects, projectValue]);
             setProjectValue([]);
@@ -158,11 +161,17 @@ const UserAdmin = () => {
         setUserManagedProjects(proj);
     }
 
+    // Swaps the buttons and displayed panels for the search results, by email or by name
+    const buttonSwap = () => {
+        searchResultType === "email" 
+        ? setSearchResultType('name') 
+        : setSearchResultType('email');
+    };
 
     // If there is a selected user, show the edit form; else show search form
     if (Object.keys(userToEdit).length === 0) {
         return (
-            <div className="Container--UserManagement">
+            <div className="container--usermanagement">
                 <div>
                     <h3>User Management</h3>
                     <input
@@ -171,10 +180,19 @@ const UserAdmin = () => {
                         value={searchTerm}
                         onChange={handleChange}
                     />
-                    <div className="ua-row">
-                        <div className="search-column">
-                            <div>Name</div>
-                            {<ul className="search-results">    
+                    <div className="tab-buttons">
+                        <div><button 
+                            className={searchResultType === "name" ? "select-button selected" : "select-button"} 
+                            onClick={buttonSwap} disabled={searchResultType === "name"}>Results by Name
+                        </button></div>
+                        <div><button 
+                            className={searchResultType === "email" ? "select-button selected" : "select-button"} 
+                            onClick={buttonSwap} disabled={searchResultType === "email"}>Results by Email
+                        </button></div>
+                    </div>
+                    <div>
+                        <div>
+                            {<ul className={searchResultType === "name" ? "search-results" : "search-results hide-results"}>    
                                 {nameResults.map((result,index) => {
                                 return (
                                     <li key={index}>{result}</li>
@@ -182,9 +200,8 @@ const UserAdmin = () => {
                             </ul>}
                         </div> 
 
-                        <div className="search-column">
-                            <div>Email</div>
-                            {<ul className="search-results">
+                        <div>
+                            {<ul className={searchResultType === "email" ? "search-results" : "search-results hide-results"}>
                                 {emailResults.map((result,index) => {
                                 return (
                                     <li key={index}>{result}</li>

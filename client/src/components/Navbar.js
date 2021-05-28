@@ -69,7 +69,7 @@ const Navbar = (props) => {
                     <div
                         className={`navbar-logo ${
                             props.location.pathname === "/admin" &&
-                            "justify-right grow"
+                            "justify-right"
                         }`}
                     >
                         <img src="/hflalogo.png" alt="Hack for LA Logo"></img>
