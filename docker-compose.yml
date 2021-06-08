@@ -5,8 +5,8 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile.api
-      target: api-development
-    command: yarn run dev
+      target: api-production
+    command: yarn run start
     volumes:
       - ./backend:/srv/backend
       - backend_node_modules:/srv/backend/node_modules
@@ -24,7 +24,7 @@ services:
     build:
       context: ./client
       dockerfile: Dockerfile.client
-      target: client-development
+      target: client-production
     command: yarn run start
     volumes:
       - ./client:/srv/client
@@ -46,7 +46,7 @@ services:
       dockerfile: Dockerfile.nginx
       context: ./nginx
     ports:
-      - "8000:80"
+      - "80:80"
     networks:
       - gateway
     depends_on:
