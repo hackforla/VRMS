@@ -28,6 +28,12 @@
         "extensions": [".js", ".jsx"]
       }
     ],
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ],
     "testing-library/await-async-query": "error",
     "testing-library/no-await-sync-query": "error",
     "testing-library/no-debug": "warn",
