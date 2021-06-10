@@ -15,6 +15,7 @@ const UserAdmin = () => {
     const [projectValue, setProjectValue] = useState("");  // State and handler for form in EditUsers
     const [userLoaded, setUserLoaded] = useState(false);  // is a user currently loaded
     const [searchResultType, setSearchResultType] = useState("name"); // Which results will diplay
+    const [addNewProject, setAddNewProject] = useState(false); // show add new project component
 
     // Fetch users from db
     async function fetchUsers() {
@@ -81,6 +82,7 @@ const UserAdmin = () => {
 
     // Filter active projects for dropdown
     const activeProjects = Object.values(projects).filter (project => project.projectStatus === 'Active')
+    .sort((a,b) => a.name.localeCompare(b.name))
     .map((p) => [p._id, p.name])
     ;
 
@@ -168,8 +170,47 @@ const UserAdmin = () => {
         : setSearchResultType('email');
     };
 
+    // Add new project things
+    const toggleAddProject = () => {
+        addNewProject === true 
+        ? setAddNewProject(false) 
+        : setAddNewProject(true); 
+    }
+
+      // Adds new project to db
+      const addProjectToDb = async (newProjectName) => {
+
+        // Renaming variable so it matches db name
+        //let newProjectName = name;
+
+        // // Update database
+        const url = `/api/projects/`;
+        const requestOptions = {
+          method: 'POST',
+          headers: {
+              "Content-Type": "application/json",
+              "x-customrequired-header": headerToSend
+          },
+          body: JSON.stringify({ name: newProjectName, projectStatus: "Active"})
+        };
+
+        try {
+          const response = await fetch(url, requestOptions); 
+          const resJson = await response.json();
+          return resJson;
+        } catch (error) {
+          console.log(`Add project error: `, error);
+          alert("Server not responding.  Please try again.");
+        }
+      }
+
+    const handleNewProjectFormSubmit = async (project) => {
+      await addProjectToDb(project);
+      fetchProjects();
+    }
+
     // If there is a selected user, show the edit form; else show search form
-    if (Object.keys(userToEdit).length === 0) {
+    if (Object.keys(userToEdit).length === 0 && addNewProject === false) {
         return (
             <div className="container--usermanagement">
                 <div>
@@ -209,10 +250,11 @@ const UserAdmin = () => {
                             </ul>}
                         </div> 
                     </div>
+                    <div><button className="button" onClick={toggleAddProject}>Add New Project</button></div>
                 </div>
             </div>
         )
-    } else {
+    } else if (Object.keys(userToEdit).length > 0 && addNewProject === false) {
         return (
             <div className="edit-users">
                 <EditUsers
@@ -228,8 +270,18 @@ const UserAdmin = () => {
                 />
             </div>
         )
+    } else {
+        return (
+            <div className="">
+                <AddNewProject 
+                toggleAddProject = {toggleAddProject}
+                handleNewProjectFormSubmit = {handleNewProjectFormSubmit}
+                projects = {projects}
+                />
+            </div>
+        )
     }
-};
+};  // End UserAdmin
 
 // child of UserAdmin. Displays form to update users. 
 const EditUsers = (props) => {
@@ -313,7 +365,59 @@ const EditUsers = (props) => {
             </div>
         </div>
     )
-};
+};  // End EditUser
+
+const AddNewProject = (props) => {
+
+  //initialize state hooks
+  const [newProjectName, setNewProjectName] = useState(""); // manage input state
+  const [validationError, setValidationErrors] = useState("");
+
+  // Handle input change
+  const handleNameChange = event => {
+    setNewProjectName(event.target.value);
+  }
+
+  // Handle Form Submit
+  const handleProjectFormSubmit = event => {
+    event.preventDefault();
+
+    // Clear validation error on resubmit
+    setValidationErrors("");
+
+    // Validation
+    const validationMatch = Object.values(props.projects).filter (project => project.name.toLowerCase() === newProjectName.toLowerCase().trim())
+    .map( p => p.name)
+    ;
+
+    if (validationMatch.length > 0) {
+        setValidationErrors(`The project name "${newProjectName}" is already in use.`);
+        setNewProjectName(""); // clear the form
+    } else {
+        props.handleNewProjectFormSubmit(newProjectName); 
+        setNewProjectName(""); // clear the form
+    }
+  }
+
+  return (
+    <div className="add-new-project">
+      <h3>Add New Project</h3>
+      <div>
+            <form onSubmit={handleProjectFormSubmit}>
+              <input
+                type="text"
+                placeholder="Project Name"
+                value={newProjectName}
+                onChange={handleNameChange}
+              />
+              <span className="validation-error">{validationError}</span>
+              <br />
+              <button className="button-add" type="submit">Add Project</button>
+            </form>
+        </div>
+      <div><button className="button-back" onClick={props.toggleAddProject}>Back to user search</button></div>
+    </div>
+  )};  // End AddNewProject
 
 // Export UserAdmin
 export default UserAdmin;

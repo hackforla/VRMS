@@ -122,3 +122,22 @@ border-radius: 0px;
 .light-results {
   color: #666
 }
+
+.add-new-project {
+  //nothing yet
+}
+
+.button {
+  background-color: black;
+  width: 250px;
+  color: white;
+  font-size: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.validation-error {
+  color: red;
+  padding-top: 10px;
+}
