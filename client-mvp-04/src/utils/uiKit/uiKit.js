@@ -6,6 +6,7 @@ import projectIcon from '../../assets/images/icons/311.png';
 import gitHubIcon from '../../assets/images/icons/github.png';
 import RedirectLink from '../../components/common/link/link';
 import Input from '../../components/common/input/input';
+import InputSkills from '../../components/common/inputSkills/inputSkills';
 import ErrorMessage from '../../components/common/errorMessage/errorMessage';
 import ProgressBar from '../../components/common/progressBar/progressBar';
 import Checkbox from '../../components/common/checkbox/checkbox';
@@ -23,6 +24,11 @@ const data = {
     'EST | Eastern Standard Time',
   ],
 };
+
+//for the skills input component (demo purpose)
+const skills = {
+   currentSkills: ["JavaScript", "TypeScript", "React", "Angular", "Java", "Node.js"]
+ }
 /***** DEV-UI-KIT FOR DEVELOPMENT ONLY *****/
 /*UI KIT helps devs determine, which UI elements will be used throughout
 the application. UI elements created based on finalized v0.4 Style Guide.*/
@@ -257,6 +263,9 @@ const DevUiKit = () => {
         </div>
         <p className={'dev-comment'}>Rounded input with icon</p>
       </div>
+      
+      {/*** Skills Input ***/}
+      <InputSkills skillOptions={skills.currentSkills}/>
 
       {/*** PROGRESS BAR ***/}
       <div className={'progress-container'}>
