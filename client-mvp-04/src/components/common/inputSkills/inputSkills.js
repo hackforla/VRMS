@@ -2,8 +2,6 @@ import React, { useState, useRef } from 'react';
 import SkillItem from './skillItem';
 import DropDown from './dropdown';
 import { ReactComponent as PlusSign } from '../../../assets/images/icons/plus-sign.svg';
-import { useClickOutside } from '../../../hooks/useClickOutside';
-
 
 const InputSkills = ({ skillOptions }) => {
   const [skills, setSkills] = useState([]);
@@ -11,10 +9,7 @@ const InputSkills = ({ skillOptions }) => {
   const [displayStatus, setDisplayStatus] = useState(false);
   const [errors, setErrors] = useState([]);
   const inputRef = useRef(null);
-  const clickOutsideRef = useClickOutside(() => {
-    setDisplayStatus(false);
-    console.log("asdkfahlsdkjfh")
-  });
+  
   
   const removeSkill = (index) => () => {
     setSkills(skills.filter((s, i) => i !== index));
@@ -26,10 +21,13 @@ const InputSkills = ({ skillOptions }) => {
     if(value === "") return
     let skill = skillOptions.find(
       skill => (
-        skill.toLowerCase().includes(value.toLowerCase())
-    ));
+        skill.toLowerCase() === value.toLowerCase())
+    );
+    setErrors([]); // clears errors
     if (skill){
-      setSkills([...skills, skill]);
+      if(!skills.includes(skill)){
+        setSkills([...skills, skill]);
+      }
     } else {
       showError(value);
       inputRef.current.focus();
@@ -72,9 +70,8 @@ const InputSkills = ({ skillOptions }) => {
         <DropDown
           displayStatus={displayStatus}
           setDisplayStatus={setDisplayStatus}
-          skillOptions={getSkillOptions()}
+          options={getSkillOptions()}
           setValue={setValue}
-          clickOutsideRef={clickOutsideRef}
         />
 
         <div className="skills-container">

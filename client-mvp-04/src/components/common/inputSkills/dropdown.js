@@ -1,26 +1,31 @@
 import React from 'react'
+import { useClickOutside } from '../../../hooks/useClickOutside';
+
 
 const Dropdown = ({
   displayStatus,
   setDisplayStatus,
   setValue,
-  skillOptions,
-  clickOutsideRef,
+  options
 }) => {
+  const clickOutsideRef = useClickOutside(() => {
+    setDisplayStatus(false);
+    console.log('asdkfahlsdkjfh');
+  });
   return (
     <div
       className={`option-container ${!displayStatus && 'hide'}`}
       ref={clickOutsideRef}
     >
-      {skillOptions.map((skill, index) => (
-        <label className="option-label" htmlFor={skill} key={index}>
-          {skill}
+      {options.map((option, index) => (
+        <label className="option-label" htmlFor={option} key={index}>
+          {option}
           <input
             className="option"
             type="radio"
-            name="skills"
-            id={skill}
-            value={skill}
+            name="options"
+            id={option}
+            value={option}
             onClick={(e) => {
               setValue(e.target.value);
               setDisplayStatus(!displayStatus);
