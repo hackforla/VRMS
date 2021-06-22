@@ -371,7 +371,8 @@ const AddNewProject = (props) => {
 
   //initialize state hooks
   const [newProjectName, setNewProjectName] = useState(""); // manage input state
-  const [validationError, setValidationErrors] = useState("");
+  const [validationError, setValidationErrors] = useState(""); // validation errors
+  const [addProjectSuccess, setAddProjectSuccess] = useState(""); // project successfully added to db
 
   // Handle input change
   const handleNameChange = event => {
@@ -382,8 +383,10 @@ const AddNewProject = (props) => {
   const handleProjectFormSubmit = event => {
     event.preventDefault();
 
-    // Clear validation error on resubmit
+    // Clear notifications on resubmit
     setValidationErrors("");
+    setAddProjectSuccess("");
+
 
     // Validation
     const validationMatch = Object.values(props.projects).filter (project => project.name.toLowerCase() === newProjectName.toLowerCase().trim())
@@ -396,6 +399,7 @@ const AddNewProject = (props) => {
     } else {
         props.handleNewProjectFormSubmit(newProjectName); 
         setNewProjectName(""); // clear the form
+        setAddProjectSuccess(`The project "${newProjectName}" has been added!`);
     }
   }
 
@@ -411,6 +415,7 @@ const AddNewProject = (props) => {
                 onChange={handleNameChange}
               />
               <span className="validation-error">{validationError}</span>
+              <span className="project-success">{addProjectSuccess}</span>
               <br />
               <button className="button-add" type="submit">Add Project</button>
             </form>
