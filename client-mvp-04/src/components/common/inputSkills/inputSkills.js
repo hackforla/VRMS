@@ -3,8 +3,9 @@ import SkillItem from './skillItem';
 import DropDown from './dropdown';
 import { ReactComponent as PlusSign } from '../../../assets/images/icons/plus-sign.svg';
 
-const InputSkills = ({ skillOptions }) => {
-  const [skills, setSkills] = useState([]);
+const InputSkills = ({ options, skills, setSkills }) => {
+  // const [skills, setSkills] = useState([]);
+  const [skillOptions, setSkillOptions] = useState(options);
   const [value, setValue] = useState('');
   const [displayStatus, setDisplayStatus] = useState(false);
   const [errors, setErrors] = useState([]);
@@ -12,6 +13,7 @@ const InputSkills = ({ skillOptions }) => {
   
   
   const removeSkill = (index) => () => {
+    setSkillOptions([...skillOptions, skills[index]])
     setSkills(skills.filter((s, i) => i !== index));
   };
   const showError = (skill) => {
@@ -27,6 +29,7 @@ const InputSkills = ({ skillOptions }) => {
     if (skill){
       if(!skills.includes(skill)){
         setSkills([...skills, skill]);
+        setSkillOptions(skillOptions.filter(s => s !== skill));
       }
     } else {
       showError(value);
@@ -49,9 +52,21 @@ const InputSkills = ({ skillOptions }) => {
       <div className="skill-input-container required-asterisk dropdown-wrapper">
         <input
           type="text"
-          placeholder="   Current Skills"
+          placeholder=" Current Skills"
           id="skill-input"
           ref={inputRef}
+          onFocus={(e) => (
+            e.target.parentElement.classList.remove('required-asterisk')
+          )}
+          onBlur={(e) => {
+            let input = e.target;
+            setTimeout(() => {
+              if(input.value === ""){
+                input.parentElement.classList.add('required-asterisk');
+              }
+            }, 100)
+          }}
+          value={value}
           onChange={(e) => {
             setValue(e.target.value);
             if (e.target.value !== '') {
@@ -59,12 +74,6 @@ const InputSkills = ({ skillOptions }) => {
             }
             e.target.parentElement.classList.remove('required-asterisk');
           }}
-          // onKeyDown={(e) => {
-          //   if (e.key === 'Enter') {
-          //     submitSkill(e);
-          //   }
-          // }}
-          value={value}
         />
         <PlusSign onClick={submitSkill} className="input-plus" />
         <DropDown

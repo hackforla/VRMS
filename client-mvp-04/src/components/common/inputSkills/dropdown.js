@@ -1,5 +1,5 @@
 import React from 'react'
-import { useClickOutside } from '../../../hooks/useClickOutside';
+import { useClickOutside } from '../../../utils/hooks/useClickOutside';
 
 
 const Dropdown = ({
@@ -10,7 +10,6 @@ const Dropdown = ({
 }) => {
   const clickOutsideRef = useClickOutside(() => {
     setDisplayStatus(false);
-    console.log('asdkfahlsdkjfh');
   });
   return (
     <div

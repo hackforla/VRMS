@@ -4,3 +4,10 @@ export class Email {
     return value.search(pattern) !== -1;
   }
 }
+
+export class Skills {
+  static isValid(skillOptions, skillsInputed){
+    if(skillsInputed.length === 0) return false;
+    return skillsInputed.every(skill => skillOptions.includes(skill));
+  }
+}
