@@ -31,29 +31,12 @@ services:
       - client_node_modules:/srv/client/node_modules
     expose:
       - "3000"
-      - "4000"
     ports:
       - "3000:3000"
-    stdin_open: true
-    restart: on-failure
-    networks:
-      - gateway
-
-  client-mvp-04:
-    build:
-      context: ./client-mvp-04
-      dockerfile: Dockerfile.client
-      target: client-mvp-development
-    command: npm run start
-    volumes:
-      - ./client-mvp-04:/srv/client
-      - client-mvp-04_node_modules:/srv/client/node_modules
-    expose:
-      - "3001"
-      - "3002"
-      - "4000"
-    ports:
-      - "3001:3001"
+    environment:
+      BACKEND_HOST: backend
+    depends_on: 
+      - backend
     stdin_open: true
     restart: on-failure
     networks:
@@ -65,13 +48,11 @@ services:
       dockerfile: Dockerfile.nginx
       context: ./nginx
     ports:
-      - "8000:80"
-      - "8001:81"
+      - "80:80"
     networks:
       - gateway
     depends_on:
       - client
-      - client-mvp-04
       - backend
 
   mailhog:
@@ -90,5 +71,4 @@ networks:
 
 volumes:
   client_node_modules:
-  client-mvp-04_node_modules:
   backend_node_modules:
