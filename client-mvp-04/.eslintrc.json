@@ -14,7 +14,7 @@
     "ecmaFeatures": {
       "jsx": true
     },
-    "ecmaVersion": 12
+    "ecmaVersion": 2017
   },
   "plugins": ["react", "prettier"],
   "rules": {
