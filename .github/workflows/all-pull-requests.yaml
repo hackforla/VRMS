@@ -57,11 +57,11 @@ jobs:
       - name: Run client unit test suite
         run: docker-compose run --rm client yarn run test
 
-  test-mvp-unit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Build the client mvp container
-        run: docker-compose build client-mvp-04
-      - name: Run frontend unit test suite
-        run: docker-compose run --rm client-mvp-04 yarn run test
+#   test-mvp-unit:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
+#       - name: Build the client mvp container
+#         run: docker-compose build client-mvp-04
+#       - name: Run frontend unit test suite
+#         run: docker-compose run --rm client-mvp-04 yarn run test
