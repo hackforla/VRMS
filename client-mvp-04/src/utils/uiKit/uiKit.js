@@ -27,7 +27,7 @@ const data = {
   ],
 };
 
-//for the skills input component (demo purpose)
+//for the current skills input component (demo purpose)
 const skills = {
    currentSkills: ["JavaScript", "TypeScript", "React", "Angular", "Java", "Node.js"]
  }
@@ -40,7 +40,7 @@ const DevUiKit = () => {
   //for the dropdown section (demo purpose)
   const [timezone, setTimezone] = useState('');
 
-  // for the skills input component (demo purpose)
+  // for the current skills input component (demo purpose)
   const [skillsInputed, setSkillsInputed] = useState([]);
 
   return (
