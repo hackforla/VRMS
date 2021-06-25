@@ -9,11 +9,17 @@ const InputSkills = ({ options, skills, setSkills }) => {
   const [displayStatus, setDisplayStatus] = useState(false);
   const [errors, setErrors] = useState([]);
   const inputRef = useRef(null);
+  const skillWrapperRef = useRef(null);
   
   
   const removeSkill = (index) => () => {
     setSkillOptions([...skillOptions, skills[index]])
     setSkills(skills.filter((s, i) => i !== index));
+    setTimeout(() => {
+      if(skills.length <= 1) {
+        skillWrapperRef.current.classList.add("required-asterisk")
+      }
+    }, 100)
   };
   const showError = (skill) => {
     setErrors([
@@ -42,7 +48,7 @@ const InputSkills = ({ options, skills, setSkills }) => {
       return;
     }
     setValue('');
-    e.target.parentElement.classList.add('required-asterisk');
+    skillWrapperRef.current.classList.remove('required-asterisk');
   };
 
   const getSkillOptions = () => (
@@ -54,7 +60,10 @@ const InputSkills = ({ options, skills, setSkills }) => {
       {errors.map((error) => (
         <div className="error-message">{error}</div>
       ))}
-      <div className="skill-input-container required-asterisk dropdown-wrapper">
+      <div 
+        className="skill-input-container required-asterisk dropdown-wrapper"
+        ref={skillWrapperRef}
+      >
         <input
           type="text"
           placeholder=" Current Skills"
@@ -65,25 +74,16 @@ const InputSkills = ({ options, skills, setSkills }) => {
               submitSkill(e);
             }
           }}
-          onFocus={(e) =>
-            e.target.parentElement.classList.remove('required-asterisk')
-          }
-          onBlur={(e) => {
-            let input = e.target;
-            setTimeout(() => {
-              if (input.value === '') {
-                input.parentElement.classList.add('required-asterisk');
-              }
-            }, 100);
-          }}
           value={value}
           onChange={(e) => {
             setValue(e.target.value);
             if (e.target.value !== '') {
               setDisplayStatus(true);
             }
-            e.target.parentElement.classList.remove('required-asterisk');
           }}
+          onFocus={() =>
+            setDisplayStatus(true)
+          }
         />
         <PlusSign onClick={submitSkill} className="input-plus" />
         <DropDown

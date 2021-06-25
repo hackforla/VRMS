@@ -270,7 +270,7 @@ const DevUiKit = () => {
         <p className={'dev-comment'}>Rounded input with icon</p>
       </div>
       
-      {/*** Skills Input ***/}
+      {/*** Current Skills Input ***/}
       <InputSkills options={skills.currentSkills} skills={skillsInputed} setSkills={setSkillsInputed} />
       
       {/*** PROGRESS BAR ***/}

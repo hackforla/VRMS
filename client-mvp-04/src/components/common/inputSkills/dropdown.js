@@ -26,8 +26,8 @@ const Dropdown = ({
             id={option}
             value={option}
             onClick={(e) => {
+              setDisplayStatus(false);
               onClickHandler(e.target.value);
-              setDisplayStatus(!displayStatus);
             }}
           />
         </label>
