@@ -5,7 +5,7 @@ import { useClickOutside } from '../../../utils/hooks/useClickOutside';
 const Dropdown = ({
   displayStatus,
   setDisplayStatus,
-  setValue,
+  onClickHandler,
   options
 }) => {
   const clickOutsideRef = useClickOutside(() => {
@@ -26,7 +26,7 @@ const Dropdown = ({
             id={option}
             value={option}
             onClick={(e) => {
-              setValue(e.target.value);
+              onClickHandler(e.target.value);
               setDisplayStatus(!displayStatus);
             }}
           />

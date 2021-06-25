@@ -4,7 +4,6 @@ import DropDown from './dropdown';
 import { ReactComponent as PlusSign } from '../../../assets/images/icons/plus-sign.svg';
 
 const InputSkills = ({ options, skills, setSkills }) => {
-  // const [skills, setSkills] = useState([]);
   const [skillOptions, setSkillOptions] = useState(options);
   const [value, setValue] = useState('');
   const [displayStatus, setDisplayStatus] = useState(false);
@@ -17,7 +16,13 @@ const InputSkills = ({ options, skills, setSkills }) => {
     setSkills(skills.filter((s, i) => i !== index));
   };
   const showError = (skill) => {
-    setErrors([...errors, `${skill} is not one of the options`])
+    setErrors([
+      `${skill} is not a valid input. Please select from the dropdown list.`
+    ]);
+  }
+  const dropDownOptionClicked = clickedValue => {
+    setValue(clickedValue);
+    inputRef.current.focus();
   }
   const submitSkill = (e) => {
     if(value === "") return
@@ -41,7 +46,7 @@ const InputSkills = ({ options, skills, setSkills }) => {
   };
 
   const getSkillOptions = () => (
-    skillOptions.filter(skill => skill.toLowerCase().includes(value.toLowerCase()))
+    skillOptions.filter(skill => skill.toLowerCase().startsWith(value.toLowerCase()))
   );
 
   return (
@@ -55,16 +60,21 @@ const InputSkills = ({ options, skills, setSkills }) => {
           placeholder=" Current Skills"
           id="skill-input"
           ref={inputRef}
-          onFocus={(e) => (
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              submitSkill(e);
+            }
+          }}
+          onFocus={(e) =>
             e.target.parentElement.classList.remove('required-asterisk')
-          )}
+          }
           onBlur={(e) => {
             let input = e.target;
             setTimeout(() => {
-              if(input.value === ""){
+              if (input.value === '') {
                 input.parentElement.classList.add('required-asterisk');
               }
-            }, 100)
+            }, 100);
           }}
           value={value}
           onChange={(e) => {
@@ -80,7 +90,7 @@ const InputSkills = ({ options, skills, setSkills }) => {
           displayStatus={displayStatus}
           setDisplayStatus={setDisplayStatus}
           options={getSkillOptions()}
-          setValue={setValue}
+          onClickHandler={dropDownOptionClicked}
         />
 
         <div className="skills-container">
