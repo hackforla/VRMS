@@ -66,7 +66,7 @@ const InputSkills = ({ options, skills, setSkills }) => {
       >
         <input
           type="text"
-          placeholder=" Current Skills"
+          placeholder="Current Skills"
           id="skill-input"
           ref={inputRef}
           onKeyDown={(e) => {
