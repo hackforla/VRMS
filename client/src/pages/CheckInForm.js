@@ -197,20 +197,10 @@ const submitReturning = (returningUser, e = null) => {
         answer.attendanceReason = reason;
     }
 
-    // if (project !== "--SELECT ONE--") {
-    //     answer.currentProject = project;
-    // }
 
-    // if ((returningUser.attendanceReason === undefined && reason === "--SELECT ONE--") || (returningUser.currentProject === undefined && project === "--SELECT ONE--")) {
-    // if (returningUser.attendanceReason === undefined && reason === "--SELECT ONE--") {
-    //   console.log('something should be selected');
-    //     alert('Answer the question to unlock the check-in button!');
-    // } else {
-        // console.log(answer);
 
         const answerJson = JSON.stringify(answer);
 
-        // console.log(answerJson);
 
         try {
             const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
@@ -234,7 +224,6 @@ const submitReturning = (returningUser, e = null) => {
             .then(response => {
                 const checkInForm = { userId: `${returningUser._id}`, eventId: new URLSearchParams(props.location.search).get('eventId') };
     
-                // console.log(`Here's the form: ${checkInForm.toString()}`);
     
                 return fetch('/api/checkins', {
                     method: "POST",
@@ -305,82 +294,7 @@ const submitNewProfile = (userForm) => {
       });
 }
 
-// const submitReturningUserForm = (email) => {
-//     // First, create a new user in the user collection
 
-//     fetch(`/api/users?email=${email}`, {
-//         method: "GET",
-//         headers: {
-//             "Content-Type": "application/json"
-//         }
-//     })
-//         .then(res => {
-//             return res.json();
-//         })
-//         .then(responseId => {
-
-//             const answer = { 
-//                 attendanceReason: reason
-//             };
-
-//             // const answer = { 
-//             //     whichProject: project
-//             // };
-
-//             const answerJson = JSON.stringify(answer);
-
-//             if (responseId === false) {
-//                 setIsError(true);
-//                 setErrorMessage("You haven't checked in with that email. Redirecting home to create a new profile...");
-
-//                 setTimeout(() => {
-//                     props.history.push("/");
-//                 }, 4000)
-//             } else {
-//                 return fetch(`/api/users/${responseId}`, {
-//                     method: "PATCH",
-//                     body: answerJson,
-//                     headers: {
-//                         "Content-Type": "application/json"
-//                     }
-//                 })
-//                 .then(res => {
-//                     return res.json();
-//                 })
-//                 .then(response => {
-//                     const checkInForm = { userId: `${response}`, eventId: new URLSearchParams(props.location.search).get('eventId') };
-
-//                     // console.log(`Here's the form: ${checkInForm.toString()}`);
-
-//                     return fetch('/api/checkins', {
-//                         method: "POST",
-//                         body: JSON.stringify(checkInForm),
-//                         headers: {
-//                             "Content-Type": "application/json"
-//                         }
-//                     })
-//                     .then(res => {
-//                         if (res.ok) {
-//                             props.history.push('/success');
-//                         }
-//                     })
-//                     .catch(err => console.log(err));
-//                 })                    
-//                 .catch(err => console.log(err));
-//             }
-//         })
-//         .catch(err => {
-//             console.log(err);
-//         });
-// }
-
-// function checkIsEmptyField(obj) {
-//     if (!Object.values(obj).some(key => (key !== null && key !== ''))) {
-//         setIsError(true);
-//         setErrorMessage("Please don't leave any fields blank");
-//         setIsFormReady(false);
-//     }  
-// } 
 
 const checkInNewUser = (e) => {
     e.preventDefault();
@@ -505,27 +419,6 @@ const createNewProfile = (e) => {
   }
 }
 
-// const checkInReturningUser = (e) => {
-//     e.preventDefault();
-
-//     try {
-//         setIsLoading(true);
-
-//         // v1: Get userId from auth cookie (JWT) => return it in response
-//         // fetch to create checkin using userId
-    
-//         submitReturningUserForm(formInput.email);
-
-//         console.log('Checking in Returning User');
-
-//         setIsLoading(false);
-//     } catch(error) {
-//         console.log(error);
-//         setIsLoading(false);
-//         // setIsError(error);
-//         // alert(error);
-//     }
-// }
 
 const checkEmail = (e) => {
     e.preventDefault();
@@ -570,11 +463,6 @@ const checkEmail = (e) => {
     }
 }
 
-// function getFormValue() {
-//     if (Object.keys(formInput).includes(questions[0].htmlName.toString())) {
-//         return `{formInput.${questions[0].htmlName.toString()}.toString()}`
-//     } 
-// }
 
 useEffect(() => {
     fetchQuestions();
