@@ -44,7 +44,7 @@ UserController.user_by_id = async function (req, res) {
 };
 
 // Add User with POST
-UserController.create = async function (req, res, next) {
+UserController.create = async function (req, res) {
   const { headers } = req;
   const body = {user: {}, error: {}};
 
