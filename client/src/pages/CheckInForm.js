@@ -137,49 +137,53 @@ const CheckInForm = props => {
     }
   };
 
-  const submitForm = (userForm) => { 
-    // First, create a new user in the user collection
-    const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
+  // Helper function to make post request
+  // args : 
+  //    url - the string api endpoint to send the post request to
+  //    postObject - the JSON object that is going to be posted.
+  async function post(url,postObject){
 
-    fetch('/api/users', {
-        method: "POST",
-        body: JSON.stringify(userForm),
-        headers: {
+    try{
+      const response = await fetch(url,
+        {
+          method:"POST", 
+          body:JSON.stringify(postObject),
+          headers:{
             "Content-Type": "application/json",
-            "x-customrequired-header": headerToSend
-        }
-    })
-        .then(res => {
-            if (res.ok) {
-                return res.json();
-            }
-            
-            throw new Error(res.statusText);
+            "x-customrequired-header":  process.env.REACT_APP_CUSTOM_REQUEST_HEADER 
+          }
         })
-        .then(responseId => {
-            if (responseId.includes('E11000')) {
-                setIsError(true);
-                setErrorMessage('Email address is already in use.')
-            } else {
-                const checkInForm = { userId: (responseId), eventId: new URLSearchParams(props.location.search).get('eventId') };
+      const data = await response.json();
+      if(Object.keys(data.error).length != 0){
+        throw data.error;
+      }
+      else{
+        return data;
+      }
+      
+    }catch(error){
+      throw error
+    }
+     
 
-                return fetch('/api/checkins', {
-                    method: "POST",
-                    body: JSON.stringify(checkInForm),
-                    headers: {
-                        "Content-Type": "application/json",
-                        "x-customrequired-header": headerToSend
-                    }
-                })
-                    .then(res => {
-                        props.history.push(`/success?eventId=${eventId}`);
-                    })
-                    .catch(err => console.log(err));
-            }
-        })
-        .catch(err => {
-            console.log(err);
-        });
+  }
+
+
+  const submitForm = async (userForm) => { 
+
+    //Try creating a new user, return duplicate email error if email already exist in the system.
+    try {
+      const response = await post('/api/users', userForm);
+      console.log(response)
+    } catch (err) {
+      console.log(err);
+      if (err.code === 11000) {
+        setIsError(true);
+        setErrorMessage('Email address is already in use.');
+      }
+      
+    }
+
 }
 
 const submitReturning = (returningUser, e = null) => {
