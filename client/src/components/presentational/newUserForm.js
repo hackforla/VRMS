@@ -15,13 +15,11 @@ const NewUserForm = (props) => {
         >
           <div className="form-row">
             <div className="form-input-text">
-              {/* <label htmlFor="first-name">First Name</label> */}
               <input
                 type="text"
                 name="firstName"
                 placeholder="First Name"
                 value={props.firstName.toString()}
-                // aria-label="topic"
                 onChange={props.handleFirstNameChange}
                 aria-label="First Name"
                 required
@@ -30,13 +28,11 @@ const NewUserForm = (props) => {
           </div>
           <div className="form-row">
             <div className="form-input-text">
-              {/* <label htmlFor="last-name">Last Name</label> */}
               <input
                 type="text"
                 name="lastName"
                 placeholder="Last Name"
                 value={props.lastName.toString()}
-                // aria-label="topic"
                 onChange={props.handleLastNameChange}
                 aria-label="Last Name"
                 required
@@ -50,7 +46,6 @@ const NewUserForm = (props) => {
                 name="email"
                 placeholder="Email Address"
                 value={props.formInput.email.toString()}
-                // aria-label="topic"
                 onChange={props.handleInputChange}
                 aria-label="Email Address"
                 required
@@ -78,7 +73,6 @@ const NewUserForm = (props) => {
                               ].toString()
                             : ""
                         }
-                        // aria-label="topic"
                         onChange={props.handleInputChange}
                         required
                       />
@@ -88,92 +82,6 @@ const NewUserForm = (props) => {
                 )
               );
             })}
-
-          {props.questions.length !== 0 &&
-            props.questions.map((question) => {
-              return (
-                question.type === "select" && (
-                  <div key={question._id} className="form-row last-row">
-                    <div className="form-input-radio">
-                      <label htmlFor={question.htmlName}>
-                        Is this your first time attending a Hack Night?
-                      </label>
-                      <div className="radio-buttons first-time-select">
-                        <input
-                          id="radio1"
-                          type="radio"
-                          name={question.htmlName}
-                          value={true}
-                          // aria-label="topic"
-                          onChange={props.handleNewMemberChange}
-                          defaultChecked
-                          required
-                        />
-                        <label htmlFor="radio1">Yes</label>
-                        <input
-                          id="radio2"
-                          type="radio"
-                          name={question.htmlName}
-                          value={false}
-                          // aria-label="topic"
-                          onChange={props.handleNewMemberChange}
-                        />
-                        <label htmlFor="radio2">No</label>
-                      </div>
-                    </div>
-                  </div>
-                )
-              );
-            })}
-
-          {props.newMember === true
-            ? null
-            : props.questions.length !== 0 &&
-              props.questions.map((question) => {
-                return (
-                  question.htmlName === "attendanceLength" && (
-                    <div key={question._id} className="form-row">
-                      <div className="form-input-text">
-                        <label htmlFor={question.htmlName}>
-                          {question.questionText}
-                        </label>
-                        <div className="radio-buttons">
-                          <select
-                            name={question.htmlName}
-                            value={props.month}
-                            // aria-label="topic"
-                            onChange={props.handleMonthChange}
-                            required
-                          >
-                            {props.months.map((month, index) => {
-                              return (
-                                <option key={index} value={month}>
-                                  {month}
-                                </option>
-                              );
-                            })}
-                          </select>
-                          <select
-                            name={question.htmlName}
-                            value={props.year}
-                            // aria-label="topic"
-                            onChange={props.handleYearChange}
-                            required
-                          >
-                            {props.years.map((year, index) => {
-                              return (
-                                <option key={index} value={year}>
-                                  {year}
-                                </option>
-                              );
-                            })}
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                  )
-                );
-              })}
 
           {props.isError && props.errorMessage.length > 1 ? (
             <div className="error">{props.errorMessage}</div>

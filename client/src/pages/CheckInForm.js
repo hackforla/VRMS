@@ -7,14 +7,11 @@ import "../sass/CheckIn.scss";
 
 const CheckInForm = props => {
   const [isLoading, setIsLoading] = useState(false);
-  // const [isFormReady, setIsFormReady] = useState(true);
-  // eslint-disable-next-line no-unused-vars
-  const [isQuestionAnswered, setIsQuestionAnswered] = useState(false);
+
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [questions, setQuestions] = useState([]);
   const [newOrReturning] = useState(props && props.match.params.userType);
-  // const [newProfile] = useState(props && props.match.params.userType);
 
   // eslint-disable-next-line no-unused-vars
   const [eventId, setEventId] = useState(props.location.search.slice(9, props.location.search.length));
@@ -111,31 +108,9 @@ const CheckInForm = props => {
 
   const handleYearChange = e => setYear(e.currentTarget.value);
 
-  const handleReasonChange = e => {
-    setReason(e.currentTarget.value);
-    setIsQuestionAnswered(true);
-  };
 
-  const handleProjectChange = e => {
-    setProject(e.currentTarget.value);
-    setIsQuestionAnswered(true);
-  };
 
-  const handleNewMemberChange = e => {
-    if (e.target.value === "true") {
-      setNewMember(true);
-      setMonth(
-        moment()
-          .format("MMM")
-          .toUpperCase()
-      );
-      setYear(moment().format("YYYY"));
-    }
 
-    if (e.target.value === "false") {
-      setNewMember(false);
-    }
-  };
 
   // Helper function to make post request
   // args : 
@@ -169,7 +144,11 @@ const CheckInForm = props => {
   }
 
 
-  const submitForm = async (userForm) => { 
+  const submitForm = async (userForm) => {
+
+    if(userForm.newMember){
+      
+    }
 
     //Try creating a new user, return duplicate email error if email already exist in the system.
     try {
@@ -205,7 +184,7 @@ const submitReturning = (returningUser, e = null) => {
         try {
             const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
-            fetch(`/api/users/${returningUser._id}`, {
+            fetch(`/api/users/${returningUser.user._id}`, {
                 method: "PATCH",
                 body: answerJson,
                 headers: {
@@ -222,7 +201,7 @@ const submitReturning = (returningUser, e = null) => {
               throw new Error(res.statusText)
             })
             .then(response => {
-                const checkInForm = { userId: `${returningUser._id}`, eventId: new URLSearchParams(props.location.search).get('eventId') };
+                const checkInForm = { userId: `${returningUser.user._id}`, eventId: new URLSearchParams(props.location.search).get('eventId') };
     
     
                 return fetch('/api/checkins', {
@@ -262,37 +241,6 @@ const submitReturning = (returningUser, e = null) => {
     // }
 }
 
-const submitNewProfile = (userForm) => { 
-  // First, create a new user in the user collection
-  const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
-
-  fetch('/api/users', {
-      method: "POST",
-      body: JSON.stringify(userForm),
-      headers: {
-          "Content-Type": "application/json",
-          "x-customrequired-header": headerToSend
-      }
-  })
-      .then(res => {
-          if (res.ok) {
-              return res.json();
-          }
-          
-          throw new Error(res.statusText);
-      })
-      .then(responseId => {
-          if (responseId.includes('E11000')) {
-              setIsError(true);
-              setErrorMessage('Email address is already in use.')
-          } else {
-            props.history.push(`/success`);
-          }
-      })
-      .catch(err => {
-          console.log(err);
-      });
-}
 
 
 
@@ -357,67 +305,7 @@ const checkInNewUser = (e) => {
     }
 }
 
-// eslint-disable-next-line no-unused-vars
-const createNewProfile = (e) => {
-  e.preventDefault();
 
-  const firstAttended = `${month} ${year}`;
-      
-  // SET all of the user's info from useState objects
-  const userForm = { 
-      name: { 
-          firstName, 
-          lastName 
-      }, 
-      ...formInput,
-      newMember,
-      firstAttended
-  };
-
-  let ready = true;
-
-  try {
-      setIsLoading(true);
-
-      if (
-          userForm.name.firstName === "" || 
-          userForm.name.lastName === "" || 
-          userForm.email === "" || 
-          userForm.currentRole === "" || 
-          userForm.desiredRole === "" || 
-          firstAttended === ""
-      ) {
-          setIsError(true);
-          setErrorMessage("Please don't leave any fields blank");
-          ready = false;
-      } 
-      
-      const currYear = parseInt(moment().format('YYYY'));
-      const currMonth = parseInt(moment().format('MM'));
-      const yearJoined = parseInt(year);
-      // extra date info needed to be recognized as a date
-      const monthJoined = parseInt(moment(month + ' 9, 2020').format('MM')); 
-      // console.log(currYear, currMonth, yearJoined, monthJoined);
-      if(yearJoined > currYear || (yearJoined === currYear && monthJoined > currMonth)) {
-          setIsError(true);
-          setErrorMessage("You can't set a date in the future... Please try again.");
-          ready = false;
-      } 
-
-      // console.log(isFormReady);
-
-      // SUBMIT all of the user's info from the userForm object
-      if(ready) {
-          submitNewProfile(userForm);
-      }  
-
-      setIsLoading(false);
-
-  } catch(error) {
-      console.log(error);
-      setIsLoading(false);
-  }
-}
 
 
 const checkEmail = (e) => {
@@ -468,11 +356,12 @@ useEffect(() => {
     fetchQuestions();
 
 }, []);
-
+  
   return (
     <div className="flex-container">
-      {props.location.pathname === '/newProfile' && (
-        <NewUserForm
+      {
+        (props.location.pathname === '/newProfile' || newOrReturning === "newUser") && (
+          <NewUserForm
           firstName={firstName}
           handleFirstNameChange={handleFirstNameChange}
           lastName={lastName}
@@ -480,7 +369,6 @@ useEffect(() => {
           formInput={formInput}
           handleInputChange={handleInputChange}
           questions={questions}
-          handleNewMemberChange={handleNewMemberChange}
           handleMonthChange={handleMonthChange}
           newMember={newMember}
           months={months}
@@ -492,7 +380,8 @@ useEffect(() => {
           isLoading={isLoading}
           checkInNewUser={checkInNewUser}
         />
-      )}
+        )
+      }
 
       {newOrReturning === "returningUser" && (
         <ReturnUserForm
@@ -503,39 +392,11 @@ useEffect(() => {
           errorMessage={errorMessage}
           isLoading={isLoading}
           checkEmail={checkEmail}
-          questions={questions}
-          reason={reason}
-          handleReasonChange={handleReasonChange}
-          reasons={reasons}
           project={project}
-          handleProjectChange={handleProjectChange}
           submitReturning={submitReturning}
-          //   yearhandleYearChange={yearhandleYearChange}
         />
       )}
       
-      {newOrReturning === "newUser" && (
-        <NewUserForm
-          firstName={firstName}
-          handleFirstNameChange={handleFirstNameChange}
-          lastName={lastName}
-          handleLastNameChange={handleLastNameChange}
-          formInput={formInput}
-          handleInputChange={handleInputChange}
-          questions={questions}
-          handleNewMemberChange={handleNewMemberChange}
-          handleMonthChange={handleMonthChange}
-          newMember={newMember}
-          months={months}
-          month={month}
-          handleYearChange={handleYearChange}
-          years={years}
-          isError={isError}
-          errorMessage={errorMessage}
-          isLoading={isLoading}
-          checkInNewUser={checkInNewUser}
-        />
-      )}
     </div>
   );
 };
