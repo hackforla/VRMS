@@ -6,7 +6,7 @@ const UserAdmin = () => {
     
     const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
-    // Initialize hooks
+    // Initialize state hooks
     const [users, setUsers] = useState([]); // All users pulled from database
     const [projects, setProjects] = useState([]); // All projects pulled from db
     const [userToEdit, setUserToEdit] = useState({}); // The selected user that is being edited
@@ -16,6 +16,8 @@ const UserAdmin = () => {
     const [userLoaded, setUserLoaded] = useState(false);  // is a user currently loaded
     const [searchResultType, setSearchResultType] = useState("name"); // Which results will diplay
     const [addNewProject, setAddNewProject] = useState(false); // show add new project component
+    const [showUserSearch, setShowUserSearch] = useState(false); // show user search
+
 
     // Fetch users from db
     async function fetchUsers() {
@@ -149,7 +151,16 @@ const UserAdmin = () => {
         setUserToEdit({});
         setSearchTerm("");
         setUserManagedProjects([]);
+        setAddNewProject(false);
+        setShowUserSearch(false);
     };
+
+    const backToSearch = () => {
+      setUserLoaded(false);
+      setUserToEdit({});
+      setSearchTerm("");
+      setUserManagedProjects([]);
+    }
     
     // Remove projects from db
     const handleRemoveProject = (projectToRemove) => {
@@ -176,6 +187,14 @@ const UserAdmin = () => {
         ? setAddNewProject(false) 
         : setAddNewProject(true); 
     }
+
+    // Add new project things
+    const toggleUserSearch = () => {
+       showUserSearch === true 
+      ? setShowUserSearch(false) 
+      : setShowUserSearch(true); 
+    }
+
 
       // Adds new project to db
       const addProjectToDb = async (newProjectName) => {
@@ -209,8 +228,7 @@ const UserAdmin = () => {
       fetchProjects();
     }
 
-    // If there is a selected user, show the edit form; else show search form
-    if (Object.keys(userToEdit).length === 0 && addNewProject === false) {
+    if (Object.keys(userToEdit).length === 0 && addNewProject === false && showUserSearch === true) {
         return (
             <div className="container--usermanagement">
                 <div>
@@ -248,9 +266,9 @@ const UserAdmin = () => {
                                     <li key={index}>{result}</li>
                                 )})}
                             </ul>}
-                        </div> 
+                        </div>
                     </div>
-                    <div><button className="button" onClick={toggleAddProject}>Add New Project</button></div>
+                    <div><button className="button" onClick={handleProjectFormCancel}>Admin Dashboard</button></div>
                 </div>
             </div>
         )
@@ -267,21 +285,29 @@ const UserAdmin = () => {
                     handleRemoveProject = {handleRemoveProject}
                     projectValue = {projectValue}
                     setProjectValue = {setProjectValue}
+                    backToSearch = {backToSearch}
                 />
             </div>
         )
+    } else if (addNewProject === true )  {
+      return (
+        <div className="">
+            <AddNewProject 
+            toggleAddProject = {toggleAddProject}
+            handleNewProjectFormSubmit = {handleNewProjectFormSubmit}
+            projects = {projects}
+            />
+        </div>
+      )
     } else {
-        return (
-            <div className="">
-                <AddNewProject 
-                toggleAddProject = {toggleAddProject}
-                handleNewProjectFormSubmit = {handleNewProjectFormSubmit}
-                projects = {projects}
-                />
-            </div>
-        )
+      return (
+        <div>
+          <div><button className="button" onClick={toggleUserSearch}>User Management</button></div>
+          <div><button className="button" onClick={toggleAddProject}>Add New Project</button></div>
+        </div>
+      )
     }
-};  // End UserAdmin
+};  // End admin
 
 // child of UserAdmin. Displays form to update users. 
 const EditUsers = (props) => {
@@ -298,7 +324,7 @@ const EditUsers = (props) => {
 
     //Processing
     const cancelEdit = () => {
-        props.handleFormCancel();
+        props.backToSearch();
     }
 
     // add user projects to state
@@ -362,6 +388,7 @@ const EditUsers = (props) => {
                         <button className="button-add" type="submit">Add project</button>
                 </form>}
                 <div><button className="button-back" onClick={cancelEdit}>Back to search</button></div>
+                <div><button className="button" onClick={props.handleFormCancel}>Admin Dashboard</button></div>
             </div>
         </div>
     )
@@ -387,8 +414,15 @@ const AddNewProject = (props) => {
     setValidationErrors("");
     setAddProjectSuccess("");
 
-
     // Validation
+
+    //If there's no project name don't do anything
+    if (!newProjectName) {
+      console.log('empty');
+      return;
+    }
+
+    // If the entry already exists in the db, set error and clear form
     const validationMatch = Object.values(props.projects).filter (project => project.name.toLowerCase() === newProjectName.toLowerCase().trim())
     .map( p => p.name)
     ;
@@ -420,7 +454,7 @@ const AddNewProject = (props) => {
               <button className="button-add" type="submit">Add Project</button>
             </form>
         </div>
-      <div><button className="button-back" onClick={props.toggleAddProject}>Back to user search</button></div>
+      <div><button className="button-back" onClick={props.toggleAddProject}>Admin Dashboard</button></div>
     </div>
   )};  // End AddNewProject
 
