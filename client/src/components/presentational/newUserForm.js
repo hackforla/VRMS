@@ -19,8 +19,8 @@ const NewUserForm = (props) => {
                 type="text"
                 name="firstName"
                 placeholder="First Name"
-                value={props.firstName.toString()}
-                onChange={props.handleFirstNameChange}
+                value={props.formInput.name?.firstName.toString()}
+                onChange={props.handleInputChange}
                 aria-label="First Name"
                 required
               />
@@ -32,8 +32,8 @@ const NewUserForm = (props) => {
                 type="text"
                 name="lastName"
                 placeholder="Last Name"
-                value={props.lastName.toString()}
-                onChange={props.handleLastNameChange}
+                value={props.formInput.name?.lastName.toString()}
+                onChange={props.handleInputChange}
                 aria-label="Last Name"
                 required
               />

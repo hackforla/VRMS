@@ -42,9 +42,13 @@ router.get("/findEvent/:id", (req, res) => {
 });
 
 router.post("/", (req, res) => {
+  const body = {data: {}, error: {}};
+
   CheckIn.create(req.body)
     .then((checkIn) => {
-      res.sendStatus(201);
+      body.data = checkIn
+      return res.status(201).send(body);
+      
     })
     .catch((err) => {
       console.log(err);

@@ -44,9 +44,8 @@ UserController.user_by_id = async function (req, res) {
 };
 
 // Add User with POST
-UserController.create = async function (req, res) {
+UserController.create = async function (req, res, next) {
   const { headers } = req;
-  const body = {user: {}, error: {}};
 
   if (headers['x-customrequired-header'] !== expectedHeader) {
     return res.sendStatus(403);
@@ -54,13 +53,9 @@ UserController.create = async function (req, res) {
 
   try {
     const user = await User.create(req.body);
-    body.user = user;
-    return res.status(201).send(body);
+    return res.status(201).send(user);
   } catch (err) {
-    body.error.code = err.code;
-    body.error.message = err.message
-    return res.status(200).send(body);
-
+    return next(err);
   }
 };
 

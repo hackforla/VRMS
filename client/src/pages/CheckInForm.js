@@ -1,389 +1,297 @@
-import React, { useState, useEffect } from "react";
-import moment from "moment";
-import NewUserForm from "./../components/presentational/newUserForm";
-import ReturnUserForm from "./../components/presentational/returnUserForm";
+import React, { useState, useEffect } from 'react';
+import NewUserForm from './../components/presentational/newUserForm';
+import ReturnUserForm from './../components/presentational/returnUserForm';
 
-import "../sass/CheckIn.scss";
+import '../sass/CheckIn.scss';
 
-const CheckInForm = props => {
+const _apiHost = '/api';
+const _customHeader = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
+
+async function request(url, params, method = 'GET') {
+  function objectToQueryString(obj) {
+    return Object.keys(obj)
+      .map((key) => key + '=' + obj[key])
+      .join('&');
+  }
+
+  // options passed to the fetch request
+  const options = {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      'x-customrequired-header': _customHeader,
+    },
+  };
+
+  // if params exists and method is GET, add query string to url
+  // otherwise, just add params as a "body" property to the options object
+  if (params) {
+    if (method === 'GET') {
+      url += '?' + objectToQueryString(params);
+    } else {
+      options.body = JSON.stringify(params); // body should match Content-Type in headers option
+    }
+  }
+
+  // fetch returns a promise, so we add keyword await to wait until the promise settles
+  try {
+    const response = await fetch(_apiHost + url, options);
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw error;
+    }
+
+    const result = await response.json(); // convert response into JSON
+
+    // returns a single Promise object
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
+
+const CheckInForm = (props) => {
   const [isLoading, setIsLoading] = useState(false);
-
   const [isError, setIsError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
   const [questions, setQuestions] = useState([]);
   const [newOrReturning] = useState(props && props.match.params.userType);
-
-  // eslint-disable-next-line no-unused-vars
-  const [eventId, setEventId] = useState(props.location.search.slice(9, props.location.search.length));
-  const [formInput, setFormInput] = useState({
-    email: "",
-    currentRole: "",
-    desiredRole: "",
-    attendanceLength: ""
-  });
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [newMember, setNewMember] = useState(true);
-  const [month, setMonth] = useState(
-    moment()
-      .format("MMM")
-      .toUpperCase()
-  );
-  const [year, setYear] = useState(moment().format("YYYY"));
-  const [reason, setReason] = useState("--SELECT ONE--");
-  const [project, setProject] = useState("--SELECT ONE--");
   const [user, setUser] = useState(null);
-  console.log(props.location.pathname);
+  const [formInput, setFormInput] = useState({
+    name: {
+      firstName: '',
+      lastName: '',
+    },
+    email: '',
+    currentRole: '',
+    desiredRole: '',
+    newMember: true,
+  });
 
-  // form data to fill drop-downs
-  const months = [
-    "JAN",
-    "FEB",
-    "MAR",
-    "APR",
-    "MAY",
-    "JUN",
-    "JUL",
-    "AUG",
-    "SEP",
-    "OCT",
-    "NOV",
-    "DEC"
-  ];
-  const years = [
-    "2021",
-    "2020",
-    "2019",
-    "2018",
-    "2017",
-    "2016",
-    "2015",
-    "2014",
-    "2013"
-  ];
-  const reasons = [
-    "--SELECT ONE--",
-    "Open Data",
-    "Homelessness",
-    "Social Justice/Equity",
-    "Transportation",
-    "Mental Health",
-    "Civic Engagement",
-    "Environment",
-    "Education/STEM",
-    "Fundraising"
-  ];
-  
-  const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
+  /**
+   *
+   * @param {Object} userObject
+   * @returns A new user object
+   */
+  async function createNewUser(userObject) {
+    try {
+      const response = await request('/users', userObject, 'POST');
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
 
+  /**
+   * The function uses the endpoint '/api/checkins' to checkin a user to a event. Upon succesfull completion
+   * the function returns a checkin object. Otherwise on failure it throws an error Object.
+   *
+   * @param {String} userId  The string _id that uniquely identifies a user
+   * @param {String} eventId The string _id that uniquely identifies an event
+   * @returns A checkIn object
+   */
+  async function checkInUserToEvent(userId, eventId) {
+    try {
+      const response = await request(
+        '/checkins',
+        { userId: userId, eventId: eventId },
+        'POST'
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
+   * Given an email, the function checks if a user exist under that email. If it finds the user, the function
+   * returns the user Object. If no user is found connected to the email the function throws an error "User Not Found"
+   *
+   * @param {String} email
+   * @returns A User Object
+   */
+  async function checkUserExistenceByEmail(email) {
+    try {
+      const response = await request('/checkuser', { email: email }, 'POST');
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
+   *
+   * @returns An object of questions and answers.
+   */
+  async function getAllQuestions() {
+    try {
+      const response = await request('/questions');
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
+   * This function makes use of the getAllQuestion function to populate the forms with questions
+   * using the react setState => setQuestions
+   */
   const fetchQuestions = async () => {
     try {
       setIsLoading(true);
-      const res = await fetch("/api/questions", {
-        headers: {
-            "x-customrequired-header": headerToSend
-        }
-      });
-      const resJson = await res.json();
 
-      setQuestions(resJson);
+      const questions = await getAllQuestions();
+
+      setQuestions(questions);
+
       setIsLoading(false);
     } catch (error) {
       console.log(error);
+
       setIsLoading(false);
     }
   };
 
-  const handleInputChange = e =>
-    setFormInput({
-      ...formInput,
-      [e.currentTarget.name]: e.currentTarget.value
-    });
-
-  const handleFirstNameChange = e => setFirstName(e.currentTarget.value);
-
-  const handleLastNameChange = e => setLastName(e.currentTarget.value);
-
-  const handleMonthChange = e => setMonth(e.currentTarget.value);
-
-  const handleYearChange = e => setYear(e.currentTarget.value);
-
-
-
-
-
-  // Helper function to make post request
-  // args : 
-  //    url - the string api endpoint to send the post request to
-  //    postObject - the JSON object that is going to be posted.
-  async function post(url,postObject){
-
-    try{
-      const response = await fetch(url,
-        {
-          method:"POST", 
-          body:JSON.stringify(postObject),
-          headers:{
-            "Content-Type": "application/json",
-            "x-customrequired-header":  process.env.REACT_APP_CUSTOM_REQUEST_HEADER 
-          }
-        })
-      const data = await response.json();
-      if(Object.keys(data.error).length != 0){
-        throw data.error;
-      }
-      else{
-        return data;
-      }
-      
-    }catch(error){
-      throw error
-    }
-     
-
-  }
-
-
-  const submitForm = async (userForm) => {
-
-    if(userForm.newMember){
-      
-    }
-
-    //Try creating a new user, return duplicate email error if email already exist in the system.
-    try {
-      const response = await post('/api/users', userForm);
-      console.log(response)
-    } catch (err) {
-      console.log(err);
-      if (err.code === 11000) {
-        setIsError(true);
-        setErrorMessage('Email address is already in use.');
-      }
-      
-    }
-
-}
-
-const submitReturning = (returningUser, e = null) => {
-    e && e.preventDefault();
-    
-    const answer = {
-        newMember: false
-    };
-
-    if (reason !== "--SELECT ONE--") {
-        answer.attendanceReason = reason;
-    }
-
-
-
-        const answerJson = JSON.stringify(answer);
-
-
-        try {
-            const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
-
-            fetch(`/api/users/${returningUser.user._id}`, {
-                method: "PATCH",
-                body: answerJson,
-                headers: {
-                    "Content-Type": "application/json",
-                    "x-customrequired-header": headerToSend
-                }
-            })
-            .then(res => {
-              console.log('res.ok, 209', res.ok);
-              if (res.ok) {
-                return res.json(); 
-              }
-
-              throw new Error(res.statusText)
-            })
-            .then(response => {
-                const checkInForm = { userId: `${returningUser.user._id}`, eventId: new URLSearchParams(props.location.search).get('eventId') };
-    
-    
-                return fetch('/api/checkins', {
-                    method: "POST",
-                    body: JSON.stringify(checkInForm),
-                    headers: {
-                        "Content-Type": "application/json",
-                        "x-customrequired-header": headerToSend
-                    }
-                })
-                .then(res => {
-                    if (res.ok) {
-                      return props.history.push('/success'); 
-                    }
-                    console.log('throwing new error in line 230');
-                    throw new Error(res.statusText);
-                })
-                .catch(error => {
-                  console.log(error.error);
-                  setIsError(true);
-                  setErrorMessage(error);
-                  setIsLoading(false);
-                })
-            })
-            .catch(error => {
-              console.log(error);
-              setIsError(true);
-              setErrorMessage(error);
-              setIsLoading(false);
-            })              
-        } catch (error) {
-            console.log(error);
-            setIsError(true);
-            setErrorMessage(error);
-            setIsLoading(false);
-        }
-    // }
-}
-
-
-
-
-const checkInNewUser = (e) => {
-    e.preventDefault();
-
-    const firstAttended = `${month} ${year}`;
-        
-    // SET all of the user's info from useState objects
-    const userForm = { 
-        name: { 
-            firstName, 
-            lastName 
-        }, 
+  /**
+   * Changes in the form input fields are handled by this function and mapped to the
+   * formInput Object via => setFormInput()
+   * @param {Event} e
+   */
+  const handleInputChange = (e) => {
+    if (
+      e.currentTarget.name === 'firstName' ||
+      e.currentTarget.name === 'lastName'
+    ) {
+      setFormInput({
         ...formInput,
-        newMember,
-        firstAttended
-    };
-
-    let ready = true;
-
-    try {
-        setIsLoading(true);
-
-        if (
-            userForm.name.firstName === "" || 
-            userForm.name.lastName === "" || 
-            userForm.email === "" || 
-            userForm.currentRole === "" || 
-            userForm.desiredRole === "" || 
-            firstAttended === ""
-        ) {
-            setIsError(true);
-            setErrorMessage("Please don't leave any fields blank");
-            ready = false;
-        } 
-        
-        const currYear = parseInt(moment().format('YYYY'));
-        const currMonth = parseInt(moment().format('MM'));
-        const yearJoined = parseInt(year);
-        // extra date info needed to be recognized as a date
-        const monthJoined = parseInt(moment(month + ' 9, 2020').format('MM')); 
-        // console.log(currYear, currMonth, yearJoined, monthJoined);
-        if(yearJoined > currYear || (yearJoined === currYear && monthJoined > currMonth)) {
-            setIsError(true);
-            setErrorMessage("You can't set a date in the future... Please try again.");
-            ready = false;
-        } 
-
-        // console.log(isFormReady);
-
-        // SUBMIT all of the user's info from the userForm object
-        if(ready) {
-            submitForm(userForm);
-        }  
-
-        setIsLoading(false);
-
-    } catch(error) {
-        console.log(error);
-        setIsLoading(false);
+        name: {
+          ...formInput.name,
+          [e.currentTarget.name]: e.currentTarget.value,
+        },
+      });
+    } else {
+      setFormInput({
+        ...formInput,
+        [e.currentTarget.name]: e.currentTarget.value,
+      });
     }
-}
+  };
 
+  /**
+   * Validates form data by ensuring that no fields are blank strings.
+   * @param {Object} formInput The form input object as represented by the setFormInput state
+   * @return {Error}, Throws an error message if a form field is blank
+   */
+  const validateNewUserFormInput = (formInput) => {
+    if (
+      formInput.name.firstName === '' ||
+      formInput.name.lastName === '' ||
+      formInput.email === '' ||
+      formInput.currentRole === '' ||
+      formInput.desiredRole === ''
+    ) {
+      throw new Error("Please don't leave any fields blank");
+    }
+  };
 
+  /**
+   * Validates form data by ensuring that the email field is not blank
+   * @param {Object} formInput The form input object as represented by the setFormInput state
+   * @return {Error}, Throws an error message if the form email field is blank
+   */
+  const validateReturningUserFormInput = (formInput) => {
+    if (!formInput.email) {
+      throw new Error('User email is required');
+    }
+  };
 
-
-const checkEmail = (e) => {
+  /**
+   * Checks in a new user by
+   *   1. validating the form data with => validateNewUserFormInput
+   *        - Invalid form data triggers `setIsError` and `setErrorMessage`
+   *   2. Creating a new user
+   *   3. Checking in the new user to an event
+   *   4. Redirects to /success page upon succesfull check in
+   * @param {Event} e The event that is triggered by pressing on the submit button on the newUserForm
+   *                It is only used to prevent default behaviour of form submission
+   */
+  const checkInNewUser = async (e) => {
     e.preventDefault();
 
     try {
-        if (!formInput.email) {
-          throw new Error("User email is required");
-        }
+      setIsLoading(true);
 
-        setIsLoading(true);
+      validateNewUserFormInput(formInput);
 
-        fetch('/api/checkuser', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "x-customrequired-header": headerToSend
-            },
-            body: JSON.stringify({ email: formInput.email })
-        })
-        .then(res => {
-            if (res.ok) {
-                return res.json();
-            }
-            
-            throw new Error(res.statusText);
-        })
-        .then(resJson => {
-          // console.log(resJson);
-            setUser(resJson);
-            setIsLoading(false);
-            resJson && submitReturning(resJson);
-        })
-        .catch(err => {
-            console.log(err);
-            setIsLoading(false);
-        })
+      const newUser = await createNewUser(formInput);
+      const eventId = new URLSearchParams(props.location.search).get('eventId');
+
+      await checkInUserToEvent(newUser._id, eventId);
+
+      setIsLoading(false);
+
+      props.history.push(`/success`);
     } catch (error) {
-        console.log(error);
-        setIsError(true);
-        setErrorMessage(error)
-        setIsLoading(false);
+      setIsError(true);
+      error.error.code === 11000 &&
+        setErrorMessage('Email address is already in use!');
+      setIsLoading(false);
     }
-}
+  };
 
+  /**
+   * Checks in a new user by
+   *   1. validating the form data with => validateReturningUserFormInput
+   *        - Invalid form data triggers `setIsError` and `setErrorMessage`
+   *   2. checking if the email provided exists in the database
+   *        - throws error if email not found
+   *   3. Checking in the new user to an event
+   *   4. Redirects to /success page upon succesfull check in
+   * @param {Event} e The event that is triggered by pressing on the submit button on the returningUserForm
+   *                  It is only used to prevent default behaviour of form submission
+   */
+  const checkInReturningUser = async (e) => {
+    e.preventDefault();
+    try {
+      setIsLoading(true);
 
-useEffect(() => {
+      validateReturningUserFormInput(formInput);
+
+      const user = await checkUserExistenceByEmail(formInput.email);
+      const eventId = new URLSearchParams(props.location.search).get('eventId');
+
+      await checkInUserToEvent(user._id, eventId);
+
+      setIsLoading(false);
+      props.history.push(`/success`);
+    } catch (error) {
+      setIsError(true);
+      setErrorMessage(error.message);
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchQuestions();
+  }, []);
 
-}, []);
-  
   return (
     <div className="flex-container">
-      {
-        (props.location.pathname === '/newProfile' || newOrReturning === "newUser") && (
-          <NewUserForm
-          firstName={firstName}
-          handleFirstNameChange={handleFirstNameChange}
-          lastName={lastName}
-          handleLastNameChange={handleLastNameChange}
+      {(props.location.pathname === '/newProfile' ||
+        newOrReturning === 'newUser') && (
+        <NewUserForm
+          questions={questions}
           formInput={formInput}
           handleInputChange={handleInputChange}
-          questions={questions}
-          handleMonthChange={handleMonthChange}
-          newMember={newMember}
-          months={months}
-          month={month}
-          handleYearChange={handleYearChange}
-          years={years}
           isError={isError}
           errorMessage={errorMessage}
           isLoading={isLoading}
           checkInNewUser={checkInNewUser}
         />
-        )
-      }
+      )}
 
-      {newOrReturning === "returningUser" && (
+      {newOrReturning === 'returningUser' && (
         <ReturnUserForm
           user={user}
           formInput={formInput}
@@ -391,12 +299,9 @@ useEffect(() => {
           isError={isError}
           errorMessage={errorMessage}
           isLoading={isLoading}
-          checkEmail={checkEmail}
-          project={project}
-          submitReturning={submitReturning}
+          checkInReturningUser={checkInReturningUser}
         />
       )}
-      
     </div>
   );
 };

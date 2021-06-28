@@ -6,7 +6,7 @@ const { User } = require('../models/user.model');
 // TODO: Refactor checkuser and test. Consider moving to auth.
 
 // GET /api/checkuser/
-router.post('/', (req, res) => {
+router.post('/', (req, res, next) => {
   const { email, auth_origin } = req.body;
   console.log(email);
   console.log(`auth_origin: ${auth_origin}`);
@@ -19,15 +19,18 @@ router.post('/', (req, res) => {
     User.findOne({ email })
       .then((user) => {
         if (!user) {
-          return res.sendStatus(400);
+          return next({
+            status: 400,
+            message: "User not found"
+          });
         } else {
           return res.status(200).send({ user: user, auth_origin: auth_origin });
         }
       })
       .catch((err) => {
         console.log(err);
-
-        return res.sendStatus(400);
+        return next(err)
+        //return res.sendStatus(400);
       });
   } else {
     // TODO: Refactor as path is not called, or tested.
