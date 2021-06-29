@@ -37,7 +37,7 @@ const Navbar = (props) => {
                                 <p className="home-link-text">ADD EVENT</p>
                             </Link>
                             <Link to="/useradmin">
-                                <p className="home-link-text">USERS</p>
+                                <p className="home-link-text">ADMIN</p>
                             </Link>
                             <Link to="/projects">
                                 <p className="home-link-text">PROJECTS</p>
@@ -51,7 +51,7 @@ const Navbar = (props) => {
                                 <p className="home-link-text">EVENTS</p>
                             </Link>
                             <Link to="/useradmin">
-                                <p className="home-link-text">USERS</p>
+                                <p className="home-link-text">ADMIN</p>
                             </Link>
                             <Link to="/projects">
                                 <p className="home-link-text">PROJECTS</p>
