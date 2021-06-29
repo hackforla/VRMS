@@ -1,11 +1,9 @@
 const { CheckIn } = require('./checkIn.model');
 const { Event } = require('./event.model');
 const { Project } = require('./project.model');
-const { ProjectInfo } = require('./projectInfo.model');
 const { ProjectTeamMember } = require('./projectTeamMember.model');
 const { Question } = require('./question.model');
 const { RecurringEvent } = require('./recurringEvent.model');
-const { Role } = require('./role.model');
 const { User } = require('./user.model');
 
 const mongoose = require("mongoose");
@@ -15,10 +13,8 @@ module.exports = {
   CheckIn,
   Event,
   Project,
-  ProjectInfo,
   ProjectTeamMember,
   Question,
   RecurringEvent,
-  Role,
   User,
 };
