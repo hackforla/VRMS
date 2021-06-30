@@ -6,11 +6,14 @@ import projectIcon from '../../assets/images/icons/311.png';
 import gitHubIcon from '../../assets/images/icons/github.png';
 import RedirectLink from '../../components/common/link/link';
 import Input from '../../components/common/input/input';
+import InputSkills from '../../components/common/inputSkills/inputSkills';
+import { Skills } from '../validation/validation.js'
 import ErrorMessage from '../../components/common/errorMessage/errorMessage';
 import ProgressBar from '../../components/common/progressBar/progressBar';
 import Checkbox from '../../components/common/checkbox/checkbox';
 import searchIcon from '../../assets/images/icons/searchIcon.svg';
 import Dropdown from '../../components/common/dropdown/dropdown';
+
 
 //for the dropdown section (demo purpose)
 const data = {
@@ -23,6 +26,12 @@ const data = {
     'EST | Eastern Standard Time',
   ],
 };
+
+//for the current skills input component (demo purpose)
+const skills = {
+   currentSkills: ["JavaScript", "TypeScript", "React", "Angular", "Java", "Node.js"]
+ }
+
 /***** DEV-UI-KIT FOR DEVELOPMENT ONLY *****/
 /*UI KIT helps devs determine, which UI elements will be used throughout
 the application. UI elements created based on finalized v0.4 Style Guide.*/
@@ -31,6 +40,9 @@ const DevUiKit = () => {
   //for the dropdown section (demo purpose)
   // eslint-disable-next-line
   const [timezone, setTimezone] = useState('');
+
+  // for the current skills input component (demo purpose)
+  const [skillsInputed, setSkillsInputed] = useState([]);
 
   return (
     <div className="kit-container custom-scroll-bar">
@@ -244,7 +256,10 @@ const DevUiKit = () => {
         </div>
         <p className="dev-comment">Rounded input with icon</p>
       </div>
-
+      
+      {/*** Current Skills Input ***/}
+      <InputSkills options={skills.currentSkills} skills={skillsInputed} setSkills={setSkillsInputed} />
+      
       {/*** PROGRESS BAR ***/}
       <div className="progress-container">
         <h1 className="kit-sec-title">*** PROGRESS BAR ***</h1>
