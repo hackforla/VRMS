@@ -6,7 +6,7 @@ const UserAdmin = () => {
     
     const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
-    // Initialize hooks
+    // Initialize state hooks
     const [users, setUsers] = useState([]); // All users pulled from database
     const [projects, setProjects] = useState([]); // All projects pulled from db
     const [userToEdit, setUserToEdit] = useState({}); // The selected user that is being edited
@@ -15,6 +15,9 @@ const UserAdmin = () => {
     const [projectValue, setProjectValue] = useState("");  // State and handler for form in EditUsers
     const [userLoaded, setUserLoaded] = useState(false);  // is a user currently loaded
     const [searchResultType, setSearchResultType] = useState("name"); // Which results will diplay
+    const [addNewProject, setAddNewProject] = useState(false); // show add new project component
+    const [showUserSearch, setShowUserSearch] = useState(false); // show user search
+
 
     // Fetch users from db
     async function fetchUsers() {
@@ -81,6 +84,7 @@ const UserAdmin = () => {
 
     // Filter active projects for dropdown
     const activeProjects = Object.values(projects).filter (project => project.projectStatus === 'Active')
+    .sort((a,b) => a.name.localeCompare(b.name))
     .map((p) => [p._id, p.name])
     ;
 
@@ -147,7 +151,16 @@ const UserAdmin = () => {
         setUserToEdit({});
         setSearchTerm("");
         setUserManagedProjects([]);
+        setAddNewProject(false);
+        setShowUserSearch(false);
     };
+
+    const backToSearch = () => {
+      setUserLoaded(false);
+      setUserToEdit({});
+      setSearchTerm("");
+      setUserManagedProjects([]);
+    }
     
     // Remove projects from db
     const handleRemoveProject = (projectToRemove) => {
@@ -168,8 +181,54 @@ const UserAdmin = () => {
         : setSearchResultType('email');
     };
 
-    // If there is a selected user, show the edit form; else show search form
-    if (Object.keys(userToEdit).length === 0) {
+    // Add new project things
+    const toggleAddProject = () => {
+        addNewProject === true 
+        ? setAddNewProject(false) 
+        : setAddNewProject(true); 
+    }
+
+    // Add new project things
+    const toggleUserSearch = () => {
+       showUserSearch === true 
+      ? setShowUserSearch(false) 
+      : setShowUserSearch(true); 
+    }
+
+
+      // Adds new project to db
+      const addProjectToDb = async (newProjectName) => {
+
+        // Renaming variable so it matches db name
+        //let newProjectName = name;
+
+        // // Update database
+        const url = `/api/projects/`;
+        const requestOptions = {
+          method: 'POST',
+          headers: {
+              "Content-Type": "application/json",
+              "x-customrequired-header": headerToSend
+          },
+          body: JSON.stringify({ name: newProjectName, projectStatus: "Active"})
+        };
+
+        try {
+          const response = await fetch(url, requestOptions); 
+          const resJson = await response.json();
+          return resJson;
+        } catch (error) {
+          console.log(`Add project error: `, error);
+          alert("Server not responding.  Please try again.");
+        }
+      }
+
+    const handleNewProjectFormSubmit = async (project) => {
+      await addProjectToDb(project);
+      fetchProjects();
+    }
+
+    if (Object.keys(userToEdit).length === 0 && addNewProject === false && showUserSearch === true) {
         return (
             <div className="container--usermanagement">
                 <div>
@@ -207,12 +266,13 @@ const UserAdmin = () => {
                                     <li key={index}>{result}</li>
                                 )})}
                             </ul>}
-                        </div> 
+                        </div>
                     </div>
+                    <div><button className="button" onClick={handleProjectFormCancel}>Admin Dashboard</button></div>
                 </div>
             </div>
         )
-    } else {
+    } else if (Object.keys(userToEdit).length > 0 && addNewProject === false) {
         return (
             <div className="edit-users">
                 <EditUsers
@@ -225,11 +285,29 @@ const UserAdmin = () => {
                     handleRemoveProject = {handleRemoveProject}
                     projectValue = {projectValue}
                     setProjectValue = {setProjectValue}
+                    backToSearch = {backToSearch}
                 />
             </div>
         )
+    } else if (addNewProject === true )  {
+      return (
+        <div className="">
+            <AddNewProject 
+            toggleAddProject = {toggleAddProject}
+            handleNewProjectFormSubmit = {handleNewProjectFormSubmit}
+            projects = {projects}
+            />
+        </div>
+      )
+    } else {
+      return (
+        <div>
+          <div><button className="button" onClick={toggleUserSearch}>User Management</button></div>
+          <div><button className="button" onClick={toggleAddProject}>Add New Project</button></div>
+        </div>
+      )
     }
-};
+};  // End admin
 
 // child of UserAdmin. Displays form to update users. 
 const EditUsers = (props) => {
@@ -246,7 +324,7 @@ const EditUsers = (props) => {
 
     //Processing
     const cancelEdit = () => {
-        props.handleFormCancel();
+        props.backToSearch();
     }
 
     // add user projects to state
@@ -310,10 +388,75 @@ const EditUsers = (props) => {
                         <button className="button-add" type="submit">Add project</button>
                 </form>}
                 <div><button className="button-back" onClick={cancelEdit}>Back to search</button></div>
+                <div><button className="button" onClick={props.handleFormCancel}>Admin Dashboard</button></div>
             </div>
         </div>
     )
-};
+};  // End EditUser
+
+const AddNewProject = (props) => {
+
+  //initialize state hooks
+  const [newProjectName, setNewProjectName] = useState(""); // manage input state
+  const [validationError, setValidationErrors] = useState(""); // validation errors
+  const [addProjectSuccess, setAddProjectSuccess] = useState(""); // project successfully added to db
+
+  // Handle input change
+  const handleNameChange = event => {
+    setNewProjectName(event.target.value);
+  }
+
+  // Handle Form Submit
+  const handleProjectFormSubmit = event => {
+    event.preventDefault();
+
+    // Clear notifications on resubmit
+    setValidationErrors("");
+    setAddProjectSuccess("");
+
+    // Validation
+
+    //If there's no project name don't do anything
+    if (!newProjectName) {
+      console.log('empty');
+      return;
+    }
+
+    // If the entry already exists in the db, set error and clear form
+    const validationMatch = Object.values(props.projects).filter (project => project.name.toLowerCase() === newProjectName.toLowerCase().trim())
+    .map( p => p.name)
+    ;
+
+    if (validationMatch.length > 0) {
+        setValidationErrors(`The project name "${newProjectName}" is already in use.`);
+        setNewProjectName(""); // clear the form
+    } else {
+        props.handleNewProjectFormSubmit(newProjectName); 
+        setNewProjectName(""); // clear the form
+        setAddProjectSuccess(`The project "${newProjectName}" has been added!`);
+    }
+  }
+
+  return (
+    <div className="add-new-project">
+      <h3>Add New Project</h3>
+      <div>
+            <form onSubmit={handleProjectFormSubmit}>
+              <input
+                type="text"
+                placeholder="Project Name"
+                value={newProjectName}
+                onChange={handleNameChange}
+              />
+              <span className="validation-error">{validationError}</span>
+              <span className="project-success">{addProjectSuccess}</span>
+              <br />
+              <button className="button-add" type="submit">Add Project</button>
+            </form>
+        </div>
+      <div><button className="button-back" onClick={props.toggleAddProject}>Admin Dashboard</button></div>
+    </div>
+  )};  // End AddNewProject
 
 // Export UserAdmin
 export default UserAdmin;
