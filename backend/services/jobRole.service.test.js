@@ -1,6 +1,6 @@
 const { JobRole } = require('../models/dictionaries/jobRole.model');
 const { setupDB } = require("../setup-test");
-const { JobRoleService } = require('./jobRole.service');
+const jobRoleService = require('./jobRole.service');
 
 setupDB("jobRole-service");
 
@@ -9,7 +9,7 @@ describe("JobRoleService can retrieve roles", () => {
     const testRoles = ["this", "is", "a", "test"];
     await JobRole.create({ roles: testRoles});
 
-    const roles = await JobRoleService.getAll();
+    const roles = await jobRoleService.getAll();
 
     expect(roles.length).toEqual(testRoles.length);
     expect([...roles]).toEqual(testRoles);
@@ -19,7 +19,7 @@ describe("JobRoleService can retrieve roles", () => {
   test("throws expected error", async (done) => {
     expect.assertions(1);
     try {
-      await JobRoleService.getAll();
+      await jobRoleService.getAll();
     } catch (e) {
       expect(e.name).toEqual("DatabaseError");
     }

@@ -12,6 +12,6 @@ const getAll = async () => {
   }
 }
 
-module.exports.JobRoleService = {
+export const JobRoleService = {
   getAll
 }
