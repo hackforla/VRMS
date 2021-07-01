@@ -1,11 +1,11 @@
 /**
  * Sets value in the local storage.
  * @param {string} key - A string specifying the name of the key you want to set the value of.
- * @param {string} value - A string specifying the value of the key.
+ * @param {object | string} value - An object or a string specifying the value of the key.
  */
 export function setItem(key, value) {
   try {
-    window.localStorage.setItem(key, value);
+    window.localStorage.setItem(key, JSON.stringify(value));
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
@@ -14,13 +14,13 @@ export function setItem(key, value) {
 
 /**
  * Gets value from the local storage
- * @param {string} key A string specifying the name of the key you want to get the value of
- * @return {string} A string contains the value of the key
+ * @param {string} key A string specifying the name of the key you want to get the value of.
+ * @return {object | string} Value of the key. Return type depends on the given value type.
  */
 // eslint-disable-next-line consistent-return
 export function getItem(key) {
   try {
-    return window.localStorage.getItem(key);
+    return JSON.parse(window.localStorage.getItem(key));
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
