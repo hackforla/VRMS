@@ -5,6 +5,13 @@ export class Email {
   }
 }
 
+/** 
+* the following Skill.isValid validation is not in use. 
+* It is meant is meant to be used on http post request, 
+* to check that inputed skills are within the skills options.
+* There is already validation inside the component, 
+* this is extra, beating over the head redundancy, if needed. 
+*/
 export class Skills {
   static isValid(skillOptions, skillsInputed){
     if(skillsInputed.length === 0) return false;

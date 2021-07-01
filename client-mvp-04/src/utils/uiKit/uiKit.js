@@ -7,7 +7,6 @@ import gitHubIcon from '../../assets/images/icons/github.png';
 import RedirectLink from '../../components/common/link/link';
 import Input from '../../components/common/input/input';
 import InputSkills from '../../components/common/inputSkills/inputSkills';
-import { Skills } from '../validation/validation.js'
 import ErrorMessage from '../../components/common/errorMessage/errorMessage';
 import ProgressBar from '../../components/common/progressBar/progressBar';
 import Checkbox from '../../components/common/checkbox/checkbox';
@@ -259,7 +258,7 @@ const DevUiKit = () => {
       
       {/*** Current Skills Input ***/}
       <InputSkills options={skills.currentSkills} skills={skillsInputed} setSkills={setSkillsInputed} />
-      
+      <p className={'dev-comment'}>Current Skills Input</p>
       {/*** PROGRESS BAR ***/}
       <div className="progress-container">
         <h1 className="kit-sec-title">*** PROGRESS BAR ***</h1>
