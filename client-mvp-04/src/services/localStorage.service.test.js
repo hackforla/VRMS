@@ -2,6 +2,10 @@
 import { setItem, getItem, removeItem, clear } from './localStorage.service';
 
 describe('Tests Functions of the localStorage.service.js', () => {
+  beforeEach(() => {
+    window.localStorage.clear();
+  });
+
   it('sets and gets the given object value from the local storage', () => {
     const givenValue = {
       name: 'VRMS',
@@ -18,6 +22,9 @@ describe('Tests Functions of the localStorage.service.js', () => {
   });
 
   it('removes item from the local storage', () => {
+    const givenValue = 'This is a demo string value';
+    setItem('demo', givenValue);
+    expect(getItem('demo')).toEqual(givenValue);
     removeItem('demo');
     expect(getItem('demo')).toEqual(null);
   });
@@ -33,7 +40,7 @@ describe('Tests Functions of the localStorage.service.js', () => {
     expect(getItem('string')).toEqual(stringValue);
     expect(getItem('object')).toEqual(objectValue);
     clear();
-    expect(getItem('one')).toEqual(null);
-    expect(getItem('two')).toEqual(null);
+    expect(getItem('string')).toEqual(null);
+    expect(getItem('object')).toEqual(null);
   });
 });
