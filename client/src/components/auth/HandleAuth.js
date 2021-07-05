@@ -17,8 +17,29 @@ const HandleAuth = (props) => {
     setMagicLink(isValid);
   }, []);
 
+  // Where is the user getting redirected to after login?  Let's find out!
+
+  let loginRedirect;
+
+  if (auth.user) {
+    let userAccessLevel = auth.user.accessLevel;
+
+    switch (userAccessLevel) {
+      case 'admin':
+        loginRedirect = '/admin';
+        break;
+      case 'user':
+        loginRedirect = '/projects'
+        break;
+      default:
+        // Actively do nothing.
+    }
+  }
+
+
   return auth.user && isMagicLinkValid ? (
-    <Redirect to="/admin" />
+    
+    <Redirect to={loginRedirect} />
   ) : (
     <div className="flex-container">
       <div>Sorry, the link is not valid anymore.</div>
