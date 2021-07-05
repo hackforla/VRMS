@@ -72,7 +72,7 @@ module.exports = (cron, fetch) => {
         console.log("Check-ins opened");
     };
 
-    const scheduledTask = cron.schedule('*/10 7-21 * * *', () => {
+    const scheduledTask = cron.schedule('*/30 * * * *', () => {
         runTask();
     });
 
