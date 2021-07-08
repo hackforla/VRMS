@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import { checkUser, checkAuth } from '../../services/user.service';
+import {authLevelRedirect} from '../../utils/authUtils'
 
 import useAuth from '../../hooks/useAuth';
 import '../../sass/AdminLogin.scss';
@@ -82,23 +83,11 @@ const Auth = () => {
     }
   }
 
-    // Where is the user getting redirected to after login?  Let's find out!
-    let loginRedirect;
-
-    if (auth.user) {
-      let userAccessLevel = auth.user.accessLevel;
-  
-      switch (userAccessLevel) {
-        case 'admin':
-          loginRedirect = '/admin';
-          break;
-        case 'user':
-          loginRedirect = '/projects'
-          break;
-        default:
-          // Do nothing (harder than you think).
-      }
-    }
+  // This allows users who are not admind, but are allowed to manage projects, login 
+  let loginRedirect = ''; 
+  if (auth.user) {
+    loginRedirect = authLevelRedirect(auth.user);
+  }
 
   return auth.user ? (
     <Redirect to={loginRedirect} />

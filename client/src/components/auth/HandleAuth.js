@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import { isValidToken } from '../../services/user.service';
+import {authLevelRedirect} from '../../utils/authUtils'
 
 import '../../sass/MagicLink.scss';
 import useAuth from '../../hooks/useAuth';
@@ -17,28 +18,13 @@ const HandleAuth = (props) => {
     setMagicLink(isValid);
   }, []);
 
-  // Where is the user getting redirected to after login?  Let's find out!
-
-  let loginRedirect;
-
+  // check user accessLevel and redirect to the appropriate page
+  let loginRedirect = ''; 
   if (auth.user) {
-    let userAccessLevel = auth.user.accessLevel;
-
-    switch (userAccessLevel) {
-      case 'admin':
-        loginRedirect = '/admin';
-        break;
-      case 'user':
-        loginRedirect = '/projects'
-        break;
-      default:
-        // Actively do nothing.
-    }
+    loginRedirect = authLevelRedirect(auth.user);
   }
 
-
-  return auth.user && isMagicLinkValid ? (
-    
+  return auth.user && isMagicLinkValid ? ( 
     <Redirect to={loginRedirect} />
   ) : (
     <div className="flex-container">

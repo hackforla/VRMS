@@ -1,9 +1,20 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
 
+import useAuth from '../hooks/useAuth';
+import {authLevelRedirect} from '../utils/authUtils'
+
 import "../sass/Navbar.scss";
 
 const Navbar = (props) => {
+
+    // check user accessLevel and adjust link accordingly
+    const auth = useAuth();
+    let loginRedirect = '/admin'; 
+    if (auth.user) {
+      loginRedirect = authLevelRedirect(auth.user);
+    }
+
     return (
         <div className="nav-wrapper">
             <nav
@@ -13,7 +24,7 @@ const Navbar = (props) => {
             >
                 <div className="navbar-buttons-container">
                     {props.location.pathname === "/" ? (
-                        <Link to="/admin">
+                        <Link to={loginRedirect}>
                             <p className="home-link-text">LOGIN</p>
                         </Link>
                     ) : (
