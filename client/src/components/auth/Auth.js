@@ -83,7 +83,7 @@ const Auth = () => {
     }
   }
 
-  // This allows users who are not admind, but are allowed to manage projects, login 
+  // This allows users who are not admin, but are allowed to manage projects, to login 
   let loginRedirect = ''; 
   if (auth.user) {
     loginRedirect = authLevelRedirect(auth.user);

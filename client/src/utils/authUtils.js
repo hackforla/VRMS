@@ -16,3 +16,4 @@ export function authLevelRedirect (user) {
 
   return loginRedirect;
 }
+
