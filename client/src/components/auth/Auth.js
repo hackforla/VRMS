@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import { checkUser, checkAuth } from '../../services/user.service';
+import {authLevelRedirect} from '../../utils/authUtils'
 
 import useAuth from '../../hooks/useAuth';
 import '../../sass/AdminLogin.scss';
@@ -12,6 +13,7 @@ import '../../sass/AdminLogin.scss';
 const Auth = () => {
   const LOG_IN = 'LOG_IN';
   const ADMIN = 'admin';
+  const USER = 'user';
   const pattern = /\b[a-z0-9._]+@[a-z0-9.-]+\.[a-z]{2,4}\b/i;
 
   const history = useHistory();
@@ -46,7 +48,7 @@ const Auth = () => {
     if (isEmailValid) {
       const userData = await checkUser(email, LOG_IN);
       if (userData) {
-        if (userData.user.accessLevel !== ADMIN) {
+        if (userData.user.accessLevel !== ADMIN && (userData.user.accessLevel === USER && userData.user.managedProjects.length === 0)) {
           showError(
             "You don't have the correct access level to view the dashboard"
           );
@@ -81,8 +83,14 @@ const Auth = () => {
     }
   }
 
+  // This allows users who are not admin, but are allowed to manage projects, to login 
+  let loginRedirect = ''; 
+  if (auth.user) {
+    loginRedirect = authLevelRedirect(auth.user);
+  }
+
   return auth.user ? (
-    <Redirect to="/admin" />
+    <Redirect to={loginRedirect} />
   ) : (
     <div className="flex-container">
       <div className="adminlogin-container">
