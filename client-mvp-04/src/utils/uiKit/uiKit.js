@@ -12,6 +12,7 @@ import ProgressBar from '../../components/common/progressBar/progressBar';
 import Checkbox from '../../components/common/checkbox/checkbox';
 import searchIcon from '../../assets/images/icons/searchIcon.svg';
 import Dropdown from '../../components/common/dropdown/dropdown';
+import InputWIcon from "../../components/inputWIcon";
 
 
 //for the dropdown section (demo purpose)
@@ -166,15 +167,7 @@ const DevUiKit = () => {
         <Input placeholder="Enter your email" type="email" />
         <p className="dev-comment">Default Input, components/common/input</p>
 
-        <div className="text-field-icon-container">
-          <img src={gitHubIcon} className="text-field-icon" alt="gitHub" />
-          <input
-            type="text"
-            name="text-icon-field"
-            placeholder="GitHub user name (not email)"
-          />
-        </div>
-        <p className="dev-comment">Input with icon</p>
+        <InputWIcon/>
 
         <div className="checkbox-container">
           <Checkbox content="Checkbox Text" />
@@ -255,7 +248,7 @@ const DevUiKit = () => {
         </div>
         <p className="dev-comment">Rounded input with icon</p>
       </div>
-      
+
       {/*** Current Skills Input ***/}
       <InputSkills options={skills.currentSkills} skills={skillsInputed} setSkills={setSkillsInputed} />
       <p className={'dev-comment'}>Current Skills Input</p>
