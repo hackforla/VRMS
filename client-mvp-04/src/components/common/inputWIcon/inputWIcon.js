@@ -1,5 +1,5 @@
 import React from 'react'
-import gitHubIcon from "../../assets/images/icons/github.png";
+import gitHubIcon from "../../../assets/images/icons/github.png";
 
 const InputWIcon = () => {
   return (

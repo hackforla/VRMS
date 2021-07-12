@@ -12,7 +12,7 @@ import ProgressBar from '../../components/common/progressBar/progressBar';
 import Checkbox from '../../components/common/checkbox/checkbox';
 import searchIcon from '../../assets/images/icons/searchIcon.svg';
 import Dropdown from '../../components/common/dropdown/dropdown';
-import InputWIcon from "../../components/inputWIcon";
+import InputWIcon from "../../components/common/inputWIcon/inputWIcon";
 
 
 //for the dropdown section (demo purpose)
