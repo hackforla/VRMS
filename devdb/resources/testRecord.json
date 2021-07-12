@@ -1,0 +1,25 @@
+{
+  "pk":{
+    "S":"User#johnnytest@nowhere.com"
+  },
+  "sk":{
+    "S":"Metadata"
+  },
+  "user":{
+    "M":{
+      "name": {
+        "M": {
+          "firstName": {
+            "S": "Johnny"
+          },
+          "lastName": {
+            "S": "Test"
+          }
+        }
+      },
+      "email": {
+        "S": "johnnytest@nowhere.com"
+      }
+    }
+  }
+}
