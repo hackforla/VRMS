@@ -62,6 +62,9 @@ const runCloseCheckinWorker = require('./workers/closeCheckins')(cron, fetch);
 const runCreateRecurringEventsWorker = require('./workers/createRecurringEvents')(cron, fetch);
 // const runSlackBot = require("./workers/slackbot")(fetch);
 
+// MIDDLEWARE
+const errorhandler = require('./middleware/errorhandler.middleware');
+
 // ROUTES
 const eventsRouter = require("./routers/events.router");
 const checkInsRouter = require('./routers/checkIns.router');
@@ -74,6 +77,7 @@ const recurringEventsRouter = require("./routers/recurringEvents.router");
 const projectTeamMembersRouter = require("./routers/projectTeamMembers.router");
 const slackRouter = require("./routers/slack.router");
 const authRouter = require("./routers/auth.router");
+const locationsRouter = require('./routers/locations.router');
 
 // Check that clients to the API are sending the custom request header on all methods
 // except for ones described in the dontCheckCustomRequestHeaderApis array.
@@ -113,10 +117,15 @@ app.use("/api/projects", projectsRouter);
 app.use("/api/recurringevents", recurringEventsRouter);
 app.use("/api/projectteammembers", projectTeamMembersRouter);
 app.use('/api/slack', slackRouter);
+app.use('/api/locations', locationsRouter);
 
 // 404 for all non-defined endpoints.
-app.get("*", (req, res) => {
-  res.sendStatus(404);
+app.get("*", (req, res, next) => {
+  const error = new Error('Not Found');
+  error.status = 404;
+  next(error);
 });
+
+app.use(errorhandler);
 
 module.exports = app;
