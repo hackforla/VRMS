@@ -1,39 +1,40 @@
 {
   "env": {
     "browser": true,
+    "commonjs": true,
     "es2017": true
   },
   "extends": [
+    "eslint:recommended",
     "plugin:react/recommended",
     "airbnb",
-    "airbnb-base",
-    "plugin:prettier/recommended",
-    "plugin:react-hooks/recommended",
-    "plugin:testing-library/recommended",
-    "plugin:testing-library/react",
-    "plugin:jest-dom/recommended"
+    "prettier"
   ],
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
     },
-    "ecmaVersion": 2017,
-    "sourceType": "module"
+    "ecmaVersion": 2017
   },
-  "plugins": ["react", "testing-library", "jest-dom"],
+  "plugins": ["react", "prettier"],
   "rules": {
+    "no-unused-vars": "warn",
+    "no-console": "off",
+    "func-names": "off",
+    "no-process-exit": "off",
+    "object-shorthand": "off",
+    "class-methods-use-this": "off",
     "react/jsx-filename-extension": [
       1,
       {
         "extensions": [".js", ".jsx"]
       }
     ],
-    "testing-library/await-async-query": "error",
-    "testing-library/no-await-sync-query": "error",
-    "testing-library/no-debug": "warn",
-    "jest-dom/prefer-checked": "error",
-    "jest-dom/prefer-enabled-disabled": "error",
-    "jest-dom/prefer-required": "error",
-    "jest-dom/prefer-to-have-attribute": "error"
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ]
   }
 }
