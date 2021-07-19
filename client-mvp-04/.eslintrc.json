@@ -8,7 +8,11 @@
     "eslint:recommended",
     "plugin:react/recommended",
     "airbnb",
-    "prettier"
+    "prettier",
+    "plugin:jest/recommended",
+    "plugin:jest-dom/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:testing-library/react"
   ],
   "parserOptions": {
     "ecmaFeatures": {
@@ -16,7 +20,7 @@
     },
     "ecmaVersion": 2017
   },
-  "plugins": ["react", "prettier"],
+  "plugins": ["react", "prettier", "jest", "testing-library"],
   "rules": {
     "no-unused-vars": "warn",
     "no-console": "off",
@@ -24,6 +28,18 @@
     "no-process-exit": "off",
     "object-shorthand": "off",
     "class-methods-use-this": "off",
+    "react/jsx-curly-brace-presence": "off",
+    "react/prop-types": "off",
+    "spaced-comment": "warn",
+    "arrow-body-style": ["warn", "as-needed"],
+    "no-param-reassign": "warn",
+    "import/no-extraneous-dependencies": ["warn", { "devDependencies": true }],
+    "jsx-a11y/click-events-have-key-events": "warn",
+    "jsx-a11y/no-static-element-interactions": "warn",
+    "import/no-named-as-default": "warn",
+    "import/prefer-default-export": "warn",
+    "react/no-unescaped-entities": "warn",
+    "import/no-named-as-default-member": "warn",
     "react/jsx-filename-extension": [
       1,
       {
@@ -36,5 +52,6 @@
         "endOfLine": "auto"
       }
     ]
-  }
+  },
+  "ignorePatterns": ["node_modules/**"]
 }
