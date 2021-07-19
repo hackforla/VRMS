@@ -19,6 +19,8 @@ EXAMPLE:
 - Home Unite US, Management, Saturday 12:30pm, 1 hour
 - Home Unite US, Team meeting, Tuesday 6pm, 2 hours
 
+Note: Please explicitly state if a meeting time that is currently displayed is to be deleted.
+
 ### What is your project page URL?
 https://www.hackforla.org/projects/vrms
 
