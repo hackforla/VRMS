@@ -13,6 +13,7 @@ const LoginView = ({
   isEmailValid,
   errorMsgInvalidEmail,
   errorMsgFailedEmail,
+  userEmail
 }) => {
   return (
     <section data-testid="login-container" className="flex-container login">
@@ -25,6 +26,7 @@ const LoginView = ({
           type={'email'}
           onChange={(e) => handleInputChange(e)}
           autoComplete={'email'}
+          value={userEmail}
         />
 
         <Button

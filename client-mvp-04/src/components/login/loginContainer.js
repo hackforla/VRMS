@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import LoginView from './loginView';
 import { useDispatch } from 'react-redux';
 import { Email } from '../../utils/validation/validation';
@@ -6,6 +6,7 @@ import { checkAuth, checkUser } from '../../services/user.service';
 import { useHistory } from 'react-router-dom';
 import allActions from '../../store/actions';
 import { AUTH_ORIGIN } from '../../utils/constants';
+import { getItem, setItem } from '../../services/localStorage.service';
 
 const LoginContainer = () => {
   const history = useHistory();
@@ -23,8 +24,8 @@ const LoginContainer = () => {
     setErrorMsgInvalidEmail(false);
     setErrorMsgFailedEmail(false);
     const inputValue = e.currentTarget.value.toString();
-    inputValue ? setIsDisabled(false) : setIsDisabled(true);
-    setUserEmail(inputValue);
+    userEmail ? setIsDisabled(false) : setIsDisabled(true);
+    inputValue !== userEmail && setUserEmail(inputValue);
   }
 
   const handleSubmitForm = async (e) => {
@@ -37,6 +38,7 @@ const LoginContainer = () => {
       if (isAuth) {
         dispatch(allActions.authActions.setUser(userData));
         history.push('/login/auth');
+        setItem('vrmsuser:email', userEmail);
       } else {
         setErrorMsgFailedEmail(true);
       }
@@ -46,6 +48,15 @@ const LoginContainer = () => {
     }
   };
 
+  useEffect(()=>{
+
+    const value = getItem('vrmsuser:email');
+    if(value) {
+      setUserEmail(value.toString());
+      setIsDisabled(false);
+    }
+  },[userEmail])
+
   return (
     <LoginView
       handleSubmitForm={handleSubmitForm}
@@ -54,6 +65,7 @@ const LoginContainer = () => {
       isEmailValid={isEmailValid}
       errorMsgInvalidEmail={errorMsgInvalidEmail}
       errorMsgFailedEmail={errorMsgFailedEmail}
+      userEmail={userEmail}
     />
   );
 };
