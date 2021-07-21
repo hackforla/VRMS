@@ -1,4 +1,4 @@
-import { AUTH_START, AUTH_SUCCESS, AUTH_FAIL, SET_USER } from './types';
+import { AUTH_START, AUTH_SUCCESS, AUTH_FAIL, SET_USER, AUTH_LOGOUT } from './types';
 import { HEADERS, AUTH_VERIFY_SIGN_IN } from '../../utils/endpoints.js';
 
 const authStart = () => ({ type: AUTH_START });
@@ -34,10 +34,13 @@ const authUserWithToken = (token, auth_origin) => {
 
 const setUser = (user) => ({ type: SET_USER, payload: user });
 
+const authLogout = () => ({type: AUTH_LOGOUT})
+
 export default {
   authStart,
   authSuccess,
   authFail,
   authUserWithToken,
   setUser,
+  authLogout
 };

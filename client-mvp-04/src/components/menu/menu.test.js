@@ -60,7 +60,7 @@ describe('Should display Menu if user authorized in app', () => {
     expect(screen.getByTestId('menu-logout-link')).toBeInTheDocument();
     expect(screen.getByTestId('menu-logout-link')).toHaveAttribute(
       'href',
-      '/page'
+      '/logout'
     );
   });
 
@@ -92,6 +92,11 @@ describe('Should display Menu if user authorized in app', () => {
     );
     fireEvent.click(screen.getByTestId('menu-profile-link'));
     expect(history.location.pathname).toBe('/page');
+  });
+
+  test('Should redirect to the logout page if clicked the Logout link ', () => {
+    fireEvent.click(screen.getByTestId('menu-logout-link'));
+    expect(history.location.pathname).toBe('/logout');
   });
 });
 
