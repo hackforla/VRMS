@@ -42,6 +42,9 @@ jobs:
           envkey_GMAIL_SECRET_ID: ${{ secrets.GMAIL_SECRET_ID }}
           envkey_GMAIL_REFRESH_TOKEN: ${{ secrets.GMAIL_REFRESH_TOKEN }}
           envkey_GMAIL_EMAIL: ${{ secrets.GMAIL_EMAIL }}
+          envkey_MAILHOG_PORT: ${{ secrets.MAILHOG_PORT }}
+          envkey_MAILHOG_USER: ${{ secrets.MAILHOG_USER }}
+          envkey_MAILHOG_PASSWORD: ${{ secrets.MAILHOG_PASSWORD }}
           file_name: backend/.env
       - name: Build the backend container
         run: docker-compose build backend
