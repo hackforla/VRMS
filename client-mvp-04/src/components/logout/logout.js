@@ -8,12 +8,12 @@ const Logout = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(allActions.authActions.authLogout());
-  });
+  }, [dispatch]);
 
   return (
-    <section data-testid="logout-message" className="flex-container dummy">
+    <section data-testid="logout-message" className="flex-container logout">
       {!loggedIn && (
-        <h2 className="dummy-content">You have been logged out.</h2>
+        <h2 className="logout-content">You have been logged out.</h2>
       )}
     </section>
   );

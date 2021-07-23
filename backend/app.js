@@ -80,7 +80,6 @@ const recurringEventsRouter = require("./routers/recurringEvents.router");
 const projectTeamMembersRouter = require("./routers/projectTeamMembers.router");
 const slackRouter = require("./routers/slack.router");
 const authRouter = require("./routers/auth.router");
-const locationsRouter = require('./routers/locations.router');
 const healthCheckRouter = require('./routers/healthCheck.router');
 
 // Check that clients to the API are sending the custom request header on all methods
@@ -122,7 +121,6 @@ app.use("/api/projects", projectsRouter);
 app.use("/api/recurringevents", recurringEventsRouter);
 app.use("/api/projectteammembers", projectTeamMembersRouter);
 app.use('/api/slack', slackRouter);
-app.use('/api/locations', locationsRouter);
 app.use('/api/healthcheck', healthCheckRouter);
 
 // 404 for all non-defined endpoints.
