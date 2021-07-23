@@ -8,6 +8,6 @@ module.exports = {
   EmailController,
   EventController,
   UserController,
-  ProjectController
+  ProjectController,
   HealthCheckController
 };
