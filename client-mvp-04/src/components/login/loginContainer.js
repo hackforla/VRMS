@@ -55,7 +55,7 @@ const LoginContainer = () => {
       setUserEmail(value.toString());
       setIsDisabled(false);
     }
-  },[userEmail])
+  },[]); // [] gets email from local storage only on mount
 
   return (
     <LoginView
