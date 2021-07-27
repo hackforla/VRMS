@@ -4,7 +4,7 @@ const cors = require('cors');
 
 const { RecurringEvent } = require('../models/recurringEvent.model');
 
-// GET /api/recurringevents/
+// GET /api/recurringEvents/
 router.get('/', cors(), (req, res) => {
     // const { query } = req;
         

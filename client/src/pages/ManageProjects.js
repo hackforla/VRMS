@@ -2,13 +2,19 @@ import React, { useState, useEffect } from 'react';
 import '../sass/ManageProjects.scss';
 import useAuth from '../hooks/useAuth';
 
+import SelectProject from '../components/manageProjects/selectProject.js';
+import DisplayProjectInfo from '../components/manageProjects/displayProject.js';
 
 const ManageProjects = () => {
+
   const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
   const { user } = useAuth();
   const [projects, setProjects] = useState([]);
-  console.log(user, projects);
+  const [projectToEdit, setProjectToEdit] = useState([]);
+  const [recurringEvents, setRecurringEvents] = useState([]);
+  const [componentToDisplay, setComponentToDisplay] = useState (''); // displayProjectInfo, editMeetingTime or editProjectInfor 
+
   // Fetch projects from db
   async function fetchProjects() {
     try {
@@ -25,26 +31,63 @@ const ManageProjects = () => {
     }
   }
 
+    // Fetch recurringEvents
+    async function fetchRecurringEvents() {
+      try {
+        const res = await fetch('/api/recurringEvents/', {
+          headers: {
+            'x-customrequired-header': headerToSend,
+          },
+        });
+        const resJson = await res.json();
+        setRecurringEvents(resJson);
+      } catch (error) {
+        console.log(`fetchProjects error: ${error}`);
+        alert('Server not responding.  Please refresh the page.');
+      }
+    }
+
   useEffect(() => {
     fetchProjects();
+    fetchRecurringEvents();
   }, []);
 
-  const managedProjects = projects.filter((item) =>
-    user?.managedProjects.includes(item._id)
-  );
-  return (
-    <div className="container--ManageProjects">
-      {/* useAuth for user
-        useProjects for projects
-        iterate through users managed projects
-        make the project a seperate component that allows for updating
-      */}
-      <h3>Manage Projects</h3>
-      {managedProjects.map(project => (
-        <p>{project.name}</p>
-      ))}
-    </div>
-  );
+  const projectSelectClickHandler = project => event => {
+    setProjectToEdit(project);
+    setComponentToDisplay('displayProjectInfo');
+  };
+
+  const goSelectProject = () => {
+    setComponentToDisplay('selectProject');
+}
+
+
+  switch (componentToDisplay) {
+    case 'editMeetingTime':
+      // <EditMeetingTime /> // Placeholder for future coponent
+      break;
+    case 'editProjectInfo':
+      //<EditProjectInfo />  // Placeholder for future coponent
+      break;
+    case 'displayProjectInfo':
+      return (
+      <DisplayProjectInfo 
+        projectToEdit = {projectToEdit}
+        goSelectProject = {goSelectProject}
+        recurringEvents = {recurringEvents}
+      />
+      );
+      break;
+    default:
+      return (
+        <SelectProject 
+          projectSelectClickHandler = {projectSelectClickHandler}
+          accessLevel = {user?.accessLevel}
+          projects = {projects}
+          user = {user}
+        />
+      );
+  }
 };
 
 export default ManageProjects;
