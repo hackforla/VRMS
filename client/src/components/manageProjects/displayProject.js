@@ -3,7 +3,7 @@ import '../../sass/ManageProjects.scss';
 
 const DisplayProjectInfo  = ( props ) => {
   
-  const projectRecurringEvents = props.recurringEvents.filter (rEvents => rEvents.project._id === props.projectToEdit._id );
+  //const projectRecurringEvents = props.recurringEvents.filter (rEvents => rEvents.project._id === props.projectToEdit._id );
 
 
   return (
