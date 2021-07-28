@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Redirect } from 'react-router-dom';
 import '../sass/ManageProjects.scss';
 import useAuth from '../hooks/useAuth';
 
@@ -51,6 +52,11 @@ const ManageProjects = () => {
     fetchProjects();
     fetchRecurringEvents();
   }, []);
+
+  // If not logged in, redirect back home
+  if (!user) {
+    return <Redirect to="/" />;
+  }
 
   const projectSelectClickHandler = project => event => {
     setProjectToEdit(project);
