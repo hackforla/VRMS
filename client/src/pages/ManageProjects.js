@@ -4,7 +4,7 @@ import '../sass/ManageProjects.scss';
 import useAuth from '../hooks/useAuth';
 
 import SelectProject from '../components/manageProjects/selectProject.js';
-import DisplayProjectInfo from '../components/manageProjects/displayProject.js';
+import EditProjectInfo from '../components/manageProjects/editProject.js';
 
 const ManageProjects = () => {
 
@@ -14,7 +14,7 @@ const ManageProjects = () => {
   const [projects, setProjects] = useState([]);
   const [projectToEdit, setProjectToEdit] = useState([]);
   const [recurringEvents, setRecurringEvents] = useState([]);
-  const [componentToDisplay, setComponentToDisplay] = useState (''); // displayProjectInfo, editMeetingTime or editProjectInfor 
+  const [componentToDisplay, setComponentToDisplay] = useState (''); // editProjectInfo, editMeetingTime or editProjectInfor 
 
   // Fetch projects from db
   async function fetchProjects() {
@@ -60,7 +60,7 @@ const ManageProjects = () => {
 
   const projectSelectClickHandler = project => event => {
     setProjectToEdit(project);
-    setComponentToDisplay('displayProjectInfo');
+    setComponentToDisplay('editProjectInfo');
   };
 
   const goSelectProject = () => {
@@ -73,11 +73,8 @@ const ManageProjects = () => {
       // <EditMeetingTime /> // Placeholder for future coponent
       break;
     case 'editProjectInfo':
-      //<EditProjectInfo />  // Placeholder for future coponent
-      break;
-    case 'displayProjectInfo':
       return (
-      <DisplayProjectInfo 
+      <EditProjectInfo 
         projectToEdit = {projectToEdit}
         goSelectProject = {goSelectProject}
         recurringEvents = {recurringEvents}

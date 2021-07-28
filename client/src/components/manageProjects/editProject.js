@@ -1,7 +1,7 @@
 import React from 'react';
 import '../../sass/ManageProjects.scss';
 
-const DisplayProjectInfo  = ( props ) => {
+const EditProjectInfo  = ( props ) => {
   
   //const projectRecurringEvents = props.recurringEvents.filter (rEvents => rEvents.project._id === props.projectToEdit._id );
 
@@ -26,4 +26,4 @@ const DisplayProjectInfo  = ( props ) => {
   );
 };
 
-export default DisplayProjectInfo;
+export default EditProjectInfo;
