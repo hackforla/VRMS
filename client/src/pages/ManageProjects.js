@@ -5,6 +5,7 @@ import useAuth from '../hooks/useAuth';
 
 import SelectProject from '../components/manageProjects/selectProject.js';
 import EditProjectInfo from '../components/manageProjects/editProject.js';
+import EditableField from '../components/manageProjects/editableField';
 
 const ManageProjects = () => {
 
@@ -78,6 +79,7 @@ const ManageProjects = () => {
         projectToEdit = {projectToEdit}
         goSelectProject = {goSelectProject}
         recurringEvents = {recurringEvents}
+        setProjectToEdit = {setProjectToEdit}
       />
       );
       break;
