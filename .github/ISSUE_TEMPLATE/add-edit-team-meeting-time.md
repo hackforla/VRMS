@@ -1,7 +1,7 @@
 ---
 name: Add/edit team meeting time
 about: Use this template to request a meeting time change for your project
-title: ''
+title: 'Meeting time change request for [Project Name]'
 labels: 1 week change request
 assignees: ''
 
@@ -18,6 +18,8 @@ We need to add/change the team meeting time for [YOUR PROJECT NAME HERE] so it w
 EXAMPLE: 
 - Home Unite US, Management, Saturday 12:30pm, 1 hour
 - Home Unite US, Team meeting, Tuesday 6pm, 2 hours
+
+Note: Please explicitly state if a meeting time that is currently displayed is to be deleted.
 
 ### What is your project page URL?
 https://www.hackforla.org/projects/vrms
