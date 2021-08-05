@@ -3,6 +3,7 @@ export function authLevelRedirect (user) {
   let loginRedirect;
   let userAccessLevel = user.accessLevel;
 
+// current access levels in useProvideAuth.js: 'admin', 'user'
   switch (userAccessLevel) {
     case 'admin':
       loginRedirect = '/admin';
@@ -11,7 +12,7 @@ export function authLevelRedirect (user) {
       loginRedirect = '/projects'
       break;
     default:
-      // Do nothing (harder than you think).
+      throw new Error('Unsupported access level');
   }
 
   return loginRedirect;

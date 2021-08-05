@@ -329,7 +329,7 @@ const AdminDashboard = () => {
     }
   }, []);
 
-  return auth && auth.user ? (
+  return auth && auth.user && auth.isAdmin? (
     <div className="flex-container">
       <div className="dashboard admin-dashboard-wrap">
 
@@ -424,7 +424,9 @@ const AdminDashboard = () => {
       </div>
     </div>
     ) : (
-    <Redirect to="/login" />
+      auth?.user
+        ?    <Redirect to="/projects" />
+        :    <Redirect to="/login" />
   );
 };
 
