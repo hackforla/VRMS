@@ -30,16 +30,24 @@ const EditProjectInfo  = ( props ) => {
     }
   };
 
+  const addEditableFields = (project) => {
+    console.log(project);
+  }
+
+  //const editableProject = addEditableFelds();
+
   return (
     <div>
-      <EditableField 
-        fieldData={props.projectToEdit.name} 
-        fieldName="name" 
-        updateProject={updateProject}
-        setProjectToEdit={props.setProjectToEdit}
-        projId={props.projectToEdit._id}
-      />
-      <div>Project Info for {props.projectToEdit.name}</div>
+            <div className="project-list-item">Project Info for {props.projectToEdit.name}</div>
+      <div>
+        <EditableField 
+          fieldData={props.projectToEdit.name} 
+          fieldName="name" 
+          updateProject={updateProject}
+          setProjectToEdit={props.setProjectToEdit}
+          projId={props.projectToEdit._id}
+        />
+      </div>
 
       <div><button className="button-back" onClick={props.goSelectProject}>Back to Select Project</button></div>
     </div>

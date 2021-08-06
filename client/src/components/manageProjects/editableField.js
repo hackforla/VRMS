@@ -12,7 +12,7 @@ const EditableField  = (
         { editable ? (
                 <input 
                     type="text"
-                    className="input section-name-input edit-section"
+                    className="editable-field"
                     value={fieldValue}
                     onBlur={(e)=>{
                         updateProject(projId, fieldName, fieldValue).then(proj => {console.log(proj); setProjectToEdit(proj)})
