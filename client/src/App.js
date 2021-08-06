@@ -62,7 +62,6 @@ const App = () => {
               {routes.map(({ path, Component }) => (
                 <Route key={path} exact path={path} component={Component} />
               ))}
-              <Redirect to="/" />
             </Switch>
           </main>
           <Footer />

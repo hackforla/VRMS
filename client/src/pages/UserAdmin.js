@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import '../sass/UserAdmin.scss';
+import { Redirect } from 'react-router-dom';
+import useAuth from '../hooks/useAuth';
 
 //Parent
 const UserAdmin = () => {
-    
+    const auth = useAuth();
     const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
     // Initialize state hooks
@@ -227,6 +229,9 @@ const UserAdmin = () => {
       await addProjectToDb(project);
       fetchProjects();
     }
+
+  if(!auth.user) return <Redirect to='/login'/>
+  if(auth.user?.accessLevel !== 'admin') return <Redirect to='/projects'/>
 
     if (Object.keys(userToEdit).length === 0 && addNewProject === false && showUserSearch === true) {
         return (

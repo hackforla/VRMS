@@ -12,7 +12,7 @@ export function authLevelRedirect (user) {
       loginRedirect = '/projects'
       break;
     default:
-      throw new Error('Unsupported access level');
+      // throw new Error('Unsupported access level');
   }
 
   return loginRedirect;

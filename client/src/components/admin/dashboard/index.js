@@ -329,7 +329,7 @@ const AdminDashboard = () => {
     }
   }, []);
 
-  return auth && auth.user && auth.isAdmin? (
+  return auth && auth.user && auth.user.accessLevel==='admin'? (
     <div className="flex-container">
       <div className="dashboard admin-dashboard-wrap">
 

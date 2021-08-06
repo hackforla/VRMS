@@ -21,7 +21,7 @@ const HandleAuth = (props) => {
   // check user accessLevel and redirect to the appropriate page
   let loginRedirect = ''; 
   if (auth.user) {
-    loginRedirect = authLevelRedirect(auth.user);
+    loginRedirect = authLevelRedirect(auth.user?.accessLevel);
   }
 
   return auth.user && isMagicLinkValid ? ( 
