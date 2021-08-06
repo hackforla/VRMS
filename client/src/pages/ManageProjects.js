@@ -10,11 +10,12 @@ const ManageProjects = () => {
 
   const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
-  const { user } = useAuth();
+  const [auth] = useAuth();
   const [projects, setProjects] = useState([]);
   const [projectToEdit, setProjectToEdit] = useState([]);
   const [recurringEvents, setRecurringEvents] = useState([]);
   const [componentToDisplay, setComponentToDisplay] = useState (''); // displayProjectInfo, editMeetingTime or editProjectInfor 
+  const user = auth?.user;
 
   // Fetch projects from db
   async function fetchProjects() {
