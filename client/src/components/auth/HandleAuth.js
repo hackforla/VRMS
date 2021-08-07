@@ -1,35 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Loader from '../common/loader/loader';
 import { Redirect } from 'react-router-dom';
-import { isValidToken } from '../../services/user.service';
-import {authLevelRedirect} from '../../utils/authUtils'
-
-import '../../sass/MagicLink.scss';
-import useAuth from '../../hooks/useAuth';
+import allActions from '../../store/actions';
 
 const HandleAuth = (props) => {
-  const auth = useAuth();
-  const [isMagicLinkValid, setMagicLink] = useState(null);
+  const loggedIn = useSelector((state) => state.auth.loggedIn);
+  const user = useSelector((state) => state.auth.user);
+  const isLoaded = useSelector((state) => state.auth.isLoaded);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const search = props.location.search;
     const params = new URLSearchParams(search);
-    const api_token = params.get('token');
-    const isValid = isValidToken(api_token);
-    setMagicLink(isValid);
-  }, []);
+    const token = params.get('token');
+    const auth_origin = params.get('auth_origin');
+    dispatch(allActions.authActions.authUserWithToken(token, auth_origin));
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // check user accessLevel and redirect to the appropriate page
-  let loginRedirect = ''; 
-  if (auth.user) {
-    loginRedirect = authLevelRedirect(auth.user);
-  }
-
-  return auth.user && isMagicLinkValid ? ( 
-    <Redirect to={loginRedirect} />
+  return isLoaded ? (
+    loggedIn && user ? (
+      <Redirect to="/dashboard" />
+    ) : (
+      <Redirect to="/auth/expired-session" />
+    )
   ) : (
-    <div className="flex-container">
-      <div>Sorry, the link is not valid anymore.</div>
-    </div>
+    <Loader />
   );
 };
 
