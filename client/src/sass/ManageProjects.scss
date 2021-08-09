@@ -17,16 +17,31 @@
   margin-bottom: 5px;
 }
 
+.project-list-heading {
+  margin-bottom: 20px;
+  font-size: 18px;
+}
+
 .project-sub-heading {
   margin: 20px 0 20px 0;
 }
 
-.editable-field input{
-  width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
+.editable-field {
+  font-weight: normal !important;
+  font-size: 18px !important;
+  max-width: none !important;
+  width: 400px !important;
+}
+
+.editable-field-div {
+  margin-top: 20px;
+}
+
+.section-name {
+  font-size: 16px;
+}
+
+.section-content {
+  font-size: 12px;
+  text-transform: none;
 }

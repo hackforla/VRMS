@@ -8,6 +8,11 @@ import EditProjectInfo from '../components/manageProjects/editProject.js';
 
 const ManageProjects = () => {
 
+  /* Still to do: 
+  - Fix form css
+  - update from db after entry
+  */
+
   const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
   const { user } = useAuth();
