@@ -9,9 +9,9 @@ import "../sass/Navbar.scss";
 const Navbar = (props) => {
 
     // check user accessLevel and adjust link accordingly
-    const auth = useAuth();
+    const [auth] = useAuth();
     let loginRedirect = '/admin'; 
-    if (auth.user) {
+    if (auth?.user) {
       loginRedirect = authLevelRedirect(auth.user);
     }
 

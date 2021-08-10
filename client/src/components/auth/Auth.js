@@ -17,7 +17,7 @@ const Auth = () => {
   const pattern = /\b[a-z0-9._]+@[a-z0-9.-]+\.[a-z]{2,4}\b/i;
 
   const history = useHistory();
-  const auth = useAuth();
+  const [auth] = useAuth();
 
   const [email, setEmail] = useState('');
   const [isDisabled, setIsDisabled] = useState(true);
@@ -85,11 +85,11 @@ const Auth = () => {
 
   // This allows users who are not admin, but are allowed to manage projects, to login 
   let loginRedirect = ''; 
-  if (auth.user) {
+  if (auth?.user) {
     loginRedirect = authLevelRedirect(auth.user);
   }
 
-  return auth.user ? (
+  return auth?.user ? (
     <Redirect to={loginRedirect} />
   ) : (
     <div className="flex-container">
