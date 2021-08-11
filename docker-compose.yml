@@ -55,10 +55,10 @@ services:
   
   mongo:
     image: mongo
-    restart: always
+    restart: on-failure
     container_name: vrms-mongo
     ports: 
-      - "8081:8081"
+      - "27017:27017"
 
 
   mailhog:
