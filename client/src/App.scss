@@ -1,37 +1,39 @@
-.app {
-  height: 100%;
+@import "sass/_main.scss";
+
+.app{
+  height: 100vh;
   width: 100vw;
   display: flex;
   justify-content: center;
-  align-content: center;
+  align-items: center;
   overflow: hidden;
-  max-height: 90vh;
-  margin: 5vh 0;
 }
 
 .app-container {
+  max-width: 414px;
+  width: 100%;
+  min-width: 320px;
+  height: 896px;
   position: relative;
-  max-width: 500px;
-  width: 100%;
-  background-color: white;
-  overflow: hidden;
-  border-radius: 10px;
-  padding: 15px;
-}
-
-.main {
-  height: calc(90vh - 160px);
-  overflow-y: scroll;
-}
-
-.flexcenter-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-content: center;
+  border: 1px solid $border-color;
+  box-sizing: border-box;
   text-align: center;
-  height: 100%;
+  overflow: hidden;
+  padding: 10px;
+  border-radius: 30px;
+}
+
+.app-main {
+  height: 628px;
   width: 100%;
+  overflow: hidden;
+  box-sizing: content-box;
+  // Hide scrollbar using overflow-y: scroll
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    &::-webkit-scrollbar { /* WebKit */
+      display: none;  /* Safari and Chrome */
+    }
 }
 
 .flex-container {
@@ -39,10 +41,62 @@
   flex-direction: column;
   height: 100%;
   width: 100%;
+  padding: 70px 40px 40px;
+  text-align: left;
 }
 
-@media (max-width: 500px) {
+@media (max-height: 900px) {
   .app-container {
-    margin: 0 15px;
+    height: 95vh;
+  }
+
+  .app-main {
+    height: calc(95vh - 160px);
+  }
+
+  .flex-container {
+    height: calc(95vh - 160px);
+  }
+}
+
+@media (max-height: 896px) and (max-width: 420px) {
+  .app-container {
+    height: 100vh;
+    border: none;
+    border-radius: 0;
+  }
+
+  .app-main {
+    height: calc(100vh - 160px);
+  }
+
+  .flex-container {
+    height: calc(100vh - 160px);
+  }
+}
+
+@media (max-width: 400px) {
+  .flex-container {
+    padding: 60px 25px 20px;
+  }
+}
+
+@media (max-width: 374px) {
+  .app-main {
+    height: calc(100vh - 170px);
+  }
+
+  .flex-container {
+    height: calc(100vh - 170px);
+  }
+
+  h2 {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 350px) {
+  .flex-container {
+    padding: 40px 15px 20px;
   }
 }
