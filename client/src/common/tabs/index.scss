@@ -1,0 +1,33 @@
+.tab-header{
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin-bottom: 0;
+  li{
+    width: 50%;
+    text-align: center;
+    font-size: 15px;
+    line-height: 1;
+    margin-left: 0;
+    padding: 10px;
+    border-bottom: 2px solid #3D5A6C;
+    transition: all .3s;
+    font-weight: 300;
+    cursor: pointer;
+    &.selected{
+      border-bottom: 2px solid #3D5A6C;
+      color: #FFFFFF;
+      font-weight: bold;
+      background: #3D5A6C;
+      border-radius: 10px 10px 0 0;
+    }
+  }
+}
+
+.tab{
+  width: 100%;
+  padding: 10px 0;
+  font-family: 'Open Sans', sans-serif;
+  color: #444;
+}

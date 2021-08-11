@@ -1,0 +1,7 @@
+FROM node:14.11.0 AS client-development
+RUN mkdir /srv/client && chown node:node /srv/client
+WORKDIR /srv/client
+USER node
+RUN mkdir -p node_modules
+COPY --chown=node:node package.json package.json ./
+RUN npm install --silent

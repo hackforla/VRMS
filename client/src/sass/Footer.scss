@@ -1,0 +1,28 @@
+.footer {
+    display: flex;
+    padding: 5px 0;
+}
+
+.footer-text {
+    font-size: 9px;
+}
+
+.footer-greeting {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    min-width: max-content;
+
+    p {
+        white-space: nowrap;
+    }
+}
+
+.logout-button {
+    font-size: 9px;
+    margin-left: 4px;
+}

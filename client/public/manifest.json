@@ -21,11 +21,6 @@
       "src": "logo310.png",
       "type": "image/png",
       "sizes": "310x310"
-    },
-    {
-      "src": "logo512.png",
-      "type": "image/png",
-      "sizes": "512x512"
     }
   ],
   "start_url": ".",

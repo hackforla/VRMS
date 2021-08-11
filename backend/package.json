@@ -1,7 +1,7 @@
 {
-  "name": "vrms-server-mvp",
-  "version": "0.4.0",
-  "description": "VRMS Backend for MVP 0.4",
+  "name": "vrms-server",
+  "version": "0.3.0",
+  "description": "VRMS Backend",
   "main": "server.js",
   "scripts": {
     "lint": "eslint .",
@@ -9,10 +9,12 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "client": "npm run start --prefix client",
+    "heroku-postbuild": "cd client && npm install && npm run build"
   },
-  "author": "alex-anakin",
-  "license": "AGPL-3.0",
+  "author": "sarL3y",
+  "license": "ISC",
   "devDependencies": {
     "@shelf/jest-mongodb": "^1.2.3",
     "babel-eslint": "^10.1.0",
@@ -49,6 +51,8 @@
     "mongodb-memory-server": "^6.9.0",
     "mongoose": "^5.10.0",
     "morgan": "^1.10.0",
+    "node-cron": "^2.0.3",
+    "node-fetch": "^2.6.0",
     "nodemailer": "^6.4.16"
   },
   "directories": {

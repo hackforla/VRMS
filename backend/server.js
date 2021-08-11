@@ -1,6 +1,8 @@
 const app = require("./app");
 const mongoose = require("mongoose");
 
+const { Role } = require("./models");
+
 // Load config variables
 const { CONFIG_DB } = require('./config/');
 
@@ -46,8 +48,35 @@ async function closeServer() {
   });
 }
 
+function initial() {
+  Role.collection.estimatedDocumentCount((err, count) => {
+    if (!err && count === 0) {
+      new Role({
+        name: "APP_USER",
+      }).save((err) => {
+        if (err) {
+          console.log("error", err);
+        }
+
+        console.log("added 'user' to roles collection");
+      });
+
+      new Role({
+        name: "APP_ADMIN",
+      }).save((err) => {
+        if (err) {
+          console.log("error", err);
+        }
+
+        console.log("added 'moderator' to roles collection");
+      });
+    }
+  });
+}
+
 if (require.main === module) {
   runServer().catch((err) => console.error(err));
+  initial();
 }
 
 module.exports = { app, runServer, closeServer };

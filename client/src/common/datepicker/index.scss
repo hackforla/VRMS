@@ -1,0 +1,41 @@
+.datepicker-section {
+  color: #000000;
+  .datepicker-header {
+    font-size: 15px;
+    font-weight: bold;
+  }
+}
+
+.datepicker-wrap {
+  display: block;
+  max-width: 100%;
+  text-align: center;
+
+  .datepicker-name {
+    display: inline-flex;
+    line-height: 1;
+    width: 40px;
+    max-width: 40px;
+  }
+
+  .react-datepicker-wrapper {
+    .react-datepicker__input-container{
+      input[type=text] {
+        max-width: 242px;
+        min-width: 242px;
+        width: 242px;
+        height: auto;
+        color: #000000;
+        font-size: 14px;
+        font-weight: normal;
+        line-height: 1;
+        margin: 0;
+        border-bottom: 1px solid #000000;
+        text-align: center;
+        &:focus {
+          border-bottom: 1px solid #fa114f;
+        }
+      }
+    }
+  }
+}

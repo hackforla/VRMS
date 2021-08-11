@@ -1,7 +1,5 @@
 # Backend
 
-VRMS MVP 0.4 backend application
-
 ## Running Tests
 
 To maintain consistency across the front end and back end development, we are using Jest

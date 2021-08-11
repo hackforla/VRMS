@@ -1,43 +1,36 @@
 {
-  "name": "vrms-client-mvp-04",
-  "version": "0.4.0",
-  "description": "VRMS Client MVP",
-  "author": "OlgaBilogurova",
+  "name": "vrms-client",
+  "version": "0.3.0",
+  "description": "VRMS Client",
   "homepage": "https://www.vrms.io",
-  "license": "ISC",
-  "private": true,
   "dependencies": {
     "@babel/plugin-transform-react-jsx-self": "^7.10.4",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
     "classnames": "^2.2.6",
     "cross-env": "^7.0.2",
     "cross-var": "^1.1.0",
     "d3": "^5.15.1",
     "dotenv-cli": "^3.2.0",
     "http-proxy-middleware": "^1.0.5",
+    "js-cookie": "^2.2.1",
     "local-storage": "^2.0.0",
-    "markdown-to-jsx": "^7.1.1",
-    "mathjs": "^6.6.2",
+    "mathjs": "^7.5.1",
     "minimist": "^1.2.3",
     "moment": "^2.24.0",
     "moment-recur": "^1.0.7",
     "node-sass": "^4.14.1",
     "react": "^16.13.1",
+    "react-datepicker": "^3.1.3",
     "react-dom": "^16.13.1",
-    "react-redux": "^7.2.1",
-    "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.3",
-    "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0"
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "^3.4.1"
   },
   "scripts": {
     "start": "dotenv -e .env -e ../backend/.env -- cross-var cross-env PORT=%CLIENT_PORT% react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --watchAll=false",
     "test:watch": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "heroku-postbuild": "npm run build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -54,21 +47,18 @@
       "last 1 safari version"
     ]
   },
+  "author": "sarL3y",
+  "license": "ISC",
   "devDependencies": {
     "eslint-config-airbnb": "^18.2.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-jest-dom": "^3.6.5",
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.20.6",
     "eslint-plugin-react-hooks": "^4.1.2",
-    "eslint-plugin-testing-library": "^3.10.1",
-    "jest-fetch-mock": "^3.0.3",
     "prettier": "^2.1.1",
-    "react-test-renderer": "^16.13.1",
-    "redux-devtools-extension": "^2.13.8",
-    "redux-mock-store": "^1.5.4"
+    "react-test-renderer": "^16.13.1"
   }
 }

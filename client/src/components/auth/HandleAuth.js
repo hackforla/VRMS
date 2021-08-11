@@ -1,31 +1,64 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Loader from '../../components/common/loader/loader';
+import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
-import allActions from '../../store/actions';
+import { isValidToken } from '../../services/user.service';
+import {authLevelRedirect} from '../../utils/authUtils'
+
+import '../../sass/MagicLink.scss';
+import useAuth from '../../hooks/useAuth';
 
 const HandleAuth = (props) => {
-  const loggedIn = useSelector((state) => state.auth.loggedIn);
-  const user = useSelector((state) => state.auth.user);
-  const isLoaded = useSelector((state) => state.auth.isLoaded);
-  const dispatch = useDispatch();
+  const [auth, refreshAuth] = useAuth();
+  const [isMagicLinkValid, setMagicLink] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
+  // Step 1: Validate token from query string
   useEffect(() => {
     const search = props.location.search;
     const params = new URLSearchParams(search);
-    const token = params.get('token');
-    const auth_origin = params.get('auth_origin');
-    dispatch(allActions.authActions.authUserWithToken(token, auth_origin));
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    const api_token = params.get('token');
 
-  return isLoaded ? (
-    loggedIn && user ? (
-      <Redirect to="/dashboard" />
-    ) : (
-      <Redirect to="/auth/expired-session" />
-    )
-  ) : (
-    <Loader />
+    if(!api_token) return;
+    isValidToken(api_token).then((isValid) => {
+      setMagicLink(isValid)
+    });
+  }, []);
+
+  // Step 2: Refresh user auth (requires valid Magic Link)
+  useEffect(() => {
+    if(!isMagicLinkValid) return;
+    if(!auth?.isError) return;
+
+    refreshAuth();
+  },[isMagicLinkValid, refreshAuth])
+
+  // Step 3: Set IsLoaded value to render Component
+  useEffect(() => {
+    if(!isMagicLinkValid) {
+      setIsLoaded(true);
+      return;
+    };
+
+    if(!auth || auth.isError) return;
+    
+    setIsLoaded(true);
+    },[isMagicLinkValid, auth?.isError, setIsLoaded])
+
+  if(!isLoaded) 
+    return (
+      <div>Loading...</div>
+    );
+
+  if (auth?.user) {
+    const loginRedirect = authLevelRedirect(auth.user);
+    return (
+      <Redirect to={loginRedirect} />
+    );
+  }
+
+  return (
+    <div className="flex-container">
+      <div>Sorry, the link is not valid anymore.</div>
+    </div>
   );
 };
 

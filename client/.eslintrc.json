@@ -8,10 +8,7 @@
     "airbnb",
     "airbnb-base",
     "plugin:prettier/recommended",
-    "plugin:react-hooks/recommended",
-    "plugin:testing-library/recommended",
-    "plugin:testing-library/react",
-    "plugin:jest-dom/recommended"
+    "plugin:react-hooks/recommended"
   ],
   "parserOptions": {
     "ecmaFeatures": {
@@ -20,20 +17,13 @@
     "ecmaVersion": 2017,
     "sourceType": "module"
   },
-  "plugins": ["react", "testing-library", "jest-dom"],
+  "plugins": ["react"],
   "rules": {
     "react/jsx-filename-extension": [
       1,
       {
         "extensions": [".js", ".jsx"]
       }
-    ],
-    "testing-library/await-async-query": "error",
-    "testing-library/no-await-sync-query": "error",
-    "testing-library/no-debug": "warn",
-    "jest-dom/prefer-checked": "error",
-    "jest-dom/prefer-enabled-disabled": "error",
-    "jest-dom/prefer-required": "error",
-    "jest-dom/prefer-to-have-attribute": "error"
+    ]
   }
 }
