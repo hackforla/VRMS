@@ -58,6 +58,7 @@
     "jest-dom/prefer-in-document": "warn",
     "jest-dom/prefer-enabled-disabled": "warn",
     "jest-dom/prefer-checked": "warn",
+    "jest/valid-title": "warn",
     "jest/valid-expect": [
       "warn",
       {
