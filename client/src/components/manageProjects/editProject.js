@@ -35,13 +35,16 @@ const EditProjectInfo  = ( props ) => {
     try {
         const response = await fetch(url, requestOptions); 
         const resJson = await response.json();
-        props.setProjectToEdit(resJson);
+        console.log('resJson: ', resJson);
+
         return resJson;
     } catch (error) {
         console.log(`update user error: `, error);
         alert("Server not responding.  Please try again.");
     }
   };
+
+  console.log('pte: ', props.projectToEdit);
 
   return (
     <div>

@@ -1,21 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import '../../sass/ManageProjects.scss';
+
 
 
 const EditableField  = (
     { projId, fieldData, fieldName, updateProject, setProjectToEdit }
 ) => {
   const [fieldValue, setFieldValue] = useState(fieldData);
+  const [editable, setEditable] = useState(false);
+  const ref = useRef(); 
+
+  useEffect(() => {      
+    if (editable) {
+      ref.current.focus();
+      setFieldValue(fieldData);
+      //console.log("I'm here");
+    } 
+  },[editable]);
 
   return (
     <div>
+      {editable ? 
       <input 
+        ref={ref}
         type="text"
         className="editable-field"
         value={fieldValue}
         onBlur={(e)=>{
           updateProject(projId, fieldName, fieldValue)
-          //.then(proj => {setProjectToEdit(proj)})
+          .then(proj => {setProjectToEdit(proj); setEditable(false)})
         }}
         onChange={e=>{
           setFieldValue(e.target.value)
@@ -29,6 +42,8 @@ const EditableField  = (
           input.addEventListener('keydown', onEnterKey)
         }}
       />
+      : <div onClick = {() => setEditable(true)}>{fieldData}</div>
+      }  
     </div>
   );
 };
