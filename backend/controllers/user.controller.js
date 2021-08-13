@@ -51,8 +51,13 @@ UserController.create = async function (req, res) {
     return res.sendStatus(403);
   }
 
+
   try {
-    const user = await User.create(req.body);
+  const newUser = {
+    ...req.body,
+    email: req.body.email.toLowerCase()
+  }
+    const user = await User.create(newUser);
     return res.status(201).send(user);
   } catch (err) {
     return res.sendStatus(400);

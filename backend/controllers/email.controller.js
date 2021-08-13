@@ -7,6 +7,9 @@ const CLIENT_ID = process.env.GMAIL_CLIENT_ID;
 const SECRET_ID = process.env.GMAIL_SECRET_ID;
 const REFRESH_TOKEN = process.env.GMAIL_REFRESH_TOKEN;
 const EMAIL_ACCOUNT = process.env.GMAIL_EMAIL;
+const MAILHOG_PORT = Number.parseInt(process.env.MAILHOG_PORT);
+const MAILHOG_USER = process.env.MAILHOG_USER;
+const MAILHOG_PASSWORD = process.env.MAILHOG_PASSWORD;
 
 /** Create an access token to use Google Gmail account as our SMTP provider. */
 const getAccessTokenForGmailAccount = () => {
@@ -30,10 +33,10 @@ const getAccessTokenForGmailAccount = () => {
 const createMailhogSmtpTransport = () => {
   const smtpTransport = nodemailer.createTransport({
     host: 'mailhog',
-    port: 1025,
+    port: MAILHOG_PORT,
     auth: {
-      user: 'user',
-      pass: 'password',
+      user: MAILHOG_USER,
+      pass: MAILHOG_PASSWORD,
     },
   });
   return smtpTransport;

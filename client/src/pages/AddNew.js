@@ -13,7 +13,7 @@ const AddNew = (props) => {
 	const [error, setError] = useState(null);
 	const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
-	const auth = useAuth();
+	const [auth] = useAuth();
 
 	useEffect(() => {
 		const getProjects = async () => {

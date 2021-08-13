@@ -21,6 +21,7 @@ import AddNew from './pages/AddNew';
 import ProjectLeaderDashboard from './pages/ProjectLeaderDashboard';
 import UserAdmin from './pages/UserAdmin';
 import ManageProjects from './pages/ManageProjects';
+import HealthCheck from "./pages/HealthCheck";
 
 import './App.scss';
 
@@ -47,6 +48,7 @@ const routes = [
     Component: ProjectLeaderDashboard,
   },
   { path: '/add/:item', name: 'addnew', Component: AddNew },
+  { path: '/healthcheck', name: 'healthcheck', Component: HealthCheck }
 ];
 
 const App = () => {

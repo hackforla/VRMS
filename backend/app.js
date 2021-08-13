@@ -9,7 +9,7 @@ const morgan = require('morgan');
 const cookieParser = require("cookie-parser");
 
 const customRequestHeaderName = 'x-customrequired-header';
-const dontCheckCustomRequestHeaderApis = ["GET::/api/recurringevents"];
+const dontCheckCustomRequestHeaderApis = ["GET::/api/recurringevents", "GET::/api/healthcheck"];
 
 // Import environment variables
 const dotenv = require('dotenv');
@@ -34,6 +34,9 @@ require('assert-env')([
   'GMAIL_SECRET_ID',
   'GMAIL_REFRESH_TOKEN',
   'GMAIL_EMAIL',
+  'MAILHOG_PORT',
+  'MAILHOG_USER',
+  'MAILHOG_PASSWORD'
 ]);
  
 
@@ -77,6 +80,7 @@ const recurringEventsRouter = require("./routers/recurringEvents.router");
 const projectTeamMembersRouter = require("./routers/projectTeamMembers.router");
 const slackRouter = require("./routers/slack.router");
 const authRouter = require("./routers/auth.router");
+const healthCheckRouter = require('./routers/healthCheck.router');
 
 // Check that clients to the API are sending the custom request header on all methods
 // except for ones described in the dontCheckCustomRequestHeaderApis array.
@@ -90,8 +94,9 @@ app.use(function customHeaderCheck (req, res, next) {
 
   const key = `${req.method}::${pathToCheck}`;
 
-  if(!dontCheckCustomRequestHeaderApis.includes(key)) 
-  {
+  if(dontCheckCustomRequestHeaderApis.includes(key)) {
+    next();
+  } else {
     const { headers } = req;
     const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
 
@@ -116,6 +121,7 @@ app.use("/api/projects", projectsRouter);
 app.use("/api/recurringevents", recurringEventsRouter);
 app.use("/api/projectteammembers", projectTeamMembersRouter);
 app.use('/api/slack', slackRouter);
+app.use('/api/healthcheck', healthCheckRouter);
 
 // 404 for all non-defined endpoints.
 app.get("*", (req, res, next) => {

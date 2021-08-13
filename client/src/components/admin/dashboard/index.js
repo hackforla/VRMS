@@ -12,7 +12,7 @@ import "../../../sass/Dashboard.scss";
 import "./index.scss";
 
 const AdminDashboard = () => {
-  const auth = useAuth();
+  const [auth] = useAuth();
   const defaultChartType = "All Events";
   const eventsArr = [];
   const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
