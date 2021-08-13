@@ -44,126 +44,157 @@ const EditProjectInfo  = ( props ) => {
     }
   };
 
-  console.log('pte: ', props.projectToEdit);
+
+  // Add commas to arrays for display
+  const partnerDataFormatted = props.projectToEdit.partners.join(", ");
+  const recrutingDataFormatted = props.projectToEdit.recruitingCategories.join(", ");
+  
 
   return (
     <div>
-      <div className="project-list-heading">Project Info for: {props.projectToEdit.name}</div>
-      <div className="editable-field-div">Name: 
+      <div className="project-list-heading">Project: {props.projectToEdit.name}</div>
+
+      <div>
         <EditableField 
           fieldData={props.projectToEdit.name} 
           fieldName="name" 
           updateProject={updateProject}
           setProjectToEdit={props.setProjectToEdit}
           projId={props.projectToEdit._id}
+          fieldType="text"
+          fieldTitle="Name:"
         />
       </div>
-      <div className="editable-field-div">Description: 
+      <div className="editable-field-div">
         <EditableField 
           fieldData={props.projectToEdit.description} 
           fieldName="description" 
           updateProject={updateProject}
           setProjectToEdit={props.setProjectToEdit}
           projId={props.projectToEdit._id}
+          fieldType="textarea"
+          fieldTitle="Description:"
         />
       </div>
-      <div className="editable-field-div">Location: 
+      <div className="editable-field-div">
         <EditableField 
           fieldData={props.projectToEdit.location} 
           fieldName="location" 
           updateProject={updateProject}
           setProjectToEdit={props.setProjectToEdit}
           projId={props.projectToEdit._id}
+          fieldType="text"
+          fieldTitle="Location:"
         />
       </div>
-      <div className="editable-field-div">GitHub Identifier: 
+      <div className="editable-field-div">
         <EditableField 
           fieldData={props.projectToEdit.githubIdentifier} 
           fieldName="githubIdentifier" 
           updateProject={updateProject}
           setProjectToEdit={props.setProjectToEdit}
           projId={props.projectToEdit._id}
+          fieldType="text"
+          fieldTitle="GitHub Identifier:"
         />
       </div> 
-      <div className="editable-field-div">GitHib URL: 
+      <div className="editable-field-div">
         <EditableField 
           fieldData={props.projectToEdit.githubUrl} 
           fieldName="githubUrl" 
           updateProject={updateProject}
           setProjectToEdit={props.setProjectToEdit}
           projId={props.projectToEdit._id}
+          fieldType="text"
+          fieldTitle="GitHib URL:"
         />
       </div>
-      <div className="editable-field-div">Slack URL: 
+      <div className="editable-field-div">
         <EditableField 
           fieldData={props.projectToEdit.slackUrl} 
           fieldName="slackUrl" 
           updateProject={updateProject}
           setProjectToEdit={props.setProjectToEdit}
           projId={props.projectToEdit._id}
+          fieldType="text"
+          fieldTitle="Slack URL:"
         />
       </div>
-      <div className="editable-field-div">Google Drive URL: 
+      <div className="editable-field-div">
         <EditableField 
           fieldData={props.projectToEdit.googleDriveUrl} 
           fieldName="googleDriveUrl" 
           updateProject={updateProject}
           setProjectToEdit={props.setProjectToEdit}
           projId={props.projectToEdit._id}
+          fieldType="text"
+          fieldTitle="Google Drive URL:"
         />
       </div>
-      <div className="editable-field-div">Google Drive ID: 
+      <div className="editable-field-div">
         <EditableField 
           fieldData={props.projectToEdit.googleDriveId} 
           fieldName="googleDriveId" 
           updateProject={updateProject}
           setProjectToEdit={props.setProjectToEdit}
           projId={props.projectToEdit._id}
+          fieldType="text"
+          fieldTitle="Google Drive ID:"
         />
       </div>
-      <div className="editable-field-div">HfLA Website URL: 
+      <div className="editable-field-div">
         <EditableField 
           fieldData={props.projectToEdit.hflaWebsiteUrl} 
           fieldName="hflaWebsiteUrl" 
           updateProject={updateProject}
           setProjectToEdit={props.setProjectToEdit}
           projId={props.projectToEdit._id}
+          fieldType="text"
+          fieldTitle="HfLA Website URL:"
         />
       </div>
-      <div className="editable-field-div">Video Converence Link: 
+      <div className="editable-field-div">
         <EditableField 
           fieldData={props.projectToEdit.videoConferenceLink} 
           fieldName="videoConferenceLink" 
           updateProject={updateProject}
           setProjectToEdit={props.setProjectToEdit}
           projId={props.projectToEdit._id}
+          fieldType="text"
+          fieldTitle="Video Converence Link:"
         />
       </div>
-      <div className="editable-field-div">Looking For Description: 
+      <div className="editable-field-div">
         <EditableField 
           fieldData={props.projectToEdit.lookingDescription} 
           fieldName="lookingDescription" 
           updateProject={updateProject}
           setProjectToEdit={props.setProjectToEdit}
           projId={props.projectToEdit._id}
+          fieldType="text"
+          fieldTitle="Looking For Description:"
         />
       </div>
-      <div className="editable-field-div">Partners (comma separated): 
+      <div className="editable-field-div">
         <EditableField 
-          fieldData={props.projectToEdit.partners} 
+          fieldData={partnerDataFormatted} 
           fieldName="partners" 
           updateProject={updateProject}
           setProjectToEdit={props.setProjectToEdit}
           projId={props.projectToEdit._id}
+          fieldType="text"
+          fieldTitle="Partners (comma separated):"
         />
       </div> 
-      <div className="editable-field-div">Recruiting Categories (comma separated): 
+      <div className="editable-field-div">
         <EditableField 
-          fieldData={props.projectToEdit.recruitingCategories} 
+          fieldData={recrutingDataFormatted} 
           fieldName="recruitingCategories" 
           updateProject={updateProject}
           setProjectToEdit={props.setProjectToEdit}
           projId={props.projectToEdit._id}
+          fieldType="text"
+          fieldTitle="Recruiting Categories (comma separated):"
         />
       </div> 
       

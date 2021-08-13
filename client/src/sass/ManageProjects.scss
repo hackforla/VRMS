@@ -33,6 +33,11 @@
   width: 400px !important;
 }
 
+.editable-field {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+}
+
 .editable-field-div {
   margin-top: 20px;
 }
@@ -42,6 +47,13 @@
 }
 
 .section-content {
-  font-size: 12px;
+  font-size: 14px;
   text-transform: none;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.project-edit-button {
+  color: #FA114F;
+  cursor:pointer;
+  font-family:Arial, Helvetica, sans-serif
 }
