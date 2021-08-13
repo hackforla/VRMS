@@ -66,7 +66,7 @@ jobs:
       with:
         access_key_id: ${{ secrets.INCUBATOR_AWS_ACCESS_KEY_ID }}
         secret_access_key: ${{ secrets.INCUBATOR_AWS_SECRET_ACCESS_KEY }}
-        account_id: ${{ secrets.AWS_ACCOUNT_ID }}
+        account_id: ${{ secrets.INCUBATOR_AWS_ACCOUNT_ID }}
         repo: ${{ needs.setup_env.outputs.AWS_APPENV }}
         region: ${{ env.AWS_REGION }}
         tags: latest,${{ needs.setup_env.outputs.IMAGE_TAG }}
