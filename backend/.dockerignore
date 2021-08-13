@@ -3,5 +3,6 @@
 .npm
 docker-compose*.yml
 npm-debug.log*
-Dockerfile
+Dockerfile.*
 node_modules
+*.sh
