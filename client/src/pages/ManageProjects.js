@@ -20,8 +20,6 @@ const ManageProjects = () => {
   const [projectToEdit, setProjectToEdit] = useState([]);
   const [recurringEvents, setRecurringEvents] = useState([]);
   const [componentToDisplay, setComponentToDisplay] = useState (''); // displayProjectInfo, editMeetingTime or editProjectInfor 
-  const user = auth?.user;
-
 
   // Fetch projects from db
   async function fetchProjects() {
