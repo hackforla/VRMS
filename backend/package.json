@@ -2,11 +2,12 @@
   "name": "vrms-server",
   "version": "0.4.0",
   "description": "VRMS Backend",
+  "license": "AGPL-3.0",
+  "author": "alex-anakin",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "format": "prettier --check .",
     "test": "jest",
     "test:watch": "jest --watch",
     "lint": "eslint ."
