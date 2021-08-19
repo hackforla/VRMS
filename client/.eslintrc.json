@@ -1,22 +1,89 @@
 {
-    "env": {
-        "browser": true,
-        "es6": true
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
     },
-    "globals": {
-        "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly"
-    },
-    "parserOptions": {
-        "ecmaFeatures": {
-            "jsx": true
-        },
-        "ecmaVersion": 2018,
-        "sourceType": "module"
-    },
-    "plugins": [
-        "react", "react-hooks"
+  },
+  "env": {
+    "browser": true,
+    "es2017": true
+  },
+  "ignorePatterns": ["node_modules/**"],
+  "plugins": ["react", "prettier", "jest", "testing-library"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "airbnb",
+    "prettier",
+    "plugin:jest/recommended",
+    "plugin:jest-dom/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:testing-library/react"
+  ],
+  "rules": {
+    "camelcase": "warn",
+    "max-classes-per-file": "warn",
+    "prefer-promise-reject-errors": "warn",
+    "prefer-const": "warn",
+    "no-shadow": "warn",
+    "no-use-before-define": "warn",
+    "no-nested-ternary": "warn",
+    "no-unused-vars": "warn",
+    "no-console": "off",
+    "func-names": "off",
+    "no-process-exit": "off",
+    "object-shorthand": "off",
+    "class-methods-use-this": "off",
+    "spaced-comment": "warn",
+    "arrow-body-style": ["warn", "as-needed"],
+    "no-param-reassign": "warn",
+    "no-unused-expressions": "warn",
+    "prefer-destructuring": "warn",
+    "no-return-await": "warn",
+    "jsx-a11y/click-events-have-key-events": "warn",
+    "jsx-a11y/no-static-element-interactions": "warn",
+    "jsx-a11y/label-has-associated-control": "warn",
+    "import/extensions": "warn",
+    "import/newline-after-import": "warn",
+    "import/no-extraneous-dependencies": ["warn", { "devDependencies": true }],
+    "import/no-named-as-default": "warn",
+    "import/prefer-default-export": "warn",
+    "import/no-named-as-default-member": "warn",
+    "import/no-useless-path-segments": "warn",
+    "import/no-duplicates": "warn",
+    "import/order": "warn",
+    "testing-library/prefer-screen-queries": "off",
+    "testing-library/no-node-access": "warn",
+    "jest-dom/prefer-in-document": "warn",
+    "jest-dom/prefer-enabled-disabled": "warn",
+    "jest-dom/prefer-checked": "warn",
+    "jest/valid-title": "warn",
+    "jest/valid-expect": [
+      "warn",
+      {
+        "alwaysAwait": true
+      }
     ],
-    "rules": {
-    }
+    "jest/no-standalone-expect": "warn",
+    "react/no-unescaped-entities": "warn",
+    "react/jsx-curly-brace-presence": "off",
+    "react/prop-types": "off",
+    "react/no-array-index-key": "warn",
+    "react/button-has-type": "warn",
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [".js", ".jsx"]
+      }
+    ],
+    "prettier/prettier": [
+      "warn",
+      {
+        "endOfLine": "auto",
+        "singleQuote": true
+      }
+    ]
+  }
 }

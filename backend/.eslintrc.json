@@ -1,17 +1,27 @@
 {
-  "parser": "babel-eslint",
   "parserOptions": {
-    "sourceType": "module",
-    "allowImportExportEverywhere": false,
-    "codeFrame": false
+    "ecmaVersion": 2018,
+    "sourceType": "module"
   },
   "env": {
-    "browser": true,
+    "node": true,
     "jest": true
   },
-  "settings": {
-    "react": {
-      "version": "999.999.999"
-    }
+  "plugins": ["prettier", "jest"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:jest/recommended",
+    "prettier"
+  ],
+  "rules": {
+    "max-len": ["warn", { "code": 100 }],
+    "prefer-promise-reject-errors": ["off"],
+    "no-prototype-builtins": "warn",
+    "no-return-assign": ["off"],
+    "no-unused-vars": "warn",
+    "no-undef": "warn",
+    "jest/no-done-callback": "warn",
+    "jest/no-try-expect": "warn",
+    "jest/no-conditional-expect": "warn"
   }
 }
