@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Loader from '../../components/common/loader/loader';
+import Loader from '../common/loader/loader';
 import { Redirect } from 'react-router-dom';
 import allActions from '../../store/actions';
 

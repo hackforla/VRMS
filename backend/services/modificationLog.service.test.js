@@ -1,4 +1,4 @@
-const modificationLogService = require('./modificationLog.service');
+const { ModificationLogService } = require('./modificationLog.service');
 const { setupDB } = require("../setup-test");
 
 setupDB("modificationLog-service");
@@ -11,14 +11,14 @@ describe("ModificationLogService can save and retrieve logs", () => {
     const objectType = "UserProfile";
     const newState = {name: "Foo"};
 
-    await modificationLogService.saveLog(authorEmail, objectId, objectType,
+    await ModificationLogService.saveLog(authorEmail, objectId, objectType,
       newState );
 
-    const noResults = await modificationLogService.getLogs(objectId, "EventTemplate");
+    const noResults = await ModificationLogService.getLogs(objectId, "EventTemplate");
 
     expect(noResults.length).toEqual(0);
 
-    const retrievedLogs = await modificationLogService.getLogs(objectId, objectType);
+    const retrievedLogs = await ModificationLogService.getLogs(objectId, objectType);
 
     expect(retrievedLogs.length).toEqual(1);
 

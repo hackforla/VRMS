@@ -1,4 +1,4 @@
-const timeZoneService = require('./timeZone.service');
+const { TimeZoneService } = require('./timeZone.service');
 const { TimeZone } = require('../models/dictionaries/timeZone.model');
 const { setupDB } = require("../setup-test");
 
@@ -13,7 +13,7 @@ describe("TimeZoneService can retrieve Timezones", () => {
 
     await TimeZone.create(submittedData);
 
-    const retrievedTimeZones = await timeZoneService.getTimeZones();
+    const retrievedTimeZones = await TimeZoneService.getTimeZones();
 
     expect(retrievedTimeZones.length).toEqual(submittedData.timeZones.length);
 

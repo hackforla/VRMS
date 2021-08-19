@@ -16,4 +16,4 @@ ModificationLogService.getLogs = async function (objectId, objectType) {
     return results;
 }
 
-module.exports = ModificationLogService;
+module.exports.ModificationLogService = ModificationLogService;

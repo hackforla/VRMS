@@ -54,6 +54,14 @@ services:
     depends_on:
       - client
       - backend
+  
+  mongo:
+    image: mongo
+    restart: on-failure
+    container_name: vrms-mongo
+    ports: 
+      - "27017:27017"
+
 
   mailhog:
     image: mailhog/mailhog

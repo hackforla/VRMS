@@ -1,5 +1,5 @@
-const userProfileService = require('./userProfile.service');
-const modificationLogService = require('./modificationLog.service');
+const { UserProfileService } = require('./userProfile.service');
+const { ModificationLogService } = require('./modificationLog.service');
 const DatabaseError = require('../errors/database.error');
 
 const { setupDB } = require('../setup-test');
@@ -10,7 +10,7 @@ describe('UserProfileService can save/update/get user profiles', () => {
   test('Save a user profile record and then retrieve it by the service', async (done) => {
     const newRecordData = { signupEmail: 'FOO@BAR.COM' };
 
-    const result = await userProfileService.createUser(newRecordData, 'creator@bar.com');
+    const result = await UserProfileService.createUser(newRecordData, 'creator@bar.com');
 
     expect(result.isNew).toBe(false);
 
@@ -18,14 +18,14 @@ describe('UserProfileService can save/update/get user profiles', () => {
     expect(result.signupEmail).toBe(newRecordData.signupEmail.toLowerCase());
 
     // verify log record was created
-    const logResult = await modificationLogService.getLogs(result._id, 'UserProfile');
+    const logResult = await ModificationLogService.getLogs(result._id, 'UserProfile');
 
     expect(logResult.length).toBe(1);
 
-    const findUserResult = await userProfileService.getUser(result._id);
+    const findUserResult = await UserProfileService.getUser(result._id);
     expect(findUserResult.signupEmail).toBe(result.signupEmail);
 
-    const findUserByEmailResult = await userProfileService.getUserByEmail(result.signupEmail);
+    const findUserByEmailResult = await UserProfileService.getUserByEmail(result.signupEmail);
     expect(findUserByEmailResult.signupEmail).toBe(result.signupEmail);
 
     done();
@@ -36,11 +36,11 @@ describe('UserProfileService can save/update/get user profiles', () => {
     const newRecordEmailNull = { signupEmail: null };
     const newRecordNoEmail = { signupEmail: '' };
 
-    await expect(userProfileService.createUser(newRecordNoEmailDefined)).rejects.toThrow(
+    await expect(UserProfileService.createUser(newRecordNoEmailDefined)).rejects.toThrow(
       DatabaseError,
     );
-    await expect(userProfileService.createUser(newRecordEmailNull)).rejects.toThrow(DatabaseError);
-    await expect(userProfileService.createUser(newRecordNoEmail)).rejects.toThrow(DatabaseError);
+    await expect(UserProfileService.createUser(newRecordEmailNull)).rejects.toThrow(DatabaseError);
+    await expect(UserProfileService.createUser(newRecordNoEmail)).rejects.toThrow(DatabaseError);
 
     done();
   });
@@ -48,7 +48,7 @@ describe('UserProfileService can save/update/get user profiles', () => {
   test('Should update a user profile with allowed values. Should not allow update email.', 
     async (done) => {
     const newRecord = { signupEmail: 'foo@bar.com' };
-    const newRecordResult = await userProfileService.createUser(newRecord, 'creator@bar.com');
+    const newRecordResult = await UserProfileService.createUser(newRecord, 'creator@bar.com');
 
     expect(newRecordResult.firstName).toBeUndefined();
     expect(newRecordResult.lastName).toBeUndefined();
@@ -60,7 +60,7 @@ describe('UserProfileService can save/update/get user profiles', () => {
       lastName: 'Bar',
       meetLocation: 'Los Angeles',
     };
-    const updatedRecordResult = await userProfileService.updateUser(
+    const updatedRecordResult = await UserProfileService.updateUser(
       updateRecordData,
       'updater@bar.com',
     );
@@ -70,7 +70,7 @@ describe('UserProfileService can save/update/get user profiles', () => {
     expect(updatedRecordResult.meetLocation).toBe(updateRecordData.meetLocation);
 
     const updateRecordNoMeetLocationData = { signupEmail: 'foo@bar.com', meetLocation: null };
-    const updatedRecordNoMeetLocationResult = await userProfileService.updateUser(
+    const updatedRecordNoMeetLocationResult = await UserProfileService.updateUser(
       updateRecordNoMeetLocationData,
       'updater@bar.com',
     );
@@ -81,7 +81,7 @@ describe('UserProfileService can save/update/get user profiles', () => {
     const notAllowedUpdate = { signupEmail: 'changed@email.com' };
 
     await expect(
-      userProfileService.updateUser(notAllowedUpdate, 'updater@bar.com'),
+      UserProfileService.updateUser(notAllowedUpdate, 'updater@bar.com'),
     ).rejects.toThrow(DatabaseError);
 
     // Try and update a record that doesn't exist
@@ -93,7 +93,7 @@ describe('UserProfileService can save/update/get user profiles', () => {
     };
 
     await expect(
-      userProfileService.updateUser(doesntExistRecordData, 'updater@bar.com'),
+      UserProfileService.updateUser(doesntExistRecordData, 'updater@bar.com'),
     ).rejects.toThrow(DatabaseError);
 
     done();

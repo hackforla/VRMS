@@ -10,4 +10,4 @@ TimeZoneService.getTimeZones = async function () {
 
 }
 
-module.exports = TimeZoneService;
+module.exports.TimeZoneService = TimeZoneService;

@@ -1,4 +1,4 @@
-const locationService = require('./location.service');
+const { LocationService } = require('./location.service');
 const { setupDB } = require('../setup-test');
 
 setupDB('location-service');
@@ -9,7 +9,7 @@ describe('Test LocationService.add', () => {
 
     try {
       // Add empty array
-      await locationService.add([]);
+      await LocationService.add([]);
     } catch (err) {
       expect(err.name).toBe('ValidationError');
       expect(err.message).toBe("locations input array must have at least one element");
@@ -19,8 +19,8 @@ describe('Test LocationService.add', () => {
   });
   test('Add an array of location strings sucessfully adds to database', async (done) => {
     const locationsArray = ['loc1', 'loc2', 'loc3'];
-    await locationService.add(locationsArray);
-    const savedLocations = await locationService.getAll();
+    await LocationService.add(locationsArray);
+    const savedLocations = await LocationService.getAll();
 
     expect(savedLocations.length).toEqual(3);
     expect(savedLocations).toEqual(expect.arrayContaining(locationsArray));
@@ -31,10 +31,10 @@ describe('Test LocationService.add', () => {
     
     const isArrayUnique = arr => Array.isArray(arr) && new Set(arr).size === arr.length;
     
-    await locationService.add(['loc1', 'loc2', 'loc3']);
-    await locationService.add(['loc3', 'loc4', 'loc5']);
+    await LocationService.add(['loc1', 'loc2', 'loc3']);
+    await LocationService.add(['loc3', 'loc4', 'loc5']);
     
-    const savedLocations = await locationService.getAll();
+    const savedLocations = await LocationService.getAll();
 
     expect(isArrayUnique(savedLocations)).toBeTruthy();
     
@@ -48,7 +48,7 @@ describe('Test LocationService.add', () => {
     
     const locationsArray = ['    ', 'role6', 'role7'];
     try {
-      await locationService.add(locationsArray);
+      await LocationService.add(locationsArray);
     } catch (err) {
       expect(err.name).toBe('ValidationError');
       expect(err.message).toBe("locations array should not contain empty strings");
@@ -64,7 +64,7 @@ describe('Test LocationService.add', () => {
 
 describe('Test LocationService.getAll', () => {
   test('Should return an empty array if no location data found', async (done) => {
-    const savedLocations = await locationService.getAll();
+    const savedLocations = await LocationService.getAll();
     expect(savedLocations.length).toBe(0)
 
     done();
@@ -72,8 +72,8 @@ describe('Test LocationService.getAll', () => {
   })
 
   test('Should return an array of location string if data exists', async (done) => {
-    await locationService.add(['loc1', 'loc2', 'loc3']);
-    const savedLocations = await locationService.getAll();
+    await LocationService.add(['loc1', 'loc2', 'loc3']);
+    const savedLocations = await LocationService.getAll();
     expect(savedLocations.length).toBe(3)
 
     done();

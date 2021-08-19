@@ -144,7 +144,7 @@ const Menu = () => {
             className="redirect-link menu-item-content"
             key="menu-logout-link"
             data-testid="menu-logout-link"
-            to="/page"
+            to="/logout"
           >
             <div className="icon-wrapper">
               <img src={logoutIcon} className="item-icon" alt="Log Out" />

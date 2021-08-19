@@ -3,17 +3,12 @@
   "version": "0.3.0",
   "description": "VRMS Server",
   "scripts": {
-    "start": "concurrently \"cd backend && npm run start\" \"cd client && npm run start\"",
+    "start": "concurrently \"cd backend && npm run dev\" \"cd client && npm run start\"",
     "dev:api": "cd backend && npm run dev",
     "dev:client": "cd client && npm run start",
     "dev": "dotenv -e backend/.env -e client/.env concurrently \"npm run dev:api\" \"npm run dev:client\"",
-    "cy:open": "dotenv -e client/.env -- cross-var cross-env CYPRESS_baseUrl=%CLIENT_URL% cypress open",
-    "cy:run": "dotenv -e client/.env -- cross-var cross-env CYPRESS_baseUrl=%CLIENT_URL% cypress run --headed",
-    "test:cy": "dotenv -e ./backend/.env -e ./client/.env cross-var start-test dev:api %BACKEND_PORT% dev:client %CLIENT_PORT% cy:run",
     "test:backend": "cd backend && npm run test",
-    "test:client": "cd client && npm run test",
-    "test:client-mvp": "cd client-mvp-04 && npm run test",
-    "test:all": "cross-env NODE_ENV=test npm run test:client && npm run test:client-mvp && npm run test:backend && npm run test:cy"
+    "test:client": "cd client && npm run test"
   },
   "dependencies": {
     "concurrently": "^5.3.0",

@@ -1,7 +1,7 @@
 /* eslint-disable func-names */
 const mongoose = require('mongoose');
 const UserProfile = require('../models/userProfile.model');
-const modificationLogService = require('./modificationLog.service');
+const { ModificationLogService } = require('./modificationLog.service');
 const DatabaseError = require('../errors/database.error');
 
 const UserProfileService = {};
@@ -20,7 +20,7 @@ UserProfileService.createUser = async function (userProfileData, authorEmail) {
     try {
       newRecord = await UserProfile.create(userProfileData);
 
-      await modificationLogService
+      await ModificationLogService
         .saveLog(authorEmail, newRecord._id, 'UserProfile', newRecord);
     } catch (error) {
       throw new DatabaseError(error.message);
@@ -49,7 +49,7 @@ UserProfileService.updateUser = async function (userProfileData, authorEmail) {
       );
 
       if (updatedUserProfile != null) {
-        await modificationLogService.saveLog(
+        await ModificationLogService.saveLog(
           authorEmail,
           updatedUserProfile._id,
           'UserProfile',
@@ -84,4 +84,4 @@ UserProfileService.getUserByEmail = async function (email) {
   }
 };
 
-module.exports = UserProfileService;
+module.exports.UserProfileService = UserProfileService;

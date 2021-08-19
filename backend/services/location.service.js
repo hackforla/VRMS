@@ -52,4 +52,4 @@ LocationService.getAll = async function () {
   return [];
 };
 
-module.exports = LocationService;
+module.exports.LocationService = LocationService;

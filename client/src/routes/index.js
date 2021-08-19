@@ -9,6 +9,8 @@ import Dashboard from '../components/dashboard/dashboard';
 import CreateAccountContainer from '../components/createAccount/createAccountContainer';
 import CodeOfConduct from '../components/onboarding/codeOfConduct/codeOfConduct';
 import EmailSetup from '../components/onboarding/emailSetup/emailSetup';
+import Logout from '../components/logout/logout';
+import HealthCheck from '../components/healthCheck/healthCheck';
 
 // For development only
 import DevUiKit from '../utils/uiKit/uiKit';
@@ -18,6 +20,11 @@ export const Routes = [
     path: '/',
     key: 'home',
     component: Home,
+  },
+  {
+    path: '/logout',
+    key: 'logout',
+    component: Logout,
   },
   {
     path: '/login',
@@ -59,6 +66,10 @@ export const Routes = [
     key: 'code-of-conduct',
     component: CodeOfConduct,
   },
+  { path: '/healthcheck', 
+  key: 'healthcheck', 
+  component: HealthCheck 
+  },
   {
     path: '/page',
     key: 'dummy',
@@ -73,5 +84,5 @@ export const Routes = [
   {
     key: 'error',
     component: Error,
-  },
+  }
 ];

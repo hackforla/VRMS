@@ -1,16 +1,20 @@
 {
-  "name": "vrms-client-mvp-04",
+  "name": "vrms-client",
   "version": "0.4.0",
-  "description": "VRMS Client MVP",
-  "author": "OlgaBilogurova",
+  "description": "VRMS Client",
   "homepage": "https://www.vrms.io",
   "license": "ISC",
-  "private": true,
+  "author": "OlgaBilogurova",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --watchAll=false",
+    "test:watch": "react-scripts test",
+    "lint": "eslint .",
+    "eject": "react-scripts eject"
+  },
   "dependencies": {
     "@babel/plugin-transform-react-jsx-self": "^7.10.4",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
     "classnames": "^2.2.6",
     "cross-env": "^7.0.2",
     "cross-var": "^1.1.0",
@@ -32,15 +36,25 @@
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0"
   },
-  "scripts": {
-    "start": "dotenv -e .env -e ../backend/.env -- cross-var cross-env PORT=%CLIENT_PORT% react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --watchAll=false",
-    "test:watch": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+  "devDependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jest-dom": "^3.6.5",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.24.0",
+    "eslint-plugin-react-hooks": "^4.1.2",
+    "eslint-plugin-testing-library": "^3.10.1",
+    "jest-fetch-mock": "^3.0.3",
+    "prettier": "^2.1.1",
+    "react-test-renderer": "^16.13.1",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-mock-store": "^1.5.4"
   },
   "browserslist": {
     "production": [
@@ -53,22 +67,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "eslint-config-airbnb": "^18.2.0",
-    "eslint-config-airbnb-base": "^14.2.0",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-jest-dom": "^3.6.5",
-    "eslint-plugin-jsx-a11y": "^6.3.1",
-    "eslint-plugin-prettier": "^3.1.4",
-    "eslint-plugin-react": "^7.20.6",
-    "eslint-plugin-react-hooks": "^4.1.2",
-    "eslint-plugin-testing-library": "^3.10.1",
-    "jest-fetch-mock": "^3.0.3",
-    "prettier": "^2.1.1",
-    "react-test-renderer": "^16.13.1",
-    "redux-devtools-extension": "^2.13.8",
-    "redux-mock-store": "^1.5.4"
   }
 }

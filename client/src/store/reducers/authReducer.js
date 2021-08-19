@@ -3,6 +3,7 @@ import {
   AUTH_SUCCESS,
   AUTH_FAIL,
   SET_USER,
+  AUTH_LOGOUT
 } from '../actions/types';
 
 const authDefaultState = {
@@ -50,6 +51,15 @@ export default (state = authDefaultState, { type, payload }) => {
         user: payload.user,
         authOrigin: payload.auth_origin,
       };
+    case AUTH_LOGOUT:
+      return {
+        ...state,
+        authToken: null,
+        authOrigin: null,
+        loggedIn: false,
+        user: null,
+        userProfile: null
+      }
     default:
       return state;
   }

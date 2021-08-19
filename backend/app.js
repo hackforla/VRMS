@@ -45,9 +45,23 @@ app.use(cookieParser());
 // HTTP Request Logger
 app.use(morgan("dev"));
 
+// MIDDLEWARE
+const errorhandler = require('./middleware/errorhandler.middleware');
+
+// ROUTES
+const locationsRouter = require('./routers/locations.router');
+const healthCheckRouter = require('./routers/healthCheck.router');
+
+app.use('/api/locations', locationsRouter);
+app.use('/api/healthcheck', healthCheckRouter);
+
 // 404 for all non-defined endpoints.
-app.get("*", (req, res) => {
-  res.sendStatus(404);
+app.get("*", (req, res, next) => {
+  const error = new Error('Not Found');
+  error.status = 404;
+  next(error);
 });
+
+app.use(errorhandler);
 
 module.exports = app;
