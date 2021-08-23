@@ -12,6 +12,8 @@ WORKDIR /srv/client
 COPY --from=node-modules-install /srv/client/node_modules node_modules
 COPY . .
 USER root
+ARG CUSTOM_REQUEST_HEADER nAb3kY-S%qE#4!d
+ENV REACT_APP_CUSTOM_REQUEST_HEADER $CUSTOM_REQUEST_HEADER
 RUN npm run build
 
 FROM nginx as client-production
