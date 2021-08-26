@@ -1,0 +1,39 @@
+name: PR Checks
+on:
+  push:
+    branches: [development-0.4]
+    paths-ignore:
+      - "*.md"
+  pull_request:
+    branches: [development-0.4]
+    paths-ignore:
+      - "*.md"
+
+jobs:
+  test-backend-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v1
+        with:
+          envkey_BACKEND_PORT: ${{ secrets.BACKEND_PORT }}
+          envkey_REACT_APP_PROXY: ${{ secrets.REACT_APP_PROXY }}
+          file_name: backend/.env
+      - name: Build the backend container
+        run: docker-compose build backend
+      - name: Run backend unit test suite
+        run: docker-compose run --rm backend yarn run test --testPathIgnorePatterns=routers
+      - name: Run backend code inspection
+        run: docker-compose run --rm backend yarn run lint
+
+  test-client-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the client container
+        run: docker-compose build client
+      - name: Run client unit test suite
+        run: docker-compose run --rm client yarn run test
+      - name: Run client code inspection
+        run: docker-compose run --rm client yarn run lint
