@@ -38,8 +38,6 @@ ProjectController.project_by_id = async function (req, res) {
 ProjectController.update = async function (req, res) {
   const { ProjectId } = req.params;
   try {
-    console.log('pid: ', ProjectId);
-    console.log('rb: ', req.body);
     const project = await Project.findOneAndUpdate({_id: ProjectId}, req.body, {new: true});
     return res.status(200).send(project);
   } catch (err) {
