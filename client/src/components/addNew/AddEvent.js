@@ -13,7 +13,7 @@ import {
 } from '../Form';
 import { ErrorContainer } from "../ErrorContainer";
 import { UserContext } from '../../context/userContext';
-import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../utils/globalSettings";
+import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../../utils/globalSettings";
 
 const AddEvent = (props) => {
 	const { projects, error, setError, setRedirectLink } = props;
