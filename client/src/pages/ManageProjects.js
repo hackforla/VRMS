@@ -5,10 +5,11 @@ import useAuth from '../hooks/useAuth';
 
 import SelectProject from '../components/manageProjects/selectProject.js';
 import DisplayProjectInfo from '../components/manageProjects/displayProject.js';
+import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../utils/globalSettings";
 
 const ManageProjects = () => {
 
-  const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
+  const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
   const [auth] = useAuth();
   const [projects, setProjects] = useState([]);

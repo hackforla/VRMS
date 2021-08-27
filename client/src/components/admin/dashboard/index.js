@@ -10,12 +10,13 @@ import Tab from "../../../common/tabs/tab";
 import LocationTableReport from "../reports";
 import "../../../sass/Dashboard.scss";
 import "./index.scss";
+import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../utils/globalSettings";
 
 const AdminDashboard = () => {
   const [auth] = useAuth();
   const defaultChartType = "All Events";
   const eventsArr = [];
-  const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
+  const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
   let uniqueEventTypes = new Set();
   let hackNightUniqueLocations = new Set();

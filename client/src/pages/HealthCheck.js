@@ -1,6 +1,7 @@
 import React from "react";
+import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../utils/globalSettings";
 
-const customHeader = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
+const customHeader = REACT_APP_CUSTOM_REQUEST_HEADER;
 const reactProxy = process.env.REACT_APP_PROXY;
 
 const HealthCheck = () => {

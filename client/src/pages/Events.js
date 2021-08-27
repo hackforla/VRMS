@@ -4,12 +4,13 @@ import moment from 'moment';
 
 import { ReactComponent as ClockIcon} from '../svg/Icon_Clock.svg';
 import { ReactComponent as LocationIcon} from '../svg/Icon_Location.svg';
+import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../utils/globalSettings";
 
 import '../sass/Events.scss';
 
 const Events = (props) => {
     const [events, setEvents] = useState([]);
-    const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
+    const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
     async function fetchData() {
         try {

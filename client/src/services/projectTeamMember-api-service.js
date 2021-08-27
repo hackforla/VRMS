@@ -1,3 +1,5 @@
+import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../utils/globalSettings";
+
 const ProjectTeamMemberApi = {
   /**
    * @returns created projectTeamMember object
@@ -5,7 +7,7 @@ const ProjectTeamMemberApi = {
    * other optional parameters, see projectTeamMember model
    */
   postMember(member) {
-    const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
+    const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
     console.log({member});
     return fetch('/api/projectteammembers', {

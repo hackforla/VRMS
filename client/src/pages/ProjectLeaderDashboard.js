@@ -4,6 +4,7 @@ import UpcomingEvent from "../components/presentational/upcomingEvent";
 import ProjectDashboardContainer from "../components/presentational/projectDashboardContainer";
 import DashboardButton from "../components/dashboard/DashboardButton";
 import ProjectInfo from "../components/dashboard/ProjectInfo";
+import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../utils/globalSettings";
 
 import "../sass/Dashboard.scss";
 
@@ -20,7 +21,7 @@ const ProjectLeaderDashboard = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
   const [rosterProjectId, setRosterProjectId] = useState("");
-  const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
+  const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
   async function getProjectFromUserId() {
     try {

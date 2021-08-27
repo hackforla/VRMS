@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../utils/globalSettings";
 
 import '../sass/DashboardUsers.scss';
 // import '../sass/EventsContainer-media-queries.scss';
@@ -8,7 +9,7 @@ const Leaderboard = (props) => {
     const [users, setUsers] = useState(null);
     const [checkIns, setCheckIns] = useState(null);
     // const [isError, setIsError] = useState(false);
-    const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
+    const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
     async function fetchUsers() {
 

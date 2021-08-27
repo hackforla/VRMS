@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../utils/globalSettings";
 import '../sass/UserAdmin.scss';
 
 //Parent
 const UserAdmin = () => {
     
-    const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
+    const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
     // Initialize state hooks
     const [users, setUsers] = useState([]); // All users pulled from database
