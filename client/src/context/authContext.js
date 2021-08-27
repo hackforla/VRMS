@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
-export const AuthContext = createContext();
 import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../utils/globalSettings";
+
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [auth, setAuth] = useState();
