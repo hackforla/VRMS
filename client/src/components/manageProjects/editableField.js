@@ -4,7 +4,7 @@ import '../../sass/ManageProjects.scss';
 
 
 const EditableField  = (
-    { projId, fieldData, fieldName, updateProject, setProjectToEdit, fieldType, fieldTitle }
+    { projId, fieldData, fieldName, updateProject, renderUpdatedProj, fieldType, fieldTitle }
 ) => {
   const [fieldValue, setFieldValue] = useState(fieldData);
   const [editable, setEditable] = useState(false);
@@ -29,7 +29,7 @@ const EditableField  = (
             className="editable-field"
             onBlur={(e)=>{
               updateProject(projId, fieldName, fieldValue)
-              .then(proj => {setProjectToEdit(proj); setEditable(false)})
+              .then(proj => {renderUpdatedProj(proj); setEditable(false)})
             }}
             onChange={e=>{
               setFieldValue(e.target.value)
@@ -51,7 +51,7 @@ const EditableField  = (
           value={fieldValue}
           onBlur={(e)=>{
             updateProject(projId, fieldName, fieldValue)
-            .then(proj => {setProjectToEdit(proj); setEditable(false)})
+            .then(proj => {renderUpdatedProj(proj); setEditable(false)})
           }}
           onChange={e=>{
             setFieldValue(e.target.value)

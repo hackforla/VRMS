@@ -54,6 +54,17 @@ const ManageProjects = () => {
     fetchRecurringEvents();
   }, []);
 
+  function renderUpdatedProj(updatedProj) {
+    let updatedProjList = projects;
+    let index = updatedProjList.findIndex(
+      (proj) => proj._id === updatedProj._id
+    );
+    updatedProjList[index] = updatedProj;
+
+    setProjects(updatedProjList);
+    setProjectToEdit(updatedProj);
+  }
+
   // If not logged in, redirect back home
   if (!user) {
     return <Redirect to="/" />;
@@ -75,12 +86,12 @@ const ManageProjects = () => {
       break;
     case 'editProjectInfo':
       return (
-      <EditProjectInfo 
-        projectToEdit = {projectToEdit}
-        goSelectProject = {goSelectProject}
-        recurringEvents = {recurringEvents}
-        setProjectToEdit = {setProjectToEdit}
-      />
+        <EditProjectInfo
+          projectToEdit={projectToEdit}
+          goSelectProject={goSelectProject}
+          recurringEvents={recurringEvents}
+          renderUpdatedProj={renderUpdatedProj}
+        />
       );
       break;
     default:

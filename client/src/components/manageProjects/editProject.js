@@ -35,7 +35,6 @@ const EditProjectInfo  = ( props ) => {
     try {
         const response = await fetch(url, requestOptions); 
         const resJson = await response.json();
-        console.log('resJson: ', resJson);
 
         return resJson;
     } catch (error) {
@@ -59,7 +58,7 @@ const EditProjectInfo  = ( props ) => {
           fieldData={props.projectToEdit.name} 
           fieldName="name" 
           updateProject={updateProject}
-          setProjectToEdit={props.setProjectToEdit}
+          renderUpdatedProj={props.renderUpdatedProj}
           projId={props.projectToEdit._id}
           fieldType="text"
           fieldTitle="Name:"
@@ -70,7 +69,7 @@ const EditProjectInfo  = ( props ) => {
           fieldData={props.projectToEdit.description} 
           fieldName="description" 
           updateProject={updateProject}
-          setProjectToEdit={props.setProjectToEdit}
+          renderUpdatedProj={props.renderUpdatedProj}
           projId={props.projectToEdit._id}
           fieldType="textarea"
           fieldTitle="Description:"
@@ -81,7 +80,7 @@ const EditProjectInfo  = ( props ) => {
           fieldData={props.projectToEdit.location} 
           fieldName="location" 
           updateProject={updateProject}
-          setProjectToEdit={props.setProjectToEdit}
+          renderUpdatedProj={props.renderUpdatedProj}
           projId={props.projectToEdit._id}
           fieldType="text"
           fieldTitle="Location:"
@@ -92,7 +91,7 @@ const EditProjectInfo  = ( props ) => {
           fieldData={props.projectToEdit.githubIdentifier} 
           fieldName="githubIdentifier" 
           updateProject={updateProject}
-          setProjectToEdit={props.setProjectToEdit}
+          renderUpdatedProj={props.renderUpdatedProj}
           projId={props.projectToEdit._id}
           fieldType="text"
           fieldTitle="GitHub Identifier:"
@@ -103,7 +102,7 @@ const EditProjectInfo  = ( props ) => {
           fieldData={props.projectToEdit.githubUrl} 
           fieldName="githubUrl" 
           updateProject={updateProject}
-          setProjectToEdit={props.setProjectToEdit}
+          renderUpdatedProj={props.renderUpdatedProj}
           projId={props.projectToEdit._id}
           fieldType="text"
           fieldTitle="GitHib URL:"
@@ -114,7 +113,7 @@ const EditProjectInfo  = ( props ) => {
           fieldData={props.projectToEdit.slackUrl} 
           fieldName="slackUrl" 
           updateProject={updateProject}
-          setProjectToEdit={props.setProjectToEdit}
+          renderUpdatedProj={props.renderUpdatedProj}
           projId={props.projectToEdit._id}
           fieldType="text"
           fieldTitle="Slack URL:"
@@ -125,7 +124,7 @@ const EditProjectInfo  = ( props ) => {
           fieldData={props.projectToEdit.googleDriveUrl} 
           fieldName="googleDriveUrl" 
           updateProject={updateProject}
-          setProjectToEdit={props.setProjectToEdit}
+          renderUpdatedProj={props.renderUpdatedProj}
           projId={props.projectToEdit._id}
           fieldType="text"
           fieldTitle="Google Drive URL:"
@@ -136,7 +135,7 @@ const EditProjectInfo  = ( props ) => {
           fieldData={props.projectToEdit.googleDriveId} 
           fieldName="googleDriveId" 
           updateProject={updateProject}
-          setProjectToEdit={props.setProjectToEdit}
+          renderUpdatedProj={props.renderUpdatedProj}
           projId={props.projectToEdit._id}
           fieldType="text"
           fieldTitle="Google Drive ID:"
@@ -147,7 +146,7 @@ const EditProjectInfo  = ( props ) => {
           fieldData={props.projectToEdit.hflaWebsiteUrl} 
           fieldName="hflaWebsiteUrl" 
           updateProject={updateProject}
-          setProjectToEdit={props.setProjectToEdit}
+          renderUpdatedProj={props.renderUpdatedProj}
           projId={props.projectToEdit._id}
           fieldType="text"
           fieldTitle="HfLA Website URL:"
@@ -158,7 +157,7 @@ const EditProjectInfo  = ( props ) => {
           fieldData={props.projectToEdit.videoConferenceLink} 
           fieldName="videoConferenceLink" 
           updateProject={updateProject}
-          setProjectToEdit={props.setProjectToEdit}
+          renderUpdatedProj={props.renderUpdatedProj}
           projId={props.projectToEdit._id}
           fieldType="text"
           fieldTitle="Video Converence Link:"
@@ -169,7 +168,7 @@ const EditProjectInfo  = ( props ) => {
           fieldData={props.projectToEdit.lookingDescription} 
           fieldName="lookingDescription" 
           updateProject={updateProject}
-          setProjectToEdit={props.setProjectToEdit}
+          renderUpdatedProj={props.renderUpdatedProj}
           projId={props.projectToEdit._id}
           fieldType="text"
           fieldTitle="Looking For Description:"
@@ -180,7 +179,7 @@ const EditProjectInfo  = ( props ) => {
           fieldData={partnerDataFormatted} 
           fieldName="partners" 
           updateProject={updateProject}
-          setProjectToEdit={props.setProjectToEdit}
+          renderUpdatedProj={props.renderUpdatedProj}
           projId={props.projectToEdit._id}
           fieldType="text"
           fieldTitle="Partners (comma separated):"
@@ -191,7 +190,7 @@ const EditProjectInfo  = ( props ) => {
           fieldData={recrutingDataFormatted} 
           fieldName="recruitingCategories" 
           updateProject={updateProject}
-          setProjectToEdit={props.setProjectToEdit}
+          renderUpdatedProj={props.renderUpdatedProj}
           projId={props.projectToEdit._id}
           fieldType="text"
           fieldTitle="Recruiting Categories (comma separated):"
