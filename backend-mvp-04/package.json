@@ -14,8 +14,9 @@
   "author": "alex-anakin",
   "license": "AGPL-3.0",
   "devDependencies": {
+    "@babel/eslint-parser": "^7.15.0",
+    "@babel/eslint-plugin": "^7.14.5",
     "@shelf/jest-mongodb": "^1.2.3",
-    "babel-eslint": "^10.1.0",
     "concurrently": "^5.1.0",
     "debug": "^4.1.1",
     "eslint": "^7.9.0",
