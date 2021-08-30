@@ -8,6 +8,10 @@ const fetch = require("node-fetch");
 const morgan = require('morgan');
 const cookieParser = require("cookie-parser");
 
+// swagger
+const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+
 const customRequestHeaderName = 'x-customrequired-header';
 const dontCheckCustomRequestHeaderApis = ["GET::/api/recurringevents", "GET::/api/healthcheck"];
 
@@ -81,6 +85,41 @@ const projectTeamMembersRouter = require("./routers/projectTeamMembers.router");
 const slackRouter = require("./routers/slack.router");
 const authRouter = require("./routers/auth.router");
 const healthCheckRouter = require('./routers/healthCheck.router');
+
+// for Swagger
+const options = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "VRMS",
+      version: "0.1.0",
+      description:
+        "<description of VRMS>",
+      license: {
+        name: "MIT",
+        url: "https://spdx.org/licenses/MIT.html",
+      },
+      contact: {
+        name: "",
+        url: "",
+        email: "info@email.com",
+      },
+    },
+    servers: [
+      {
+        url: "http://localhost:3000/",
+      },
+    ],
+  },
+  apis: ["./routers/events.router.js"],
+};
+
+const specs = swaggerJsdoc(options);
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(specs, { explorer: true })
+);
 
 // Check that clients to the API are sending the custom request header on all methods
 // except for ones described in the dontCheckCustomRequestHeaderApis array.
