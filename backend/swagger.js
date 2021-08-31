@@ -65,5 +65,5 @@ const doc = {
 }
 
 swaggerAutogen(outputFile, endpointsFiles, doc).then(() => {
-    require('./index.js')
+    require('./app.js') // generate new documentation every time index.js is run
 })
