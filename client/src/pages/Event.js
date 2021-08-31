@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../utils/globalSettings";
 
 import '../sass/Event.scss';
 // import '../sass/Event-media-queries.scss';
@@ -9,7 +10,7 @@ const Event = (props) => {
     const [isLoading, setIsLoading] = useState(false);
     const [event, setEvent] = useState([]);
     const [isCheckInReady, setIsCheckInReady] = useState();
-    const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
+    const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
     // const [isError, setIsError] = useState(null);
     // const [selected, setSelected] = useState('checkIns');
