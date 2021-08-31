@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import '../sass/ManageProjects.scss';
 import useAuth from '../hooks/useAuth';
-
-import SelectProject from '../components/manageProjects/selectProject.js';
-import DisplayProjectInfo from '../components/manageProjects/displayProject.js';
 import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../utils/globalSettings";
+import SelectProject from '../components/manageProjects/selectProject.js';
+import EditProjectInfo from '../components/manageProjects/editProject.js';
 
 const ManageProjects = () => {
 
@@ -55,6 +54,17 @@ const ManageProjects = () => {
     fetchRecurringEvents();
   }, []);
 
+  function renderUpdatedProj(updatedProj) {
+    let updatedProjList = projects;
+    let index = updatedProjList.findIndex(
+      (proj) => proj._id === updatedProj._id
+    );
+    updatedProjList[index] = updatedProj;
+
+    setProjects(updatedProjList);
+    setProjectToEdit(updatedProj);
+  }
+
   // If not logged in, redirect back home
   if (!user) {
     return <Redirect to="/" />;
@@ -62,7 +72,7 @@ const ManageProjects = () => {
 
   const projectSelectClickHandler = project => event => {
     setProjectToEdit(project);
-    setComponentToDisplay('displayProjectInfo');
+    setComponentToDisplay('editProjectInfo');
   };
 
   const goSelectProject = () => {
@@ -75,15 +85,13 @@ const ManageProjects = () => {
       // <EditMeetingTime /> // Placeholder for future coponent
       break;
     case 'editProjectInfo':
-      //<EditProjectInfo />  // Placeholder for future coponent
-      break;
-    case 'displayProjectInfo':
       return (
-      <DisplayProjectInfo 
-        projectToEdit = {projectToEdit}
-        goSelectProject = {goSelectProject}
-        recurringEvents = {recurringEvents}
-      />
+        <EditProjectInfo
+          projectToEdit={projectToEdit}
+          goSelectProject={goSelectProject}
+          recurringEvents={recurringEvents}
+          renderUpdatedProj={renderUpdatedProj}
+        />
       );
       break;
     default:
