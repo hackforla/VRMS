@@ -1,3 +1,5 @@
+import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../../client/src/utils/globalSettings";
+
 module.exports = (cron, fetch) => {
 
     // Check to see if any recurring events are happening today, 
@@ -9,7 +11,7 @@ module.exports = (cron, fetch) => {
     let TODAY_DATE;
     let TODAY;
     const URL = process.env.NODE_ENV === 'prod' ? 'https://www.vrms.io' : 'http://localhost:4000';
-    const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
+    const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
     const fetchEvents = async () => {
         try {

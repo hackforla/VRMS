@@ -1,11 +1,12 @@
 import React, { useState }  from 'react';
 import '../../sass/ManageProjects.scss';
 import EditableField from './editableField';
+import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../../utils/globalSettings";
 
 
 const EditProjectInfo  = ( props ) => {
 
-  const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
+  const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
   //const [currentProjectData, setCurrentProjectData] = useState(props.projectToEdit);
 
