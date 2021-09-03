@@ -4,7 +4,7 @@ module.exports = (cron, fetch) => {
     // and if so, open their respective check-ins
 
     const url = process.env.NODE_ENV === 'prod' ? 'https://www.vrms.io' : 'http://localhost:4000';
-    const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER
+    const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
 
     async function fetchEvents() {    
         try {
