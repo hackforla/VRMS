@@ -1,9 +1,8 @@
-import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../../client/src/utils/globalSettings";
-
 module.exports = (fetch) => {
     console.log('Hello from SlackBot');
     const token = process.env.SLACK_TOKEN;
-    const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
+
+    const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER
 
     let EVENTS;
 

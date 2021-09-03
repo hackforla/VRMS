@@ -1,8 +1,6 @@
-import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../../../client/src/utils/globalSettings";
-
 export const HEADERS = {
   'Content-Type': 'application/json',
-  'x-customrequired-header': REACT_APP_CUSTOM_REQUEST_HEADER,
+  'x-customrequired-header': process.env.REACT_APP_CUSTOM_REQUEST_HEADER
 };
 
 // Inner API's
