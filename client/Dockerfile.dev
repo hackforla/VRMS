@@ -1,0 +1,8 @@
+FROM node:14.17.6 AS client-development
+RUN mkdir /srv/client && chown node:node /srv/client
+WORKDIR /srv/client
+USER node
+RUN mkdir -p node_modules
+COPY package.json yarn.lock ./
+RUN yarn install --pure-lockfile
+COPY . .

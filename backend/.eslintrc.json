@@ -1,17 +1,13 @@
 {
-  "parser": "babel-eslint",
+  "parser": "@babel/eslint-parser",
   "parserOptions": {
     "sourceType": "module",
     "allowImportExportEverywhere": false,
-    "codeFrame": false
+    "codeFrame": false,
+    "requireConfigFile": false
   },
   "env": {
     "browser": true,
     "jest": true
-  },
-  "settings": {
-    "react": {
-      "version": "999.999.999"
-    }
   }
 }

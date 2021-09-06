@@ -4,7 +4,7 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile.api
+      dockerfile: Dockerfile.dev
       target: api-development
     command: yarn run dev
     volumes:
@@ -23,7 +23,7 @@ services:
   client:
     build:
       context: ./client
-      dockerfile: Dockerfile.client
+      dockerfile: Dockerfile.dev
       target: client-development
     command: yarn run start
     volumes:
@@ -35,6 +35,7 @@ services:
       - "3000:3000"
     environment:
       BACKEND_HOST: backend
+      CHOKIDAR_USEPOLLING: "true"
     depends_on: 
       - backend
     stdin_open: true
