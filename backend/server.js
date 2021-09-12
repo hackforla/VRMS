@@ -1,8 +1,8 @@
-const app = require("./app");
+const app = require("./src/app");
 const mongoose = require("mongoose");
 
 // Load config variables
-const { CONFIG_DB } = require('./config/');
+const { CONFIG_DB } = require('./src/config/');
 
 // Required convention for mongoose - https://stackoverflow.com/a/51862948/5900471
 mongoose.Promise = global.Promise;
