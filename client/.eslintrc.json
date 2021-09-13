@@ -1,14 +1,13 @@
 {
-  "parserOptions": {
-    "ecmaVersion": 2018,
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true
-    }
-  },
   "env": {
     "browser": true,
     "es2017": true
+  },"parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+  },
+  "ecmaVersion": 2018,
+  "sourceType": "module"
   },
   "ignorePatterns": ["node_modules/**"],
   "plugins": ["react", "prettier", "jest", "testing-library"],

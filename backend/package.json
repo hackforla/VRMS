@@ -13,38 +13,32 @@
     "lint": "eslint . --ext .js,.jsx"
   },
   "dependencies": {
-    "@slack/bolt": "^2.2.3",
     "assert-env": "^0.6.0",
-    "async": "^3.2.0",
+    "async": "^3.2.1",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",
-    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "dotenv-expand": "^5.1.0",
     "express": "^4.17.1",
-    "express-validator": "^6.6.1",
-    "googleapis": "^59.0.0",
-    "helmet": "^3.22.0",
     "jsonwebtoken": "^8.5.1",
-    "mongodb-memory-server": "^6.9.0",
     "mongoose": "^5.10.0",
-    "morgan": "^1.10.0",
-    "nodemailer": "^6.4.16"
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.15.5",
+    "@babel/eslint-parser": "^7.15.4",
     "@shelf/jest-mongodb": "^1.2.3",
     "concurrently": "^5.1.0",
-    "debug": "^4.1.1",
+    "debug": "^4.3.2",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-jest": "^24.4.0",
     "eslint-plugin-prettier": "^3.4.0",
     "jest": "^26.4.0",
-    "nodemon": "^2.0.2",
-    "prettier": "^2.1.1",
-    "pretty-quick": "^3.0.2",
-    "supertest": "^4.0.2",
-    "why-is-node-running": "^2.2.0"
+    "mongodb": "^3.x.x",
+    "mongodb-memory-server": "6.9.6",
+    "nodemon": "^2.0.12",
+    "supertest": "^4.0.2"
   },
   "directories": {
     "test": "test"
