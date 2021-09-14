@@ -1,0 +1,12 @@
+[
+  {"_id":{"$oid":"61404aad5dfe7a2d2c8f7112"},"name":"Austin Wolf","title":"National Implementation Technician","department":"IT","joined":"2020-12-29T16:19:13.798Z"},
+  {"_id":{"$oid":"61404aad5dfe7a2d2c8f7113"},"name":"Mr. Rebecca Prohaska","title":"Legacy Division Representative","department":"Human Resources","joined":"2021-01-28T00:51:24.407Z"},
+  {"_id":{"$oid":"61404aad5dfe7a2d2c8f7114"},"name":"Jerome Yundt","title":"Dynamic Directives Technician","department":"IT","joined":"2021-02-17T10:28:35.191Z"},
+  {"_id":{"$oid":"61404aad5dfe7a2d2c8f7115"},"name":"Billy Rice","title":"Human Response Executive","department":"Marketing","joined":"2020-10-24T01:38:01.527Z"},
+  {"_id":{"$oid":"61404aad5dfe7a2d2c8f7116"},"name":"Billie Dickinson","title":"Corporate Tactics Strategist","department":"IT","joined":"2020-12-11T22:05:23.764Z"},
+  {"_id":{"$oid":"61404aad5dfe7a2d2c8f7117"},"name":"Israel Runolfsdottir","title":"International Program Facilitator","department":"IT","joined":"2021-01-17T17:18:52.826Z"},
+  {"_id":{"$oid":"61404aad5dfe7a2d2c8f7118"},"name":"Beverly Fay","title":"Corporate Security Representative","department":"IT","joined":"2021-04-07T08:25:48.972Z"},
+  {"_id":{"$oid":"61404aad5dfe7a2d2c8f7119"},"name":"Alexander Lueilwitz PhD","title":"Product Quality Architect","department":"Human Resources","joined":"2020-11-10T07:42:02.373Z"},
+  {"_id":{"$oid":"61404aad5dfe7a2d2c8f711a"},"name":"Nettie Ankunding","title":"Future Assurance Executive","department":"Human Resources","joined":"2021-02-26T12:43:50.059Z"},
+  {"_id":{"$oid":"61404aad5dfe7a2d2c8f711b"},"name":"Edmond Ritchie Jr.","title":"International Implementation Orchestrator","department":"IT","joined":"2020-11-26T11:47:20.252Z"}
+]

@@ -49,9 +49,11 @@ app.use(morgan("dev"));
 const errorhandler = require('./middleware/errorhandler.middleware');
 
 // ROUTES
+const employeesRouter = require('./employees');
 const locationsRouter = require('./routers/locations.router');
 const healthCheckRouter = require('./routers/healthCheck.router');
 
+app.use('/api/employees', employeesRouter);
 app.use('/api/locations', locationsRouter);
 app.use('/api/healthcheck', healthCheckRouter);
 

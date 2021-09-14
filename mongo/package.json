@@ -1,0 +1,17 @@
+{
+  "name": "vrms-mongo-setup",
+  "version": "0.1.0",
+  "description": "VRMS Database Seed Scripts",
+  "license": "AGPL-3.0",
+  "author": "HackForLA",
+  "main": "./scripts/index.js",
+  "scripts": {
+    "rebuild": "cd ../ && docker-compose build dbseed",
+    "generate:employees": "node ./scripts/index.js --type employee --amount 10"
+  },
+  "devDependencies": {
+    "faker": "^5.5.3",
+    "mongodb": "^3.x.x",
+    "yargs": "^17.1.1"
+  }
+}

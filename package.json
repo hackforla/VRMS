@@ -4,6 +4,7 @@
   "description": "VRMS Server",
   "scripts": {
     "start": "docker-compose up",
+    "start:rebuild": "docker-compose up --build",
     "start:local": "concurrently \"cd backend && npm run dev\" \"cd client && npm run start\"",
     "test:backend": "cd backend && npm run test",
     "test:client": "cd client && npm run test"
