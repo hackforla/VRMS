@@ -44,9 +44,6 @@ const Navbar = (props) => {
                             <Link to="/events">
                                 <p className="home-link-text">EVENTS</p>
                             </Link>
-                            <Link to="/add/event">
-                                <p className="home-link-text">ADD EVENT</p>
-                            </Link>
                             <Link to="/useradmin">
                                 <p className="home-link-text">ADMIN</p>
                             </Link>
