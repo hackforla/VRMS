@@ -17,7 +17,6 @@ import Success from './pages/Success';
 import HandleAuth from './components/auth/HandleAuth';
 import EmailSent from './pages/EmailSent';
 import Events from './pages/Events';
-import AddNew from './pages/AddNew';
 import ProjectLeaderDashboard from './pages/ProjectLeaderDashboard';
 import UserAdmin from './pages/UserAdmin';
 import ManageProjects from './pages/ManageProjects';
@@ -47,7 +46,6 @@ const routes = [
     name: 'pldashboard',
     Component: ProjectLeaderDashboard,
   },
-  { path: '/add/:item', name: 'addnew', Component: AddNew },
   { path: '/healthcheck', name: 'healthcheck', Component: HealthCheck }
 ];
 
