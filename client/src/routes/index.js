@@ -12,6 +12,8 @@ import EmailSetup from '../components/onboarding/emailSetup/emailSetup';
 import Logout from '../components/logout/logout';
 import HealthCheck from '../components/healthCheck/healthCheck';
 
+import AuthTest from "../components/auth/awsAuth";
+
 // For development only
 import DevUiKit from '../utils/uiKit/uiKit';
 
@@ -20,6 +22,11 @@ export const Routes = [
     path: '/',
     key: 'home',
     component: Home,
+  },
+  {
+    path: '/authtest',
+    key: 'authtest',
+    component: AuthTest
   },
   {
     path: '/logout',

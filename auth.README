@@ -1,0 +1,26 @@
+# JW Auth Environment keys
+```
+AWS_COGNITO_REGION=us-west-2
+AWS_COGNITO_USER_POOL_ID=us-west-2_KwBqRR7k0
+AWS_COGNITO_APP_CLIENT_ID=sr3r9dm9ugmjnst6gdklrrrcm
+```
+# Change files
+## backend
+- src/config/auth.config.js
+- src/employees/index.js
+- src/middleware/cognitoAuth.middleware.js
+- src/middleware/index.js
+- src/app.js
+- src/app.test.js
+- package.json
+- yarn.lock
+
+## client
+- src/components/auth/awsAuth.js
+- src/components/auth/awsAuth.scss
+- src/routes/index.js
+- utils/constants/index.js
+- utils/securedFetch.js
+- utils/securedFetch.test.js
+- package.json
+- yarn.lock

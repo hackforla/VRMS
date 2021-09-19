@@ -5,6 +5,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const morgan = require('morgan');
 const cookieParser = require("cookie-parser");
+var cors = require('cors');
 
 // Import environment variables
 const dotenv = require('dotenv');
@@ -34,6 +35,9 @@ require('assert-env')([
 
 // Create a new application using the Express framework
 const app = express();
+
+// Enable global Cors
+app.use(cors());
 
 // Required to view Request Body (req.body) in JSON
 app.use(bodyParser.json());
