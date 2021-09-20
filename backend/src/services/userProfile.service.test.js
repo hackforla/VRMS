@@ -8,7 +8,7 @@ setupDB('userProfile-service');
 
 describe('UserProfileService can save/update/get user profiles', () => {
   test('Save a user profile record and then retrieve it by the service', async (done) => {
-    const newRecordData = { signupEmail: 'FOO@BAR.COM' };
+    const newRecordData = { signupEmail: 'FOO@BAR.COM', awsUserId: "7be38bcc-fad0-4c84-a0cf-eb89b8ac4e00" };
 
     const result = await UserProfileService.createUser(newRecordData, 'creator@bar.com');
 
@@ -47,7 +47,7 @@ describe('UserProfileService can save/update/get user profiles', () => {
 
   test('Should update a user profile with allowed values. Should not allow update email.', 
     async (done) => {
-    const newRecord = { signupEmail: 'foo@bar.com' };
+    const newRecord = { signupEmail: 'foo@bar.com', awsUserId: "3dea478d-e3e4-4f60-a70a-076167ed000e" };
     const newRecordResult = await UserProfileService.createUser(newRecord, 'creator@bar.com');
 
     expect(newRecordResult.firstName).toBeUndefined();
@@ -56,6 +56,7 @@ describe('UserProfileService can save/update/get user profiles', () => {
 
     const updateRecordData = {
       signupEmail: 'foo@bar.com',
+      awsUserId: "3dea478d-e3e4-4f60-a70a-076167ed000e",
       firstName: 'Foo',
       lastName: 'Bar',
       meetLocation: 'Los Angeles',
@@ -69,7 +70,7 @@ describe('UserProfileService can save/update/get user profiles', () => {
     expect(updatedRecordResult.lastName).toBe(updateRecordData.lastName);
     expect(updatedRecordResult.meetLocation).toBe(updateRecordData.meetLocation);
 
-    const updateRecordNoMeetLocationData = { signupEmail: 'foo@bar.com', meetLocation: null };
+    const updateRecordNoMeetLocationData = { signupEmail: 'foo@bar.com', awsUserId: "ad20d80e-4ea8-4473-81dc-a4b8a4a9c707", meetLocation: null };
     const updatedRecordNoMeetLocationResult = await UserProfileService.updateUser(
       updateRecordNoMeetLocationData,
       'updater@bar.com',
@@ -87,6 +88,7 @@ describe('UserProfileService can save/update/get user profiles', () => {
     // Try and update a record that doesn't exist
     const doesntExistRecordData = {
       signupEmail: 'doesnotexist@bar.com',
+      awsUserId: "ad20d80e-4ea8-4473-81dc-a4b8a4a9c707",
       firstName: 'DOESNT',
       lastName: 'EXIST',
       meetLocation: 'Anaheim',

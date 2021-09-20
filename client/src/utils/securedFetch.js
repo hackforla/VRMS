@@ -6,13 +6,13 @@ export const securedFetch = async (input, settings = {}) => {
   const jwtToken = accessToken.getJwtToken();
   const authHeader = { "authorization": jwtToken };
 
-  let headers = settings?.headers;
+  let headers = settings ? settings.headers : null;
   if(headers instanceof Headers) {
     headers.set("authorization", jwtToken);
   } else if(Array.isArray(headers)) {
     headers.push(["authorization", jwtToken])
   } else if(typeof headers === "object") {
-    headers = {...headers, authHeader};
+    headers = {...headers, ...authHeader};
   } else {
     headers = authHeader;
   }

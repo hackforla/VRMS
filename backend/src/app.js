@@ -1,10 +1,10 @@
 // app.js - Entry point for our application
 
 // Load in all of our node modules. Their uses are explained below as they are called.
-const express = require("express");
-const bodyParser = require("body-parser");
+const express = require('express');
+const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const cookieParser = require("cookie-parser");
+const cookieParser = require('cookie-parser');
 var cors = require('cors');
 
 // Import environment variables
@@ -31,7 +31,6 @@ require('assert-env')([
   'GMAIL_REFRESH_TOKEN',
   'GMAIL_EMAIL',
 ]);
- 
 
 // Create a new application using the Express framework
 const app = express();
@@ -47,20 +46,24 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // HTTP Request Logger
-app.use(morgan("dev"));
+app.use(morgan('dev'));
 
 // MIDDLEWARE
 const errorhandler = require('./middleware/errorhandler.middleware');
 
 // ROUTES
+const employeesRouter = require('./employees');
+const usersRouter = require('./users');
 const locationsRouter = require('./routers/locations.router');
 const healthCheckRouter = require('./routers/healthCheck.router');
 
+app.use('/api/employees', employeesRouter);
+app.use('/api/users', usersRouter);
 app.use('/api/locations', locationsRouter);
 app.use('/api/healthcheck', healthCheckRouter);
 
 // 404 for all non-defined endpoints.
-app.get("*", (req, res, next) => {
+app.get('*', (req, res, next) => {
   const error = new Error('Not Found');
   error.status = 404;
   next(error);

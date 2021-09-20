@@ -1,15 +1,25 @@
 import React from 'react';
 import './footer.scss';
 import RedirectLink from '../link/link';
-import { useSelector } from 'react-redux';
-
+import { useUserContext, SignOutButton } from "../../auth";
 const Footer = () => {
-  const loggedIn = useSelector((state) => state.auth.loggedIn);
-  const user = useSelector((state) => state.auth.user);
+  const [awsUser] = useUserContext();
+ 
+  const btnStyles = {
+    display: "inline",
+    padding: "0 10px",
+    border: "none",
+    color: "#007bff",
+    backgroundColor: "transparent",
+    textTransform: "none"
+  }
 
-  return loggedIn && user ? (
+  return awsUser ? (
     <footer data-testid="footer-logged-in" className="inner-footer">
-      <div className="text-block">Logged in as {user.email}</div>
+      <div className="text-block">
+        Logged in as {awsUser.attributes.email}
+        <SignOutButton style={btnStyles} />
+      </div>
     </footer>
   ) : (
     <footer data-testid="footer" className="app-footer">
