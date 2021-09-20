@@ -14,6 +14,7 @@ describe("UserProfile Model saves the correct values", () => {
       meetLocation: "a location",
       timeZone: "a timezone",		
       signupEmail: "test@test.com",
+      awsUserId: "ad20d80e-4ea8-4473-81dc-a4b8a4a9c707",
       phone: "867-5309",
       isTextingAllowed: true, 
       isCodeOfConductAccepted: true, 

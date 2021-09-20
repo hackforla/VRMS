@@ -48,7 +48,16 @@ describe('securedFetch', () => {
     const [key, value] = lastCalledHeaders.find(h => h[0] === "authorization");
     expect(value).toEqual(jwtToken);
   });
-  it('Should append auth to request with headers array', async () => {
+  it('Should append auth to request with settings object', async () => {
+    const settings = {
+      headers: {"cors": "*"}
+    };
+    await securedFetch(endpoint, settings);
+    const lastCalledHeaders = lastSettings.headers;
+    const value = lastCalledHeaders.authorization;
+    expect(value).toEqual(jwtToken);
+  });
+  it('Should append auth to request with null settings', async () => {
     await securedFetch(endpoint, null);
     const lastCalledHeaders = lastSettings.headers;
     expect(typeof lastCalledHeaders === "object").toBe(true);

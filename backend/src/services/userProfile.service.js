@@ -84,4 +84,13 @@ UserProfileService.getUserByEmail = async function (email) {
   }
 };
 
+UserProfileService.getUserByAwsUserId = async function (id) {
+  try {
+    const result = await UserProfile.findOne({ awsUserId: id.toLowerCase() });
+    return result;
+  } catch (error) {
+    throw new DatabaseError(error.message);
+  }
+};
+
 module.exports.UserProfileService = UserProfileService;

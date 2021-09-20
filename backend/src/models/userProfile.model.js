@@ -7,6 +7,7 @@ const userProfileSchema = mongoose.Schema({
   lastName: { type: String },
   meetLocation: { type: String }, // HfLA locations user participates at
   timeZone: { type: String },			// user’s timezone
+  awsUserId: { type: String, unique: true, index: true, required: true},
   signupEmail: { type: String, unique: true, index: true, required: true },	
     // user’s preferred contact email
   phone: { type: String },

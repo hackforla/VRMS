@@ -54,10 +54,12 @@ const errorhandler = require('./middleware/errorhandler.middleware');
 
 // ROUTES
 const employeesRouter = require('./employees');
+const usersRouter = require("./users");
 const locationsRouter = require('./routers/locations.router');
 const healthCheckRouter = require('./routers/healthCheck.router');
 
 app.use('/api/employees', employeesRouter);
+app.use("/api/users", usersRouter);
 app.use('/api/locations', locationsRouter);
 app.use('/api/healthcheck', healthCheckRouter);
 
