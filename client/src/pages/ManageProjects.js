@@ -5,6 +5,7 @@ import useAuth from '../hooks/useAuth';
 import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../utils/globalSettings";
 import SelectProject from '../components/manageProjects/selectProject.js';
 import EditProjectInfo from '../components/manageProjects/editProject.js';
+import EditMeetingTimes from '../components/manageProjects/editMeetingTimes';
 
 const ManageProjects = () => {
 
@@ -75,14 +76,29 @@ const ManageProjects = () => {
     setComponentToDisplay('editProjectInfo');
   };
 
+  const meetingSelectClickHandler = () => {
+    setComponentToDisplay('editMeetingTimes');
+  };
+
+  const setEditProject = () => {
+    setComponentToDisplay('editProjectInfo');
+  }
+
   const goSelectProject = () => {
+    setProjectToEdit([]);
     setComponentToDisplay('selectProject');
 }
 
-
+  // This switch determines which component will be displayed. 
   switch (componentToDisplay) {
-    case 'editMeetingTime':
-      // <EditMeetingTime /> // Placeholder for future coponent
+    case 'editMeetingTimes':
+      return (
+        <EditMeetingTimes 
+        goSelectProject={goSelectProject}
+        goEditProject={setEditProject}
+        projectToEdit={projectToEdit}
+        />
+      )
       break;
     case 'editProjectInfo':
       return (
@@ -91,6 +107,7 @@ const ManageProjects = () => {
           goSelectProject={goSelectProject}
           recurringEvents={recurringEvents}
           renderUpdatedProj={renderUpdatedProj}
+          meetingSelectClickHandler={meetingSelectClickHandler}
         />
       );
       break;

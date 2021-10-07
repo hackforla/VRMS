@@ -51,8 +51,12 @@ const EditProjectInfo  = ( props ) => {
   
 
   return (
+
+    
     <div>
       <div className="project-list-heading">Project: {props.projectToEdit.name}</div>
+
+      <div><button className="button-back" onClick={props.meetingSelectClickHandler}>Edit Meeting Times</button></div>
 
       <div>
         <EditableField 
