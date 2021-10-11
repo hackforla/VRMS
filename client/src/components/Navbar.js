@@ -46,6 +46,7 @@ const Navbar = (props) => {
               </>
             ) : null}
 
+
             {auth?.user?.accessLevel === 'user' ? (
               <Link to="/projects">
                 <p className="home-link-text">PROJECTS</p>

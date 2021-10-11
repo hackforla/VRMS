@@ -45,7 +45,6 @@ const Home = (props) => {
     }, [event]);
 
     return (
-        <div className="flexcenter-container">
             <div className="home">
                 <div className="home-headers">
                     <h1>VRMS</h1>
@@ -95,7 +94,6 @@ const Home = (props) => {
                     </div>
                 )}
             </div>
-        </div>
     );
 };
 
