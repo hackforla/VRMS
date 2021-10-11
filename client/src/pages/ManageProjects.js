@@ -15,7 +15,7 @@ const ManageProjects = () => {
   const [projects, setProjects] = useState([]);
   const [projectToEdit, setProjectToEdit] = useState([]);
   const [recurringEvents, setRecurringEvents] = useState([]);
-  const [componentToDisplay, setComponentToDisplay] = useState (''); // displayProjectInfo, editMeetingTime or editProjectInfor 
+  const [componentToDisplay, setComponentToDisplay] = useState (''); // options: selectProject, editMeetingTimes or editProjectInfo 
   const user = auth?.user;
 
   // Fetch projects from db
@@ -97,6 +97,8 @@ const ManageProjects = () => {
         goSelectProject={goSelectProject}
         goEditProject={setEditProject}
         projectToEdit={projectToEdit}
+        recurringEvents={recurringEvents}
+        setRecurringEvents={setRecurringEvents}
         />
       )
       break;
