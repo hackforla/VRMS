@@ -161,7 +161,7 @@ const EditProjectInfo  = ( props ) => {
           renderUpdatedProj={props.renderUpdatedProj}
           projId={props.projectToEdit._id}
           fieldType="text"
-          fieldTitle="Video Converence Link:"
+          fieldTitle="Video Conference Link:"
         />
       </div>
       <div className="editable-field-div">
