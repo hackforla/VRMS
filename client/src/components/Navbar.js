@@ -13,7 +13,6 @@ const Navbar = (props) => {
     let loginRedirect = '/admin'; 
     if (auth?.user) {
       loginRedirect = authLevelRedirect(auth.user);
-      console.log("auth User!: ",auth.user)
     }
     return (
       <div className="nav-wrapper">
