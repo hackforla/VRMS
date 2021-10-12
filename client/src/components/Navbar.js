@@ -18,15 +18,15 @@ const Navbar = (props) => {
       <div className="nav-wrapper">
         <nav className="navbar" role="navigation" aria-label="main navigation">
           <div className="navbar-buttons-container">
-            {!auth?.user && props.location.pathname === '/' ? (
-              <Link to={loginRedirect}>
-                <p className="home-link-text">LOGIN</p>
-              </Link>
-            ) : null}
-            {!auth?.user && props.location.pathname === '/login' ? (
-              <Link to="/">
-                <p className="home-link-text">HOME</p>
-              </Link>
+            {!auth?.user ? (
+              <>
+                <Link to="/">
+                  <p className="home-link-text">CHECK-IN</p>
+                </Link>
+                <Link to={loginRedirect}>
+                  <p className="home-link-text">ADMIN</p>
+                </Link>
+              </>
             ) : null}
             {auth?.user?.accessLevel === 'admin' ? (
               <>
@@ -44,6 +44,7 @@ const Navbar = (props) => {
                 </Link>
               </>
             ) : null}
+
 
             {auth?.user?.accessLevel === 'user' ? (
               <Link to="/projects">
