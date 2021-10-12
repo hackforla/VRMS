@@ -74,7 +74,7 @@ const Events = (props) => {
         })}
         </ul>
         <div className="add-event-btn">
-        <Link to="/add/event" className="add-event-link">
+        <Link to="/projects" className="add-event-link">
             <PlusIcon />
             <span className="add-event-link-text">ADD EVENT</span>
         </Link>
