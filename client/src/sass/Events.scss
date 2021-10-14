@@ -55,4 +55,47 @@
     margin: 0px 12px 0px;
 }
 
-    
+.events-list{
+    height: 100%;
+    position: relative;
+    overflow: auto;
+
+    .add-event-btn {
+        position: sticky;
+        bottom: 0;
+        display: flex;
+        justify-content: flex-end;
+        .add-event-link{
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+
+            /*animation taken from stackoverflow */
+            overflow: hidden;
+            width: 40px;
+            -webkit-transition: width .3s;
+            transition: width .3s;
+            transition-timing-function: ease-in-out;
+            white-space: nowrap; 
+            svg {
+                width: 2em;
+                height: 2em;
+            }
+            .add-event-link-text{
+                display: none;
+                color: rgb(250, 17, 79);
+                margin-left: 10px;
+            }
+        }
+        .add-event-link:hover {
+            width: 126px;
+            -webkit-transition: width .3s;
+            transition: width .3s;
+            transition-timing-function: ease-in-out;
+        }
+        .add-event-link:hover .add-event-link-text{
+            display: inline-block;
+        }
+    }
+}
