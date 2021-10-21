@@ -1,6 +1,6 @@
 import React, { useState, useEffect }  from 'react';
 import '../../sass/ManageProjects.scss';
-// import EditableField from './editableField';
+import EditableMeeting from './editableMeeting';
 import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../../utils/globalSettings";
 
 // This component displays current meeting times for selected project and offers the option to edit those times. 
@@ -8,6 +8,9 @@ const EditMeetingTimes  = (props) => {
 
   // Initialize state
   const [rEvents, setREvents] = useState([]);
+  const [eventToEdit, setEventToEdit] = useState('');
+  const [editTrue, setEventTrue] = useState(false);
+  const [eventToEditInfo, setEventToEditInfo] = useState({});
 
   // Filters the recurring events to select for the selected projects. 
   const thisProjectRecurringEvents = (projectToEditID) => { 
@@ -29,7 +32,7 @@ const EditMeetingTimes  = (props) => {
 
   function readableEvent (e) {
 
-    let description = e.description;
+    //let description = e.description;
 
     // Get date for each of the parts of the event time/day   
     let d = new Date(e.date);
@@ -57,11 +60,12 @@ const EditMeetingTimes  = (props) => {
 
     // Create readable object for this event
     let newEvent = {
-      description: description,
+      description: e.description,
       dayOfTheWeekNumber: dayOfTheWeekNumber,
       dayOfTheWeek: dayOfTheWeek,
       startTime: startTime,
-      endTime: endTime
+      endTime: endTime,
+      event_id: e._id
     }
 
     return newEvent;
@@ -72,18 +76,40 @@ const EditMeetingTimes  = (props) => {
     return readableEvent(item);
   });
 
+
+  const handleEditEventClick = (eventToEditID) => () => {
+    setEventToEdit(eventToEditID);
+    setEventToEditInfo  (props.recurringEvents.find(e => (e?._id === eventToEditID)));
+    setEventTrue(true);
+
+    console.log('eid', eventToEditID);
+    console.log('re', props.recurringEvents);
+
+  }
+
   return (
     <div>
 	    <div className="project-list-heading">Project: {props.projectToEdit.name}</div>
+      <div className="project-list-heading">Edit Recurring Events</div>
 
-      {processedEvents.map(rEvent => (
-        <div className="display-events">
-          <div>Description: {rEvent.description}</div>
-          <div>Day: {rEvent.dayOfTheWeek}</div>
-          <div>Start Time: {rEvent.startTime} </div>
-          <div>End Time: {rEvent.endTime} </div>
+      {editTrue ?
+
+        <div>
+          <EditableMeeting
+            theEvent={eventToEditInfo}
+          />
         </div>
-      ))}
+      :
+        processedEvents.map(rEvent => (
+          <div className="display-events">
+            <div>Description: {rEvent.description}</div>
+            <div>Day: {rEvent.dayOfTheWeek}</div>
+            <div>Start Time: {rEvent.startTime} </div>
+            <div>End Time: {rEvent.endTime} </div>
+            <div><span className="project-edit-button" onClick={handleEditEventClick(rEvent.event_id)} > [edit]</span></div>
+          </div>
+        ))
+      }
 
       <div><button className="button-back" onClick={props.goEditProject}>Back to Edit Project</button></div>
       <div><button className="button-back" onClick={props.goSelectProject}>Back to Select Project</button></div>
