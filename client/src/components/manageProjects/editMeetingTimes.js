@@ -11,6 +11,7 @@ const EditMeetingTimes  = (props) => {
   const [eventToEdit, setEventToEdit] = useState('');
   const [editTrue, setEventTrue] = useState(false);
   const [eventToEditInfo, setEventToEditInfo] = useState({});
+  const [readableEventToEdit, setReadableEventToEdit] = useState({});
 
   // Filters the recurring events to select for the selected projects. 
   const thisProjectRecurringEvents = (projectToEditID) => { 
@@ -27,7 +28,7 @@ const EditMeetingTimes  = (props) => {
   /* 
   This makes the dates into human readable text.  However, it may ultimately be necessary to do some
   additional work on the time and time zone stuff, or to simply use a 
-  library like momentjs (https://momentjs.com/timezone/) 
+  library like moments (https://momentjs.com/timezone/) 
   */
 
   function readableEvent (e) {
@@ -49,14 +50,14 @@ const EditMeetingTimes  = (props) => {
     let startHours = (sHours % 12) || 12;
     let startMinutes = (start.getMinutes() < 10 ? '0' : '') + start.getMinutes();
     let startAorP = sHours >= 12 ? 'pm' : 'am';
-    let startTime = startHours + ":" + startMinutes + " " + startAorP;
+    let startTime = startHours + ":" + startMinutes + startAorP;
 
     // Convert end time from 24 to 12 and make pretty
     let eHours = end.getHours();
     let endHours = (eHours % 12) || 12;
     let endMinutes = (end.getMinutes() < 10 ? '0' : '') + end.getMinutes();
     let endAorP = eHours >= 12 ? 'pm' : 'am';
-    let endTime = endHours + ":" + endMinutes + " " + endAorP;
+    let endTime = endHours + ":" + endMinutes + endAorP;
 
     // Create readable object for this event
     let newEvent = {
@@ -77,42 +78,65 @@ const EditMeetingTimes  = (props) => {
   });
 
 
-  const handleEditEventClick = (eventToEditID) => () => {
+  const handleEventUpdate = (eventToEditID) => () => {
     setEventToEdit(eventToEditID);
-    setEventToEditInfo  (props.recurringEvents.find(e => (e?._id === eventToEditID)));
-    setEventTrue(true);
+    // setEventToEditInfo  (props.recurringEvents.find(e => (e?._id === eventToEditID)));
+    // setReadableEventToEdit(readableEvent(eventToEditInfo));
+    // setEventTrue(true);
 
-    console.log('eid', eventToEditID);
-    console.log('re', props.recurringEvents);
-
+    console.log('Update', eventToEditID);
   }
+
+  const handleResetEvent = (eventToEditID) => () => {
+    setEventToEdit(eventToEditID);
+    // setEventToEditInfo  (props.recurringEvents.find(e => (e?._id === eventToEditID)));
+    // setReadableEventToEdit(readableEvent(eventToEditInfo));
+    // setEventTrue(true);
+
+    console.log('Reset', eventToEditID);
+  } 
+
+  const handleEventDelete = (eventToEditID) => () => {
+    setEventToEdit(eventToEditID);
+    // setEventToEditInfo  (props.recurringEvents.find(e => (e?._id === eventToEditID)));
+    // setReadableEventToEdit(readableEvent(eventToEditInfo));
+    // setEventTrue(true);
+
+    console.log('Delete', eventToEditID);
+  }
+
+  /*
+  ToDo: 
+  Create editable drop-downs for meeting info
+  Add "update"/"cancel" and "Delete" buttons (update and cancel button is greyed out until you make a change)
+  Cancel functionality
+  Update functionality
+  delete functionality
+  Make add new meeting button
+  Add new meeting time functionality
+  Styling 
+  */
+
 
   return (
     <div>
-	    <div className="project-list-heading">Project: {props.projectToEdit.name}</div>
+      <div className="project-list-heading">Project: {props.projectToEdit.name}</div>
       <div className="project-list-heading">Edit Recurring Events</div>
-
-      {editTrue ?
-
-        <div>
-          <EditableMeeting
-            theEvent={eventToEditInfo}
-          />
-        </div>
-      :
-        processedEvents.map(rEvent => (
-          <div className="display-events">
-            <div>Description: {rEvent.description}</div>
-            <div>Day: {rEvent.dayOfTheWeek}</div>
-            <div>Start Time: {rEvent.startTime} </div>
-            <div>End Time: {rEvent.endTime} </div>
-            <div><span className="project-edit-button" onClick={handleEditEventClick(rEvent.event_id)} > [edit]</span></div>
-          </div>
-        ))
-      }
-
-      <div><button className="button-back" onClick={props.goEditProject}>Back to Edit Project</button></div>
-      <div><button className="button-back" onClick={props.goSelectProject}>Back to Select Project</button></div>
+      {processedEvents.map(rEvent => (
+        <EditableMeeting
+          key = {rEvent.event_id}
+          event_id = {rEvent.event_id}
+          eventDescription = {rEvent.description}
+          eventDay = {rEvent.dayOfTheWeek}
+          eventStartTime = {rEvent.startTime}
+          eventEndTime = {rEvent.endTime}
+          handleEventUpdate = {handleEventUpdate}
+          handleResetEvent = {handleResetEvent}
+          handleEventDelete = {handleEventDelete}
+         />
+      ))}
+        <div><button className="button-back" onClick={props.goEditProject}>Back to Edit Project</button></div>
+        <div><button className="button-back" onClick={props.goSelectProject}>Back to Select Project</button></div>
     </div>
   );
 
