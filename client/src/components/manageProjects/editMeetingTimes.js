@@ -2,9 +2,14 @@ import React, { useState, useEffect }  from 'react';
 import '../../sass/ManageProjects.scss';
 import EditableMeeting from './editableMeeting';
 import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../../utils/globalSettings";
+import CreateNewEvent from './createNewEvent';
+import { now } from 'moment';
 
 // This component displays current meeting times for selected project and offers the option to edit those times. 
 const EditMeetingTimes  = (props) => {
+
+  const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
+  //const URL = process.env.NODE_ENV === 'prod' ? 'https://www.vrms.io' : 'http://localhost:4000';
 
   // Initialize state
   const [rEvents, setREvents] = useState([]);
@@ -13,9 +18,9 @@ const EditMeetingTimes  = (props) => {
   const [eventToEditInfo, setEventToEditInfo] = useState({});
   const [readableEventToEdit, setReadableEventToEdit] = useState({});
 
-  // Filters the recurring events to select for the selected projects. 
+  // // Filters the recurring events to select for the selected projects. 
   const thisProjectRecurringEvents = (projectToEditID) => { 
-    setREvents(props.recurringEvents.filter(e => (e?.project._id === projectToEditID)));
+    setREvents(props.recurringEvents.filter(e => (e?.project?._id === projectToEditID)));
   }
 
   // Get project recurring events when component loads
@@ -25,15 +30,7 @@ const EditMeetingTimes  = (props) => {
 
   // Translate event data into human readable format
 
-  /* 
-  This makes the dates into human readable text.  However, it may ultimately be necessary to do some
-  additional work on the time and time zone stuff, or to simply use a 
-  library like moments (https://momentjs.com/timezone/) 
-  */
-
   function readableEvent (e) {
-
-    //let description = e.description;
 
     // Get date for each of the parts of the event time/day   
     let d = new Date(e.date);
@@ -66,7 +63,8 @@ const EditMeetingTimes  = (props) => {
       dayOfTheWeek: dayOfTheWeek,
       startTime: startTime,
       endTime: endTime,
-      event_id: e._id
+      event_id: e._id,
+      videoConferenceLink: e.videoConferenceLink
     }
 
     return newEvent;
@@ -77,43 +75,141 @@ const EditMeetingTimes  = (props) => {
     return readableEvent(item);
   });
 
-
-  const handleEventUpdate = (eventToEditID) => () => {
+  // Click Handlers
+  const handleEventUpdate = (eventToEditID,description, day, startTime, endTime) => () => {
     setEventToEdit(eventToEditID);
     // setEventToEditInfo  (props.recurringEvents.find(e => (e?._id === eventToEditID)));
     // setReadableEventToEdit(readableEvent(eventToEditInfo));
     // setEventTrue(true);
+
+
 
     console.log('Update', eventToEditID);
+    console.log('Update', description);
+    console.log('Update', day);
+    console.log('Update', startTime);
+    console.log('Update', endTime);
   }
 
-  const handleResetEvent = (eventToEditID) => () => {
-    setEventToEdit(eventToEditID);
-    // setEventToEditInfo  (props.recurringEvents.find(e => (e?._id === eventToEditID)));
-    // setReadableEventToEdit(readableEvent(eventToEditInfo));
-    // setEventTrue(true);
+  const deleteRecurringEvent = async (RecurringEventID) => {
 
-    console.log('Reset', eventToEditID);
-  } 
+    const url = `/api/recurringEvents/${RecurringEventID}`;
+    const requestOptions = {
+        method: 'DELETE',
+        headers: {
+            "Content-Type": "application/json",
+            "x-customrequired-header": headerToSend
+        },
+    };
 
-  const handleEventDelete = (eventToEditID) => () => {
-    setEventToEdit(eventToEditID);
-    // setEventToEditInfo  (props.recurringEvents.find(e => (e?._id === eventToEditID)));
-    // setReadableEventToEdit(readableEvent(eventToEditInfo));
-    // setEventTrue(true);
+    const response = await fetch(url, requestOptions); 
+    if (!response.ok) {
+      throw new Error(`HTTP error!  ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
 
-    console.log('Delete', eventToEditID);
   }
+
+  const handleEventDelete = (eventID) => () => {
+
+    deleteRecurringEvent(eventID)
+    .then( (data) => {
+      console.log('success: ', data);
+    })
+    .catch( (error) => {
+      console.log(`Delete Event Error: `, error);
+      alert("Server not responding.  Please try again.");
+    });
+
+  }
+
+   
+  // Function to Create New User
+  const createNewRecurringEvent = async (eventToCreate) => {
+
+    const url = `/api/recurringEvents/`;
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+            "x-customrequired-header": headerToSend
+        },
+        body: JSON.stringify(eventToCreate)
+    };
+
+    // console.log("event: ", eventToCreate);
+    // console.log("strinify: ", JSON.stringify(eventToCreate));
+
+    const response = await fetch(url, requestOptions); 
+    if (!response.ok) {
+      throw new Error(`HTTP error!  ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+
+  }
+
+  const handleEventCreate = () => {
+
+    //create object for new event
+
+    // Find the date for the day of the week
+    let day = 3;
+    const date = new Date();
+    date.setDate(date.getDate() + ((7 - date.getDay()) % 7 + day) % 7);
+
+    // Set start time
+    let startTime = new Date(date);
+    startTime.setHours(10);
+    startTime.setMinutes(30);
+
+    //set End Time
+    let endTime = new Date(date); 
+    endTime.setHours(11);
+    endTime.setMinutes(30);
+
+    let createdDate = new Date();
+    let updatedDate = new Date();
+
+
+    const theNewEvent = {
+      name: "Hackforla.org Website",
+      location: {
+          city: "Los Angeles",
+          state: "CA",
+          country: "USA"
+      },
+      hacknight: "Online",
+      brigade: "Hack for LA",
+      eventType: "Project Meeting",
+      description: "Crazy Hat Meeting",
+      project: "5edeb146ce228b001778fad0",                                                
+      date: date,   
+      startTime: startTime,
+      endTime: endTime,
+      hours: 1,
+      createdDate: createdDate,
+      updatedDate: updatedDate,
+      checkInReady: false,
+      videoConferenceLink: "https://us02web.zoom.us/j/9899833897?pwd=ZHJ5WFBqUmF4L2UvcElTUTZrRW83QT09"
+    };
+
+    createNewRecurringEvent(theNewEvent)
+    .then( (data) => {
+      console.log('success: ', data);
+    })
+    .catch( (error) => {
+      console.log(`Create Recurring Event: `, error);
+      //alert("Server not responding.  Please try again.");
+    });
+  }
+
 
   /*
   ToDo: 
-  Create editable drop-downs for meeting info
-  Add "update"/"cancel" and "Delete" buttons (update and cancel button is greyed out until you make a change)
-  Cancel functionality
   Update functionality
   delete functionality
-  Make add new meeting button
-  Add new meeting time functionality
   Styling 
   */
 
@@ -130,13 +226,18 @@ const EditMeetingTimes  = (props) => {
           eventDay = {rEvent.dayOfTheWeek}
           eventStartTime = {rEvent.startTime}
           eventEndTime = {rEvent.endTime}
+          eventMeetingURL = {rEvent.videoConferenceLink}
           handleEventUpdate = {handleEventUpdate}
-          handleResetEvent = {handleResetEvent}
           handleEventDelete = {handleEventDelete}
          />
       ))}
-        <div><button className="button-back" onClick={props.goEditProject}>Back to Edit Project</button></div>
-        <div><button className="button-back" onClick={props.goSelectProject}>Back to Select Project</button></div>
+      <div>
+        <CreateNewEvent 
+          handleEventCreate = {handleEventCreate}
+        />
+      </div>
+      <div><button className="button-back" onClick={props.goEditProject}>Back to Edit Project</button></div>
+      <div><button className="button-back" onClick={props.goSelectProject}>Back to Select Project</button></div>
     </div>
   );
 

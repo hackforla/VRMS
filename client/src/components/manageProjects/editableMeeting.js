@@ -3,7 +3,7 @@ import '../../sass/ManageProjects.scss';
 
 
 const EditableMeeting  = ( { 
-  event_id, eventDescription, eventDay,eventStartTime,eventEndTime, handleEventUpdate, handleResetEvent, handleEventDelete 
+  event_id, eventDescription, eventDay,eventStartTime,eventEndTime, handleEventUpdate, handleEventDelete, eventMeetingURL 
 } ) => {
 
   // State variables
@@ -11,6 +11,7 @@ const EditableMeeting  = ( {
   const [dayState, setDayState] = useState(eventDay);
   const [startState, setStartState] = useState(eventStartTime);
   const [endState, setEndState] = useState(eventEndTime);
+  const [meetingLinkState, setMeetingLinkState] = useState(eventMeetingURL);
 
   // Helper functions
 
@@ -37,7 +38,7 @@ const EditableMeeting  = ( {
 
   let clockHours = createClockHours();
 
-  // Handle clicks and such
+  // Handle state changes
   const handleDescriptionChange = event => {
     setDescriptionState(event.target.value);
   };  
@@ -52,7 +53,21 @@ const EditableMeeting  = ( {
 
   const handleEndChange = event => {
     setEndState(event.target.value);
-  };  
+  }; 
+  
+  const handleMeetingLinkChange = event => {
+    setMeetingLinkState(event.target.value);
+  }
+
+  // Handle Clicks
+  const handleResetEvent = (eventToEditID) => () => {
+    setDescriptionState(eventDescription);
+    setDayState(eventDay);
+    setStartState(eventStartTime);
+    setEndState(eventEndTime);
+    setMeetingLinkState(eventMeetingURL);
+  } 
+
 
   return (
     <div className="display-events">
@@ -95,7 +110,15 @@ const EditableMeeting  = ( {
       </select> 
     </div>
     <div>
-      <span className="project-edit-button" onClick={handleEventUpdate(event_id)} >[UPDATE]</span>
+      <span className="editable-field">Meeting Link:</span>
+      <input 
+        type="text"
+        value={meetingLinkState}
+        onChange={handleMeetingLinkChange}
+      />
+    </div>
+    <div>
+      <span className="project-edit-button" onClick={handleEventUpdate(event_id,descriptionState,dayState,startState,endState)} >[UPDATE]</span>
       <span className="project-edit-button" onClick={handleResetEvent(event_id)} >[RESET]</span>
       <span className="project-edit-button" onClick={handleEventDelete(event_id)} >[DELETE]</span>
     </div>
