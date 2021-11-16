@@ -15,10 +15,28 @@
     justify-content: space-between;
 }
 
-.home-link-text {
+.nav-link-container {
+    margin: 0px 18px 0px 0px;
+}
+
+.nav-link-text {
     margin: 0;
     padding: 0;
     font-weight: bold;
+
+    cursor: default;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 0px;
+    /* letter-spacing: .05em; */
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+        monospace;
+
+}
+
+.nav-link-active {
+    color: gray;
+    margin: 0px 18px 0px 0px;
 }
 
 .navbar-buttons-container {
@@ -27,14 +45,6 @@
     display: flex;
     top: 36px;
     left: 12px;
-
-    a {
-        margin: 0px 18px 0px 0px;
-        
-        p {
-            font-weight: 600;
-        }
-    }
 }
 
 .navbar-logo {
