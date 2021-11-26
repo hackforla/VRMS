@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../utils/globalSettings";
+import * as authApi from '../api/auth';
 
 export const AuthContext = createContext();
 
@@ -14,9 +15,19 @@ export const AuthProvider = ({ children }) => {
       const userAuth = await fetchAuth();
       setAuth(userAuth)
     }
+
+    const logout = async () => {
+      const res = await authApi.fetchLogout();
+
+      if (!res.ok) {
+        throw new Error(res.statusText);
+      }
+
+      setAuth(null);
+    }
     
     return (
-        <AuthContext.Provider value={[auth, refreshAuth]}>
+        <AuthContext.Provider value={{auth, refreshAuth, logout}}>
             { children }
         </AuthContext.Provider>
     );

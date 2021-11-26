@@ -10,7 +10,7 @@ const ManageProjects = () => {
 
   const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
-  const [auth] = useAuth();
+  const { auth } = useAuth();
   const [projects, setProjects] = useState([]);
   const [projectToEdit, setProjectToEdit] = useState([]);
   const [recurringEvents, setRecurringEvents] = useState([]);
@@ -65,9 +65,9 @@ const ManageProjects = () => {
     setProjectToEdit(updatedProj);
   }
 
-  // If not logged in, redirect back home
-  if (!user) {
-    return <Redirect to="/" />;
+  // If not logged in, redirect to login page
+  if (!auth && !auth?.user) {
+    return <Redirect to="/login" />;
   }
 
   const projectSelectClickHandler = project => event => {
@@ -77,7 +77,7 @@ const ManageProjects = () => {
 
   const goSelectProject = () => {
     setComponentToDisplay('selectProject');
-}
+  }
 
 
   switch (componentToDisplay) {

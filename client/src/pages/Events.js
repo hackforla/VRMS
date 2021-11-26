@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import moment from 'moment';
 
 import { ReactComponent as ClockIcon} from '../svg/Icon_Clock.svg';
@@ -8,8 +8,10 @@ import { ReactComponent as PlusIcon } from '../svg/Icon_Plus.svg';
 import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../utils/globalSettings";
 
 import '../sass/Events.scss';
+import useAuth from '../hooks/useAuth';
 
 const Events = (props) => {
+    const { auth } = useAuth();
     const [events, setEvents] = useState([]);
     const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
@@ -33,7 +35,7 @@ const Events = (props) => {
 
     }, []);
 
-    return (
+    return auth && auth.user ? (
     <div className="events-list">
         <ul>
         {events.map((event, index) => {
@@ -80,7 +82,8 @@ const Events = (props) => {
         </Link>
         </div>
     </div>
-
+    ) : (
+        <Redirect to='/login' />
     );
 };
 

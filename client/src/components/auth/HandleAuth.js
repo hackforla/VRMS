@@ -7,7 +7,7 @@ import '../../sass/MagicLink.scss';
 import useAuth from '../../hooks/useAuth';
 
 const HandleAuth = (props) => {
-  const [auth, refreshAuth] = useAuth();
+  const { auth, refreshAuth } = useAuth();
   const [isMagicLinkValid, setMagicLink] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
 

@@ -13,7 +13,7 @@ import "./index.scss";
 import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../../../utils/globalSettings";
 
 const AdminDashboard = () => {
-  const [auth] = useAuth();
+  const { auth } = useAuth();
   const defaultChartType = "All Events";
   const eventsArr = [];
   const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
