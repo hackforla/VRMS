@@ -213,7 +213,7 @@ const submitReturning = (returningUser, e = null) => {
                 }
             })
             .then(res => {
-              console.log('res.ok, 209', res.ok);
+              // console.log('res.ok, 209', res.ok);
               if (res.ok) {
                 return res.json(); 
               }
@@ -526,7 +526,7 @@ const checkEmail = (e) => {
 
         setIsLoading(true);
 
-        console.log('formInput.email:', formInput.email)
+        // console.log('formInput.email:', formInput.email)
 
         fetch('/api/checkuser', {
             method: "POST",
@@ -537,7 +537,7 @@ const checkEmail = (e) => {
             body: JSON.stringify({ email: formInput.email })
         })
         .then(res => {
-          console.log('res:', res)
+          // console.log('res:', res)
 
             if (res.ok) {
                 return res.json();
@@ -546,7 +546,7 @@ const checkEmail = (e) => {
             throw new Error(res.statusText);
         })
         .then(resJson => {
-          console.log("resJSON: ", resJson);
+          // console.log("resJSON: ", resJson);
             setUser(resJson);
             setIsLoading(false);
             resJson && submitReturning(resJson);
