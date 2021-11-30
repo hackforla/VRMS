@@ -204,7 +204,7 @@ const submitReturning = (returningUser, e = null) => {
         try {
             const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
-            fetch(`/api/users/${returningUser._id}`, {
+            fetch(`/api/users/${returningUser.user._id}`, {
                 method: "PATCH",
                 body: answerJson,
                 headers: {
@@ -526,6 +526,8 @@ const checkEmail = (e) => {
 
         setIsLoading(true);
 
+        console.log('formInput.email:', formInput.email)
+
         fetch('/api/checkuser', {
             method: "POST",
             headers: {
@@ -535,6 +537,8 @@ const checkEmail = (e) => {
             body: JSON.stringify({ email: formInput.email })
         })
         .then(res => {
+          console.log('res:', res)
+
             if (res.ok) {
                 return res.json();
             }
@@ -542,7 +546,7 @@ const checkEmail = (e) => {
             throw new Error(res.statusText);
         })
         .then(resJson => {
-          // console.log(resJson);
+          console.log("resJSON: ", resJson);
             setUser(resJson);
             setIsLoading(false);
             resJson && submitReturning(resJson);
