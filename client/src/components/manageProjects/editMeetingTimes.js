@@ -127,6 +127,7 @@ const EditMeetingTimes  = (props) => {
    
   // Function to Create New User
   const createNewRecurringEvent = async (eventToCreate) => {
+    eventToCreate.preventDefault();
 
     const url = `/api/recurringEvents/`;
     const requestOptions = {
@@ -151,6 +152,7 @@ const EditMeetingTimes  = (props) => {
   }
 
   const handleEventCreate = () => {
+    
 
     //create object for new event
 
@@ -183,7 +185,7 @@ const EditMeetingTimes  = (props) => {
       hacknight: "Online",
       brigade: "Hack for LA",
       eventType: "Project Meeting",
-      description: "Crazy Hat Meeting",
+      description: "Crazy Car Meeting",
       project: "5edeb146ce228b001778fad0",                                                
       date: date,   
       startTime: startTime,
@@ -200,19 +202,10 @@ const EditMeetingTimes  = (props) => {
       console.log('success: ', data);
     })
     .catch( (error) => {
-      console.log(`Create Recurring Event: `, error);
+      console.log(`Create Recurring Event Error: `, error);
       //alert("Server not responding.  Please try again.");
     });
   }
-
-
-  /*
-  ToDo: 
-  Update functionality
-  delete functionality
-  Styling 
-  */
-
 
   return (
     <div>
