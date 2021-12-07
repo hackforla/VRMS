@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { Redirect } from 'react-router-dom';
 import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../utils/globalSettings";
 import '../sass/UserAdmin.scss';
+import useAuth from '../hooks/useAuth';
 
 //Parent
 const UserAdmin = () => {
-    
+
     const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
     // Initialize state hooks
+    const [auth] = useAuth();
     const [users, setUsers] = useState([]); // All users pulled from database
     const [projects, setProjects] = useState([]); // All projects pulled from db
     const [userToEdit, setUserToEdit] = useState({}); // The selected user that is being edited
@@ -59,25 +62,28 @@ const UserAdmin = () => {
         fetchProjects();
     }, []);
 
+
+
     // Handle click on selected user in search results
     const userClickHandler = usr => event => {
         setUserToEdit(usr);
     }
 
 
+
     // Get search resuts to display on page
     const emailResults = !searchTerm
     ? []
-    : Object.values(users).filter 
+    : Object.values(users).filter
         (user => user.email.toLowerCase().startsWith(searchTerm.toLowerCase().trim()))
         .sort((a,b) => a.email.localeCompare(b.email))
-        .map((u) => <div onClick={userClickHandler(u)}>{u.email + " ( " + u.name.firstName + " " + u.name.lastName + " )"}</div>)      
+        .map((u) => <div onClick={userClickHandler(u)}>{u.email + " ( " + u.name.firstName + " " + u.name.lastName + " )"}</div>)
     ;
-    
+
     const nameResults = !searchTerm
     ? []
-    : Object.values(users).filter 
-        (user => 
+    : Object.values(users).filter
+        (user =>
             user.name.firstName.concat(' ', user.name.lastName).toLowerCase().startsWith(searchTerm.toLowerCase().trim()))
             .sort((a,b) => a.name.firstName.concat(a.name.lastName).localeCompare(b.name.firstName.concat(b.name.lastName)))
             .map((u) => <div onClick={userClickHandler(u)}>{u.name.firstName + " " + u.name.lastName + " ( " + u.email + " )"}</div>)
@@ -112,7 +118,7 @@ const UserAdmin = () => {
         };
 
         try {
-            const response = await fetch(url, requestOptions); 
+            const response = await fetch(url, requestOptions);
             const resJson = await response.json();
             return resJson;
         } catch (error) {
@@ -126,18 +132,21 @@ const UserAdmin = () => {
     useEffect(() => {
         if (userLoaded) {
           updateUserDb();
-          fetchUsers(); // Fetches users from db and resets users state.  On the off chance that there is a problem with db write, this will align state with db 
+          fetchUsers(); // Fetches users from db and resets users state.  On the off chance that there is a problem with db write, this will align state with db
         } else {
           setUserLoaded(true);
         }
       }, [userManagedProjects]);
 
+    if (auth?.user?.accessLevel !== 'admin') {
+        return <Redirect to="/" />;
+    }
 
     // Handle the add project form submit
     const handleProjectFormSubmit = async (event) => {
         event.preventDefault();
 
-        // If there is a value, and it's not already in state, add to state, which will trigger db update (see useEffect above) 
+        // If there is a value, and it's not already in state, add to state, which will trigger db update (see useEffect above)
         if (projectValue.length > 0 && projectValue != 'default' && !userManagedProjects.includes(projectValue)) {
             setUserManagedProjects([...userManagedProjects, projectValue]);
             setProjectValue([]);
@@ -162,12 +171,12 @@ const UserAdmin = () => {
       setSearchTerm("");
       setUserManagedProjects([]);
     }
-    
+
     // Remove projects from db
     const handleRemoveProject = (projectToRemove) => {
         if (userManagedProjects.length > 0) {
             setUserManagedProjects(userManagedProjects.filter(p => (p !== projectToRemove)));
-        } 
+        }
     };
 
     // This initially populates userManagedProjects upon selection of a user
@@ -177,23 +186,23 @@ const UserAdmin = () => {
 
     // Swaps the buttons and displayed panels for the search results, by email or by name
     const buttonSwap = () => {
-        searchResultType === "email" 
-        ? setSearchResultType('name') 
+        searchResultType === "email"
+        ? setSearchResultType('name')
         : setSearchResultType('email');
     };
 
     // Add new project things
     const toggleAddProject = () => {
-        addNewProject === true 
-        ? setAddNewProject(false) 
-        : setAddNewProject(true); 
+        addNewProject === true
+        ? setAddNewProject(false)
+        : setAddNewProject(true);
     }
 
     // Add new project things
     const toggleUserSearch = () => {
-       showUserSearch === true 
-      ? setShowUserSearch(false) 
-      : setShowUserSearch(true); 
+       showUserSearch === true
+      ? setShowUserSearch(false)
+      : setShowUserSearch(true);
     }
 
 
@@ -215,7 +224,7 @@ const UserAdmin = () => {
         };
 
         try {
-          const response = await fetch(url, requestOptions); 
+          const response = await fetch(url, requestOptions);
           const resJson = await response.json();
           return resJson;
         } catch (error) {
@@ -241,24 +250,24 @@ const UserAdmin = () => {
                         onChange={handleChange}
                     />
                     <div className="tab-buttons">
-                        <div><button 
-                            className={searchResultType === "name" ? "select-button selected" : "select-button"} 
+                        <div><button
+                            className={searchResultType === "name" ? "select-button selected" : "select-button"}
                             onClick={buttonSwap} disabled={searchResultType === "name"}>Results by Name
                         </button></div>
-                        <div><button 
-                            className={searchResultType === "email" ? "select-button selected" : "select-button"} 
+                        <div><button
+                            className={searchResultType === "email" ? "select-button selected" : "select-button"}
                             onClick={buttonSwap} disabled={searchResultType === "email"}>Results by Email
                         </button></div>
                     </div>
                     <div>
                         <div>
-                            {<ul className={searchResultType === "name" ? "search-results" : "search-results hide-results"}>    
+                            {<ul className={searchResultType === "name" ? "search-results" : "search-results hide-results"}>
                                 {nameResults.map((result,index) => {
                                 return (
                                     <li key={index}>{result}</li>
                                 )})}
                             </ul>}
-                        </div> 
+                        </div>
 
                         <div>
                             {<ul className={searchResultType === "email" ? "search-results" : "search-results hide-results"}>
@@ -293,7 +302,7 @@ const UserAdmin = () => {
     } else if (addNewProject === true )  {
       return (
         <div className="">
-            <AddNewProject 
+            <AddNewProject
             toggleAddProject = {toggleAddProject}
             handleNewProjectFormSubmit = {handleNewProjectFormSubmit}
             projects = {projects}
@@ -310,7 +319,7 @@ const UserAdmin = () => {
     }
 };  // End admin
 
-// child of UserAdmin. Displays form to update users. 
+// child of UserAdmin. Displays form to update users.
 const EditUsers = (props) => {
 
     // Handle change on input
@@ -337,7 +346,7 @@ const EditUsers = (props) => {
     function prepareUserProjects (userProjects, activeProjects ) {
         let res = activeProjects.filter(item => userProjects.includes(item[0]));
         return res;
-    } 
+    }
 
     const userProjectsToDisplay = prepareUserProjects (userProjects, props.activeProjects);
 
@@ -345,15 +354,15 @@ const EditUsers = (props) => {
         <div>
             <div className="ua-row">
                 <div className="user-display-column-left">
-                    Name: 
+                    Name:
                 </div>
                 <div className="user-display-column-right">
-                    {userName} 
+                    {userName}
                 </div>
             </div>
             <div className="ua-row">
                 <div className="user-display-column-left">
-                    Email: 
+                    Email:
                 </div>
                 <div className="user-display-column-right">
                     {userEmail}
@@ -361,10 +370,10 @@ const EditUsers = (props) => {
             </div>
             <div className="ua-row">
                 <div className="user-display-column-left">
-                    Projects: 
+                    Projects:
                 </div>
                 <div className="user-display-column-right">
-                    <ul className="project-list">    
+                    <ul className="project-list">
                         {userProjectsToDisplay.map((result,index) => {
                         return (
                             <li key={index}>{result[1]}
@@ -376,9 +385,9 @@ const EditUsers = (props) => {
             </div>
             <div>
                 {<form onSubmit={props.handleFormSubmit}>
-                    <select 
+                    <select
                         className="project-select"
-                        value={props.projectValue} 
+                        value={props.projectValue}
                         onChange={handleChange}>
                             <option  value='default'>Select a project..</option>
                             {props.activeProjects.map((result,index) => {
@@ -432,7 +441,7 @@ const AddNewProject = (props) => {
         setValidationErrors(`The project name "${newProjectName}" is already in use.`);
         setNewProjectName(""); // clear the form
     } else {
-        props.handleNewProjectFormSubmit(newProjectName); 
+        props.handleNewProjectFormSubmit(newProjectName);
         setNewProjectName(""); // clear the form
         setAddProjectSuccess(`The project "${newProjectName}" has been added!`);
     }
