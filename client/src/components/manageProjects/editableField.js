@@ -10,39 +10,29 @@ const EditableField = ({
   fieldType,
   fieldTitle,
   accessLevel,
+  canEdit,
 }) => {
   const [fieldValue, setFieldValue] = useState(fieldData);
   const [editable, setEditable] = useState(false);
-  const [userAccessLevel] = useState(accessLevel);
-  const [userCanEdit, setUserCanEdit] = useState(false);
+  const [notRestricted, setNotRestricted] = useState(false);
   const ref = useRef();
-
-  console.log('editableField: props: editable:', editable);
-  console.log('editableFields: props: accessLevel: ', userAccessLevel);
   console.log('editableFields: props: accessLevel: ', accessLevel);
-  console.log('usercanedit', userCanEdit);
 
   // create function that checks the user has access to edit all fields
 
-  const canEdit = () => {
-    // get user accessLevel
-    console.log(
-      `editableField: canEdit: activated onClick: editable?: ${editable} : and accessLevel: ${accessLevel}`
-    );
-
-    if (userAccessLevel === 'user') {
-      setUserCanEdit(true);
-    }
+  const checkUser = () => {
+    const permitted = canEdit.includes(accessLevel);
+    setNotRestricted(permitted);
   };
 
   // Update the displayed results to match the change just made to the db
   useEffect(() => {
-    canEdit();
+    checkUser();
     if (editable) {
       ref.current.focus();
       setFieldValue(fieldData);
     }
-  }, [editable, userCanEdit]);
+  }, [editable]);
 
   return (
     // here goes the conditional rendering
@@ -50,7 +40,7 @@ const EditableField = ({
     <div>
       <div>
         {fieldTitle}
-        {userCanEdit === true ? (
+        {notRestricted ? (
           <span
             className="project-edit-button"
             onClick={() => {

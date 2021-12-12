@@ -66,7 +66,8 @@ const EditProject = (props) => {
           projId={props.projectToEdit._id}
           fieldType="text"
           fieldTitle="Name:"
-          // accessLevel={props.userAccessLevel}
+          accessLevel={props.userAccessLevel}
+          canEdit={['admin']}
         />
       </div>
       <div className="editable-field-div">
@@ -78,7 +79,8 @@ const EditProject = (props) => {
           projId={props.projectToEdit._id}
           fieldType="textarea"
           fieldTitle="Description:"
-          // accessLevel={props.userAccessLevel}
+          accessLevel={props.userAccessLevel}
+          canEdit={['admin']}
         />
       </div>
       <div className="editable-field-div">
@@ -90,7 +92,8 @@ const EditProject = (props) => {
           projId={props.projectToEdit._id}
           fieldType="text"
           fieldTitle="Location:"
-          // accessLevel={props.userAccessLevel}
+          accessLevel={props.userAccessLevel}
+          canEdit={['admin']}
         />
       </div>
       <div className="editable-field-div">
@@ -102,7 +105,8 @@ const EditProject = (props) => {
           projId={props.projectToEdit._id}
           fieldType="text"
           fieldTitle="GitHub Identifier:"
-          // accessLevel={props.userAccessLevel}
+          accessLevel={props.userAccessLevel}
+          canEdit={['admin']}
         />
       </div>
       <div className="editable-field-div">
@@ -114,7 +118,8 @@ const EditProject = (props) => {
           projId={props.projectToEdit._id}
           fieldType="text"
           fieldTitle="GitHib URL:"
-          // accessLevel={props.userAccessLevel}
+          accessLevel={props.userAccessLevel}
+          canEdit={['admin']}
         />
       </div>
       <div className="editable-field-div">
@@ -126,7 +131,8 @@ const EditProject = (props) => {
           projId={props.projectToEdit._id}
           fieldType="text"
           fieldTitle="Slack URL:"
-          // accessLevel={props.userAccessLevel}
+          accessLevel={props.userAccessLevel}
+          canEdit={['admin']}
         />
       </div>
       <div className="editable-field-div">
@@ -139,6 +145,7 @@ const EditProject = (props) => {
           fieldType="text"
           fieldTitle="Google Drive URL:"
           accessLevel={props.userAccessLevel}
+          canEdit={['admin', 'user']}
         />
       </div>
       <div className="editable-field-div">
@@ -150,7 +157,8 @@ const EditProject = (props) => {
           projId={props.projectToEdit._id}
           fieldType="text"
           fieldTitle="Google Drive ID:"
-          // accessLevel={props.userAccessLevel}
+          accessLevel={props.userAccessLevel}
+          canEdit={['admin']}
         />
       </div>
       <div className="editable-field-div">
@@ -162,7 +170,8 @@ const EditProject = (props) => {
           projId={props.projectToEdit._id}
           fieldType="text"
           fieldTitle="HfLA Website URL:"
-          // accessLevel={props.userAccessLevel}
+          accessLevel={props.userAccessLevel}
+          canEdit={['admin']}
         />
       </div>
       <div className="editable-field-div">
@@ -175,6 +184,7 @@ const EditProject = (props) => {
           fieldType="text"
           fieldTitle="Video Conference Link:"
           accessLevel={props.userAccessLevel}
+          canEdit={['admin', 'user']}
         />
       </div>
       <div className="editable-field-div">
@@ -186,7 +196,8 @@ const EditProject = (props) => {
           projId={props.projectToEdit._id}
           fieldType="text"
           fieldTitle="Looking For Description:"
-          // accessLevel={props.userAccessLevel}
+          accessLevel={props.userAccessLevel}
+          canEdit={['admin']}
         />
       </div>
       <div className="editable-field-div">
@@ -199,6 +210,7 @@ const EditProject = (props) => {
           fieldType="text"
           fieldTitle="Partners (comma separated):"
           accessLevel={props.userAccessLevel}
+          canEdit={['admin', 'user']}
         />
       </div>
       <div className="editable-field-div">
@@ -210,7 +222,8 @@ const EditProject = (props) => {
           projId={props.projectToEdit._id}
           fieldType="text"
           fieldTitle="Recruiting Categories (comma separated):"
-          // accessLevel={props.userAccessLevel}
+          accessLevel={props.userAccessLevel}
+          canEdit={['admin']}
         />
       </div>
 
