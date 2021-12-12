@@ -10,15 +10,12 @@ const ManageProjects = () => {
   const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
   const [auth] = useAuth();
-  console.log('ManageProjects: auth', auth.isAdmin);
   const [projects, setProjects] = useState([]);
   const [projectToEdit, setProjectToEdit] = useState([]);
   const [recurringEvents, setRecurringEvents] = useState([]);
   const [componentToDisplay, setComponentToDisplay] = useState(''); // displayProjectInfo, editMeetingTime or editProjectInfor
   const [accessLevel, setAccessLevel] = useState();
   const user = auth?.user;
-
-  console.log('ManageProjects: user: accessLevel: ', user.accessLevel);
 
   // Fetch projects from db
   async function fetchProjects() {

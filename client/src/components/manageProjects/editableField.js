@@ -16,7 +16,6 @@ const EditableField = ({
   const [editable, setEditable] = useState(false);
   const [notRestricted, setNotRestricted] = useState(false);
   const ref = useRef();
-  console.log('editableFields: props: accessLevel: ', accessLevel);
 
   // create function that checks the user has access to edit all fields
 

@@ -7,8 +7,6 @@ import { REACT_APP_CUSTOM_REQUEST_HEADER } from '../../utils/globalSettings';
 //for user level block access to all except for the ones checked
 
 const EditProject = (props) => {
-  console.log('editProject.js: props:', props);
-
   const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
   //const [currentProjectData, setCurrentProjectData] = useState(props.projectToEdit);
