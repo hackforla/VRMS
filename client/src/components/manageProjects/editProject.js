@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import '../../sass/ManageProjects.scss';
 import EditableField from './editableField';
 import { REACT_APP_CUSTOM_REQUEST_HEADER } from '../../utils/globalSettings';
