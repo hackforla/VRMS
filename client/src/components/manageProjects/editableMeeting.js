@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../../sass/ManageProjects.scss';
-
+import { createClockHours } from '../../utils/createClockHours';
 
 const EditableMeeting  = ( { 
   event_id, eventDescription, eventDay,eventStartTime,eventEndTime, handleEventUpdate, handleEventDelete, eventMeetingURL 
@@ -15,27 +15,7 @@ const EditableMeeting  = ( {
 
   // Helper functions
 
-  // These are the hours of the day in an array to make setting the time options faster and cleaner
-  function createClockHours () {
-
-    let hours = [12];
-    let clockHours = [];
-
-    for (let i = 1; i < 12; i++) {
-      hours.push(i);
-    }
-
-    let aorp = 'am';
-    for (let i = 0; i < 2; i++) {
-      for (const d of hours) {
-          clockHours.push(d + ':00' + aorp);
-          clockHours.push(d + ':30' + aorp);
-      }
-      aorp = "pm"; 
-    }
-    return clockHours;
-  }
-
+  // create clock hours for form input
   let clockHours = createClockHours();
 
   // Handle state changes
@@ -101,7 +81,7 @@ const EditableMeeting  = ( {
       </select>
     </div>
     <div>
-      <span className="editable-field">Start Time:</span>
+      <span className="editable-field">End Time:</span>
       <select value={endState} onChange={handleEndChange}>
       {clockHours.map((value,index) => {
         return (

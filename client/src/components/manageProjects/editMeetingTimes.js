@@ -76,13 +76,13 @@ const EditMeetingTimes  = (props) => {
   });
 
   // Click Handlers
+
+
   const handleEventUpdate = (eventToEditID,description, day, startTime, endTime) => () => {
     setEventToEdit(eventToEditID);
     // setEventToEditInfo  (props.recurringEvents.find(e => (e?._id === eventToEditID)));
     // setReadableEventToEdit(readableEvent(eventToEditInfo));
     // setEventTrue(true);
-
-
 
     console.log('Update', eventToEditID);
     console.log('Update', description);
@@ -114,9 +114,9 @@ const EditMeetingTimes  = (props) => {
   const handleEventDelete = (eventID) => () => {
 
     deleteRecurringEvent(eventID)
-    .then( (data) => {
-      console.log('success: ', data);
-    })
+    // .then( (data) => {
+    //   console.log('success: ', data);
+    // })
     .catch( (error) => {
       console.log(`Delete Event Error: `, error);
       alert("Server not responding.  Please try again.");
@@ -124,92 +124,15 @@ const EditMeetingTimes  = (props) => {
 
   }
 
-   
-  // Function to Create New User
-  const createNewRecurringEvent = async (eventToCreate) => {
-    eventToCreate.preventDefault();
-
-    const url = `/api/recurringEvents/`;
-    const requestOptions = {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-            "x-customrequired-header": headerToSend
-        },
-        body: JSON.stringify(eventToCreate)
-    };
-
-    // console.log("event: ", eventToCreate);
-    // console.log("strinify: ", JSON.stringify(eventToCreate));
-
-    const response = await fetch(url, requestOptions); 
-    if (!response.ok) {
-      throw new Error(`HTTP error!  ${response.status}`);
-    }
-    const data = await response.json();
-    return data;
-
-  }
-
-  const handleEventCreate = () => {
-    
-
-    //create object for new event
-
-    // Find the date for the day of the week
-    let day = 3;
-    const date = new Date();
-    date.setDate(date.getDate() + ((7 - date.getDay()) % 7 + day) % 7);
-
-    // Set start time
-    let startTime = new Date(date);
-    startTime.setHours(10);
-    startTime.setMinutes(30);
-
-    //set End Time
-    let endTime = new Date(date); 
-    endTime.setHours(11);
-    endTime.setMinutes(30);
-
-    let createdDate = new Date();
-    let updatedDate = new Date();
-
-
-    const theNewEvent = {
-      name: "Hackforla.org Website",
-      location: {
-          city: "Los Angeles",
-          state: "CA",
-          country: "USA"
-      },
-      hacknight: "Online",
-      brigade: "Hack for LA",
-      eventType: "Project Meeting",
-      description: "Crazy Car Meeting",
-      project: "5edeb146ce228b001778fad0",                                                
-      date: date,   
-      startTime: startTime,
-      endTime: endTime,
-      hours: 1,
-      createdDate: createdDate,
-      updatedDate: updatedDate,
-      checkInReady: false,
-      videoConferenceLink: "https://us02web.zoom.us/j/9899833897?pwd=ZHJ5WFBqUmF4L2UvcElTUTZrRW83QT09"
-    };
-
-    createNewRecurringEvent(theNewEvent)
-    .then( (data) => {
-      console.log('success: ', data);
-    })
-    .catch( (error) => {
-      console.log(`Create Recurring Event Error: `, error);
-      //alert("Server not responding.  Please try again.");
-    });
-  }
-
   return (
     <div>
       <div className="project-list-heading">Project: {props.projectToEdit.name}</div>
+      <div>
+        <CreateNewEvent 
+          projectName = {props.projectToEdit.name}
+          projectID = {props.projectToEdit._id}
+        />
+      </div>
       <div className="project-list-heading">Edit Recurring Events</div>
       {processedEvents.map(rEvent => (
         <EditableMeeting
@@ -224,11 +147,7 @@ const EditMeetingTimes  = (props) => {
           handleEventDelete = {handleEventDelete}
          />
       ))}
-      <div>
-        <CreateNewEvent 
-          handleEventCreate = {handleEventCreate}
-        />
-      </div>
+
       <div><button className="button-back" onClick={props.goEditProject}>Back to Edit Project</button></div>
       <div><button className="button-back" onClick={props.goSelectProject}>Back to Select Project</button></div>
     </div>

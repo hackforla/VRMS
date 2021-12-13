@@ -3,7 +3,7 @@ const router = express.Router();
 const cors = require('cors');
 
 const { RecurringEvent } = require('../models/recurringEvent.model');
-const {RecurringEventController} = require('../controllers')
+const { RecurringEventController } = require('../controllers/');
 
 // GET /api/recurringevents/
 router.get('/', cors(), (req, res) => {
@@ -66,18 +66,6 @@ router.patch('/:id', (req, res) => {
             return res.sendStatus(503);
         });
 });
-
-// router.delete('/:id', (req, res) => {
-//     RecurringEvent
-//     .findByIdAndDelete(req.params.id)
-//     .then(recurringEvent => {
-//         return res.status(200).send(recurringEvent);
-//     })
-//     .catch(err => {
-//         console.log(err);
-//         return res.sendStatus(400);
-//     });
-// });
 
 router.delete('/:RecurringEventID', RecurringEventController.destroy);
 
