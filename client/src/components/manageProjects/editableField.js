@@ -52,7 +52,9 @@ const EditableField = ({
         ) : (
           <span className="project-edit-button" style={{ color: 'gray' }}>
             {' '}
-            [only certain users can edit this field]
+            <a href="https://github.com/chukalicious/VRMS/blob/feature/allow-pm-to-edit-project-fields/team-lead-contact-info.md">
+              [Contact your team lead to make changes to this field]
+            </a>
           </span>
         )}
       </div>
