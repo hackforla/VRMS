@@ -3,7 +3,6 @@ import '../../sass/ManageProjects.scss';
 import EditableMeeting from './editableMeeting';
 import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../../utils/globalSettings";
 import CreateNewEvent from './createNewEvent';
-import { now } from 'moment';
 
 // This component displays current meeting times for selected project and offers the option to edit those times. 
 const EditMeetingTimes  = (props) => {
@@ -14,9 +13,9 @@ const EditMeetingTimes  = (props) => {
   // Initialize state
   const [rEvents, setREvents] = useState([]);
   const [eventToEdit, setEventToEdit] = useState('');
-  const [editTrue, setEventTrue] = useState(false);
-  const [eventToEditInfo, setEventToEditInfo] = useState({});
-  const [readableEventToEdit, setReadableEventToEdit] = useState({});
+  // const [editTrue, setEventTrue] = useState(false);
+  // const [eventToEditInfo, setEventToEditInfo] = useState({});
+  // const [readableEventToEdit, setReadableEventToEdit] = useState({});
 
   // // Filters the recurring events to select for the selected projects. 
   const thisProjectRecurringEvents = (projectToEditID) => { 
@@ -58,11 +57,14 @@ const EditMeetingTimes  = (props) => {
 
     // Create readable object for this event
     let newEvent = {
+      name: e.name,
       description: e.description,
+      eventType: e.eventType,
       dayOfTheWeekNumber: dayOfTheWeekNumber,
       dayOfTheWeek: dayOfTheWeek,
       startTime: startTime,
       endTime: endTime,
+      duration: e.hours,
       event_id: e._id,
       videoConferenceLink: e.videoConferenceLink
     }
@@ -75,20 +77,61 @@ const EditMeetingTimes  = (props) => {
     return readableEvent(item);
   });
 
+
   // Click Handlers
 
+  const deleteReRender = (data) => {
+    setREvents(rEvents.filter(e => (e._id !== data._id)));
+  }
 
-  const handleEventUpdate = (eventToEditID,description, day, startTime, endTime) => () => {
-    setEventToEdit(eventToEditID);
-    // setEventToEditInfo  (props.recurringEvents.find(e => (e?._id === eventToEditID)));
+  const reRender = () => {
+    props.fetchRecurringEvents();
+    props.setRecurringEvents();
+    thisProjectRecurringEvents(props.projectToEdit._id);
+  }
+
+  const handleEventUpdate = (eventID, values) => () => {
+    setEventToEdit(eventID);
+    // setEventToEditInfo  (props.recurringEvents.find(e => (e?._id === eventID)));
     // setReadableEventToEdit(readableEvent(eventToEditInfo));
     // setEventTrue(true);
 
-    console.log('Update', eventToEditID);
-    console.log('Update', description);
-    console.log('Update', day);
-    console.log('Update', startTime);
-    console.log('Update', endTime);
+    let theUpdatedEvent = {};
+
+    // If the fields have been changed, add to object
+    if (values.name) {
+      theUpdatedEvent = {name: values.name};
+    }
+
+
+    // If the day has been changed, find the next occurence of the changed date
+    if (values.day) {
+      let day = parseInt(values.day);
+      const date = new Date();
+      date.setDate(date.getDate() + ((7 - date.getDay()) % 7 + day) % 7); 
+      
+    //   const dateGMT = new Date(date).toISOString();
+
+    //   theUpdatedEvent = {
+    //     date: dateGMT 
+    // }
+
+
+    
+
+    // Set date updated
+    const updatedDate = new Date().toISOString();
+    theUpdatedEvent = { 
+      updatedDate: updatedDate 
+    };
+
+    // theUpdatedEvent = {
+    //   updatedDate: updatedDate,
+    // };
+
+    console.log('Updated Event: ', theUpdatedEvent);
+    console.log('values: ', values);
+
   }
 
   const deleteRecurringEvent = async (RecurringEventID) => {
@@ -114,14 +157,13 @@ const EditMeetingTimes  = (props) => {
   const handleEventDelete = (eventID) => () => {
 
     deleteRecurringEvent(eventID)
-    // .then( (data) => {
-    //   console.log('success: ', data);
-    // })
+    .then( (data) => {
+      deleteReRender(data);
+    })
     .catch( (error) => {
       console.log(`Delete Event Error: `, error);
       alert("Server not responding.  Please try again.");
     });
-
   }
 
   return (
@@ -131,6 +173,7 @@ const EditMeetingTimes  = (props) => {
         <CreateNewEvent 
           projectName = {props.projectToEdit.name}
           projectID = {props.projectToEdit._id}
+          reRender = {reRender}
         />
       </div>
       <div className="project-list-heading">Edit Recurring Events</div>
@@ -138,10 +181,13 @@ const EditMeetingTimes  = (props) => {
         <EditableMeeting
           key = {rEvent.event_id}
           event_id = {rEvent.event_id}
+          eventName = {rEvent.name}
           eventDescription = {rEvent.description}
+          eventType = {rEvent.eventType}
           eventDay = {rEvent.dayOfTheWeek}
           eventStartTime = {rEvent.startTime}
           eventEndTime = {rEvent.endTime}
+          eventDuration = {rEvent.duration}
           eventMeetingURL = {rEvent.videoConferenceLink}
           handleEventUpdate = {handleEventUpdate}
           handleEventDelete = {handleEventDelete}

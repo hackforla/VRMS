@@ -99,6 +99,7 @@ const ManageProjects = () => {
         projectToEdit={projectToEdit}
         recurringEvents={recurringEvents}
         setRecurringEvents={setRecurringEvents}
+        fetchRecurringEvents={fetchRecurringEvents}
         />
       )
       break;

@@ -4,8 +4,11 @@ import { createClockHours } from '../../utils/createClockHours';
 import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../../utils/globalSettings";
 
 const CreateNewEvent  = ( { 
-  projectName, projectID
+  projectName, 
+  projectID, 
+  reRender 
 } ) => {
+
   const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
   // Initialize state
@@ -15,7 +18,7 @@ const CreateNewEvent  = ( {
     eventType: 'Team Meeting',
     day: '0',
     startTime: '7:00pm',
-    duration: '1',
+    duration: '1'
   });
 
   // Toggle new event form display
@@ -32,128 +35,126 @@ const CreateNewEvent  = ( {
     setFormValues({ ...formValues, [event.target.name]: event.target.value })
   }
 
-    // Function to Create New reurringEvent
-    const createNewRecurringEvent = async (eventToCreate) => {
-      const url = `/api/recurringEvents/`;
-      const requestOptions = {
-          method: 'POST',
-          headers: {
-              "Content-Type": "application/json",
-              "x-customrequired-header": headerToSend
-          },
-          body: JSON.stringify(eventToCreate)
-      };
-  
-      const response = await fetch(url, requestOptions); 
-      if (!response.ok) {
-        throw new Error(`HTTP error!  ${response.status}`);
-      }
-      const data = await response.json();
-      return data;
-    }
-  
-    const handleEventCreate = (event) => {
-
-      //Add some validation?!?!
-
-      // Set start and end times to enter into database
-
-      // Find the date for the next occurance of day of the week
-      let day = parseInt(formValues.day);
-      const date = new Date();
-      date.setDate(date.getDate() + ((7 - date.getDay()) % 7 + day) % 7);
-
-      // reconstitute date from form back into timestamp
-      let timeParts = formValues.startTime.split(':');
-      const sap = timeParts[1].slice(-2);
-      timeParts[1] = timeParts[1].slice(0,-2);
-      let startHour = parseInt(timeParts[0]);
-      const startMinutes = parseInt(timeParts[1]);
-      const startSeconds = 0;
-      
-      // set 12am to 0 and make afternoon into military time
-      if (sap === 'pm' && startHour !== 12) {
-        startHour = startHour + 12;
-      } else if (sap === 'am' && startHour === 12) {
-        startHour = 0;
-      }
-
-      // Update the date string with the start hours of the meeting
-      date.setHours(startHour);
-      date.setMinutes(startMinutes);
-      date.setSeconds(startSeconds);
-
-      // This is the date and time of the first meeting.
-      // This will also be used as the start time
-      const startTimeDate = new Date(date.getTime());
-      let endTime;
-
-      // Create the endTime by adding seconds to the timestamp and converting it back date
-      switch (formValues.duration) {
-        case '.5':
-          endTime = new Date(date.getTime() + (.5*3600000)); 
-        break;
-        case '1':
-          endTime = new Date(date.getTime() + (1*3600000)); 
-        break;
-        case '1.5':
-          endTime = new Date(date.getTime() + (1.5*3600000)); 
-        break;
-        case '2':
-          endTime = new Date(date.getTime() + (2*3600000)); 
-        break;
-        case '2.5':
-          endTime = new Date(date.getTime() + (2.5*3600000));
-        break;
-        case '3':
-          endTime = new Date(date.getTime() + (3*3600000));
-        break;
-        case '3.5':
-          endTime = new Date(date.getTime() + (3.5*3600000));
-        break;
-        case '4':
-          endTime = new Date(date.getTime() + (4*3600000));
-        break;
-        default:
-          // I can't think of how it will get to default,  but I thought I'd put this here anyway
-          endTime = new Date(date.getTime()) 
-      } 
-  
-      //convert to ISO and GMT
-      const startDateTimeGMT = new Date(startTimeDate).toISOString();
-      const endTimeGMT = new Date(endTime).toISOString();
-
-      const createdDate = new Date().toISOString();
-      const updatedDate = new Date().toISOString();
-  
-      // This is the new event object
-      // Certain values - like 'location' - are hard-coded here as they are constant
-      const theNewEvent = {
-        name: formValues.name,
-        location: {
-            city: "Los Angeles",
-            state: "CA",
-            country: "USA"
+  // Function to Create New reurringEvent
+  const createNewRecurringEvent = async (eventToCreate) => {
+    const url = `/api/recurringEvents/`;
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+            "x-customrequired-header": headerToSend
         },
-        hacknight: "Online",
-        brigade: "Hack for LA",
-        eventType: formValues.eventType,
-        description: formValues.description,
-        project: projectID,                                                
-        date: startDateTimeGMT,   
-        startTime: startDateTimeGMT,
-        endTime: endTimeGMT,
-        hours: formValues.duration.toString(),
-        createdDate: createdDate,
-        updatedDate: updatedDate,
-        checkInReady: false,
-        videoConferenceLink: formValues.videoConferenceLink
-      };
+        body: JSON.stringify(eventToCreate)
+    };
+  
+    const response = await fetch(url, requestOptions); 
+    if (!response.ok) {
+      throw new Error(`HTTP error!  ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+  }
+  
+  const handleEventCreate = (event) => {
+
+    //Add some validation?!?!
+
+    // Find the date for the next occurance of day of the week
+    let day = parseInt(formValues.day);
+    const date = new Date();
+    date.setDate(date.getDate() + ((7 - date.getDay()) % 7 + day) % 7);
+
+    // reconstitute time from form back into timestamp
+    let timeParts = formValues.startTime.split(':');
+    const sap = timeParts[1].slice(-2);
+    timeParts[1] = timeParts[1].slice(0,-2);
+    let startHour = parseInt(timeParts[0]);
+    const startMinutes = parseInt(timeParts[1]);
+    const startSeconds = 0;
+    
+    // set 12am to 0 and make afternoon into military time
+    if (sap === 'pm' && startHour !== 12) {
+      startHour = startHour + 12;
+    } else if (sap === 'am' && startHour === 12) {
+      startHour = 0;
+    }
+
+    // Update the date string with the start hours of the meeting
+    date.setHours(startHour);
+    date.setMinutes(startMinutes);
+    date.setSeconds(startSeconds);
+
+    // This is the date and time of the first meeting.
+    // This will also be used as the start time
+    const startTimeDate = new Date(date.getTime());
+    let endTime;
+
+    // Create the endTime by adding seconds to the timestamp and converting it back date
+    switch (formValues.duration) {
+      case '.5':
+        endTime = new Date(date.getTime() + (.5*3600000)); 
+      break;
+      case '1':
+        endTime = new Date(date.getTime() + (1*3600000)); 
+      break;
+      case '1.5':
+        endTime = new Date(date.getTime() + (1.5*3600000)); 
+      break;
+      case '2':
+        endTime = new Date(date.getTime() + (2*3600000)); 
+      break;
+      case '2.5':
+        endTime = new Date(date.getTime() + (2.5*3600000));
+      break;
+      case '3':
+        endTime = new Date(date.getTime() + (3*3600000));
+      break;
+      case '3.5':
+        endTime = new Date(date.getTime() + (3.5*3600000));
+      break;
+      case '4':
+        endTime = new Date(date.getTime() + (4*3600000));
+      break;
+      default:
+        // I can't think of how it will get to default,  but I thought I'd put this here anyway
+        endTime = new Date(date.getTime()) 
+    } 
+
+    //convert to ISO and GMT
+    const startDateTimeGMT = new Date(startTimeDate).toISOString();
+    const endTimeGMT = new Date(endTime).toISOString();
+
+    const createdDate = new Date().toISOString();
+    const updatedDate = new Date().toISOString();
+
+    // This is the new event object
+    // Certain values - like 'location' - are hard-coded here as they are constant
+    const theNewEvent = {
+      name: formValues.name,
+      location: {
+          city: "Los Angeles",
+          state: "CA",
+          country: "USA"
+      },
+      hacknight: "Online",
+      brigade: "Hack for LA",
+      eventType: formValues.eventType,
+      description: formValues.description,
+      project: projectID,                                                
+      date: startDateTimeGMT,   
+      startTime: startDateTimeGMT,
+      endTime: endTimeGMT,
+      hours: formValues.duration.toString(),
+      createdDate: createdDate,
+      updatedDate: updatedDate,
+      checkInReady: false,
+      videoConferenceLink: formValues.videoConferenceLink
+    };
   
       createNewRecurringEvent(theNewEvent)
-      // .then( (data) => {
-      //   console.log('success: ', data);
-      // })
+      .then( (data) => {
+        reRender(data)
+      })
       .catch( (error) => {
         console.log(`Create Recurring Event Error: `, error);
         alert("Server not responding.  Please try again.");
@@ -168,7 +169,13 @@ const CreateNewEvent  = ( {
 
       /* Refactor this so that info isn't repeated to set form */
       // Reset page
-      //setFormValues=({ });
+      setFormValues({
+        name: `${projectName} Team Meeting`,
+        eventType: 'Team Meeting',
+        day: '0',
+        startTime: '7:00pm',
+        duration: '1'
+       });
       setDisplayForm(false);
       
     }
