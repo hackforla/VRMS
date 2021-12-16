@@ -11,7 +11,7 @@ const Navbar = (props) => {
 
     // check user accessLevel and adjust link accordingly
     const [page, setPage] = useState('home');
-    const [auth] = useAuth();
+    const { auth } = useAuth();
     let loginRedirect = '/admin';
     if (auth?.user) {
       loginRedirect = authLevelRedirect(auth.user);
