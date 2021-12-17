@@ -8,6 +8,7 @@ const EditableMeeting  = ( {
   eventDescription, 
   eventType, 
   eventDay,
+  eventDayNumber,
   eventStartTime,
   eventEndTime, 
   eventDuration,
@@ -78,7 +79,7 @@ const EditableMeeting  = ( {
       />
     </div>
     <div>
-    <span className="editable-field">Day:</span>
+    <span className="editable-field">Meeting Type:</span>
       <select 
         value={formValues.eventType} 
         onChange={handleInputChange}
@@ -106,15 +107,16 @@ const EditableMeeting  = ( {
         value={formValues.day} 
         onChange={handleInputChange}
         name='day'
-        defaultValue={eventDay}
+        //defaultValue={eventDay}
+        defaultValue={eventDayNumber}
         >
-      <option value="sunday">Sunday</option>
-      <option value="monday">Monday</option>
-      <option value="tuesday">Tuesday</option>
-      <option value="wednesday">Wednesday</option>
-      <option value="thursday">Thursday</option>
-      <option value="friday">Friday</option>
-      <option value="saturday">Saturday</option>
+      <option value="0">Sunday</option>
+      <option value="1">Monday</option>
+      <option value="2">Tuesday</option>
+      <option value="3">Wednesday</option>
+      <option value="4">Thursday</option>
+      <option value="5">Friday</option>
+      <option value="6">Saturday</option>
       </select>
     </div>
     <div>
@@ -175,7 +177,7 @@ const EditableMeeting  = ( {
       />
     </div>
     <div>
-      <span className="project-edit-button" onClick={handleEventUpdate(event_id, formValues)} >[UPDATE]</span>
+      <span className="project-edit-button" onClick={handleEventUpdate(event_id, formValues, eventStartTime, eventDuration)} >[UPDATE]</span>
       <span className="project-edit-button" onClick={handleResetEvent(event_id)} >[RESET]</span>
       <span className="project-edit-button" onClick={handleEventDelete(event_id)} >[DELETE]</span>
     </div>

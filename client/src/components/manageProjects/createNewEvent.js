@@ -102,7 +102,7 @@ const CreateNewEvent  = ( {
       break;
       case '2':
         endTime = new Date(date.getTime() + (2*3600000)); 
-      break;
+        break;
       case '2.5':
         endTime = new Date(date.getTime() + (2.5*3600000));
       break;

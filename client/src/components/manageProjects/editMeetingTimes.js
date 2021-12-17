@@ -13,9 +13,6 @@ const EditMeetingTimes  = (props) => {
   // Initialize state
   const [rEvents, setREvents] = useState([]);
   const [eventToEdit, setEventToEdit] = useState('');
-  // const [editTrue, setEventTrue] = useState(false);
-  // const [eventToEditInfo, setEventToEditInfo] = useState({});
-  // const [readableEventToEdit, setReadableEventToEdit] = useState({});
 
   // // Filters the recurring events to select for the selected projects. 
   const thisProjectRecurringEvents = (projectToEditID) => { 
@@ -79,7 +76,6 @@ const EditMeetingTimes  = (props) => {
 
 
   // Click Handlers
-
   const deleteReRender = (data) => {
     setREvents(rEvents.filter(e => (e._id !== data._id)));
   }
@@ -90,47 +86,191 @@ const EditMeetingTimes  = (props) => {
     thisProjectRecurringEvents(props.projectToEdit._id);
   }
 
-  const handleEventUpdate = (eventID, values) => () => {
-    setEventToEdit(eventID);
-    // setEventToEditInfo  (props.recurringEvents.find(e => (e?._id === eventID)));
-    // setReadableEventToEdit(readableEvent(eventToEditInfo));
-    // setEventTrue(true);
+    // update reurringEvent
+    const updateRecurringEvent = async (eventToUpdate, eventID) => {
+      const url = `/api/recurringEvents/eventID`;
+      const requestOptions = {
+          method: 'PATCH',
+          headers: {
+              "Content-Type": "application/json",
+              "x-customrequired-header": headerToSend
+          },
+          body: JSON.stringify(eventToUpdate)
+      };
+    
+      const response = await fetch(url, requestOptions); 
+      if (!response.ok) {
+        throw new Error(`HTTP error!  ${response.status}`);
+      }
+      const data = await response.json();
+      return data;
+    }
 
+  const handleEventUpdate = ( eventID, values, startTimeOriginal, durationOriginal ) => () => {
+
+    setEventToEdit(eventID);
+
+    // Creating an empty object. Values that have been changed for update
+    // will be added to the object and, in time, the database
     let theUpdatedEvent = {};
 
     // If the fields have been changed, add to object
+
+    // Fields that don't need any processing
     if (values.name) {
-      theUpdatedEvent = {name: values.name};
+      theUpdatedEvent = { 
+        ...theUpdatedEvent, 
+        name: values.name 
+      };
+    }
+    if (values.eventType) {
+      theUpdatedEvent = { 
+        ...theUpdatedEvent, 
+        eventType: values.eventType 
+      };
+    }
+    if (values.description) {
+      theUpdatedEvent = { 
+        ...theUpdatedEvent, 
+        description: values.description 
+      };
     }
 
+    if (values.meetingURL) {
+      theUpdatedEvent = { 
+        ...theUpdatedEvent, 
+        meetingURL: values.meetingURL 
+      };
+    }    
 
-    // If the day has been changed, find the next occurence of the changed date
+    // Set date updated
+    const updatedDate = new Date().toISOString();
+    theUpdatedEvent = {
+      ...theUpdatedEvent, 
+      updatedDate: updatedDate 
+    };
+
+    // If the day has been changed, find the next occurence of the changed day
     if (values.day) {
       let day = parseInt(values.day);
       const date = new Date();
       date.setDate(date.getDate() + ((7 - date.getDay()) % 7 + day) % 7); 
       
-    //   const dateGMT = new Date(date).toISOString();
+      const dateGMT = new Date(date).toISOString();
 
-    //   theUpdatedEvent = {
-    //     date: dateGMT 
-    // }
+      theUpdatedEvent = {
+        ...theUpdatedEvent, 
+        day: dateGMT
+      };
+    }
+
+    // Set start time, End time and Duration if either start time or duration is changed
+    if ( values.startTime || values.duration ) {
+
+      // A lot of this code is reused from CreateNewEvent.js and could possibly be consolidated
+      // Yes, I know, I should do it now, but I just want to get it working and then
+      // I'll come back to it.  (See "Technical Debt")
+
+      // Since we need a start time and a duration, we need to figure out 
+      // if only the start time, only the duration, or both are changing
+      // if either of them is not changing, we use the previous time or duration
+
+      let startTimeToUse = startTimeOriginal;
+      let durationToUse = durationOriginal;
+
+      if ( values.startTime ) {
+        startTimeToUse = values.startTime;
+      }
+
+      if ( values.duration ) {
+        durationToUse = values.duration;
+      }
+
+      console.log('vo: ', durationOriginal);
+      console.log('vd: ', values.duration);
+      console.log('vtu: ', durationToUse);
+
+      const timeDate = new Date();
+
+      // reconstitute time from form back into timestamp
+      let timeParts = startTimeToUse.split(':');
+      const sap = timeParts[1].slice(-2);
+      timeParts[1] = timeParts[1].slice(0,-2);
+      let startHour = parseInt(timeParts[0]);
+      const startMinutes = parseInt(timeParts[1]);
+      const startSeconds = 0;
+      
+      // set 12am to 0 and make afternoon into military time
+      if (sap === 'pm' && startHour !== 12) {
+        startHour = startHour + 12;
+      } else if (sap === 'am' && startHour === 12) {
+        startHour = 0;
+      }
+  
+      // Update the date string with the start hours of the meeting
+      timeDate.setHours(startHour);
+      timeDate.setMinutes(startMinutes);
+      timeDate.setSeconds(startSeconds);
+  
+      // This is the date and time of the first meeting.
+      // This will also be used as the start time
+      //const startTimeDate = new Date(date.getTime());
+      let endTime;
 
 
-    
+      // Create the endTime by adding seconds to the timestamp and converting it back date
+      switch (durationToUse) {
+        case '.5':
+          endTime = new Date(timeDate.getTime() + (.5*3600000)); 
+        break;
+        case '1':
+          endTime = new Date(timeDate.getTime() + (1*3600000)); 
+        break;
+        case '1.5':
+          endTime = new Date(timeDate.getTime() + (1.5*3600000)); 
+        break;
+        case '2':
+          endTime = new Date(timeDate.getTime() + (2*3600000)); 
+        break;
+        case '2.5':
+          endTime = new Date(timeDate.getTime() + (2.5*3600000));
+        break;
+        case '3':
+          endTime = new Date(timeDate.getTime() + (3*3600000));
+        break;
+        case '3.5':
+          endTime = new Date(timeDate.getTime() + (3.5*3600000));
+        break;
+        case '4':
+          endTime = new Date(timeDate.getTime() + (4*3600000));
+        break;
+        default:
+          // I can't think of how it will get to default,  but I thought I'd put this here anyway
+          endTime = new Date(timeDate.getTime()) 
+      } 
+  
+      console.log('endTime2: ', endTime);
 
-    // Set date updated
-    const updatedDate = new Date().toISOString();
-    theUpdatedEvent = { 
-      updatedDate: updatedDate 
-    };
+      //convert to ISO and GMT
+      const startTimeGMT = new Date(timeDate).toISOString();
+      const endTimeGMT = new Date(endTime).toISOString();
 
-    // theUpdatedEvent = {
-    //   updatedDate: updatedDate,
-    // };
+      theUpdatedEvent = { 
+        ...theUpdatedEvent, 
+        startTime: startTimeGMT,
+        endTime: endTimeGMT,
+        duration: durationToUse
+      } 
+    }
 
-    console.log('Updated Event: ', theUpdatedEvent);
-    console.log('values: ', values);
+    // updateRecurringEvent(theUpdatedEvent, eventID)
+    // .then( (data) => {
+    //   //reRender(data)
+    // })
+    // .catch( (error) => {
+    //   console.log(`Create Recurring Event Error: `, error);
+    //   alert("Server not responding.  Please try again.");
+    // });
 
   }
 
@@ -185,6 +325,7 @@ const EditMeetingTimes  = (props) => {
           eventDescription = {rEvent.description}
           eventType = {rEvent.eventType}
           eventDay = {rEvent.dayOfTheWeek}
+          eventDayNumber = {rEvent.dayOfTheWeekNumber}
           eventStartTime = {rEvent.startTime}
           eventEndTime = {rEvent.endTime}
           eventDuration = {rEvent.duration}
