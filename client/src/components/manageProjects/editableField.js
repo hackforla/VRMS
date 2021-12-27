@@ -52,8 +52,12 @@ const EditableField = ({
         ) : (
           <span className="project-edit-button" style={{ color: 'gray' }}>
             {' '}
-            <a href="https://github.com/chukalicious/VRMS/blob/feature/allow-pm-to-edit-project-fields/team-lead-contact-info.md">
-              [Contact your team lead to make changes to this field]
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://github.com/hackforla/VRMS/blob/development/team-lead-contact-info.md"
+            >
+              [Click here to find out how to change this field]
             </a>
           </span>
         )}
