@@ -5,6 +5,8 @@ import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../../utils/globalSettings";
 import CreateNewEvent from './createNewEvent';
 
 // This component displays current meeting times for selected project and offers the option to edit those times. 
+
+// ToDo: Destructure props
 const EditMeetingTimes  = (props) => {
 
   const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
@@ -12,6 +14,8 @@ const EditMeetingTimes  = (props) => {
 
   // Initialize state
   const [rEvents, setREvents] = useState([]);
+
+  // ToDo: Is this state needed? If not, remove it. 
   const [eventToEdit, setEventToEdit] = useState('');
 
   // // Filters the recurring events to select for the selected projects. 
@@ -25,7 +29,6 @@ const EditMeetingTimes  = (props) => {
   }, [])
 
   // Translate event data into human readable format
-
   function readableEvent (e) {
 
     // Get date for each of the parts of the event time/day   
@@ -74,21 +77,23 @@ const EditMeetingTimes  = (props) => {
     return readableEvent(item);
   });
 
-
   // Click Handlers
   const deleteReRender = (data) => {
     setREvents(rEvents.filter(e => (e._id !== data._id)));
   }
 
+  // ToDo: Make everything Re-render properly
   const reRender = () => {
     props.fetchRecurringEvents();
     props.setRecurringEvents();
     thisProjectRecurringEvents(props.projectToEdit._id);
   }
 
+    /*** Update Event Functions ***/
+
     // update reurringEvent
-    const updateRecurringEvent = async (eventToUpdate, eventID) => {
-      const url = `/api/recurringEvents/eventID`;
+    const updateRecurringEvent = async (eventToUpdate, RecurringEventID) => {
+      const url = `/api/recurringEvents/${RecurringEventID}`;
       const requestOptions = {
           method: 'PATCH',
           headers: {
@@ -97,6 +102,8 @@ const EditMeetingTimes  = (props) => {
           },
           body: JSON.stringify(eventToUpdate)
       };
+
+      console.log('body: ', body);
     
       const response = await fetch(url, requestOptions); 
       if (!response.ok) {
@@ -110,8 +117,9 @@ const EditMeetingTimes  = (props) => {
 
     setEventToEdit(eventID);
 
-    // Creating an empty object. Values that have been changed for update
-    // will be added to the object and, in time, the database
+    // ToDo: Add some validation if you haven't made any changes, or have deleted the description field
+
+    // Values that have been changed for will be added to the object and, in time, the database
     let theUpdatedEvent = {};
 
     // If the fields have been changed, add to object
@@ -135,7 +143,6 @@ const EditMeetingTimes  = (props) => {
         description: values.description 
       };
     }
-
     if (values.meetingURL) {
       theUpdatedEvent = { 
         ...theUpdatedEvent, 
@@ -143,16 +150,18 @@ const EditMeetingTimes  = (props) => {
       };
     }    
 
-    // Set date updated
+    // Set updated date to today and add it to the object
     const updatedDate = new Date().toISOString();
     theUpdatedEvent = {
       ...theUpdatedEvent, 
       updatedDate: updatedDate 
     };
 
+    // These need some processing before adding to the update object
+
     // If the day has been changed, find the next occurence of the changed day
-    if (values.day) {
-      let day = parseInt(values.day);
+    if (values.dayNumber) {
+      let day = parseInt(values.dayNumber);
       const date = new Date();
       date.setDate(date.getDate() + ((7 - date.getDay()) % 7 + day) % 7); 
       
@@ -167,13 +176,15 @@ const EditMeetingTimes  = (props) => {
     // Set start time, End time and Duration if either start time or duration is changed
     if ( values.startTime || values.duration ) {
 
-      // A lot of this code is reused from CreateNewEvent.js and could possibly be consolidated
+      // ToTo: A lot of this code is reused from CreateNewEvent.js and could possibly be consolidated
       // Yes, I know, I should do it now, but I just want to get it working and then
       // I'll come back to it.  (See "Technical Debt")
 
-      // Since we need a start time and a duration, we need to figure out 
-      // if only the start time, only the duration, or both are changing
-      // if either of them is not changing, we use the previous time or duration
+      /*
+      We need a start time and a duration to calculate everything we need.  
+      If only the start time or only the duration is changing, 
+      we use the previous time or duration for the calculation.
+      */
 
       let startTimeToUse = startTimeOriginal;
       let durationToUse = durationOriginal;
@@ -186,12 +197,9 @@ const EditMeetingTimes  = (props) => {
         durationToUse = values.duration;
       }
 
-      console.log('vo: ', durationOriginal);
-      console.log('vd: ', values.duration);
-      console.log('vtu: ', durationToUse);
-
       const timeDate = new Date();
 
+      // ToDo: Make this a reusable function
       // reconstitute time from form back into timestamp
       let timeParts = startTimeToUse.split(':');
       const sap = timeParts[1].slice(-2);
@@ -215,8 +223,9 @@ const EditMeetingTimes  = (props) => {
       // This is the date and time of the first meeting.
       // This will also be used as the start time
       //const startTimeDate = new Date(date.getTime());
-      let endTime;
 
+      // ToDo: Make this a reusable function
+      let endTime;
 
       // Create the endTime by adding seconds to the timestamp and converting it back date
       switch (durationToUse) {
@@ -248,8 +257,6 @@ const EditMeetingTimes  = (props) => {
           // I can't think of how it will get to default,  but I thought I'd put this here anyway
           endTime = new Date(timeDate.getTime()) 
       } 
-  
-      console.log('endTime2: ', endTime);
 
       //convert to ISO and GMT
       const startTimeGMT = new Date(timeDate).toISOString();
@@ -263,16 +270,20 @@ const EditMeetingTimes  = (props) => {
       } 
     }
 
-    // updateRecurringEvent(theUpdatedEvent, eventID)
-    // .then( (data) => {
-    //   //reRender(data)
-    // })
-    // .catch( (error) => {
-    //   console.log(`Create Recurring Event Error: `, error);
-    //   alert("Server not responding.  Please try again.");
-    // });
+    console.log('update event: ', theUpdatedEvent);
+
+    updateRecurringEvent(theUpdatedEvent, eventID)
+    .then( (data) => {
+      //reRender(data)
+    })
+    .catch( (error) => {
+      console.log(`Update Recurring Event Error: `, error);
+      alert("Server not responding.  Please try again.");
+    });
 
   }
+
+  /*** Delete Event Functions ***/
 
   const deleteRecurringEvent = async (RecurringEventID) => {
 
