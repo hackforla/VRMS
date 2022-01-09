@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import '../../sass/ManageProjects.scss';
+import Modal from './Modal';
 
 const EditableField = ({
   projId,
@@ -15,7 +16,15 @@ const EditableField = ({
   const [fieldValue, setFieldValue] = useState(fieldData);
   const [editable, setEditable] = useState(false);
   const [notRestricted, setNotRestricted] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const ref = useRef();
+
+  // Modal Functions
+  console.log('editableField: showModal:', showModal);
+  const closeModal = (e) => {
+    setShowModal(false);
+    console.log(showModal);
+  };
 
   // create function that checks the user has access to edit all fields
 
@@ -50,12 +59,21 @@ const EditableField = ({
             [edit]
           </span>
         ) : (
-          <span className="project-edit-button" style={{ color: 'gray' }}>
-            {' '}
-            <a href="https://github.com/chukalicious/VRMS/blob/feature/allow-pm-to-edit-project-fields/team-lead-contact-info.md">
+          <>
+            <span
+              className="project-edit-button"
+              style={{ color: 'gray' }}
+              onClick={() => setShowModal(true)}
+            >
+              {' '}
+              {/* Modal will go here. onclick => open modal */}
+              {/* Propose this text gets changed to a call to action type of text and something that better describes what happens when the link is clicked  */}
+              {/* "Click here to..." */}
               [Contact your team lead to make changes to this field]
-            </a>
-          </span>
+            </span>
+
+            {showModal ? <Modal handleClose={closeModal} /> : null}
+          </>
         )}
       </div>
 
