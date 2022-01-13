@@ -22,11 +22,8 @@ const Modal = (props) => {
   };
 
   return (
-    <div className="container--Modal">
-      <div
-        className="modal-box"
-        // style={{ border: 'black solid 2px' }
-      >
+    <div className="container--Modal" onClick={() => props.handleClose()}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="close-x" onClick={props.handleClose}>
           Close [X]
         </div>
