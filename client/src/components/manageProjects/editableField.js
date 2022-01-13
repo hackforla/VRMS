@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import '../../sass/ManageProjects.scss';
-import Modal from './Modal';
+import Modal from './modal/Modal';
 
 const EditableField = ({
   projId,
