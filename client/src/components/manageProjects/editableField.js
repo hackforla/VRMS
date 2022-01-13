@@ -4,6 +4,7 @@ import Modal from './Modal';
 
 const EditableField = ({
   projId,
+  projectName,
   fieldData,
   fieldName,
   updateProject,
@@ -17,17 +18,37 @@ const EditableField = ({
   const [editable, setEditable] = useState(false);
   const [notRestricted, setNotRestricted] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  // body to be collected and sent to the Github server
+  const [formattedIssue, setFormattedIssue] = useState({
+    title: 'Request to edit project field',
+    projectName: projectName,
+    fieldToEdit: fieldName,
+    proposedValue: '',
+    assignee: 'ExperimentsInHonesty',
+  });
+
   const ref = useRef();
 
   // Modal Functions
-  console.log('editableField: showModal:', showModal);
+
   const closeModal = (e) => {
+    setFormattedIssue({
+      ...formattedIssue,
+      proposedValue: '',
+    });
     setShowModal(false);
-    console.log(showModal);
+  };
+
+  const getIssue = (issue) => {
+    console.log('value', issue);
+    const newIssue = {
+      ...formattedIssue,
+      proposedValue: issue.proposedValue,
+    };
+    setFormattedIssue(newIssue);
   };
 
   // create function that checks the user has access to edit all fields
-
   const checkUser = () => {
     const permitted = canEdit.includes(accessLevel);
     setNotRestricted(permitted);
@@ -66,13 +87,21 @@ const EditableField = ({
               onClick={() => setShowModal(true)}
             >
               {' '}
-              {/* Modal will go here. onclick => open modal */}
-              {/* Propose this text gets changed to a call to action type of text and something that better describes what happens when the link is clicked  */}
-              {/* "Click here to..." */}
               [Contact your team lead to make changes to this field]
             </span>
+            {/* Modal will go here. onclick => open modal */}
+            {/* Propose this text gets changed to a call to action type of text and something that better describes what happens when the link is clicked  */}
+            {/* "Click here to..." */}
 
-            {showModal ? <Modal handleClose={closeModal} /> : null}
+            {showModal ? (
+              <Modal
+                title={`Request to edit ${projectName} project ${fieldName}field`}
+                project={projectName}
+                fieldToEdit={fieldName}
+                handleClose={closeModal}
+                getIssue={getIssue}
+              />
+            ) : null}
           </>
         )}
       </div>
