@@ -19,10 +19,11 @@ const EditableField = ({
   const [notRestricted, setNotRestricted] = useState(false);
   const [showModal, setShowModal] = useState(false);
   // body to be collected and sent to the Github server
+
   const [formattedIssue, setFormattedIssue] = useState({
     title: 'Request to edit project field',
-    projectName: projectName,
-    fieldToEdit: fieldName,
+    projectName: `${projectName}`,
+    fieldToEdit: `${fieldName}`,
     proposedValue: '',
     assignee: 'ExperimentsInHonesty',
   });
@@ -40,7 +41,6 @@ const EditableField = ({
   };
 
   const getIssue = (issue) => {
-    console.log('value', issue);
     const newIssue = {
       ...formattedIssue,
       proposedValue: issue.proposedValue,
@@ -95,7 +95,7 @@ const EditableField = ({
 
             {showModal ? (
               <Modal
-                title={`Request to edit ${projectName} project ${fieldName}field`}
+                title={`Request to edit ${projectName} project ${fieldName} field`}
                 project={projectName}
                 fieldToEdit={fieldName}
                 handleClose={closeModal}

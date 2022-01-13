@@ -3,7 +3,6 @@ import { Label, Input, AuxiliaryButton } from '../../components/Form';
 
 const Modal = (props) => {
   const [issue, setIssue] = useState({ proposedValue: '' });
-  console.log('Modal.js: issue: ', issue);
 
   const handleChange = (e) => {
     setIssue({ [e.target.name]: e.target.value });
