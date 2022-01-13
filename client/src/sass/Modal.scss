@@ -1,0 +1,69 @@
+.container--Modal {
+  display: flex;
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(250, 17, 79, 0.9);
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+}
+
+.close-x {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+}
+
+.modal-box {
+  padding: 1.5rem 3rem 4.5rem 3rem;
+  background-color: #fff;
+  border-radius: 0.5rem;
+}
+
+.title {
+  text-decoration: underline;
+}
+
+.button-space {
+  margin-top: 2rem;
+}
+
+.project-sub-heading {
+  margin: 20px 0 20px 0;
+}
+
+div.editable-field {
+  font-weight: normal;
+  font-size: 18px;
+  max-width: none;
+  width: 400px;
+}
+
+.editable-field {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  min-width: 90%;
+}
+
+.editable-field-div {
+  margin-top: 20px;
+}
+
+.section-name {
+  font-size: 16px;
+}
+
+.section-content {
+  font-size: 14px;
+  text-transform: none;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.project-edit-button {
+  color: #fa114f;
+  cursor: pointer;
+  font-family: Arial, Helvetica, sans-serif;
+}
