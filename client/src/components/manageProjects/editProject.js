@@ -57,6 +57,7 @@ const EditProject = (props) => {
 
       <div>
         <EditableField
+          projectName={props.projectToEdit.name}
           fieldData={props.projectToEdit.name}
           fieldName="name"
           updateProject={updateProject}
@@ -70,6 +71,7 @@ const EditProject = (props) => {
       </div>
       <div className="editable-field-div">
         <EditableField
+          projectName={props.projectToEdit.name}
           fieldData={props.projectToEdit.description}
           fieldName="description"
           updateProject={updateProject}
@@ -83,6 +85,7 @@ const EditProject = (props) => {
       </div>
       <div className="editable-field-div">
         <EditableField
+          projectName={props.projectToEdit.name}
           fieldData={props.projectToEdit.location}
           fieldName="location"
           updateProject={updateProject}
@@ -96,6 +99,7 @@ const EditProject = (props) => {
       </div>
       <div className="editable-field-div">
         <EditableField
+          projectName={props.projectToEdit.name}
           fieldData={props.projectToEdit.githubIdentifier}
           fieldName="githubIdentifier"
           updateProject={updateProject}
@@ -109,6 +113,7 @@ const EditProject = (props) => {
       </div>
       <div className="editable-field-div">
         <EditableField
+          projectName={props.projectToEdit.name}
           fieldData={props.projectToEdit.githubUrl}
           fieldName="githubUrl"
           updateProject={updateProject}
@@ -122,6 +127,7 @@ const EditProject = (props) => {
       </div>
       <div className="editable-field-div">
         <EditableField
+          projectName={props.projectToEdit.name}
           fieldData={props.projectToEdit.slackUrl}
           fieldName="slackUrl"
           updateProject={updateProject}
@@ -135,6 +141,7 @@ const EditProject = (props) => {
       </div>
       <div className="editable-field-div">
         <EditableField
+          projectName={props.projectToEdit.name}
           fieldData={props.projectToEdit.googleDriveUrl}
           fieldName="googleDriveUrl"
           updateProject={updateProject}
@@ -148,6 +155,7 @@ const EditProject = (props) => {
       </div>
       <div className="editable-field-div">
         <EditableField
+          projectName={props.projectToEdit.name}
           fieldData={props.projectToEdit.googleDriveId}
           fieldName="googleDriveId"
           updateProject={updateProject}
@@ -161,6 +169,7 @@ const EditProject = (props) => {
       </div>
       <div className="editable-field-div">
         <EditableField
+          projectName={props.projectToEdit.name}
           fieldData={props.projectToEdit.hflaWebsiteUrl}
           fieldName="hflaWebsiteUrl"
           updateProject={updateProject}
@@ -174,6 +183,7 @@ const EditProject = (props) => {
       </div>
       <div className="editable-field-div">
         <EditableField
+          projectName={props.projectToEdit.name}
           fieldData={props.projectToEdit.videoConferenceLink}
           fieldName="videoConferenceLink"
           updateProject={updateProject}
@@ -187,6 +197,7 @@ const EditProject = (props) => {
       </div>
       <div className="editable-field-div">
         <EditableField
+          projectName={props.projectToEdit.name}
           fieldData={props.projectToEdit.lookingDescription}
           fieldName="lookingDescription"
           updateProject={updateProject}
@@ -200,6 +211,7 @@ const EditProject = (props) => {
       </div>
       <div className="editable-field-div">
         <EditableField
+          projectName={props.projectToEdit.name}
           fieldData={partnerDataFormatted}
           fieldName="partners"
           updateProject={updateProject}
@@ -213,6 +225,7 @@ const EditProject = (props) => {
       </div>
       <div className="editable-field-div">
         <EditableField
+          projectName={props.projectToEdit.name}
           fieldData={recrutingDataFormatted}
           fieldName="recruitingCategories"
           updateProject={updateProject}
