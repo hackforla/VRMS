@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Label, Input, AuxiliaryButton } from '../../components/Form';
+import '../../../sass/Modal.scss';
+import { Label, Input, AuxiliaryButton } from '../../Form';
 
 const Modal = (props) => {
   const [issue, setIssue] = useState({ proposedValue: '' });
@@ -17,15 +18,21 @@ const Modal = (props) => {
     e.preventDefault();
     props.getIssue(issue);
     setIssue({ proposedValue: '' });
+    props.handleClose(e);
   };
 
   return (
-    <div>
-      <div>
-        <div onClick={props.handleClose}>Close [X]</div>
-        <p>Title: {props.title}</p>
-        <p>Project Name: {props.project}</p>
-        <p>Field to Edit: {props.fieldToEdit}</p>
+    <div className="container--Modal">
+      <div
+        className="modal-box"
+        // style={{ border: 'black solid 2px' }
+      >
+        <div className="close-x" onClick={props.handleClose}>
+          Close [X]
+        </div>
+        <p className="Label title">{props.title}</p>
+        <p className="Label">Project Name: {props.project}</p>
+        <p className="Label">Field to Edit: {props.fieldToEdit}</p>
         <form onSubmit={handleSubmit}>
           <Label>Proposed Value:</Label>
           <Input
