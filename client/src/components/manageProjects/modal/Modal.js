@@ -3,9 +3,7 @@ import '../../../sass/Modal.scss';
 import { Label, Input, AuxiliaryButton } from '../../Form';
 
 const Modal = (props) => {
-  // console.log('Modal.js: props: ', props);
   const [issue, setIssue] = useState({ proposedValue: '' });
-  // console.log('Modal: issue: ', issue);
 
   const handleChange = (e) => {
     setIssue({ [e.target.name]: e.target.value });
@@ -20,9 +18,6 @@ const Modal = (props) => {
     e.preventDefault();
     props.getIssue(issue);
     setIssue({ proposedValue: '' });
-    // this handle close cannot go here
-    // props.handleClose(e);
-
     props.setShowModal(false);
   };
 
@@ -41,7 +36,7 @@ const Modal = (props) => {
             props
               .requestToEdit()
               .then((res) => {
-                console.log(res);
+                console.log('response', res);
               })
               .catch((err) => console.log(err));
           }}
