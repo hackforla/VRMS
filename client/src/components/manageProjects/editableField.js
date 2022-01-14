@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import '../../sass/ManageProjects.scss';
 import Modal from './modal/Modal';
+import { REACT_APP_CUSTOM_REQUEST_HEADER } from '../../utils/globalSettings';
 
 const EditableField = ({
   projId,
@@ -14,19 +15,21 @@ const EditableField = ({
   accessLevel,
   canEdit,
 }) => {
+  const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
   const [fieldValue, setFieldValue] = useState(fieldData);
   const [editable, setEditable] = useState(false);
   const [notRestricted, setNotRestricted] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  // body to be collected and sent to the Github server
 
+  // body to be collected and sent to the Github server
   const [formattedIssue, setFormattedIssue] = useState({
-    title: 'Request to edit project field',
+    title: `Request to edit ${projectName}'s ${fieldName} field`,
     projectName: `${projectName}`,
     fieldToEdit: `${fieldName}`,
     proposedValue: '',
     assignee: 'ExperimentsInHonesty',
   });
+  console.log('editableField: formattedIssue: ', formattedIssue);
 
   const ref = useRef();
 
@@ -45,6 +48,7 @@ const EditableField = ({
       ...formattedIssue,
       proposedValue: issue.proposedValue,
     };
+    console.log('editableIssue: newIssue:', newIssue);
     setFormattedIssue(newIssue);
   };
 
@@ -62,6 +66,30 @@ const EditableField = ({
       setFieldValue(fieldData);
     }
   }, [editable]);
+
+  const requestToEdit = async () => {
+    const url = `https://api.github.com/repos/hackforla/VRMS/issues`;
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // 'x-customrequired-header': headerToSend,
+        Accept: 'application/vnd.github.v3+json',
+        Authorization: 'token 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',
+      },
+      title: formattedIssue.title,
+      body: JSON.stringify(formattedIssue),
+    };
+
+    try {
+      const response = await fetch(url, requestOptions);
+      const resJson = await response.json();
+
+      return resJson;
+    } catch (error) {
+      console.log(`update user error: `, error);
+    }
+  };
 
   return (
     // here goes the conditional rendering
@@ -100,6 +128,8 @@ const EditableField = ({
                 fieldToEdit={fieldName}
                 handleClose={closeModal}
                 getIssue={getIssue}
+                requestToEdit={requestToEdit}
+                setShowModal={setShowModal}
               />
             ) : null}
           </>
