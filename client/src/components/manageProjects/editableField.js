@@ -29,7 +29,6 @@ const EditableField = ({
     proposedValue: '',
     assignee: 'ExperimentsInHonesty',
   });
-  console.log('editableField: formattedIssue: ', formattedIssue);
 
   const ref = useRef();
 
@@ -48,7 +47,6 @@ const EditableField = ({
       ...formattedIssue,
       proposedValue: issue.proposedValue,
     };
-    console.log('editableIssue: newIssue:', newIssue);
     setFormattedIssue(newIssue);
   };
 
@@ -73,11 +71,9 @@ const EditableField = ({
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        // 'x-customrequired-header': headerToSend,
         Accept: 'application/vnd.github.v3+json',
-        Authorization: 'token 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',
+        Authorization: 'token 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',
       },
-      title: formattedIssue.title,
       body: JSON.stringify(formattedIssue),
     };
 
