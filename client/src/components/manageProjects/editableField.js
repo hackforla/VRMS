@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import '../../sass/ManageProjects.scss';
 import Modal from './modal/Modal';
-import { REACT_APP_CUSTOM_REQUEST_HEADER } from '../../utils/globalSettings';
 
 const EditableField = ({
   projId,
@@ -15,19 +14,22 @@ const EditableField = ({
   accessLevel,
   canEdit,
 }) => {
-  const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
+  const { REACT_APP_GUTHUB_PAT } = process.env;
+  console.log(REACT_APP_GUTHUB_PAT);
   const [fieldValue, setFieldValue] = useState(fieldData);
   const [editable, setEditable] = useState(false);
   const [notRestricted, setNotRestricted] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
   // body to be collected and sent to the Github server
+  const [value, setValue] = useState('');
   const [formattedIssue, setFormattedIssue] = useState({
     title: `Request to edit ${projectName}'s ${fieldName} field`,
     projectName: `${projectName}`,
     fieldToEdit: `${fieldName}`,
     proposedValue: '',
-    assignee: 'ExperimentsInHonesty',
+    body: `### Project: ${projectName} <br> Field to edit: ${fieldName} <br> Proposed Value: ${value}`,
+    assignee: 'chukalicious',
   });
 
   const ref = useRef();
@@ -48,6 +50,8 @@ const EditableField = ({
       proposedValue: issue.proposedValue,
     };
     setFormattedIssue(newIssue);
+
+    console.log(typeof newIssue.proposedValue);
   };
 
   // create function that checks the user has access to edit all fields
@@ -72,7 +76,8 @@ const EditableField = ({
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/vnd.github.v3+json',
-        Authorization: 'token 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',
+        // Authorization: REACT_APP_GUTHUB_PAT,
+        Authorization: 'token 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',
       },
       body: JSON.stringify(formattedIssue),
     };
