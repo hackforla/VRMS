@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useCallback, useState, useRef, useEffect } from 'react';
 import '../../sass/ManageProjects.scss';
 
 const EditableField = ({
@@ -19,10 +19,10 @@ const EditableField = ({
 
   // create function that checks the user has access to edit all fields
 
-  const checkUser = () => {
+  const checkUser = useCallback(() => {
     const permitted = canEdit.includes(accessLevel);
     setNotRestricted(permitted);
-  };
+  }, [accessLevel, canEdit]);
 
   // Update the displayed results to match the change just made to the db
   useEffect(() => {
@@ -31,7 +31,7 @@ const EditableField = ({
       ref.current.focus();
       setFieldValue(fieldData);
     }
-  }, [editable]);
+  }, [checkUser, editable, fieldData]);
 
   return (
     // here goes the conditional rendering

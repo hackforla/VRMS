@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import '../sass/ManageProjects.scss';
 import useAuth from '../hooks/useAuth';
@@ -17,7 +17,7 @@ const ManageProjects = () => {
   const user = auth?.user;
 
   // Fetch projects from db
-  async function fetchProjects() {
+  const fetchProjects = useCallback(async () => {
     try {
       const res = await fetch('/api/projects/', {
         headers: {
@@ -30,10 +30,10 @@ const ManageProjects = () => {
       console.log(`fetchProjects error: ${error}`);
       alert('Server not responding.  Please refresh the page.');
     }
-  }
+  }, [headerToSend]);
 
   // Fetch recurringEvents
-  async function fetchRecurringEvents() {
+  const fetchRecurringEvents = useCallback(async () => {
     try {
       const res = await fetch('/api/recurringEvents/', {
         headers: {
@@ -46,12 +46,12 @@ const ManageProjects = () => {
       console.log(`fetchProjects error: ${error}`);
       alert('Server not responding.  Please refresh the page.');
     }
-  }
-
+  }, [headerToSend]);
+  
   useEffect(() => {
     fetchProjects();
     fetchRecurringEvents();
-  }, []);
+  }, [fetchProjects, fetchRecurringEvents]);
 
   function renderUpdatedProj(updatedProj) {
     let updatedProjList = projects;
@@ -76,7 +76,7 @@ const ManageProjects = () => {
 
   const goSelectProject = () => {
     setComponentToDisplay('selectProject');
-  }
+  };
 
   switch (componentToDisplay) {
     case 'editMeetingTime':
@@ -92,7 +92,6 @@ const ManageProjects = () => {
           userAccessLevel={user.accessLevel}
         />
       );
-      break;
     default:
       return (
         <SelectProject
