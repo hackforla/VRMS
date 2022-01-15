@@ -67,96 +67,6 @@ const AdminDashboard = () => {
 
   const [isLoading, setIsLoading] = useState(true);
 
-  const processData = useCallback(
-    (events, checkins) => {
-      const processedEvents = processEvents(events);
-      setProcessedEvents([...eventsArr]);
-      const checkinsByEvent = collectCheckinsByEventId(checkins);
-      prepareDataForDonutCharts(processedEvents, checkinsByEvent);
-    },
-    [
-      collectCheckinsByEventId,
-      eventsArr,
-      prepareDataForDonutCharts,
-      processEvents,
-    ]
-  );
-
-  const getAndSetData = useCallback(
-    async (signal) => {
-      try {
-        const eventsRes = await fetch(
-          '/api/events',
-          {
-            headers: {
-              'x-customrequired-header': headerToSend,
-            },
-          },
-          signal
-        );
-        const events = await eventsRes.json();
-        const checkinsRes = await fetch(
-          '/api/checkins',
-          {
-            headers: {
-              'x-customrequired-header': headerToSend,
-            },
-          },
-          signal
-        );
-        const checkins = await checkinsRes.json();
-        processData(events, checkins);
-        setIsLoading(false);
-      } catch (error) {
-        setIsLoading(false);
-        console.log(error);
-      }
-    },
-    [headerToSend, processData]
-  );
-
-  const processEvents = useCallback(
-    (rowEvents) => {
-      const events = {};
-
-      for (let event of rowEvents) {
-        if (!event) continue;
-
-        // Process legacy data with undefined 'hours' property because initially an event length was 3 hours
-        if (!event.hours) {
-          event.hours = parseInt('3');
-        }
-
-        // Define unique event types and process events without 'eventType' property
-        if (!event.eventType) {
-          // Find events without 'eventType' property (30 events) and assign it
-          event.eventType = 'Hacknight';
-        }
-        processEventTypes(event, 'eventType', uniqueEventTypes);
-
-        // Extract events with 'hacknight' property & find unique locations in it
-        if (event.hacknight) {
-          processEventTypes(event, 'hacknight', hackNightUniqueLocations);
-        }
-        events[event._id] = event;
-        eventsArr.push(event);
-      }
-      return events;
-    },
-    [eventsArr, hackNightUniqueLocations, uniqueEventTypes]
-  );
-
-  function processEventTypes(event, propName, uniqueTypes) {
-    const capitalize = (str, lower = false) =>
-      (lower ? str.toLowerCase() : str).replace(
-        /(?:^|\s|["'([{])+\S/g,
-        (match) => match.toUpperCase()
-      );
-    let type = capitalize(event[propName], true);
-    event[propName] = type;
-    uniqueTypes.add(type);
-  }
-
   const collectCheckinsByEventId = useCallback((rowCheckins) => {
     const checkins = {};
     for (let checkin of rowCheckins) {
@@ -171,14 +81,6 @@ const AdminDashboard = () => {
     setCheckins({ ...checkins });
     return checkins;
   }, []);
-
-  function createChartTypes() {
-    let chartTypes = {
-      'All Events': '',
-      'Hacknight Only': '',
-    };
-    setChartTypes(chartTypes);
-  }
 
   const prepareDataForDonutCharts = useCallback(
     (checkins, events) => {
@@ -238,6 +140,104 @@ const AdminDashboard = () => {
     },
     [hackNightUniqueLocations, uniqueEventTypes]
   );
+
+  const processEvents = useCallback(
+    (rowEvents) => {
+      const events = {};
+
+      for (let event of rowEvents) {
+        if (!event) continue;
+
+        // Process legacy data with undefined 'hours' property because initially an event length was 3 hours
+        if (!event.hours) {
+          event.hours = parseInt('3');
+        }
+
+        // Define unique event types and process events without 'eventType' property
+        if (!event.eventType) {
+          // Find events without 'eventType' property (30 events) and assign it
+          event.eventType = 'Hacknight';
+        }
+        processEventTypes(event, 'eventType', uniqueEventTypes);
+
+        // Extract events with 'hacknight' property & find unique locations in it
+        if (event.hacknight) {
+          processEventTypes(event, 'hacknight', hackNightUniqueLocations);
+        }
+        events[event._id] = event;
+        eventsArr.push(event);
+      }
+      return events;
+    },
+    [eventsArr, hackNightUniqueLocations, uniqueEventTypes]
+  );
+
+  const processData = useCallback(
+    (events, checkins) => {
+      const processedEvents = processEvents(events);
+      setProcessedEvents([...eventsArr]);
+      const checkinsByEvent = collectCheckinsByEventId(checkins);
+      prepareDataForDonutCharts(processedEvents, checkinsByEvent);
+    },
+    [
+      collectCheckinsByEventId,
+      eventsArr,
+      prepareDataForDonutCharts,
+      processEvents,
+    ]
+  );
+
+  const getAndSetData = useCallback(
+    async (signal) => {
+      try {
+        const eventsRes = await fetch(
+          '/api/events',
+          {
+            headers: {
+              'x-customrequired-header': headerToSend,
+            },
+          },
+          signal
+        );
+        const events = await eventsRes.json();
+        const checkinsRes = await fetch(
+          '/api/checkins',
+          {
+            headers: {
+              'x-customrequired-header': headerToSend,
+            },
+          },
+          signal
+        );
+        const checkins = await checkinsRes.json();
+        processData(events, checkins);
+        setIsLoading(false);
+      } catch (error) {
+        setIsLoading(false);
+        console.log(error);
+      }
+    },
+    [headerToSend, processData]
+  );
+
+  function processEventTypes(event, propName, uniqueTypes) {
+    const capitalize = (str, lower = false) =>
+      (lower ? str.toLowerCase() : str).replace(
+        /(?:^|\s|["'([{])+\S/g,
+        (match) => match.toUpperCase()
+      );
+    let type = capitalize(event[propName], true);
+    event[propName] = type;
+    uniqueTypes.add(type);
+  }
+
+  function createChartTypes() {
+    let chartTypes = {
+      'All Events': '',
+      'Hacknight Only': '',
+    };
+    setChartTypes(chartTypes);
+  }
 
   function extractVolunteersSignedInByProperty(
     events,
