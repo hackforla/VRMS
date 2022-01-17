@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import '../../sass/ManageProjects.scss';
 import { createClockHours } from '../../utils/createClockHours';
 import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../../utils/globalSettings";
 import { findNextOccuranceOfDay } from './utilities/findNextDayOccuranceOfDay';
+import { addDurationToTime } from './utilities/addDurationToTime';
+import { timeConvertFromForm } from './utilities/timeConvertFromForm';
 
 const CreateNewEvent  = ( { 
   projectName, 
@@ -21,10 +23,7 @@ const CreateNewEvent  = ( {
     duration: '1'
   }
 
-  // Is the create new event form displayed or not?
   const [displayForm, setDisplayForm] = useState(false);
-
-  // Hold current form values
   const [formValues, setFormValues] = useState(initialFormValues);
 
   /*** On Click funtions ***/
@@ -65,70 +64,11 @@ const CreateNewEvent  = ( {
   }
   
   const handleEventCreate = (event) => {
-
     /* ToDo: Ask Bonnie what, if any, validation is required */
 
-    // Find the date for the next occurance of day of the week
-    // let day = parseInt(formValues.day);
-    // const date = new Date();
-    // date.setDate(date.getDate() + ((7 - date.getDay()) % 7 + day) % 7);
-
     const date = findNextOccuranceOfDay(formValues.day);
-
-    // reconstitute time from form to timestamp
-    const timeParts = formValues.startTime.split(':');
-    const sap = timeParts[1].slice(-2);
-    let startHour = parseInt(timeParts[0]);
-    const startMinutes = parseInt(timeParts[1].slice(0,-2));
-    const startSeconds = 0;
-    
-    // set 12am to 0 and make afternoon into military time
-    if (sap === 'pm' && startHour !== 12) {
-      startHour = startHour + 12;
-    } else if (sap === 'am' && startHour === 12) {
-      startHour = 0;
-    }
-
-    // Update the date string with the start hours of the meeting
-    date.setHours(startHour);
-    date.setMinutes(startMinutes);
-    date.setSeconds(startSeconds);
-
-    // This is the date and time of the first meeting.
-    // This will also be used as the start time 
-    const startTimeDate = new Date(date.getTime());
-    let endTime;
-
-    // Create the endTime by adding seconds to the timestamp and converting it back to date
-    switch (formValues.duration) {
-      case '.5':
-        endTime = new Date(date.getTime() + (.5*3600000)); 
-      break;
-      case '1':
-        endTime = new Date(date.getTime() + (1*3600000)); 
-      break;
-      case '1.5':
-        endTime = new Date(date.getTime() + (1.5*3600000)); 
-      break;
-      case '2':
-        endTime = new Date(date.getTime() + (2*3600000)); 
-        break;
-      case '2.5':
-        endTime = new Date(date.getTime() + (2.5*3600000));
-      break;
-      case '3':
-        endTime = new Date(date.getTime() + (3*3600000));
-      break;
-      case '3.5':
-        endTime = new Date(date.getTime() + (3.5*3600000));
-      break;
-      case '4':
-        endTime = new Date(date.getTime() + (4*3600000));
-      break;
-      default:
-        // ToDo: Change this to report some kind of error
-        endTime = new Date(date.getTime()) 
-    } 
+    const startTimeDate = timeConvertFromForm(date, formValues.startTime);
+    const endTime = addDurationToTime(startTimeDate, formValues.duration); 
 
     //convert to ISO and GMT
     const startDateTimeGMT = new Date(startTimeDate).toISOString();
