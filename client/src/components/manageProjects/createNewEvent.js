@@ -2,16 +2,15 @@ import React, { useState, useEffect } from 'react';
 import '../../sass/ManageProjects.scss';
 import { createClockHours } from '../../utils/createClockHours';
 import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../../utils/globalSettings";
+import { findNextOccuranceOfDay } from './utilities/findNextDayOccuranceOfDay';
 
 const CreateNewEvent  = ( { 
   projectName, 
   projectID, 
-  reRender 
+  newEventReRender
 } ) => {
 
   const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
-
-  /*** Initialize state ***/
 
   // These are the initial form values
   const initialFormValues = {
@@ -22,20 +21,20 @@ const CreateNewEvent  = ( {
     duration: '1'
   }
 
-  // Is the create form displayed or not?
+  // Is the create new event form displayed or not?
   const [displayForm, setDisplayForm] = useState(false);
+
   // Hold current form values
   const [formValues, setFormValues] = useState(initialFormValues);
 
   /*** On Click funtions ***/
-
   // Toggle new event form display
   const handleFormDisplay = () => {
     setDisplayForm(true);
   }
 
   const cancelForm = () => {
-    setFormValues({});
+    setFormValues(initialFormValues);
     setDisplayForm(false);
     // ToDo: set to scroll to the top when form is cancelled
   }
@@ -45,7 +44,7 @@ const CreateNewEvent  = ( {
     setFormValues({ ...formValues, [event.target.name]: event.target.value })
   }
 
-  // Function to Create New reurringEvent
+/***  Create New Recurring Event functions ***/
   const createNewRecurringEvent = async (eventToCreate) => {
     const url = `/api/recurringEvents/`;
     const requestOptions = {
@@ -70,14 +69,15 @@ const CreateNewEvent  = ( {
     /* ToDo: Ask Bonnie what, if any, validation is required */
 
     // Find the date for the next occurance of day of the week
-    let day = parseInt(formValues.day);
-    const date = new Date();
-    date.setDate(date.getDate() + ((7 - date.getDay()) % 7 + day) % 7);
+    // let day = parseInt(formValues.day);
+    // const date = new Date();
+    // date.setDate(date.getDate() + ((7 - date.getDay()) % 7 + day) % 7);
+
+    const date = findNextOccuranceOfDay(formValues.day);
 
     // reconstitute time from form to timestamp
     const timeParts = formValues.startTime.split(':');
     const sap = timeParts[1].slice(-2);
-    // timeParts[1] = timeParts[1].slice(0,-2);
     let startHour = parseInt(timeParts[0]);
     const startMinutes = parseInt(timeParts[1].slice(0,-2));
     const startSeconds = 0;
@@ -160,11 +160,10 @@ const CreateNewEvent  = ( {
       checkInReady: false,
       videoConferenceLink: formValues.videoConferenceLink
     };
- 
-      console.log(theNewEvent);
-      createNewRecurringEvent(theNewEvent)
+
+    createNewRecurringEvent(theNewEvent)
       .then( (data) => {
-        reRender(data)
+        newEventReRender(data)
       })
       .catch( (error) => {
         console.log(`Create Recurring Event Error: `, error);
@@ -177,7 +176,6 @@ const CreateNewEvent  = ( {
       handleEventCreate();
       setFormValues(initialFormValues);
       setDisplayForm(false);
-      // ToDo: Re-render the page after submit
     }
 
   // This creates the clock hours for the form

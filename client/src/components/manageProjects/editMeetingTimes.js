@@ -5,12 +5,16 @@ import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../../utils/globalSettings";
 import CreateNewEvent from './createNewEvent';
 
 // This component displays current meeting times for selected project and offers the option to edit those times. 
-
-// ToDo: Destructure props
-const EditMeetingTimes  = (props) => {
+const EditMeetingTimes  = ({
+  recurringEvents, 
+  projectToEdit,
+  fetchRecurringEvents,
+  goEditProject,
+  goSelectProject
+  }) => {
 
   const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
-  //const URL = process.env.NODE_ENV === 'prod' ? 'https://www.vrms.io' : 'http://localhost:4000';
+  const URL = process.env.NODE_ENV === 'prod' ? 'https://www.vrms.io' : 'http://localhost:4000';
 
   // Initialize state
   const [rEvents, setREvents] = useState([]);
@@ -18,14 +22,10 @@ const EditMeetingTimes  = (props) => {
   // ToDo: Is this state needed? If not, remove it. 
   const [eventToEdit, setEventToEdit] = useState('');
 
-  // // Filters the recurring events to select for the selected projects. 
-  const thisProjectRecurringEvents = (projectToEditID) => { 
-    setREvents(props.recurringEvents.filter(e => (e?.project?._id === projectToEditID)));
-  }
-
   // Get project recurring events when component loads
   useEffect(() => {
-    thisProjectRecurringEvents(props.projectToEdit._id);
+    // Filters the recurring events for this project
+    setREvents(recurringEvents.filter(e => (e?.project?._id === projectToEdit._id)));
   }, [])
 
   // Translate event data into human readable format
@@ -77,41 +77,49 @@ const EditMeetingTimes  = (props) => {
     return readableEvent(item);
   });
 
-  // Click Handlers
-  const deleteReRender = (data) => {
+  /*** Re render functions ***/
+  const deleteEventReRender = (data) => {
     setREvents(rEvents.filter(e => (e._id !== data._id)));
   }
 
-  // ToDo: Make everything Re-render properly
-  const reRender = () => {
-    props.fetchRecurringEvents();
-    props.setRecurringEvents();
-    thisProjectRecurringEvents(props.projectToEdit._id);
+  const newEventReRender = (data) => {
+    setREvents([data, ...rEvents]);
   }
+
+  const updateEventReRender = (data) => {
+    let uEvents = [];
+    
+    for (let i = 0; i < rEvents.length; i++) {
+      if (rEvents[[i]]._id === data._id) {
+        uEvents.push(data);
+      } else {
+        uEvents.push(rEvents[i]);
+      }
+    }
+    setREvents(uEvents);
+  };
 
     /*** Update Event Functions ***/
 
-    // update reurringEvent
-    const updateRecurringEvent = async (eventToUpdate, RecurringEventID) => {
-      const url = `/api/recurringEvents/${RecurringEventID}`;
-      const requestOptions = {
-          method: 'PATCH',
-          headers: {
-              "Content-Type": "application/json",
-              "x-customrequired-header": headerToSend
-          },
-          body: JSON.stringify(eventToUpdate)
-      };
+  // update reurringEvent
+  const updateRecurringEvent = async (eventToUpdate, RecurringEventID) => {
 
-      console.log('body: ', body);
-    
-      const response = await fetch(url, requestOptions); 
-      if (!response.ok) {
-        throw new Error(`HTTP error!  ${response.status}`);
-      }
-      const data = await response.json();
-      return data;
+    const url = `/api/recurringEvents/${RecurringEventID}`;
+    const requestOptions = {
+        method: 'PATCH',
+        headers: {
+            "Content-Type": "application/json",
+            "x-customrequired-header": headerToSend
+        },
+        body: JSON.stringify(eventToUpdate)
+    };
+    const response = await fetch(url, requestOptions); 
+    if (!response.ok) {
+      throw new Error(`HTTP error!  ${response.status}`);
     }
+    const data = await response.json();
+    return data;
+  }
 
   const handleEventUpdate = ( eventID, values, startTimeOriginal, durationOriginal ) => () => {
 
@@ -146,7 +154,7 @@ const EditMeetingTimes  = (props) => {
     if (values.meetingURL) {
       theUpdatedEvent = { 
         ...theUpdatedEvent, 
-        meetingURL: values.meetingURL 
+        videoConferenceLink: values.meetingURL 
       };
     }    
 
@@ -169,7 +177,7 @@ const EditMeetingTimes  = (props) => {
 
       theUpdatedEvent = {
         ...theUpdatedEvent, 
-        day: dateGMT
+        date: dateGMT
       };
     }
 
@@ -266,15 +274,13 @@ const EditMeetingTimes  = (props) => {
         ...theUpdatedEvent, 
         startTime: startTimeGMT,
         endTime: endTimeGMT,
-        duration: durationToUse
+        hours: durationToUse
       } 
     }
 
-    console.log('update event: ', theUpdatedEvent);
-
     updateRecurringEvent(theUpdatedEvent, eventID)
     .then( (data) => {
-      //reRender(data)
+      updateEventReRender(data);
     })
     .catch( (error) => {
       console.log(`Update Recurring Event Error: `, error);
@@ -309,7 +315,7 @@ const EditMeetingTimes  = (props) => {
 
     deleteRecurringEvent(eventID)
     .then( (data) => {
-      deleteReRender(data);
+      deleteEventReRender(data);
     })
     .catch( (error) => {
       console.log(`Delete Event Error: `, error);
@@ -319,12 +325,12 @@ const EditMeetingTimes  = (props) => {
 
   return (
     <div>
-      <div className="project-list-heading">Project: {props.projectToEdit.name}</div>
+      <div className="project-list-heading">Project: {projectToEdit.name}</div>
       <div>
         <CreateNewEvent 
-          projectName = {props.projectToEdit.name}
-          projectID = {props.projectToEdit._id}
-          reRender = {reRender}
+          projectName = {projectToEdit.name}
+          projectID = {projectToEdit._id}
+          newEventReRender = {newEventReRender}
         />
       </div>
       <div className="project-list-heading">Edit Recurring Events</div>
@@ -346,8 +352,8 @@ const EditMeetingTimes  = (props) => {
          />
       ))}
 
-      <div><button className="button-back" onClick={props.goEditProject}>Back to Edit Project</button></div>
-      <div><button className="button-back" onClick={props.goSelectProject}>Back to Select Project</button></div>
+      <div><button className="button-back" onClick={goEditProject}>Back to Edit Project</button></div>
+      <div><button className="button-back" onClick={goSelectProject}>Back to Select Project</button></div>
     </div>
   );
 

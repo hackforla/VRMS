@@ -83,6 +83,7 @@ const EditableMeeting  = ( {
           value={formValues.description}
           onChange={handleInputChange}
           defaultValue={eventDescription}
+          placeholder='Enter event description...'
         />
       </div>
       <div>
@@ -143,6 +144,7 @@ const EditableMeeting  = ( {
           onChange={handleInputChange}
           name='meetingURL'
           defaultValue={eventMeetingURL}
+          placeholder='Enter meeting url...'
         />
       </div>
       <div>

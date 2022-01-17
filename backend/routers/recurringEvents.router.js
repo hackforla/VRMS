@@ -22,19 +22,6 @@ router.get('/', cors(), (req, res) => {
         });
 });
 
-router.post('/', (req, res) => {
-
-    RecurringEvent
-        .create(req.body)
-        .then(recurringEvent => {
-            return res.sendStatus(201);
-        })
-        .catch(err => {
-            console.log(err);
-            return res.sendStatus(400);
-        });
-});
-
 router.get('/:id', (req, res) => {
     RecurringEvent
         .findById(req.params.id)
@@ -47,28 +34,10 @@ router.get('/:id', (req, res) => {
         });
 });
 
-// router.patch('/:id', (req, res) => {
-//     RecurringEvent
-//         .findById(req.params.id, function(err, recurringEvent) {
-//             // recurringEvent.checkInReady = !recurringEvent.checkInReady;
+router.post('/', RecurringEventController.create);
 
-//             recurringEvent.save(err => {
-//                 if (err) {
-//                     return res.sendStatus(400);
-//                 }
-//             })
-//         })
-//         .then(recurringEvent => {
-//             return res.status(200).send(recurringEvent);
-//         })
-//         .catch(err => {
-//             console.log(err);
-//             return res.sendStatus(503);
-//         });
-// });
+router.patch('/:RecurringEventId', RecurringEventController.update);
 
-router.patch('/:RecurringEventID', RecurringEventController.update);
-
-router.delete('/:RecurringEventID', RecurringEventController.destroy);
+router.delete('/:RecurringEventId', RecurringEventController.destroy);
 
 module.exports = router;
