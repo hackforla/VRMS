@@ -185,4 +185,11 @@ UserController.verifyMe = async function (req, res) {
   return res.status(200).send(user);
 };
 
+UserController.logout = async function (req, res) {
+  return res
+    .clearCookie('token')
+    .status(200)
+    .send('Successfully logged out.');
+}
+
 module.exports = UserController;

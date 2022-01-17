@@ -17,7 +17,7 @@ const Auth = () => {
   const pattern = /\b[a-z0-9._]+@[a-z0-9.-]+\.[a-z]{2,4}\b/i;
 
   const history = useHistory();
-  const [auth] = useAuth();
+  const { auth } = useAuth();
 
   const [email, setEmail] = useState('');
   const [isDisabled, setIsDisabled] = useState(true);

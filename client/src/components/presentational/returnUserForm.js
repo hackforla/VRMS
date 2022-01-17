@@ -1,7 +1,6 @@
-import React from "react";
+import React from 'react';
 
 const ReturnUserForm = (props) => {
-
   return (
     <div className="check-in-container">
       <div className="check-in-headers">
@@ -10,7 +9,7 @@ const ReturnUserForm = (props) => {
       <div className="check-in-form">
         <form
           className="form-check-in"
-          autoComplete="off"
+          autoComplete="on"
           onSubmit={(e) => e.preventDefault()}
         >
           <div className="form-row">
@@ -31,9 +30,7 @@ const ReturnUserForm = (props) => {
               />
             </div>
             <p>
-              {
-                "(This allows easy use of the app. We'll never sell your data!)"
-              }
+              {"(This allows easy use of the app. We'll never sell your data!)"}
             </p>
           </div>
 
@@ -51,7 +48,9 @@ const ReturnUserForm = (props) => {
                   type="submit"
                   className="form-check-in-submit"
                   onClick={(e) => props.checkEmail(e)}
-                  disabled={!props.formInput.email || props.formInput.email===""}
+                  disabled={
+                    !props.formInput.email || props.formInput.email === ''
+                  }
                 >
                   CHECK IN
                 </button>

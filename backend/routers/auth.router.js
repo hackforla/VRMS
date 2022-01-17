@@ -28,4 +28,6 @@ router.post('/verify-signin', [verifyToken.isTokenValid], UserController.verifyS
 
 router.post('/me', [AuthUtil.verifyCookie], UserController.verifyMe);
 
+router.post('/logout', [AuthUtil.verifyCookie], UserController.logout);
+
 module.exports = router;

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../utils/globalSettings";
 import '../sass/UserAdmin.scss';
+import useAuth from '../hooks/useAuth';
+import { Redirect } from 'react-router-dom';
 
 //Parent
 const UserAdmin = () => {
@@ -8,6 +10,7 @@ const UserAdmin = () => {
     const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
     // Initialize state hooks
+    const { auth } = useAuth();
     const [users, setUsers] = useState([]); // All users pulled from database
     const [projects, setProjects] = useState([]); // All projects pulled from db
     const [userToEdit, setUserToEdit] = useState({}); // The selected user that is being edited
@@ -226,6 +229,10 @@ const UserAdmin = () => {
     const handleNewProjectFormSubmit = async (project) => {
       await addProjectToDb(project);
       fetchProjects();
+    }
+
+    if (!auth && !auth?.user) {
+        return <Redirect to="/login" />;
     }
 
     if (Object.keys(userToEdit).length === 0 && addNewProject === false && showUserSearch === true) {

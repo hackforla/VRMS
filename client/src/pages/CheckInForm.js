@@ -138,49 +138,41 @@ const CheckInForm = props => {
     }
   };
 
-  const submitForm = (userForm) => { 
+  const submitForm = async (userForm) => { 
     // First, create a new user in the user collection
     const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
-    fetch('/api/users', {
-        method: "POST",
-        body: JSON.stringify(userForm),
-        headers: {
-            "Content-Type": "application/json",
-            "x-customrequired-header": headerToSend
-        }
-    })
-        .then(res => {
-            if (res.ok) {
-                return res.json();
-            }
-            
-            throw new Error(res.statusText);
-        })
-        .then(responseId => {
-            if (responseId.includes('E11000')) {
-                setIsError(true);
-                setErrorMessage('Email address is already in use.')
-            } else {
-                const checkInForm = { userId: (responseId), eventId: new URLSearchParams(props.location.search).get('eventId') };
+    const userRes = await fetch('/api/users', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+          'x-customrequired-header': headerToSend
+      },
+      body: JSON.stringify(userForm)
+    });
 
-                return fetch('/api/checkins', {
-                    method: "POST",
-                    body: JSON.stringify(checkInForm),
-                    headers: {
-                        "Content-Type": "application/json",
-                        "x-customrequired-header": headerToSend
-                    }
-                })
-                    .then(res => {
-                        props.history.push(`/success?eventId=${eventId}`);
-                    })
-                    .catch(err => console.log(err));
-            }
-        })
-        .catch(err => {
-            console.log(err);
-        });
+    if (!userRes.ok) {
+      throw new Error(userRes.statusText);
+    }
+
+    const userData = await userRes.json();
+    const userId = userData._id;
+    const eventId = new URLSearchParams(props.location.search).get('eventId');
+
+    const checkinRes = await fetch('/api/checkins', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-customrequired-header': headerToSend
+      },
+      body: JSON.stringify({ userId, eventId})
+    });
+
+    if (!checkinRes.ok) {
+      throw new Error(checkinRes.statusText);
+    }
+
+    props.history.push(`/success?eventId=${eventId}`);
 }
 
 const submitReturning = (returningUser, e = null) => {
@@ -212,7 +204,7 @@ const submitReturning = (returningUser, e = null) => {
         try {
             const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
-            fetch(`/api/users/${returningUser._id}`, {
+            fetch(`/api/users/${returningUser.user._id}`, {
                 method: "PATCH",
                 body: answerJson,
                 headers: {
@@ -221,7 +213,7 @@ const submitReturning = (returningUser, e = null) => {
                 }
             })
             .then(res => {
-              console.log('res.ok, 209', res.ok);
+              // console.log('res.ok, 209', res.ok);
               if (res.ok) {
                 return res.json(); 
               }
@@ -534,6 +526,8 @@ const checkEmail = (e) => {
 
         setIsLoading(true);
 
+        // console.log('formInput.email:', formInput.email)
+
         fetch('/api/checkuser', {
             method: "POST",
             headers: {
@@ -543,6 +537,8 @@ const checkEmail = (e) => {
             body: JSON.stringify({ email: formInput.email })
         })
         .then(res => {
+          // console.log('res:', res)
+
             if (res.ok) {
                 return res.json();
             }
@@ -550,7 +546,7 @@ const checkEmail = (e) => {
             throw new Error(res.statusText);
         })
         .then(resJson => {
-          // console.log(resJson);
+          // console.log("resJSON: ", resJson);
             setUser(resJson);
             setIsLoading(false);
             resJson && submitReturning(resJson);
