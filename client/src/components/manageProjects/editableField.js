@@ -22,15 +22,15 @@ const EditableField = ({
   const [showModal, setShowModal] = useState(false);
 
   // body to be collected and sent to the Github server
+
   const [value, setValue] = useState('');
+  console.log('value: ', value);
   const [formattedIssue, setFormattedIssue] = useState({
     title: `Request to edit ${projectName}'s ${fieldName} field`,
-    projectName: `${projectName}`,
-    fieldToEdit: `${fieldName}`,
-    proposedValue: '',
     body: `### Project: ${projectName} <br> Field to edit: ${fieldName} <br> Proposed Value: ${value}`,
     assignee: 'chukalicious',
   });
+  console.log('formattedIssue:', formattedIssue);
 
   const ref = useRef();
 
@@ -49,9 +49,15 @@ const EditableField = ({
       ...formattedIssue,
       proposedValue: issue.proposedValue,
     };
+
+    const issueStr = issue.proposedValue;
     setFormattedIssue(newIssue);
+    setValue(issueStr);
+    // setValue(issue.proposedValue);
 
     console.log(typeof newIssue.proposedValue);
+    console.log(newIssue.proposedValue);
+    console.log('newIssue', newIssue);
   };
 
   // create function that checks the user has access to edit all fields
@@ -77,7 +83,7 @@ const EditableField = ({
         'Content-Type': 'application/json',
         Accept: 'application/vnd.github.v3+json',
         // Authorization: REACT_APP_GUTHUB_PAT,
-        Authorization: 'token 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',
+        Authorization: 'token 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',
       },
       body: JSON.stringify(formattedIssue),
     };
@@ -92,8 +98,9 @@ const EditableField = ({
     }
   };
 
+  console.log('value: ', value);
+
   return (
-    // here goes the conditional rendering
     // this button will be disabled if user !admin
     <div>
       <div>
