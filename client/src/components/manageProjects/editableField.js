@@ -83,7 +83,7 @@ const EditableField = ({
         'Content-Type': 'application/json',
         Accept: 'application/vnd.github.v3+json',
         // Authorization: REACT_APP_GUTHUB_PAT,
-        Authorization: 'token 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',
+        // Authorization: ,
       },
       body: JSON.stringify(formattedIssue),
     };
