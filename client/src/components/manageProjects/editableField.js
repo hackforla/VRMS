@@ -13,7 +13,11 @@ const EditableField = ({
   fieldTitle,
   accessLevel,
   canEdit,
+  getIssue,
+  issueValue,
 }) => {
+  console.log('editableField: props: issueValue: ', issueValue);
+  console.log('editableField: props: issueValue: ', typeof issueValue);
   const { REACT_APP_GUTHUB_PAT } = process.env;
   console.log(REACT_APP_GUTHUB_PAT);
   const [fieldValue, setFieldValue] = useState(fieldData);
@@ -22,12 +26,12 @@ const EditableField = ({
   const [showModal, setShowModal] = useState(false);
 
   // body to be collected and sent to the Github server
-
-  const [value, setValue] = useState('');
-  console.log('value: ', value);
+  const [issueStr, setIssueStr] = useState('');
+  console.log('issueStr:', issueStr);
   const [formattedIssue, setFormattedIssue] = useState({
     title: `Request to edit ${projectName}'s ${fieldName} field`,
-    body: `### Project: ${projectName} <br> Field to edit: ${fieldName} <br> Proposed Value: ${value}`,
+
+    body: `### Project: ${projectName} <br> Field to edit: ${fieldName} <br> Proposed Value: ${issueValue}`,
     assignee: 'chukalicious',
   });
   console.log('formattedIssue:', formattedIssue);
@@ -35,6 +39,12 @@ const EditableField = ({
   const ref = useRef();
 
   // Modal Functions
+  useEffect(() => {
+    setFormattedIssue({
+      ...formattedIssue,
+      body: `### Project: ${projectName} <br> Field to edit: ${fieldName} <br> Proposed Value: ${issueValue}`,
+    });
+  }, [issueValue]);
 
   const closeModal = (e) => {
     setFormattedIssue({
@@ -44,20 +54,29 @@ const EditableField = ({
     setShowModal(false);
   };
 
-  const getIssue = (issue) => {
-    const newIssue = {
-      ...formattedIssue,
-      proposedValue: issue.proposedValue,
+  const requestToEdit = async () => {
+    const url = `https://api.github.com/repos/hackforla/VRMS/issues`;
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/vnd.github.v3+json',
+        // Authorization: REACT_APP_GUTHUB_PAT,
+        Authorization: 'token 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',
+      },
+      body: JSON.stringify(formattedIssue),
     };
+    try {
+      const response = await fetch(url, requestOptions);
+      const resJson = await response.json();
 
-    const issueStr = issue.proposedValue;
-    setFormattedIssue(newIssue);
-    setValue(issueStr);
-    // setValue(issue.proposedValue);
+      console.log('requestOptions: body: ', requestOptions.body);
+      console.log('formattedIssue inside the api call:', formattedIssue);
 
-    console.log(typeof newIssue.proposedValue);
-    console.log(newIssue.proposedValue);
-    console.log('newIssue', newIssue);
+      return resJson;
+    } catch (error) {
+      console.log(`update user error: `, error);
+    }
   };
 
   // create function that checks the user has access to edit all fields
@@ -74,31 +93,6 @@ const EditableField = ({
       setFieldValue(fieldData);
     }
   }, [editable]);
-
-  const requestToEdit = async () => {
-    const url = `https://api.github.com/repos/hackforla/VRMS/issues`;
-    const requestOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/vnd.github.v3+json',
-        // Authorization: REACT_APP_GUTHUB_PAT,
-        // Authorization: ,
-      },
-      body: JSON.stringify(formattedIssue),
-    };
-
-    try {
-      const response = await fetch(url, requestOptions);
-      const resJson = await response.json();
-
-      return resJson;
-    } catch (error) {
-      console.log(`update user error: `, error);
-    }
-  };
-
-  console.log('value: ', value);
 
   return (
     // this button will be disabled if user !admin
@@ -125,7 +119,6 @@ const EditableField = ({
               {' '}
               [Contact your team lead to make changes to this field]
             </span>
-            {/* Modal will go here. onclick => open modal */}
             {/* Propose this text gets changed to a call to action type of text and something that better describes what happens when the link is clicked  */}
             {/* "Click here to..." */}
 

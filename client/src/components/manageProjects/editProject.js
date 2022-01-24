@@ -7,6 +7,7 @@ import { REACT_APP_CUSTOM_REQUEST_HEADER } from '../../utils/globalSettings';
 //for user level block access to all except for the ones checked
 
 const EditProject = (props) => {
+  console.log('editProject: props: ', props);
   const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
   //const [currentProjectData, setCurrentProjectData] = useState(props.projectToEdit);
@@ -67,6 +68,8 @@ const EditProject = (props) => {
           fieldTitle="Name:"
           accessLevel={props.userAccessLevel}
           canEdit={['admin']}
+          getIssue={props.getIssue}
+          issueValue={props.issueValue}
         />
       </div>
       <div className="editable-field-div">
@@ -81,6 +84,8 @@ const EditProject = (props) => {
           fieldTitle="Description:"
           accessLevel={props.userAccessLevel}
           canEdit={['admin']}
+          getIssue={props.getIssue}
+          issueValue={props.issueValue}
         />
       </div>
       <div className="editable-field-div">
@@ -95,6 +100,8 @@ const EditProject = (props) => {
           fieldTitle="Location:"
           accessLevel={props.userAccessLevel}
           canEdit={['admin']}
+          getIssue={props.getIssue}
+          issueValue={props.issueValue}
         />
       </div>
       <div className="editable-field-div">
@@ -109,6 +116,8 @@ const EditProject = (props) => {
           fieldTitle="GitHub Identifier:"
           accessLevel={props.userAccessLevel}
           canEdit={['admin']}
+          getIssue={props.getIssue}
+          issueValue={props.issueValue}
         />
       </div>
       <div className="editable-field-div">
@@ -123,6 +132,8 @@ const EditProject = (props) => {
           fieldTitle="GitHib URL:"
           accessLevel={props.userAccessLevel}
           canEdit={['admin']}
+          getIssue={props.getIssue}
+          issueValue={props.issueValue}
         />
       </div>
       <div className="editable-field-div">
@@ -137,6 +148,8 @@ const EditProject = (props) => {
           fieldTitle="Slack URL:"
           accessLevel={props.userAccessLevel}
           canEdit={['admin']}
+          getIssue={props.getIssue}
+          issueValue={props.issueValue}
         />
       </div>
       <div className="editable-field-div">
@@ -151,6 +164,8 @@ const EditProject = (props) => {
           fieldTitle="Google Drive URL:"
           accessLevel={props.userAccessLevel}
           canEdit={['admin', 'user']}
+          getIssue={props.getIssue}
+          issueValue={props.issueValue}
         />
       </div>
       <div className="editable-field-div">
@@ -165,6 +180,7 @@ const EditProject = (props) => {
           fieldTitle="Google Drive ID:"
           accessLevel={props.userAccessLevel}
           canEdit={['admin']}
+          issueValue={props.issueValue}
         />
       </div>
       <div className="editable-field-div">
@@ -179,6 +195,8 @@ const EditProject = (props) => {
           fieldTitle="HfLA Website URL:"
           accessLevel={props.userAccessLevel}
           canEdit={['admin']}
+          getIssue={props.getIssue}
+          issueValue={props.issueValue}
         />
       </div>
       <div className="editable-field-div">
@@ -193,6 +211,8 @@ const EditProject = (props) => {
           fieldTitle="Video Conference Link:"
           accessLevel={props.userAccessLevel}
           canEdit={['admin', 'user']}
+          getIssue={props.getIssue}
+          issueValue={props.issueValue}
         />
       </div>
       <div className="editable-field-div">
@@ -207,6 +227,8 @@ const EditProject = (props) => {
           fieldTitle="Looking For Description:"
           accessLevel={props.userAccessLevel}
           canEdit={['admin']}
+          getIssue={props.getIssue}
+          issueValue={props.issueValue}
         />
       </div>
       <div className="editable-field-div">
@@ -221,6 +243,8 @@ const EditProject = (props) => {
           fieldTitle="Partners (comma separated):"
           accessLevel={props.userAccessLevel}
           canEdit={['admin', 'user']}
+          getIssue={props.getIssue}
+          issueValue={props.issueValue}
         />
       </div>
       <div className="editable-field-div">
@@ -235,6 +259,8 @@ const EditProject = (props) => {
           fieldTitle="Recruiting Categories (comma separated):"
           accessLevel={props.userAccessLevel}
           canEdit={['admin']}
+          getIssue={props.getIssue}
+          issueValue={props.issueValue}
         />
       </div>
 

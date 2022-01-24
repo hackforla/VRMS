@@ -4,8 +4,10 @@ import { Label, Input, AuxiliaryButton } from '../../Form';
 
 const Modal = (props) => {
   const [issue, setIssue] = useState({ proposedValue: '' });
+  console.log('issue when it renders: ', issue);
 
   const handleChange = (e) => {
+    console.log('issue before change: ', issue);
     setIssue({ [e.target.name]: e.target.value });
   };
 
@@ -17,7 +19,7 @@ const Modal = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     props.getIssue(issue);
-    setIssue({ proposedValue: '' });
+    console.log('issue en el handleSubmit: ', issue);
     props.setShowModal(false);
   };
 

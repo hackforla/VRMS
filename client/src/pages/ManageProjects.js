@@ -16,6 +16,20 @@ const ManageProjects = () => {
   const [componentToDisplay, setComponentToDisplay] = useState(''); // displayProjectInfo, editMeetingTime or editProjectInfor
   const user = auth?.user;
 
+  const [issueValue, setIssueValue] = useState({ proposedValue: '' });
+  console.log('ManageProjects: issueValue:', issueValue);
+
+  const getIssue = (issue) => {
+    console.log('ManageProjects: getIssue: issue: ', issue);
+
+    setIssueValue({ proposedValue: issue.proposedValue });
+  };
+
+  console.log(
+    'ManageProjects: issueValue: after running the getIssue function:',
+    issueValue
+  );
+
   // Fetch projects from db
   async function fetchProjects() {
     try {
@@ -76,7 +90,7 @@ const ManageProjects = () => {
 
   const goSelectProject = () => {
     setComponentToDisplay('selectProject');
-  }
+  };
 
   switch (componentToDisplay) {
     case 'editMeetingTime':
@@ -90,6 +104,8 @@ const ManageProjects = () => {
           recurringEvents={recurringEvents}
           renderUpdatedProj={renderUpdatedProj}
           userAccessLevel={user.accessLevel}
+          getIssue={getIssue}
+          issueValue={issueValue.proposedValue}
         />
       );
       break;
