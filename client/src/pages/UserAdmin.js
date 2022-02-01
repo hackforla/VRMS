@@ -67,12 +67,11 @@ const UserAdmin = () => {
         setUserToEdit(usr);
     }
 
-
     // Get search resuts to display on page
     const emailResults = !searchTerm
     ? []
     : Object.values(users).filter 
-        (user => user.email.toLowerCase().startsWith(searchTerm.toLowerCase().trim()))
+        (user => user.email?.toLowerCase().startsWith(searchTerm.toLowerCase().trim()))
         .sort((a,b) => a.email.localeCompare(b.email))
         .map((u) => <div onClick={userClickHandler(u)}>{u.email + " ( " + u.name.firstName + " " + u.name.lastName + " )"}</div>)      
     ;
@@ -81,7 +80,7 @@ const UserAdmin = () => {
     ? []
     : Object.values(users).filter 
         (user => 
-            user.name.firstName.concat(' ', user.name.lastName).toLowerCase().startsWith(searchTerm.toLowerCase().trim()))
+            user.name?.firstName.concat(' ', user.name.lastName).toLowerCase().startsWith(searchTerm.toLowerCase().trim()))
             .sort((a,b) => a.name.firstName.concat(a.name.lastName).localeCompare(b.name.firstName.concat(b.name.lastName)))
             .map((u) => <div onClick={userClickHandler(u)}>{u.name.firstName + " " + u.name.lastName + " ( " + u.email + " )"}</div>)
     ;

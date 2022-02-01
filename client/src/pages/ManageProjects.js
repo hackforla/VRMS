@@ -4,6 +4,7 @@ import '../sass/ManageProjects.scss';
 import useAuth from '../hooks/useAuth';
 import { REACT_APP_CUSTOM_REQUEST_HEADER } from '../utils/globalSettings';
 import SelectProject from '../components/manageProjects/selectProject.js';
+import EditMeetingTimes from '../components/manageProjects/editMeetingTimes';
 import EditProject from '../components/manageProjects/editProject.js';
 
 const ManageProjects = () => {
@@ -74,13 +75,30 @@ const ManageProjects = () => {
     setComponentToDisplay('editProjectInfo');
   };
 
-  const goSelectProject = () => {
-    setComponentToDisplay('selectProject');
+  const meetingSelectClickHandler = () => {
+    setComponentToDisplay('editMeetingTimes');
+  };
+
+  const setEditProject = () => {
+    setComponentToDisplay('editProjectInfo');
   }
 
+  const goSelectProject = () => {
+    setProjectToEdit([]);
+    setComponentToDisplay('selectProject');
+  }
+  // }
+
   switch (componentToDisplay) {
-    case 'editMeetingTime':
-      // <EditMeetingTime /> // Placeholder for future coponent
+    case 'editMeetingTimes':
+      return (
+        <EditMeetingTimes 
+        goSelectProject={goSelectProject}
+        goEditProject={setEditProject}
+        projectToEdit={projectToEdit}
+        recurringEvents={recurringEvents}
+        />
+      )
       break;
     case 'editProjectInfo':
       return (
@@ -89,6 +107,7 @@ const ManageProjects = () => {
           goSelectProject={goSelectProject}
           recurringEvents={recurringEvents}
           renderUpdatedProj={renderUpdatedProj}
+          meetingSelectClickHandler={meetingSelectClickHandler}
           userAccessLevel={user.accessLevel}
         />
       );

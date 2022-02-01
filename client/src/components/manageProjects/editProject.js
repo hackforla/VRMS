@@ -50,11 +50,15 @@ const EditProject = (props) => {
     props.projectToEdit.recruitingCategories.join(', ');
 
   return (
+
+    
     <div>
       <div className="project-list-heading">
         Project: {props.projectToEdit.name}
       </div>
 
+      <div><button className="button-back" onClick={props.meetingSelectClickHandler}>Edit Meeting Times</button></div>
+    
       <div>
         <EditableField
           fieldData={props.projectToEdit.name}
