@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import '../../sass/ManageProjects.scss';
 import { createClockHours } from '../../utils/createClockHours';
 

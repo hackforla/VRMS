@@ -242,19 +242,19 @@ const ProjectLeaderDashboard = () => {
 
   useEffect(() => {
     getDashboardInfo();
-  }, []);
+  }, [getDashboardInfo]);
 
   useEffect(() => {
     getAttendees();
-  }, [nextEvent]);
+  }, [getAttendees, nextEvent]);
 
   useEffect(() => {
     getRoster();
-  }, [project, forceRerender]);
+  }, [getRoster, project, forceRerender]);
 
   useEffect(() => {
     getNextEvent();
-  }, [project]);
+  }, [getNextEvent, project]);
 
   return (
     <div className="flex-container">
