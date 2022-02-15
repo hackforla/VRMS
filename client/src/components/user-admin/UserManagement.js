@@ -36,9 +36,9 @@ const UserManagement = ({ users, setUserToEdit, handleProjectFormCancel }) => {
                 .includes(searchTerm.toLowerCase().trim())
             )
             .sort((a, b) =>
-              a.name.firstName
-                .concat(a.name.lastName)
-                .localeCompare(b.name.firstName.concat(b.name.lastName))
+              a.name?.firstName
+                .concat(a.name?.lastName)
+                .localeCompare(b.name?.firstName.concat(b.name?.lastName))
             );
   }
   return (
@@ -94,8 +94,8 @@ const UserManagement = ({ users, setUserToEdit, handleProjectFormCancel }) => {
                       onClick={() => setUserToEdit(u)}
                     >
                       {searchResultType === 'name'
-                        ? `${u.name.firstName} ${u.name.lastName} ( ${u.email} )`
-                        : `${u.email} ( ${u.name.firstName} ${u.name.lastName} )`}
+                        ? `${u.name?.firstName} ${u.name?.lastName} ( ${u.email} )`
+                        : `${u.email} ( ${u.name?.firstName} ${u.name?.lastName} )`}
                     </button>
                   </li>
                 );
