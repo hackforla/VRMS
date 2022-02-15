@@ -54,7 +54,7 @@
     "mongoose": "^5.10.0",
     "morgan": "^1.10.0",
     "node-cron": "^2.0.3",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.7",
     "nodemailer": "^6.6.1"
   },
   "directories": {
