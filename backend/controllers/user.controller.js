@@ -59,7 +59,13 @@ UserController.create = async function (req, res) {
   }
     const user = await User.create(newUser);
     return res.status(201).send(user);
-  } catch (err) {
+  } catch (error) {
+    if (error.name === 'MongoError' && error.code === 11000) {
+      return res.status(409).json({
+        error,
+        message: 'User already exists',
+      });
+    }
     return res.sendStatus(400);
   }
 };
