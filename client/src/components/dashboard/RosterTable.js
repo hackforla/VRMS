@@ -53,8 +53,6 @@ const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
   };
 
   const gDriveClickHandler = (email, fileId) => {
-    email = email;
-    fileId = fileId;
     const bodyObject = {
       email: email,
       file: fileId,

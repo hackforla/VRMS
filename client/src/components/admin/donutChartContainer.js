@@ -72,7 +72,7 @@ const DonutChartContainer = (props) => {
         const { data } = d;
         return data.color;
       });
-  }, [props]);
+  }, [createArc, createPie, pieData, props]);
 
   return (
     <div className="dashboard-stats">

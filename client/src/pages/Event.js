@@ -89,7 +89,7 @@ const Event = (props) => {
     useEffect(() => {
         fetchEvent();
         // fetchRsvps();
-    }, [isLoading, isCheckInReady]);
+    }, [fetchEvent, isLoading, isCheckInReady]);
 
     return (
         <div className="flex-container">
