@@ -151,6 +151,13 @@ const CheckInForm = props => {
       body: JSON.stringify(userForm)
     });
 
+    if (userRes.status === 409) {
+      const error = await userRes.json();
+      setIsError(true);
+      setErrorMessage(error.message);
+      return;
+    }
+
     if (!userRes.ok) {
       throw new Error(userRes.statusText);
     }
