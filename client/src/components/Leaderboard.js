@@ -2,13 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../utils/globalSettings";
 
 import '../sass/DashboardUsers.scss';
-// import '../sass/EventsContainer-media-queries.scss';
 
 const Leaderboard = (props) => {
-    // const [isLoading, setIsLoading] = useState(false);
     const [users, setUsers] = useState(null);
     const [checkIns, setCheckIns] = useState(null);
-    // const [isError, setIsError] = useState(false);
     const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
     async function fetchUsers() {
@@ -61,27 +58,6 @@ const Leaderboard = (props) => {
         <div className="flexcenter-container">
             <div className="dashboard-header">
                 <p className="dashboard-header-text-large">Volunteer Leaderboard</p>
-
-                {/* <form className="form-stats" autoComplete="off" onSubmit={e => e.preventDefault()}>
-                    <div className="stats-form-row">
-                        <div className="stats-form-input-text">
-                            <div className="stat-select">
-                                <label htmlFor="whichBrigade">Location:</label>
-                                <select 
-                                    name="whichBrigade"
-                                    value={brigade}
-                                    // aria-label="topic"
-                                    onChange={handleBrigadeChange}
-                                    required
-                                >
-                                {brigadeSelection.map((brigade, index) => {
-                                    return <option key={index} value={brigade}>{brigade}</option>
-                                })} 
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </form> */}
             </div>
             <div className="events-list">
                 <ul>

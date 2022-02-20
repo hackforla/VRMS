@@ -41,7 +41,6 @@ async function closeServer() {
         if (err) {
           return reject(err);
         }
-
         resolve();
       });
     });
@@ -57,7 +56,6 @@ function initial() {
         if (err) {
           console.log("error", err);
         }
-
         console.log("added 'user' to roles collection");
       });
 
@@ -67,7 +65,6 @@ function initial() {
         if (err) {
           console.log("error", err);
         }
-
         console.log("added 'moderator' to roles collection");
       });
     }

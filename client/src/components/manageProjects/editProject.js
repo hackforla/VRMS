@@ -9,8 +9,6 @@ import { REACT_APP_CUSTOM_REQUEST_HEADER } from '../../utils/globalSettings';
 const EditProject = (props) => {
   const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
-  //const [currentProjectData, setCurrentProjectData] = useState(props.projectToEdit);
-
   const updateProject = async (projectId, fieldName, fieldValue) => {
     // These field are arrays, but the form makes them comma separated strings, so this adds it back to db as an arrray.
     if (fieldName === 'partners' || fieldName === 'recruitingCategories') {
@@ -50,8 +48,6 @@ const EditProject = (props) => {
     props.projectToEdit.recruitingCategories.join(', ');
 
   return (
-
-    
     <div>
       <div className="project-list-heading">
         Project: {props.projectToEdit.name}

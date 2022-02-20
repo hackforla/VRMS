@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import "./index.scss";
 
 const TabsContainer = (props) => {
-
     const [activeTab, selectTab] = useState(props.active);
 
     function handleChange(index) {

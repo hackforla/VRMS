@@ -8,13 +8,11 @@ const eventOverview = props => {
 
   return (
     <div className="header-admin-dashboard">
-
       <form
         className="form-stats"
         autoComplete="off"
         onSubmit={e => e.preventDefault()}
       >
-
         <div className="stats-form-row">
           <div className="stats-form-input-text">
             <div className="stat-select">

@@ -1,10 +1,6 @@
 import React from 'react';
-import "./index.scss";
+import './index.scss';
 
-const Tab = (props) => {
-    return(
-        <div>{props.children}</div>
-    )
-};
+const Tab = (props) => <div>{props.children}</div>;
 
 export default Tab;

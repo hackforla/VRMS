@@ -5,7 +5,6 @@ mongoose.Promise = global.Promise;
 const questionSchema = mongoose.Schema({
     questionText: { type: String },
     htmlName: { type: String },
-    // inputType: { type: String, default: "text" },
     answers: {
         answerOneText: { type: String },
         answerTwoText: { type: String },
