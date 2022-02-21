@@ -7,6 +7,25 @@
   margin-bottom: 200px;
 }
 
+.bg-overlay {
+  opacity: 0;
+  display: none;
+  &.active {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: white;
+    height: 100%;
+    opacity: 0.6;
+  }
+}
+
 .project-list {
   display: flex;
   flex-direction: column;
@@ -96,7 +115,7 @@ div.editable-field {
 .event-form-box {
   min-width: 100%;
   padding: 10px;
-  margin-top: 5px;
+  margin: 5px 0;
   position: relative;
   border: solid black 2px;
   display: flex;
@@ -152,7 +171,7 @@ textarea {
 }
 
 .button-back {
-  margin-top: 0;
+  margin: 10px 0;
 }
 
 .create-form-button {
