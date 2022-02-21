@@ -17,6 +17,16 @@
   margin-bottom: 5px;
 }
 
+.project-list-button {
+  font-family: 'aliseoregular', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+    'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+  text-align: left;
+}
+
 .project-list-heading {
   margin: 20px 0;
   font-size: 18px;
@@ -39,7 +49,7 @@ div.editable-field {
 }
 
 .editable-field-div {
-  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .section-name {
@@ -52,10 +62,19 @@ div.editable-field {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.project-edit-title {
+  margin-bottom: 4px;
+  display: flex;
+  flex-direction: row;
+}
+
 .project-edit-button {
-  color: #FA114F;
-  cursor:pointer;
-  font-family:Arial, Helvetica, sans-serif
+  flex: 2;
+  padding-left: 8px;
+  color: #fa114f;
+  cursor: pointer;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: left;
 }
 
 .button-edit {
@@ -71,7 +90,6 @@ div.editable-field {
 .display-events {
   margin-top: 15px;
   margin-bottom: 10px;
-
 }
 
 // create new event form on createNewEvent.js
@@ -79,7 +97,7 @@ div.editable-field {
   min-width: 100%;
   padding: 10px;
   margin-top: 5px;
-  position:relative; 
+  position: relative;
   border: solid black 2px;
   display: flex;
   flex-direction: column;
@@ -87,15 +105,23 @@ div.editable-field {
 
 .event-form-box .event-form-title {
   font-size: 20px;
-  margin-bottom: 10px;
+  margin-bottom: 16px;
 }
 
-.event-form-box input, textarea {
+.event-form-label {
+  display: block;
+  select {
+    display: block;
+  }
+}
+
+.event-form-box input,
+textarea {
   display: block;
   width: 100%;
   padding: 2px 0 15px 10px;
-  margin: 5px 0 ;
-  border:1px;
+  margin: 5px 0;
+  border: 1px;
   border-radius: 5px;
   font-size: 20px;
   color: black;
@@ -112,7 +138,7 @@ div.editable-field {
   margin: 12px;
 }
 
-.event-form-box textarea{
+.event-form-box textarea {
   height: 25px;
 }
 
@@ -125,22 +151,16 @@ div.editable-field {
   margin-top: 10px;
 }
 
-.createBtn, .cancelBtn {
-  background-color: black;
-  color: white;
-  font-size: 20px;
-  margin: 5px 10px 0 0;
-  padding: 5px;
-  border-radius: 5px;
-  cursor: pointer;
+.button-back {
+  margin-top: 0;
 }
 
-.button-create-event {
+.create-form-button {
+  width: 250px;
   background-color: black;
   color: white;
   font-size: 20px;
+  margin: 0 10px 10px 0;
   padding: 10px;
   border-radius: 5px;
-  margin: 20px 0px;
-  cursor: pointer;
 }
