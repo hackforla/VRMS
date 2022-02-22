@@ -93,9 +93,9 @@ module.exports = (cron, fetch) => {
                     } 
                     if (filteredEvent.hasOwnProperty("location")) {
                         eventToCreate.location = {
-                            city: filteredEvent.location.city && filteredEvent.location.city,
-                            state: filteredEvent.location.state && filteredEvent.location.state,
-                            country: filteredEvent.location.country && filteredEvent.location.country
+                            city: filteredEvent.location.city ? filteredEvent.location.city : 'REMOTE',
+                            state: filteredEvent.location.state ? filteredEvent.location.state : 'REMOTE',
+                            country: filteredEvent.location.country ? filteredEvent.location.country : 'REMOTE'
                         };
                     }
     
