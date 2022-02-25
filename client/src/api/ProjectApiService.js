@@ -37,6 +37,40 @@ class ProjectApiService {
       return undefined;
     }
   }
+
+  async updateProject(projectId, fieldName, fieldValue) {
+    let updateValue = fieldValue;
+    // These field are arrays, but the form makes them comma separated strings,
+    // so this adds it back to db as an arrray.
+    if (
+      fieldValue &&
+      (fieldName === 'partners' || fieldName === 'recruitingCategories')
+    ) {
+      updateValue = fieldValue
+        .split(',')
+        .filter((x) => x !== '')
+        .map((y) => y.trim());
+    }
+
+    // Update database
+    const url = `${this.baseProjectUrl}${projectId}`;
+    const requestOptions = {
+      method: 'PATCH',
+      headers: this.headers,
+      body: JSON.stringify({ [fieldName]: updateValue }),
+    };
+
+    try {
+      const response = await fetch(url, requestOptions);
+      const resJson = await response.json();
+
+      return resJson;
+    } catch (error) {
+      console.log(`update project error: `, error);
+      alert('Server not responding.  Please try again.');
+      return undefined;
+    }
+  }
 }
 
 export default ProjectApiService;

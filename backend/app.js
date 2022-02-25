@@ -71,7 +71,7 @@ const grantPermissionRouter = require('./routers/grantpermission.router');
 const projectsRouter = require('./routers/projects.router');
 const recurringEventsRouter = require('./routers/recurringEvents.router');
 const projectTeamMembersRouter = require('./routers/projectTeamMembers.router');
-const slackRouter = require('./routers/slack.router');
+//const slackRouter = require("./routers/slack.router");
 const authRouter = require('./routers/auth.router');
 const healthCheckRouter = require('./routers/healthCheck.router');
 
@@ -111,7 +111,7 @@ app.use('/api/grantpermission', grantPermissionRouter);
 app.use('/api/projects', projectsRouter);
 app.use('/api/recurringevents', recurringEventsRouter);
 app.use('/api/projectteammembers', projectTeamMembersRouter);
-app.use('/api/slack', slackRouter);
+//app.use('/api/slack', slackRouter);
 app.use('/api/healthcheck', healthCheckRouter);
 
 // 404 for all non-defined endpoints.

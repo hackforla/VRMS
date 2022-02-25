@@ -2,117 +2,84 @@ import React, { useState, useRef, useEffect } from 'react';
 import '../../sass/ManageProjects.scss';
 
 const EditableField = ({
-  projId,
   fieldData,
   fieldName,
   updateProject,
-  renderUpdatedProj,
-  fieldType,
+  fieldType = 'text',
   fieldTitle,
   accessLevel,
-  canEdit,
+  canEdit = ['admin'],
 }) => {
   const [fieldValue, setFieldValue] = useState(fieldData);
   const [editable, setEditable] = useState(false);
-  const [notRestricted, setNotRestricted] = useState(false);
+  const [notRestricted] = useState(canEdit.includes(accessLevel));
   const ref = useRef();
-
-  // create function that checks the user has access to edit all fields
-
-  const checkUser = () => {
-    const permitted = canEdit.includes(accessLevel);
-    setNotRestricted(permitted);
-  };
 
   // Update the displayed results to match the change just made to the db
   useEffect(() => {
-    checkUser();
     if (editable) {
       ref.current.focus();
-      setFieldValue(fieldData);
     }
   }, [editable]);
 
+  const inputProps = {
+    ref,
+    className: 'editable-field',
+    onBlur: () => {
+      setEditable(false);
+      updateProject(fieldName, fieldValue);
+    },
+    onChange: ({ target }) => {
+      setFieldValue(target.value);
+      const onEnterKey = ({ keyCode }) => {
+        if (keyCode === 13) {
+          target.removeEventListener('keydown', onEnterKey);
+          target.blur();
+        }
+      };
+      target.addEventListener('keydown', onEnterKey);
+    },
+    value: fieldValue,
+  };
+
   return (
-    // here goes the conditional rendering
     // this button will be disabled if user !admin
-    <div>
-      <div>
+    <div className="editable-field-div">
+      <div className="project-edit-title">
         {fieldTitle}
         {notRestricted ? (
-          <span
+          <button
+            type="button"
             className="project-edit-button"
             onClick={() => {
               setEditable(true);
             }}
           >
-            {' '}
             [edit]
-          </span>
+          </button>
         ) : (
-          <span className="project-edit-button" style={{ color: 'gray' }}>
-            {' '}
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://github.com/hackforla/VRMS/blob/development/team-lead-contact-info.md"
-            >
-              [Click here to find out how to change this field]
-            </a>
-          </span>
+          <a
+            className="project-edit-button"
+            style={{ color: 'gray' }}
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://github.com/hackforla/VRMS/blob/development/project-edit-info.md"
+          >
+            [Click here to find out how to change this field]
+          </a>
         )}
       </div>
 
       {editable ? (
-        fieldType === 'textarea' ? (
-          <textarea
-            ref={ref}
-            className="editable-field"
-            onBlur={(e) => {
-              updateProject(projId, fieldName, fieldValue).then((proj) => {
-                renderUpdatedProj(proj);
-                setEditable(false);
-              });
-            }}
-            onChange={(e) => {
-              setFieldValue(e.target.value);
-              const input = e.target;
-              const onEnterKey = (e) => {
-                if (e.keyCode === 13) {
-                  input.removeEventListener('keydown', onEnterKey);
-                  input.blur();
-                }
-              };
-              input.addEventListener('keydown', onEnterKey);
-            }}
-          >
-            {fieldValue}
-          </textarea>
-        ) : (
-          <input
-            ref={ref}
-            type="text"
-            className="editable-field"
-            value={fieldValue}
-            onBlur={(e) => {
-              updateProject(projId, fieldName, fieldValue).then((proj) => {
-                renderUpdatedProj(proj);
-                setEditable(false);
-              });
-            }}
-            onChange={(e) => {
-              setFieldValue(e.target.value);
-              const input = e.target;
-              const onEnterKey = (e) => {
-                if (e.keyCode === 13) {
-                  input.removeEventListener('keydown', onEnterKey);
-                  input.blur();
-                }
-              };
-              input.addEventListener('keydown', onEnterKey);
-            }}
-          />
-        )
+        <>
+          {fieldType === 'textarea' ? (
+            /* eslint-disable react/jsx-props-no-spreading */
+            <textarea {...inputProps} />
+          ) : (
+            <input {...inputProps} />
+            /* eslint-enable react/jsx-props-no-spreading */
+          )}
+        </>
       ) : (
         <div className="section-content">{fieldData}</div>
       )}
