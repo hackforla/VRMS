@@ -51,11 +51,12 @@ UserController.create = async function (req, res) {
     return res.sendStatus(403);
   }
 
+
   try {
-    const newUser = {
-      ...req.body,
-      email: req.body.email.toLowerCase(),
-    };
+  const newUser = {
+    ...req.body,
+    email: req.body.email.toLowerCase()
+  }
     const user = await User.create(newUser);
     return res.status(201).send(user);
   } catch (error) {
@@ -79,7 +80,7 @@ UserController.update = async function (req, res) {
   }
 
   try {
-    const user = await User.findOneAndUpdate({ _id: UserId }, req.body, { new: true });
+    const user = await User.findOneAndUpdate({_id: UserId}, req.body, { new: true });
     return res.status(200).send(user);
   } catch (err) {
     return res.sendStatus(400);
@@ -191,7 +192,10 @@ UserController.verifyMe = async function (req, res) {
 };
 
 UserController.logout = async function (req, res) {
-  return res.clearCookie('token').status(200).send('Successfully logged out.');
-};
+  return res
+    .clearCookie('token')
+    .status(200)
+    .send('Successfully logged out.');
+}
 
 module.exports = UserController;
