@@ -15,19 +15,16 @@ const EditProject = ({
   const partnerDataFormatted = projectToEdit.partners.join(', ');
   const recrutingDataFormatted = projectToEdit.recruitingCategories.join(', ');
 
-  /* eslint-disable no-underscore-dangle */
   return (
     <div>
       <div className="project-list-heading">{`Project: ${projectToEdit.name}`}</div>
-      <div>
-        <button
-          type="button"
-          className="button-back"
-          onClick={meetingSelectClickHandler}
-        >
-          Edit Meeting Times
-        </button>
-      </div>
+      <button
+        type="button"
+        className="button-back"
+        onClick={meetingSelectClickHandler}
+      >
+        Edit Meeting Times
+      </button>
       <EditableField
         fieldData={projectToEdit.name}
         fieldName="name"
@@ -128,7 +125,6 @@ const EditProject = ({
       </button>
     </div>
   );
-  /* eslint-enable no-underscore-dangle */
 };
 
 export default EditProject;
