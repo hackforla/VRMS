@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Redirect } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import SelectProject from '../components/manageProjects/selectProject';
-import EditMeetingTimes from '../components/manageProjects/editMeetingTimes';
 import EditProject from '../components/manageProjects/editProject';
 import ProjectApiService from '../api/ProjectApiService';
 import RecurringEventsApiService from '../api/RecurringEventsApiService';
@@ -109,14 +108,6 @@ const ManageProjects = () => {
     setComponentToDisplay(PAGES.editProjectInfo);
   };
 
-  const meetingSelectClickHandler = () => {
-    setComponentToDisplay(PAGES.editMeetingTimes);
-  };
-
-  const setEditProject = () => {
-    setComponentToDisplay(PAGES.editProjectInfo);
-  };
-
   const goSelectProject = () => {
     setProjectToEdit([]);
     setComponentToDisplay(PAGES.selectProject);
@@ -125,19 +116,6 @@ const ManageProjects = () => {
   let displayedComponent;
 
   switch (componentToDisplay) {
-    case PAGES.editMeetingTimes:
-      displayedComponent = (
-        <EditMeetingTimes
-          goSelectProject={goSelectProject}
-          goEditProject={setEditProject}
-          projectToEdit={projectToEdit}
-          recurringEvents={recurringEvents}
-          createNewRecurringEvent={createNewRecurringEvent}
-          deleteRecurringEvent={deleteRecurringEvent}
-          updateRecurringEvent={updateRecurringEvent}
-        />
-      );
-      break;
     case PAGES.editProjectInfo:
       displayedComponent = (
         <EditProject
@@ -145,8 +123,10 @@ const ManageProjects = () => {
           goSelectProject={goSelectProject}
           recurringEvents={recurringEvents}
           updateProject={updateProject}
-          meetingSelectClickHandler={meetingSelectClickHandler}
           userAccessLevel={user.accessLevel}
+          createNewRecurringEvent={createNewRecurringEvent}
+          deleteRecurringEvent={deleteRecurringEvent}
+          updateRecurringEvent={updateRecurringEvent}
         />
       );
       break;

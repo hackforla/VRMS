@@ -1,30 +1,62 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import EditableField from './editableField';
+import EditMeetingTimes from './editMeetingTimes';
+import CreateNewEvent from './createNewEvent';
+import readableEvent from './utilities/readableEvent';
 import '../../sass/ManageProjects.scss';
 
 // Need to hold user state to check which type of user they are and conditionally render editing fields in this component
 // for user level block access to all except for the ones checked
 const EditProject = ({
   projectToEdit,
-  meetingSelectClickHandler,
   userAccessLevel,
   updateProject,
   goSelectProject,
+  recurringEvents,
+  createNewRecurringEvent,
+  deleteRecurringEvent,
+  updateRecurringEvent,
 }) => {
   // Add commas to arrays for display
   const partnerDataFormatted = projectToEdit.partners.join(', ');
   const recrutingDataFormatted = projectToEdit.recruitingCategories.join(', ');
+  const [rEvents, setREvents] = useState([]);
+  const [selectedEvent, setSelectedEvent] = useState();
+  const [isCreateNew, setIsCreateNew] = useState();
+
+  // Get project recurring events when component loads
+  useEffect(() => {
+    setREvents(
+      recurringEvents
+        // eslint-disable-next-line no-underscore-dangle
+        .filter((e) => e?.project?._id === projectToEdit._id)
+        .map((item) => readableEvent(item))
+    );
+  }, [projectToEdit, recurringEvents, setREvents]);
 
   return (
     <div>
-      <div className="project-list-heading">{`Project: ${projectToEdit.name}`}</div>
-      <button
-        type="button"
-        className="button-back"
-        onClick={meetingSelectClickHandler}
-      >
-        Edit Meeting Times
+      <div className={`edit-meeting-modal ${selectedEvent ? 'active' : ''}`}>
+        <EditMeetingTimes
+          selectedEvent={selectedEvent}
+          setSelectedEvent={setSelectedEvent}
+          deleteRecurringEvent={deleteRecurringEvent}
+          updateRecurringEvent={updateRecurringEvent}
+        />
+      </div>
+      <div className={`edit-meeting-modal ${isCreateNew ? 'active' : ''}`}>
+        <CreateNewEvent
+          createNewRecurringEvent={createNewRecurringEvent}
+          projectName={projectToEdit.name}
+          // eslint-disable-next-line no-underscore-dangle
+          projectID={projectToEdit._id}
+          setIsCreateNew={setIsCreateNew}
+        />
+      </div>
+      <button type="button" className="button-back" onClick={goSelectProject}>
+        Back to Select Project
       </button>
+      <div className="project-list-heading">{`Project: ${projectToEdit.name}`}</div>
       <EditableField
         fieldData={projectToEdit.name}
         fieldName="name"
@@ -120,9 +152,29 @@ const EditProject = ({
         fieldTitle="Recruiting Categories (comma separated):"
         accessLevel={userAccessLevel}
       />
-      <button type="button" className="button-back" onClick={goSelectProject}>
-        Back to Select Project
-      </button>
+      <div className="event-list">
+        <h3>Recurring Events</h3>
+        <ul>
+          {rEvents.map((event) => (
+            // eslint-disable-next-line no-underscore-dangle
+            <li key={`${event._id}`}>
+              <button type="button" onClick={() => setSelectedEvent(event)}>
+                <div>{event.name}</div>
+                <div className="event-list-details">{`${event.dayOfTheWeek}, ${event.startTime} - ${event.endTime}; ${event.eventType}`}</div>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="display-events">
+        <button
+          type="button"
+          className="create-form-button"
+          onClick={() => setIsCreateNew(true)}
+        >
+          Create New Event
+        </button>
+      </div>
     </div>
   );
 };

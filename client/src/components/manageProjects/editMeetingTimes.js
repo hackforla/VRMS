@@ -1,36 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import '../../sass/ManageProjects.scss';
 import EditableMeeting from './editableMeeting';
-import CreateNewEvent from './createNewEvent';
-import { readableEvent } from './utilities/readableEvent';
 import { findNextOccuranceOfDay } from './utilities/findNextDayOccuranceOfDay';
 import { addDurationToTime } from './utilities/addDurationToTime';
 import { timeConvertFromForm } from './utilities/timeConvertFromForm';
 
 // This component displays current meeting times for selected project and offers the option to edit those times.
 const EditMeetingTimes = ({
-  recurringEvents,
-  projectToEdit,
-  goEditProject,
-  goSelectProject,
-  createNewRecurringEvent,
+  selectedEvent,
+  setSelectedEvent,
   deleteRecurringEvent,
   updateRecurringEvent,
 }) => {
-  const [rEvents, setREvents] = useState([]);
-
-  // Get project recurring events when component loads
-  useEffect(() => {
-    // Filters the recurring events for this project
-    setREvents(
-      // eslint-disable-next-line no-underscore-dangle
-      recurringEvents.filter((e) => e?.project?._id === projectToEdit._id)
-    );
-  }, [projectToEdit, recurringEvents, setREvents]);
-
-  // Map new array of readable event objects
-  const processedEvents = rEvents.map((item) => readableEvent(item));
-
   const handleEventUpdate = (
     eventID,
     values,
@@ -123,48 +104,40 @@ const EditMeetingTimes = ({
     }
 
     updateRecurringEvent(theUpdatedEvent, eventID);
+    setSelectedEvent(null);
   };
 
   const handleEventDelete = (eventID) => () => {
     // ToDo: Add delete confirmation so user knows the item has been deleted
     deleteRecurringEvent(eventID);
+    setSelectedEvent(null);
   };
 
   return (
     <div>
-      <div className="project-list-heading">{`Project: ${projectToEdit.name}`}</div>
-      <div>
-        <CreateNewEvent
-          createNewRecurringEvent={createNewRecurringEvent}
-          projectName={projectToEdit.name}
-          // eslint-disable-next-line no-underscore-dangle
-          projectID={projectToEdit._id}
-        />
-      </div>
-      <div className="project-list-heading">Edit Recurring Events</div>
-      {processedEvents.map((rEvent) => (
+      <button
+        type="button"
+        className="meeting-cancel-button"
+        onClick={() => setSelectedEvent(null)}
+      >
+        X
+      </button>
+      {selectedEvent && (
         <EditableMeeting
-          key={rEvent.event_id}
-          eventId={rEvent.event_id}
-          eventName={rEvent.name}
-          eventDescription={rEvent.description}
-          eventType={rEvent.eventType}
-          eventDayNumber={rEvent.dayOfTheWeekNumber}
-          eventStartTime={rEvent.startTime}
-          eventEndTime={rEvent.endTime}
-          eventDuration={rEvent.duration}
-          videoConferenceLink={rEvent.videoConferenceLink}
+          key={selectedEvent.event_id}
+          eventId={selectedEvent.event_id}
+          eventName={selectedEvent.name}
+          eventDescription={selectedEvent.description}
+          eventType={selectedEvent.eventType}
+          eventDayNumber={selectedEvent.dayOfTheWeekNumber}
+          eventStartTime={selectedEvent.startTime}
+          eventEndTime={selectedEvent.endTime}
+          eventDuration={selectedEvent.duration}
+          videoConferenceLink={selectedEvent.videoConferenceLink}
           handleEventUpdate={handleEventUpdate}
           handleEventDelete={handleEventDelete}
         />
-      ))}
-
-      <button type="button" className="button-back" onClick={goEditProject}>
-        Back to Edit Project
-      </button>
-      <button type="button" className="button-back" onClick={goSelectProject}>
-        Back to Select Project
-      </button>
+      )}
     </div>
   );
 };

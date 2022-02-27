@@ -20,20 +20,74 @@ const EventForm = ({ title, formValues, handleInputChange, children }) => {
           onChange={handleInputChange}
         />
       </label>
-
-      <label className="event-form-label" htmlFor="eventType">
-        Event Type:
-        <select
-          id="eventType"
-          value={formValues.eventType}
-          onChange={handleInputChange}
-          name="eventType"
-        >
-          <option value="Team Meeting">Team Meeting</option>
-          <option value="Onboarding">Onboarding</option>
-        </select>
-      </label>
-
+      <div className="event-form-row">
+        <label className="event-form-label" htmlFor="eventType">
+          Event Type:
+          <select
+            id="eventType"
+            value={formValues.eventType}
+            onChange={handleInputChange}
+            name="eventType"
+          >
+            <option value="Team Meeting">Team Meeting</option>
+            <option value="Onboarding">Onboarding</option>
+          </select>
+        </label>
+        <label className="event-form-label" htmlFor="day">
+          Day of the Week:
+          <select
+            id="day"
+            value={formValues.day}
+            onChange={handleInputChange}
+            name="day"
+          >
+            <option value="0">Sunday</option>
+            <option value="1">Monday</option>
+            <option value="2">Tuesday</option>
+            <option value="3">Wednesday</option>
+            <option value="4">Thursday</option>
+            <option value="5">Friday</option>
+            <option value="6">Saturday</option>
+          </select>
+        </label>
+      </div>
+      <div className="event-form-row">
+        <label className="event-form-label" htmlFor="startTime">
+          Start Time:
+          <select
+            id="startTime"
+            value={formValues.startTime}
+            onChange={handleInputChange}
+            name="startTime"
+          >
+            {clockHours.map((value) => {
+              return (
+                <option key={value} value={value}>
+                  {value}
+                </option>
+              );
+            })}
+          </select>
+        </label>
+        <label className="event-form-label" htmlFor="duration">
+          Duration:
+          <select
+            id="duration"
+            value={formValues.duration}
+            onChange={handleInputChange}
+            name="duration"
+          >
+            <option value=".5">.5</option>
+            <option value="1">1</option>
+            <option value="1.5">1.5</option>
+            <option value="2">2</option>
+            <option value="2.5">2.5</option>
+            <option value="3">3</option>
+            <option value="3.5">3.5</option>
+            <option value="4">4</option>
+          </select>
+        </label>
+      </div>
       <label className="event-form-label" htmlFor="description">
         Description:
         <input
@@ -44,7 +98,6 @@ const EventForm = ({ title, formValues, handleInputChange, children }) => {
           onChange={handleInputChange}
         />
       </label>
-
       <label className="event-form-label" htmlFor="videoConferenceLink">
         Event Link:
         <input
@@ -54,61 +107,6 @@ const EventForm = ({ title, formValues, handleInputChange, children }) => {
           value={formValues.videoConferenceLink}
           onChange={handleInputChange}
         />
-      </label>
-
-      <label className="event-form-label" htmlFor="day">
-        Day of the Week:
-        <select
-          id="day"
-          value={formValues.day}
-          onChange={handleInputChange}
-          name="day"
-        >
-          <option value="0">Sunday</option>
-          <option value="1">Monday</option>
-          <option value="2">Tuesday</option>
-          <option value="3">Wednesday</option>
-          <option value="4">Thursday</option>
-          <option value="5">Friday</option>
-          <option value="6">Saturday</option>
-        </select>
-      </label>
-
-      <label className="event-form-label" htmlFor="startTime">
-        Start Time:
-        <select
-          id="startTime"
-          value={formValues.startTime}
-          onChange={handleInputChange}
-          name="startTime"
-        >
-          {clockHours.map((value) => {
-            return (
-              <option key={value} value={value}>
-                {value}
-              </option>
-            );
-          })}
-        </select>
-      </label>
-
-      <label className="event-form-label" htmlFor="duration">
-        Duration:
-        <select
-          id="duration"
-          value={formValues.duration}
-          onChange={handleInputChange}
-          name="duration"
-        >
-          <option value=".5">.5</option>
-          <option value="1">1</option>
-          <option value="1.5">1.5</option>
-          <option value="2">2</option>
-          <option value="2.5">2.5</option>
-          <option value="3">3</option>
-          <option value="3.5">3.5</option>
-          <option value="4">4</option>
-        </select>
       </label>
 
       {children}
