@@ -3,12 +3,10 @@ import { Link } from 'react-router-dom';
 import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../utils/globalSettings";
 
 import '../sass/ReadyEvents.scss';
-// import '../sass/SelectCheckIn-media-queries.scss';
 
 const ReadyEvents = (props) => {
     const [isLoading, setIsLoading] = useState(false);
     const [events, setEvents] = useState([]);
-    // const [isError, setIsError] = useState(null);
     const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
     async function fetchEvent() {
@@ -26,8 +24,6 @@ const ReadyEvents = (props) => {
         } catch(error) {
             console.log(error);
             setIsLoading(false);
-            // setIsError(error);
-            // alert(error);
         }
     }
 

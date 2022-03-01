@@ -5,7 +5,6 @@ import '../sass/MagicLink.scss';
 const EmailSent = (props) => {
 
     useEffect(() => {
-        // fetchData();
         let timer = setTimeout(() => {
             props.history.push('/');
         }, 10000);

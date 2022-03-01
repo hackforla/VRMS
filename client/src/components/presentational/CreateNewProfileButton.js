@@ -1,12 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-
 import '../../sass/Home.scss';
 
 const CreateNewProfileButton = (props) => {
-    // console.log(props.events);
-
     return (
         <Link 
             to={`/newProfile`} 

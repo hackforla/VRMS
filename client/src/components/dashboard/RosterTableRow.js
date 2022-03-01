@@ -1,5 +1,5 @@
-import React, { Fragment } from "react";
-import styles from "../../sass/ProjectLeaderDashboard.module.scss";
+import React, { Fragment } from 'react';
+import styles from '../../sass/ProjectLeaderDashboard.module.scss';
 
 const RosterTableRow = ({
   name,
@@ -34,6 +34,7 @@ const RosterTableRow = ({
       }}
     />
   );
+
   const slackIcon = (
     <img
       className={styles.rosterIconImg}
@@ -42,9 +43,7 @@ const RosterTableRow = ({
     />
   );
 
-  //
-  let here = null;
-  here = (
+  let here = (
     <div className={styles.rosterIconContainer}>
       <div className={styles.rosterIcon}>{slackIcon}</div>
       {services.googleDrive ? (

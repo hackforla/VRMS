@@ -19,7 +19,6 @@ const projectSchema = mongoose.Schema({
     name: { type: String },
     description: { type: String },
     githubIdentifier: { type: String },
-    // owner: { type: String },
     projectStatus: { type: String },                    // Active, Completed, or Paused
     location: { type: String },                         // DTLA, Westside, South LA, or Remote (hacknight)
     //teamMembers: { type: String },                    // commented since we should be able to get this from Project Team Members table

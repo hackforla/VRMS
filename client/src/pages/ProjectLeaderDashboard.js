@@ -283,7 +283,6 @@ const ProjectLeaderDashboard = () => {
           />
 
           <div className="dashboard-chart-container">
-            {/* {isCheckInReady ? ( */}
             <button
               className={`tab-selector ${
                 attendeeOrRoster ? "tab-selected" : null
@@ -291,11 +290,9 @@ const ProjectLeaderDashboard = () => {
               onClick={() => {
                 changeTable(true);
               }}
-              // onClick={(e) => props.setCheckInReady(e, props.nextEvent[0]._id)}
             >
               ATTENDEES
             </button>
-            {/* ) : null} */}
             <button
               className={`tab-selector ${
                 !attendeeOrRoster ? "tab-selected" : null

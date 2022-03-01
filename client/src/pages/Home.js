@@ -28,20 +28,15 @@ const Home = (props) => {
         } catch (error) {
             console.log(error);
             setIsLoading(false);
-            // setIsError(error);
-            // alert(error);
         }
     }
 
     const handleEventChange = (e) => {
         setEvent(e.currentTarget.value);
-        // setIsQuestionAnswered(true);
     };
 
     useEffect(() => {
         fetchEvents();
-
-        // console.log(event);
     }, [event]);
 
     return (
@@ -67,7 +62,6 @@ const Home = (props) => {
                                         <select
                                             name={"meeting-checkin"}
                                             className="select-meeting-dropdown"
-                                            // aria-label="topic"
                                             onChange={handleEventChange}
                                             required
                                         >

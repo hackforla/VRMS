@@ -52,12 +52,6 @@ app.use(cookieParser());
 // HTTP Request Logger
 app.use(morgan('dev'));
 
-// Hide sensitive Header data
-// app.use(helmet());
-
-// Cross-Origin-Resource-Sharing
-// app.use(cors());
-
 // WORKERS
 const runOpenCheckinWorker = require('./workers/openCheckins')(cron, fetch);
 const runCloseCheckinWorker = require('./workers/closeCheckins')(cron, fetch);
