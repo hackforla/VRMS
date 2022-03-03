@@ -31,6 +31,7 @@ const EditProject = ({
         // eslint-disable-next-line no-underscore-dangle
         .filter((e) => e?.project?._id === projectToEdit._id)
         .map((item) => readableEvent(item))
+        .sort((a, b) => a.dayOfTheWeekNumber - b.dayOfTheWeekNumber)
     );
   }, [projectToEdit, recurringEvents, setREvents]);
 
