@@ -151,12 +151,21 @@ div.editable-field {
     text-align: left;
   }
 
-  &-details {
+  &-details,
+  &-description {
     font-family: Arial, Helvetica, sans-serif;
     font-style: normal;
     font-weight: normal;
     font-size: 14px;
     line-height: 24px;
+  }
+
+  &-description {
+    color: #5c5c5c;
+    height: 24px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
@@ -259,6 +268,7 @@ textarea {
 
 .create-form-button {
   width: 250px;
+  height: 43px;
   background-color: black;
   color: white;
   font-size: 20px;

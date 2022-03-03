@@ -162,6 +162,7 @@ const EditProject = ({
               <button type="button" onClick={() => setSelectedEvent(event)}>
                 <div>{event.name}</div>
                 <div className="event-list-details">{`${event.dayOfTheWeek}, ${event.startTime} - ${event.endTime}; ${event.eventType}`}</div>
+                <div className="event-list-description">{`${event.description}`}</div>
               </button>
             </li>
           ))}
