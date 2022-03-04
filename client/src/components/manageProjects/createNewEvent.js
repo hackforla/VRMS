@@ -9,6 +9,7 @@ const CreateNewEvent = ({
   projectName,
   projectID,
   createNewRecurringEvent,
+  setIsCreateNew,
 }) => {
   // These are the initial form values
   const initialFormValues = {
@@ -20,21 +21,7 @@ const CreateNewEvent = ({
     startTime: '7:00pm',
     duration: '1',
   };
-
-  const [displayForm, setDisplayForm] = useState(false);
   const [formValues, setFormValues] = useState(initialFormValues);
-
-  // **** On Click funtions ****
-  // Toggle new event form display
-  const handleFormDisplay = () => {
-    setDisplayForm(true);
-  };
-
-  const cancelForm = () => {
-    setFormValues(initialFormValues);
-    setDisplayForm(false);
-    // ToDo: set to scroll to the top when form is cancelled
-  };
 
   // Handle form input changes
   const handleInputChange = (event) => {
@@ -84,11 +71,20 @@ const CreateNewEvent = ({
   const handleFormSubmit = () => {
     handleEventCreate();
     setFormValues(initialFormValues);
-    setDisplayForm(false);
+    setIsCreateNew(false);
   };
-
-  if (displayForm) {
-    return (
+  return (
+    <div>
+      <button
+        type="button"
+        className="meeting-cancel-button"
+        onClick={() => {
+          setFormValues(initialFormValues);
+          setIsCreateNew(false);
+        }}
+      >
+        X
+      </button>
       <EventForm
         handleInputChange={handleInputChange}
         formValues={formValues}
@@ -104,30 +100,8 @@ const CreateNewEvent = ({
           >
             Create New Event
           </button>
-          <button
-            type="button"
-            className="create-form-button"
-            onClick={() => {
-              cancelForm();
-            }}
-          >
-            Cancel
-          </button>
         </div>
       </EventForm>
-    );
-  }
-  return (
-    <div className="display-events">
-      <button
-        type="button"
-        className="create-form-button"
-        onClick={() => {
-          handleFormDisplay();
-        }}
-      >
-        Create New Event
-      </button>
     </div>
   );
 };

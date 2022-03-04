@@ -111,11 +111,96 @@ div.editable-field {
   margin-bottom: 10px;
 }
 
+.event-list {
+  margin-bottom: 40px;
+  h3 {
+    width: 190px;
+    padding: 7px 18px 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 24px;
+    color: #000000;
+    background-color: #f2f2f2;
+  }
+
+  ul {
+    padding-top: 4px;
+    border-top: 2px solid #32373b;
+  }
+
+  li {
+    display: flex;
+    padding: 8px 0;
+    flex-direction: column;
+    border-bottom: 1px solid #ecebed;
+  }
+
+  li:hover {
+    background-color: #f2f2f2;
+  }
+
+  button {
+    font-family: 'aliseoregular', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+      'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+      'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    padding: 0;
+    text-align: left;
+  }
+
+  &-details,
+  &-description {
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 24px;
+  }
+
+  &-description {
+    color: #5c5c5c;
+    height: 24px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.edit-meeting-modal {
+  width: 92%;
+  display: none;
+  background-color: white;
+  opacity: 1;
+  &.active {
+    position: absolute;
+    left: 18px;
+    top: 24px;
+    display: block;
+    z-index: 3;
+  }
+}
+
+.meeting-cancel-button {
+  background-color: transparent;
+  border: none;
+  width: 98%;
+  font-family: Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 22px;
+  line-height: 24px;
+  color: #000000;
+  text-align: right;
+}
+
 // create new event form on createNewEvent.js
 .event-form-box {
   min-width: 100%;
+  min-height: 540px;
   padding: 10px;
-  margin: 5px 0;
   position: relative;
   border: solid black 2px;
   display: flex;
@@ -127,8 +212,14 @@ div.editable-field {
   margin-bottom: 16px;
 }
 
+.event-form-row {
+  display: flex;
+  flex-direction: row;
+}
+
 .event-form-label {
   display: block;
+  margin-top: 4px;
   select {
     display: block;
   }
@@ -163,6 +254,7 @@ textarea {
 
 .event-form-box label {
   font-size: 15px;
+  width: 100%;
   display: block;
 }
 
@@ -176,10 +268,15 @@ textarea {
 
 .create-form-button {
   width: 250px;
+  height: 43px;
   background-color: black;
   color: white;
   font-size: 20px;
   margin: 0 10px 10px 0;
   padding: 10px;
   border-radius: 5px;
+}
+
+.create-form-button:active {
+  background-color: #969595;
 }
