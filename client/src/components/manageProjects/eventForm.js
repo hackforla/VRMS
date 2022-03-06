@@ -2,9 +2,13 @@ import React from 'react';
 import { createClockHours } from '../../utils/createClockHours';
 import '../../sass/ManageProjects.scss';
 
-const EventForm = ({ title, formValues, handleInputChange, children }) => {
-  /* ToDo: Ask Bonnie what, if any, validation is required */
-
+const EventForm = ({
+  title,
+  formValues,
+  formErrors,
+  handleInputChange,
+  children,
+}) => {
   // This creates the clock hours for the form
   const clockHours = createClockHours();
   return (
@@ -18,7 +22,11 @@ const EventForm = ({ title, formValues, handleInputChange, children }) => {
           name="name"
           value={formValues.name}
           onChange={handleInputChange}
+          maxLength={30}
         />
+        {formErrors?.name ? (
+          <div className="event-form-error">{formErrors.name}</div>
+        ) : null}
       </label>
       <div className="event-form-row">
         <label className="event-form-label" htmlFor="eventType">
@@ -96,6 +104,7 @@ const EventForm = ({ title, formValues, handleInputChange, children }) => {
           name="description"
           value={formValues.description}
           onChange={handleInputChange}
+          maxLength={60}
         />
       </label>
       <label className="event-form-label" htmlFor="videoConferenceLink">
@@ -107,6 +116,11 @@ const EventForm = ({ title, formValues, handleInputChange, children }) => {
           value={formValues.videoConferenceLink}
           onChange={handleInputChange}
         />
+        {formErrors?.videoConferenceLink ? (
+          <div className="event-form-error">
+            {formErrors.videoConferenceLink}
+          </div>
+        ) : null}
       </label>
 
       {children}

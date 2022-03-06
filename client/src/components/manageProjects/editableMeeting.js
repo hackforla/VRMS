@@ -13,6 +13,7 @@ const EditableMeeting = ({
   eventDuration,
   handleEventUpdate,
   handleEventDelete,
+  formErrors,
   videoConferenceLink = '',
 }) => {
   // *** Initialization Station ***
@@ -43,7 +44,11 @@ const EditableMeeting = ({
   };
 
   return (
-    <EventForm handleInputChange={handleInputChange} formValues={formValues}>
+    <EventForm
+      handleInputChange={handleInputChange}
+      formValues={formValues}
+      formErrors={formErrors}
+    >
       <div>
         <button
           type="button"
