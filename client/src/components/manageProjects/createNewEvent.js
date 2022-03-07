@@ -3,6 +3,7 @@ import '../../sass/ManageProjects.scss';
 import { findNextOccuranceOfDay } from './utilities/findNextDayOccuranceOfDay';
 import { addDurationToTime } from './utilities/addDurationToTime';
 import { timeConvertFromForm } from './utilities/timeConvertFromForm';
+import validateEventForm from './utilities/validateEventForm';
 import EventForm from './eventForm';
 
 const CreateNewEvent = ({
@@ -22,6 +23,7 @@ const CreateNewEvent = ({
     duration: '1',
   };
   const [formValues, setFormValues] = useState(initialFormValues);
+  const [formErrors, setFormErrors] = useState({});
 
   // Handle form input changes
   const handleInputChange = (event) => {
@@ -69,9 +71,13 @@ const CreateNewEvent = ({
 
   // Handle submission of new recurring event form
   const handleFormSubmit = () => {
-    handleEventCreate();
-    setFormValues(initialFormValues);
-    setIsCreateNew(false);
+    const errors = validateEventForm(formValues);
+    if (!errors) {
+      handleEventCreate();
+      setFormValues(initialFormValues);
+      setIsCreateNew(false);
+    }
+    setFormErrors(errors);
   };
   return (
     <div>
@@ -80,6 +86,7 @@ const CreateNewEvent = ({
         className="meeting-cancel-button"
         onClick={() => {
           setFormValues(initialFormValues);
+          setFormErrors(null);
           setIsCreateNew(false);
         }}
       >
@@ -88,6 +95,7 @@ const CreateNewEvent = ({
       <EventForm
         handleInputChange={handleInputChange}
         formValues={formValues}
+        formErrors={formErrors}
         title="Create New Recurring Event"
       >
         <div className="button-box">
