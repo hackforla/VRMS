@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import Alert from 'react-bootstrap/Alert';
 import EditableField from './editableField';
 import EditMeetingTimes from './editMeetingTimes';
 import CreateNewEvent from './createNewEvent';
 import readableEvent from './utilities/readableEvent';
 import '../../sass/ManageProjects.scss';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 // Need to hold user state to check which type of user they are and conditionally render editing fields in this component
 // for user level block access to all except for the ones checked
@@ -23,6 +26,11 @@ const EditProject = ({
   const [rEvents, setREvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState();
   const [isCreateNew, setIsCreateNew] = useState();
+
+  // States for alerts
+  const [showNewEventCreatedAlert, setShowNewEventCreatedAlert] = useState(
+    false
+  );
 
   // Get project recurring events when component loads
   useEffect(() => {
@@ -52,6 +60,7 @@ const EditProject = ({
           // eslint-disable-next-line no-underscore-dangle
           projectID={projectToEdit._id}
           setIsCreateNew={setIsCreateNew}
+          setShowNewEventCreatedAlert={setShowNewEventCreatedAlert}
         />
       </div>
       <button type="button" className="button-back" onClick={goSelectProject}>
@@ -155,6 +164,13 @@ const EditProject = ({
       />
       <div className="event-list">
         <h3>Recurring Events</h3>
+        <Alert
+          variant="success"
+          show={showNewEventCreatedAlert}
+          style={{ zIndex: 100 }}
+        >
+          Successfully created event!
+        </Alert>
         <ul>
           {rEvents.map((event) => (
             // eslint-disable-next-line no-underscore-dangle

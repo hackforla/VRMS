@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import Alert from 'react-bootstrap/Alert';
 import { Redirect } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import SelectProject from '../components/manageProjects/selectProject';
@@ -7,6 +8,8 @@ import ProjectApiService from '../api/ProjectApiService';
 import RecurringEventsApiService from '../api/RecurringEventsApiService';
 import Loading from '../svg/22.gif';
 import '../sass/ManageProjects.scss';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const PAGES = Object.freeze({
   selectProject: 'selectProject',
