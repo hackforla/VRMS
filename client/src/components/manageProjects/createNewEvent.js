@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
-import Alert from 'react-bootstrap/Alert';
 import '../../sass/ManageProjects.scss';
 import { findNextOccuranceOfDay } from './utilities/findNextDayOccuranceOfDay';
 import { addDurationToTime } from './utilities/addDurationToTime';
 import { timeConvertFromForm } from './utilities/timeConvertFromForm';
 import validateEventForm from './utilities/validateEventForm';
 import EventForm from './eventForm';
-
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 const CreateNewEvent = ({
   projectName,

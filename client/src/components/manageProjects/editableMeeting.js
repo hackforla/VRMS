@@ -15,6 +15,7 @@ const EditableMeeting = ({
   handleEventDelete,
   formErrors,
   videoConferenceLink = '',
+  setShowUpdateEventAlert,
 }) => {
   // *** Initialization Station ***
   const initialUpdateFormValues = {

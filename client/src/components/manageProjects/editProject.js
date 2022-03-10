@@ -31,6 +31,7 @@ const EditProject = ({
   const [showNewEventCreatedAlert, setShowNewEventCreatedAlert] = useState(
     false
   );
+  const [showUpdateEventAlert, setShowUpdateEventAlert] = useState(false);
 
   // Get project recurring events when component loads
   useEffect(() => {
@@ -49,6 +50,7 @@ const EditProject = ({
         <EditMeetingTimes
           selectedEvent={selectedEvent}
           setSelectedEvent={setSelectedEvent}
+          setShowUpdateEventAlert={setShowUpdateEventAlert}
           deleteRecurringEvent={deleteRecurringEvent}
           updateRecurringEvent={updateRecurringEvent}
         />
@@ -167,9 +169,14 @@ const EditProject = ({
         <Alert
           variant="success"
           show={showNewEventCreatedAlert}
-          style={{ zIndex: 100 }}
         >
           Successfully created event!
+        </Alert>
+        <Alert
+          show={showUpdateEventAlert}
+          variant="primary"  
+        >
+          Successfully updated event!
         </Alert>
         <ul>
           {rEvents.map((event) => (
