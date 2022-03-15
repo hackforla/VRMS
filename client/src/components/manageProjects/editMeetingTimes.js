@@ -10,6 +10,7 @@ import validateEventForm from './utilities/validateEventForm';
 const EditMeetingTimes = ({
   selectedEvent,
   setSelectedEvent,
+  setShowUpdateEventAlert,
   deleteRecurringEvent,
   updateRecurringEvent,
 }) => {
@@ -19,7 +20,7 @@ const EditMeetingTimes = ({
     values,
     startTimeOriginal,
     durationOriginal
-  ) => () => {
+  ) => async () => {
     const errors = validateEventForm(values);
     if (!errors) {
       let theUpdatedEvent = {};
@@ -105,6 +106,10 @@ const EditMeetingTimes = ({
       }
 
       updateRecurringEvent(theUpdatedEvent, eventID);
+      setShowUpdateEventAlert(true);
+      await setTimeout(() => {
+        setShowUpdateEventAlert(false);
+      }, 5000)
       setSelectedEvent(null);
     }
     setFormErrors(errors);

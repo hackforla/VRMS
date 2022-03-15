@@ -11,6 +11,7 @@ const CreateNewEvent = ({
   projectID,
   createNewRecurringEvent,
   setIsCreateNew,
+  setShowNewEventCreatedAlert,
 }) => {
   // These are the initial form values
   const initialFormValues = {
@@ -70,12 +71,16 @@ const CreateNewEvent = ({
   };
 
   // Handle submission of new recurring event form
-  const handleFormSubmit = () => {
+  const handleFormSubmit = async () => {
     const errors = validateEventForm(formValues);
     if (!errors) {
       handleEventCreate();
       setFormValues(initialFormValues);
       setIsCreateNew(false);
+      setShowNewEventCreatedAlert(true);
+      await setTimeout(() => {
+        setShowNewEventCreatedAlert(false);
+      }, 5000)
     }
     setFormErrors(errors);
   };

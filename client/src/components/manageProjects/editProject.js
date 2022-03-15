@@ -24,6 +24,12 @@ const EditProject = ({
   const [selectedEvent, setSelectedEvent] = useState();
   const [isCreateNew, setIsCreateNew] = useState();
 
+  // States for alerts
+  const [showNewEventCreatedAlert, setShowNewEventCreatedAlert] = useState(
+    false
+  );
+  const [showUpdateEventAlert, setShowUpdateEventAlert] = useState(false);
+
   // Get project recurring events when component loads
   useEffect(() => {
     setREvents(
@@ -41,6 +47,7 @@ const EditProject = ({
         <EditMeetingTimes
           selectedEvent={selectedEvent}
           setSelectedEvent={setSelectedEvent}
+          setShowUpdateEventAlert={setShowUpdateEventAlert}
           deleteRecurringEvent={deleteRecurringEvent}
           updateRecurringEvent={updateRecurringEvent}
         />
@@ -52,6 +59,7 @@ const EditProject = ({
           // eslint-disable-next-line no-underscore-dangle
           projectID={projectToEdit._id}
           setIsCreateNew={setIsCreateNew}
+          setShowNewEventCreatedAlert={setShowNewEventCreatedAlert}
         />
       </div>
       <button type="button" className="button-back" onClick={goSelectProject}>
@@ -155,6 +163,9 @@ const EditProject = ({
       />
       <div className="event-list">
         <h3>Recurring Events</h3>
+        {showUpdateEventAlert}
+        {showNewEventCreatedAlert ? <h2>Event Created!</h2> : null}
+        {showUpdateEventAlert ? <h2>Event Updated!</h2> : null}
         <ul>
           {rEvents.map((event) => (
             // eslint-disable-next-line no-underscore-dangle
