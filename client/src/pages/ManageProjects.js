@@ -1,119 +1,137 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Redirect } from 'react-router-dom';
-import '../sass/ManageProjects.scss';
 import useAuth from '../hooks/useAuth';
-import { REACT_APP_CUSTOM_REQUEST_HEADER } from '../utils/globalSettings';
-import SelectProject from '../components/manageProjects/selectProject.js';
-import EditMeetingTimes from '../components/manageProjects/editMeetingTimes';
-import EditProject from '../components/manageProjects/editProject.js';
+import SelectProject from '../components/manageProjects/selectProject';
+import EditProject from '../components/manageProjects/editProject';
+import ProjectApiService from '../api/ProjectApiService';
+import RecurringEventsApiService from '../api/RecurringEventsApiService';
+import Loading from '../svg/22.gif';
+import '../sass/ManageProjects.scss';
+
+const PAGES = Object.freeze({
+  selectProject: 'selectProject',
+  editProjectInfo: 'editProjectInfo',
+  editMeetingTimes: 'editMeetingTimes',
+});
 
 const ManageProjects = () => {
-  const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
-
   const { auth } = useAuth();
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState();
   const [projectToEdit, setProjectToEdit] = useState([]);
-  const [recurringEvents, setRecurringEvents] = useState([]);
-  const [componentToDisplay, setComponentToDisplay] = useState(''); // displayProjectInfo, editMeetingTime or editProjectInfor
+  const [recurringEvents, setRecurringEvents] = useState();
+  const [componentToDisplay, setComponentToDisplay] = useState('');
+  const [projectApiService] = useState(new ProjectApiService());
+  const [recurringEventsApiService] = useState(new RecurringEventsApiService());
+  const [projectsLoading, setProjectsLoading] = useState(false);
+  const [eventsLoading, setEventsLoading] = useState(false);
+
   const user = auth?.user;
 
-  // Fetch projects from db
-  async function fetchProjects() {
-    try {
-      const res = await fetch('/api/projects/', {
-        headers: {
-          'x-customrequired-header': headerToSend,
-        },
-      });
-      const resJson = await res.json();
-      setProjects(resJson);
-    } catch (error) {
-      console.log(`fetchProjects error: ${error}`);
-      alert('Server not responding.  Please refresh the page.');
-    }
-  }
+  const fetchProjects = useCallback(async () => {
+    setProjectsLoading(true);
+    const projectRes = await projectApiService.fetchProjects();
+    setProjects(projectRes);
+    setProjectsLoading(false);
+  }, [projectApiService]);
 
-  // Fetch recurringEvents
-  async function fetchRecurringEvents() {
-    try {
-      const res = await fetch('/api/recurringEvents/', {
-        headers: {
-          'x-customrequired-header': headerToSend,
-        },
-      });
-      const resJson = await res.json();
-      setRecurringEvents(resJson);
-    } catch (error) {
-      console.log(`fetchProjects error: ${error}`);
-      alert('Server not responding.  Please refresh the page.');
+  const fetchRecurringEvents = useCallback(async () => {
+    setEventsLoading(true);
+    const eventsRes = await recurringEventsApiService.fetchRecurringEvents();
+    setRecurringEvents(eventsRes);
+    setEventsLoading(false);
+  }, [recurringEventsApiService]);
+
+  const updateProject = useCallback(
+    async (fieldName, fieldValue) => {
+      await projectApiService.updateProject(
+        // eslint-disable-next-line no-underscore-dangle
+        projectToEdit._id,
+        fieldName,
+        fieldValue
+      );
+      fetchProjects();
+    },
+    [projectApiService, fetchProjects, projectToEdit]
+  );
+
+  const createNewRecurringEvent = useCallback(
+    async (eventToCreate) => {
+      await recurringEventsApiService.createNewRecurringEvent(eventToCreate);
+      fetchRecurringEvents();
+    },
+    [recurringEventsApiService, fetchRecurringEvents]
+  );
+
+  const deleteRecurringEvent = useCallback(
+    async (recurringEventID) => {
+      await recurringEventsApiService.deleteRecurringEvent(recurringEventID);
+      fetchRecurringEvents();
+    },
+    [recurringEventsApiService, fetchRecurringEvents]
+  );
+
+  const updateRecurringEvent = useCallback(
+    async (eventToUpdate, recurringEventID) => {
+      await recurringEventsApiService.updateRecurringEvent(
+        eventToUpdate,
+        recurringEventID
+      );
+      fetchRecurringEvents();
+    },
+    [recurringEventsApiService, fetchRecurringEvents]
+  );
+
+  useEffect(() => {
+    // Refresh project to edit, if projects have been refreshed
+    if (projectToEdit && projects) {
+      setProjectToEdit(
+        projects.find(
+          // eslint-disable-next-line no-underscore-dangle
+          (proj) => proj._id === projectToEdit._id
+        )
+      );
     }
-  }
+  }, [projectToEdit, projects, setProjectToEdit]);
 
   useEffect(() => {
     fetchProjects();
     fetchRecurringEvents();
-  }, []);
-
-  function renderUpdatedProj(updatedProj) {
-    let updatedProjList = projects;
-    let index = updatedProjList.findIndex(
-      (proj) => proj._id === updatedProj._id
-    );
-    updatedProjList[index] = updatedProj;
-
-    setProjects(updatedProjList);
-    setProjectToEdit(updatedProj);
-  }
+  }, [fetchProjects, fetchRecurringEvents]);
 
   // If not logged in, redirect to login page
   if (!auth && !auth?.user) {
     return <Redirect to="/login" />;
   }
 
-  const projectSelectClickHandler = (project) => (event) => {
+  const projectSelectClickHandler = (project) => () => {
     setProjectToEdit(project);
-    setComponentToDisplay('editProjectInfo');
+    setComponentToDisplay(PAGES.editProjectInfo);
   };
-
-  const meetingSelectClickHandler = () => {
-    setComponentToDisplay('editMeetingTimes');
-  };
-
-  const setEditProject = () => {
-    setComponentToDisplay('editProjectInfo');
-  }
 
   const goSelectProject = () => {
     setProjectToEdit([]);
-    setComponentToDisplay('selectProject');
-  }
-  // }
+    setComponentToDisplay(PAGES.selectProject);
+  };
+
+  let displayedComponent;
 
   switch (componentToDisplay) {
-    case 'editMeetingTimes':
-      return (
-        <EditMeetingTimes 
-        goSelectProject={goSelectProject}
-        goEditProject={setEditProject}
-        projectToEdit={projectToEdit}
-        recurringEvents={recurringEvents}
-        />
-      )
-      break;
-    case 'editProjectInfo':
-      return (
+    case PAGES.editProjectInfo:
+      displayedComponent = (
         <EditProject
           projectToEdit={projectToEdit}
           goSelectProject={goSelectProject}
           recurringEvents={recurringEvents}
-          renderUpdatedProj={renderUpdatedProj}
-          meetingSelectClickHandler={meetingSelectClickHandler}
+          updateProject={updateProject}
           userAccessLevel={user.accessLevel}
+          createNewRecurringEvent={createNewRecurringEvent}
+          deleteRecurringEvent={deleteRecurringEvent}
+          updateRecurringEvent={updateRecurringEvent}
         />
       );
       break;
     default:
-      return (
+      displayedComponent = (
         <SelectProject
           projectSelectClickHandler={projectSelectClickHandler}
           accessLevel={user?.accessLevel}
@@ -121,7 +139,20 @@ const ManageProjects = () => {
           user={user}
         />
       );
+      break;
   }
+  return (
+    <>
+      <span
+        className={`bg-overlay ${
+          eventsLoading || projectsLoading ? 'active' : ''
+        }`}
+      >
+        <img src={Loading} alt="Logo" />
+      </span>
+      {displayedComponent}
+    </>
+  );
 };
 
 export default ManageProjects;

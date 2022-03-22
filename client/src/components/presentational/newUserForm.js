@@ -15,13 +15,11 @@ const NewUserForm = (props) => {
         >
           <div className="form-row">
             <div className="form-input-text">
-              {/* <label htmlFor="first-name">First Name</label> */}
               <input
                 type="text"
                 name="firstName"
                 placeholder="First Name"
                 value={props.firstName.toString()}
-                // aria-label="topic"
                 onChange={props.handleFirstNameChange}
                 aria-label="First Name"
                 required
@@ -30,13 +28,11 @@ const NewUserForm = (props) => {
           </div>
           <div className="form-row">
             <div className="form-input-text">
-              {/* <label htmlFor="last-name">Last Name</label> */}
               <input
                 type="text"
                 name="lastName"
                 placeholder="Last Name"
                 value={props.lastName.toString()}
-                // aria-label="topic"
                 onChange={props.handleLastNameChange}
                 aria-label="Last Name"
                 required
@@ -50,7 +46,6 @@ const NewUserForm = (props) => {
                 name="email"
                 placeholder="Email Address"
                 value={props.formInput.email.toString()}
-                // aria-label="topic"
                 onChange={props.handleInputChange}
                 aria-label="Email Address"
                 required
@@ -78,7 +73,6 @@ const NewUserForm = (props) => {
                               ].toString()
                             : ""
                         }
-                        // aria-label="topic"
                         onChange={props.handleInputChange}
                         required
                       />
@@ -104,7 +98,6 @@ const NewUserForm = (props) => {
                           type="radio"
                           name={question.htmlName}
                           value={true}
-                          // aria-label="topic"
                           onChange={props.handleNewMemberChange}
                           defaultChecked
                           required
@@ -115,7 +108,6 @@ const NewUserForm = (props) => {
                           type="radio"
                           name={question.htmlName}
                           value={false}
-                          // aria-label="topic"
                           onChange={props.handleNewMemberChange}
                         />
                         <label htmlFor="radio2">No</label>
@@ -141,7 +133,6 @@ const NewUserForm = (props) => {
                           <select
                             name={question.htmlName}
                             value={props.month}
-                            // aria-label="topic"
                             onChange={props.handleMonthChange}
                             required
                           >
@@ -156,7 +147,6 @@ const NewUserForm = (props) => {
                           <select
                             name={question.htmlName}
                             value={props.year}
-                            // aria-label="topic"
                             onChange={props.handleYearChange}
                             required
                           >

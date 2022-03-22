@@ -7,6 +7,25 @@
   margin-bottom: 200px;
 }
 
+.bg-overlay {
+  opacity: 0;
+  display: none;
+  &.active {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: white;
+    height: 100%;
+    opacity: 0.6;
+  }
+}
+
 .project-list {
   display: flex;
   flex-direction: column;
@@ -15,6 +34,16 @@
 
 .project-list-item {
   margin-bottom: 5px;
+}
+
+.project-list-button {
+  font-family: 'aliseoregular', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+    'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+  text-align: left;
 }
 
 .project-list-heading {
@@ -39,7 +68,7 @@ div.editable-field {
 }
 
 .editable-field-div {
-  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .section-name {
@@ -52,10 +81,19 @@ div.editable-field {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.project-edit-title {
+  margin-bottom: 4px;
+  display: flex;
+  flex-direction: row;
+}
+
 .project-edit-button {
-  color: #FA114F;
-  cursor:pointer;
-  font-family:Arial, Helvetica, sans-serif
+  flex: 2;
+  padding-left: 8px;
+  color: #fa114f;
+  cursor: pointer;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: left;
 }
 
 .button-edit {
@@ -71,15 +109,99 @@ div.editable-field {
 .display-events {
   margin-top: 15px;
   margin-bottom: 10px;
+}
 
+.event-list {
+  margin-bottom: 40px;
+  h3 {
+    width: 190px;
+    padding: 7px 18px 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 24px;
+    color: #000000;
+    background-color: #f2f2f2;
+  }
+
+  ul {
+    padding-top: 4px;
+    border-top: 2px solid #32373b;
+  }
+
+  li {
+    display: flex;
+    padding: 8px 0;
+    flex-direction: column;
+    border-bottom: 1px solid #ecebed;
+  }
+
+  li:hover {
+    background-color: #f2f2f2;
+  }
+
+  button {
+    font-family: 'aliseoregular', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+      'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+      'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    padding: 0;
+    text-align: left;
+  }
+
+  &-details,
+  &-description {
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 24px;
+  }
+
+  &-description {
+    color: #5c5c5c;
+    height: 24px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.edit-meeting-modal {
+  width: 92%;
+  display: none;
+  background-color: white;
+  opacity: 1;
+  &.active {
+    position: absolute;
+    left: 18px;
+    top: 24px;
+    display: block;
+    z-index: 3;
+  }
+}
+
+.meeting-cancel-button {
+  background-color: transparent;
+  border: none;
+  width: 98%;
+  font-family: Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 22px;
+  line-height: 24px;
+  color: #000000;
+  text-align: right;
 }
 
 // create new event form on createNewEvent.js
 .event-form-box {
   min-width: 100%;
+  min-height: 540px;
   padding: 10px;
-  margin-top: 5px;
-  position:relative; 
+  position: relative;
   border: solid black 2px;
   display: flex;
   flex-direction: column;
@@ -87,15 +209,34 @@ div.editable-field {
 
 .event-form-box .event-form-title {
   font-size: 20px;
+  margin-bottom: 16px;
+}
+
+.event-form-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.event-form-label {
+  display: block;
+  margin-top: 4px;
+  select {
+    display: block;
+  }
+}
+
+.event-form-error {
+  color: red;
   margin-bottom: 10px;
 }
 
-.event-form-box input, textarea {
+.event-form-box input,
+textarea {
   display: block;
   width: 100%;
   padding: 2px 0 15px 10px;
-  margin: 5px 0 ;
-  border:1px;
+  margin: 5px 0;
+  border: 1px;
   border-radius: 5px;
   font-size: 20px;
   color: black;
@@ -112,12 +253,13 @@ div.editable-field {
   margin: 12px;
 }
 
-.event-form-box textarea{
+.event-form-box textarea {
   height: 25px;
 }
 
 .event-form-box label {
   font-size: 15px;
+  width: 100%;
   display: block;
 }
 
@@ -125,22 +267,21 @@ div.editable-field {
   margin-top: 10px;
 }
 
-.createBtn, .cancelBtn {
-  background-color: black;
-  color: white;
-  font-size: 20px;
-  margin: 5px 10px 0 0;
-  padding: 5px;
-  border-radius: 5px;
-  cursor: pointer;
+.button-back {
+  margin: 10px 0;
 }
 
-.button-create-event {
+.create-form-button {
+  width: 250px;
+  height: 43px;
   background-color: black;
   color: white;
   font-size: 20px;
+  margin: 0 10px 10px 0;
   padding: 10px;
   border-radius: 5px;
-  margin: 20px 0px;
-  cursor: pointer;
+}
+
+.create-form-button:active {
+  background-color: #969595;
 }

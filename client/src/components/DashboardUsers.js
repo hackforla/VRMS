@@ -1,30 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 
 import '../sass/DashboardUsers.scss';
-// import '../sass/EventsContainer-media-queries.scss';
 
 const DashboardUsers = (props) => {
-    // const [isLoading, setIsLoading] = useState(false);
     const [users, setUsers] = useState(null);
-    // const [isError, setIsError] = useState(false);
 
     async function fetchData() {
         try {
             const res = await fetch("/api/users");
             const resJson = await res.json();
-
             setUsers(resJson);
         } catch(error) {
             alert(error);
         }
-
         console.log(users);
     }
 
     useEffect(() => {
         fetchData();
-
     }, []);
 
     return (

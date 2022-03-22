@@ -3,9 +3,7 @@ import styles from "../../sass/ProjectLeaderDashboard.module.scss";
 import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../../utils/globalSettings";
 
 const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
-
   const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
-
   const gitHubIcon = (
     <img
       className={styles.rosterIconImg}
@@ -86,11 +84,6 @@ const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
     projectName,
     accessLevel = "manager"
   ) => {
-    // ******************** pbtag -- allow PL to add githubHandle if not
-    // already there
-    // if (!githubHandle) {
-    // }
-
     const bodyObject = {
       // temporary placeholder handle + repoName
       handle: "testingphoebe",
@@ -140,33 +133,6 @@ const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
           <div className={styles.rosterIcon}>{gitHubIcon}</div>
         </div>
       </div>
-      {/* {attendees &&
-        attendees.map((attendee) => {
-          return (
-            <RosterTableRow
-              key={Math.random()}
-              name={
-                attendee.userId.name.firstName +
-                " " +
-                attendee.userId.name.lastName
-              }
-              role={attendee.userId.currentRole}
-              email={attendee.userId.email}
-              isNewMember={true}
-              gDriveClicked={() => {
-                gDriveClickHandler(attendee.userId.email, RosterProjectId);
-              }}
-              gitHubClicked={() =>
-                gitHubClickHandler(attendee.userId.githubHandle)
-              }
-              RosterProjectId={RosterProjectId}
-              services={{
-                gitHub: attendee.onProjectGithub,
-                googleDrive: attendee.onProjectGoogleDrive,
-              }}
-            ></RosterTableRow>
-          );
-        })} */}
     </div>
   );
 };

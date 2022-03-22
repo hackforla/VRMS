@@ -14,12 +14,6 @@ const DonutChart = props => {
     .innerRadius(props.innerRadius)
     .outerRadius(props.outerRadius);
 
-  // const colors = d3.scaleOrdinal(d3.schemeCategory10);
-  // const dtla = d3.color("#2A768A");
-  // const westside = d3.color("#102D49");
-  // const southLa = d3.color("#CD1F42");
-
-  // const colors = [dtla, westside, southLa];
   const format = d3.format(".2f");
 
   useEffect(() => {
@@ -45,18 +39,6 @@ const DonutChart = props => {
         const { data } = d;
         return data.color;
       });
-
-    // const text = groupWithUpdate
-    // 	.append("text")
-    // 	.merge(groupWithData.select("text"));
-
-    // text
-    // 	.attr("text-anchor", "middle")
-    // 	.attr("alignment-baseline", "middle")
-    // 	.attr("transform", d => `translate(${createArc.centroid(d)})`)
-    // 	.style("fill", "white")
-    // 	.style("font-size", 10)
-    // 	.text(d => format(d.value));
   }, [props.data]);
 
   return (
