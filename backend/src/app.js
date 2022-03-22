@@ -30,6 +30,8 @@ require('assert-env')([
   'GMAIL_SECRET_ID',
   'GMAIL_REFRESH_TOKEN',
   'GMAIL_EMAIL',
+  'AWS_COGNITO_REGION',
+  'AWS_COGNITO_USER_POOL_ID',
 ]);
 
 // Create a new application using the Express framework

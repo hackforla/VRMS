@@ -31,6 +31,8 @@ jobs:
           envkey_GMAIL_SECRET_ID: ${{ secrets.GMAIL_SECRET_ID }}
           envkey_GMAIL_REFRESH_TOKEN: ${{ secrets.GMAIL_REFRESH_TOKEN }}
           envkey_GMAIL_EMAIL: ${{ secrets.GMAIL_EMAIL }}
+          envkey_AWS_COGNITO_REGION: UPDATE_ME
+          envkey_AWS_COGNITO_USER_POOL_ID: UPDATE_ME
           file_name: backend/.env
       - name: Build the backend container
         run: docker-compose build backend
