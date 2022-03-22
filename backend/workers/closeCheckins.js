@@ -1,12 +1,12 @@
 module.exports = (cron, fetch) => {
 
-    // Check to see if any events are about to start, 
+    // Check to see if any events are about to start,
     // and if so, open their respective check-ins
 
     const url = process.env.NODE_ENV === 'prod' ? 'https://www.vrms.io' : 'http://localhost:4000';
-    const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
+    const headerToSend = process.env.CUSTOM_REQUEST_HEADER;
 
-    async function fetchEvents() {    
+    async function fetchEvents() {
         try {
             const res = await fetch(`${url}/api/events`, {
                 headers: {
@@ -26,7 +26,7 @@ module.exports = (cron, fetch) => {
 
         // Filter events if event date is after now but before thirty minutes from now
         if (events && events.length > 0) {
-            
+
             const sortedEvents = events.filter(event => {
                 const currentTimeISO = new Date().toISOString();
                 const threeHoursFromStartTime = new Date(event.date).getTime() + 10800000;
@@ -39,7 +39,7 @@ module.exports = (cron, fetch) => {
             return sortedEvents;
         };
     };
-    
+
     async function closeCheckins(events) {
         if(events && events.length > 0) {
             events.forEach(async event => {
@@ -58,7 +58,7 @@ module.exports = (cron, fetch) => {
             });
         };
     };
-    
+
     async function runTask() {
         console.log("Closing check-ins");
 

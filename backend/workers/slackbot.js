@@ -2,7 +2,7 @@ module.exports = (fetch) => {
     console.log('Hello from SlackBot');
     const token = process.env.SLACK_TOKEN;
 
-    const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
+    const headerToSend = process.env.CUSTOM_REQUEST_HEADER;
 
     let EVENTS;
 
@@ -39,7 +39,7 @@ module.exports = (fetch) => {
                 const now = new Date();
 
                 // 10 Minutes til event startTime
-                // If event.date - 
+                // If event.date -
                 return (event.date )
             });
 
@@ -57,15 +57,15 @@ module.exports = (fetch) => {
                 const linkNew = 'http://localhost:3000/checkIn/newUser?eventId=' + event._id;
                 const linkReturning = 'http://localhost:3000/checkIn/returningUser?eventId=' + event._id;
                 const messageToSend = `&text=Hey ${team} team! Here are the links to check-in for your meeting tonight: \n\nNew User: ${linkNew} \nReturning User: ${linkReturning} \n\nHave fun tonight!`
-                
+
                 const urlToSend = `${BASE_URL}?token=${token}&channel=${channel}${messageToSend}&unfurl_media=false&username=VRMS Bot`;
-                
+
                 if (team.length > 0) {
                     console.log('Send slack message');
                     // await sendSlackMessage(urlToSend);
                 } else {
                     console.log("Didn't do anything with " + (event && event));
-                } 
+                }
             })
         }
     };
@@ -86,7 +86,7 @@ module.exports = (fetch) => {
             .catch(err => {
                 console.log(err);
             });
-        
+
         console.log('Done sending');
     }
 
