@@ -9,8 +9,8 @@ import validateEventForm from './utilities/validateEventForm';
 // This component displays current meeting times for selected project and offers the option to edit those times.
 const EditMeetingTimes = ({
   selectedEvent,
+  setEventAlert,
   setSelectedEvent,
-  setShowUpdateEventAlert,
   deleteRecurringEvent,
   updateRecurringEvent,
 }) => {
@@ -106,9 +106,9 @@ const EditMeetingTimes = ({
       }
 
       updateRecurringEvent(theUpdatedEvent, eventID);
-      setShowUpdateEventAlert(true);
+      setEventAlert("Event updated!")
       await setTimeout(() => {
-        setShowUpdateEventAlert(false);
+        setEventAlert(null);
       }, 5000)
       setSelectedEvent(null);
     }

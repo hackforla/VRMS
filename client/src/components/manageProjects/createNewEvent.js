@@ -10,8 +10,8 @@ const CreateNewEvent = ({
   projectName,
   projectID,
   createNewRecurringEvent,
+  setEventAlert,
   setIsCreateNew,
-  setShowNewEventCreatedAlert,
 }) => {
   // These are the initial form values
   const initialFormValues = {
@@ -77,9 +77,9 @@ const CreateNewEvent = ({
       handleEventCreate();
       setFormValues(initialFormValues);
       setIsCreateNew(false);
-      setShowNewEventCreatedAlert(true);
+      setEventAlert("Event created!")
       await setTimeout(() => {
-        setShowNewEventCreatedAlert(false);
+        setEventAlert(null);
       }, 5000)
     }
     setFormErrors(errors);
