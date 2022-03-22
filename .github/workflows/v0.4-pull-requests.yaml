@@ -17,8 +17,20 @@ jobs:
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v1
         with:
+          envkey_CUSTOM_REQUEST_HEADER: ${{ secrets.CUSTOM_REQUEST_HEADER }}
+          envkey_SLACK_OAUTH_TOKEN: ${{ secrets.SLACK_OAUTH_TOKEN }}
+          envkey_SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          envkey_SLACK_TEAM_ID: ${{ secrets.SLACK_TEAM_ID }}
+          envkey_SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
+          envkey_SLACK_CLIENT_ID: ${{ secrets.SLACK_CLIENT_ID }}
+          envkey_SLACK_CLIENT_SECRET: ${{ secrets.SLACK_CLIENT_SECRET }}
+          envkey_SLACK_SIGNING_SECRET: ${{ secrets.SLACK_SIGNING_SECRET }}
           envkey_BACKEND_PORT: ${{ secrets.BACKEND_PORT }}
           envkey_REACT_APP_PROXY: ${{ secrets.REACT_APP_PROXY }}
+          envkey_GMAIL_CLIENT_ID: ${{ secrets.GMAIL_CLIENT_ID }}
+          envkey_GMAIL_SECRET_ID: ${{ secrets.GMAIL_SECRET_ID }}
+          envkey_GMAIL_REFRESH_TOKEN: ${{ secrets.GMAIL_REFRESH_TOKEN }}
+          envkey_GMAIL_EMAIL: ${{ secrets.GMAIL_EMAIL }}
           file_name: backend/.env
       - name: Build the backend container
         run: docker-compose build backend
