@@ -115,10 +115,13 @@ const EditMeetingTimes = ({
     setFormErrors(errors);
   };
 
-  const handleEventDelete = (eventID) => () => {
-    // ToDo: Add delete confirmation so user knows the item has been deleted
+  const handleEventDelete = (eventID) => async () => {
     deleteRecurringEvent(eventID);
     setSelectedEvent(null);
+    setEventAlert("Event deleted!");
+    await setTimeout(() => {
+      setEventAlert(null);
+    }, 5000);
   };
 
   return (
