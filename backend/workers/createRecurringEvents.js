@@ -143,7 +143,6 @@ module.exports = (cron, fetch) => {
             console.log('Running createEvent: ', jsonEvent);
 
             try {
-                // console.log(headerToSend);
                 const response = await fetch(`${URL}/api/events/`, options);
                 const resJson = await response.json();
                 return resJson;
