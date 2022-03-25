@@ -11,7 +11,6 @@ module.exports = (cron, fetch) => {
     const URL = process.env.NODE_ENV === 'prod' ? 'https://www.vrms.io' : 'http://localhost:4000';
 
     const headerToSend = process.env.CUSTOM_REQUEST_HEADER;
-    console.log(headerToSend);
     const fetchEvents = async () => {
         try {
             const res = await fetch(`${URL}/api/events/`, {
