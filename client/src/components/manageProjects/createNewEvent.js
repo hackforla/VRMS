@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../sass/ManageProjects.scss';
 import { findNextOccuranceOfDay } from './utilities/findNextDayOccuranceOfDay';
 import { addDurationToTime } from './utilities/addDurationToTime';
@@ -14,8 +14,9 @@ const CreateNewEvent = ({
 }) => {
   // These are the initial form values
   const initialFormValues = {
-    name: `${projectName} Team Meeting`,
-    eventType: 'Team Meeting',
+    name: '',
+    eventType: '',
+    eventSubtype: '',
     description: '',
     videoConferenceLink: '',
     day: '0',
@@ -29,6 +30,11 @@ const CreateNewEvent = ({
   const handleInputChange = (event) => {
     setFormValues({ ...formValues, [event.target.name]: event.target.value });
   };
+
+  useEffect(() => {
+    let type = formValues.eventType, subtype = formValues.eventSubtype;
+    setFormValues({...formValues, name: type + " " + subtype});
+  }, [formValues.eventSubtype, formValues.eventType])
 
   const handleEventCreate = () => {
     const date = findNextOccuranceOfDay(formValues.day);
@@ -54,6 +60,7 @@ const CreateNewEvent = ({
       hacknight: 'Online',
       brigade: 'Hack for LA',
       eventType: formValues.eventType,
+      eventSubtype: formValues.eventSubtype,
       description: formValues.description,
       project: projectID,
       date: startDateTimeGMT,
@@ -103,6 +110,10 @@ const CreateNewEvent = ({
             type="button"
             className="create-form-button"
             onClick={() => {
+              if (formValues.eventType == null) {
+                alert("Please select an event type.");
+                return;
+              }
               handleFormSubmit();
             }}
           >

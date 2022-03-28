@@ -203,8 +203,8 @@ div.editable-field {
   padding: 10px;
   position: relative;
   border: solid black 2px;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1 1;
 }
 
 .event-form-box .event-form-title {

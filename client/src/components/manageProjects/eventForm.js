@@ -11,19 +11,25 @@ const EventForm = ({
 }) => {
   // This creates the clock hours for the form
   const clockHours = createClockHours();
+  const subtypes = [
+    'All Team',
+    'Data Science',
+    'UI/UX Design',
+    'UI/UX Design & Research',
+    'UI/UX Research',
+    'Engineering All',
+    'Engineering Front End',
+    'Engineering Back End',
+    'PM',
+    'PM & Org',
+    'Other',
+  ];
   return (
     <div className="event-form-box">
       {title && <h3 className="event-form-title">{title}</h3>}
       <label className="event-form-label" htmlFor="name">
         Event Name:
-        <input
-          id="name"
-          placeholder="Meeting name..."
-          name="name"
-          value={formValues.name}
-          onChange={handleInputChange}
-          maxLength={30}
-        />
+        <p>{formValues.eventType} {formValues.eventSubtype || ""}</p>
         {formErrors?.name ? (
           <div className="event-form-error">{formErrors.name}</div>
         ) : null}
@@ -37,10 +43,26 @@ const EventForm = ({
             onChange={handleInputChange}
             name="eventType"
           >
+            <option value={null}>--Select--</option>
             <option value="Team Meeting">Team Meeting</option>
             <option value="Onboarding">Onboarding</option>
           </select>
         </label>
+        {formValues.eventType === 'Team Meeting' && (
+          <label className="event-form-label" htmlFor="eventSubtype">
+            Event Subtype:
+            <select
+              id="eventSubtype"
+              value={formValues.eventSubtype}
+              onChange={handleInputChange}
+              name="eventSubtype"
+            >
+              {subtypes.map((subtype) => (
+                <option value={subtype}>{subtype}</option>
+              ))}
+            </select>
+          </label>
+        )}
         <label className="event-form-label" htmlFor="day">
           Day of the Week:
           <select
