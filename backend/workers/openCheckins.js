@@ -1,12 +1,12 @@
 module.exports = (cron, fetch) => {
 
-    // Check to see if any events are about to start, 
+    // Check to see if any events are about to start,
     // and if so, open their respective check-ins
 
     const url = process.env.NODE_ENV === 'prod' ? 'https://www.vrms.io' : 'http://localhost:4000';
-    const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
+    const headerToSend = process.env.CUSTOM_REQUEST_HEADER;
 
-    async function fetchEvents() {    
+    async function fetchEvents() {
         try {
             const res = await fetch(`${url}/api/events`, {
                 headers: {
@@ -33,7 +33,7 @@ module.exports = (cron, fetch) => {
             return sortedEvents;
         };
     };
-    
+
     async function openCheckins(events) {
         if(events && events.length > 0) {
             events.forEach(event => {
@@ -55,7 +55,7 @@ module.exports = (cron, fetch) => {
             });
         };
     };
-    
+
     async function runTask() {
         console.log("Opening check-ins");
 
