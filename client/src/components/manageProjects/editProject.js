@@ -160,7 +160,7 @@ const EditProject = ({
       />
       <div className="event-list">
         <h3>Recurring Events</h3>
-        <h2>{eventAlert}</h2>
+        <h2 className="event-alert">{eventAlert}</h2>
         <ul>
           {rEvents.map((event) => (
             // eslint-disable-next-line no-underscore-dangle
