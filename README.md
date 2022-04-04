@@ -41,7 +41,7 @@ This section discusses some tips and best practices for working with Git.
 
 #### Step 1: Become a member of the repository Team
 
-Send your GitHub name to the project manager, or post it in the [VRMS Slack channel](https://hackforla.slack.com/archives/CRGH5HM0Q), and we'll add you as a member to the GitHub repository Team.
+Send your GitHub name to the project manager, or post it in the [VRMS Slack channel](https://hackforla.slack.com/archives/CRGH5HM0Q), and we'll add you as a member to the GitHub repository Team. Note: you should be added to both the VRMS and VRMS-write teams.
 
 Once you have accepted the GitHub invite (via email or in your GitHub notifications), please do the following:
 
@@ -94,17 +94,19 @@ Add another remote called `vrms` that points to the `hackforla` version of the r
 ```bash
 git remote add vrms https://github.com/hackforla/vrms.git
 ```
-Note: Understanding how git remotes work will make collaborating much easier.  You can learn more about remotes [here](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/configuring-a-remote-for-a-fork) and [here](https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes)
+
+Note: Understanding how git remotes work will make collaborating much easier. You can learn more about remotes [here](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/configuring-a-remote-for-a-fork) and [here](https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes)
 
 #### Step 4: Change to a new branch
 
-Create a new branch for each issue you work on. Doing all your work on topic branches leaves your repository's main branch unmodified and greatly simplifies keeping your fork in sync with the main project. 
+Create a new branch for each issue you work on. Doing all your work on topic branches leaves your repository's main branch unmodified and greatly simplifies keeping your fork in sync with the main project.
 
 This command will let you know available branches and which branch you're on.
 
 ```bash
 git branch
 ```
+
 Star (`*`) indicates which branch you're on
 
 By default you should start on the `development` branch.
@@ -115,7 +117,7 @@ This command will (create and) change to a new branch:
 git checkout -b fix-logo-width-311
 ```
 
-The text after the `-b`, in the example `fix-logo-width-311`, will be the name of your new branch. Choose a branch name that relates to the issue you're working on. (No spaces!)  The format should look like the scheme above where the words are a brief description of the issue that will make sense at a glance to someone unfamiliar with the issue. 
+The text after the `-b`, in the example `fix-logo-width-311`, will be the name of your new branch. Choose a branch name that relates to the issue you're working on. (No spaces!) The format should look like the scheme above where the words are a brief description of the issue that will make sense at a glance to someone unfamiliar with the issue.
 
 ### Incorporating changes from upstream
 
@@ -133,7 +135,7 @@ git fetch vrms
 git reset --hard vrms/development
 ```
 
-This will reset the current HEAD to match the VRMS development repository. 
+This will reset the current HEAD to match the VRMS development repository.
 
 ## Get up and running
 
@@ -161,26 +163,27 @@ This will reset the current HEAD to match the VRMS development repository.
    - `touch vrms/backend/.env`
    - `touch vrms/client/.env`
    - `touch vrms/client-mvp-04/.env`
-    
+
    Note 1: In the above example you are trying to create an empty file called `.env` in each of the listed directories: backend, client and client-mvp-04. You can use either `touch <path-to-directory> .env` or navigate to the directory and use `touch .env`
 
-   Note 2: `touch` is a Unix/Linux or Mac command; It is not available in Windows. In Windows, use a text editor (e.g. Notepad) to create an empty file and save it in each of the locations as `.env` . (If you use Windows Explorer to create the file it will create a file called `.env.txt`, which will not work.) 
-   
+   Note 2: `touch` is a Unix/Linux or Mac command; It is not available in Windows. In Windows, use a text editor (e.g. Notepad) to create an empty file and save it in each of the locations as `.env` . (If you use Windows Explorer to create the file it will create a file called `.env.txt`, which will not work.)
+
    - Then paste the content from the [document](https://docs.google.com/document/d/1yDF6UmyO-MPNrl3y_Mw0mkm_WaixlSkXzWbudCzHXDY/edit?usp=sharing). It is accessible for the project team members only.
    - _Please note that the `ports` for the frontend and backend are set in this location_
 
 1. Take a second to review the `app.js` and `server.js` files in the `vrms/backend` folder. These two files are a blueprint for the back end, so please familiarize yourself with it. You'll see folders for the database collection models, routes for the API, and a config file which loads the necessary environment variables.
 
 1. Start the local development servers (frontend & backend).
-   
+
    To run `client`:
+
    - Navigate to the root of the application `vrms/` and run `npm run dev`
-   
+
    To run `client-mvp-04`:
+
    - Navigate to the root of the application `vrms/` and run `npm run mvp`
 
 You should now have a live app. Happy hacking.
-
 
 ## Running Tests
 
@@ -191,9 +194,9 @@ To run all of the tests run `npm run test:all` from the root folder.
 
 ## Using the development database
 
-The application uses MongoDB. We have created a shared development database using MongoDB Cloud and MongoDB Atlas.  The conection string for the development database is included in the environmental variables that you pasted into your backend/.env file in step 5 of the "Get Up and Running" setion.  If you completed that step successfully you should not need to do anything else. 
+The application uses MongoDB. We have created a shared development database using MongoDB Cloud and MongoDB Atlas. The conection string for the development database is included in the environmental variables that you pasted into your backend/.env file in step 5 of the "Get Up and Running" setion. If you completed that step successfully you should not need to do anything else.
 
-To view and edit the development database manually, you can download [MongoDB Compass](https://www.mongodb.com/try/download/compass). To connect to the development database you will use the "DATABASE_URL" from the [document](https://docs.google.com/document/d/1yDF6UmyO-MPNrl3y_Mw0mkm_WaixlSkXzWbudCzHXDY/edit?usp=sharing) that contained the environmental variables. The string will start with "mongodb+srv://". 
+To view and edit the development database manually, you can download [MongoDB Compass](https://www.mongodb.com/try/download/compass). To connect to the development database you will use the "DATABASE_URL" from the [document](https://docs.google.com/document/d/1yDF6UmyO-MPNrl3y_Mw0mkm_WaixlSkXzWbudCzHXDY/edit?usp=sharing) that contained the environmental variables. The string will start with "mongodb+srv://".
 
 If you want to install a local copy to experiment with and learn more about MongoDB, you can use [this tutorial](https://zellwk.com/blog/local-mongodb/)
 
