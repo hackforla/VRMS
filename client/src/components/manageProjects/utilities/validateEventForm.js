@@ -17,6 +17,12 @@ const validateEventForm = (vals) => {
             videoConferenceLink: 'Event link is required',
           };
         }
+        if (!validateLink(vals[key])) {
+          newErrors = {
+            ...newErrors,
+            videoConferenceLink: 'Invalid link'
+          }
+        }
         break;
 
       default:
@@ -27,3 +33,8 @@ const validateEventForm = (vals) => {
 };
 
 export default validateEventForm;
+
+function validateLink(str) {
+  let linkregex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/
+  return linkregex.test(str);
+}
