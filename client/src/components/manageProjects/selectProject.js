@@ -37,6 +37,7 @@ const SelectProject = ({
     <div className="container--ManageProjects">
       <h3>Manage Projects</h3>
       <div className="project-sub-heading">Select project to edit</div>
+      <button className="project-add-project-btn">Add Project</button>
       <ul className="project-list">{managedProjects}</ul>
     </div>
   );
