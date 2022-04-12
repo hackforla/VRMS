@@ -196,6 +196,13 @@ div.editable-field {
   text-align: right;
 }
 
+.event-alert {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: white;
+}
+
 // create new event form on createNewEvent.js
 .event-form-box {
   min-width: 100%;
