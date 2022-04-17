@@ -197,6 +197,6 @@ To view and edit the development database manually, you can download [MongoDB Co
 
 If you want to install a local copy to experiment with and learn more about MongoDB, you can use [this tutorial](https://zellwk.com/blog/local-mongodb/)
 
-### Licensing _WIP_
+### Licensing 
 
-Details about the project's open source status below:
+ [AGPL-3.0 License](https://github.com/hackforla/VRMS/blob/development/LICENSE)
