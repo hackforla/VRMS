@@ -87,6 +87,7 @@ const Event = (props) => {
                         )
                     }
                 </div>
+                <button className='button-edit'>EDIT</button>
             </div>
         </div>
     )

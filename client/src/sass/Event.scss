@@ -1,13 +1,50 @@
 .hidden {
-    display: none;
+  display: none;
 }
 
 .event-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 1;
-    margin-bottom: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  margin-bottom: 200px;
 }
 
+.button-edit {
+  align-items: center;
+  background-image: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
+  border: 0;
+  border-radius: 8px;
+  box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+  box-sizing: border-box;
+  color: #ffffff;
+  display: flex;
+  font-family: Phantomsans, sans-serif;
+  font-size: 20px;
+  justify-content: center;
+  line-height: 1em;
+  max-width: 100%;
+  margin-top: 100px;
+  min-width: 140px;
+  padding: 19px 24px;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.button-edit:active,
+.button-edit:hover {
+    box-shadow: 1px 1px #5b42f3;
+  outline: 0;
+}
+
+@media (min-width: 768px) {
+  .button-edit {
+    font-size: 24px;
+    min-width: 196px;
+  }
+}
