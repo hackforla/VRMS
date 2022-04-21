@@ -62,7 +62,7 @@ const EditProject = ({
       <button type="button" className="button-back" onClick={goSelectProject}>
         Back to Select Project
       </button>
-      <div className="project-list-heading">{`Project: ${projectToEdit.name}`}</div>
+      <div className="project-list-heading">{projectToEdit.name}</div>
       <EditableField
         fieldData={projectToEdit.name}
         fieldName="name"
