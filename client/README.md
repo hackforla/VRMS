@@ -17,8 +17,8 @@ Please follow instructions from `vrms/README.md`.
 ## Get up and running (locally)
 
 1. Make sure that you've done 6 steps from the similar section `vrms/README.md`.
- 
-2. Make sure you added the required environment variables (`.env`) for the `client-mvp-04` and `backend` directories. 
+
+2. Make sure you added the required environment variables (`.env`) for the `client` and `backend` directories.
 
 3. Start the local development servers (frontend & backend).
    - Navigate to the root of the application `vrms/` and run `npm run mvp`
@@ -27,9 +27,9 @@ You should now have a live app.
 
 ## Running Tests
 
-To run all `client-mvp-04` tests:
+To run all `client` tests:
 
-- Navigate to the `client-mvp-04` directory
+- Navigate to the `client` directory
 - Run `npm test` or `npm run test`
 
 You should now see all existing tests passed.
