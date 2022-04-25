@@ -1,6 +1,6 @@
 module.exports = (cron, fetch) => {
 
-    // Check to see if any recurring events are happening today, 
+    // Check to see if any recurring events are happening today,
     // and if so, check to see if an event has already been created
     // for it. If not, create one.
 
@@ -10,8 +10,7 @@ module.exports = (cron, fetch) => {
     let TODAY;
     const URL = process.env.NODE_ENV === 'prod' ? 'https://www.vrms.io' : 'http://localhost:4000';
 
-    const headerToSend = process.env.REACT_APP_CUSTOM_REQUEST_HEADER;
-
+    const headerToSend = process.env.CUSTOM_REQUEST_HEADER;
     const fetchEvents = async () => {
         try {
             const res = await fetch(`${URL}/api/events/`, {
@@ -19,6 +18,7 @@ module.exports = (cron, fetch) => {
                   "x-customrequired-header": headerToSend
                 }
             });
+
             EVENTS = await res.json();
 
             // return EVENTS;
@@ -90,7 +90,7 @@ module.exports = (cron, fetch) => {
                         startTime: filteredEvent.startTime && newEventDate,
                         endTime: filteredEvent.endTime && newEndTime,
                         hours: filteredEvent.hours && filteredEvent.hours
-                    } 
+                    }
                     if (filteredEvent.hasOwnProperty("location")) {
                         eventToCreate.location = {
                             city: filteredEvent.location.city ? filteredEvent.location.city : 'REMOTE',
@@ -98,7 +98,7 @@ module.exports = (cron, fetch) => {
                             country: filteredEvent.location.country ? filteredEvent.location.country : 'REMOTE'
                         };
                     }
-    
+
                     const created = await createEvent(eventToCreate);
                     console.log(created);
                 };
@@ -120,14 +120,14 @@ module.exports = (cron, fetch) => {
                 const yearToday = TODAY_DATE.getFullYear();
                 const monthToday = TODAY_DATE.getMonth();
                 const dateToday = TODAY_DATE.getDate();
-               
+
                 return (year === yearToday && month === monthToday && date === dateToday && eventName === event.name);
             });
             console.log("Events already created: ", filteredEvents);
             return filteredEvents.length > 0 ? true : false;
         };
     };
-    
+
     const createEvent = async (event) => {
         if(event) {
             const jsonEvent = JSON.stringify(event);
@@ -139,10 +139,11 @@ module.exports = (cron, fetch) => {
                 },
                 body: jsonEvent
             }
+
             console.log('Running createEvent: ', jsonEvent);
 
             try {
-                const response = await fetch(`${URL}/api/events/`, options); 
+                const response = await fetch(`${URL}/api/events/`, options);
                 const resJson = await response.json();
                 return resJson;
             } catch (error) {
@@ -150,7 +151,7 @@ module.exports = (cron, fetch) => {
             };
         };
     };
-    
+
     async function runTask() {
         console.log("Creating today's events");
 
@@ -159,12 +160,11 @@ module.exports = (cron, fetch) => {
         await filterAndCreateEvents();
 
         console.log("Today's events are created");
-    
+
     };
 
     const scheduledTask = cron.schedule('*/30 * * * *', () => {
         runTask();
     });
-
     return scheduledTask;
 };
