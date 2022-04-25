@@ -9,6 +9,7 @@ import validateEventForm from './utilities/validateEventForm';
 // This component displays current meeting times for selected project and offers the option to edit those times.
 const EditMeetingTimes = ({
   selectedEvent,
+  setEventAlert,
   setSelectedEvent,
   deleteRecurringEvent,
   updateRecurringEvent,
@@ -19,7 +20,7 @@ const EditMeetingTimes = ({
     values,
     startTimeOriginal,
     durationOriginal
-  ) => () => {
+  ) => async () => {
     const errors = validateEventForm(values);
     if (!errors) {
       let theUpdatedEvent = {};
@@ -105,15 +106,22 @@ const EditMeetingTimes = ({
       }
 
       updateRecurringEvent(theUpdatedEvent, eventID);
+      setEventAlert("Event updated!")
+      await setTimeout(() => {
+        setEventAlert(null);
+      }, 5000)
       setSelectedEvent(null);
     }
     setFormErrors(errors);
   };
 
-  const handleEventDelete = (eventID) => () => {
-    // ToDo: Add delete confirmation so user knows the item has been deleted
+  const handleEventDelete = (eventID) => async () => {
     deleteRecurringEvent(eventID);
     setSelectedEvent(null);
+    setEventAlert("Event deleted!");
+    await setTimeout(() => {
+      setEventAlert(null);
+    }, 5000);
   };
 
   return (

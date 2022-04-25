@@ -87,6 +87,9 @@ const Event = (props) => {
                         )
                     }
                 </div>
+                <div>
+                    <p><Link to="/events"><strong>Back to Events</strong></Link></p>
+                </div>
             </div>
         </div>
     )
