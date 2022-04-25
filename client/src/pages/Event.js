@@ -87,7 +87,11 @@ const Event = (props) => {
                         )
                     }
                 </div>
+
                 <button className='button-edit'>EDIT</button>
+                <div>
+                    <p><Link to="/events"><strong>Back to Events</strong></Link></p>
+                </div>
             </div>
         </div>
     )
