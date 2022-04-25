@@ -116,7 +116,7 @@ const CreateNewEvent = ({
             className="create-form-button"
             onClick={() => {
               if (formValues.eventType == null) {
-                alert("Please select an event type.");
+                setFormErrors("Event type is blank. Select an event type.")
                 return;
               }
               handleFormSubmit();

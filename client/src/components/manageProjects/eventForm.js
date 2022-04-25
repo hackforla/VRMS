@@ -29,7 +29,7 @@ const EventForm = ({
       {title && <h3 className="event-form-title">{title}</h3>}
       <label className="event-form-label" htmlFor="name">
         Event Name:
-        <p>{formValues.eventType} {formValues.eventSubtype || ""}</p>
+        <p>{formValues.name}</p>
         {formErrors?.name ? (
           <div className="event-form-error">{formErrors.name}</div>
         ) : null}
