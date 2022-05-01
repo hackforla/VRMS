@@ -1,0 +1,16 @@
+form.sign-up-form {
+  margin-top: 20px;
+
+  .text-field-container {
+    max-width: 100%;
+    width: 100%;
+  }
+  input {
+    width: 100%;
+    margin-top: 20px;
+  }
+  input[readonly] {
+    background-color: #e9ecef;
+    color: #495057;
+  }
+}

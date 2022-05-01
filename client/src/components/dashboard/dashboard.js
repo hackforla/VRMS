@@ -1,24 +1,20 @@
 import React from 'react';
-import './dashboard.scss';
-import { useSelector } from 'react-redux';
-import { Redirect } from 'react-router-dom';
 import Notifications from '../notifications/notifications';
 import DashboardNav from './dashboardNav';
+import { useUserContext } from "../auth";
+import './dashboard.scss';
 
 const Dashboard = () => {
-  const loggedIn = useSelector((state) => state.auth.loggedIn);
-  const userProfile = useSelector((state) => state.auth.userProfile);
+  const [, appUser] = useUserContext();
 
-  return loggedIn && userProfile ? (
+  return (
     <div className="dashboard" data-testid="dashboard">
       <h2 className="user-name" data-testid="dash-user-name">
-        Hi, {userProfile.firstName}
+        Hi, {appUser.firstName}
       </h2>
       <Notifications />
       <DashboardNav />
     </div>
-  ) : (
-    <Redirect to="/auth/expired-session" />
   );
 };
 
