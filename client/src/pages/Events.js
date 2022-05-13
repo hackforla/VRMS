@@ -23,7 +23,7 @@ const Events = (props) => {
         },
       });
       const resJson = await res.json();
-
+      
       setEvents(resJson);
     } catch (error) {
       alert(error);
@@ -50,7 +50,7 @@ const Events = (props) => {
                     <Link to={`/event/${event._id}`}>{event.name}</Link>
                   </p>
 
-                  <div className="event-info">
+                  {/* <div className="event-info">
                     <div className="event-info-container">
                       <div className="event-info-wrapper">
                         <ClockIcon />
@@ -65,7 +65,7 @@ const Events = (props) => {
                         </p>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </li>
