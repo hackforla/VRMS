@@ -73,12 +73,6 @@ const Events = (props) => {
           );
         })}
       </ul>
-      <div className="add-event-btn">
-        <Link to="/projects" className="add-event-link">
-          <PlusIcon />
-          <span className="add-event-link-text">ADD EVENT</span>
-        </Link>
-      </div>
     </div>
   ) : (
     <Redirect to="/login" />
