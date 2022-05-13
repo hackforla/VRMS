@@ -45,10 +45,8 @@ const Events = (props) => {
       <ul>
         {events
           .filter((event) => {
-            console.log(typeof event.name);
             return typeof event.name === 'string' && event.name.toLowerCase().match(eventSearchParam.toLowerCase());
           })
-          //.filter((event) => event.name.match(eventSearchParam))
           .map((event, index) => {
             const event_city = event.location && (event.location.city || 'TBD');
             const event_state =
@@ -63,23 +61,6 @@ const Events = (props) => {
                       <Link to={`/event/${event._id}`}>{event.name}</Link> (
                       {moment(event.date).format('ddd, MMM D @ h:mm a')})
                     </p>
-
-                    {/* <div className="event-info">
-                    <div className="event-info-container">
-                      <div className="event-info-wrapper">
-                        <ClockIcon />
-                        <p className="event-info-text">
-                          {moment(event.date).format('ddd, MMM D @ h:mm a')}
-                        </p>
-                      </div>
-                      <div className="event-info-wrapper">
-                        <LocationIcon />
-                        <p className="event-info-text">
-                          {event_city}, {event_state}
-                        </p>
-                      </div>
-                    </div>
-                  </div> */}
                   </div>
                 </div>
               </li>
