@@ -48,6 +48,7 @@ const Events = (props) => {
                   <p className="event-name">
                     {' '}
                     <Link to={`/event/${event._id}`}>{event.name}</Link>
+                    {" "}({moment(event.date).format('ddd, MMM D @ h:mm a')})
                   </p>
 
                   {/* <div className="event-info">
