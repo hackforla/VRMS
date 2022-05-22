@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import EditableField from './editableField';
 import EditMeetingTimes from './editMeetingTimes';
 import CreateNewEvent from './createNewEvent';
@@ -11,7 +12,6 @@ const EditProject = ({
   projectToEdit,
   userAccessLevel,
   updateProject,
-  goSelectProject,
   recurringEvents,
   createNewRecurringEvent,
   deleteRecurringEvent,
@@ -29,13 +29,15 @@ const EditProject = ({
 
   // Get project recurring events when component loads
   useEffect(() => {
-    setREvents(
-      recurringEvents
-        // eslint-disable-next-line no-underscore-dangle
-        .filter((e) => e?.project?._id === projectToEdit._id)
-        .map((item) => readableEvent(item))
-        .sort((a, b) => a.dayOfTheWeekNumber - b.dayOfTheWeekNumber)
-    );
+    if (recurringEvents) {
+      setREvents(
+        recurringEvents
+          // eslint-disable-next-line no-underscore-dangle
+          .filter((e) => e?.project?._id === projectToEdit._id)
+          .map((item) => readableEvent(item))
+          .sort((a, b) => a.dayOfTheWeekNumber - b.dayOfTheWeekNumber)
+      );
+    }
   }, [projectToEdit, recurringEvents, setREvents]);
 
   return (
@@ -59,9 +61,9 @@ const EditProject = ({
           setIsCreateNew={setIsCreateNew}
         />
       </div>
-      <button type="button" className="button-back" onClick={goSelectProject}>
+      <Link className="button-back" to={`/projects`}>
         Back to Select Project
-      </button>
+      </Link>
       <div className="project-list-heading">{`Project: ${projectToEdit.name}`}</div>
       <EditableField
         fieldData={projectToEdit.name}
@@ -164,7 +166,7 @@ const EditProject = ({
         <ul>
           {rEvents.map((event) => (
             // eslint-disable-next-line no-underscore-dangle
-            <li key={`${event._id}`}>
+            <li key={`${event.event_id}`}>
               <button type="button" onClick={() => setSelectedEvent(event)}>
                 <div>{event.name}</div>
                 <div className="event-list-details">{`${event.dayOfTheWeek}, ${event.startTime} - ${event.endTime}; ${event.eventType}`}</div>

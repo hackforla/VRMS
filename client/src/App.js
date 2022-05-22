@@ -20,7 +20,7 @@ import Events from './pages/Events';
 import ProjectLeaderDashboard from './pages/ProjectLeaderDashboard';
 import UserAdmin from './pages/UserAdmin';
 import ManageProjects from './pages/ManageProjects';
-import HealthCheck from "./pages/HealthCheck";
+import HealthCheck from './pages/HealthCheck';
 
 import './App.scss';
 
@@ -42,11 +42,16 @@ const routes = [
   { path: '/useradmin', name: 'useradmin', Component: UserAdmin },
   { path: '/projects', name: 'projects', Component: ManageProjects },
   {
+    path: '/project/:projectId',
+    name: 'project',
+    Component: ManageProjects,
+  },
+  {
     path: '/projectleader',
     name: 'pldashboard',
     Component: ProjectLeaderDashboard,
   },
-  { path: '/healthcheck', name: 'healthcheck', Component: HealthCheck }
+  { path: '/healthcheck', name: 'healthcheck', Component: HealthCheck },
 ];
 
 const App = () => {
