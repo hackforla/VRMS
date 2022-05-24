@@ -9,9 +9,6 @@
     -webkit-box-pack: justify;
         -ms-flex-pack: justify;
             justify-content: space-between;
-    padding: 6px 6px 6px 6px;
-    margin: 0px 6px 18px 6px;
-    border-bottom: 2px solid #FAFAFA;
 }
 
 .list-event-headers {
@@ -25,8 +22,8 @@
 }
 
 .event-name {
-    font-size: 28px;
-    margin: 6px 0px;
+    font-size: 15px;
+    margin: 2px 0px;
 }
 
 .event-info {

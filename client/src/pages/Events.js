@@ -13,6 +13,7 @@ import useAuth from '../hooks/useAuth';
 const Events = (props) => {
   const { auth } = useAuth();
   const [events, setEvents] = useState([]);
+  const [eventSearchParam, setEventSearchParam] = useState('');
   const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
   async function fetchData() {
@@ -36,48 +37,36 @@ const Events = (props) => {
 
   return auth && auth.user ? (
     <div className="events-list">
+      <p>Filter:</p>
+      <input
+        value={eventSearchParam}
+        onChange={(e) => setEventSearchParam(e.target.value)}
+      />
       <ul>
-        {events.map((event, index) => {
-          const event_city = event.location && (event.location.city || 'TBD');
-          const event_state = event.location && (event.location.state || 'TBD');
+        {events
+          .filter((event) => {
+            return typeof event.name === 'string' && event.name.toLowerCase().match(eventSearchParam.toLowerCase());
+          })
+          .map((event, index) => {
+            const event_city = event.location && (event.location.city || 'TBD');
+            const event_state =
+              event.location && (event.location.state || 'TBD');
 
-          return (
-            <li key={index}>
-              <div key={index} className="list-event-container">
-                <div className="list-event-headers">
-                  <p className="event-name">
-                    {' '}
-                    <Link to={`/event/${event._id}`}>{event.name}</Link>
-                  </p>
-
-                  <div className="event-info">
-                    <div className="event-info-container">
-                      <div className="event-info-wrapper">
-                        <ClockIcon />
-                        <p className="event-info-text">
-                          {moment(event.date).format('ddd, MMM D @ h:mm a')}
-                        </p>
-                      </div>
-                      <div className="event-info-wrapper">
-                        <LocationIcon />
-                        <p className="event-info-text">
-                          {event_city}, {event_state}
-                        </p>
-                      </div>
-                    </div>
+            return (
+              <li key={index}>
+                <div key={index} className="list-event-container">
+                  <div className="list-event-headers">
+                    <p className="event-name">
+                      {' '}
+                      <Link to={`/event/${event._id}`}>{event.name}</Link> (
+                      {moment(event.date).format('ddd, MMM D @ h:mm a')})
+                    </p>
                   </div>
                 </div>
-              </div>
-            </li>
-          );
-        })}
+              </li>
+            );
+          })}
       </ul>
-      <div className="add-event-btn">
-        <Link to="/projects" className="add-event-link">
-          <PlusIcon />
-          <span className="add-event-link-text">ADD EVENT</span>
-        </Link>
-      </div>
     </div>
   ) : (
     <Redirect to="/login" />
