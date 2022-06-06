@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import { checkUser, checkAuth } from '../../services/user.service';
-import {authLevelRedirect} from '../../utils/authUtils'
+import { authLevelRedirect } from '../../utils/authUtils';
 
 import useAuth from '../../hooks/useAuth';
 import '../../sass/AdminLogin.scss';
@@ -27,6 +27,7 @@ const Auth = () => {
   const validateEmail = () => {
     if (email.search(pattern) !== -1) {
       setIsDisabled(false);
+      console.log('email is valid');
       return true;
     } else {
       setIsDisabled(true);
@@ -48,7 +49,11 @@ const Auth = () => {
     if (isEmailValid) {
       const userData = await checkUser(email, LOG_IN);
       if (userData) {
-        if (userData.user.accessLevel !== ADMIN && (userData.user.accessLevel === USER && userData.user.managedProjects.length === 0)) {
+        if (
+          userData.user.accessLevel !== ADMIN &&
+          userData.user.accessLevel === USER &&
+          userData.user.managedProjects.length === 0
+        ) {
           showError(
             "You don't have the correct access level to view the dashboard"
           );
@@ -73,7 +78,10 @@ const Auth = () => {
 
   function handleInputChange(e) {
     const inputValue = e.currentTarget.value.toString();
+    console.log('inputValue:', inputValue);
+    validateEmail();
     if (!inputValue) {
+      console.log('inputValue inside the if statement: ', inputValue);
       setIsDisabled(true);
       showError('Please enter a valid email address');
     } else {
@@ -83,8 +91,27 @@ const Auth = () => {
     }
   }
 
-  // This allows users who are not admin, but are allowed to manage projects, to login 
-  let loginRedirect = ''; 
+  useEffect(() => {
+    const keyDownHandler = (e) => {
+      console.log('User pressed: ', e.key);
+
+      if (e.key === 'Enter') {
+        e.preventDefault();
+
+        // 👇️ call submit function here
+        handleLogin(e);
+      }
+    };
+
+    document.addEventListener('keydown', keyDownHandler);
+
+    return () => {
+      document.removeEventListener('keydown', keyDownHandler);
+    };
+  }, [isDisabled]);
+
+  // This allows users who are not admin, but are allowed to manage projects, to login
+  let loginRedirect = '';
   if (auth?.user) {
     loginRedirect = authLevelRedirect(auth.user);
   }
@@ -119,6 +146,7 @@ const Auth = () => {
 
         <div className="form-input-button">
           <button
+            type="submit"
             onClick={handleLogin}
             className="login-button"
             data-test="login-btn"
