@@ -90,17 +90,17 @@ const Auth = () => {
   }
 
   useEffect(() => {
-    const keyDownHandler = (e) => {
+    const enterKeyEventHandler = (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
         handleLogin(e);
       }
     };
 
-    document.addEventListener('keydown', keyDownHandler);
+    document.addEventListener('keydown', enterKeyEventHandler);
 
     return () => {
-      document.removeEventListener('keydown', keyDownHandler);
+      document.removeEventListener('keydown', enterKeyEventHandler);
     };
   }, [email]);
 
