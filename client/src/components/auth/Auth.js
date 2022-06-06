@@ -79,7 +79,6 @@ const Auth = () => {
     const inputValue = e.currentTarget.value.toString();
     validateEmail();
     if (!inputValue) {
-      console.log('inputValue inside the if statement: ', inputValue);
       setIsDisabled(true);
       showError('Please enter a valid email address');
     } else {
