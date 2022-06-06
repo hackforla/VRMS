@@ -27,7 +27,6 @@ const Auth = () => {
   const validateEmail = () => {
     if (email.search(pattern) !== -1) {
       setIsDisabled(false);
-      console.log('email is valid');
       return true;
     } else {
       setIsDisabled(true);
@@ -78,7 +77,6 @@ const Auth = () => {
 
   function handleInputChange(e) {
     const inputValue = e.currentTarget.value.toString();
-    console.log('inputValue:', inputValue);
     validateEmail();
     if (!inputValue) {
       console.log('inputValue inside the if statement: ', inputValue);
@@ -93,12 +91,8 @@ const Auth = () => {
 
   useEffect(() => {
     const keyDownHandler = (e) => {
-      console.log('User pressed: ', e.key);
-
       if (e.key === 'Enter') {
         e.preventDefault();
-
-        // 👇️ call submit function here
         handleLogin(e);
       }
     };
@@ -108,7 +102,7 @@ const Auth = () => {
     return () => {
       document.removeEventListener('keydown', keyDownHandler);
     };
-  }, [isDisabled]);
+  }, [email]);
 
   // This allows users who are not admin, but are allowed to manage projects, to login
   let loginRedirect = '';
