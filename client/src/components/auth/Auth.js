@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import { checkUser, checkAuth } from '../../services/user.service';
-import {authLevelRedirect} from '../../utils/authUtils'
+import { authLevelRedirect } from '../../utils/authUtils';
 
 import useAuth from '../../hooks/useAuth';
 import '../../sass/AdminLogin.scss';
@@ -48,7 +48,11 @@ const Auth = () => {
     if (isEmailValid) {
       const userData = await checkUser(email, LOG_IN);
       if (userData) {
-        if (userData.user.accessLevel !== ADMIN && (userData.user.accessLevel === USER && userData.user.managedProjects.length === 0)) {
+        if (
+          userData.user.accessLevel !== ADMIN &&
+          userData.user.accessLevel === USER &&
+          userData.user.managedProjects.length === 0
+        ) {
           showError(
             "You don't have the correct access level to view the dashboard"
           );
@@ -73,6 +77,7 @@ const Auth = () => {
 
   function handleInputChange(e) {
     const inputValue = e.currentTarget.value.toString();
+    validateEmail();
     if (!inputValue) {
       setIsDisabled(true);
       showError('Please enter a valid email address');
@@ -83,8 +88,23 @@ const Auth = () => {
     }
   }
 
-  // This allows users who are not admin, but are allowed to manage projects, to login 
-  let loginRedirect = ''; 
+  useEffect(() => {
+    const enterKeyEventHandler = (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleLogin(e);
+      }
+    };
+
+    document.addEventListener('keydown', enterKeyEventHandler);
+
+    return () => {
+      document.removeEventListener('keydown', enterKeyEventHandler);
+    };
+  }, [email]);
+
+  // This allows users who are not admin, but are allowed to manage projects, to login
+  let loginRedirect = '';
   if (auth?.user) {
     loginRedirect = authLevelRedirect(auth.user);
   }
@@ -119,6 +139,7 @@ const Auth = () => {
 
         <div className="form-input-button">
           <button
+            type="submit"
             onClick={handleLogin}
             className="login-button"
             data-test="login-btn"
