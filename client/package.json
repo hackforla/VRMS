@@ -15,13 +15,14 @@
     "local-storage": "^2.0.0",
     "mathjs": "^7.5.1",
     "minimist": "^1.2.6",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "moment-recur": "^1.0.7",
     "react": "^16.13.1",
     "react-datepicker": "^3.1.3",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "^3.4.1"
+    "react-scripts": "^3.4.1",
+    "validator": "^13.7.0"
   },
   "scripts": {
     "start": "dotenv -e .env -e ../backend/.env -- cross-var cross-env PORT=%CLIENT_PORT% react-scripts start",

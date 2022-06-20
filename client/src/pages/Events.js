@@ -2,90 +2,75 @@ import React, { useState, useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import moment from 'moment';
 
-import { ReactComponent as ClockIcon} from '../svg/Icon_Clock.svg';
-import { ReactComponent as LocationIcon} from '../svg/Icon_Location.svg';
+import { ReactComponent as ClockIcon } from '../svg/Icon_Clock.svg';
+import { ReactComponent as LocationIcon } from '../svg/Icon_Location.svg';
 import { ReactComponent as PlusIcon } from '../svg/Icon_Plus.svg';
-import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../utils/globalSettings";
+import { REACT_APP_CUSTOM_REQUEST_HEADER } from '../utils/globalSettings';
 
 import '../sass/Events.scss';
 import useAuth from '../hooks/useAuth';
 
 const Events = (props) => {
-    const { auth } = useAuth();
-    const [events, setEvents] = useState([]);
-    const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
+  const { auth } = useAuth();
+  const [events, setEvents] = useState([]);
+  const [eventSearchParam, setEventSearchParam] = useState('');
+  const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
-    async function fetchData() {
-        try {
-            const res = await fetch("/api/events", {
-                headers: {
-                    "x-customrequired-header": headerToSend
-                }
-            });
-            const resJson = await res.json();
+  async function fetchData() {
+    try {
+      const res = await fetch('/api/events', {
+        headers: {
+          'x-customrequired-header': headerToSend,
+        },
+      });
+      const resJson = await res.json();
 
-            setEvents(resJson);
-        } catch(error) {
-            alert(error);
-        }
+      setEvents(resJson);
+    } catch (error) {
+      alert(error);
     }
+  }
 
-    useEffect(() => {
-        fetchData();
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-    }, []);
-
-    return auth && auth.user ? (
+  return auth && auth.user ? (
     <div className="events-list">
-        <ul>
-        {events.map((event, index) => {
-            const event_city =
-            event.location && (event.location.city || 'TBD');
+      <p>Filter:</p>
+      <input
+        value={eventSearchParam}
+        onChange={(e) => setEventSearchParam(e.target.value)}
+      />
+      <ul>
+        {events
+          .filter((event) => {
+            return typeof event.name === 'string' && event.name.toLowerCase().match(eventSearchParam.toLowerCase());
+          })
+          .map((event, index) => {
+            const event_city = event.location && (event.location.city || 'TBD');
             const event_state =
-            event.location && (event.location.state || 'TBD');
+              event.location && (event.location.state || 'TBD');
 
             return (
-            <li key={index}>
+              <li key={index}>
                 <div key={index} className="list-event-container">
-                <div className="list-event-headers">
-                    <p className="event-name">{event.name}</p>
-
-                    <div className="event-info">
-                    <div className="event-info-container">
-                        <div className="event-info-wrapper">
-                        <ClockIcon />
-                        <p className="event-info-text">
-                            {moment(event.date).format('ddd, MMM D @ h:mm a')}
-                        </p>
-                        </div>
-                        <div className="event-info-wrapper">
-                        <LocationIcon />
-                        <p className="event-info-text">
-                            {event_city}, {event_state}
-                        </p>
-                        </div>
-                    </div>
-                    <div className="event-details-container">
-                        <Link to={`/event/${event._id}`}>Details</Link>
-                    </div>
-                    </div>
+                  <div className="list-event-headers">
+                    <p className="event-name">
+                      {' '}
+                      <Link to={`/event/${event._id}`}>{event.name}</Link> (
+                      {moment(event.date).format('ddd, MMM D @ h:mm a')})
+                    </p>
+                  </div>
                 </div>
-                </div>
-            </li>
+              </li>
             );
-        })}
-        </ul>
-        <div className="add-event-btn">
-        <Link to="/projects" className="add-event-link">
-            <PlusIcon />
-            <span className="add-event-link-text">ADD EVENT</span>
-        </Link>
-        </div>
+          })}
+      </ul>
     </div>
-    ) : (
-        <Redirect to='/login' />
-    );
+  ) : (
+    <Redirect to="/login" />
+  );
 };
 
 export default Events;
-    

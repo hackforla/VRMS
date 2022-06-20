@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useParams } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import SelectProject from '../components/manageProjects/selectProject';
 import EditProject from '../components/manageProjects/editProject';
@@ -15,9 +15,10 @@ const PAGES = Object.freeze({
 });
 
 const ManageProjects = () => {
+  const { projectId } = useParams();
   const { auth } = useAuth();
   const [projects, setProjects] = useState();
-  const [projectToEdit, setProjectToEdit] = useState([]);
+  const [projectToEdit, setProjectToEdit] = useState();
   const [recurringEvents, setRecurringEvents] = useState();
   const [componentToDisplay, setComponentToDisplay] = useState('');
   const [projectApiService] = useState(new ProjectApiService());
@@ -83,15 +84,16 @@ const ManageProjects = () => {
 
   useEffect(() => {
     // Refresh project to edit, if projects have been refreshed
-    if (projectToEdit && projects) {
+    if (projectId && projects) {
       setProjectToEdit(
         projects.find(
           // eslint-disable-next-line no-underscore-dangle
-          (proj) => proj._id === projectToEdit._id
+          (proj) => proj._id === projectId
         )
       );
+      setComponentToDisplay(PAGES.editProjectInfo);
     }
-  }, [projectToEdit, projects, setProjectToEdit]);
+  }, [projects, setProjectToEdit, projectId]);
 
   useEffect(() => {
     fetchProjects();
@@ -103,16 +105,6 @@ const ManageProjects = () => {
     return <Redirect to="/login" />;
   }
 
-  const projectSelectClickHandler = (project) => () => {
-    setProjectToEdit(project);
-    setComponentToDisplay(PAGES.editProjectInfo);
-  };
-
-  const goSelectProject = () => {
-    setProjectToEdit([]);
-    setComponentToDisplay(PAGES.selectProject);
-  };
-
   let displayedComponent;
 
   switch (componentToDisplay) {
@@ -120,7 +112,6 @@ const ManageProjects = () => {
       displayedComponent = (
         <EditProject
           projectToEdit={projectToEdit}
-          goSelectProject={goSelectProject}
           recurringEvents={recurringEvents}
           updateProject={updateProject}
           userAccessLevel={user.accessLevel}
@@ -133,7 +124,6 @@ const ManageProjects = () => {
     default:
       displayedComponent = (
         <SelectProject
-          projectSelectClickHandler={projectSelectClickHandler}
           accessLevel={user?.accessLevel}
           projects={projects}
           user={user}

@@ -1,12 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import '../../sass/ManageProjects.scss';
 
-const SelectProject = ({
-  projects,
-  accessLevel,
-  user,
-  projectSelectClickHandler,
-}) => {
+const SelectProject = ({ projects, accessLevel, user }) => {
   // If access level is 'admin', display all active projects.
   // If access level is 'user' display user managed projects.
   const managedProjects = projects
@@ -23,13 +19,9 @@ const SelectProject = ({
     .map((p) => (
       // eslint-disable-next-line no-underscore-dangle
       <li className="project-list-item" key={p._id}>
-        <button
-          className="project-list-button"
-          type="button"
-          onClick={projectSelectClickHandler(p)}
-        >
+        <Link className="project-list-button" to={`/project/${p._id}`}>
           {p.name ? p.name : '[unnamed project]'}
-        </button>
+        </Link>
       </li>
     ));
 

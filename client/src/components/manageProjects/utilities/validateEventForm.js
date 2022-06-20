@@ -1,3 +1,5 @@
+import validator from 'validator'
+
 const validateEventForm = (vals) => {
   let newErrors = {};
   Object.keys(vals).forEach((key) => {
@@ -17,6 +19,12 @@ const validateEventForm = (vals) => {
             videoConferenceLink: 'Event link is required',
           };
         }
+        if (!validateLink(vals[key])) {
+          newErrors = {
+            ...newErrors,
+            videoConferenceLink: 'Invalid link'
+          }
+        }
         break;
 
       default:
@@ -27,3 +35,7 @@ const validateEventForm = (vals) => {
 };
 
 export default validateEventForm;
+
+function validateLink(str) {
+  return validator.isURL(str);
+}
