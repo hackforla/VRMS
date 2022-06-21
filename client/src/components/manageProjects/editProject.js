@@ -114,7 +114,6 @@ const EditProject = ({
         updateProject={updateProject}
         fieldTitle="Google Drive URL:"
         accessLevel={userAccessLevel}
-        canEdit={['admin', 'user']}
       />
       <EditableField
         fieldData={projectToEdit.googleDriveId}
@@ -136,7 +135,6 @@ const EditProject = ({
         updateProject={updateProject}
         fieldTitle="Video Conference Link:"
         accessLevel={userAccessLevel}
-        canEdit={['admin', 'user']}
       />
       <EditableField
         fieldData={projectToEdit.lookingDescription}
@@ -151,7 +149,6 @@ const EditProject = ({
         updateProject={updateProject}
         fieldTitle="Partners (comma separated):"
         accessLevel={userAccessLevel}
-        canEdit={['admin', 'user']}
       />
       <EditableField
         fieldData={recrutingDataFormatted}
