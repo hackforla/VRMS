@@ -70,23 +70,6 @@ const Event = (props) => {
                     )
                 }
 
-                <div className="set-checkin-button">    
-                    {event && isCheckInReady === false ? 
-                        (
-                            <Link 
-                                to={`/events/${event._id}`}
-                                onClick={e => setCheckInReady(e)}>
-                                    OPEN
-                            </Link>
-                        ) : (
-                            <Link 
-                                to={`/events/${event._id}`}
-                                onClick={e => setCheckInReady(e)}>
-                                    CLOSE
-                            </Link>
-                        )
-                    }
-                </div>
                 <div>
                     <p><Link to="/events"><strong>Back to Events</strong></Link></p>
                 </div>
