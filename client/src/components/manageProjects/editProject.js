@@ -62,7 +62,7 @@ const EditProject = ({
         />
       </div>
       <Link className="button-back" to={`/projects`}>
-        Back to Select Project
+        All Projects
       </Link>
       <div className="project-list-heading">{`Project: ${projectToEdit.name}`}</div>
       <EditableField

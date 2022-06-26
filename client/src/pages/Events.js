@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import moment from 'moment';
-
-import { ReactComponent as ClockIcon } from '../svg/Icon_Clock.svg';
-import { ReactComponent as LocationIcon } from '../svg/Icon_Location.svg';
-import { ReactComponent as PlusIcon } from '../svg/Icon_Plus.svg';
 import { REACT_APP_CUSTOM_REQUEST_HEADER } from '../utils/globalSettings';
 
 import '../sass/Events.scss';
@@ -39,13 +35,17 @@ const Events = (props) => {
     <div className="events-list">
       <p>Filter:</p>
       <input
+        style={{ marginBottom: '10px' }}
         value={eventSearchParam}
         onChange={(e) => setEventSearchParam(e.target.value)}
       />
       <ul>
         {events
           .filter((event) => {
-            return typeof event.name === 'string' && event.name.toLowerCase().match(eventSearchParam.toLowerCase());
+            return (
+              typeof event.name === 'string' &&
+              event.name.toLowerCase().match(eventSearchParam.toLowerCase())
+            );
           })
           .map((event, index) => {
             const event_city = event.location && (event.location.city || 'TBD');
