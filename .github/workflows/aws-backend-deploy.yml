@@ -2,10 +2,11 @@ name: Backend Build and Deploy
 on:
   workflow_dispatch:
     inputs:
-      env:
-        description: 'AWS Env'     
-        required: true
-        default: 'dev'
+        type: choice
+        description: 'AWS Incubator Env'
+        options: 
+        - dev
+        - prod
       ref:
         description: 'Branch, Tag, or SHA'
         required: true
