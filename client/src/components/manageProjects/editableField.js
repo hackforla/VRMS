@@ -57,17 +57,7 @@ const EditableField = ({
           >
             [edit]
           </button>
-        ) : (
-          <a
-            className="project-edit-button"
-            style={{ color: 'gray' }}
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://github.com/hackforla/VRMS/blob/development/project-edit-info.md"
-          >
-            [Click here to find out how to change this field]
-          </a>
-        )}
+        ) : null}
       </div>
 
       {editable ? (
