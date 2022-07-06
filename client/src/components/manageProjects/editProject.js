@@ -71,6 +71,7 @@ const EditProject = ({
         updateProject={updateProject}
         fieldTitle="Name:"
         accessLevel={userAccessLevel}
+        canEdit={['admin']}
       />
       <EditableField
         fieldData={projectToEdit.description}
@@ -79,6 +80,7 @@ const EditProject = ({
         fieldType="textarea"
         fieldTitle="Description:"
         accessLevel={userAccessLevel}
+        canEdit={['admin']}
       />
       <EditableField
         fieldData={projectToEdit.location}
@@ -86,6 +88,7 @@ const EditProject = ({
         updateProject={updateProject}
         fieldTitle="Location:"
         accessLevel={userAccessLevel}
+        canEdit={['admin']}
       />
       <EditableField
         fieldData={projectToEdit.githubIdentifier}
@@ -93,6 +96,7 @@ const EditProject = ({
         updateProject={updateProject}
         fieldTitle="GitHub Identifier:"
         accessLevel={userAccessLevel}
+        canEdit={['admin']}
       />
       <EditableField
         fieldData={projectToEdit.githubUrl}
@@ -100,6 +104,7 @@ const EditProject = ({
         updateProject={updateProject}
         fieldTitle="GitHib URL:"
         accessLevel={userAccessLevel}
+        canEdit={['admin']}
       />
       <EditableField
         fieldData={projectToEdit.slackUrl}
@@ -107,6 +112,7 @@ const EditProject = ({
         updateProject={updateProject}
         fieldTitle="Slack URL:"
         accessLevel={userAccessLevel}
+        canEdit={['admin']}
       />
       <EditableField
         fieldData={projectToEdit.googleDriveUrl}
@@ -114,7 +120,7 @@ const EditProject = ({
         updateProject={updateProject}
         fieldTitle="Google Drive URL:"
         accessLevel={userAccessLevel}
-        canEdit={['admin', 'user']}
+        canEdit={['admin']}
       />
       <EditableField
         fieldData={projectToEdit.googleDriveId}
@@ -122,6 +128,7 @@ const EditProject = ({
         updateProject={updateProject}
         fieldTitle="Google Drive ID:"
         accessLevel={userAccessLevel}
+        canEdit={['admin']}
       />
       <EditableField
         fieldData={projectToEdit.hflaWebsiteUrl}
@@ -129,6 +136,7 @@ const EditProject = ({
         updateProject={updateProject}
         fieldTitle="HfLA Website URL:"
         accessLevel={userAccessLevel}
+        canEdit={['admin']}
       />
       <EditableField
         fieldData={projectToEdit.videoConferenceLink}
@@ -136,7 +144,7 @@ const EditProject = ({
         updateProject={updateProject}
         fieldTitle="Video Conference Link:"
         accessLevel={userAccessLevel}
-        canEdit={['admin', 'user']}
+        canEdit={['admin']}
       />
       <EditableField
         fieldData={projectToEdit.lookingDescription}
@@ -144,6 +152,7 @@ const EditProject = ({
         updateProject={updateProject}
         fieldTitle="Looking For Description:"
         accessLevel={userAccessLevel}
+        canEdit={['admin']}
       />
       <EditableField
         fieldData={partnerDataFormatted}
@@ -151,7 +160,7 @@ const EditProject = ({
         updateProject={updateProject}
         fieldTitle="Partners (comma separated):"
         accessLevel={userAccessLevel}
-        canEdit={['admin', 'user']}
+        canEdit={['admin']}
       />
       <EditableField
         fieldData={recrutingDataFormatted}
@@ -159,6 +168,7 @@ const EditProject = ({
         updateProject={updateProject}
         fieldTitle="Recruiting Categories (comma separated):"
         accessLevel={userAccessLevel}
+        canEdit={['admin']}
       />
       <div className="event-list">
         <h3>Recurring Events</h3>
