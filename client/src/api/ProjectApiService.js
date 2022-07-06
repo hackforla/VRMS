@@ -44,7 +44,9 @@ class ProjectApiService {
     // so this adds it back to db as an arrray.
     if (
       fieldValue &&
-      (fieldName === 'partners' || fieldName === 'recruitingCategories')
+      (fieldName === 'partners' ||
+        fieldName === 'recruitingCategories' ||
+        fieldName === 'managedByUsers')
     ) {
       updateValue = fieldValue
         .split(',')

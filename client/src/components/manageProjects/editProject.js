@@ -20,6 +20,7 @@ const EditProject = ({
   // Add commas to arrays for display
   const partnerDataFormatted = projectToEdit.partners.join(', ');
   const recrutingDataFormatted = projectToEdit.recruitingCategories.join(', ');
+  const managedByUsersDataFormatted = projectToEdit.managedByUsers.join(', ');
   const [rEvents, setREvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState();
   const [isCreateNew, setIsCreateNew] = useState();
@@ -146,12 +147,12 @@ const EditProject = ({
         accessLevel={userAccessLevel}
       />
       <EditableField
-        fieldData={projectToEdit.managedByUsers}
+        fieldData={managedByUsersDataFormatted}
         fieldName="managedByUsers"
         updateProject={updateProject}
         fieldTitle="Managed by Users (comma separated):"
         accessLevel={userAccessLevel}
-        canEdit={['admin', 'user']}
+        canEdit={['admin']}
       />
       <EditableField
         fieldData={partnerDataFormatted}
