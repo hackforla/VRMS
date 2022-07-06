@@ -146,6 +146,14 @@ const EditProject = ({
         accessLevel={userAccessLevel}
       />
       <EditableField
+        fieldData={projectToEdit.managedByUsers}
+        fieldName="managedByUsers"
+        updateProject={updateProject}
+        fieldTitle="Managed by Users (comma separated):"
+        accessLevel={userAccessLevel}
+        canEdit={['admin', 'user']}
+      />
+      <EditableField
         fieldData={partnerDataFormatted}
         fieldName="partners"
         updateProject={updateProject}
