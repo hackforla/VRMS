@@ -70,6 +70,7 @@ const Event = (props) => {
                   display: 'block',
                   margin: '0 auto 10px',
                   textAlign: 'center',
+                  padding: '10px 0',
                 }}
               >
                 Edit Event
