@@ -64,6 +64,9 @@ const EditProject = ({
       <Link className="button-back" to={`/projects`}>
         Back to Select Project
       </Link>
+      <div className="project-warning-text">
+        *The data here is only test data and is not accurate*
+      </div>
       <div className="project-list-heading">{`Project: ${projectToEdit.name}`}</div>
       <EditableField
         fieldData={projectToEdit.name}

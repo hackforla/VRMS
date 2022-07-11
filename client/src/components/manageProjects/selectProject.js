@@ -44,9 +44,6 @@ const SelectProject = ({ projects, accessLevel, user }) => {
         </Link>
       </div>
       <div className="project-sub-heading">Select project to edit</div>
-      <div className="project-warning-text">
-        *The data here is only test data and is not accurate*
-      </div>
       <ul className="project-list">{managedProjects}</ul>
     </div>
   );
