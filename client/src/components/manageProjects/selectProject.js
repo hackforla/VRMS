@@ -29,19 +29,21 @@ const SelectProject = ({ projects, accessLevel, user }) => {
     <div className="container--ManageProjects">
       <h3>Manage Projects</h3>
       <div className="project-sub-heading" style={{ margin: '0 auto' }}>
-        <Link to="useradmin">
-          {' '}
-          <button
-            type="button"
-            className="button"
-            style={{
-              fontSize: 'small',
-              width: 'auto',
-            }}
-          >
-            Add a Project
-          </button>
-        </Link>
+        {accessLevel === 'admin' ? (
+          <Link to="useradmin">
+            {' '}
+            <button
+              type="button"
+              className="button"
+              style={{
+                fontSize: 'small',
+                width: 'auto',
+              }}
+            >
+              Add a Project
+            </button>
+          </Link>
+        ) : null}
       </div>
       <div className="project-sub-heading">Select project to edit</div>
       <ul className="project-list">{managedProjects}</ul>
