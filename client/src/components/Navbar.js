@@ -67,7 +67,7 @@ const Navbar = (props) => {
               <p className="nav-link-text">ADMIN</p>
             </Link>
           </div>}
-        {page === 'projects' ?
+        {window.location.href.split('/')[3] === 'projects' ?
           <p className="nav-link-text nav-link-active" >PROJECTS</p>
           :
           <div className='nav-link-container'>
