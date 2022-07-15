@@ -26,13 +26,8 @@ const SelectProject = ({ projects, accessLevel, user }) => {
     ));
 
   return (
-    <div className="container--ManageProjects">
-      {/* 
-      Trying to create merge conflicts by commenting this out
-      
-      <h3>Manage Projects</h3>
-      <div className="project-sub-heading">Select project to edit</div>
-      <ul className="project-list">{managedProjects}</ul> */}
+    <div>
+      {/* trying to create merge conflicts */}
     </div>
   );
 };
