@@ -62,9 +62,47 @@ const EditProject = ({
         />
       </div>
       <Link className="button-back" to={`/projects`}>
-        Back to Select Project
+        {"< Back"}
       </Link>
-      <div className="project-list-heading">{`Project: ${projectToEdit.name}`}</div>
+      <div className="project-list-heading project-page-title">{`${projectToEdit.name}`}</div>
+      <h3 className='project-page-title'>Project events</h3>
+      <div className="event-list">
+        {rEvents?.length > 0 ? (
+
+        <div>
+        <h3>Recurring Events</h3>
+        <h2 className="event-alert">{eventAlert}</h2>
+        <ul>
+          {rEvents.map((event) => (
+            // eslint-disable-next-line no-underscore-dangle
+            <li key={`${event.event_id}`}>
+              <button type="button" onClick={() => setSelectedEvent(event)}>
+                <div>{event.name}</div>
+                <div className="event-list-details">{`${event.dayOfTheWeek}, ${event.startTime} - ${event.endTime}; ${event.eventType}`}</div>
+                <div className="event-list-description">{`${event.description}`}</div>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+        
+        ) : (
+      <div>There are currently no events for this project</div>)}
+
+        
+      </div>
+      <div className="display-events">
+            <button
+              type="button"
+              className="create-form-button-updated"
+              onClick={() => setIsCreateNew(true)}
+            >
+              + Create New Event
+            </button>
+          </div>
+      <i className='project-page-warning'>IMPORTANT: The data below is only test data and is not accurate.</i>
+      <h3 className='project-page-title'>Project detail</h3>
+      
       <EditableField
         fieldData={projectToEdit.name}
         fieldName="name"
@@ -157,31 +195,7 @@ const EditProject = ({
         fieldTitle="Recruiting Categories (comma separated):"
         accessLevel={userAccessLevel}
       />
-      <div className="event-list">
-        <h3>Recurring Events</h3>
-        <h2 className="event-alert">{eventAlert}</h2>
-        <ul>
-          {rEvents.map((event) => (
-            // eslint-disable-next-line no-underscore-dangle
-            <li key={`${event.event_id}`}>
-              <button type="button" onClick={() => setSelectedEvent(event)}>
-                <div>{event.name}</div>
-                <div className="event-list-details">{`${event.dayOfTheWeek}, ${event.startTime} - ${event.endTime}; ${event.eventType}`}</div>
-                <div className="event-list-description">{`${event.description}`}</div>
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className="display-events">
-        <button
-          type="button"
-          className="create-form-button"
-          onClick={() => setIsCreateNew(true)}
-        >
-          Create New Event
-        </button>
-      </div>
+      
     </div>
   );
 };
