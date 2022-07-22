@@ -44,7 +44,8 @@ module.exports = (cron, fetch) => {
                     headers: {
                       "Content-Type": "application/json",
                       "x-customrequired-header": headerToSend
-                    }
+                    },
+                    body: JSON.stringify({ checkInReady: true })
                 })
                     .then(res => {
                         const response = res;
