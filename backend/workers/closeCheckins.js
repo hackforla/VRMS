@@ -50,7 +50,8 @@ module.exports = (cron, fetch) => {
                     headers: {
                       "Content-Type": "application/json",
                       "x-customrequired-header": headerToSend
-                    }
+                    },
+                    body: JSON.stringify({ checkInReady: false })
                 })
                     .catch(err => {
                         console.log(err);
