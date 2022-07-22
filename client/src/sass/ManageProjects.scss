@@ -182,9 +182,13 @@ div.editable-field {
   opacity: 1;
   &.active {
     position: absolute;
-    left: 18px;
+    height: 100%;
+    width: 100%;
+    padding-left: 8px;
+    padding-right: 50px;
     top: 24px;
     display: block;
+    background-color: rgba(255, 255, 255, 0.763);
     z-index: 3;
   }
 }
@@ -218,6 +222,7 @@ div.editable-field {
   border: solid black 2px;
   display: flex;
   flex-direction: column;
+  background-color: white;
 }
 
 .event-form-box .event-form-title {
@@ -281,6 +286,7 @@ textarea {
 }
 
 .button-back {
+  text-align: center;
   display: block;
   margin: 10px 0;
 }
