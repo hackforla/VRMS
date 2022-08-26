@@ -1,3 +1,4 @@
+const { ProjectsService } = require('./projects.service');
 const { LocationService } = require('./location.service');
 const { ModificationLogService } = require('./modificationLog.service');
 const { UserProfileService } = require('./userProfile.service');
@@ -9,5 +10,6 @@ module.exports = {
   ModificationLogService,
   UserProfileService,
   TimeZoneService,
-  JobRoleService
+  JobRoleService,
+  ProjectsService,
 };

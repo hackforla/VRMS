@@ -48,11 +48,13 @@ const employeesRouter = require('./employees');
 const usersRouter = require('./users');
 const locationsRouter = require('./routers/locations.router');
 const healthCheckRouter = require('./routers/healthCheck.router');
+const projectsRouter = require('./routers/projects.router');
 
 app.use('/api/employees', employeesRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/locations', locationsRouter);
 app.use('/api/healthcheck', healthCheckRouter);
+app.use('/api/projects', projectsRouter);
 
 // 404 for all non-defined endpoints.
 app.get('*', (req, res, next) => {
