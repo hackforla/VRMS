@@ -56,11 +56,13 @@ const Events = (props) => {
               <li key={index}>
                 <div key={index} className="list-event-container">
                   <div className="list-event-headers">
-                    <p className="event-name">
-                      {' '}
-                      <Link to={`/event/${event._id}`}>{event.name}</Link> (
-                      {moment(event.date).format('ddd, MMM D @ h:mm a')})
-                    </p>
+                    <Link to={`/event/${event._id}`}>
+                      <p className="event-name">
+                        {' '}
+                        {event.name}
+                        ({moment(event.date).format('ddd, MMM D @ h:mm a')})
+                      </p>
+                    </Link>
                   </div>
                 </div>
               </li>

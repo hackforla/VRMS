@@ -24,6 +24,12 @@
 .event-name {
     font-size: 15px;
     margin: 2px 0px;
+    border: 2px black solid;
+    border-radius: 5px;
+    padding: 0.3em;
+    &:hover {
+      background-color:lightgrey;
+  }
 }
 
 .event-info {
