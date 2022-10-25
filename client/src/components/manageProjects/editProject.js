@@ -125,14 +125,14 @@ const EditProject = ({
         accessLevel={userAccessLevel}
         canEdit={['admin']}
       />
-      <EditableField
+      {/* <EditableField   
         fieldData={projectToEdit.googleDriveId}
         fieldName="googleDriveId"
         updateProject={updateProject}
         fieldTitle="Google Drive ID:"
         accessLevel={userAccessLevel}
         canEdit={['admin']}
-      />
+      /> */}
       <EditableField
         fieldData={projectToEdit.hflaWebsiteUrl}
         fieldName="hflaWebsiteUrl"
@@ -141,22 +141,22 @@ const EditProject = ({
         accessLevel={userAccessLevel}
         canEdit={['admin']}
       />
-      <EditableField
+      {/* <EditableField
         fieldData={projectToEdit.videoConferenceLink}
         fieldName="videoConferenceLink"
         updateProject={updateProject}
         fieldTitle="Video Conference Link:"
         accessLevel={userAccessLevel}
         canEdit={['admin']}
-      />
-      <EditableField
+      /> */}
+      {/* <EditableField
         fieldData={projectToEdit.lookingDescription}
         fieldName="lookingDescription"
         updateProject={updateProject}
         fieldTitle="Looking For Description:"
         accessLevel={userAccessLevel}
         canEdit={['admin']}
-      />
+      /> */}
       <EditableField
         fieldData={partnerDataFormatted}
         fieldName="partners"
@@ -165,14 +165,14 @@ const EditProject = ({
         accessLevel={userAccessLevel}
         canEdit={['admin']}
       />
-      <EditableField
+      {/* <EditableField
         fieldData={recrutingDataFormatted}
         fieldName="recruitingCategories"
         updateProject={updateProject}
         fieldTitle="Recruiting Categories (comma separated):"
         accessLevel={userAccessLevel}
         canEdit={['admin']}
-      />
+      /> */}
       <div className="event-list">
         <h3>Recurring Events</h3>
         <h2 className="event-alert">{eventAlert}</h2>
