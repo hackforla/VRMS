@@ -32,8 +32,14 @@
   cursor: pointer;
 }
 
-.project-list-item {
+.project-list-item li {
   margin-bottom: 5px;
+  border: 2px black solid;
+  border-radius: 5px;
+  padding: 0.3em;
+  &:hover {
+    background-color: lightgrey;
+  }
 }
 
 .project-list-button {
