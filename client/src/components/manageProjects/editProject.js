@@ -5,6 +5,7 @@ import EditMeetingTimes from './editMeetingTimes';
 import CreateNewEvent from './createNewEvent';
 import readableEvent from './utilities/readableEvent';
 import '../../sass/ManageProjects.scss';
+import { AiOutlineEdit } from 'react-icons/ai';
 
 // Need to hold user state to check which type of user they are and conditionally render editing fields in this component
 // for user level block access to all except for the ones checked
@@ -181,9 +182,16 @@ const EditProject = ({
             // eslint-disable-next-line no-underscore-dangle
             <li key={`${event.event_id}`}>
               <button type="button" onClick={() => setSelectedEvent(event)}>
-                <div>{event.name}</div>
-                <div className="event-list-details">{`${event.dayOfTheWeek}, ${event.startTime} - ${event.endTime}; ${event.eventType}`}</div>
-                <div className="event-list-description">{`${event.description}`}</div>
+                <div className="recurring-event-btn">
+                  <section>
+                    <div>{event.name}</div>
+                    <div className="event-list-details">{`${event.dayOfTheWeek}, ${event.startTime} - ${event.endTime}; ${event.eventType}`}</div>
+                    <div className="event-list-description">{`${event.description}`}</div>
+                  </section>
+                  <section>
+                    <AiOutlineEdit />
+                  </section>
+                </div>
               </button>
             </li>
           ))}

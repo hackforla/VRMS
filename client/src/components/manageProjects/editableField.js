@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { AiOutlineEdit } from 'react-icons/ai';
 import '../../sass/ManageProjects.scss';
 
 const EditableField = ({
@@ -45,20 +46,18 @@ const EditableField = ({
   return (
     // this button will be disabled if user !admin
     <div className="editable-field-div">
-      <div className="project-edit-title">
-        {fieldTitle}
-        {notRestricted ? (
-          <button
-            type="button"
-            className="project-edit-button"
-            onClick={() => {
-              setEditable(true);
-            }}
-          >
-            [edit]
-          </button>
-        ) : null}
-      </div>
+      <div className="project-edit-title">{fieldTitle}</div>
+      {notRestricted ? (
+        <button
+          type="button"
+          className="project-edit-button"
+          onClick={() => {
+            setEditable(true);
+          }}
+        >
+          <AiOutlineEdit />
+        </button>
+      ) : null}
 
       {editable ? (
         <>

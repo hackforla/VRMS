@@ -61,6 +61,13 @@
   margin-bottom: 1rem;
 }
 
+.recurring-event-btn {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-right: 10%;
+}
+
 div.editable-field {
   font-weight: normal;
   font-size: 18px;
