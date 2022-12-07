@@ -46,18 +46,20 @@ const EditableField = ({
   return (
     // this button will be disabled if user !admin
     <div className="editable-field-div">
-      <div className="project-edit-title">{fieldTitle}</div>
-      {notRestricted ? (
-        <button
-          type="button"
-          className="project-edit-button"
-          onClick={() => {
-            setEditable(true);
-          }}
-        >
-          <AiOutlineEdit />
-        </button>
-      ) : null}
+      <div className="editable-field-div2">
+        <div className="project-edit-title">{fieldTitle}</div>
+        {notRestricted ? (
+          <button
+            type="button"
+            className="project-edit-button"
+            onClick={() => {
+              setEditable(true);
+            }}
+          >
+            <AiOutlineEdit />
+          </button>
+        ) : null}
+      </div>
 
       {editable ? (
         <>
