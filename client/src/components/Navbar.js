@@ -43,27 +43,11 @@ const Navbar = (props) => {
     )
     const isAuth = () => (
       <>
-        {page === 'home' ?
-          <p className="nav-link-text nav-link-active" >HOME</p>
-          :
-          <div className='nav-link-container'>
-            <Link to="/admin" onClick={e => setPage('home')} className="nav-link-text">
-              <p className="nav-link-text">HOME</p>
-            </Link>
-          </div>}
-        {page === 'events' ?
-          <p className="nav-link-text nav-link-active" >EVENTS</p>
-          :
-          <div className='nav-link-container'>
-            <Link to="/events" onClick={e => setPage('events')}>
-              <p className="nav-link-text">EVENTS</p>
-            </Link>
-          </div>}
         {page === 'useradmin' ?
-          <p className="nav-link-text nav-link-active" >ADMIN</p>
+          <p className="nav-link-text nav-link-active" >USER MANAGEMENT</p>
           :
           <div className='nav-link-container'>
-            <Link to="/useradmin" onClick={e => setPage('useradmin')}>
+            <Link to="/useradmin" onClick={e => setPage('usermanagement')}>
               <p className="nav-link-text">ADMIN</p>
             </Link>
           </div>}
