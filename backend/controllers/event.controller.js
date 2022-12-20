@@ -11,7 +11,6 @@ EventController.event_list = async function (req, res) {
   } catch (err) {
     return res.sendStatus(400);
   }
-
 };
 
 EventController.event_by_id = async function (req, res) {
@@ -45,7 +44,6 @@ EventController.destroy = async function (req, res) {
   } catch (err) {
     return res.sendStatus(400);
   }
-  
 };
 
 EventController.update = async function (req, res) {
@@ -58,6 +56,5 @@ EventController.update = async function (req, res) {
     return res.sendStatus(400);
   }
 };
-
 
 module.exports = EventController;
