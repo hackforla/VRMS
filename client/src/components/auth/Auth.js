@@ -101,7 +101,7 @@ const Auth = () => {
     return () => {
       document.removeEventListener('keydown', enterKeyEventHandler);
     };
-  }, [email]);
+  }, [email, handleLogin]);
 
   // This allows users who are not admin, but are allowed to manage projects, to login
   let loginRedirect = '';

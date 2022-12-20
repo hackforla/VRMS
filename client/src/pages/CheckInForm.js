@@ -444,7 +444,7 @@ const CheckInForm = (props) => {
 
   useEffect(() => {
     fetchQuestions();
-  }, []);
+  }, [fetchQuestions]);
 
   return (
     <div className="flex-container">
