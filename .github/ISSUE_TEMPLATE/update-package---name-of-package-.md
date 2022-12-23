@@ -2,7 +2,7 @@
 name: 'Update package: [name of package]'
 about: Describe this issue template's purpose here.
 title: 'Update package: name of package'
-labels: 'housekeeping, MVP v0.4 - dev, role: Front End, size: 1pt'
+labels: 'housekeeping, role: Front End, size: 1pt'
 assignees: ''
 
 ---
