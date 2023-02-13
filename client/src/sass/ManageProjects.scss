@@ -153,6 +153,15 @@ div.editable-field {
     background-color: #f2f2f2;
   }
 
+  .button-container {
+    text-align: right;
+    background-color: #000;
+    padding: 0 5px;
+  }
+
+  .button-container button {
+    background-color: #0000ff;
+  }
   button {
     font-family: 'aliseoregular', -apple-system, BlinkMacSystemFont, 'Segoe UI',
       'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
