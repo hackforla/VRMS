@@ -1,3 +1,5 @@
+@import './variables.scss';
+
 .check-in-container {
     display: flex;
     flex-direction: column;
@@ -64,30 +66,29 @@ label {
 
 input[type=text], input[type=email] {
     -webkit-appearance: none;
-    max-width: 310px;
-    width: 310px;
+    max-width: 300px;
+    width: 300px;
     height: 36px;
     outline: none;
     background-color: inherit;
     border-top: none;
     border-right: none;
-    border-bottom: 3px solid black;
-    border-left: none;
+    border: 1px solid black;
     border-radius: 2px;
     font-size: 24px;
     padding: 0 4px;
     margin: 4px 0px;
-    color: rgb(250, 17, 79);
+    color: $text;
     font-weight: bold;
     transition: all .3s ease-in-out;
 
     &::placeholder {
-        color: rgb(250, 17, 79);
+        color: $text;
         font-weight: 200;
     }
 
     &:focus {
-        border-bottom: 3px solid rgb(250, 17, 79);
+        border: 2px solid $color-primary;
     }
 }
 
@@ -135,7 +136,7 @@ input[type=radio] {
     margin-top: 20px;
     margin-bottom: 36px;
     button {
-        border: 3px solid black;
+        border: 3px solid $color-primary;
         border-radius: 4px;
         font-weight: bold;
         font-size: 18px;
@@ -143,7 +144,7 @@ input[type=radio] {
         transition: all .3s ease-in-out;
 
         &:hover {
-            background-color: black;
+            background-color: $color-primary;
             color: white;
         }
         &:disabled {

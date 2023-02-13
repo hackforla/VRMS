@@ -1,3 +1,5 @@
+@import './variables.scss';
+
 .container--ManageProjects {
   display: flex;
   flex-direction: column;
@@ -10,6 +12,7 @@
 .bg-overlay {
   opacity: 0;
   display: none;
+
   &.active {
     position: absolute;
     display: flex;
@@ -37,6 +40,7 @@
   border: 2px black solid;
   border-radius: 5px;
   padding: 0.3em;
+
   &:hover {
     background-color: lightgrey;
   }
@@ -59,6 +63,41 @@
 
 .project-sub-heading {
   margin: 20px 0 20px 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  border-bottom: 2px $color-primary solid;
+  // border-color: #fa114f;
+}
+
+.project-sub-heading>button {
+  width: 100%;
+  flex-grow: 1;
+  border-radius: 5px 5px 0 0;
+  font-weight: 600; //$font-semi-bold
+  font-size: 16px;
+  
+
+  background-color: transparent;
+  color: #000000;
+
+  &.active {
+    background-color: $color-primary;
+    color: white;
+  }
+
+}
+
+.active {
+  border-color: #fa114f;
+  color: #000000;
+}
+
+.search-field {
+  width: 100%;
+  padding: 10px 10px 10px 10px;
+  margin-bottom: 20px;
+  font-size: 14px;
 }
 
 .project-warning-text {
@@ -125,6 +164,7 @@ div.editable-field {
 
 .event-list {
   margin-bottom: 40px;
+
   h3 {
     width: 190px;
     padding: 7px 18px 10px;
@@ -153,15 +193,6 @@ div.editable-field {
     background-color: #f2f2f2;
   }
 
-  .button-container {
-    text-align: right;
-    background-color: #000;
-    padding: 0 5px;
-  }
-
-  .button-container button {
-    background-color: #0000ff;
-  }
   button {
     font-family: 'aliseoregular', -apple-system, BlinkMacSystemFont, 'Segoe UI',
       'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
@@ -195,6 +226,7 @@ div.editable-field {
   display: none;
   background-color: white;
   opacity: 1;
+
   &.active {
     position: absolute;
     height: 100%;
@@ -253,6 +285,7 @@ div.editable-field {
 .event-form-label {
   display: block;
   margin-top: 4px;
+
   select {
     display: block;
   }
