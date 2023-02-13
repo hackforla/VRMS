@@ -49,10 +49,10 @@ const EditableMeeting = ({
       formValues={formValues}
       formErrors={formErrors}
     >
-      <div>
+      <div className="button-container-vertical">
         <button
           type="button"
-          className="create-form-button"
+          className="filled-button btn wide"
           onClick={handleEventUpdate(
             eventId,
             formValues,
@@ -60,21 +60,21 @@ const EditableMeeting = ({
             eventDuration
           )}
         >
-          UPDATE
+          Apply
         </button>
         <button
           type="button"
-          className="create-form-button"
+          className="border-button btn wide"
           onClick={handleResetEvent(eventId)}
         >
-          RESET
+          Reset
         </button>
         <button
           type="button"
-          className="create-form-button"
+          className="border-button btn wide"
           onClick={handleEventDelete(eventId)}
         >
-          DELETE
+          Delete
         </button>
       </div>
     </EventForm>

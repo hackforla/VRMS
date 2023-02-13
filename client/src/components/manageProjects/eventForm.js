@@ -29,6 +29,38 @@ const EventForm = ({
         ) : null}
       </label>
       <div className="event-form-row">
+        <label className="event-form-label" htmlFor="description">
+          Description:
+          <input
+            id="description"
+            placeholder="Meeting description..."
+            name="description"
+            value={formValues.description}
+            onChange={handleInputChange}
+            maxLength={60}
+          />
+        </label>
+      </div>
+
+      <div className="event-form-label">
+        <label className="event-form-label" htmlFor="videoConferenceLink">
+          Event Link:
+          <input
+            id="videoConferenceLink"
+            placeholder="Enter meeting url..."
+            name="videoConferenceLink"
+            value={formValues.videoConferenceLink}
+            onChange={handleInputChange}
+          />
+          {formErrors?.videoConferenceLink ? (
+            <div className="event-form-error">
+              {formErrors.videoConferenceLink}
+            </div>
+          ) : null}
+        </label>
+      </div>
+
+      <div className="event-form-row">
         <label className="event-form-label" htmlFor="eventType">
           Event Type:
           <select
@@ -59,6 +91,7 @@ const EventForm = ({
           </select>
         </label>
       </div>
+
       <div className="event-form-row">
         <label className="event-form-label" htmlFor="startTime">
           Start Time:
@@ -96,32 +129,6 @@ const EventForm = ({
           </select>
         </label>
       </div>
-      <label className="event-form-label" htmlFor="description">
-        Description:
-        <input
-          id="description"
-          placeholder="Meeting description..."
-          name="description"
-          value={formValues.description}
-          onChange={handleInputChange}
-          maxLength={60}
-        />
-      </label>
-      <label className="event-form-label" htmlFor="videoConferenceLink">
-        Event Link:
-        <input
-          id="videoConferenceLink"
-          placeholder="Enter meeting url..."
-          name="videoConferenceLink"
-          value={formValues.videoConferenceLink}
-          onChange={handleInputChange}
-        />
-        {formErrors?.videoConferenceLink ? (
-          <div className="event-form-error">
-            {formErrors.videoConferenceLink}
-          </div>
-        ) : null}
-      </label>
 
       {children}
     </div>

@@ -53,7 +53,6 @@ const AddNewProject = ({
 
   return (
     <div className="add-new-project">
-      <h3>Add New Project</h3>
       <div>
         <form onSubmit={handleProjectFormSubmit}>
           <div className="input-group">
@@ -71,11 +70,6 @@ const AddNewProject = ({
             Add Project
           </button>
         </form>
-      </div>
-      <div>
-        <button type="button" className="button-back" onClick={onBackClick}>
-          Admin Dashboard
-        </button>
       </div>
     </div>
   );

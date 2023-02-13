@@ -36,6 +36,7 @@ export const AuthProvider = ({ children }) => {
 const fetchAuth = async () => {
   const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
+
   const request = {
     method: "POST",
     headers: {
@@ -49,7 +50,7 @@ const fetchAuth = async () => {
     if(response.status !== 200)
       return {user: null, isAdmin: false, isError: true };
 
-    const user = await response.json();  
+    const user = await response.json();
     return { user, isAdmin: user.accessLevel === 'admin', isError: false };
   }
   catch (error) {
