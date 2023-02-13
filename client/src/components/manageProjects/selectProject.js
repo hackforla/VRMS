@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../../sass/ManageProjects.scss';
+import AddNewProject from '../user-admin/AddNewProject';
 
 const SelectProject = ({ projects, accessLevel, user }) => {
   // If access level is 'admin', display all active projects.
   // If access level is 'user' display user managed projects.
+  const [toggle, setToggle] = useState(true);
+
+  const handleToggle = () => { setToggle(!toggle) };
+
   const managedProjects = projects
     ?.filter((proj) => {
       if (accessLevel === 'admin') {
@@ -27,40 +32,53 @@ const SelectProject = ({ projects, accessLevel, user }) => {
 
   return (
     <div className="container--ManageProjects">
-      <h3>Project Mangement</h3>
-      <div className="project-sub-heading" style={{ margin: '0 auto' }}>
+      <h3>Project Management</h3>
+      <div className="project-sub-heading">
         {accessLevel === 'admin' ? (
-            <div className='button-container'>
+          // <Link to="useradmin">
+          <>
             <button
-            className='button'
-            style={{
-              fontSize: 'small',
-              width: 'auto',
-            }}
-            >
-              Find Project
-            </button>
-          {/* <Link to="useradmin"> */}
-              
-            <button
-              type="button"
-              className="button"
+              className={`button ${toggle && 'active'}`}
               style={{
                 fontSize: 'small',
                 width: 'auto',
               }}
-              >
+              value='findProject'
+              onClick={handleToggle}
+            >
+              Find Project
+            </button>
+            {/* <Link to="useradmin"> */}
+
+            <button
+              type="button"
+              className={`button ${!toggle && 'active'}`}
+              style={{
+                fontSize: 'small',
+                width: 'auto',
+              }}
+              onClick={handleToggle}
+            >
               Add a Project
             </button>
-          {/* </Link> */}
-              </div>
+          </>
+          // </Link>
         ) : null}
       </div>
-      <input placeholder="Search Projects"
- className="search-field" />
-      <ul className="project-list">{managedProjects}</ul>
+      <div>
+        {toggle
+          ? <>
+            <input placeholder="Search Projects"
+              className="search-field" />
+            <ul className="project-list">{managedProjects}</ul>
+          </>
+          : <AddNewProject />
+        }
+      </div>
     </div>
   );
 };
+
+
 
 export default SelectProject;
