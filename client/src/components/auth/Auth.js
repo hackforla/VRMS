@@ -134,8 +134,9 @@ const Auth = () => {
             </div>
           </div>
         </form>
-
+        
         {isError && <div className="adminlogin-warning">{errorMessage}</div>}
+        {/* TODO: Prevent error message from moving UI */}
 
         <div className="form-input-button">
           <button
