@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import '../../sass/ManageProjects.scss';
+import EditIcon from '../svg/EditIcon';
+// client/src/components/svg/EditIcon.jsx
 
 const EditableField = ({
   fieldData,
@@ -47,7 +49,7 @@ const EditableField = ({
     <div className="editable-field-div">
       <div className="project-edit-title">
         {fieldTitle}
-        {notRestricted ? (
+        {notRestricted &&
           <button
             type="button"
             className="project-edit-button"
@@ -55,9 +57,9 @@ const EditableField = ({
               setEditable(true);
             }}
           >
-            [edit]
+            <EditIcon /> <span>Edit</span>
           </button>
-        ) : null}
+        }
       </div>
 
       {editable ? (
@@ -71,7 +73,7 @@ const EditableField = ({
           )}
         </>
       ) : (
-        <div className="section-content">{fieldData}</div>
+        <div className="section-content">{fieldData || "{ none }"}</div>
       )}
     </div>
   );

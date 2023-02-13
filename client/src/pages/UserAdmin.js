@@ -21,7 +21,7 @@ const UserAdmin = () => {
   const [users, setUsers] = useState([]); // All users pulled from database
   const [projects, setProjects] = useState([]); // All projects pulled from db
   const [userToEdit, setUserToEdit] = useState({}); // The selected user that is being edited
-  const [currentPage, setCurrentPage] = useState(PAGES.main);
+  const [currentPage, setCurrentPage] = useState(PAGES.userManagement);
 
   const [userApiService] = useState(new UserApiService());
   const [projectApiService] = useState(new ProjectApiService());

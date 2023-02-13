@@ -1,3 +1,5 @@
+@import './variables.scss';
+
 .nav-wrapper {
     display: flex;
     flex-direction: row;
@@ -20,35 +22,32 @@
 }
 
 .nav-link-text {
-    margin: 0;
     padding: 0;
     font-weight: bold;
+    font-size: 20px;
 
     cursor: pointer;
     font-weight: 400;
     text-decoration: none;
     padding: 0px;
-    /* letter-spacing: .05em; */
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
     
+    &.active {
+        font-weight: 600;
+        border-bottom: 2px $color-primary solid;
+    }
   }
   
-  .nav-link-active {
-    // color: red;
-    font-weight: 600;
-    margin: 0px 18px 0px 0px;
-    padding-bottom: 1.1em;
-    border-bottom: 2px #fa114f solid;
-}
-
 .navbar-buttons-container {
-    height: 1em;
+    // height: 1em;
+    flex-grow: 1;
     font-size: 16px;
     position: initial;
     display: flex;
-    top: 36px;
-    left: 12px;
+    justify-content: space-evenly;
+    align-items: center;
+    
 }
 
 .navbar-logo {

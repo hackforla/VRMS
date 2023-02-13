@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../../sass/ManageProjects.scss';
+import AddNewProject from '../user-admin/AddNewProject';
 
 const SelectProject = ({ projects, accessLevel, user }) => {
   // If access level is 'admin', display all active projects.
   // If access level is 'user' display user managed projects.
+  const [toggle, setToggle] = useState(true);
+
+  const handleToggle = () => { setToggle(!toggle) };
+
   const managedProjects = projects
     ?.filter((proj) => {
       if (accessLevel === 'admin') {
@@ -27,28 +32,61 @@ const SelectProject = ({ projects, accessLevel, user }) => {
 
   return (
     <div className="container--ManageProjects">
-      <h3>Manage Projects</h3>
-      <div className="project-sub-heading" style={{ margin: '0 auto' }}>
+      <h3>Project Management</h3>
+      <div className="project-sub-heading">
         {accessLevel === 'admin' ? (
-          <Link to="useradmin">
-            {' '}
+          // <Link to="useradmin">
+          <>
             <button
-              type="button"
-              className="button"
+              className={`button ${toggle && 'active'}`}
               style={{
                 fontSize: 'small',
                 width: 'auto',
               }}
+              value='findProject'
+              onClick={handleToggle}
+            >
+              Find Project
+            </button>
+            {/* <Link to="useradmin"> */}
+
+            <button
+              type="button"
+              className={`button ${!toggle && 'active'}`}
+              style={{
+                fontSize: 'small',
+                width: 'auto',
+              }}
+              onClick={handleToggle}
             >
               Add a Project
             </button>
-          </Link>
+          </>
+          // </Link>
         ) : null}
       </div>
-      <div className="project-sub-heading">Select project to edit</div>
-      <ul className="project-list">{managedProjects}</ul>
+      <div>
+        {toggle
+          ? <>
+            <input placeholder="Search Projects"
+              className="search-field" />
+            <ul className="project-list">{managedProjects}</ul>
+          </>
+          : <AddNewProject
+          //TODO
+          //  Create ProjectsApiContext
+          //    This button fails handleNewProjectFormSubmit is passed
+          //    from props. Can be sidestepped if project API calls for
+          //    ADMIN and USER are moved to a Context component.
+          projects={[]}
+          handleNewProjectFormSubmit={()=>(null)}
+          />
+        }
+      </div>
     </div>
   );
 };
+
+
 
 export default SelectProject;
