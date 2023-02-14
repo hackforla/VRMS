@@ -57,8 +57,11 @@
 }
 
 .project-list-heading {
-  margin: 20px 0;
-  font-size: 18px;
+  font-family: $font-body;
+  padding: 20px 18px 20px 18px;
+  font-size: 16px;
+  border-bottom: 1px $dark solid;
+
 }
 
 .project-sub-heading {
@@ -164,6 +167,8 @@ div.editable-field {
 
 .event-list {
   margin-bottom: 40px;
+  margin-top: 36px;
+
 
   h3 {
     width: 190px;
@@ -175,22 +180,24 @@ div.editable-field {
     line-height: 24px;
     color: #000000;
     background-color: #f2f2f2;
+    border-bottom: 1px $dark solid;
+    width: auto;
   }
 
   ul {
     padding-top: 4px;
-    border-top: 2px solid #32373b;
+    margin: 0 36px 0 36px;
   }
 
   li {
     display: flex;
-    padding: 8px 0;
+    padding: 10px 8px 10px 8px;
     flex-direction: column;
     border-bottom: 1px solid #ecebed;
   }
 
   li:hover {
-    background-color: #f2f2f2;
+    background-color: $bg-light-gray-hover;
   }
 
   button {
@@ -219,6 +226,10 @@ div.editable-field {
     overflow: hidden;
     text-overflow: ellipsis;
   }
+}
+
+.event-title > span {
+  margin-right: 10px;
 }
 
 .edit-meeting-modal {
@@ -270,6 +281,7 @@ div.editable-field {
   display: flex;
   flex-direction: column;
   background-color: white;
+  font-family: $font-body;
 }
 
 .event-form-box .event-form-title {
@@ -283,6 +295,7 @@ div.editable-field {
 }
 
 .event-form-label {
+  font-weight: 800;
   display: block;
   margin-top: 4px;
 
@@ -352,4 +365,78 @@ textarea {
 
 .create-form-button:active {
   background-color: #969595;
+}
+
+.edit-content-container {
+  background-color: $bg-light-gray;
+}
+
+.edit-content-container > .inner {
+  padding: 18px 46px 18px 46px;
+}
+
+.button-container-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.button-container { 
+  display: flex;
+  justify-content: space-around;
+  &.vertical {
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+
+
+.button-container > .btn {
+  // width: 50%;
+  margin-bottom: 36px;
+}
+
+.border-button {
+  border: 3px $color-primary solid;
+  color: $text;
+  &:hover {
+    background-color: $bg-light-gray-hover;
+  }
+}
+
+.filled-button {
+  background-color: $color-primary;
+  color: $text-light;
+  &:hover {
+    background-color: $color-primary-accent;
+  }
+}
+
+.btn {
+  text-align: center;
+  width: 150px;
+  padding: 12px 0 12px 0;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin-bottom: 24px;
+  &.wide { 
+    width: 330px;
+  }
+}
+
+.mb-32 {
+  margin-bottom: 32px;
+}
+
+.btn > span {
+  display: block;
+}
+
+.btn:hover {
+  font-weight: 800;
 }

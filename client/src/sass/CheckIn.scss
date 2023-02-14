@@ -47,6 +47,7 @@
 }
 
 .form-input-text {
+    font-family: $font-body;
     display: flex;
     flex-direction: column;
 
@@ -62,6 +63,7 @@ label {
     text-align: left;
     font-size: 20px;
     font-weight: bold;
+    margin-bottom: 8px;
 }
 
 input[type=text], input[type=email] {
@@ -142,12 +144,15 @@ input[type=radio] {
         font-size: 18px;
         font-weight: bold;
         transition: all .3s ease-in-out;
+        background-color: $color-primary;
+        color: white;
 
         &:hover {
-            background-color: $color-primary;
+            background-color: $color-primary-accent;
             color: white;
         }
         &:disabled {
+            background-color: white;
             color: #bbb;
             border-color: #bbb;
             pointer-events: none;
