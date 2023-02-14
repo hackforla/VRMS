@@ -103,10 +103,10 @@ const CreateNewEvent = ({
         formErrors={formErrors}
         title="Create New Recurring Event"
       >
-        <div className="button-box">
+        <div className="button-container-vertical">
           <button
             type="button"
-            className="create-form-button"
+            className="filled-button btn wide"
             onClick={() => {
               handleFormSubmit();
             }}
