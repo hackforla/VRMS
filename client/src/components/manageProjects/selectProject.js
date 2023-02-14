@@ -72,7 +72,15 @@ const SelectProject = ({ projects, accessLevel, user }) => {
               className="search-field" />
             <ul className="project-list">{managedProjects}</ul>
           </>
-          : <AddNewProject />
+          : <AddNewProject
+          //TODO
+          //  Create ProjectsApiContext
+          //    This button fails handleNewProjectFormSubmit is passed
+          //    from props. Can be sidestepped if project API calls for
+          //    ADMIN and USER are moved to a Context component.
+          projects={[]}
+          handleNewProjectFormSubmit={()=>(null)}
+          />
         }
       </div>
     </div>
