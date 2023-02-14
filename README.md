@@ -174,11 +174,15 @@ This will reset the current HEAD to match the VRMS development repository.
 
    To run `client`:
 
-   - Navigate to the root of the application `vrms/` and run `npm run dev`
+   - Navigate to the root of the application `vrms/` and run `yarn start`
 
-   To run `client-mvp-04`:
+   **Troubleshooting:** If you encounter the following error after running `yarn start`:
+   
+      ```
+      Error: error:0308010C:digital envelope routines::unsupported
+      ```
+   Try changing your node version to `16.14.2` by running `nvm use 16.14.2`. If you do not have `nvm` installed, see [install instructions](https://github.com/nvm-sh/nvm#installing-and-updating)
 
-   - Navigate to the root of the application `vrms/` and run `npm run mvp`
 
 You should now have a live app. Happy hacking.
 
