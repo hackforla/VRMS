@@ -45,7 +45,6 @@ const Navbar = ({}) => {
   const AdminLoggedIn = () => {
     if (auth?.user?.accessLevel === 'admin') return (
       <>
-        <LinkWrapper text={"HOME"} linkedPage="useradmin" to={loginRedirect} />
         <LinkWrapper text={"USERS"} linkedPage="usermanagement" to="/useradmin" />
         <LinkWrapper text={"PROJECTS"} linkedPage="projects" to="/projects" />
       </>
