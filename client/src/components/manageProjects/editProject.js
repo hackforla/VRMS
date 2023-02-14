@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import EditableField from './editableField';
 import EditMeetingTimes from './editMeetingTimes';
+import EditIcon from '../svg/EditIcon';
 import CreateNewEvent from './createNewEvent';
 import readableEvent from './utilities/readableEvent';
 import '../../sass/ManageProjects.scss';
@@ -61,119 +62,122 @@ const EditProject = ({
           setIsCreateNew={setIsCreateNew}
         />
       </div>
-      <Link className="button-back" to={`/projects`}>
-        All Projects
-      </Link>
+      <h3>Project Management</h3>
       <div className="project-warning-text">
         *The data here is only test data and is not accurate*
       </div>
-      <div className="project-list-heading">{`Project: ${projectToEdit.name}`}</div>
-      <EditableField
-        fieldData={projectToEdit.name}
-        fieldName="name"
-        updateProject={updateProject}
-        fieldTitle="Name:"
-        accessLevel={userAccessLevel}
-        canEdit={['admin']}
-      />
-      <EditableField
-        fieldData={projectToEdit.description}
-        fieldName="description"
-        updateProject={updateProject}
-        fieldType="textarea"
-        fieldTitle="Description:"
-        accessLevel={userAccessLevel}
-        canEdit={['admin']}
-      />
-      <EditableField
-        fieldData={projectToEdit.location}
-        fieldName="location"
-        updateProject={updateProject}
-        fieldTitle="Location:"
-        accessLevel={userAccessLevel}
-        canEdit={['admin']}
-      />
-      <EditableField
-        fieldData={projectToEdit.githubIdentifier}
-        fieldName="githubIdentifier"
-        updateProject={updateProject}
-        fieldTitle="GitHub Identifier:"
-        accessLevel={userAccessLevel}
-        canEdit={['admin']}
-      />
-      <EditableField
-        fieldData={projectToEdit.githubUrl}
-        fieldName="githubUrl"
-        updateProject={updateProject}
-        fieldTitle="GitHib URL:"
-        accessLevel={userAccessLevel}
-        canEdit={['admin']}
-      />
-      <EditableField
-        fieldData={projectToEdit.slackUrl}
-        fieldName="slackUrl"
-        updateProject={updateProject}
-        fieldTitle="Slack URL:"
-        accessLevel={userAccessLevel}
-        canEdit={['admin']}
-      />
-      <EditableField
-        fieldData={projectToEdit.googleDriveUrl}
-        fieldName="googleDriveUrl"
-        updateProject={updateProject}
-        fieldTitle="Google Drive URL:"
-        accessLevel={userAccessLevel}
-        canEdit={['admin']}
-      />
-      {/* <EditableField   
-        fieldData={projectToEdit.googleDriveId}
-        fieldName="googleDriveId"
-        updateProject={updateProject}
-        fieldTitle="Google Drive ID:"
-        accessLevel={userAccessLevel}
-        canEdit={['admin']}
-      /> */}
-      <EditableField
-        fieldData={projectToEdit.hflaWebsiteUrl}
-        fieldName="hflaWebsiteUrl"
-        updateProject={updateProject}
-        fieldTitle="HfLA Website URL:"
-        accessLevel={userAccessLevel}
-        canEdit={['admin']}
-      />
-      {/* <EditableField
-        fieldData={projectToEdit.videoConferenceLink}
-        fieldName="videoConferenceLink"
-        updateProject={updateProject}
-        fieldTitle="Video Conference Link:"
-        accessLevel={userAccessLevel}
-        canEdit={['admin']}
-      /> */}
-      {/* <EditableField
-        fieldData={projectToEdit.lookingDescription}
-        fieldName="lookingDescription"
-        updateProject={updateProject}
-        fieldTitle="Looking For Description:"
-        accessLevel={userAccessLevel}
-        canEdit={['admin']}
-      /> */}
-      <EditableField
-        fieldData={partnerDataFormatted}
-        fieldName="partners"
-        updateProject={updateProject}
-        fieldTitle="Partners (comma separated):"
-        accessLevel={userAccessLevel}
-        canEdit={['admin']}
-      />
-      {/* <EditableField
-        fieldData={recrutingDataFormatted}
-        fieldName="recruitingCategories"
-        updateProject={updateProject}
-        fieldTitle="Recruiting Categories (comma separated):"
-        accessLevel={userAccessLevel}
-        canEdit={['admin']}
-      /> */}
-      <div className="event-list">
+      <div className="edit-content-container">
+        <div className="project-list-heading">{`Project: ${projectToEdit.name}`}</div>
+        <div className="inner">
+          <EditableField
+            fieldData={projectToEdit.name}
+            fieldName="name"
+            updateProject={updateProject}
+            fieldTitle="Name:"
+            accessLevel={userAccessLevel}
+            canEdit={['admin']}
+          />
+          <EditableField
+            fieldData={projectToEdit.description}
+            fieldName="description"
+            updateProject={updateProject}
+            fieldType="textarea"
+            fieldTitle="Description:"
+            accessLevel={userAccessLevel}
+            canEdit={['admin']}
+          />
+          <EditableField
+            fieldData={projectToEdit.location}
+            fieldName="location"
+            updateProject={updateProject}
+            fieldTitle="Location:"
+            accessLevel={userAccessLevel}
+            canEdit={['admin']}
+          />
+          <EditableField
+            fieldData={projectToEdit.githubIdentifier}
+            fieldName="githubIdentifier"
+            updateProject={updateProject}
+            fieldTitle="GitHub Identifier:"
+            accessLevel={userAccessLevel}
+            canEdit={['admin']}
+          />
+          <EditableField
+            fieldData={projectToEdit.githubUrl}
+            fieldName="githubUrl"
+            updateProject={updateProject}
+            fieldTitle="GitHib URL:"
+            accessLevel={userAccessLevel}
+            canEdit={['admin']}
+          />
+          <EditableField
+            fieldData={projectToEdit.slackUrl}
+            fieldName="slackUrl"
+            updateProject={updateProject}
+            fieldTitle="Slack URL:"
+            accessLevel={userAccessLevel}
+            canEdit={['admin']}
+          />
+          <EditableField
+            fieldData={projectToEdit.googleDriveUrl}
+            fieldName="googleDriveUrl"
+            updateProject={updateProject}
+            fieldTitle="Google Drive URL:"
+            accessLevel={userAccessLevel}
+            canEdit={['admin']}
+          />
+          {/* <EditableField   
+          fieldData={projectToEdit.googleDriveId}
+          fieldName="googleDriveId"
+          updateProject={updateProject}
+          fieldTitle="Google Drive ID:"
+          accessLevel={userAccessLevel}
+          canEdit={['admin']}
+        /> */}
+          <EditableField
+            fieldData={projectToEdit.hflaWebsiteUrl}
+            fieldName="hflaWebsiteUrl"
+            updateProject={updateProject}
+            fieldTitle="HfLA Website URL:"
+            accessLevel={userAccessLevel}
+            canEdit={['admin']}
+          />
+          {/* <EditableField
+          fieldData={projectToEdit.videoConferenceLink}
+          fieldName="videoConferenceLink"
+          updateProject={updateProject}
+          fieldTitle="Video Conference Link:"
+          accessLevel={userAccessLevel}
+          canEdit={['admin']}
+        /> */}
+          {/* <EditableField
+          fieldData={projectToEdit.lookingDescription}
+          fieldName="lookingDescription"
+          updateProject={updateProject}
+          fieldTitle="Looking For Description:"
+          accessLevel={userAccessLevel}
+          canEdit={['admin']}
+        /> */}
+          <EditableField
+            fieldData={partnerDataFormatted}
+            fieldName="partners"
+            updateProject={updateProject}
+            fieldTitle="Partners (comma separated):"
+            accessLevel={userAccessLevel}
+            canEdit={['admin']}
+          />
+          {/* <EditableField
+          fieldData={recrutingDataFormatted}
+          fieldName="recruitingCategories"
+          updateProject={updateProject}
+          fieldTitle="Recruiting Categories (comma separated):"
+          accessLevel={userAccessLevel}
+          canEdit={['admin']}
+        /> */}
+        </div>
+      </div>
+
+      <div className="event-list edit-content-container">
         <h3>Recurring Events</h3>
         <h2 className="event-alert">{eventAlert}</h2>
         <ul>
@@ -181,7 +185,12 @@ const EditProject = ({
             // eslint-disable-next-line no-underscore-dangle
             <li key={`${event.event_id}`}>
               <button type="button" onClick={() => setSelectedEvent(event)}>
-                <div>{event.name}</div>
+                <div className="event-title">
+                  <span>
+                    {event.name}
+                  </span>
+                  <EditIcon />
+                </div>
                 <div className="event-list-details">{`${event.dayOfTheWeek}, ${event.startTime} - ${event.endTime}; ${event.eventType}`}</div>
                 <div className="event-list-description">{`${event.description}`}</div>
               </button>
@@ -189,14 +198,19 @@ const EditProject = ({
           ))}
         </ul>
       </div>
-      <div className="display-events">
+      <div className="button-container">
         <button
           type="button"
-          className="create-form-button"
+          className="border-button btn"
           onClick={() => setIsCreateNew(true)}
         >
           Create New Event
         </button>
+        <Link className="filled-button btn" to={`/projects`}>
+          <span>
+            Close
+          </span>
+        </Link>
       </div>
     </div>
   );
