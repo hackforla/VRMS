@@ -176,7 +176,7 @@ This will reset the current HEAD to match the VRMS development repository.
 
    - Navigate to the root of the application `vrms/` and run `yarn start`
 
-   **Troubleshooting:** If you encounter the following error after running `yarn start`:
+   *Troubleshooting :* If you encounter the following error after running `yarn start`:
    
       ```
       Error: error:0308010C:digital envelope routines::unsupported
