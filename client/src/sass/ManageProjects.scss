@@ -311,3 +311,13 @@ textarea {
 .create-form-button:active {
   background-color: #969595;
 }
+
+.event-list-details {
+ display: flex;
+ justify-content: space-between;
+  
+ .icon {
+   size: 3em;
+   margin-right: 20px;
+ }
+}

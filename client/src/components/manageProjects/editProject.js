@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { GrEdit } from 'react-icons/gr';
+import { IconContext } from 'react-icons';
 import EditableField from './editableField';
 import EditMeetingTimes from './editMeetingTimes';
 import CreateNewEvent from './createNewEvent';
@@ -182,7 +184,12 @@ const EditProject = ({
             <li key={`${event.event_id}`}>
               <button type="button" onClick={() => setSelectedEvent(event)}>
                 <div>{event.name}</div>
-                <div className="event-list-details">{`${event.dayOfTheWeek}, ${event.startTime} - ${event.endTime}; ${event.eventType}`}</div>
+                <div className="event-list-details">
+                  {`${event.dayOfTheWeek}, ${event.startTime} - ${event.endTime}; ${event.eventType}`}
+                  <IconContext.Provider value={{ size: '1.5em'}}>
+                   <div className="icon"><GrEdit /></div>
+                  </IconContext.Provider>
+                   </div>
                 <div className="event-list-description">{`${event.description}`}</div>
               </button>
             </li>
