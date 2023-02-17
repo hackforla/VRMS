@@ -48,10 +48,6 @@ const Events = (props) => {
             );
           })
           .map((event, index) => {
-            const event_city = event.location && (event.location.city || 'TBD');
-            const event_state =
-              event.location && (event.location.state || 'TBD');
-
             return (
               <li key={index}>
                 <div key={index} className="list-event-container">
