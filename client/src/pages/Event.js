@@ -27,6 +27,7 @@ const Event = (props) => {
     }
   }
 
+  // eslint-disable-next-line
   async function setCheckInReady(e) {
     e.preventDefault();
 
