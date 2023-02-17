@@ -79,6 +79,7 @@ const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
       });
   };
 
+  // eslint-disable-next-line
   const gitHubClickHandler = (
     githubHandle,
     projectName,
