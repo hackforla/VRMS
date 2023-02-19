@@ -45,7 +45,7 @@ module.exports = (cron, fetch) => {
     async function filterAndCreateEvents() {
         TODAY_DATE = new Date();
         TODAY = TODAY_DATE.getDay();
-        console.log("Date: ", TODAY_DATE, "Day: ", TODAY);
+        // console.log("Date: ", TODAY_DATE, "Day: ", TODAY);
         const recurringEvents = RECURRING_EVENTS;
         // console.log("Today Day: ", TODAY);
         // Filter recurring events where the event date is today
@@ -64,7 +64,7 @@ module.exports = (cron, fetch) => {
                 const eventDate = new Date(filteredEvent.date);
 
                 if (eventExists) {
-                    console.log("Not going to run ceateEvent");
+                    // console.log("Not going to run ceateEvent");
                 } else {
                     // Create new event
                     const hours = eventDate.getHours();
@@ -100,7 +100,7 @@ module.exports = (cron, fetch) => {
                     }
 
                     const created = await createEvent(eventToCreate);
-                    console.log(created);
+                    // console.log(created);
                 };
             };
         };
@@ -123,7 +123,7 @@ module.exports = (cron, fetch) => {
 
                 return (year === yearToday && month === monthToday && date === dateToday && eventName === event.name);
             });
-            console.log("Events already created: ", filteredEvents);
+            // console.log("Events already created: ", filteredEvents);
             return filteredEvents.length > 0 ? true : false;
         };
     };
@@ -140,26 +140,26 @@ module.exports = (cron, fetch) => {
                 body: jsonEvent
             }
 
-            console.log('Running createEvent: ', jsonEvent);
+            // console.log('Running createEvent: ', jsonEvent);
 
             try {
                 const response = await fetch(`${URL}/api/events/`, options);
                 const resJson = await response.json();
                 return resJson;
             } catch (error) {
-                console.log(error);
+                // console.log(error);
             };
         };
     };
 
     async function runTask() {
-        console.log("Creating today's events");
+        // console.log("Creating today's events");
 
         await fetchEvents();
         await fetchRecurringEvents();
         await filterAndCreateEvents();
 
-        console.log("Today's events are created");
+        // console.log("Today's events are created");
 
     };
 

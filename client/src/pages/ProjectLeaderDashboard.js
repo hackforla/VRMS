@@ -4,7 +4,7 @@ import UpcomingEvent from "../components/presentational/upcomingEvent";
 import ProjectDashboardContainer from "../components/presentational/projectDashboardContainer";
 import DashboardButton from "../components/dashboard/DashboardButton";
 import ProjectInfo from "../components/dashboard/ProjectInfo";
-import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../utils/globalSettings";
+import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend } from "../utils/globalSettings";
 
 import "../sass/Dashboard.scss";
 
@@ -21,88 +21,6 @@ const ProjectLeaderDashboard = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
   const [rosterProjectId, setRosterProjectId] = useState("");
-  const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
-
-  async function getProjectFromUserId() {
-    try {
-      const project = await fetch(
-        "/api/projectteammembers/projectowner/5e2790b06dc5b4ed0bc1df56", {
-            headers: {
-                "x-customrequired-header": headerToSend
-            }
-        }
-      );
-      const projectJson = await project.json();
-      setProject(projectJson);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async function getNextEvent() {
-    // event id temporarily hard coded so actual check in data would be listed
-    try {
-      if (project && project.projectId) {
-        const events = await fetch(
-          `/api/events/nexteventbyproject/${project.projectId._id}`, {
-            headers: {
-                "x-customrequired-header": headerToSend
-            }
-          } 
-        );
-        const eventsJson = await events.json();
-        setIsCheckInReady(eventsJson.checkInReady);
-        setNextEvent([eventsJson]);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  async function getRoster() {
-    try {
-      if (project && project.projectId) {
-        const roster = await fetch(
-          `/api/projectteammembers/${project.projectId._id}`, {
-              headers: {
-                  "x-customrequired-header": headerToSend
-              }
-          }
-        );
-        const rosterJson = await roster.json();
-        // temporary function that fixes outdated data
-        rosterJson.forEach((item) => {
-          if (!item.userId.name) {
-            item.userId.name = {};
-            item.userId.name.firstName = item.userId.firstName;
-            item.userId.name.lastName = item.userId.lastName; 
-          }
-        });
-        setRoster(rosterJson);
-
-        setRosterProjectId(project.projectId.googleDriveId);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async function getAttendees() {
-    try {
-      if (nextEvent && nextEvent[0]._id) {
-        const id = nextEvent[0]._id;
-        const attendees = await fetch(`/api/checkins/findEvent/${id}`, {
-            headers: {
-                "x-customrequired-header": headerToSend
-            }
-          });
-        const attendeesJson = await attendees.json();
-        setAttendees(attendeesJson);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
   async function setCheckInReady(e, nextEventId) {
     e.preventDefault();
@@ -125,10 +43,6 @@ const ProjectLeaderDashboard = () => {
 
   async function changeTable(e) {
     setAttendeeOrRoster(e);
-  }
-
-  async function getDashboardInfo() {
-    await getProjectFromUserId();
   }
 
   const handleSubmit = async (e, email) => {
@@ -193,10 +107,10 @@ const ProjectLeaderDashboard = () => {
     try {
       const onTeam = await fetch(
         `/api/projectteammembers/project/${project.projectId._id}/${user._id}`, {
-          headers: {
-            "x-customrequired-header": headerToSend
-          }
+        headers: {
+          "x-customrequired-header": headerToSend
         }
+      }
       );
       const onTeamJson = await onTeam.json();
 
@@ -241,18 +155,99 @@ const ProjectLeaderDashboard = () => {
   }
 
   useEffect(() => {
-    getDashboardInfo();
+    async function getProjectFromUserId() {
+      try {
+        const project = await fetch(
+          "/api/projectteammembers/projectowner/5e2790b06dc5b4ed0bc1df56", {
+          headers: {
+            "x-customrequired-header": headerToSend
+          }
+        }
+        );
+        const projectJson = await project.json();
+        setProject(projectJson);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    getProjectFromUserId() // getDashboardInfo
   }, []);
 
   useEffect(() => {
+    async function getAttendees() {
+      try {
+        if (nextEvent && nextEvent[0]._id) {
+          const id = nextEvent[0]._id;
+          const attendees = await fetch(`/api/checkins/findEvent/${id}`, {
+            headers: {
+              "x-customrequired-header": headerToSend
+            }
+          });
+          const attendeesJson = await attendees.json();
+          setAttendees(attendeesJson);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    
     getAttendees();
   }, [nextEvent]);
 
   useEffect(() => {
+    async function getRoster() {
+      try {
+        if (project && project.projectId) {
+          const roster = await fetch(
+            `/api/projectteammembers/${project.projectId._id}`, {
+            headers: {
+              "x-customrequired-header": headerToSend
+            }
+          }
+          );
+          const rosterJson = await roster.json();
+          // temporary function that fixes outdated data
+          rosterJson.forEach((item) => {
+            if (!item.userId.name) {
+              item.userId.name = {};
+              item.userId.name.firstName = item.userId.firstName;
+              item.userId.name.lastName = item.userId.lastName;
+            }
+          });
+          setRoster(rosterJson);
+  
+          setRosterProjectId(project.projectId.googleDriveId);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    
     getRoster();
   }, [project, forceRerender]);
 
   useEffect(() => {
+    async function getNextEvent() {
+      // event id temporarily hard coded so actual check in data would be listed
+      try {
+        if (project && project.projectId) {
+          const events = await fetch(
+            `/api/events/nexteventbyproject/${project.projectId._id}`, {
+            headers: {
+              "x-customrequired-header": headerToSend
+            }
+          }
+          );
+          const eventsJson = await events.json();
+          setIsCheckInReady(eventsJson.checkInReady);
+          setNextEvent([eventsJson]);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    
     getNextEvent();
   }, [project]);
 

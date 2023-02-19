@@ -20,6 +20,7 @@ const EditProject = ({
 }) => {
   // Add commas to arrays for display
   const partnerDataFormatted = projectToEdit.partners.join(', ');
+  // eslint-disable-next-line
   const recrutingDataFormatted = projectToEdit.recruitingCategories.join(', ');
   const [rEvents, setREvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState();

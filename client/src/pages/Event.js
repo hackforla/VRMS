@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
-import { REACT_APP_CUSTOM_REQUEST_HEADER } from '../utils/globalSettings';
+import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend } from '../utils/globalSettings';
 
 import '../sass/Event.scss';
 
@@ -9,24 +9,8 @@ const Event = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [event, setEvent] = useState([]);
   const [isCheckInReady, setIsCheckInReady] = useState();
-  const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
-  async function fetchEvent() {
-    try {
-      const res = await fetch(`/api/events/${props.match.params.id}`, {
-        headers: {
-          'x-customrequired-header': headerToSend,
-        },
-      });
-      const resJson = await res.json();
-
-      setEvent(resJson);
-      setIsCheckInReady(resJson.checkInReady);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
+  // eslint-disable-next-line
   async function setCheckInReady(e) {
     e.preventDefault();
 
@@ -49,8 +33,24 @@ const Event = (props) => {
   }
 
   useEffect(() => {
+    async function fetchEvent() {
+      try {
+        const res = await fetch(`/api/events/${props.match.params.id}`, {
+          headers: {
+            'x-customrequired-header': headerToSend,
+          },
+        });
+        const resJson = await res.json();
+  
+        setEvent(resJson);
+        setIsCheckInReady(resJson.checkInReady);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
     fetchEvent();
-  }, [isLoading, isCheckInReady]);
+  }, [isLoading, isCheckInReady, props.match.params.id]);
 
   return (
     <div className="flex-container">
