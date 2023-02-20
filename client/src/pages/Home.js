@@ -83,8 +83,7 @@ const Home = (props) => {
                 {events.length > 0 && (
                     <div className="home-buttons">
                         {event === "--SELECT ONE--" && events.length === 1 && <CreateNewProfileButton />}
-                        {event !== "--SELECT ONE--" && events.length > 1 && <CheckInButtons event={event} events={events} />}
-                        {event === "--SELECT ONE--" && events.length > 1 && <CheckInButtons disabled={true} event={event} events={events}/>}
+                        {events.length > 1 && <CheckInButtons disabled={event === "--SELECT ONE--"} event={event} events={events}/>}
                     </div>
                 )}
             </div>
