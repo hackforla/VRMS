@@ -21,7 +21,7 @@ const HandleAuth = (props) => {
     isValidToken(api_token).then((isValid) => {
       setMagicLink(isValid)
     });
-  }, []);
+  }, [props.location.search]);
 
   // Step 2: Refresh user auth (requires valid Magic Link)
   useEffect(() => {
