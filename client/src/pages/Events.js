@@ -12,22 +12,22 @@ const Events = (props) => {
   const [eventSearchParam, setEventSearchParam] = useState('');
   const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
-  async function fetchData() {
-    try {
-      const res = await fetch('/api/events', {
-        headers: {
-          'x-customrequired-header': headerToSend,
-        },
-      });
-      const resJson = await res.json();
-
-      setEvents(resJson);
-    } catch (error) {
-      alert(error);
-    }
-  }
-
   useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await fetch('/api/events', {
+          headers: {
+            'x-customrequired-header': headerToSend,
+          },
+        });
+        const resJson = await res.json();
+  
+        setEvents(resJson);
+      } catch (error) {
+        alert(error);
+      }
+    }
+    
     fetchData();
   }, []);
 

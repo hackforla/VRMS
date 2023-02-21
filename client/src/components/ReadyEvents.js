@@ -9,27 +9,26 @@ const ReadyEvents = (props) => {
     const [events, setEvents] = useState([]);
     const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
-    async function fetchEvent() {
-        try {
-            setIsLoading(true);
-            const res = await fetch("/api/events?checkInReady=true", {
-                headers: {
-                    "x-customrequired-header": headerToSend
-                }
-            });
-            const resJson = await res.json();
-
-            setEvents(resJson);
-            setIsLoading(false);
-        } catch(error) {
-            console.log(error);
-            setIsLoading(false);
-        }
-    }
-
     useEffect(() => {
-        fetchEvent();
+        async function fetchEvent() {
+            try {
+                setIsLoading(true);
+                const res = await fetch("/api/events?checkInReady=true", {
+                    headers: {
+                        "x-customrequired-header": headerToSend
+                    }
+                });
+                const resJson = await res.json();
+    
+                setEvents(resJson);
+                setIsLoading(false);
+            } catch(error) {
+                console.log(error);
+                setIsLoading(false);
+            }
+        }
 
+        fetchEvent();
     }, []);
 
     return (

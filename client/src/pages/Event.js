@@ -11,22 +11,6 @@ const Event = (props) => {
   const [isCheckInReady, setIsCheckInReady] = useState();
   const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
-  async function fetchEvent() {
-    try {
-      const res = await fetch(`/api/events/${props.match.params.id}`, {
-        headers: {
-          'x-customrequired-header': headerToSend,
-        },
-      });
-      const resJson = await res.json();
-
-      setEvent(resJson);
-      setIsCheckInReady(resJson.checkInReady);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   // eslint-disable-next-line
   async function setCheckInReady(e) {
     e.preventDefault();
@@ -50,8 +34,24 @@ const Event = (props) => {
   }
 
   useEffect(() => {
+    async function fetchEvent() {
+      try {
+        const res = await fetch(`/api/events/${props.match.params.id}`, {
+          headers: {
+            'x-customrequired-header': headerToSend,
+          },
+        });
+        const resJson = await res.json();
+  
+        setEvent(resJson);
+        setIsCheckInReady(resJson.checkInReady);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
     fetchEvent();
-  }, [isLoading, isCheckInReady]);
+  }, [isLoading, isCheckInReady, props.match.params.id]);
 
   return (
     <div className="flex-container">
