@@ -5,10 +5,11 @@ VRMS is a tool used for the engagement, support, and retention of a network of v
 
 This is an ambitious project to create a system that will help us measure our human capital development, reduce repetitive tasks and processes for leadership, and improve outcomes for both volunteers and the projects they contribute to.
 
-## Contributing
-We require all Code Contributors to 
+
+## How to Contribute
+We require all code contributors to 
 1. Join our organization by going through [Hack for LA onboarding](https://www.hackforla.org/getting-started). It's free to join!
-2. Read our [CONTRIBUTING.md] document
+2. Read our [CONTRIBUTING.md](https://github.com/hackforla/VRMS/blob/development/CONTRIBUTING.md) document.
 
 ## Wiki Highlights
 1. [Introduction](https://github.com/hackforla/VRMS/wiki/Introduction)

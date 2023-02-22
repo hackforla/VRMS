@@ -1,3 +1,11 @@
+<h1>How to Contribute to VRMS</h1>
+<p>First off, thank you for taking the time to contribute! 🥳👍</p>
+
+<p>This document outlines the process for joining our team and contributing to the VRMS Github repository. If you notice errors or have important information to add, please feel free to propose changes to this document with a pull request</p>
+
+
+<h2>Table of Contents</h2>
+
 - [**Part 1 : How to join the team**](#part-1--how-to-join-the-team)
   - [**1.1 VRMS contributor expectations**](#11-vrms-contributor-expectations)
   - [**1.2 Reach out to us on Slack**](#12-reach-out-to-us-on-slack)
@@ -195,10 +203,10 @@ git checkout -b your-branch-name
 ```
 
 ### **3.3 Work on the Issue**
-Every issue will contain action items you must complete before you are ready to submit a pull request. Be sure to use the checkboxes to indicate you have completed each action item.
+Every issue will contain action items you must complete before you are ready to submit a pull request. Be sure to use the checkboxes as you complete each action item so we can track your progress!
 
 
-After you have completed the action items, you can add and commit the changes to your new branch using the commands
+After you have completed the action items, add and commit the changes to your new branch using the commands
 ```
 git add .
 git commit -m "your commit message"
@@ -213,8 +221,9 @@ git push --set-upstream origin your-branch-name
 ```
 ### **4.2 Create a pull request on the VRMS repository**
 1. Go to your fork of the VRMS repository on GitHub and click on the `Compare & pull request` button. <details><summary>See screenshot</summary> <img src="https://user-images.githubusercontent.com/73561520/220488394-09bc759e-98d9-4a09-86c6-66378cf50923.png"/></details>
-2. Title your pull request by summarizing the changes you made
-3. Add your issue number to the pull request
-4. Fill out the "What changes did you make and why?" section 
+2. Be sure to title your pull request by summarizing the changes you made
+3. Be sure to add your issue number where the template says `Fixes #replace_this_text_with_the_issue_number`
+4. Fill out the "What changes did you make and why?" section of the pull request template
 5. Include before & after images with your pull request if there are visual changes to the user interface
 6. Request a review from another developer on the team
+7. Review another developers pull request while you are waiting for your pull request to be reviewed
