@@ -367,6 +367,16 @@ textarea {
   background-color: #969595;
 }
 
+.event-list-details {
+ display: flex;
+}
+
+
+
+.edit-icon {
+  margin-left: 22px;
+}
+
 .edit-content-container {
   background-color: $bg-light-gray;
 }

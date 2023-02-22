@@ -5,6 +5,7 @@ import EditMeetingTimes from './editMeetingTimes';
 import EditIcon from '../svg/EditIcon';
 import CreateNewEvent from './createNewEvent';
 import readableEvent from './utilities/readableEvent';
+import { ReactComponent as EditIcon } from "../../svg/Icon_Edit.svg";
 import '../../sass/ManageProjects.scss';
 
 // Need to hold user state to check which type of user they are and conditionally render editing fields in this component
@@ -185,7 +186,7 @@ const EditProject = ({
             // eslint-disable-next-line no-underscore-dangle
             <li key={`${event.event_id}`}>
               <button type="button" onClick={() => setSelectedEvent(event)}>
-                <div className="event-title">
+              <div className="event-title">
                   <span>
                     {event.name}
                   </span>
