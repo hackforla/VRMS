@@ -51,7 +51,6 @@ const fetchAuth = async () => {
       return {user: null, isAdmin: false, isError: true };
 
     const user = await response.json();
-    console.log("User:", user)  // This needs to be deleted later
     return { user, isAdmin: user.accessLevel === 'admin', isError: false };
   }
   catch (error) {
