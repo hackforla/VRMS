@@ -29,7 +29,7 @@ const SelectProject = ({ projects, accessLevel, user }) => {
     <div className="container--ManageProjects">
       <h3>Manage Projects</h3>
       <div className="project-sub-heading" style={{ margin: '0 auto' }}>
-        {accessLevel === 'admin' ? (
+        {accessLevel === 'admin' &&
           <Link to="useradmin">
             {' '}
             <button
@@ -43,7 +43,7 @@ const SelectProject = ({ projects, accessLevel, user }) => {
               Add a Project
             </button>
           </Link>
-        ) : null}
+        }
       </div>
       <div className="project-sub-heading">Select project to edit</div>
       <ul className="project-list">{managedProjects}</ul>

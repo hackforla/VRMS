@@ -391,12 +391,12 @@ const AdminDashboard = () => {
         </div>
 
         {!isLoading && nextEvent.length ? (
-          !isCheckInReady ? (
+          !isCheckInReady &&
             <div className="event-header">You have 1 upcoming event:</div>
           ) : (
             <div className="event-header">Current event:</div>
           )
-        ) : null}
+        }
 
         <div className="admin-upcoming-event">
           {isLoading ? (

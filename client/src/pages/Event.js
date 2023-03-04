@@ -61,7 +61,7 @@ const Event = (props) => {
             <p>{moment(event.date).format('dddd, MMMM D, YYYY @ h:mm a')}</p>
             <p>{event.location.city}</p>
             <p>{event.location.state}</p>
-            {event.project ? (
+            {event.project &&
               <Link
                 to={`/project/${event.project._id}`}
                 className="create-form-button"
@@ -75,7 +75,7 @@ const Event = (props) => {
               >
                 Edit Event
               </Link>
-            ) : null}
+            }
           </div>
         ) : (
           <div>Loading...</div>

@@ -300,7 +300,7 @@ const ProjectLeaderDashboard = () => {
             </button>
           </div>
 
-          {isCheckInReady ? (
+          {isCheckInReady &&
             <>
               {attendees.length > 0 && roster.length > 0 && (
                 <ProjectDashboardContainer
@@ -327,7 +327,7 @@ const ProjectLeaderDashboard = () => {
                 <DashboardButton>Download .csv</DashboardButton>
               </div>
             </>
-          ) : null}
+          }
         </div>
       )}
     </div>
