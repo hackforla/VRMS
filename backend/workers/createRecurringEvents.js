@@ -59,43 +59,42 @@ module.exports = (cron, fetch) => {
                 const eventExists = await checkIfEventExists(filteredEvent.name);
                 const eventDate = new Date(filteredEvent.date);
 
-                if (eventExists) {
-                } else {
-                    // Create new event
-                    const hours = eventDate.getHours();
-                    const minutes = eventDate.getMinutes();
-                    const seconds = eventDate.getSeconds();
-                    const milliseconds = eventDate.getMilliseconds();
 
-                    const yearToday = TODAY_DATE.getFullYear();
-                    const monthToday = TODAY_DATE.getMonth();
-                    const dateToday = TODAY_DATE.getDate();
+                // Create new event
+                const hours = eventDate.getHours();
+                const minutes = eventDate.getMinutes();
+                const seconds = eventDate.getSeconds();
+                const milliseconds = eventDate.getMilliseconds();
 
-                    const newEventDate = new Date(yearToday, monthToday, dateToday, hours, minutes, seconds, milliseconds);
+                const yearToday = TODAY_DATE.getFullYear();
+                const monthToday = TODAY_DATE.getMonth();
+                const dateToday = TODAY_DATE.getDate();
 
-                    const newEndTime = new Date(yearToday, monthToday, dateToday, hours + filteredEvent.hours, minutes, seconds, milliseconds)
+                const newEventDate = new Date(yearToday, monthToday, dateToday, hours, minutes, seconds, milliseconds);
 
-                    const eventToCreate = {
-                        name: filteredEvent.name && filteredEvent.name,
-                        hacknight: filteredEvent.hacknight && filteredEvent.hacknight,
-                        eventType: filteredEvent.eventType && filteredEvent.eventType,
-                        description: filteredEvent.eventDescription && filteredEvent.eventDescription,
-                        project: filteredEvent.project && filteredEvent.project,
-                        date: filteredEvent.date && newEventDate,
-                        startTime: filteredEvent.startTime && newEventDate,
-                        endTime: filteredEvent.endTime && newEndTime,
-                        hours: filteredEvent.hours && filteredEvent.hours
-                    }
-                    if (filteredEvent.hasOwnProperty("location")) {
-                        eventToCreate.location = {
-                            city: filteredEvent.location.city ? filteredEvent.location.city : 'REMOTE',
-                            state: filteredEvent.location.state ? filteredEvent.location.state : 'REMOTE',
-                            country: filteredEvent.location.country ? filteredEvent.location.country : 'REMOTE'
-                        };
-                    }
+                const newEndTime = new Date(yearToday, monthToday, dateToday, hours + filteredEvent.hours, minutes, seconds, milliseconds)
 
-                    const created = await createEvent(eventToCreate);
-                };
+                const eventToCreate = {
+                    name: filteredEvent.name && filteredEvent.name,
+                    hacknight: filteredEvent.hacknight && filteredEvent.hacknight,
+                    eventType: filteredEvent.eventType && filteredEvent.eventType,
+                    description: filteredEvent.eventDescription && filteredEvent.eventDescription,
+                    project: filteredEvent.project && filteredEvent.project,
+                    date: filteredEvent.date && newEventDate,
+                    startTime: filteredEvent.startTime && newEventDate,
+                    endTime: filteredEvent.endTime && newEndTime,
+                    hours: filteredEvent.hours && filteredEvent.hours
+                }
+                if (filteredEvent.hasOwnProperty("location")) {
+                    eventToCreate.location = {
+                        city: filteredEvent.location.city ? filteredEvent.location.city : 'REMOTE',
+                        state: filteredEvent.location.state ? filteredEvent.location.state : 'REMOTE',
+                        country: filteredEvent.location.country ? filteredEvent.location.country : 'REMOTE'
+                    };
+                }
+
+                const created = await createEvent(eventToCreate);
+
             };
         };
     };
