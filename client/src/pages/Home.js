@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CheckInButtons from "../components/presentational/CheckInButtons";
 import CreateNewProfileButton from "../components/presentational/CreateNewProfileButton";
-import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../utils/globalSettings";
+import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend } from "../utils/globalSettings";
 
 import "../sass/Home.scss";
 
@@ -10,7 +10,6 @@ const Home = (props) => {
     // eslint-disable-next-line no-unused-vars
     const [isLoading, setIsLoading] = useState(false);
     const [event, setEvent] = useState("--SELECT ONE--");
-    const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
     async function fetchEvents() {
         try {

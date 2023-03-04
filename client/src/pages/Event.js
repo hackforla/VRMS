@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
-import { REACT_APP_CUSTOM_REQUEST_HEADER } from '../utils/globalSettings';
+import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend} from '../utils/globalSettings';
 
 import '../sass/Event.scss';
 
@@ -9,7 +9,6 @@ const Event = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [event, setEvent] = useState([]);
   const [isCheckInReady, setIsCheckInReady] = useState();
-  const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
   // eslint-disable-next-line
   async function setCheckInReady(e) {

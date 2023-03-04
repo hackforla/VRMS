@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../utils/globalSettings";
+import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend} from "../utils/globalSettings";
 import * as authApi from '../api/auth';
 
 export const AuthContext = createContext();
@@ -34,7 +34,6 @@ export const AuthProvider = ({ children }) => {
 };
 
 const fetchAuth = async () => {
-  const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
   const request = {
     method: "POST",
