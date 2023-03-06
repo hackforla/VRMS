@@ -24,9 +24,9 @@ const EventForm = ({
           onChange={handleInputChange}
           maxLength={30}
         />
-        {formErrors?.name &&
+        {formErrors?.name ? (
           <div className="event-form-error">{formErrors.name}</div>
-        }
+        ) : null}
       </label>
       <div className="event-form-row">
         <label className="event-form-label" htmlFor="eventType">
@@ -116,11 +116,11 @@ const EventForm = ({
           value={formValues.videoConferenceLink}
           onChange={handleInputChange}
         />
-        {formErrors?.videoConferenceLink &&
+        {formErrors?.videoConferenceLink ? (
           <div className="event-form-error">
             {formErrors.videoConferenceLink}
           </div>
-        }
+        ) : null}
       </label>
 
       {children}

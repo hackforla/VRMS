@@ -33,31 +33,31 @@ const AttendeeTable = ({ attendees, activeMeeting, projectId, setRoster, roster 
             .catch(error => console.log(error));
     };
 
+    function sortAttendees() {
+        if (!attendees.length || !roster.length) return;
+
+        const attendeesOnRoster = [];
+        const attendeesNotOnRoster = []; 
+              
+        attendees.map((attendee, index) => {
+            const currAttendee = { ...attendee };
+      
+            const isOnRoster = Boolean(roster.find(teamMember => 
+              teamMember.userId._id === attendee.userId._id));
+            
+            currAttendee.isOnRoster = isOnRoster;
+            isOnRoster 
+                ? attendeesOnRoster.push(currAttendee) 
+                : attendeesNotOnRoster.push(currAttendee);
+        });
+      
+        setSortedAttendees({
+            onTeam: attendeesOnRoster,
+            notOnTeam: attendeesNotOnRoster,
+        });
+    };
+
     useEffect(() => {
-        function sortAttendees() {
-            if (!attendees.length || !roster.length) return;
-    
-            const attendeesOnRoster = [];
-            const attendeesNotOnRoster = []; 
-                  
-            attendees.forEach((attendee) => {
-                const currAttendee = { ...attendee };
-          
-                const isOnRoster = Boolean(roster.find(teamMember => 
-                  teamMember.userId._id === attendee.userId._id));
-                
-                currAttendee.isOnRoster = isOnRoster;
-                isOnRoster 
-                    ? attendeesOnRoster.push(currAttendee) 
-                    : attendeesNotOnRoster.push(currAttendee);
-            });
-          
-            setSortedAttendees({
-                onTeam: attendeesOnRoster,
-                notOnTeam: attendeesNotOnRoster,
-            });
-        };
-        
         sortAttendees();
     }, [attendees, roster]);
 

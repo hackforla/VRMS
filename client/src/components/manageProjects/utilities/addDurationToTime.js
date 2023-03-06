@@ -30,7 +30,7 @@ export const addDurationToTime = (startTimeDate, duration) => {
 			endTime = new Date(date.getTime() + (4*3600000));
 		break;
 		default:
-			throw new Error('Error: Cannot calculate endTime');
+			throw 'Error: Cannot calculate endTime';
 	} 
 	return endTime;
 };

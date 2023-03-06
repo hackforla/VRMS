@@ -12,9 +12,9 @@ const Success = (props) => {
           <h4 className="last-row">Soon, you'll be able to: </h4>
         </div>
         <div className="future-list">
-          <p><span role="img" aria-label="pointing finger">👉</span> View your detailed, personalized journey...</p>
-          <p><span role="img" aria-label="pointing finger">👉</span> Get matched with projects that need you...</p>
-          <p><span role="img" aria-label="pointing finger">👉</span> Manage your own project!</p>
+          <p>👉 View your detailed, personalized journey...</p>
+          <p>👉 Get matched with projects that need you...</p>
+          <p>👉 Manage your own project!</p>
         </div>
 
         <div className="success-info">

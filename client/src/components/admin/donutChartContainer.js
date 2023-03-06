@@ -41,15 +41,14 @@ const DonutChartContainer = (props) => {
   }
   total = Math.round(100 * total) / 100;
 
-  
+  const createPie = d3
+    .pie(pieData)
+    .value((d) => d.value)
+    .sort(null);
+
+  const createArc = d3.arc().innerRadius(40).outerRadius(80);
+
   useEffect(() => {
-    const createPie = d3
-      .pie(pieData)
-      .value((d) => d.value)
-      .sort(null);
-  
-    const createArc = d3.arc().innerRadius(40).outerRadius(80);
-    
     const data = createPie(pieData);
 
     const group = d3.select(ref.current);
@@ -73,7 +72,7 @@ const DonutChartContainer = (props) => {
         const { data } = d;
         return data.color;
       });
-  }, [props, pieData]);
+  }, [props]);
 
   return (
     <div className="dashboard-stats">

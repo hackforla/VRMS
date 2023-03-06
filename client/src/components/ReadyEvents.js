@@ -1,33 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend} from "../utils/globalSettings";
+import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../utils/globalSettings";
 
 import '../sass/ReadyEvents.scss';
 
 const ReadyEvents = (props) => {
     const [isLoading, setIsLoading] = useState(false);
     const [events, setEvents] = useState([]);
+    const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
+
+    async function fetchEvent() {
+        try {
+            setIsLoading(true);
+            const res = await fetch("/api/events?checkInReady=true", {
+                headers: {
+                    "x-customrequired-header": headerToSend
+                }
+            });
+            const resJson = await res.json();
+
+            setEvents(resJson);
+            setIsLoading(false);
+        } catch(error) {
+            console.log(error);
+            setIsLoading(false);
+        }
+    }
 
     useEffect(() => {
-        async function fetchEvent() {
-            try {
-                setIsLoading(true);
-                const res = await fetch("/api/events?checkInReady=true", {
-                    headers: {
-                        "x-customrequired-header": headerToSend
-                    }
-                });
-                const resJson = await res.json();
-    
-                setEvents(resJson);
-                setIsLoading(false);
-            } catch(error) {
-                console.log(error);
-                setIsLoading(false);
-            }
-        }
-
         fetchEvent();
+
     }, []);
 
     return (
@@ -44,13 +46,13 @@ const ReadyEvents = (props) => {
                                 <p>{event.location.state}</p>
                             </div>
 
-                            {props.newUser &&
+                            {props.newUser ? (
                                 <Link to={`/checkIn/newUser?eventId=${event._id}`} className="checkin-newuser-button">New User Check-In</Link>
-                            }
+                            ) : null}
 
-                            {props.returningUser &&
+                            {props.returningUser ? (
                                 <Link  to={`/checkIn/returningUser?eventId=${event._id}`} className="checkin-newuser-button">Returning User Check-In</Link>
-                            }
+                            ) : null}
                         </div>
                     ))) : (
                         <div>Check back later...</div>

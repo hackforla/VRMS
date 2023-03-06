@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const UserDashboard = (props) => (
   <div className="flex-container">

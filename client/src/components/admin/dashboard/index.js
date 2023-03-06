@@ -10,12 +10,13 @@ import Tab from '../../../common/tabs/tab';
 import LocationTableReport from '../reports';
 import '../../../sass/Dashboard.scss';
 import './index.scss';
-import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend} from '../../../utils/globalSettings';
+import { REACT_APP_CUSTOM_REQUEST_HEADER } from '../../../utils/globalSettings';
 
 const AdminDashboard = () => {
   const { auth } = useAuth();
   const defaultChartType = 'All Events';
   const eventsArr = [];
+  const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
   let uniqueEventTypes = new Set();
   let hackNightUniqueLocations = new Set();
@@ -380,7 +381,6 @@ const AdminDashboard = () => {
     return function cleanup() {
       abortController.abort();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return auth && auth.user ? (
@@ -391,12 +391,12 @@ const AdminDashboard = () => {
         </div>
 
         {!isLoading && nextEvent.length ? (
-          !isCheckInReady &&
+          !isCheckInReady ? (
             <div className="event-header">You have 1 upcoming event:</div>
           ) : (
             <div className="event-header">Current event:</div>
           )
-        }
+        ) : null}
 
         <div className="admin-upcoming-event">
           {isLoading ? (

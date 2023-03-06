@@ -165,9 +165,9 @@ const NewUserForm = (props) => {
                 );
               })}
 
-          {props.isError && props.errorMessage.length > 1 &&
+          {props.isError && props.errorMessage.length > 1 ? (
             <div className="error">{props.errorMessage}</div>
-          }
+          ) : null}
 
           {!props.isLoading ? (
             <div className="form-row">

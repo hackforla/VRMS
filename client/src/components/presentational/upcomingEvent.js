@@ -18,7 +18,7 @@ const upcomingEvent = (props) => {
                         )}
                     </p>
                 </div>
-                {props.nextEvent[0].location.city !== "" &&
+                {props.nextEvent[0].location.city !== "" ? (
                     <div className="event-info-wrapper">
                         <LocationIcon />
                         <p className="event-info">
@@ -26,7 +26,7 @@ const upcomingEvent = (props) => {
                             {props.nextEvent[0].location.state}
                         </p>
                     </div>
-                }
+                ) : null}
             </div>
             <div className="warning-event-toggle">
                 {props.nextEvent[0] && props.isCheckInReady === false ? (

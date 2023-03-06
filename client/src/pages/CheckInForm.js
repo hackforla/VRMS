@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import NewUserForm from './../components/presentational/newUserForm';
 import ReturnUserForm from './../components/presentational/returnUserForm';
-import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend} from '../utils/globalSettings';
+import { REACT_APP_CUSTOM_REQUEST_HEADER } from '../utils/globalSettings';
 
 import '../sass/CheckIn.scss';
 
@@ -74,6 +74,7 @@ const CheckInForm = (props) => {
     'Fundraising',
   ];
 
+  const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
   const fetchQuestions = async () => {
     try {
@@ -128,6 +129,7 @@ const CheckInForm = (props) => {
 
   const submitForm = async (userForm) => {
     // First, create a new user in the user collection
+    const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
     const userRes = await fetch('/api/users', {
       method: 'POST',
@@ -183,6 +185,7 @@ const CheckInForm = (props) => {
     const answerJson = JSON.stringify(answer);
 
     try {
+      const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
       fetch(`/api/users/${returningUser.user._id}`, {
         method: 'PATCH',
         body: answerJson,
@@ -243,6 +246,7 @@ const CheckInForm = (props) => {
 
   const submitNewProfile = (userForm) => {
     // First, create a new user in the user collection
+    const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
 
     fetch('/api/users', {
       method: 'POST',

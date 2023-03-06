@@ -154,7 +154,7 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats, handleFiltered
         <div className="table-report-wrap">
             {!isLoading ? (
                 <div className="admin-table-report">
-                    {isFilterButton &&
+                    {isFilterButton ? (
                         <button
                             className="filter-button"
                             type="button"
@@ -162,9 +162,9 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats, handleFiltered
                         >
                             Set Filter
                         </button>
-                    }
+                    ) : null }
 
-                    {isDatepicker &&
+                    {isDatepicker ? (
                         <div className="datepicker-section">
                             <div className="datepicker-wrap">
                                 <p className="datepicker-name">Start</p>
@@ -200,7 +200,7 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats, handleFiltered
                                 Calculate Stats
                             </button>
                         </div>
-                    }
+                    ) : null }
 
                     <div className="stats-section">
                         <div className="time-description">
@@ -237,14 +237,14 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats, handleFiltered
                                     </tr>
                                 ))}
 
-                                {totalForAllEvents &&
+                                {totalForAllEvents ? (
                                     <tr>
                                         <td key={`events-total`}>Total</td>
                                         {totalForAllEvents.map((total, i) => (
                                             <td key={`${headerGroups[i]}-events-total`}>{total}</td>
                                         ))}
                                     </tr>
-                                }
+                                ) : null }
                                 </tbody>
                             </table>
                         ) : (
@@ -273,14 +273,14 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats, handleFiltered
                                     </tr>
                                 ))}
 
-                                {totalForHackNight &&
+                                {totalForHackNight ? (
                                     <tr>
                                         <td key={`hack-night-total`}>Total</td>
                                         {totalForHackNight.map((total, i) => (
                                             <td key={`${headerGroups[i]}-hack-total`}>{total}</td>
                                         ))}
                                     </tr>
-                                }
+                                ) : null }
                                 </tbody>
                             </table>
                         ) : (
