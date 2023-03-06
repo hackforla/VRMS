@@ -10,7 +10,7 @@ const EmailSent = (props) => {
         }, 10000);
 
         return () => clearTimeout(timer);
-    }, []);
+    }, [props.history]);
 
     return (
         <div className="flex-container">

@@ -33,9 +33,9 @@ const ReturnUserForm = (props) => {
             </p>
           </div>
 
-          {props.isError && props.errorMessage.length > 1 ? (
+          {props.isError && props.errorMessage.length > 1 &&
             <div className="error">{props.errorMessage}</div>
-          ) : null}
+          }
           {props.user === false && (
             <div className="error">Try entering your email again.</div>
           )}
