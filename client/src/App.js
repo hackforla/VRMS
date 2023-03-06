@@ -22,6 +22,9 @@ import UserAdmin from './pages/UserAdmin';
 import ManageProjects from './pages/ManageProjects';
 import HealthCheck from './pages/HealthCheck';
 
+import { ThemeProvider } from '@mui/material';
+import theme from './theme';
+
 import './App.scss';
 
 const routes = [
@@ -56,22 +59,24 @@ const routes = [
 
 const App = () => {
   return (
-    <AuthProvider>
-      <div className="app">
-        <div className="app-container">
-          <Navbar />
-          <main role="main" className="main">
-            <Switch>
-              {routes.map(({ path, Component }) => (
-                <Route key={path} exact path={path} component={Component} />
-              ))}
-              <Redirect to="/" />
-            </Switch>
-          </main>
-          <Footer />
+    <ThemeProvider theme={theme}>
+      <AuthProvider>
+        <div className="app">
+          <div className="app-container">
+            <Navbar />
+            <main role="main" className="main">
+              <Switch>
+                {routes.map(({ path, Component }) => (
+                  <Route key={path} exact path={path} component={Component} />
+                ))}
+                <Redirect to="/" />
+              </Switch>
+            </main>
+            <Footer />
+          </div>
         </div>
-      </div>
-    </AuthProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 };
 

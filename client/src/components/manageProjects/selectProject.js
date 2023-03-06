@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import '../../sass/ManageProjects.scss';
 
+import { Button, Typography } from '@mui/material';
+
 const SelectProject = ({ projects, accessLevel, user }) => {
   // If access level is 'admin', display all active projects.
   // If access level is 'user' display user managed projects.
@@ -27,25 +29,17 @@ const SelectProject = ({ projects, accessLevel, user }) => {
 
   return (
     <div className="container--ManageProjects">
-      <h3>Manage Projects</h3>
+      <Typography variant="h3">Project Management</Typography>
       <div className="project-sub-heading" style={{ margin: '0 auto' }}>
         {accessLevel === 'admin' &&
           <Link to="useradmin">
             {' '}
-            <button
-              type="button"
-              className="button"
-              style={{
-                fontSize: 'small',
-                width: 'auto',
-              }}
-            >
-              Add a Project
-            </button>
+            <Button variant="secondary" sx={{ mb: 3 }}>
+              Add a New Project
+            </Button>
           </Link>
         }
       </div>
-      <div className="project-sub-heading">Select project to edit</div>
       <ul className="project-list">{managedProjects}</ul>
     </div>
   );
