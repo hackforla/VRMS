@@ -22,7 +22,7 @@ jobs:
         run: docker-compose run --rm backend yarn run test --testPathIgnorePatterns=routers
 
   test-backend-integration:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Make envfile
