@@ -47,7 +47,7 @@ const EditableField = ({
     <div className="editable-field-div">
       <div className="project-edit-title">
         {fieldTitle}
-        {notRestricted ? (
+        {notRestricted &&
           <button
             type="button"
             className="project-edit-button"
@@ -57,7 +57,7 @@ const EditableField = ({
           >
             [edit]
           </button>
-        ) : null}
+        }
       </div>
 
       {editable ? (

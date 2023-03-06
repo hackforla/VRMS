@@ -21,7 +21,7 @@ const HandleAuth = (props) => {
     isValidToken(api_token).then((isValid) => {
       setMagicLink(isValid)
     });
-  }, []);
+  }, [props.location.search]);
 
   // Step 2: Refresh user auth (requires valid Magic Link)
   useEffect(() => {
@@ -29,7 +29,7 @@ const HandleAuth = (props) => {
     if(!auth?.isError) return;
 
     refreshAuth();
-  },[isMagicLinkValid, refreshAuth])
+  },[isMagicLinkValid, refreshAuth, auth])
 
   // Step 3: Set IsLoaded value to render Component
   useEffect(() => {
@@ -41,7 +41,7 @@ const HandleAuth = (props) => {
     if(!auth || auth.isError) return;
     
     setIsLoaded(true);
-    },[isMagicLinkValid, auth?.isError, setIsLoaded])
+    },[isMagicLinkValid, setIsLoaded, auth])
 
   if(!isLoaded) 
     return (

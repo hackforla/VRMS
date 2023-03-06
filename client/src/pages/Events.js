@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import moment from 'moment';
-import { REACT_APP_CUSTOM_REQUEST_HEADER } from '../utils/globalSettings';
+import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend} from '../utils/globalSettings';
 
 import '../sass/Events.scss';
 import useAuth from '../hooks/useAuth';
@@ -10,24 +10,23 @@ const Events = (props) => {
   const { auth } = useAuth();
   const [events, setEvents] = useState([]);
   const [eventSearchParam, setEventSearchParam] = useState('');
-  const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
-
-  async function fetchData() {
-    try {
-      const res = await fetch('/api/events', {
-        headers: {
-          'x-customrequired-header': headerToSend,
-        },
-      });
-      const resJson = await res.json();
-
-      setEvents(resJson);
-    } catch (error) {
-      alert(error);
-    }
-  }
 
   useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await fetch('/api/events', {
+          headers: {
+            'x-customrequired-header': headerToSend,
+          },
+        });
+        const resJson = await res.json();
+  
+        setEvents(resJson);
+      } catch (error) {
+        alert(error);
+      }
+    }
+    
     fetchData();
   }, []);
 
@@ -48,10 +47,6 @@ const Events = (props) => {
             );
           })
           .map((event, index) => {
-            const event_city = event.location && (event.location.city || 'TBD');
-            const event_state =
-              event.location && (event.location.state || 'TBD');
-
             return (
               <li key={index}>
                 <div key={index} className="list-event-container">
