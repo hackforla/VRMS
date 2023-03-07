@@ -1,1 +1,0 @@
-export const AUTH_ORIGIN = ['LOG_IN', 'ONBOARDING', 'GOOGLE_ACCOUNT_CHECK'];
