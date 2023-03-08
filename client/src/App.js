@@ -45,7 +45,7 @@ const routes = [
   { path: '/useradmin', name: 'useradmin', Component: UserAdmin },
   { path: '/projects', name: 'projects', Component: ManageProjects },
   {
-    path: '/project/:projectId',
+    path: '/projects/:projectId',
     name: 'project',
     Component: ManageProjects,
   },

@@ -3,6 +3,7 @@ import { createTheme, responsiveFontSizes } from '@mui/material';
 let theme = createTheme({
   palette: {
     primary: {
+      // main: '#00008B',
       main: '#00008B',
     },
     secondary: {
@@ -26,6 +27,7 @@ let theme = createTheme({
           textTransform: 'none',
           padding: '0.5rem 2rem',
         },
+
       },
       variants: [
         {
@@ -37,6 +39,10 @@ let theme = createTheme({
       ],
     },
   },
+  tab: {
+    minWidth: 50, // a number of your choice
+    width: 50, // a number of your choice
+}
 });
 
 theme = responsiveFontSizes(theme);

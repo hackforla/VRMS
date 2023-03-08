@@ -1,116 +1,166 @@
-import React, {useState} from "react";
-import { Link, withRouter } from "react-router-dom";
-
+import React, { useState } from 'react';
+import { NavLink, withRouter } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
-import {authLevelRedirect} from '../utils/authUtils'
+import { authLevelRedirect } from '../utils/authUtils';
+import HflaImg from '../svg/hflalogo.svg';
+import { Box, Button, Grid } from '@mui/material';
 
-import "../sass/Navbar.scss";
-//hooks
-//function -> class
+import { styled } from '@mui/system';
+import { select } from 'd3';
+// import '../sass/Navbar.scss';
+
 const Navbar = (props) => {
+  // check user accessLevel and adjust link accordingly
+  // const [page, setPage] = useState('home')
+  const { auth } = useAuth();
+  let loginRedirect = '/admin';
+  if (auth?.user) {
+    loginRedirect = authLevelRedirect(auth.user);
+  }
 
-    // check user accessLevel and adjust link accordingly
-    const [page, setPage] = useState('home');
-    const { auth } = useAuth();
-    let loginRedirect = '/admin';
-    if (auth?.user) {
-      loginRedirect = authLevelRedirect(auth.user);
-    }
-    const notAuth = () => (
-        <>
-          {page === 'home' ?
-            <p className="nav-link-text nav-link-active">CHECK-IN</p>
-            :
-            <div className='nav-link-container'>
-              <Link to="/" onClick={e => setPage('home')} >
-                <p className="nav-link-text">
-                  CHECK-IN
-                </p>
-              </Link>
-            </div>}
-          {page === 'adminLogin' ?
-            <p className="nav-link-text nav-link-active">ADMIN</p>
-            :
-            <div className='nav-link-container'>
-              <Link to={loginRedirect} onClick={e => setPage('adminLogin')}>
-                <p className="nav-link-text">
-                  ADMIN
-                </p>
-              </Link>
-            </div>
-            }
-        </>
-    )
-    const isAuth = () => (
-      <>
-        {page === 'useradmin' ?
-          <p className="nav-link-text nav-link-active" >USER MANAGEMENT</p>
-          :
-          <div className='nav-link-container'>
-            <Link to="/useradmin" onClick={e => setPage('usermanagement')}>
-              <p className="nav-link-text">ADMIN</p>
-            </Link>
-          </div>}
-        {page === 'projects' ?
-          <p className="nav-link-text nav-link-active" >PROJECTS</p>
-          :
-          <div className='nav-link-container'>
-            <Link to="/projects" onClick={e => setPage('projects')}>
-              <p className="nav-link-text">PROJECTS</p>
-            </Link>
-          </div>}
-      </>
-    )
-    const isUser = () => (
-      <>
-        {page === 'home' ?
-          <p className="nav-link-text nav-link-active" >PROJECTS</p>
-          :
-          <div className='nav-link-container'>
-            <Link to="/projects" onClick={e => setPage('home')}>
-              <p className="nav-link-text">PROJECTS</p>
-            </Link>
-          </div>}
-      </>
-    )
+  const [selected, setSelected] = useState(1);
 
+  const StyledButton = styled(Button)({
+    color: 'black',
+    marginLeft: '2rem',
+    padding: '0.1rem 0.5rem',
+    borderRadius: 0,
+    fontSize: '1rem',
+  });
 
-    return (
-      <div className="nav-wrapper">
-        <nav className="navbar" role="navigation" aria-label="main navigation">
-          <div className="navbar-buttons-container">
+  const active = {
+    button: {
+      '&.active': {
+        borderBottom: '2px #fa114f solid',
+      },
+    },
+  };
 
-            {!auth?.user &&
-              notAuth()
-            }
+  return (
+    <>
+      {
+        <Box mt={2} mb={2} sx={{ width: '100%', typography: 'body 1' }}>
+          <Grid container spacing={12}>
+            <Grid item sx={{ display: 'flex', justifyContent: 'center' }}>
+              {!auth?.user && (
+                <>
+                  <StyledButton
+                    component={NavLink}
+                    to="/"
+                    sx={selected === 1 && active.button}
+                    onClick={() => setSelected(1)}
+                  >
+                    CHECK IN
+                  </StyledButton>
+                  <StyledButton
+                    component={NavLink}
+                    to="/login"
+                    sx={selected === 2 && active.button}
+                    onClick={() => setSelected(2)}
+                  >
+                    ADMIN
+                  </StyledButton>
+                </>
+              )}
+              {auth?.user?.accessLevel === 'admin' && (
+                <>
+                  {selected === 1 ? (
+                    <StyledButton
+                      component={NavLink}
+                      to="/useradmin"
+                      sx={active.button}
+                    >
+                      ADMIN
+                    </StyledButton>
+                  ) : (
+                    <StyledButton
+                      component={NavLink}
+                      to="/useradmin"
+                      onClick={() => setSelected(1)}
+                    >
+                      ADMIN
+                    </StyledButton>
+                  )}
+                  {/* Seperate the buttons */}
+                  {selected === 2 ? (
+                    <StyledButton
+                      component={NavLink}
+                      to={'/projects'}
+                      sx={active.button}
+                    >
+                      PROJECTS
+                    </StyledButton>
+                  ) : (
+                    <StyledButton
+                      component={NavLink}
+                      to={'/projects'}
+                      onClick={() => setSelected(2)}
+                    >
+                      PROJECTS
+                    </StyledButton>
+                  )}
 
-            {auth?.user?.accessLevel === 'admin' &&
-              isAuth()
-            }
+                  {/* ................ */}
 
-            {auth?.user?.accessLevel === 'user' &&
-              isUser()
-            }
+                  {/* <StyledButton
+                      component={NavLink}
+                      to="/useradmin"
+                      // sx={selected === 1 && active.button}
+                      sx={selected === 1 ? active.button : ''}
+                      onClick={() => setSelected(1)}
+                    >
+                      ADMIN
+                    </StyledButton> */}
+                  {/* <StyledButton
+                      component={NavLink}
+                      to={"/projects"}
+                      sx={selected === 2 ? active.button : ''}
+                      onClick={() => setSelected(2)}
+                    >
+                      PROJECTS
+                    </StyledButton> */}
+                    
+                    {/* ................ */}
+                </>
+              )}
+              {auth?.user?.accessLevel === 'user' && (
+                <>
+                  <StyledButton
+                    component={NavLink}
+                    to={'/projects' || '/project'}
+                    sx={selected === 2 && active.button}
+                    onClick={() => setSelected(2)}
+                  >
+                    PROJECTS
+                  </StyledButton>
+                </>
+              )}
+            </Grid>
+            <Grid item>
+              <Box component="img" src={HflaImg} sx={{ width: '100%' }} />
+            </Grid>
+          </Grid>
+        </Box>
+      }
+    </>
 
-          </div>
-
-          {props.location.pathname === '/' ||
-          props.location.pathname === '/success' ? (
-            <div className="navbar-logo grow">
-              <img src="/hflalogo.png" alt="Hack for LA Logo"></img>
-            </div>
-          ) : (
-            <div
-              className={`navbar-logo ${
-                props.location.pathname === '/admin' && 'justify-right'
-              }`}
-            >
-              <img src="/hflalogo.png" alt="Hack for LA Logo"></img>
-            </div>
-          )}
-        </nav>
-      </div>
-    );
+    //     {/* {props.location.pathname === '/' ||
+    //     props.location.pathname === '/success' ? (
+    //       <div className="navbar-logo grow">
+    //         <img src="/hflalogo.png" alt="Hack for LA Logo"></img>
+    //       </div>
+    //     ) : (
+    //       <div
+    //         className={`navbar-logo ${
+    //           props.location.pathname === '/admin' && 'justify-right'
+    //         }`}
+    //       >
+    //         <img src="/hflalogo.png" alt="Hack for LA Logo"></img>
+    //       </div>
+    //     )} */}
+    //   {/* </nav> */}
+    // </div>
+  );
 };
 
 export default withRouter(Navbar);
