@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import { checkUser, checkAuth } from '../../services/user.service';
@@ -88,21 +88,6 @@ const Auth = () => {
     }
   }
 
-  useEffect(() => {
-    const enterKeyEventHandler = (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        handleLogin(e);
-      }
-    };
-
-    document.addEventListener('keydown', enterKeyEventHandler);
-
-    return () => {
-      document.removeEventListener('keydown', enterKeyEventHandler);
-    };
-  }, [email]);
-
   // This allows users who are not admin, but are allowed to manage projects, to login
   let loginRedirect = '';
   if (auth?.user) {
@@ -117,7 +102,7 @@ const Auth = () => {
         <div className="adminlogin-headers">
           <h3>Welcome Back!</h3>
         </div>
-        <form className="form-check-in" autoComplete="off">
+        <form onSubmit={handleLogin} className="form-check-in" autoComplete="off">
           <div className="form-row">
             <div className="form-input-text">
               <label htmlFor="email">Enter your email address:</label>

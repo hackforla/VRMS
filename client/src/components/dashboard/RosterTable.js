@@ -1,9 +1,8 @@
 import React from "react";
 import styles from "../../sass/ProjectLeaderDashboard.module.scss";
-import { REACT_APP_CUSTOM_REQUEST_HEADER } from "../../utils/globalSettings";
+import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend} from "../../utils/globalSettings";
 
 const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
-  const headerToSend = REACT_APP_CUSTOM_REQUEST_HEADER;
   const gitHubIcon = (
     <img
       className={styles.rosterIconImg}
@@ -51,8 +50,6 @@ const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
   };
 
   const gDriveClickHandler = (email, fileId) => {
-    email = email;
-    fileId = fileId;
     const bodyObject = {
       email: email,
       file: fileId,
@@ -79,6 +76,7 @@ const RosterTable = ({ attendees, activeMeeting, RosterProjectId }) => {
       });
   };
 
+  // eslint-disable-next-line
   const gitHubClickHandler = (
     githubHandle,
     projectName,

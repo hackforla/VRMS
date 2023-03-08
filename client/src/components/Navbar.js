@@ -80,17 +80,17 @@ const Navbar = (props) => {
         <nav className="navbar" role="navigation" aria-label="main navigation">
           <div className="navbar-buttons-container">
 
-            {!auth?.user ? (
+            {!auth?.user &&
               notAuth()
-            ) : null}
+            }
 
-            {auth?.user?.accessLevel === 'admin' ? (
+            {auth?.user?.accessLevel === 'admin' &&
               isAuth()
-            ) : null}
+            }
 
-            {auth?.user?.accessLevel === 'user' ? (
+            {auth?.user?.accessLevel === 'user' &&
               isUser()
-            ) : null}
+            }
 
           </div>
 
