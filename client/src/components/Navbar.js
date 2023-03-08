@@ -4,14 +4,11 @@ import useAuth from '../hooks/useAuth';
 import { authLevelRedirect } from '../utils/authUtils';
 import HflaImg from '../svg/hflalogo.svg';
 import { Box, Button, Grid } from '@mui/material';
-
 import { styled } from '@mui/system';
-import { select } from 'd3';
 // import '../sass/Navbar.scss';
 
 const Navbar = (props) => {
   // check user accessLevel and adjust link accordingly
-  // const [page, setPage] = useState('home')
   const { auth } = useAuth();
   let loginRedirect = '/admin';
   if (auth?.user) {
@@ -20,6 +17,7 @@ const Navbar = (props) => {
 
   const [selected, setSelected] = useState(1);
 
+  // Styles that may need to be included in the theme.
   const StyledButton = styled(Button)({
     color: 'black',
     marginLeft: '2rem',
@@ -28,26 +26,25 @@ const Navbar = (props) => {
     fontSize: '1rem',
   });
 
+  // Displays a line below the page link the user is on.
   const active = {
-    button: {
       '&.active': {
         borderBottom: '2px #fa114f solid',
       },
-    },
   };
 
   return (
     <>
-      {
-        <Box mt={2} mb={2} sx={{ width: '100%', typography: 'body 1' }}>
+      {<Box mt={2} mb={2} sx={{ width: '100%', typography: 'body 1' }}>
           <Grid container spacing={12}>
             <Grid item sx={{ display: 'flex', justifyContent: 'center' }}>
+              {/* No auth page -> Displays 'Checkin' and 'Admin'. */}
               {!auth?.user && (
                 <>
                   <StyledButton
                     component={NavLink}
                     to="/"
-                    sx={selected === 1 && active.button}
+                    sx={selected === 1 && active}
                     onClick={() => setSelected(1)}
                   >
                     CHECK IN
@@ -55,79 +52,40 @@ const Navbar = (props) => {
                   <StyledButton
                     component={NavLink}
                     to="/login"
-                    sx={selected === 2 && active.button}
+                    sx={selected === 2 && active}
                     onClick={() => setSelected(2)}
                   >
                     ADMIN
                   </StyledButton>
                 </>
               )}
+              {/* Admin auth -> Displays 'Users' and 'Projects'. */}
               {auth?.user?.accessLevel === 'admin' && (
                 <>
-                  {selected === 1 ? (
-                    <StyledButton
+                  <StyledButton
                       component={NavLink}
                       to="/useradmin"
-                      sx={active.button}
-                    >
-                      ADMIN
-                    </StyledButton>
-                  ) : (
-                    <StyledButton
-                      component={NavLink}
-                      to="/useradmin"
+                      sx={selected === 1 && active}
                       onClick={() => setSelected(1)}
                     >
-                      ADMIN
+                      USERS
                     </StyledButton>
-                  )}
-                  {/* Seperate the buttons */}
-                  {selected === 2 ? (
-                    <StyledButton
-                      component={NavLink}
-                      to={'/projects'}
-                      sx={active.button}
-                    >
-                      PROJECTS
-                    </StyledButton>
-                  ) : (
-                    <StyledButton
-                      component={NavLink}
-                      to={'/projects'}
-                      onClick={() => setSelected(2)}
-                    >
-                      PROJECTS
-                    </StyledButton>
-                  )}
-
-                  {/* ................ */}
-
-                  {/* <StyledButton
-                      component={NavLink}
-                      to="/useradmin"
-                      // sx={selected === 1 && active.button}
-                      sx={selected === 1 ? active.button : ''}
-                      onClick={() => setSelected(1)}
-                    >
-                      ADMIN
-                    </StyledButton> */}
-                  {/* <StyledButton
+                  <StyledButton
                       component={NavLink}
                       to={"/projects"}
-                      sx={selected === 2 ? active.button : ''}
+                      sx={selected === 2 && active}
                       onClick={() => setSelected(2)}
                     >
                       PROJECTS
-                    </StyledButton> */}
-                    
-                    {/* ................ */}
+                    </StyledButton>
                 </>
               )}
+              {/* User auth -> Displays 'Projects' only. */}
               {auth?.user?.accessLevel === 'user' && (
                 <>
                   <StyledButton
                     component={NavLink}
-                    to={'/projects' || '/project'}
+                    to={'/projects'}
                     sx={selected === 2 && active.button}
                     onClick={() => setSelected(2)}
                   >
@@ -143,23 +101,6 @@ const Navbar = (props) => {
         </Box>
       }
     </>
-
-    //     {/* {props.location.pathname === '/' ||
-    //     props.location.pathname === '/success' ? (
-    //       <div className="navbar-logo grow">
-    //         <img src="/hflalogo.png" alt="Hack for LA Logo"></img>
-    //       </div>
-    //     ) : (
-    //       <div
-    //         className={`navbar-logo ${
-    //           props.location.pathname === '/admin' && 'justify-right'
-    //         }`}
-    //       >
-    //         <img src="/hflalogo.png" alt="Hack for LA Logo"></img>
-    //       </div>
-    //     )} */}
-    //   {/* </nav> */}
-    // </div>
   );
 };
 
