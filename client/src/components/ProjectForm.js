@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import ProjectApiService from '../api/ProjectApiService';
 
 import {
   Typography,
@@ -10,13 +11,13 @@ import {
   Button,
 } from '@mui/material';
 
-/**
+/** Project Form Component
  *
- * TODO - Figure out how to bring in api call to create a new project
+ * Used for creating and updating a project
  *
  * */
 export default function ProjectForm() {
-  //   const navigate = useNavigate();
+  let history = useHistory();
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -44,15 +45,21 @@ export default function ProjectForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const projectApi = new ProjectApiService();
+
     try {
-      console.log('hello world');
+      console.log('FORM DATA', formData);
+      console.log('PROJECT API SERVICE', projectApi.create);
+      const response = await projectApi.create(formData);
+      console.log('RESPONSE', response);
     } catch (errors) {
       setFormErrors(errors);
       return;
     }
 
-    //navigate to the projects page after successful submission
-    // navigate(`/projects`);
+    //For now, navigate to projects page after successful form submission
+    //TODO - Figure out how to navigate to newly created project details page
+    history.push('/projects');
   };
 
   /** All TextField and InputLabel styles are controlled by the theme */
@@ -107,8 +114,6 @@ export default function ProjectForm() {
       placeholder: 'htttps://hackforla.org/projects/',
     },
   ];
-
-  console.log('FORM DATA', formData);
 
   return (
     <Box>
