@@ -39,10 +39,6 @@ let theme = createTheme({
       ],
     },
   },
-  tab: {
-    minWidth: 50, // a number of your choice
-    width: 50, // a number of your choice
-}
 });
 
 theme = responsiveFontSizes(theme);
