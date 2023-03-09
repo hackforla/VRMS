@@ -10,6 +10,12 @@ let theme = createTheme({
     },
   },
   typography: {
+    h1: {
+      fontFamily: 'Source Code Pro',
+      fontWeight: 'bold',
+      fontSize: '35px',
+      marginBottom: '1.5rem',
+    },
     h3: {
       fontFamily: 'Source Code Pro',
       fontWeight: 'bold',
@@ -35,6 +41,43 @@ let theme = createTheme({
           },
         },
       ],
+    },
+    MuiTextField: {
+      defaultProps: {
+        inputProps: {
+          style: { width: '100%', border: 'none', color: 'black' },
+        },
+        fullWidth: true,
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          '& .MuiInputBase-input': {
+            color: 'black',
+            fontFamily: 'Source Sans Pro',
+            fontSize: '18px',
+            fontWeight: '500',
+            border: 'none',
+            '&::placeholder': {
+              color: '#757575',
+              fontSize: '18px',
+              opacity: 1,
+            },
+          },
+        },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          color: 'black',
+          fontFamily: 'Source Sans Pro',
+          fontWeight: '600',
+          fontSize: '16px',
+          marginBottom: '0.25rem',
+        },
+      },
     },
   },
 });
