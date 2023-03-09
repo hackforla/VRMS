@@ -5,7 +5,7 @@ import { checkUser, checkAuth } from '../../services/user.service';
 import { authLevelRedirect } from '../../utils/authUtils';
 
 import useAuth from '../../hooks/useAuth';
-// import '../../sass/AdminLogin.scss';
+import '../../sass/AdminLogin.scss';
 
 /** At the moment only users with the 'admin' accessLevel can login
  * and see the dashboard
