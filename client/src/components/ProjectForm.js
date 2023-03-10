@@ -9,13 +9,15 @@ import {
   TextField,
   InputLabel,
   Button,
+  Grid,
+  Container,
 } from '@mui/material';
 
 /** Project Form Component
  *
- * Used for creating and updating a project
- *
+ * To be used for creating and updating a project
  * */
+
 export default function ProjectForm() {
   let history = useHistory();
   const [formData, setFormData] = useState({
@@ -116,19 +118,17 @@ export default function ProjectForm() {
   ];
 
   return (
-    <Box>
+    <Box sx={{ px: 0.5 }}>
       <Box sx={{ textAlign: 'center' }}>
         <Typography variant="h1">Project Management</Typography>
       </Box>
       <Box sx={{ bgcolor: '#F5F5F5' }}>
         <Box sx={{ p: 2 }}>
-          <Typography sx={{ fontSize: '18px', fontWeight: '600' }}>
-            Create New Project
-          </Typography>
+          <Typography sx={{ fontSize: '18px' }}>Project Information</Typography>
         </Box>
-        <Divider sx={{ border: '1px solid black' }} />
+        <Divider />
         <Box sx={{ py: 2, px: 4 }}>
-          <form onSubmit={handleSubmit}>
+          <form id="project-form" onSubmit={handleSubmit}>
             {simpleInputs.map((input) => (
               <Box sx={{ mb: 3 }} key={input.name}>
                 <InputLabel id={input.name}>{input.label}</InputLabel>
@@ -147,16 +147,27 @@ export default function ProjectForm() {
                 />
               </Box>
             ))}
-            <Button
-              type="submit"
-              variant="contained"
-              elevation={0}
-              sx={{ mb: 1 }}
-            >
-              Submit
-            </Button>
           </form>
         </Box>
+      </Box>
+      <Box>
+        <Grid container spacing={4} sx={{ px: 3, my: 3 }}>
+          <Grid item xs={6}>
+            <Button
+              type="submit"
+              form="project-form"
+              variant="contained"
+              sx={{ mb: 1 }}
+            >
+              Save
+            </Button>
+          </Grid>
+          <Grid item xs={6}>
+            <Button variant="secondary" sx={{ mb: 1 }}>
+              Close
+            </Button>
+          </Grid>
+        </Grid>
       </Box>
     </Box>
   );
