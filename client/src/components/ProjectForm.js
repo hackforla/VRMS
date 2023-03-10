@@ -10,7 +10,6 @@ import {
   InputLabel,
   Button,
   Grid,
-  Container,
 } from '@mui/material';
 
 /** Project Form Component
@@ -130,7 +129,7 @@ export default function ProjectForm() {
         <Box sx={{ py: 2, px: 4 }}>
           <form id="project-form" onSubmit={handleSubmit}>
             {simpleInputs.map((input) => (
-              <Box sx={{ mb: 3 }} key={input.name}>
+              <Box sx={{ mb: 1 }} key={input.name}>
                 <InputLabel id={input.name}>{input.label}</InputLabel>
                 <TextField
                   id={input.name}
@@ -139,6 +138,7 @@ export default function ProjectForm() {
                   variant="outlined"
                   type={input.type}
                   onChange={handleChange}
+                  helperText=" "
                   value={formData[input.name]}
                   {...(input.type === 'textarea' && {
                     multiline: true,
