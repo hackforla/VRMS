@@ -56,12 +56,12 @@ let theme = createTheme({
           '& .MuiInputBase-input': {
             color: 'black',
             fontFamily: 'Source Sans Pro',
-            fontSize: '18px',
+            fontSize: '14px',
             fontWeight: '500',
             border: 'none',
             '&::placeholder': {
               color: '#757575',
-              fontSize: '18px',
+              fontSize: '14px',
               opacity: 1,
             },
           },

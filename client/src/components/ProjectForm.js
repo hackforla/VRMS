@@ -151,7 +151,7 @@ export default function ProjectForm() {
         </Box>
       </Box>
       <Box>
-        <Grid container spacing={4} sx={{ px: 3, my: 3 }}>
+        <Grid container spacing={4} sx={{ px: 3, my: 1 }}>
           <Grid item xs={6}>
             <Button
               type="submit"
