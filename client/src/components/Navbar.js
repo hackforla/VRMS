@@ -13,12 +13,14 @@ const Navbar = (props) => {
   const StyledButton = styled(Button)({
     color: 'black',
     marginLeft: '2rem',
-    padding: '0.1rem 0.5rem',
+    padding: '0.01rem 0rem',
     borderRadius: 0,
     fontSize: '1rem',
-
+    fontFamily: 'Source Code Pro',
+    fontWeight: '500',
     '&.active': {
       borderBottom: '2px #fa114f solid',
+      fontWeight: '700',
     },
   });
 
