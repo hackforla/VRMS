@@ -10,6 +10,10 @@ import {
   InputLabel,
   Button,
   Grid,
+  Radio,
+  FormControl,
+  FormControlLabel,
+  RadioGroup,
 } from '@mui/material';
 
 /** Project Form Component
@@ -17,8 +21,65 @@ import {
  * To be used for creating and updating a project
  * */
 
+const simpleInputs = [
+  {
+    label: 'Project Name',
+    name: 'name',
+    type: 'text',
+    placeholder: 'Enter project name',
+  },
+  {
+    label: 'Project Description',
+    name: 'description',
+    type: 'textarea',
+    placeholder: 'Enter project description',
+  },
+  {
+    label: 'Location',
+    name: 'location',
+    type: 'text',
+    placeholder: 'Enter project location',
+  },
+  {
+    label: 'GitHub Identifier',
+    name: 'githubIdentifier',
+    type: 'text',
+    placeholder: 'Enter GitHub identifier',
+  },
+  {
+    label: 'GitHub URL',
+    name: 'githubUrl',
+    type: 'text',
+    placeholder: 'htttps://github.com/',
+  },
+  {
+    label: 'Slack URL',
+    name: 'slackUrl',
+    type: 'text',
+    placeholder: 'htttps://slack.com/',
+  },
+  {
+    label: 'Google Drive URL',
+    name: 'googleDriveUrl',
+    type: 'text',
+    placeholder: 'htttps://drive.google.com/',
+  },
+  {
+    label: 'HFLA Website URL',
+    name: 'hflaWebsiteUrl',
+    type: 'text',
+    placeholder: 'htttps://hackforla.org/projects/',
+  },
+];
+
 export default function ProjectForm() {
   let history = useHistory();
+
+  const [locationType, setLocationType] = React.useState('remote');
+
+  const handleRadioChange = (event) => {
+    setLocationType(event.target.value);
+  };
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -65,57 +126,7 @@ export default function ProjectForm() {
 
   /** All TextField and InputLabel styles are controlled by the theme */
 
-  const simpleInputs = [
-    {
-      label: 'Project Name',
-      name: 'name',
-      type: 'text',
-      placeholder: 'Enter project name',
-    },
-    {
-      label: 'Project Description',
-      name: 'description',
-      type: 'textarea',
-      placeholder: 'Enter project description',
-    },
-    {
-      label: 'Location',
-      name: 'location',
-      type: 'text',
-      placeholder: 'Enter project location',
-    },
-    {
-      label: 'GitHub Identifier',
-      name: 'githubIdentifier',
-      type: 'text',
-      placeholder: 'Enter GitHub identifier',
-    },
-    {
-      label: 'GitHub URL',
-      name: 'githubUrl',
-      type: 'text',
-      placeholder: 'htttps://github.com/',
-    },
-    {
-      label: 'Slack URL',
-      name: 'slackUrl',
-      type: 'text',
-      placeholder: 'htttps://slack.com/',
-    },
-    {
-      label: 'Google Drive URL',
-      name: 'googleDriveUrl',
-      type: 'text',
-      placeholder: 'htttps://drive.google.com/',
-    },
-    {
-      label: 'HFLA Website URL',
-      name: 'hflaWebsiteUrl',
-      type: 'text',
-      placeholder: 'htttps://hackforla.org/projects/',
-    },
-  ];
-
+  console.log('FORM DATA', formData);
   return (
     <Box sx={{ px: 0.5 }}>
       <Box sx={{ textAlign: 'center' }}>
@@ -130,7 +141,44 @@ export default function ProjectForm() {
           <form id="project-form" onSubmit={handleSubmit}>
             {simpleInputs.map((input) => (
               <Box sx={{ mb: 1 }} key={input.name}>
-                <InputLabel id={input.name}>{input.label}</InputLabel>
+                <Grid container alignItems="center">
+                  <Grid item xs="auto" sx={{ pr: 3 }}>
+                    <InputLabel
+                      sx={{ width: 'max-content', ml: 0.5 }}
+                      id={input.name}
+                    >
+                      {input.label}
+                    </InputLabel>
+                  </Grid>
+
+                  {input.name === 'location' && (
+                    <Grid item>
+                      <FormControl>
+                        <RadioGroup
+                          row
+                          aria-labelledby="demo-row-radio-buttons-group-label"
+                          name="row-radio-buttons-group"
+                          value={locationType}
+                          onChange={handleRadioChange}
+                        >
+                          <FormControlLabel
+                            value="remote"
+                            control={<Radio sx={{ p: 0 }} />}
+                            label="Remote"
+                            sx={{ width: 'max-content' }}
+                          />
+                          <FormControlLabel
+                            value="in-person"
+                            control={<Radio sx={{ p: 0 }} />}
+                            label="In-Person"
+                            sx={{ width: 'max-content' }}
+                          />
+                        </RadioGroup>
+                      </FormControl>
+                    </Grid>
+                  )}
+                </Grid>
+
                 <TextField
                   id={input.name}
                   name={input.name}
