@@ -151,7 +151,9 @@ export default function ProjectForm() {
           </Box>
           <Box sx={{ display: 'flex' }}>
             <PlusIcon style={{ marginRight: '7px' }} />
-            <Typography sx={{ fontSize: '14px' }}>Add New Project</Typography>
+            <Typography sx={{ fontSize: '14px', fontWeight: '600' }}>
+              Add New Project
+            </Typography>
           </Box>
         </Box>
         <Divider />

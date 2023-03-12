@@ -45,7 +45,7 @@ let theme = createTheme({
     MuiTextField: {
       defaultProps: {
         inputProps: {
-          style: { width: '100%', border: 'none', color: 'black' },
+          style: { width: '100%', color: 'black', border: 'none' },
         },
         fullWidth: true,
       },
@@ -53,6 +53,7 @@ let theme = createTheme({
     MuiInputBase: {
       styleOverrides: {
         root: {
+          border: '1px solid black',
           '& .MuiInputBase-input': {
             color: 'black',
             fontFamily: 'Source Sans Pro',
