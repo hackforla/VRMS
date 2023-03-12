@@ -4,32 +4,37 @@ import useAuth from '../hooks/useAuth';
 import HflaImg from '../svg/hflalogo.svg';
 import { Box, Button, Grid } from '@mui/material';
 import { styled } from '@mui/system';
+import theme from '../theme';
 
 const Navbar = (props) => {
   // check user accessLevel and adjust link accordingly
   const { auth } = useAuth();
-
+ 
   // Styles that may need to be included in the theme.
   const StyledButton = styled(Button)({
-    color: 'black',
+    color: '#757575',
     marginLeft: '2rem',
-    padding: '0.01rem 0rem',
+    marginRight: '1.5rem',
+    padding: '0.00rem 0rem',
     borderRadius: 0,
     fontSize: '1rem',
     fontFamily: 'Source Code Pro',
-    fontWeight: '600',
     '&.active': {
-      borderBottom: '2px #fa114f solid',
+      color: '#000000',
+      borderBottom: `2px ${theme.palette.primary.main} solid`,
       fontWeight: '800',
+    },
+    '&:hover': {
+      backgroundColor: 'transparent',
     },
   });
 
   return (
     <>
       {
-        <Box mt={2} mb={2} sx={{ width: '100%', typography: 'body 1' }}>
-          <Grid container spacing={12}>
-            <Grid item sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Box mt={4} mb={2} sx={{ width: '100%', typography: 'body 1' }}>
+          <Grid container spacing={4}>
+            <Grid mx={2} item sx={{ display: 'flex', justifyContent: 'center' }}>
               {/* No auth page -> Displays 2 links -> 'Checkin' and 'Admin'. */}
               {!auth?.user && (
                 <>
