@@ -75,7 +75,7 @@ const simpleInputs = [
   },
 ];
 
-/** Keep some styles here to make return jsx more readable */
+/** Styles for components that are repeated */
 const StyledButton = styled(Button)(({ theme }) => ({
   width: '150px',
 }));
@@ -106,8 +106,6 @@ export default function ProjectForm() {
     hflaWebsiteUrl: '',
   });
 
-  const [formErrors, setFormErrors] = useState([]);
-
   //update state of formData onChange of any form input field
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -116,7 +114,6 @@ export default function ProjectForm() {
       ...fData,
       [name]: value,
     }));
-    setFormErrors([]);
   };
 
   const handleSubmit = async (e) => {
@@ -129,7 +126,7 @@ export default function ProjectForm() {
       const response = await projectApi.create(formData);
       console.log('RESPONSE', response);
     } catch (errors) {
-      setFormErrors(errors);
+      console.error(errors);
       return;
     }
 
