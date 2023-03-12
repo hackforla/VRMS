@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import ProjectApiService from '../api/ProjectApiService';
+import { ReactComponent as PlusIcon } from '../svg/PlusIcon.svg';
 
 import {
   Typography,
@@ -15,6 +16,8 @@ import {
   FormControlLabel,
   RadioGroup,
 } from '@mui/material';
+
+import { styled } from '@mui/material/styles';
 
 /** Project Form Component
  *
@@ -72,6 +75,18 @@ const simpleInputs = [
   },
 ];
 
+/** Keep some styles here to make return jsx more readable */
+const StyledButton = styled(Button)(({ theme }) => ({
+  width: '150px',
+}));
+
+const StyledFormControlLabel = styled(FormControlLabel)(({ theme }) => ({
+  width: 'max-content',
+  '& .MuiFormControlLabel-label': {
+    fontSize: '14px',
+  },
+}));
+
 export default function ProjectForm() {
   let history = useHistory();
 
@@ -111,7 +126,6 @@ export default function ProjectForm() {
 
     try {
       console.log('FORM DATA', formData);
-      console.log('PROJECT API SERVICE', projectApi.create);
       const response = await projectApi.create(formData);
       console.log('RESPONSE', response);
     } catch (errors) {
@@ -120,7 +134,6 @@ export default function ProjectForm() {
     }
 
     //For now, navigate to projects page after successful form submission
-    //TODO - Figure out how to navigate to newly created project details page
     history.push('/projects');
   };
 
@@ -133,8 +146,16 @@ export default function ProjectForm() {
         <Typography variant="h1">Project Management</Typography>
       </Box>
       <Box sx={{ bgcolor: '#F5F5F5' }}>
-        <Box sx={{ p: 2 }}>
-          <Typography sx={{ fontSize: '18px' }}>Project Information</Typography>
+        <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between' }}>
+          <Box>
+            <Typography sx={{ fontSize: '18px', fontWeight: '600' }}>
+              Project Information
+            </Typography>
+          </Box>
+          <Box sx={{ display: 'flex' }}>
+            <PlusIcon style={{ marginRight: '7px' }} />
+            <Typography sx={{ fontSize: '14px' }}>Add New Project</Typography>
+          </Box>
         </Box>
         <Divider />
         <Box sx={{ py: 2, px: 4 }}>
@@ -144,7 +165,7 @@ export default function ProjectForm() {
                 <Grid container alignItems="center">
                   <Grid item xs="auto" sx={{ pr: 3 }}>
                     <InputLabel
-                      sx={{ width: 'max-content', ml: 0.5 }}
+                      sx={{ width: 'max-content', ml: 0.5, mb: 0.5 }}
                       id={input.name}
                     >
                       {input.label}
@@ -160,18 +181,22 @@ export default function ProjectForm() {
                           name="row-radio-buttons-group"
                           value={locationType}
                           onChange={handleRadioChange}
+                          sx={{ mb: 0.5 }}
                         >
-                          <FormControlLabel
+                          <StyledFormControlLabel
                             value="remote"
-                            control={<Radio sx={{ p: 0 }} />}
+                            control={
+                              <Radio size="small" sx={{ p: 0, mr: 1 }} />
+                            }
                             label="Remote"
-                            sx={{ width: 'max-content' }}
                           />
-                          <FormControlLabel
+                          <Box sx={{ width: '10px' }} />
+                          <StyledFormControlLabel
                             value="in-person"
-                            control={<Radio sx={{ p: 0 }} />}
+                            control={
+                              <Radio size="small" sx={{ p: 0, mr: 1 }} />
+                            }
                             label="In-Person"
-                            sx={{ width: 'max-content' }}
                           />
                         </RadioGroup>
                       </FormControl>
@@ -191,6 +216,12 @@ export default function ProjectForm() {
                   {...(input.type === 'textarea' && {
                     multiline: true,
                     minRows: 3,
+                    sx: {
+                      '& .MuiInputBase-root': {
+                        px: '4px',
+                        py: '5px',
+                      },
+                    },
                   })}
                 />
               </Box>
@@ -199,21 +230,14 @@ export default function ProjectForm() {
         </Box>
       </Box>
       <Box>
-        <Grid container spacing={4} sx={{ px: 3, my: 1 }}>
-          <Grid item xs={6}>
-            <Button
-              type="submit"
-              form="project-form"
-              variant="contained"
-              sx={{ mb: 1 }}
-            >
+        <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
+          <Grid item xs="auto">
+            <StyledButton type="submit" form="project-form" variant="contained">
               Save
-            </Button>
+            </StyledButton>
           </Grid>
-          <Grid item xs={6}>
-            <Button variant="secondary" sx={{ mb: 1 }}>
-              Close
-            </Button>
+          <Grid item xs="auto">
+            <StyledButton variant="secondary">Close</StyledButton>
           </Grid>
         </Grid>
       </Box>

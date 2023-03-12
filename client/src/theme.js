@@ -13,7 +13,7 @@ let theme = createTheme({
     h1: {
       fontFamily: 'Source Code Pro',
       fontWeight: 'bold',
-      fontSize: '35px',
+      fontSize: '30px',
       marginBottom: '1.5rem',
     },
     h3: {
@@ -28,16 +28,16 @@ let theme = createTheme({
       styleOverrides: {
         root: {
           fontFamily: 'Source Sans Pro',
+          fontSize: '18px',
           fontWeight: '600',
           textTransform: 'none',
-          padding: '0.5rem 2rem',
         },
       },
       variants: [
         {
           props: { variant: 'secondary' },
           style: {
-            border: '2px solid #00008B',
+            border: '3px solid #00008B',
           },
         },
       ],
@@ -59,6 +59,7 @@ let theme = createTheme({
             fontSize: '14px',
             fontWeight: '500',
             border: 'none',
+            margin: '0px 0px 0px 0px',
             '&::placeholder': {
               color: '#757575',
               fontSize: '14px',
