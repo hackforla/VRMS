@@ -17,10 +17,10 @@ const Navbar = (props) => {
     borderRadius: 0,
     fontSize: '1rem',
     fontFamily: 'Source Code Pro',
-    fontWeight: '500',
+    fontWeight: '600',
     '&.active': {
       borderBottom: '2px #fa114f solid',
-      fontWeight: '700',
+      fontWeight: '800',
     },
   });
 
