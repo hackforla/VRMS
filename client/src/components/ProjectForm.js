@@ -156,7 +156,7 @@ export default function ProjectForm() {
             </Typography>
           </Box>
         </Box>
-        <Divider />
+        <Divider sx={{ borderColor: 'rgba(0,0,0,1)' }} />
         <Box sx={{ py: 2, px: 4 }}>
           <form id="project-form" onSubmit={handleSubmit}>
             {simpleInputs.map((input) => (
