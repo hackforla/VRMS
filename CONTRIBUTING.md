@@ -215,6 +215,10 @@ git commit -m "your commit message"
 
 ## **Part 4: How to create pull requests**
 ### **4.1 Push changes to your forked repository**
+Before pushing code, always pull down the latest changes from the `development` branch by using the command
+```
+git pull vrms development
+```
 Once you are satisfied with your changes, push them to the feature branch you made within your remote repository.
 ```
 git push --set-upstream origin your-branch-name
