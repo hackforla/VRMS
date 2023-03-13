@@ -49,17 +49,24 @@ let theme = createTheme({
         },
         fullWidth: true,
       },
+      styleOverrides: {
+        root: {
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              border: '1px solid black',
+            },
+          },
+        },
+      },
     },
     MuiInputBase: {
       styleOverrides: {
         root: {
-          border: '1px solid black',
           '& .MuiInputBase-input': {
             color: 'black',
             fontFamily: 'Source Sans Pro',
             fontSize: '14px',
             fontWeight: '500',
-            border: 'none',
             margin: '0px 0px 0px 0px',
             '&::placeholder': {
               color: '#757575',
