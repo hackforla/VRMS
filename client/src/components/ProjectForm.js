@@ -223,7 +223,13 @@ export default function ProjectForm() {
                 <TextField
                   id={input.name}
                   name={input.name}
-                  placeholder={input.placeholder}
+                  placeholder={
+                    input.name === 'location'
+                      ? locationType === 'remote'
+                        ? 'Enter project zoom link'
+                        : 'Enter project street address'
+                      : input.placeholder
+                  }
                   variant="outlined"
                   type={input.type}
                   onChange={handleChange}
