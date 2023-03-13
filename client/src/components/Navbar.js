@@ -10,12 +10,11 @@ const Navbar = (props) => {
   // check user accessLevel and adjust link accordingly
   const { auth } = useAuth();
  
-  // Styles that may need to be included in the theme.
   const StyledButton = styled(Button)({
     color: '#757575',
     marginLeft: '2rem',
     marginRight: '1.5rem',
-    padding: '0.00rem 0rem',
+    padding: '0rem 0rem',
     borderRadius: 0,
     fontSize: '1rem',
     fontFamily: 'Source Code Pro',
@@ -30,8 +29,6 @@ const Navbar = (props) => {
   });
 
   return (
-    <>
-      {
         <Box mt={4} mb={2} sx={{ width: '100%', typography: 'body 1' }}>
           <Grid container spacing={4}>
             <Grid mx={2} item sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -71,8 +68,6 @@ const Navbar = (props) => {
             </Grid>
           </Grid>
         </Box>
-      }
-    </>
   );
 };
 
