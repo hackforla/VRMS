@@ -118,7 +118,7 @@ export default function ProjectForm() {
   //seperate state for the location radio buttons
   const [locationType, setLocationType] = React.useState('remote');
 
-  const [activeButton, setActiveButton] = React.useState(null);
+  const [activeButton, setActiveButton] = React.useState('close');
 
   // only handles radio button change
   const handleRadioChange = (event) => {
@@ -152,7 +152,7 @@ export default function ProjectForm() {
     if (Object.values(formData).every((val) => val !== '')) {
       setActiveButton('save');
     } else {
-      setActiveButton(null);
+      setActiveButton('close');
     }
   }, [formData]);
 
@@ -257,7 +257,7 @@ export default function ProjectForm() {
             <StyledButton
               type="submit"
               form="project-form"
-              variant="contained"
+              variant={activeButton === 'save' ? 'contained' : 'secondary'}
               disabled={activeButton !== 'save'}
             >
               Save
@@ -267,7 +267,7 @@ export default function ProjectForm() {
             <StyledButton
               component={Link}
               to="/projects"
-              variant="secondary"
+              variant={activeButton === 'close' ? 'contained' : 'secondary'}
               disabled={activeButton !== 'close'}
             >
               Close
