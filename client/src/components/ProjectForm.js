@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useHistory, Link } from 'react-router-dom';
 import ProjectApiService from '../api/ProjectApiService';
 import { ReactComponent as PlusIcon } from '../svg/PlusIcon.svg';
 
@@ -75,7 +75,12 @@ const simpleInputs = [
   },
 ];
 
-/** Styles for components that are repeated */
+/** STYLES
+ *  -most TextField and InputLabel styles are controlled by the theme
+ *  -a few repeated styles are parked here
+ *  -the rest are inline
+ */
+
 const StyledButton = styled(Button)(({ theme }) => ({
   width: '150px',
 }));
@@ -87,14 +92,18 @@ const StyledFormControlLabel = styled(FormControlLabel)(({ theme }) => ({
   },
 }));
 
+const StyledRadio = styled(Radio)(({ theme }) => ({
+  padding: '0px 0px 0px 0px',
+  marginRight: '.5rem',
+}));
+
+/**Project Form Component
+ * -renders a form for creating and updating a project
+ */
+
 export default function ProjectForm() {
   let history = useHistory();
 
-  const [locationType, setLocationType] = React.useState('remote');
-
-  const handleRadioChange = (event) => {
-    setLocationType(event.target.value);
-  };
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -106,7 +115,17 @@ export default function ProjectForm() {
     hflaWebsiteUrl: '',
   });
 
-  //update state of formData onChange of any form input field
+  //seperate state for the location radio buttons
+  const [locationType, setLocationType] = React.useState('remote');
+
+  const [activeButton, setActiveButton] = React.useState(null);
+
+  // only handles radio button change
+  const handleRadioChange = (event) => {
+    setLocationType(event.target.value);
+  };
+
+  //updates state of formData onChange of any form input
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -118,25 +137,52 @@ export default function ProjectForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const projectApi = new ProjectApiService();
-
     try {
-      console.log('FORM DATA', formData);
       const response = await projectApi.create(formData);
-      console.log('RESPONSE', response);
     } catch (errors) {
       console.error(errors);
       return;
     }
-
-    //For now, navigate to projects page after successful form submission
-    history.push('/projects');
+    setActiveButton('close');
   };
 
-  /** All TextField and InputLabel styles are controlled by the theme */
+  // Basic validation : if all inputs have values, enable the submit button
+  useEffect(() => {
+    if (Object.values(formData).every((val) => val !== '')) {
+      setActiveButton('save');
+    } else {
+      setActiveButton(null);
+    }
+  }, [formData]);
 
-  console.log('FORM DATA', formData);
+  const locationRadios = (
+    <Grid item>
+      <FormControl>
+        <RadioGroup
+          row
+          aria-labelledby="demo-row-radio-buttons-group-label"
+          name="row-radio-buttons-group"
+          value={locationType}
+          onChange={handleRadioChange}
+          sx={{ mb: 0.5 }}
+        >
+          <StyledFormControlLabel
+            value="remote"
+            control={<StyledRadio size="small" />}
+            label="Remote"
+          />
+          <Box sx={{ width: '10px' }} />
+          <StyledFormControlLabel
+            value="in-person"
+            control={<StyledRadio size="small" />}
+            label="In-Person"
+          />
+        </RadioGroup>
+      </FormControl>
+    </Grid>
+  );
+
   return (
     <Box sx={{ px: 0.5 }}>
       <Box sx={{ textAlign: 'center' }}>
@@ -171,36 +217,7 @@ export default function ProjectForm() {
                     </InputLabel>
                   </Grid>
 
-                  {input.name === 'location' && (
-                    <Grid item>
-                      <FormControl>
-                        <RadioGroup
-                          row
-                          aria-labelledby="demo-row-radio-buttons-group-label"
-                          name="row-radio-buttons-group"
-                          value={locationType}
-                          onChange={handleRadioChange}
-                          sx={{ mb: 0.5 }}
-                        >
-                          <StyledFormControlLabel
-                            value="remote"
-                            control={
-                              <Radio size="small" sx={{ p: 0, mr: 1 }} />
-                            }
-                            label="Remote"
-                          />
-                          <Box sx={{ width: '10px' }} />
-                          <StyledFormControlLabel
-                            value="in-person"
-                            control={
-                              <Radio size="small" sx={{ p: 0, mr: 1 }} />
-                            }
-                            label="In-Person"
-                          />
-                        </RadioGroup>
-                      </FormControl>
-                    </Grid>
-                  )}
+                  {input.name === 'location' && locationRadios}
                 </Grid>
 
                 <TextField
@@ -231,12 +248,24 @@ export default function ProjectForm() {
       <Box>
         <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
           <Grid item xs="auto">
-            <StyledButton type="submit" form="project-form" variant="contained">
+            <StyledButton
+              type="submit"
+              form="project-form"
+              variant="contained"
+              disabled={activeButton !== 'save'}
+            >
               Save
             </StyledButton>
           </Grid>
           <Grid item xs="auto">
-            <StyledButton variant="secondary">Close</StyledButton>
+            <StyledButton
+              component={Link}
+              to="/projects"
+              variant="secondary"
+              disabled={activeButton !== 'close'}
+            >
+              Close
+            </StyledButton>
           </Grid>
         </Grid>
       </Box>
