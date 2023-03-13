@@ -1,116 +1,72 @@
-import React, {useState} from "react";
-import { Link, withRouter } from "react-router-dom";
-
+import React from 'react';
+import { NavLink, withRouter } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
-import {authLevelRedirect} from '../utils/authUtils'
+import HflaImg from '../svg/hflalogo.svg';
+import { Box, Button, Grid } from '@mui/material';
+import { styled } from '@mui/system';
+import theme from '../theme';
 
-import "../sass/Navbar.scss";
-//hooks
-//function -> class
 const Navbar = (props) => {
+  // check user accessLevel and adjust link accordingly
+  const { auth } = useAuth();
+ 
+  const StyledButton = styled(Button)({
+    color: '#757575',
+    padding: '0rem 0rem',
+    borderRadius: 0,
+    fontSize: '1rem',
+    fontFamily: 'Source Code Pro',
+    '&.active': {
+      color: '#000000',
+      borderBottom: `2px ${theme.palette.primary.main} solid`,
+      fontWeight: '800',
+    },
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
+  });
 
-    // check user accessLevel and adjust link accordingly
-    const [page, setPage] = useState('home');
-    const { auth } = useAuth();
-    let loginRedirect = '/admin';
-    if (auth?.user) {
-      loginRedirect = authLevelRedirect(auth.user);
-    }
-    const notAuth = () => (
-        <>
-          {page === 'home' ?
-            <p className="nav-link-text nav-link-active">CHECK-IN</p>
-            :
-            <div className='nav-link-container'>
-              <Link to="/" onClick={e => setPage('home')} >
-                <p className="nav-link-text">
-                  CHECK-IN
-                </p>
-              </Link>
-            </div>}
-          {page === 'adminLogin' ?
-            <p className="nav-link-text nav-link-active">ADMIN</p>
-            :
-            <div className='nav-link-container'>
-              <Link to={loginRedirect} onClick={e => setPage('adminLogin')}>
-                <p className="nav-link-text">
-                  ADMIN
-                </p>
-              </Link>
-            </div>
-            }
-        </>
-    )
-    const isAuth = () => (
-      <>
-        {page === 'useradmin' ?
-          <p className="nav-link-text nav-link-active" >USER MANAGEMENT</p>
-          :
-          <div className='nav-link-container'>
-            <Link to="/useradmin" onClick={e => setPage('usermanagement')}>
-              <p className="nav-link-text">ADMIN</p>
-            </Link>
-          </div>}
-        {page === 'projects' ?
-          <p className="nav-link-text nav-link-active" >PROJECTS</p>
-          :
-          <div className='nav-link-container'>
-            <Link to="/projects" onClick={e => setPage('projects')}>
-              <p className="nav-link-text">PROJECTS</p>
-            </Link>
-          </div>}
-      </>
-    )
-    const isUser = () => (
-      <>
-        {page === 'home' ?
-          <p className="nav-link-text nav-link-active" >PROJECTS</p>
-          :
-          <div className='nav-link-container'>
-            <Link to="/projects" onClick={e => setPage('home')}>
-              <p className="nav-link-text">PROJECTS</p>
-            </Link>
-          </div>}
-      </>
-    )
-
-
-    return (
-      <div className="nav-wrapper">
-        <nav className="navbar" role="navigation" aria-label="main navigation">
-          <div className="navbar-buttons-container">
-
-            {!auth?.user &&
-              notAuth()
-            }
-
-            {auth?.user?.accessLevel === 'admin' &&
-              isAuth()
-            }
-
-            {auth?.user?.accessLevel === 'user' &&
-              isUser()
-            }
-
-          </div>
-
-          {props.location.pathname === '/' ||
-          props.location.pathname === '/success' ? (
-            <div className="navbar-logo grow">
-              <img src="/hflalogo.png" alt="Hack for LA Logo"></img>
-            </div>
-          ) : (
-            <div
-              className={`navbar-logo ${
-                props.location.pathname === '/admin' && 'justify-right'
-              }`}
-            >
-              <img src="/hflalogo.png" alt="Hack for LA Logo"></img>
-            </div>
-          )}
-        </nav>
-      </div>
-    );
+  return (
+        <Box sx={{ width: '100%', typography: 'body 1', mt: 4, mb: 2 }}>
+          <Grid container>
+            <Grid item xs={9} sx={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center'}}>
+              {/* No auth page -> Displays 2 links -> 'Checkin' and 'Admin'. */}
+              {!auth?.user && (
+                <>
+                  <StyledButton component={NavLink} exact to="/">
+                    CHECK IN
+                  </StyledButton>
+                  <StyledButton component={NavLink} to="/login">
+                    ADMIN
+                  </StyledButton>
+                </>
+              )}
+              {/* Admin auth -> Displays 2 links -> 'Users' and 'Projects'. */}
+              {auth?.user?.accessLevel === 'admin' && (
+                <>
+                  <StyledButton component={NavLink} to="/useradmin">
+                    USERS
+                  </StyledButton>
+                  <StyledButton component={NavLink} to="/projects">
+                    PROJECTS
+                  </StyledButton>
+                </>
+              )}
+              {/* User auth -> Displays 1 link -> 'Projects' only. */}
+              {auth?.user?.accessLevel === 'user' && (
+                <>
+                  <StyledButton component={NavLink} to="/projects">
+                    PROJECTS
+                  </StyledButton>
+                </>
+              )}
+            </Grid>
+            <Grid item>
+              <Box component="img" src={HflaImg} sx={{ width: '100%' }} />
+            </Grid>
+          </Grid>
+        </Box>
+  );
 };
 
 export default withRouter(Navbar);
