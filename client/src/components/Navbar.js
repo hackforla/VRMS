@@ -12,8 +12,6 @@ const Navbar = (props) => {
  
   const StyledButton = styled(Button)({
     color: '#757575',
-    marginLeft: '2rem',
-    marginRight: '1.5rem',
     padding: '0rem 0rem',
     borderRadius: 0,
     fontSize: '1rem',
@@ -29,9 +27,9 @@ const Navbar = (props) => {
   });
 
   return (
-        <Box mt={4} mb={2} sx={{ width: '100%', typography: 'body 1' }}>
-          <Grid container spacing={4}>
-            <Grid mx={2} item sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Box sx={{ width: '100%', typography: 'body 1', mt: 4, mb: 2 }}>
+          <Grid container>
+            <Grid item xs={9} sx={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center'}}>
               {/* No auth page -> Displays 2 links -> 'Checkin' and 'Admin'. */}
               {!auth?.user && (
                 <>
