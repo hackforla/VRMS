@@ -48,7 +48,7 @@ const routes = [
   { path: '/projects', name: 'projects', Component: ManageProjects },
   { path: '/projects/create', name: 'projectform', Component: ProjectForm },
   {
-    path: '/project/:projectId',
+    path: '/projects/:projectId',
     name: 'project',
     Component: ManageProjects,
   },

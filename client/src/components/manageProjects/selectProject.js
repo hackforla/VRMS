@@ -21,7 +21,7 @@ const SelectProject = ({ projects, accessLevel, user }) => {
     .map((p) => (
       // eslint-disable-next-line no-underscore-dangle
       <li className="project-list-item" key={p._id}>
-        <Link className="project-list-button" to={`/project/${p._id}`}>
+        <Link className="project-list-button" to={`/projects/${p._id}`}>
           {p.name ? p.name : '[unnamed project]'}
         </Link>
       </li>
