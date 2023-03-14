@@ -43,12 +43,13 @@ const simpleInputs = [
     type: 'text',
     placeholder: 'Enter project location',
   },
-  {
-    label: 'GitHub Identifier',
-    name: 'githubIdentifier',
-    type: 'text',
-    placeholder: 'Enter GitHub identifier',
-  },
+  // Leaving incase we want to add this back in for updating projects
+  // {
+  //   label: 'GitHub Identifier',
+  //   name: 'githubIdentifier',
+  //   type: 'text',
+  //   placeholder: 'Enter GitHub identifier',
+  // },
   {
     label: 'GitHub URL',
     name: 'githubUrl',
@@ -56,7 +57,7 @@ const simpleInputs = [
     placeholder: 'htttps://github.com/',
   },
   {
-    label: 'Slack URL',
+    label: 'Slack Channel URL',
     name: 'slackUrl',
     type: 'text',
     placeholder: 'htttps://slack.com/',
@@ -67,12 +68,13 @@ const simpleInputs = [
     type: 'text',
     placeholder: 'htttps://drive.google.com/',
   },
-  {
-    label: 'HFLA Website URL',
-    name: 'hflaWebsiteUrl',
-    type: 'text',
-    placeholder: 'htttps://hackforla.org/projects/',
-  },
+  // Leaving incase we want to add this back in for updating projects
+  // {
+  //   label: 'HFLA Website URL',
+  //   name: 'hflaWebsiteUrl',
+  //   type: 'text',
+  //   placeholder: 'htttps://hackforla.org/projects/',
+  // },
 ];
 
 /** STYLES
@@ -108,11 +110,11 @@ export default function ProjectForm() {
     name: '',
     description: '',
     location: '',
-    githubIdentifier: '',
+    // githubIdentifier: '',
     githubUrl: '',
     slackUrl: '',
     googleDriveUrl: '',
-    hflaWebsiteUrl: '',
+    // hflaWebsiteUrl: '',
   });
 
   //seperate state for the location radio buttons
