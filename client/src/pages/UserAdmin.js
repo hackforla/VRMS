@@ -7,7 +7,6 @@ import UserManagement from '../components/user-admin/UserManagement';
 import UserApiService from '../api/UserApiService';
 import ProjectApiService from '../api/ProjectApiService';
 
-// Parent
 const UserAdmin = () => {
   // Initialize state hooks
   const { auth } = useAuth();
