@@ -43,14 +43,6 @@ const UserAdmin = () => {
     setProjects(projectRes);
   }, [projectApiService]);
 
-  const handleNewProjectFormSubmit = useCallback(
-    async (projectName) => {
-      await projectApiService.addProjectToDb(projectName);
-      fetchProjects();
-    },
-    [projectApiService, fetchProjects]
-  );
-
   useEffect(() => {
     fetchUsers();
     fetchProjects();

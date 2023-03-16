@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ProjectApiService from '../api/ProjectApiService';
 import { ReactComponent as PlusIcon } from '../svg/PlusIcon.svg';
 
@@ -104,8 +104,6 @@ const StyledRadio = styled(Radio)(({ theme }) => ({
  */
 
 export default function ProjectForm() {
-  let history = useHistory();
-
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -141,7 +139,9 @@ export default function ProjectForm() {
     e.preventDefault();
     const projectApi = new ProjectApiService();
     try {
-      const response = await projectApi.create(formData);
+      // fires POST request to create a new project,
+      // but the server response does not include the newly created project id that we need
+      await projectApi.create(formData);
     } catch (errors) {
       console.error(errors);
       return;
