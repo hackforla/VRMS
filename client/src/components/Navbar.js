@@ -12,9 +12,9 @@ const Navbar = (props) => {
  
   const StyledButton = styled(Button)({
     color: '#757575',
-    padding: '0rem 0rem',
+    padding: '10px 0',
     borderRadius: 0,
-    fontSize: '1rem',
+    fontSize: '20px',
     fontFamily: 'Source Code Pro',
     '&.active': {
       color: '#000000',
@@ -27,7 +27,7 @@ const Navbar = (props) => {
   });
 
   return (
-        <Box sx={{ width: '100%', typography: 'body 1', mt: 4, mb: 2 }}>
+        <Box sx={{ width: '100%', typography: 'body 1', mt: 2, mb: 2 }}>
           <Grid container>
             <Grid item xs={9} sx={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center'}}>
               {/* No auth page -> Displays 2 links -> 'Checkin' and 'Admin'. */}
