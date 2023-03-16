@@ -22,12 +22,34 @@ class ProjectApiService {
     }
   }
 
-  async addProjectToDb(newProjectName) {
+  async create(projectData) {
+    const {
+      name,
+      description,
+      location,
+      githubIdentifier,
+      githubUrl,
+      slackUrl,
+      googleDriveUrl,
+      hflaWebsiteUrl,
+    } = projectData;
     const requestOptions = {
       method: 'POST',
       headers: this.headers,
-      body: JSON.stringify({ name: newProjectName, projectStatus: 'Active' }),
+      body: JSON.stringify({
+        name: name,
+        description: description,
+        location: location,
+        githubIdentifier: githubIdentifier,
+        githubUrl: githubUrl,
+        slackUrl: slackUrl,
+        googleDriveUrl: googleDriveUrl,
+        hflaWebsiteUrl: hflaWebsiteUrl,
+        projectStatus: 'Active',
+      }),
     };
+
+    console.log('THIS BASEPROJECT URL', this.baseProjectUrl);
 
     try {
       return await fetch(this.baseProjectUrl, requestOptions);

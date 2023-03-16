@@ -22,6 +22,8 @@ import UserAdmin from './pages/UserAdmin';
 import ManageProjects from './pages/ManageProjects';
 import HealthCheck from './pages/HealthCheck';
 
+import ProjectForm from './components/ProjectForm';
+
 import { ThemeProvider } from '@mui/material';
 import theme from './theme';
 
@@ -44,6 +46,7 @@ const routes = [
   { path: '/events', name: 'events', Component: Events },
   { path: '/useradmin', name: 'useradmin', Component: UserAdmin },
   { path: '/projects', name: 'projects', Component: ManageProjects },
+  { path: '/projects/create', name: 'projectform', Component: ProjectForm },
   {
     path: '/projects/:projectId',
     name: 'project',
