@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Redirect } from 'react-router-dom';
 import '../sass/UserAdmin.scss';
 import useAuth from '../hooks/useAuth';
-import AddNewProject from '../components/user-admin/AddNewProject';
 import EditUsers from '../components/user-admin/EditUsers';
 import UserManagement from '../components/user-admin/UserManagement';
 import UserApiService from '../api/UserApiService';
@@ -44,14 +43,6 @@ const UserAdmin = () => {
     setProjects(projectRes);
   }, [projectApiService]);
 
-  const handleNewProjectFormSubmit = useCallback(
-    async (projectName) => {
-      await projectApiService.addProjectToDb(projectName);
-      fetchProjects();
-    },
-    [projectApiService, fetchProjects]
-  );
-
   useEffect(() => {
     fetchUsers();
     fetchProjects();
@@ -92,16 +83,6 @@ const UserAdmin = () => {
     );
   }
 
-  if (currentPage === PAGES.addNewProject) {
-    return (
-      <AddNewProject
-        onBackClick={() => setCurrentPage(PAGES.main)}
-        handleNewProjectFormSubmit={handleNewProjectFormSubmit}
-        projects={projects}
-      />
-    );
-  }
-
   return (
     <div>
       <div>
@@ -111,15 +92,6 @@ const UserAdmin = () => {
           onClick={() => setCurrentPage(PAGES.userManagement)}
         >
           User Management
-        </button>
-      </div>
-      <div>
-        <button
-          type="button"
-          className="button"
-          onClick={() => setCurrentPage(PAGES.addNewProject)}
-        >
-          Add New Project
         </button>
       </div>
     </div>
