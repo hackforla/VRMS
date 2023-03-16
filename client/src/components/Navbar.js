@@ -12,7 +12,7 @@ const Navbar = (props) => {
  
   const StyledButton = styled(Button)({
     color: '#757575',
-    padding: '10px 0',
+    padding: '6px 0',
     borderRadius: 0,
     fontSize: '20px',
     fontFamily: 'Source Code Pro',
