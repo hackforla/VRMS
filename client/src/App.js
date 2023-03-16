@@ -19,6 +19,7 @@ import EmailSent from './pages/EmailSent';
 import Events from './pages/Events';
 import ProjectLeaderDashboard from './pages/ProjectLeaderDashboard';
 import UserAdmin from './pages/UserAdmin';
+import ProjectList from './pages/ProjectList';
 import ManageProjects from './pages/ManageProjects';
 import HealthCheck from './pages/HealthCheck';
 
@@ -45,7 +46,7 @@ const routes = [
   { path: '/emailsent', name: 'emailsent', Component: EmailSent },
   { path: '/events', name: 'events', Component: Events },
   { path: '/useradmin', name: 'useradmin', Component: UserAdmin },
-  { path: '/projects', name: 'projects', Component: ManageProjects },
+  { path: '/projects', name: 'projects', Component: ProjectList },
   { path: '/projects/create', name: 'projectform', Component: ProjectForm },
   {
     path: '/projects/:projectId',
