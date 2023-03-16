@@ -23,7 +23,10 @@
     "dotenv-cli": "^3.2.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.21.0",
+    "@babel/preset-env": "^7.20.2",
     "cypress": "^5.0.0",
+    "eslint-plugin-only-warn": "^1.1.0",
     "start-server-and-test": "^1.11.3"
   }
 }
