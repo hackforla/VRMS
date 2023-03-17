@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../../sass/UserAdmin.scss';
 
-const UserManagement = ({ users, setUserToEdit, handleProjectFormCancel }) => {
+const UserManagement = ({ users, setUserToEdit }) => {
   let searchResults = [];
   const [searchResultType, setSearchResultType] = useState('name'); // Which results will diplay
   const [searchTerm, setSearchTerm] = useState(''); // Serch term for the user/email search
@@ -102,15 +102,6 @@ const UserManagement = ({ users, setUserToEdit, handleProjectFormCancel }) => {
               })}
             </ul>
           </div>
-        </div>
-        <div>
-          <button
-            type="button"
-            className="button"
-            onClick={handleProjectFormCancel}
-          >
-            Admin Dashboard
-          </button>
         </div>
       </div>
     </div>

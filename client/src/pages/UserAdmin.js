@@ -7,20 +7,12 @@ import UserManagement from '../components/user-admin/UserManagement';
 import UserApiService from '../api/UserApiService';
 import ProjectApiService from '../api/ProjectApiService';
 
-const PAGES = Object.freeze({
-  main: 'main',
-  addNewProject: 'addNewProject',
-  userManagement: 'userManagement',
-});
-
-// Parent
 const UserAdmin = () => {
   // Initialize state hooks
   const { auth } = useAuth();
   const [users, setUsers] = useState([]); // All users pulled from database
   const [projects, setProjects] = useState([]); // All projects pulled from db
   const [userToEdit, setUserToEdit] = useState({}); // The selected user that is being edited
-  const [currentPage, setCurrentPage] = useState(PAGES.main);
 
   const [userApiService] = useState(new UserApiService());
   const [projectApiService] = useState(new ProjectApiService());
@@ -48,12 +40,6 @@ const UserAdmin = () => {
     fetchProjects();
   }, [fetchUsers, fetchProjects]);
 
-  // Handle cancel form and return to search
-  const handleProjectFormCancel = () => {
-    setCurrentPage(PAGES.main);
-    setUserToEdit({});
-  };
-
   const backToSearch = () => {
     setUserToEdit({});
   };
@@ -62,40 +48,18 @@ const UserAdmin = () => {
     return <Redirect to="/login" />;
   }
 
-  if (currentPage === PAGES.userManagement) {
-    if (Object.keys(userToEdit).length === 0) {
-      return (
-        <UserManagement
-          users={users}
-          setUserToEdit={setUserToEdit}
-          handleProjectFormCancel={handleProjectFormCancel}
-        />
-      );
-    }
+  if (Object.keys(userToEdit).length === 0) {
+    return <UserManagement users={users} setUserToEdit={setUserToEdit} />;
+  } else {
     return (
       <EditUsers
         userToEdit={userToEdit}
         projects={projects}
         updateUserDb={updateUserDb}
-        handleFormCancel={handleProjectFormCancel}
         backToSearch={backToSearch}
       />
     );
   }
-
-  return (
-    <div>
-      <div>
-        <button
-          type="button"
-          className="button"
-          onClick={() => setCurrentPage(PAGES.userManagement)}
-        >
-          User Management
-        </button>
-      </div>
-    </div>
-  );
 };
 
 export default UserAdmin;
