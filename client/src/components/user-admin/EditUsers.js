@@ -2,13 +2,7 @@ import React, { useEffect, useState } from 'react';
 import '../../sass/UserAdmin.scss';
 
 // child of UserAdmin. Displays form to update users.
-const EditUsers = ({
-  userToEdit,
-  backToSearch,
-  updateUserDb,
-  handleFormCancel,
-  projects,
-}) => {
+const EditUsers = ({ userToEdit, backToSearch, updateUserDb, projects }) => {
   const [userManagedProjects, setUserManagedProjects] = useState([]); //  The projects that the selected user is assigned
   const [projectValue, setProjectValue] = useState(''); // State and handler for form in EditUsers
 
@@ -119,11 +113,6 @@ const EditUsers = ({
         <div>
           <button type="button" className="button-back" onClick={backToSearch}>
             Back to search
-          </button>
-        </div>
-        <div>
-          <button type="button" className="button" onClick={handleFormCancel}>
-            Admin Dashboard
           </button>
         </div>
       </div>
