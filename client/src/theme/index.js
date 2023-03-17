@@ -1,14 +1,9 @@
 import { createTheme, responsiveFontSizes } from '@mui/material';
 
+import { default as palette, uiKitColors } from './palette';
+
 let theme = createTheme({
-  palette: {
-    primary: {
-      main: '#00008B',
-    },
-    secondary: {
-      main: '#FA114F',
-    },
-  },
+  palette,
   typography: {
     fontFamily: [
       'Source Sans Pro',
@@ -43,7 +38,7 @@ let theme = createTheme({
         {
           props: { variant: 'secondary' },
           style: {
-            border: '3px solid #00008B',
+            border: `3px solid ${uiKitColors.secondary}`,
           },
         },
       ],
@@ -51,7 +46,7 @@ let theme = createTheme({
     MuiTextField: {
       defaultProps: {
         inputProps: {
-          style: { width: '100%', color: 'black', border: 'none' },
+          style: { width: '100%', color: uiKitColors.black, border: 'none' },
         },
         fullWidth: true,
       },
@@ -59,7 +54,7 @@ let theme = createTheme({
         root: {
           '& .MuiOutlinedInput-root': {
             '& fieldset': {
-              border: '1px solid black',
+              border: `1px solid ${uiKitColors.black}`,
             },
           },
         },
@@ -69,13 +64,13 @@ let theme = createTheme({
       styleOverrides: {
         root: {
           '& .MuiInputBase-input': {
-            color: 'black',
+            color: uiKitColors.black,
             fontFamily: 'Source Sans Pro',
             fontSize: '14px',
             fontWeight: '500',
             margin: '0px 0px 0px 0px',
             '&::placeholder': {
-              color: '#757575',
+              color: uiKitColors.grayscale[4],
               fontSize: '14px',
               opacity: 1,
             },
@@ -86,7 +81,7 @@ let theme = createTheme({
     MuiInputLabel: {
       styleOverrides: {
         root: {
-          color: 'black',
+          color: uiKitColors.black,
           fontFamily: 'Source Sans Pro',
           fontWeight: '600',
           fontSize: '16px',
