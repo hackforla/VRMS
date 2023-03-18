@@ -121,6 +121,7 @@ const ManageProjects = () => {
         />
       );
       break;
+    // We are not using the SelectProject component anymore. Will remove soon.
     default:
       displayedComponent = (
         <SelectProject
