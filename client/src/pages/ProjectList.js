@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import ProjectApiService from '../api/ProjectApiService';
+import { styled } from '@mui/system';
+import useAuth from '../hooks/useAuth';
+import { Redirect } from 'react-router-dom';
+
 import {
   Box,
   CircularProgress,
@@ -9,19 +13,48 @@ import {
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 
+const StyledTypography = styled(Typography)({
+  textTransform: 'uppercase',
+  color: '#1132F4',
+  '&:hover': { fontWeight: '600' },
+});
+
+/** Project List Page
+ *
+ * Admin users can
+ *  - see all projects in database
+ *  - see button to add a new project
+ *
+ * Project managers can
+ *   - see all projects they manage
+ *   - will not see button to add a new project
+ */
+
 export default function ProjectList() {
   const [projects, setProjects] = useState(null);
   const [projectApiService] = useState(new ProjectApiService());
 
-  /* On component mount, request projects data from API */
+  // destructuring auth from context object created by AuthContext.Provider
+  const { auth } = useAuth();
+  const user = auth?.user;
+
+  // On component mount, request projects data from API
   useEffect(
     function getProjectsOnMount() {
       async function fetchAllProjects() {
         let projectsData = await projectApiService.fetchProjects();
-        //sort the projects alphabetically on front end for now but maybe we can do this on the backend db query
+        //sort the projects alphabetically
         projectsData = projectsData.sort((a, b) =>
           a.name.localeCompare(b.name)
         );
+
+        // if user is not admin, but is a project manager, only show projects they manage
+        if (user?.accessLevel !== 'admin' && user?.managedProjects.length > 0) {
+          projectsData = projectsData.filter((project) =>
+            user.managedProjects.includes(project._id)
+          );
+        }
+
         setProjects(projectsData);
       }
 
@@ -30,15 +63,18 @@ export default function ProjectList() {
     [projectApiService]
   );
 
-  /* Render loading circle until project data is served from API */
+  // Figure out better way to block unauthorized users from accessing this page
+  if (!auth) {
+    return <Redirect to="/login" />;
+  }
+
+  // Render loading circle until project data is served from API
   if (!projects)
     return (
       <Box sx={{ textAlign: 'center', pt: 10 }}>
         <CircularProgress />
       </Box>
     );
-
-  console.log(projects);
 
   return (
     <Box sx={{ px: 1 }}>
@@ -48,37 +84,33 @@ export default function ProjectList() {
         </Typography>
       </Box>
 
-      <Box sx={{ textAlign: 'center' }}>
-        <Button
-          component={Link}
-          to="/projects/create"
-          variant="secondary"
-          sx={{ mb: 3 }}
-        >
-          Add a New Project
-        </Button>
-      </Box>
+      {user?.accessLevel === 'admin' && (
+        <Box sx={{ textAlign: 'center' }}>
+          <Button
+            component={Link}
+            to="/projects/create"
+            variant="secondary"
+            sx={{ mb: 3, px: 4 }}
+          >
+            Add a New Project
+          </Button>
+        </Box>
+      )}
 
       <Box sx={{ bgcolor: '#F5F5F5' }}>
         <Box sx={{ p: 2 }}>
-          <Typography sx={{ fontFamily: 'Source Sans Pro', fontWeight: 600 }}>
-            Active Projects
-          </Typography>
+          <Typography variant="h3">Active Projects</Typography>
         </Box>
         <Divider sx={{ borderColor: 'rgba(0,0,0,1)' }} />
         <Box sx={{ p: 2 }}>
           {projects.map((project) => (
-            <Box key={project._id} sx={{ mb: 0.5 }}>
-              <Typography
-                sx={{
-                  fontFamily: 'Source Sans Pro',
-                  textTransform: 'uppercase',
-                }}
+            <Box key={project._id} sx={{ mb: 0.35 }}>
+              <StyledTypography
                 component={Link}
                 to={`/projects/${project._id}`}
               >
                 {project.name}
-              </Typography>
+              </StyledTypography>
             </Box>
           ))}
         </Box>

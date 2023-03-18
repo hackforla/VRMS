@@ -10,6 +10,13 @@ let theme = createTheme({
     },
   },
   typography: {
+    fontFamily: [
+      'Source Sans Pro',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+    ].join(','),
     h1: {
       fontFamily: 'Source Code Pro',
       fontWeight: 'bold',
@@ -17,10 +24,9 @@ let theme = createTheme({
       marginBottom: '1.5rem',
     },
     h3: {
-      fontFamily: 'Source Code Pro',
-      fontWeight: 'bold',
-      fontSize: '28px',
-      marginBottom: '1.5rem',
+      fontFamily: 'Source Sans Pro',
+      fontWeight: 600,
+      fontSize: '16px',
     },
   },
   components: {
