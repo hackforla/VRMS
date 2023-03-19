@@ -15,7 +15,7 @@ body {
         "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-image: url("/bg-image-skyline.jpg");
+    background-image: url("assets/bg-image-skyline.jpg");
     background-repeat: no-repeat;
     background-position: bottom;
     background-position-y: 80%;
@@ -156,7 +156,7 @@ label {
     }
 
     body {
-        background-image: url("/bg-image-pier.jpg");
+        background-image: url("assets/bg-image-pier.jpg");
         background-repeat: no-repeat;
         background-position: top;
         background-size: 1200px 1200px;
