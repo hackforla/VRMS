@@ -15,13 +15,9 @@
       "jsx": true
     },
     "ecmaVersion": 2017,
-    "sourceType": "module",
-    "babelOptions": { "configFile": "../.babelrc" }
+    "sourceType": "module"
   },
-  "plugins": [
-    "react",
-    "only-warn"
-  ],
+  "plugins": ["react"],
   "rules": {
     "react/jsx-filename-extension": [
       1,
@@ -29,6 +25,5 @@
         "extensions": [".js", ".jsx"]
       }
     ]
-  },
-  "root":true
+  }
 }

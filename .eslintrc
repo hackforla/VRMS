@@ -1,8 +1,5 @@
 {
-  "parserOptions": { "requireConfigFile": "false",
-  "babelOptions": {
-    "babelrc": false,
-  },
- },
-  "root": true,
+  "parser": "@babel/eslint-parser",
+  "parserOptions": { "requireConfigFile": "false" },
+  "babelOptions": { "configFile": "./.babelrc" }
 }
