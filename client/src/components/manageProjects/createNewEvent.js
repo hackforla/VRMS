@@ -15,7 +15,7 @@ const CreateNewEvent = ({
 }) => {
   // These are the initial form values
   const initialFormValues = {
-    name: `${projectName} Team Meeting`,
+    name: '',
     eventType: 'Team Meeting',
     description: '',
     videoConferenceLink: '',
@@ -77,10 +77,10 @@ const CreateNewEvent = ({
       handleEventCreate();
       setFormValues(initialFormValues);
       setIsCreateNew(false);
-      setEventAlert("Event created!")
+      setEventAlert('Event created!');
       await setTimeout(() => {
         setEventAlert(null);
-      }, 5000)
+      }, 5000);
     }
     setFormErrors(errors);
   };
