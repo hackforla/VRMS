@@ -64,7 +64,7 @@ module.exports = (cron, fetch) => {
         const eventDate = new Date(filteredEvent.date);
 
         if (eventExists) {
-          console.log('Not going to run ceateEvent');
+          console.log('Not going to run createEvent');
         } else {
           // Create new event
           const hours = eventDate.getHours();

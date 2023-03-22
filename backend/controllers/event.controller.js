@@ -6,13 +6,12 @@ EventController.event_list = async function (req, res) {
   const { query } = req;
 
   try {
-    console.log('I AM HERE', query);
     const events = await Event.find(query);
-    console.log('EVENTS', events);
     return res.status(200).send(events);
   } catch (err) {
     return res.sendStatus(400);
   }
+
 };
 
 EventController.event_by_id = async function (req, res) {
@@ -46,6 +45,7 @@ EventController.destroy = async function (req, res) {
   } catch (err) {
     return res.sendStatus(400);
   }
+  
 };
 
 EventController.update = async function (req, res) {
@@ -58,5 +58,6 @@ EventController.update = async function (req, res) {
     return res.sendStatus(400);
   }
 };
+
 
 module.exports = EventController;
