@@ -61,7 +61,7 @@ export default function ProjectList() {
 
       fetchAllProjects();
     },
-    [projectApiService]
+    [projectApiService, user.accessLevel, user.managedProjects]
   );
 
   // Figure out better way to block unauthorized users from accessing this page
