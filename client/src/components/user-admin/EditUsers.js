@@ -14,7 +14,7 @@ const EditUsers = ({ userToEdit, backToSearch, updateUserDb, projects }) => {
   // Filter active projects for dropdown
   const activeProjects = Object.values(projects)
     .filter((project) => project.projectStatus === 'Active')
-    .sort((a, b) => a.name.localeCompare(b.name))
+    .sort((a, b) => a.name?.localeCompare(b.name))
     // eslint-disable-next-line no-underscore-dangle
     .map((p) => [p._id, p.name]);
 
