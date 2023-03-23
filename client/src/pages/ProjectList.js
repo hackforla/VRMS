@@ -43,9 +43,10 @@ export default function ProjectList() {
     function getProjectsOnMount() {
       async function fetchAllProjects() {
         let projectsData = await projectApiService.fetchProjects();
+
         //sort the projects alphabetically
         projectsData = projectsData.sort((a, b) =>
-          a.name.localeCompare(b.name)
+          a.name?.localeCompare(b.name)
         );
 
         // if user is not admin, but is a project manager, only show projects they manage
@@ -60,7 +61,7 @@ export default function ProjectList() {
 
       fetchAllProjects();
     },
-    [projectApiService, user.accessLevel, user.managedProjects]
+    [projectApiService]
   );
 
   // Figure out better way to block unauthorized users from accessing this page

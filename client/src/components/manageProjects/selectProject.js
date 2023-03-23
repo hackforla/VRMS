@@ -17,7 +17,7 @@ const SelectProject = ({ projects, accessLevel, user }) => {
       // eslint-disable-next-line no-underscore-dangle
       return user?.managedProjects.includes(proj._id);
     })
-    .sort((a, b) => a.name.localeCompare(b.name))
+    .sort((a, b) => a.name?.localeCompare(b.name))
     .map((p) => (
       // eslint-disable-next-line no-underscore-dangle
       <li className="project-list-item" key={p._id}>
