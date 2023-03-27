@@ -22,6 +22,7 @@ import UserAdmin from './pages/UserAdmin';
 import ProjectList from './pages/ProjectList';
 import ManageProjects from './pages/ManageProjects';
 import HealthCheck from './pages/HealthCheck';
+import SecretPassword from './pages/SecretPassword';
 
 import ProjectForm from './components/ProjectForm';
 
@@ -59,6 +60,7 @@ const routes = [
     Component: ProjectLeaderDashboard,
   },
   { path: '/healthcheck', name: 'healthcheck', Component: HealthCheck },
+  { path: '/secretpassword', name: 'secretpassword', Component: SecretPassword },
 ];
 
 const App = () => {
