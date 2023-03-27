@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Box, Button, Link } from '@mui/material';
+import { Typography, Box, Link } from '@mui/material';
 import useAuth from '../hooks/useAuth';
 
 export default function UserWelcome() {

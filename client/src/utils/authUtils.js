@@ -7,7 +7,7 @@ export function authLevelRedirect(user) {
       loginRedirect = '/welcome';
       break;
     case 'user':
-      loginRedirect = '/projects';
+      loginRedirect = '/welcome';
       break;
     default:
     // Do nothing (harder than you think).
