@@ -73,7 +73,9 @@ const Navbar = (props) => {
           )}
         </Grid>
         <Grid item>
-          <Box component="img" src={HflaImg} sx={{ width: '100%' }} />
+          <NavLink to={!auth?.user ? '/' : '/welcome'}>
+            <Box component="img" src={HflaImg} sx={{ width: '100%' }} />
+          </NavLink>
         </Grid>
       </Grid>
     </Box>
