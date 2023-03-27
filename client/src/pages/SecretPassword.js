@@ -29,7 +29,6 @@ const helperTextSuccess = "That's the word!"
 export default function SecretPassword() {
   const [state, setState] = useState({
     secretPassword: '',
-    blur: false,
     error: false,
     success: false,
     copied: false,
@@ -42,14 +41,6 @@ export default function SecretPassword() {
     newFormData[name] = value
     setState(newFormData);
   };
-
-  const handleBlur = (e) => {
-    handleChange(e)
-    setState((fData) => ({
-      ...fData,
-      "blur": true,
-    }));
-  }
 
   const onSubmit = (e) => {
     e.preventDefault()
@@ -90,7 +81,6 @@ export default function SecretPassword() {
                   type="text"
                   onChange={handleChange}
                   color={state.success ? "success" : ""}
-                  onBlur={handleBlur}
                   helperText={
                     state.success
                       ? helperTextSuccess // This component should be hidden if this state is active ( state.success === true )
