@@ -38,7 +38,9 @@ let theme = createTheme({
         {
           props: { variant: 'secondary' },
           style: {
-            border: `3px solid ${uiKitColors.secondary}`,
+            // border: `3px solid ${uiKitColors.secondary}`,
+            // Temporary hacky fix, uiKit calls for a "secondary" variant that doesn't use MUI theme's secondary color
+            border: `3px solid ${uiKitColors.primary}`,
           },
         },
       ],
