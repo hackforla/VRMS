@@ -22,6 +22,7 @@ import UserAdmin from './pages/UserAdmin';
 import ProjectList from './pages/ProjectList';
 import ManageProjects from './pages/ManageProjects';
 import HealthCheck from './pages/HealthCheck';
+import UserWelcome from './pages/UserWelcome';
 
 import ProjectForm from './components/ProjectForm';
 
@@ -59,6 +60,7 @@ const routes = [
     Component: ProjectLeaderDashboard,
   },
   { path: '/healthcheck', name: 'healthcheck', Component: HealthCheck },
+  { path: '/welcome', name: 'welcome', Component: UserWelcome },
 ];
 
 const App = () => {
