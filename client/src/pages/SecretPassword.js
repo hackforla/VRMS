@@ -109,6 +109,14 @@ export default function SecretPassword() {
       {state.success && (
         <Box>
           <Grid container justifyContent="center">
+            <Typography variant='p' sx={{ mx: 5, mt: 4 }}>{successMessage}:
+            </Typography>
+            <Box color='success.main'>
+              <Typography variant='p' sx={{ mx: 5, mt: 4, fontWeight: 800 }}>
+                {currentSecretPassword}
+              </Typography>
+            </Box>
+            <Typography variant='p' sx={{ mx: 5, mt: 4 }}>{encouragementMessage}</Typography>
             <Grid item xs="auto">
               <Button
                 sx={{ minWidth: 150 }}
@@ -126,14 +134,6 @@ export default function SecretPassword() {
                 {!state.copied ? "Click to Copy" : "Copied!"}
               </Button>
             </Grid>
-            <Typography variant='p' sx={{ mx: 5, mt: 4 }}>{successMessage}:
-            </Typography>
-            <Box color='success.main'>
-              <Typography variant='p' sx={{ mx: 5, mt: 4, fontWeight: 800 }}>
-                {currentSecretPassword}
-              </Typography>
-            </Box>
-            <Typography variant='p' sx={{ mx: 5, mt: 4 }}>{encouragementMessage}</Typography>
           </Grid>
         </Box>
       )}
