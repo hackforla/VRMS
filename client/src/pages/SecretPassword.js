@@ -13,7 +13,8 @@ import {
  * To be used for validating the secret password during HFLA onboarding
  * */
 
-const currentSecretPassword = "strawberry"
+const currentSecretPassword = "strawberry".toLowerCase() // must be lower case
+
 const successMessage = "Great job! You found the secret password"
 const encouragementMessage = "Now take that word and use it to follow the rest of the onboarding instructions!"
 const secretInputLabel = "What's the Secret Password?"
@@ -47,8 +48,8 @@ export default function SecretPassword() {
     setState((fData) => ({
       ...fData,
       "secretPassword": "",
-      "error": currentSecretPassword !== state.secretPassword,
-      "success": currentSecretPassword === state.secretPassword,
+      "error": currentSecretPassword !== state.secretPassword.toLowerCase(),
+      "success": currentSecretPassword === state.secretPassword.toLowerCase(),
     }));
   }
 
