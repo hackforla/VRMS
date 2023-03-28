@@ -15,10 +15,13 @@ import {
 
 const currentSecretPassword = "strawberry".toLowerCase() // must be lower case
 
-const successMessage = "Great job! You found the secret password"
-const encouragementMessage = "Now take that word and use it to follow the rest of the onboarding instructions!"
-const secretInputLabel = "What's the Secret Password?"
+const encouragementMessage = [
+  "Great job! You found the secret password!",
+  "You can now return to the onboarding instructions.",
+  "When later asked for the password, in the onboarding form, use the password you just validated."
+]
 
+const secretInputLabel = "What's the Secret Password?"
 const helperTextInitial = " "
 const helperTextError = "That's not the password, please try again."
 const helperTextSuccess = "That's the word!"
@@ -109,14 +112,9 @@ export default function SecretPassword() {
       {state.success && (
         <Box>
           <Grid container justifyContent="center">
-            <Typography variant='p' sx={{ mx: 5, mt: 4 }}>{successMessage}:
-            </Typography>
-            <Box color='success.main'>
-              <Typography variant='p' sx={{ mx: 5, mt: 4, fontWeight: 800 }}>
-                {currentSecretPassword}
-              </Typography>
-            </Box>
-            <Typography variant='p' sx={{ mx: 5, mt: 4 }}>{encouragementMessage}</Typography>
+            {encouragementMessage.map(phrase => (
+              <Typography variant='p' key={phrase} sx={{ mx: 5, mb: 4 }}>{phrase}</Typography>
+            ))}
             <Grid item xs="auto">
               <Button
                 sx={{ minWidth: 150 }}
