@@ -27,11 +27,20 @@ const Navbar = (props) => {
   });
 
   return (
-    <Box sx={{ width: '100%', typography: 'body 1', mt: 2, mb: 2 }}>
+    <Box sx={{ my: 2, mx: { xs: 0, sm: 4 } }}>
       <Grid container>
+        <Grid item>
+          <NavLink to={!auth?.user ? '/' : '/welcome'}>
+            <Box
+              component="img"
+              src={HflaImg}
+              sx={{ width: '48.3px', mt: '7px' }}
+            />
+          </NavLink>
+        </Grid>
         <Grid
           item
-          xs={9}
+          xs={10}
           sx={{
             display: 'flex',
             justifyContent: 'space-evenly',
@@ -71,11 +80,6 @@ const Navbar = (props) => {
               </StyledButton>
             </>
           )}
-        </Grid>
-        <Grid item>
-          <NavLink to={!auth?.user ? '/' : '/welcome'}>
-            <Box component="img" src={HflaImg} sx={{ width: '100%' }} />
-          </NavLink>
         </Grid>
       </Grid>
     </Box>
