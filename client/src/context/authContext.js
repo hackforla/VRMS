@@ -1,58 +1,59 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend} from "../utils/globalSettings";
+import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend } from '../utils/globalSettings';
 import * as authApi from '../api/auth';
+import { useHistory } from 'react-router-dom';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [auth, setAuth] = useState();
+  const [auth, setAuth] = useState();
+  const history = useHistory();
 
-    useEffect(() => {
-      refreshAuth();
-    }, []);
+  useEffect(() => {
+    refreshAuth();
+  }, []);
 
-    const refreshAuth = async () => {
-      const userAuth = await fetchAuth();
-      setAuth(userAuth)
+  const refreshAuth = async () => {
+    const userAuth = await fetchAuth();
+    setAuth(userAuth);
+  };
+
+  const logout = async () => {
+    const res = await authApi.fetchLogout();
+
+    if (!res.ok) {
+      throw new Error(res.statusText);
     }
 
-    const logout = async () => {
-      const res = await authApi.fetchLogout();
+    history.push('/');
+    setAuth(null);
+  };
 
-      if (!res.ok) {
-        throw new Error(res.statusText);
-      }
-
-      setAuth(null);
-    }
-    
-    return (
-        <AuthContext.Provider value={{auth, refreshAuth, logout}}>
-            { children }
-        </AuthContext.Provider>
-    );
+  return (
+    <AuthContext.Provider value={{ auth, refreshAuth, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 const fetchAuth = async () => {
-
   const request = {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
-      "x-customrequired-header": headerToSend
+      'Content-Type': 'application/json',
+      'x-customrequired-header': headerToSend,
     },
   };
 
-  try{
-    const response = await fetch("/api/auth/me", request);
-    if(response.status !== 200)
-      return {user: null, isAdmin: false, isError: true };
+  try {
+    const response = await fetch('/api/auth/me', request);
+    if (response.status !== 200)
+      return { user: null, isAdmin: false, isError: true };
 
-    const user = await response.json();  
+    const user = await response.json();
     return { user, isAdmin: user.accessLevel === 'admin', isError: false };
-  }
-  catch (error) {
+  } catch (error) {
     // this should never be hit...
-    console.error("fetchAuth - error", error);
+    console.error('fetchAuth - error', error);
   }
-}
+};
