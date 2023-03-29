@@ -14,6 +14,7 @@ const Home = () => {
     setSelectedEvent(e.currentTarget.value);
   };
 
+  // Fetching only events with checkInReady = true
   useEffect(() => {
     async function fetchEvents() {
       try {
@@ -74,8 +75,7 @@ const Home = () => {
                     {events.map((event) => {
                       return (
                         <option key={event._id || 0} value={event._id}>
-                          {event?.project?.name + ' - ' + event.name ||
-                            '--SELECT ONE--'}
+                          {event?.project?.name + ' - ' + event.name}
                         </option>
                       );
                     })}
