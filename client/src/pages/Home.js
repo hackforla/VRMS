@@ -41,10 +41,6 @@ const Home = () => {
     );
   }
 
-  console.log('EVENTS', events);
-
-  console.log('SELECTED EVENT', selectedEvent);
-
   return (
     <div className="home">
       <div className="home-headers">
@@ -92,8 +88,10 @@ const Home = () => {
       )}
 
       <div className="home-buttons">
+        {/* If no events with checkInReady: true */}
         {events.length === 0 && <CreateNewProfileButton />}
 
+        {/* If any events with checkInReady: true */}
         {events.length > 0 && (
           <CheckInButtons
             disabled={selectedEvent === ''}
