@@ -22,6 +22,7 @@ const UserAdmin = () => {
   const [projects, setProjects] = useState([]); // All projects pulled from db
   const [userToEdit, setUserToEdit] = useState({}); // The selected user that is being edited
   const [currentPage, setCurrentPage] = useState(PAGES.main);
+  const [newlyCreatedProject, setNewlyCreatedProject] = useState(null);
 
   const [userApiService] = useState(new UserApiService());
   const [projectApiService] = useState(new ProjectApiService());
@@ -46,7 +47,8 @@ const UserAdmin = () => {
 
   const handleNewProjectFormSubmit = useCallback(
     async (projectName) => {
-      await projectApiService.addProjectToDb(projectName);
+      const id = await projectApiService.addProjectToDb(projectName);
+      setNewlyCreatedProject(id)
       fetchProjects();
     },
     [projectApiService, fetchProjects]
@@ -95,6 +97,7 @@ const UserAdmin = () => {
   if (currentPage === PAGES.addNewProject) {
     return (
       <AddNewProject
+        newlyCreatedProject={newlyCreatedProject}
         onBackClick={() => setCurrentPage(PAGES.main)}
         handleNewProjectFormSubmit={handleNewProjectFormSubmit}
         projects={projects}

@@ -30,7 +30,9 @@ class ProjectApiService {
     };
 
     try {
-      return await fetch(this.baseProjectUrl, requestOptions);
+      const proj =  await fetch(this.baseProjectUrl, requestOptions);
+      const projectDetails = await proj.json()
+      return projectDetails._id
     } catch (error) {
       console.error(`Add project error: `, error);
       alert('Server not responding.  Please try again.');
