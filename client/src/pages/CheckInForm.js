@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import NewUserForm from './../components/presentational/newUserForm';
 import ReturnUserForm from './../components/presentational/returnUserForm';
-import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend} from '../utils/globalSettings';
+import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend } from '../utils/globalSettings';
 
 import '../sass/CheckIn.scss';
 
@@ -73,7 +73,6 @@ const CheckInForm = (props) => {
     'Education/STEM',
     'Fundraising',
   ];
-
 
   const fetchQuestions = async () => {
     try {
@@ -200,7 +199,7 @@ const CheckInForm = (props) => {
         })
         .then((response) => {
           const checkInForm = {
-            userId: `${returningUser._id}`,
+            userId: `${returningUser?.user?._id}`,
             eventId: new URLSearchParams(props.location.search).get('eventId'),
           };
 
