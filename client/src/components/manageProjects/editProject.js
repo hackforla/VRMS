@@ -115,7 +115,7 @@ const EditProject = ({
         fieldData={projectToEdit.slackUrl}
         fieldName="slackUrl"
         updateProject={updateProject}
-        fieldTitle="Slack URL:"
+        fieldTitle="Slack Channel Link:"
         accessLevel={userAccessLevel}
         canEdit={['admin']}
       />

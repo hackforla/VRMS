@@ -57,7 +57,7 @@ const simpleInputs = [
     placeholder: 'htttps://github.com/',
   },
   {
-    label: 'Slack Channel URL',
+    label: 'Slack Channel Link',
     name: 'slackUrl',
     type: 'text',
     placeholder: 'htttps://slack.com/',
