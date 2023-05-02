@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect, useHistory } from 'react-router-dom';
 import ProjectApiService from '../api/ProjectApiService';
 import { ReactComponent as PlusIcon } from '../svg/PlusIcon.svg';
 
@@ -120,6 +120,23 @@ export default function ProjectForm() {
 
   const [activeButton, setActiveButton] = React.useState('close');
 
+  const [newlyCreatedID, setNewlyCreatedID] = useState(null);
+  const history = useHistory();
+
+  const routeToNewProjectPage = () => {
+     if(newlyCreatedID !== null) {
+       console.log("ID", newlyCreatedID)
+      history.push(`/projects/${newlyCreatedID}`)
+    }
+  }
+  
+
+  useEffect(() => {
+    routeToNewProjectPage()
+  },[newlyCreatedID])
+
+  
+
   // only handles radio button change
   const handleRadioChange = (event) => {
     setLocationType(event.target.value);
@@ -141,7 +158,8 @@ export default function ProjectForm() {
     try {
       // fires POST request to create a new project,
       // but the server response does not include the newly created project id that we need
-      await projectApi.create(formData);
+      const id = await projectApi.create(formData);
+      setNewlyCreatedID(id);
     } catch (errors) {
       console.error(errors);
       return;
