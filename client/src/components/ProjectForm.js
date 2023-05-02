@@ -125,7 +125,6 @@ export default function ProjectForm() {
 
   const routeToNewProjectPage = () => {
      if(newlyCreatedID !== null) {
-       console.log("ID", newlyCreatedID)
       history.push(`/projects/${newlyCreatedID}`)
     }
   }
