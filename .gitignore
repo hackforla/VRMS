@@ -10,4 +10,4 @@ test.db
 videos/
 screenshots/
 vrms.code-workspace
-
+.vscode/
