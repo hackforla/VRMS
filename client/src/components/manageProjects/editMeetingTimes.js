@@ -39,7 +39,8 @@ const EditMeetingTimes = ({
         };
       }
 
-      if (values.description) {
+      //if there is a description or a blank description
+      if (values.description || !values.description) {
         theUpdatedEvent = {
           ...theUpdatedEvent,
           description: values.description,
