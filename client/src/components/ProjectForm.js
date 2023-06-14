@@ -252,7 +252,7 @@ export default function ProjectForm() {
                       message: 'Required!'
                     },
                     pattern: {
-                      value: /https:\/\/[\w-]*\.?zoom.us\/(j|my)\/[\d\w?=-]+/g,
+                      value: /https:\/\/[\w-]*\.?zoom.us\/(j|my)\/[\d\w?=-]+/,
                       message: "Zoom URL is not valid"
     }
                   }}
