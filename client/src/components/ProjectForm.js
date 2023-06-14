@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import { useForm, FormProvider } from 'react-hook-form';
 import ProjectApiService from '../api/ProjectApiService';
 import { ReactComponent as PlusIcon } from '../svg/PlusIcon.svg';
+import { Input } from './Input';
 
 import {
   Typography,
@@ -121,7 +123,9 @@ export default function ProjectForm() {
   const [activeButton, setActiveButton] = React.useState('close');
 
   const [newlyCreatedID, setNewlyCreatedID] = useState(null);
+
   const history = useHistory();
+  const methods = useForm();
 
   const routeToNewProjectPage = () => {
      if(newlyCreatedID !== null) {
@@ -129,12 +133,9 @@ export default function ProjectForm() {
     }
   }
   
-
   useEffect(() => {
     routeToNewProjectPage()
   },[newlyCreatedID])
-
-  
 
   // only handles radio button change
   const handleRadioChange = (event) => {
@@ -151,12 +152,12 @@ export default function ProjectForm() {
     }));
   };
 
+  const formSubmit = methods.handleSubmit(data => console.log("submitting", data))
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const projectApi = new ProjectApiService();
     try {
-      // fires POST request to create a new project,
-      // but the server response does not include the newly created project id that we need
       const id = await projectApi.create(formData);
       setNewlyCreatedID(id);
     } catch (errors) {
@@ -203,97 +204,70 @@ export default function ProjectForm() {
   );
 
   return (
-    <Box sx={{ px: 0.5 }}>
-      <Box sx={{ textAlign: 'center' }}>
-        <Typography variant="h1">Project Management</Typography>
-      </Box>
-      <Box sx={{ bgcolor: '#F5F5F5' }}>
-        <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between' }}>
-          <Box>
-            <Typography sx={{ fontSize: '18px', fontWeight: '600' }}>
-              Project Information
-            </Typography>
-          </Box>
-          <Box sx={{ display: 'flex' }}>
-            <PlusIcon style={{ marginRight: '7px' }} />
-            <Typography sx={{ fontSize: '14px', fontWeight: '600' }}>
-              Add New Project
-            </Typography>
-          </Box>
+    <FormProvider {...methods}>
+      <Box sx={{ px: 0.5 }}>
+        <Box sx={{ textAlign: 'center' }}>
+          <Typography variant="h1">Project Management</Typography>
         </Box>
-        <Divider sx={{ borderColor: 'rgba(0,0,0,1)' }} />
-        <Box sx={{ py: 2, px: 4 }}>
-          <form id="project-form" onSubmit={handleSubmit}>
-            {simpleInputs.map((input) => (
-              <Box sx={{ mb: 1 }} key={input.name}>
-                <Grid container alignItems="center">
-                  <Grid item xs="auto" sx={{ pr: 3 }}>
-                    <InputLabel
-                      sx={{ width: 'max-content', ml: 0.5, mb: 0.5 }}
-                      id={input.name}
-                    >
-                      {input.label}
-                    </InputLabel>
-                  </Grid>
-
-                  {input.name === 'location' && locationRadios}
-                </Grid>
-
-                <TextField
-                  id={input.name}
-                  name={input.name}
-                  placeholder={
-                    input.name === 'location'
-                      ? locationType === 'remote'
-                        ? 'Enter project zoom link'
-                        : 'Enter project street address'
-                      : input.placeholder
-                  }
-                  variant="outlined"
-                  type={input.type}
-                  onChange={handleChange}
-                  helperText=" "
-                  value={formData[input.name]}
-                  {...(input.type === 'textarea' && {
-                    multiline: true,
-                    minRows: 3,
-                    sx: {
-                      '& .MuiInputBase-root': {
-                        px: '4px',
-                        py: '5px',
-                      },
-                    },
-                  })}
+        <Box sx={{ bgcolor: '#F5F5F5' }}>
+          <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between' }}>
+            <Box>
+              <Typography sx={{ fontSize: '18px', fontWeight: '600' }}>
+                Project Information
+              </Typography>
+            </Box>
+            <Box sx={{ display: 'flex' }}>
+              <PlusIcon style={{ marginRight: '7px' }} />
+              <Typography sx={{ fontSize: '14px', fontWeight: '600' }}>
+                Add New Project
+              </Typography>
+            </Box>
+          </Box>
+          <Divider sx={{ borderColor: 'rgba(0,0,0,1)' }} />
+          <Box sx={{ py: 2, px: 4 }}>
+            <form id="project-form" onSubmit={e => e.preventDefault()} noValidate>
+              <Input 
+                label="name"
+                type="text"
+                id="name"
+                placeholder="type your name." 
                 />
-              </Box>
-            ))}
-          </form>
+
+                <Input 
+                  label="location"
+                  type="text"
+                  id="location"
+                  placeholder="Enter the Location"
+                />
+            </form>
+          </Box>
+        </Box>
+        <Box>
+          <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
+            <Grid item xs="auto">
+              <StyledButton
+                type="submit"
+                form="project-form"
+                // variant={activeButton === 'save' ? 'contained' : 'secondary'}
+                // disabled={activeButton !== 'save'}
+                onClick={formSubmit}
+              >
+                Save
+              </StyledButton>
+            </Grid>
+            <Grid item xs="auto">
+              <StyledButton
+                component={Link}
+                to="/projects"
+                variant={activeButton === 'close' ? 'contained' : 'secondary'}
+                disabled={activeButton !== 'close'}
+              >
+                Close
+              </StyledButton>
+            </Grid>
+          </Grid>
         </Box>
       </Box>
-      <Box>
-        <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
-          <Grid item xs="auto">
-            <StyledButton
-              type="submit"
-              form="project-form"
-              variant={activeButton === 'save' ? 'contained' : 'secondary'}
-              disabled={activeButton !== 'save'}
-            >
-              Save
-            </StyledButton>
-          </Grid>
-          <Grid item xs="auto">
-            <StyledButton
-              component={Link}
-              to="/projects"
-              variant={activeButton === 'close' ? 'contained' : 'secondary'}
-              disabled={activeButton !== 'close'}
-            >
-              Close
-            </StyledButton>
-          </Grid>
-        </Grid>
-      </Box>
-    </Box>
+    </FormProvider>
   );
 }
