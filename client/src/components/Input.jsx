@@ -2,15 +2,13 @@ import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import { findInputErrors, isFormInvalid } from '../utils/inputValidation'
 
-export const Input = ({label, type, id, placeholder}) => {
+export const Input = ({ label, type, id, placeholder, validation, name }) => {
     const { 
         register,
         formState: {errors}
      } = useFormContext();
-     console.log("STETE", errors)
 
      const inputError = findInputErrors(errors, label);
-     console.log("IE", inputError)
      const isInvalid = isFormInvalid(inputError);
 
     return (
@@ -30,12 +28,7 @@ export const Input = ({label, type, id, placeholder}) => {
                 id={id}
                 type={type}
                 placeholder={placeholder}
-                {...register(label, {
-                    required: {
-                        value: true,
-                        message: 'required'
-                    }
-                })}
+                {...register(name, validation)}
             />
         </div>
     )

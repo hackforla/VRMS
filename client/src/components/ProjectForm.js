@@ -228,16 +228,34 @@ export default function ProjectForm() {
             <form id="project-form" onSubmit={e => e.preventDefault()} noValidate>
               <Input 
                 label="name"
+                name="name"
                 type="text"
                 id="name"
                 placeholder="type your name." 
+                validation={{
+                  required: {
+                    value: true,
+                    message: 'Required'
+                  }
+                }}
                 />
 
                 <Input 
                   label="location"
+                  name="location"
                   type="text"
                   id="location"
                   placeholder="Enter the Location"
+                  validation={{
+                    required: {
+                      value: true,
+                      message: 'Required!'
+                    },
+                    pattern: {
+                      value: /https:\/\/[\w-]*\.?zoom.us\/(j|my)\/[\d\w?=-]+/g,
+                      message: "Zoom URL is not valid"
+    }
+                  }}
                 />
             </form>
           </Box>
