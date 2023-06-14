@@ -1,4 +1,4 @@
-
+import React from 'react'
 
 export const simpleInputs = [
   {
@@ -68,51 +68,66 @@ export const projectLocationValidation = {
     }
 }
 
+export function findInputErrors(errors, name) {
+  console.log("ERRRS", errors)
+  const filtered = Object.keys(errors)
+    .filter(key => key.includes(name))
+    .reduce((cur, key) => {
+      return Object.assign(cur, {error: errors[key]})
+    },{})
+    return filtered;
+}
+
+export function isFormInvalid(err) {
+  if(Object.keys(err).length > 0) return true;
+  return false;
+}
 
 
 
- {simpleInputs.map((input) => (
-              <Box sx={{ mb: 1 }} key={input.name}>
-                <Grid container alignItems="center">
-                  <Grid item xs="auto" sx={{ pr: 3 }}>
 
-                    <InputLabel
-                      sx={{ width: 'max-content', ml: 0.5, mb: 0.5 }}
-                      id={input.name}
-                    >
-                      {input.label}
-                    </InputLabel>
-                  </Grid>
+//  {simpleInputs.map((input) => (
+//               <Box sx={{ mb: 1 }} key={input.name}>
+//                 <Grid container alignItems="center">
+//                   <Grid item xs="auto" sx={{ pr: 3 }}>
 
-                  {input.name === 'location' && locationRadios}
-                </Grid>
+//                     <InputLabel
+//                       sx={{ width: 'max-content', ml: 0.5, mb: 0.5 }}
+//                       id={input.name}
+//                     >
+//                       {input.label}
+//                     </InputLabel>
+//                   </Grid>
 
-                <TextField
-                  id={input.name}
-                  name={input.name}
-                  placeholder={
-                    input.name === 'location'
-                      ? locationType === 'remote'
-                        ? 'Enter project zoom link'
-                        : 'Enter project street address'
-                      : input.placeholder
-                  }
-                  variant="outlined"
-                  type={input.type}
-                  onChange={handleChange}
-                  helperText=" "
-                  value={formData[input.name]}
-                  {...(input.type === 'textarea' && {
-                    multiline: true,
-                    minRows: 3,
-                    sx: {
-                      '& .MuiInputBase-root': {
-                        px: '4px',
-                        py: '5px',
-                      },
-                    },
-                  })}
-                />
+//                   {input.name === 'location' && locationRadios}
+//                 </Grid>
 
-              </Box>
-            ))}
+//                 <TextField
+//                   id={input.name}
+//                   name={input.name}
+//                   placeholder={
+//                     input.name === 'location'
+//                       ? locationType === 'remote'
+//                         ? 'Enter project zoom link'
+//                         : 'Enter project street address'
+//                       : input.placeholder
+//                   }
+//                   variant="outlined"
+//                   type={input.type}
+//                   onChange={handleChange}
+//                   helperText=" "
+//                   value={formData[input.name]}
+//                   {...(input.type === 'textarea' && {
+//                     multiline: true,
+//                     minRows: 3,
+//                     sx: {
+//                       '& .MuiInputBase-root': {
+//                         px: '4px',
+//                         py: '5px',
+//                       },
+//                     },
+//                   })}
+//                 />
+
+//               </Box>
+//             ))}
