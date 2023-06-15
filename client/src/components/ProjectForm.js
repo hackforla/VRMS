@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { useForm, FormProvider } from 'react-hook-form';
+import { useForm, FormProvider, Controller } from 'react-hook-form';
 import ProjectApiService from '../api/ProjectApiService';
 import { ReactComponent as PlusIcon } from '../svg/PlusIcon.svg';
 import { Input } from './Input';
@@ -176,7 +176,7 @@ export default function ProjectForm() {
     }
   }, [formData]);
 
-  const locationRadios = (
+  const LocationRadios = () => (
     <Grid item>
       <FormControl>
         <RadioGroup
@@ -226,26 +226,62 @@ export default function ProjectForm() {
           <Divider sx={{ borderColor: 'rgba(0,0,0,1)' }} />
           <Box sx={{ py: 2, px: 4 }}>
             <form id="project-form" onSubmit={e => e.preventDefault()} noValidate>
-              <Input 
+              <Controller 
                 label="name"
                 name="name"
                 type="text"
                 id="name"
-                placeholder="type your name." 
+                placeholder="Enter project name." 
                 validation={{
                   required: {
                     value: true,
                     message: 'Required'
                   }
                 }}
+                render={ ({field}) => (
+                  <Box sm={{mb:1}}>
+                    <Grid container alignItems="center">
+                      <Grid item xs="auto" sx={{pr:3}}>
+                        <InputLabel sx={{width: 'max-content', ml: 0.5, mb:0.5 }} id={field.id}>{field.name}</InputLabel>
+                      </Grid>
+                    </Grid>
+                    <TextField {...field} /> 
+                  </Box>
+                )}
                 />
 
-                <Input 
+                <Controller 
+                  label="description"
+                  name="description"
+                  type="text"
+                  id="location"
+                  placeholder="Enter a project description."
+                  validation={{
+                  required: {
+                    value: true,
+                    message: 'Required'
+                  }
+                }}
+                render={({field}) => (
+                  <Box sm={{mb:1}}>
+                    <Grid container alignItems="center">
+                      <Grid item xs="auto" sx={{pr:3}}>
+                        <InputLabel sx={{width: 'max-content', ml: 0.5, mb:0.5 }} id={field.id}>{field.name}</InputLabel>
+                      </Grid>
+                    </Grid>
+                    <TextField {...field} /> 
+                  </Box>
+                ) }
+                  />
+
+                  <LocationRadios />
+                  {locationType === 'remote' ? (
+                     <Controller 
                   label="location"
                   name="location"
                   type="text"
                   id="location"
-                  placeholder="Enter the Location"
+                  placeholder="Enter a Zoom link."
                   validation={{
                     required: {
                       value: true,
@@ -256,7 +292,88 @@ export default function ProjectForm() {
                       message: "Zoom URL is not valid"
     }
                   }}
+                  render={({field}) => (
+                  <Box sm={{mb:1}}>
+                    <Grid container alignItems="center">
+                      <Grid item xs="auto" sx={{pr:3}}>
+                        <InputLabel sx={{width: 'max-content', ml: 0.5, mb:0.5 }} id={field.id}>{field.name}</InputLabel>
+                      </Grid>
+                    </Grid>
+                    <TextField {...field} /> 
+                  </Box>
+                ) }
                 />
+                  ) : (
+                    <Controller
+                      label="address"
+                      name="address"
+                      id="address"
+                      type="text"
+                      placeholder="Enter the address."
+                      validation={{
+                        required: {
+                          value: true,
+                          message: "Required"
+                        }
+                      }}
+                      render={({field}) => (
+                  <Box sm={{mb:1}}>
+                    <Grid container alignItems="center">
+                      <Grid item xs="auto" sx={{pr:3}}>
+                        <InputLabel sx={{width: 'max-content', ml: 0.5, mb:0.5 }} id={field.id}>{field.name}</InputLabel>
+                      </Grid>
+                    </Grid>
+                    <TextField {...field} /> 
+                  </Box>
+                ) }
+                    />
+                  ) }
+
+                  <Controller 
+                    label='GitHub URL'
+                    name='githubUrl'
+                    type= 'text'
+                    placeholder='htttps://github.com/'
+                    validation={{
+                      required: {
+                        value: true,
+                        message: "Required"
+                      }
+                    }}
+                    render={({field}) => (
+                  <Box sm={{mb:1}}>
+                    <Grid container alignItems="center">
+                      <Grid item xs="auto" sx={{pr:3}}>
+                        <InputLabel sx={{width: 'max-content', ml: 0.5, mb:0.5 }} id={field.id}>{field.name}</InputLabel>
+                      </Grid>
+                    </Grid>
+                    <TextField {...field} /> 
+                  </Box>
+                ) }
+                  />
+                  <Controller 
+                    label='Slack channel link'
+                    name='slack'
+                    type= 'text'
+                    placeholder='htttps://slack.com/'
+                    validation={{
+                      required: {
+                        value: true,
+                        message: "Required"
+                      }
+                    }}
+                    render={({field}) => (
+                  <Box sm={{mb:1}}>
+                    <Grid container alignItems="center">
+                      <Grid item xs="auto" sx={{pr:3}}>
+                        <InputLabel sx={{width: 'max-content', ml: 0.5, mb:0.5 }} id={field.id}>{field.name}</InputLabel>
+                      </Grid>
+                    </Grid>
+                    <TextField {...field} /> 
+                  </Box>
+                ) }
+                  />
+               
             </form>
           </Box>
         </Box>
