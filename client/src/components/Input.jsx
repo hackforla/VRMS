@@ -1,6 +1,7 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import { findInputErrors, isFormInvalid } from '../utils/inputValidation'
+import "../sass/Form.scss";
 
 export const Input = ({ label, type, id, placeholder, validation, name, multiline }) => {
     const { 
@@ -24,6 +25,7 @@ export const Input = ({ label, type, id, placeholder, validation, name, multilin
             multiline ? (
                 <div>
                 <textarea 
+                className="new-project-input project-textarea"
                 id={id}
                 type={type}
                 placeholder={placeholder}
@@ -40,6 +42,7 @@ export const Input = ({ label, type, id, placeholder, validation, name, multilin
                     <div>
                     <input
                     id={id}
+                    className="new-project-input"
                     type={type}
                     placeholder={placeholder}
                     {...register(name, validation)}

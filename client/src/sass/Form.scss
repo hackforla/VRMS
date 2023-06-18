@@ -66,3 +66,22 @@
 .Textarea {
   height: 80px;
 }
+
+.new-project-input {
+  width:100%;
+  color: rgb(0, 0, 0);
+  font-family: 'Source Sans Pro';
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0px 0px 20px 0px;
+  height: 36px;
+  padding: 0 4px;
+  max-width: 310px;
+  outline: none;
+  background-color: inherit;
+  border-radius: 3px;
+}
+
+.project-textarea {
+  border: 3px solid red;
+}
