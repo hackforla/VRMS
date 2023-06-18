@@ -9,7 +9,7 @@ export const Input = ({ label, type, id, placeholder, validation, name, multilin
         formState: {errors}
      } = useFormContext();
 
-     const inputError = findInputErrors(errors, label);
+     const inputError = findInputErrors(errors, name);
      const isInvalid = isFormInvalid(inputError);
 
     return (

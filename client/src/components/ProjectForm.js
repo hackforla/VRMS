@@ -90,20 +90,19 @@ export default function ProjectForm() {
   };
 
 
-  const formSubmit = methods.handleSubmit(data => console.log("submitting", data))
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const formSubmit = methods.handleSubmit( async (data) => {
+    console.log("DUB", data)
     const projectApi = new ProjectApiService();
     try {
-      const id = await projectApi.create(formData);
+      const id = await projectApi.create(data);
       setNewlyCreatedID(id);
     } catch (errors) {
       console.error(errors);
       return;
     }
+
     setActiveButton('close');
-  };
+  });
 
   // Basic validation : if all inputs have values, enable the submit button
   useEffect(() => {
@@ -163,10 +162,10 @@ export default function ProjectForm() {
           </Box>
           <Divider sx={{ borderColor: 'rgba(0,0,0,1)' }} />
           <Box sx={{ py: 2, px: 4 }}>
-            <form id="project-form" onSubmit={e => e.preventDefault()} noValidate>
+            <form id="project-form" onSubmit={() => formSubmit()} noValidate>
               <Input
                 label="Project Name"
-                name="Project Name"
+                name="name"
                 type="text"
                 id="name"
                 placeholder="Enter project name." 
@@ -181,7 +180,7 @@ export default function ProjectForm() {
                 <Input 
                   multiline
                   label="Project Description"
-                  name="Project Description"
+                  name="description"
                   type="text"
                   id="description"
                   placeholder="Enter a project description."
@@ -197,7 +196,7 @@ export default function ProjectForm() {
                   {locationType === 'remote' ? (
                      <Input 
                   label="Location"
-                  name="Location"
+                  name="location"
                   type="text"
                   id="location"
                   placeholder="Enter a Zoom link."
@@ -215,7 +214,7 @@ export default function ProjectForm() {
                   ) : (
                     <Input
                       label="Address"
-                      name="Address"
+                      name="address"
                       id="address"
                       type="text"
                       placeholder="Enter the address."
@@ -230,7 +229,7 @@ export default function ProjectForm() {
 
                   <Input 
                     label='GitHub URL'
-                    name='GitHub URL'
+                    name='githubUrl'
                     type= 'text'
                     id="githubUrl"
                     placeholder='https://github.com/'
@@ -243,7 +242,7 @@ export default function ProjectForm() {
                   />
                   <Input 
                     label='Slack Channel Link'
-                    name='Slack Channel Link'
+                    name='slackUrl'
                     type= 'text'
                     id="slack"
                     placeholder='https://slack.com/'
@@ -257,7 +256,7 @@ export default function ProjectForm() {
 
                   <Input 
                     label="Google Drive URL"
-                    name="Google Drive URL"
+                    name="googleDriveUrl"
                     type="text"
                     id="google"
                     placeholder="https://drive.google.com"
