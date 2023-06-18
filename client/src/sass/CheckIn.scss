@@ -62,7 +62,8 @@ label {
     font-weight: bold;
 }
 
-input[type=text], input[type=email] {
+// input[type=text], input[type=email] 
+.text-input {
     -webkit-appearance: none;
     max-width: 310px;
     width: 310px;
@@ -82,7 +83,7 @@ input[type=text], input[type=email] {
     transition: all .3s ease-in-out;
 
     &::placeholder {
-        color: rgb(250, 17, 79);
+        // color: rgb(250, 17, 79);
         font-weight: 200;
     }
 

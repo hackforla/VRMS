@@ -2,7 +2,7 @@ import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import { findInputErrors, isFormInvalid } from '../utils/inputValidation'
 
-export const Input = ({ label, type, id, placeholder, validation, name }) => {
+export const Input = ({ label, type, id, placeholder, validation, name, multiline }) => {
     const { 
         register,
         formState: {errors}
@@ -18,23 +18,45 @@ export const Input = ({ label, type, id, placeholder, validation, name }) => {
                     {label}
                 </label>
             </div>
-            {isInvalid && (
-                <InputError 
-                    message={inputError.error.message}
-                    key={inputError.error.message} 
-                />
-            )}
-            <input
+           
+          
+        {
+            multiline ? (
+                <div>
+                <textarea 
                 id={id}
                 type={type}
                 placeholder={placeholder}
-                {...register(name, validation)}
-            />
-        </div>
+                {...register(`${name}`, validation)}
+                />
+                {isInvalid && (
+                        <InputError 
+                        message={inputError.error.message}
+                        key={inputError.error.message} 
+                        />
+                        )}
+                </div>
+                ) : (
+                    <div>
+                    <input
+                    id={id}
+                    type={type}
+                    placeholder={placeholder}
+                    {...register(name, validation)}
+                    />
+                    {isInvalid && (
+                        <InputError 
+                        message={inputError.error.message}
+                        key={inputError.error.message} 
+                        />
+                        )}
+                        </div>
+                        )
+                    }
+            </div>
     )
 }
 
 export const InputError = ({ message }) => {
-    console.log("ERR", message)
-    return <p>{message}</p>
+    return <p style={{color: '#ff0033'}}>{message}</p>
 }

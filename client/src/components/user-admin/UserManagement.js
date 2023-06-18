@@ -47,6 +47,7 @@ const UserManagement = ({ users, setUserToEdit }) => {
         <h3>User Management</h3>
         <input
           type="text"
+          className="text-input"
           placeholder="Search by name and email..."
           value={searchTerm}
           onChange={handleChange}
