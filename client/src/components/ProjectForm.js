@@ -242,7 +242,7 @@ export default function ProjectForm() {
 
                 <Input 
                   multiline
-                  label="description"
+                  label="project description"
                   name="description"
                   type="text"
                   id="description"
@@ -295,7 +295,7 @@ export default function ProjectForm() {
                     name='GitHub URL'
                     type= 'text'
                     id="githubUrl"
-                    placeholder='htttps://github.com/'
+                    placeholder='https://github.com/'
                     validation={{
                       required: {
                         value: true,
@@ -308,7 +308,7 @@ export default function ProjectForm() {
                     name='Slack channel link'
                     type= 'text'
                     id="slack"
-                    placeholder='htttps://slack.com/'
+                    placeholder='https://slack.com/'
                     validation={{
                       required: {
                         value: true,
@@ -316,6 +316,20 @@ export default function ProjectForm() {
                       }
                     }}
                   />
+
+                  <Input 
+                    label="Google Drive URL"
+                    name="Google Drive URL"
+                    type="text"
+                    id="google"
+                    placeholder="https://drive.google.com"
+                    validation={{
+                      required: {
+                        value: true,
+                        message: "Google Drive Required"
+                      }
+                    }}
+                    />
                
             </form>
           </Box>
