@@ -33,7 +33,7 @@ class ProjectApiService {
       googleDriveUrl,
       hflaWebsiteUrl,
     } = projectData;
-    console.log("IMC", projectData)
+
     const requestOptions = {
       method: 'POST',
       headers: this.headers,

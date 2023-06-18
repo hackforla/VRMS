@@ -69,7 +69,6 @@ export const projectLocationValidation = {
 }
 
 export function findInputErrors(errors, name) {
-  console.log("ERRRS", errors)
   const filtered = Object.keys(errors)
     .filter(key => key.includes(name))
     .reduce((cur, key) => {

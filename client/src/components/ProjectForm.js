@@ -53,16 +53,6 @@ const StyledRadio = styled(Radio)(({ theme }) => ({
  */
 
 export default function ProjectForm() {
-  const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    location: '',
-    // githubIdentifier: '',
-    githubUrl: '',
-    slackUrl: '',
-    googleDriveUrl: '',
-    // hflaWebsiteUrl: '',
-  });
 
   //seperate state for the location radio buttons
   const [locationType, setLocationType] = React.useState('remote');
@@ -82,7 +72,7 @@ export default function ProjectForm() {
   
   useEffect(() => {
     routeToNewProjectPage()
-  },[newlyCreatedID])
+  })
 
   // only handles radio button change
   const handleRadioChange = (event) => {
@@ -91,7 +81,6 @@ export default function ProjectForm() {
 
 
   const formSubmit = methods.handleSubmit( async (data) => {
-    console.log("DUB", data)
     const projectApi = new ProjectApiService();
     try {
       const id = await projectApi.create(data);
@@ -104,14 +93,6 @@ export default function ProjectForm() {
     setActiveButton('close');
   });
 
-  // Basic validation : if all inputs have values, enable the submit button
-  useEffect(() => {
-    if (Object.values(formData).every((val) => val !== '')) {
-      setActiveButton('save');
-    } else {
-      setActiveButton('close');
-    }
-  }, [formData]);
 
   const LocationRadios = () => (
     <Grid item>
