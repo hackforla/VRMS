@@ -15,7 +15,7 @@ export const Input = ({ label, type, id, placeholder, validation, name, multilin
     return (
         <div>
             <div>
-                <label htmlFor={id}>
+                <label className="input-label" htmlFor={id}>
                     {label}
                 </label>
             </div>
