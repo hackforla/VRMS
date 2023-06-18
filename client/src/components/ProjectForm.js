@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { useForm, FormProvider, Controller } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 import ProjectApiService from '../api/ProjectApiService';
 import { ReactComponent as PlusIcon } from '../svg/PlusIcon.svg';
 import { Input } from './Input';
@@ -9,8 +9,6 @@ import {
   Typography,
   Box,
   Divider,
-  TextField,
-  InputLabel,
   Button,
   Grid,
   Radio,
@@ -26,58 +24,7 @@ import { styled } from '@mui/material/styles';
  * To be used for creating and updating a project
  * */
 
-const simpleInputs = [
-  {
-    label: 'Project Name',
-    name: 'name',
-    type: 'text',
-    placeholder: 'Enter project name',
-  },
-  {
-    label: 'Project Description',
-    name: 'description',
-    type: 'textarea',
-    placeholder: 'Enter project description',
-  },
-  {
-    label: 'Location',
-    name: 'location',
-    type: 'text',
-    placeholder: 'Enter project location',
-  },
-  // Leaving incase we want to add this back in for updating projects
-  // {
-  //   label: 'GitHub Identifier',
-  //   name: 'githubIdentifier',
-  //   type: 'text',
-  //   placeholder: 'Enter GitHub identifier',
-  // },
-  {
-    label: 'GitHub URL',
-    name: 'githubUrl',
-    type: 'text',
-    placeholder: 'htttps://github.com/',
-  },
-  {
-    label: 'Slack Channel Link',
-    name: 'slackUrl',
-    type: 'text',
-    placeholder: 'htttps://slack.com/',
-  },
-  {
-    label: 'Google Drive URL',
-    name: 'googleDriveUrl',
-    type: 'text',
-    placeholder: 'htttps://drive.google.com/',
-  },
-  // Leaving incase we want to add this back in for updating projects
-  // {
-  //   label: 'HFLA Website URL',
-  //   name: 'hflaWebsiteUrl',
-  //   type: 'text',
-  //   placeholder: 'htttps://hackforla.org/projects/',
-  // },
-];
+
 
 /** STYLES
  *  -most TextField and InputLabel styles are controlled by the theme
@@ -142,15 +89,6 @@ export default function ProjectForm() {
     setLocationType(event.target.value);
   };
 
-  //updates state of formData onChange of any form input
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setFormData((fData) => ({
-      ...fData,
-      [name]: value,
-    }));
-  };
 
   const formSubmit = methods.handleSubmit(data => console.log("submitting", data))
 
@@ -227,8 +165,8 @@ export default function ProjectForm() {
           <Box sx={{ py: 2, px: 4 }}>
             <form id="project-form" onSubmit={e => e.preventDefault()} noValidate>
               <Input
-                label="project name"
-                name="name"
+                label="Project Name"
+                name="Project Name"
                 type="text"
                 id="name"
                 placeholder="Enter project name." 
@@ -242,8 +180,8 @@ export default function ProjectForm() {
 
                 <Input 
                   multiline
-                  label="project description"
-                  name="description"
+                  label="Project Description"
+                  name="Project Description"
                   type="text"
                   id="description"
                   placeholder="Enter a project description."
@@ -258,8 +196,8 @@ export default function ProjectForm() {
                   <LocationRadios />
                   {locationType === 'remote' ? (
                      <Input 
-                  label="location"
-                  name="location"
+                  label="Location"
+                  name="Location"
                   type="text"
                   id="location"
                   placeholder="Enter a Zoom link."
@@ -276,8 +214,8 @@ export default function ProjectForm() {
                 />
                   ) : (
                     <Input
-                      label="address"
-                      name="address"
+                      label="Address"
+                      name="Address"
                       id="address"
                       type="text"
                       placeholder="Enter the address."
@@ -304,8 +242,8 @@ export default function ProjectForm() {
                     }}
                   />
                   <Input 
-                    label='Slack channel link'
-                    name='Slack channel link'
+                    label='Slack Channel Link'
+                    name='Slack Channel Link'
                     type= 'text'
                     id="slack"
                     placeholder='https://slack.com/'
@@ -340,8 +278,7 @@ export default function ProjectForm() {
               <StyledButton
                 type="submit"
                 form="project-form"
-                // variant={activeButton === 'save' ? 'contained' : 'secondary'}
-                // disabled={activeButton !== 'save'}
+                variant={activeButton === 'save' ? 'contained' : 'secondary'}
                 onClick={formSubmit}
               >
                 Save
