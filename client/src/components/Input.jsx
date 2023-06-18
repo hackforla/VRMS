@@ -24,36 +24,36 @@ export const Input = ({ label, type, id, placeholder, validation, name, multilin
         {
             multiline ? (
                 <div>
-                <textarea 
-                className="new-project-input project-textarea"
-                id={id}
-                type={type}
-                placeholder={placeholder}
-                {...register(`${name}`, validation)}
-                />
-                {isInvalid && (
-                        <InputError 
-                        message={inputError.error.message}
-                        key={inputError.error.message} 
-                        />
+                    <textarea 
+                        className="new-project-input project-textarea"
+                        id={id}
+                        type={type}
+                        placeholder={placeholder}
+                        {...register(`${name}`, validation)}
+                    />
+                    {isInvalid && (
+                            <InputError 
+                            message={inputError.error.message}
+                            key={inputError.error.message} 
+                            />
                         )}
                 </div>
                 ) : (
                     <div>
-                    <input
-                    id={id}
-                    className="new-project-input"
-                    type={type}
-                    placeholder={placeholder}
-                    {...register(name, validation)}
-                    />
-                    {isInvalid && (
-                        <InputError 
-                        message={inputError.error.message}
-                        key={inputError.error.message} 
+                        <input
+                            id={id}
+                            className="new-project-input"
+                            type={type}
+                            placeholder={placeholder}
+                            {...register(name, validation)}
                         />
+                        {isInvalid && (
+                            <InputError 
+                                message={inputError.error.message}
+                                key={inputError.error.message} 
+                            />
                         )}
-                        </div>
+                    </div>
                         )
                     }
             </div>

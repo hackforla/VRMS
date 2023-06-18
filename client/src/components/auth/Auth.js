@@ -6,6 +6,8 @@ import { authLevelRedirect } from '../../utils/authUtils';
 
 import useAuth from '../../hooks/useAuth';
 import '../../sass/AdminLogin.scss';
+import '../../sass/CheckIn.scss';
+
 
 /** At the moment only users with the 'admin' accessLevel can login
  * and see the dashboard
@@ -108,6 +110,7 @@ const Auth = () => {
               <label htmlFor="email">Enter your email address:</label>
               <input
                 type="email"
+                className="text-input"
                 name="email"
                 placeholder="Email Address"
                 onChange={handleInputChange}

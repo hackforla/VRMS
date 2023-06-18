@@ -227,7 +227,7 @@ export default function ProjectForm() {
           <Box sx={{ py: 2, px: 4 }}>
             <form id="project-form" onSubmit={e => e.preventDefault()} noValidate>
               <Input
-                label="name"
+                label="project name"
                 name="name"
                 type="text"
                 id="name"
@@ -329,7 +329,7 @@ export default function ProjectForm() {
                         message: "Google Drive Required"
                       }
                     }}
-                    />
+                  />
                
             </form>
           </Box>
