@@ -61,5 +61,5 @@ export const Input = ({ label, type, id, placeholder, validation, name, multilin
 }
 
 export const InputError = ({ message }) => {
-    return <p style={{color: '#ff0033'}}>{message}</p>
+    return <p className="form-error">{message}</p>
 }
