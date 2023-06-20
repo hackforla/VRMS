@@ -52,9 +52,9 @@ class ProjectApiService {
     console.log('THIS BASEPROJECT URL', this.baseProjectUrl);
 
     try {
-      const proj =  await fetch(this.baseProjectUrl, requestOptions);
-      const projectDetails = await proj.json()
-      return projectDetails._id
+      const proj = await fetch(this.baseProjectUrl, requestOptions);
+      const projectDetails = await proj.json();
+      return projectDetails._id;
     } catch (error) {
       console.error(`Add project error: `, error);
       alert('Server not responding.  Please try again.');
@@ -62,32 +62,18 @@ class ProjectApiService {
     }
   }
 
-  async updateProject(projectId, fieldName, fieldValue) {
-    let updateValue = fieldValue;
-    // These field are arrays, but the form makes them comma separated strings,
-    // so this adds it back to db as an arrray.
-    if (
-      fieldValue &&
-      (fieldName === 'partners' || fieldName === 'recruitingCategories')
-    ) {
-      updateValue = fieldValue
-        .split(',')
-        .filter((x) => x !== '')
-        .map((y) => y.trim());
-    }
-
+  async updateProject(projectId, projectData) {
     // Update database
     const url = `${this.baseProjectUrl}${projectId}`;
     const requestOptions = {
       method: 'PATCH',
       headers: this.headers,
-      body: JSON.stringify({ [fieldName]: updateValue }),
+      body: JSON.stringify({ ...projectData }),
     };
 
     try {
       const response = await fetch(url, requestOptions);
       const resJson = await response.json();
-
       return resJson;
     } catch (error) {
       console.log(`update project error: `, error);
