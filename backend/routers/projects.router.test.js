@@ -20,10 +20,7 @@ describe('CREATE', () => {
     };
 
     // Submit a project
-    const res = await request
-      .post('/api/projects/')
-      .set(headers)
-      .send(submittedData);
+    const res = await request.post('/api/projects/').set(headers).send(submittedData);
     expect(res.status).toBe(201);
     done();
   });
@@ -31,26 +28,23 @@ describe('CREATE', () => {
 
 describe('READ', () => {
   test('Get all projects with GET to /api/projects/', async (done) => {
-      // Test Data
-      const submittedData = {
-        name: 'projectName',
-      };
+    // Test Data
+    const submittedData = {
+      name: 'projectName',
+    };
 
-      // Submit a project
-      const res = await request
-        .post('/api/projects/')
-        .set(headers)
-        .send(submittedData);
-      expect(res.status).toBe(201);
+    // Submit a project
+    const res = await request.post('/api/projects/').set(headers).send(submittedData);
+    expect(res.status).toBe(201);
 
-      // Get all projects
-      const res2 = await request.get('/api/projects/').set(headers);
-      expect(res2.status).toBe(200);
+    // Get all projects
+    const res2 = await request.get('/api/projects/').set(headers);
+    expect(res2.status).toBe(200);
 
-      const APIData = res2.body[0];
-      expect(APIData.name).toBe(submittedData.name);
-      done();
-  });;
+    const APIData = res2.body[0];
+    expect(APIData.name).toBe(submittedData.name);
+    done();
+  });
 });
 
 describe('UPDATE', () => {
@@ -61,10 +55,7 @@ describe('UPDATE', () => {
     };
 
     // Submit a project
-    const res = await request
-      .post('/api/projects/')
-      .set(headers)
-      .send(submittedData);
+    const res = await request.post('/api/projects/').set(headers).send(submittedData);
     expect(res.status).toBe(201);
 
     const updatedDataPayload = {
@@ -73,7 +64,7 @@ describe('UPDATE', () => {
 
     // Update project
     const res2 = await request
-      .patch(`/api/projects/${res.body._id}`)
+      .put(`/api/projects/${res.body._id}`)
       .set(headers)
       .send(updatedDataPayload);
     expect(res2.status).toBe(200);
@@ -96,15 +87,12 @@ describe('DELETE', () => {
     };
 
     // Submit a project
-    const res = await request
-      .post('/api/projects/')
-      .set(headers)
-      .send(submittedData);
+    const res = await request.post('/api/projects/').set(headers).send(submittedData);
     expect(res.status).toBe(201);
 
     // Delete project
     const res2 = await request.patch(`/api/projects/${res.body._id}`).set(headers);
     expect(res2.status).toBe(200);
     done();
-});
+  });
 });
