@@ -1,4 +1,4 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 
 const { ProjectController } = require('../controllers');
@@ -10,7 +10,6 @@ router.post('/', ProjectController.create);
 
 router.get('/:ProjectId', ProjectController.project_by_id);
 
-router.patch('/:ProjectId', ProjectController.update);
-
+router.put('/:ProjectId', ProjectController.update);
 
 module.exports = router;

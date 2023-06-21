@@ -66,7 +66,7 @@ class ProjectApiService {
     // Update database
     const url = `${this.baseProjectUrl}${projectId}`;
     const requestOptions = {
-      method: 'PATCH',
+      method: 'PUT',
       headers: this.headers,
       body: JSON.stringify({ ...projectData }),
     };

@@ -165,7 +165,7 @@ const EditProject = ({
     }));
   };
 
-  // fires PATCH request to update the project,
+  // fires PUT request to update the project,
 
   const handleSubmit = async (e) => {
     e.preventDefault();
