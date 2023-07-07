@@ -1,4 +1,5 @@
-import validator from 'validator'
+import validator from 'validator';
+import { isAnySubstring } from './../../../utils/stringUtils.js';
 
 const validateEventForm = (vals) => {
   let newErrors = {};
@@ -8,6 +9,11 @@ const validateEventForm = (vals) => {
         // Required
         if (!vals[key]) {
           newErrors = { ...newErrors, name: 'Event name is required' };
+        } else if (isAnySubstring(['meeting', 'mtg'], vals[key])) {
+          newErrors = {
+            ...newErrors,
+            name: "Event name cannot contain 'meeting' or 'mtg'",
+          };
         }
         break;
 
@@ -22,8 +28,8 @@ const validateEventForm = (vals) => {
         if (!validateLink(vals[key])) {
           newErrors = {
             ...newErrors,
-            videoConferenceLink: 'Invalid link'
-          }
+            videoConferenceLink: 'Invalid link',
+          };
         }
         break;
 
