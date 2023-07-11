@@ -49,7 +49,7 @@ const Home = () => {
         <h2>Volunteer Relationship Management System</h2>
       </div>
 
-      {events && events.length > 1 && (
+      {events && events.length >= 1 && (
         <div className="meeting-select-container">
           <form
             className="form-select-meeting"
