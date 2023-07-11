@@ -27,7 +27,7 @@ module.exports = (cron, fetch) => {
         // Filter events if event date is after now but before thirty minutes from now
         if (events && events.length > 0) {
             const sortedEvents = events.filter(event => {
-                return (event.date > currentTime) && (event.date < thirtyMinutes) && (event.checkInReady === false);
+                return (event.date >= currentTime) && (event.date <= thirtyMinutes) && (event.checkInReady === false);
             })
             // console.log('Sorted events: ', sortedEvents);
             return sortedEvents;
