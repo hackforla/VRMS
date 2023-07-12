@@ -9,5 +9,5 @@ jobs:
       - name: Create or Update Project Card
         uses: peter-evans/create-or-update-project-card@v2
         with:
-          project-name: VRMS v0.4
+          project-name: VRMS - Active Project Board
           column-name: New Issue Approval
