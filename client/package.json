@@ -26,7 +26,8 @@
     "react-hook-form": "^7.44.3",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.4.1",
-    "validator": "^13.7.0"
+    "validator": "^13.7.0",
+    "zustand": "^4.3.9"
   },
   "scripts": {
     "start": "dotenv -e .env -e ../backend/.env -- cross-var cross-env PORT=%CLIENT_PORT% react-scripts start",
