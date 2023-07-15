@@ -27,6 +27,11 @@ const EditableField = ({
     className: 'editable-field',
     onBlur: () => {
       setEditable(false);
+      if (!validateEditableField(fieldName, fieldValue)) {
+        alert(`Invalid field value for ${fieldName}`);
+        console.log(fieldValue);
+        return;
+      }
       updateProject(fieldName, fieldValue);
     },
     onChange: ({ target }) => {
@@ -47,7 +52,7 @@ const EditableField = ({
     <div className="editable-field-div">
       <div className="project-edit-title">
         {fieldTitle}
-        {notRestricted &&
+        {notRestricted && (
           <button
             type="button"
             className="project-edit-button"
@@ -57,7 +62,7 @@ const EditableField = ({
           >
             [edit]
           </button>
-        }
+        )}
       </div>
 
       {editable ? (
@@ -76,5 +81,27 @@ const EditableField = ({
     </div>
   );
 };
+
+const validateEditableField = (fieldName, fieldValue) => {
+  switch (fieldName) {
+    case 'hflaWebsiteUrl':
+      return doesLinkContainFlex(fieldValue, 'hackforla.org');
+    case 'slackUrl':
+      return doesLinkContainFlex(fieldValue, 'slack.com');
+    case 'googleDriveUrl':
+      return doesLinkContainFlex(fieldValue, 'drive.google.com');
+    case 'githubUrl':
+      return doesLinkContainFlex(fieldValue, 'github.com');
+    default:
+      break;
+  }
+};
+
+const doesLinkContainFlex = (link, key) => {
+  if (link.startsWith(`https://${key}`)) return true;
+  if (link.startsWith(`https://www.${key}`)) return true;
+  if (link.startsWith(key)) return true;
+  return false;
+}
 
 export default EditableField;
