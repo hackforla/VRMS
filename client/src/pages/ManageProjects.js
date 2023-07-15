@@ -8,6 +8,7 @@ import RecurringEventsApiService from '../api/RecurringEventsApiService';
 import Loading from '../svg/22.gif';
 
 import { useProjectsStore } from '../store/projectsStore';
+import { useRecurringEventsStore } from '../store/recurringEventsStore';
 import '../sass/ManageProjects.scss';
 
 const PAGES = Object.freeze({
@@ -19,10 +20,18 @@ const PAGES = Object.freeze({
 const ManageProjects = () => {
   const { projectId } = useParams();
   const { auth } = useAuth();
+
   const projects = useProjectsStore((state) => state.projects);
   const setProjects = useProjectsStore((state) => state.setProjects);
-  const [projectToEdit, setProjectToEdit] = useState();
-  const [recurringEvents, setRecurringEvents] = useState();
+  const projectToEdit = useProjectsStore((state) => state.projectToEdit);
+  const setProjectToEdit = useProjectsStore((state) => state.setProjectToEdit);
+  const recurringEvents = useRecurringEventsStore(
+    (state) => state.recurringEvents
+  );
+  const setRecurringEvents = useRecurringEventsStore(
+    (state) => state.setRecurringEvents
+  );
+
   const [componentToDisplay, setComponentToDisplay] = useState('');
   const [projectApiService] = useState(new ProjectApiService());
   const [recurringEventsApiService] = useState(new RecurringEventsApiService());
@@ -127,11 +136,7 @@ const ManageProjects = () => {
     // We are not using the SelectProject component anymore. Will remove soon.
     default:
       displayedComponent = (
-        <SelectProject
-          accessLevel={user?.accessLevel}
-          projects={projects}
-          user={user}
-        />
+        <SelectProject accessLevel={user?.accessLevel} user={user} />
       );
       break;
   }
