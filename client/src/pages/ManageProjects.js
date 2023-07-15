@@ -21,8 +21,8 @@ const ManageProjects = () => {
   const { projectId } = useParams();
   const { auth } = useAuth();
 
-  const projects = useProjectsStore((state) => state.projects);
-  const setProjects = useProjectsStore((state) => state.setProjects);
+  const [projects, setProjects] = useState();
+  
   const projectToEdit = useProjectsStore((state) => state.projectToEdit);
   const setProjectToEdit = useProjectsStore((state) => state.setProjectToEdit);
   const recurringEvents = useRecurringEventsStore(
@@ -31,7 +31,7 @@ const ManageProjects = () => {
   const setRecurringEvents = useRecurringEventsStore(
     (state) => state.setRecurringEvents
   );
-
+    
   const [componentToDisplay, setComponentToDisplay] = useState('');
   const [projectApiService] = useState(new ProjectApiService());
   const [recurringEventsApiService] = useState(new RecurringEventsApiService());
@@ -108,8 +108,11 @@ const ManageProjects = () => {
   }, [projects, setProjectToEdit, projectId]);
 
   useEffect(() => {
+    console.log("1")
     fetchProjects();
+    console.log("2")
     fetchRecurringEvents();
+    console.log("3")
   }, [fetchProjects, fetchRecurringEvents]);
 
   // If not logged in, redirect to login page

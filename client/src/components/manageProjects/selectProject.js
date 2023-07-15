@@ -5,10 +5,9 @@ import { useProjectsStore } from '../../store/projectsStore.js';
 
 import { Button, Typography } from '@mui/material';
 
-const SelectProject = ({ accessLevel, user }) => {
+const SelectProject = ({ projects, accessLevel, user }) => {
   // If access level is 'admin', display all active projects.
   // If access level is 'user' display user managed projects.
-  const projects = useProjectsStore((state) => state.projects);
 
   const managedProjects = projects
     ?.filter((proj) => {
