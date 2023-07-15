@@ -6,6 +6,8 @@ import EditProject from '../components/manageProjects/editProject';
 import ProjectApiService from '../api/ProjectApiService';
 import RecurringEventsApiService from '../api/RecurringEventsApiService';
 import Loading from '../svg/22.gif';
+
+import { useProjectsStore } from '../store/projectsStore';
 import '../sass/ManageProjects.scss';
 
 const PAGES = Object.freeze({
@@ -17,7 +19,8 @@ const PAGES = Object.freeze({
 const ManageProjects = () => {
   const { projectId } = useParams();
   const { auth } = useAuth();
-  const [projects, setProjects] = useState();
+  const projects = useProjectsStore((state) => state.projects);
+  const setProjects = useProjectsStore((state) => state.setProjects);
   const [projectToEdit, setProjectToEdit] = useState();
   const [recurringEvents, setRecurringEvents] = useState();
   const [componentToDisplay, setComponentToDisplay] = useState('');
