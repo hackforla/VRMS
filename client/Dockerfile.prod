@@ -1,4 +1,4 @@
-FROM 20-alpine3.17 AS node-modules-install
+FROM node:20-alpine AS node-modules-install
 RUN mkdir /srv/client && chown node:node /srv/client
 WORKDIR /srv/client
 USER node
