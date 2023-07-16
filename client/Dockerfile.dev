@@ -1,4 +1,4 @@
-FROM node:14.11.0 AS client-development
+FROM node:18.12.0 AS client-development
 RUN mkdir /srv/client && chown node:node /srv/client
 WORKDIR /srv/client
 USER node
