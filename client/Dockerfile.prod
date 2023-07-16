@@ -1,10 +1,9 @@
-FROM node:18.12.0 AS node-modules-install
+FROM node:18-alpine AS node-modules-install
 RUN mkdir /srv/client && chown node:node /srv/client
 WORKDIR /srv/client
 USER node
 RUN mkdir -p node_modules
 COPY --chown=node:node package.json package.json ./
-RUN npm install -g npm@9.8.0
 RUN npm install --silent
 
 FROM node:18.12.0-slim AS client-builder
