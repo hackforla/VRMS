@@ -4,7 +4,7 @@ WORKDIR /srv/client
 USER node
 RUN mkdir -p node_modules
 COPY --chown=node:node package.json package.json ./
-RUN npm install --silent --no-update-notifier
+RUN npm install --no-update-notifier
 
 FROM node:18-slim AS client-builder
 USER node
