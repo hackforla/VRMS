@@ -1,4 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
+import {
+  validateEditableField,
+  generateErrorEditableField,
+} from './utilities/validateEditableField';
 import '../../sass/ManageProjects.scss';
 
 const EditableField = ({
@@ -28,8 +32,7 @@ const EditableField = ({
     onBlur: () => {
       setEditable(false);
       if (!validateEditableField(fieldName, fieldValue)) {
-        alert(`Invalid field value for ${fieldName}`);
-        console.log(fieldValue);
+        alert(generateErrorEditableField(fieldName));
         return;
       }
       updateProject(fieldName, fieldValue);
@@ -64,7 +67,6 @@ const EditableField = ({
           </button>
         )}
       </div>
-
       {editable ? (
         <>
           {fieldType === 'textarea' ? (
@@ -81,27 +83,5 @@ const EditableField = ({
     </div>
   );
 };
-
-const validateEditableField = (fieldName, fieldValue) => {
-  switch (fieldName) {
-    case 'hflaWebsiteUrl':
-      return doesLinkContainFlex(fieldValue, 'hackforla.org');
-    case 'slackUrl':
-      return doesLinkContainFlex(fieldValue, 'slack.com');
-    case 'googleDriveUrl':
-      return doesLinkContainFlex(fieldValue, 'drive.google.com');
-    case 'githubUrl':
-      return doesLinkContainFlex(fieldValue, 'github.com');
-    default:
-      break;
-  }
-};
-
-const doesLinkContainFlex = (link, key) => {
-  if (link.startsWith(`https://${key}`)) return true;
-  if (link.startsWith(`https://www.${key}`)) return true;
-  if (link.startsWith(key)) return true;
-  return false;
-}
 
 export default EditableField;
