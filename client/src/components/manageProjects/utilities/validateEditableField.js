@@ -13,6 +13,7 @@ export const validateEditableField = (fieldName, fieldValue) => {
     default:
       break;
   }
+  return true;
 };
 
 export const generateErrorEditableField = (fieldName) => {
