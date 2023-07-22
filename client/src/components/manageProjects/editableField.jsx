@@ -35,6 +35,8 @@ const EditableField = ({
         alert(generateErrorEditableField(fieldName));
         return;
       }
+      let trimmedFieldValue = fieldValue.trim();
+      setFieldValue(trimmedFieldValue);
       updateProject(fieldName, fieldValue);
     },
     onChange: ({ target }) => {
