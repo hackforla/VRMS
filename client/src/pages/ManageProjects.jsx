@@ -7,6 +7,7 @@ import ProjectApiService from '../api/ProjectApiService';
 import RecurringEventsApiService from '../api/RecurringEventsApiService';
 import Loading from '../svg/22.gif';
 import '../sass/ManageProjects.scss';
+import EventsApiService_ from '../api/EventsApiService';
 
 const PAGES = Object.freeze({
   selectProject: 'selectProject',
@@ -20,20 +21,29 @@ const ManageProjects = () => {
   const [projects, setProjects] = useState();
   const [projectToEdit, setProjectToEdit] = useState();
   const [recurringEvents, setRecurringEvents] = useState();
+  const [regularEvents, setRegularEvents] = useState([]);
   const [componentToDisplay, setComponentToDisplay] = useState('');
   const [projectApiService] = useState(new ProjectApiService());
   const [recurringEventsApiService] = useState(new RecurringEventsApiService());
+  const [EventsApiService] = useState(new EventsApiService_());
   const [projectsLoading, setProjectsLoading] = useState(false);
   const [eventsLoading, setEventsLoading] = useState(false);
 
   const user = auth?.user;
 
-  const fetchProjects = useCallback(async () => {
+    const fetchProjects = useCallback(async () => {
     setProjectsLoading(true);
     const projectRes = await projectApiService.fetchProjects();
     setProjects(projectRes);
     setProjectsLoading(false);
   }, [projectApiService]);
+
+  const fetchRegularEvents = useCallback(async () => {
+    setEventsLoading(true);
+    const eventsRes = await EventsApiService.fetchEvents();
+    setRegularEvents(eventsRes);
+    setEventsLoading(false);
+  }, [recurringEventsApiService]);
 
   const fetchRecurringEvents = useCallback(async () => {
     setEventsLoading(true);
@@ -82,6 +92,17 @@ const ManageProjects = () => {
     [recurringEventsApiService, fetchRecurringEvents]
   );
 
+  const updateRegularEvent = useCallback(
+    async (eventToUpdate, eventId) => {
+      await EventsApiService.updateEvent(
+        eventToUpdate,
+        eventId
+      );
+      fetchRegularEvents();
+    },
+    [recurringEventsApiService, fetchRegularEvents]
+  );
+
   useEffect(() => {
     // Refresh project to edit, if projects have been refreshed
     if (projectId && projects) {
@@ -98,7 +119,8 @@ const ManageProjects = () => {
   useEffect(() => {
     fetchProjects();
     fetchRecurringEvents();
-  }, [fetchProjects, fetchRecurringEvents]);
+    fetchRegularEvents();
+  }, [fetchProjects, fetchRecurringEvents, fetchRegularEvents]);
 
   // If not logged in, redirect to login page
   if (!auth && !auth?.user) {
@@ -118,6 +140,8 @@ const ManageProjects = () => {
           createNewRecurringEvent={createNewRecurringEvent}
           deleteRecurringEvent={deleteRecurringEvent}
           updateRecurringEvent={updateRecurringEvent}
+          regularEvents={regularEvents}
+          updateRegularEvent={updateRegularEvent}
         />
       );
       break;
