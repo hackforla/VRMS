@@ -17,12 +17,15 @@ const EditProject = ({
   createNewRecurringEvent,
   deleteRecurringEvent,
   updateRecurringEvent,
+  regularEvents,
+  updateRegularEvent
 }) => {
   // Add commas to arrays for display
   const partnerDataFormatted = projectToEdit.partners.join(', ');
   // eslint-disable-next-line no-unused-vars
   const recrutingDataFormatted = projectToEdit.recruitingCategories.join(', ');
-  const [rEvents, setREvents] = useState([]);
+  const [recurringEventsState, setRecurringEventsState] = useState([]);
+  const [regularEventsState, setRegularEventsState] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState();
   const [isCreateNew, setIsCreateNew] = useState();
 
@@ -31,16 +34,28 @@ const EditProject = ({
 
   // Get project recurring events when component loads
   useEffect(() => {
+    if (regularEvents) {
+      setRegularEventsState(
+        regularEvents
+          // eslint-disable-next-line no-underscore-dangle
+          .filter((e) => e?.project?._id === projectToEdit._id)
+          .map((item) => ({...item, ...readableEvent(item), raw: item}))
+          .reverse() // sorts most recent events first
+      );
+    }
+  }, [projectToEdit, regularEvents, setRegularEventsState]);
+
+  useEffect(() => {
     if (recurringEvents) {
-      setREvents(
+      setRecurringEventsState(
         recurringEvents
           // eslint-disable-next-line no-underscore-dangle
           .filter((e) => e?.project?._id === projectToEdit._id)
-          .map((item) => readableEvent(item))
+          .map((item) => ({...item, ...readableEvent(item)}))
           .sort((a, b) => a.dayOfTheWeekNumber - b.dayOfTheWeekNumber)
-      );
-    }
-  }, [projectToEdit, recurringEvents, setREvents]);
+          );
+        }
+  }, [projectToEdit, recurringEvents, setRecurringEventsState]);
 
   return (
     <div>
@@ -179,7 +194,7 @@ const EditProject = ({
         <h3>Recurring Events</h3>
         <h2 className="event-alert">{eventAlert}</h2>
         <ul>
-          {rEvents.map((event) => (
+          {recurringEventsState.map((event) => (
             // eslint-disable-next-line no-underscore-dangle
             <li key={`${event.event_id}`}>
               <button type="button" onClick={() => setSelectedEvent(event)}>
@@ -203,8 +218,34 @@ const EditProject = ({
           Create New Event
         </button>
       </div>
+
+      <div className="event-list">
+        <h3>Manually Edit Events Checkin</h3>
+        <h2 className="event-alert">{eventAlert}</h2>
+        <ul>
+          {regularEventsState.map((event, index) => (
+            
+            // eslint-disable-next-line no-underscore-dangle
+            <RegularEvent event={event} key={event._id} updateRegularEvent={updateRegularEvent} />
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
+
+function RegularEvent({event, updateRegularEvent}) {
+  return (
+    <li key={`${event.event_id}`}>
+      <button type="button" onClick={async () => updateRegularEvent({checkInReady: !event.checkInReady}, event.event_id)}>
+        <div>{event.name}</div>
+        <div className="event-list-details">
+          {`${event.dayOfTheWeek}, ${event.startTime} - ${event.endTime}; ${event.eventType}`} {`${new Date(event.raw.startTime).toLocaleDateString()}`}
+        </div>
+        <div className="event-list-description">Is this event available for check in now?: <strong>{`${event.checkInReady ? "Yes" : "No"}`}</strong></div>
+      </button>
+    </li>
+  )
+}
 
 export default EditProject;
