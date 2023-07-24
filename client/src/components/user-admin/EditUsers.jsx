@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import '../../sass/UserAdmin.scss';
+import { FormGroup, FormControlLabel, Switch } from '@mui/material'
 
 // child of UserAdmin. Displays form to update users.
-const EditUsers = ({ userToEdit, backToSearch, updateUserDb, projects }) => {
+const EditUsers = ({ userToEdit, backToSearch, updateUserDb, projects, updateUserActiveStatus }) => {
   const [userManagedProjects, setUserManagedProjects] = useState([]); //  The projects that the selected user is assigned
   const [projectValue, setProjectValue] = useState(''); // State and handler for form in EditUsers
 
   // Prepare data for display
   const userName = `${userToEdit.name?.firstName} ${userToEdit.name?.lastName}`;
   const userEmail = userToEdit.email;
+  const [isActive, setIsActive] = useState(userToEdit.isActive);
   const userProjects = userManagedProjects || [];
 
   // Filter active projects for dropdown
@@ -57,6 +59,11 @@ const EditUsers = ({ userToEdit, backToSearch, updateUserDb, projects }) => {
     }
   };
 
+  const handleSetIsActive = () => {
+    setIsActive(!isActive)
+    updateUserActiveStatus(userToEdit, !isActive)
+  }
+
   return (
     <div className="edit-users">
       <div className="ua-row">
@@ -66,6 +73,15 @@ const EditUsers = ({ userToEdit, backToSearch, updateUserDb, projects }) => {
       <div className="ua-row">
         <div className="user-display-column-left">Email:</div>
         <div className="user-display-column-right">{userEmail}</div>
+      </div>
+      <div className="ua-row is-active-flex">
+        <div className="user-is-active-column-left">Is Active:</div>
+        <div className="is-active-flex">
+          <span className="active-status">{isActive.toString()}</span>
+          <FormGroup>
+            <FormControlLabel control={<Switch checked={isActive} /> } onClick={() => handleSetIsActive()} />
+          </FormGroup>
+        </div>
       </div>
       <div className="ua-row">
         <div className="user-display-column-left">Projects:</div>

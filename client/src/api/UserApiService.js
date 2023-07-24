@@ -40,6 +40,22 @@ class UserApiService {
     }
     return undefined;
   }
+
+  async updateUserDbIsActive(userToEdit, isActive) {
+    const url = `${this.baseUserUrl}${userToEdit._id}`;
+    const requestOptions = {
+      method: 'PATCH',
+      headers: this.headers,
+      body: JSON.stringify({isActive})
+    }
+
+    try {
+      return await fetch(url, requestOptions);
+    } catch(err) {
+      console.error('update is-active error', err)
+      alert('server not responding.  Please try again.');
+    }
+  }
 }
 
 export default UserApiService;
