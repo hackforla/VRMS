@@ -11,7 +11,13 @@ class EventsApiService {
 
   async fetchEvents() {
     try {
-      const res = await fetch(this.baseUrl, {
+      const threeWeeksInMilliseconds = 3 * 7 * 24 * 60 * 60 * 1000; // 3 weeks in milliseconds
+      const threeWeeksAgo = new Date()
+      threeWeeksAgo.setTime(threeWeeksAgo.getTime() - threeWeeksInMilliseconds)
+      
+      const dateQuery = `?date[$gt]=${threeWeeksAgo.toISOString().split('.')[0]+"Z"}`;
+
+      const res = await fetch(this.baseUrl + dateQuery, {
         headers: this.headers,
       });
       return await res.json();
