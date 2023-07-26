@@ -64,6 +64,22 @@
   margin-bottom: 8px;
 }
 
+.user-is-active-column-left {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 15%;
+}
+
+.active-status {
+  margin-right: 15px;
+  width: 25px;
+}
+
+.is-active-flex {
+  display: flex;
+  align-items: center;
+}
+
 .button-remove {
   width: 25%;
   color: #fa114f;
