@@ -6,11 +6,11 @@ import { FormGroup, FormControlLabel, Switch } from '@mui/material'
 const EditUsers = ({ userToEdit, backToSearch, updateUserDb, projects, updateUserActiveStatus }) => {
   const [userManagedProjects, setUserManagedProjects] = useState([]); //  The projects that the selected user is assigned
   const [projectValue, setProjectValue] = useState(''); // State and handler for form in EditUsers
+  const [isActive, setIsActive] = useState(userToEdit.isActive);
 
   // Prepare data for display
   const userName = `${userToEdit.name?.firstName} ${userToEdit.name?.lastName}`;
   const userEmail = userToEdit.email;
-  const [isActive, setIsActive] = useState(userToEdit.isActive);
   const userProjects = userManagedProjects || [];
 
   // Filter active projects for dropdown
