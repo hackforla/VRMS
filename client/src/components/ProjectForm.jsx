@@ -3,7 +3,6 @@ import { Link, useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import ProjectApiService from '../api/ProjectApiService';
 import { ReactComponent as PlusIcon } from '../svg/PlusIcon.svg';
-
 import {
   Typography,
   Box,
@@ -17,7 +16,6 @@ import {
   FormControlLabel,
   RadioGroup,
 } from '@mui/material';
-
 import { styled } from '@mui/material/styles';
 
 /** Project Form Component
@@ -109,12 +107,10 @@ const StyledRadio = styled(Radio)(({ theme }) => ({
 export default function ProjectForm() {
   //seperate state for the location radio buttons
   const [locationType, setLocationType] = React.useState('remote');
-
   const [activeButton, setActiveButton] = React.useState('close');
-
   const [newlyCreatedID, setNewlyCreatedID] = useState(null);
   const history = useHistory();
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
       name: '',
       description: '',
@@ -124,7 +120,6 @@ export default function ProjectForm() {
       googleDriveUrl: ''
     }
   });
-  const {errors} = formState;
 
   const routeToNewProjectPage = () => {
      if(newlyCreatedID !== null) {
@@ -203,7 +198,6 @@ export default function ProjectForm() {
         <Box sx={{ py: 2, px: 4 }}>
           <form id="project-form" onSubmit={handleSubmit((data) => {
             submitForm(data)
-            
           })}>
             {simpleInputs.map((input) => (
               <Box sx={{ mb: 1 }} key={input.name}>
@@ -216,13 +210,11 @@ export default function ProjectForm() {
                       {input.label}
                     </InputLabel>
                   </Grid>
-
                   {input.name === 'location' && locationRadios}
                 </Grid>
-
                 <TextField
                  type={input.type}
-                  {...register(input.name,  {required: `${input.name} is required` , pattern: {value: input.value, message: `${input.errorMessage} `}})}
+                  {...register(input.name,  {required: `${input.name} is required` , pattern: {value: input.value, message: `${input.errorMessage}`}})}
                  placeholder={input.placeholder}
                 />
                 <p style={{ color: '#fa114f' }}>{errors[input.name]?.message}</p>
@@ -238,7 +230,6 @@ export default function ProjectForm() {
               type="submit"
               form="project-form"
               variant={activeButton === 'save' ? 'contained' : 'secondary'}
-             
             >
               Save
             </StyledButton>
