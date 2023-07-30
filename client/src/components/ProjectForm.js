@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import { useForm, Controller } from 'react-hook-form';
 import ProjectApiService from '../api/ProjectApiService';
 import { ReactComponent as PlusIcon } from '../svg/PlusIcon.svg';
 
@@ -42,6 +43,8 @@ const simpleInputs = [
     name: 'location',
     type: 'text',
     placeholder: 'Enter project location',
+    value: /https:\/\/[\w-]*\.?zoom.us\/(j|my)\/[\d\w?=-]+/,
+    errorMessage: 'Please enter a valid Zoom URL'
   },
   // Leaving incase we want to add this back in for updating projects
   // {
@@ -104,17 +107,6 @@ const StyledRadio = styled(Radio)(({ theme }) => ({
  */
 
 export default function ProjectForm() {
-  const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    location: '',
-    // githubIdentifier: '',
-    githubUrl: '',
-    slackUrl: '',
-    googleDriveUrl: '',
-    // hflaWebsiteUrl: '',
-  });
-
   //seperate state for the location radio buttons
   const [locationType, setLocationType] = React.useState('remote');
 
@@ -122,6 +114,17 @@ export default function ProjectForm() {
 
   const [newlyCreatedID, setNewlyCreatedID] = useState(null);
   const history = useHistory();
+  const { register, handleSubmit, formState } = useForm({
+    defaultValues: {
+      name: '',
+      description: '',
+      location: '',
+      githubUrl: '',
+      slackUrl: '',
+      googleDriveUrl: ''
+    }
+  });
+  const {errors} = formState;
 
   const routeToNewProjectPage = () => {
      if(newlyCreatedID !== null) {
@@ -129,35 +132,19 @@ export default function ProjectForm() {
     }
   }
   
-
   useEffect(() => {
     routeToNewProjectPage()
   },[newlyCreatedID])
-
-  
 
   // only handles radio button change
   const handleRadioChange = (event) => {
     setLocationType(event.target.value);
   };
 
-  //updates state of formData onChange of any form input
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setFormData((fData) => ({
-      ...fData,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const submitForm = async (data) => {
     const projectApi = new ProjectApiService();
     try {
-      // fires POST request to create a new project,
-      // but the server response does not include the newly created project id that we need
-      const id = await projectApi.create(formData);
+      const id = await projectApi.create(data);
       setNewlyCreatedID(id);
     } catch (errors) {
       console.error(errors);
@@ -165,15 +152,6 @@ export default function ProjectForm() {
     }
     setActiveButton('close');
   };
-
-  // Basic validation : if all inputs have values, enable the submit button
-  useEffect(() => {
-    if (Object.values(formData).every((val) => val !== '')) {
-      setActiveButton('save');
-    } else {
-      setActiveButton('close');
-    }
-  }, [formData]);
 
   const locationRadios = (
     <Grid item>
@@ -223,7 +201,10 @@ export default function ProjectForm() {
         </Box>
         <Divider sx={{ borderColor: 'rgba(0,0,0,1)' }} />
         <Box sx={{ py: 2, px: 4 }}>
-          <form id="project-form" onSubmit={handleSubmit}>
+          <form id="project-form" onSubmit={handleSubmit((data) => {
+            submitForm(data)
+            
+          })}>
             {simpleInputs.map((input) => (
               <Box sx={{ mb: 1 }} key={input.name}>
                 <Grid container alignItems="center">
@@ -240,31 +221,11 @@ export default function ProjectForm() {
                 </Grid>
 
                 <TextField
-                  id={input.name}
-                  name={input.name}
-                  placeholder={
-                    input.name === 'location'
-                      ? locationType === 'remote'
-                        ? 'Enter project zoom link'
-                        : 'Enter project street address'
-                      : input.placeholder
-                  }
-                  variant="outlined"
-                  type={input.type}
-                  onChange={handleChange}
-                  helperText=" "
-                  value={formData[input.name]}
-                  {...(input.type === 'textarea' && {
-                    multiline: true,
-                    minRows: 3,
-                    sx: {
-                      '& .MuiInputBase-root': {
-                        px: '4px',
-                        py: '5px',
-                      },
-                    },
-                  })}
+                 type={input.type}
+                  {...register(input.name,  {required: `${input.name} is required` , pattern: {value: input.value, message: `${input.errorMessage} `}})}
+                 placeholder={input.placeholder}
                 />
+                <p style={{ color: '#fa114f' }}>{errors[input.name]?.message}</p>
               </Box>
             ))}
           </form>
@@ -277,7 +238,7 @@ export default function ProjectForm() {
               type="submit"
               form="project-form"
               variant={activeButton === 'save' ? 'contained' : 'secondary'}
-              disabled={activeButton !== 'save'}
+             
             >
               Save
             </StyledButton>
