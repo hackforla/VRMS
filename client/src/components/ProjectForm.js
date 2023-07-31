@@ -110,7 +110,8 @@ export default function ProjectForm() {
   const [activeButton, setActiveButton] = React.useState('close');
   const [newlyCreatedID, setNewlyCreatedID] = useState(null);
   const history = useHistory();
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const { register, handleSubmit, formState: { errors } } = useForm({ 
+    mode: 'all',
     defaultValues: {
       name: '',
       description: '',
@@ -118,7 +119,8 @@ export default function ProjectForm() {
       githubUrl: '',
       slackUrl: '',
       googleDriveUrl: ''
-    }
+    },
+    
   });
 
   const routeToNewProjectPage = () => {
