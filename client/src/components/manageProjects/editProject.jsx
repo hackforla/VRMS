@@ -61,6 +61,7 @@ const EditProject = ({
     <div>
       <div className={`edit-meeting-modal ${selectedEvent ? 'active' : ''}`}>
         <EditMeetingTimes
+          projectToEdit={projectToEdit}
           selectedEvent={selectedEvent}
           setEventAlert={setEventAlert}
           setSelectedEvent={setSelectedEvent}
@@ -71,7 +72,7 @@ const EditProject = ({
       <div className={`edit-meeting-modal ${isCreateNew ? 'active' : ''}`}>
         <CreateNewEvent
           createNewRecurringEvent={createNewRecurringEvent}
-          projectName={projectToEdit.name}
+          projectToEdit={projectToEdit}
           // eslint-disable-next-line no-underscore-dangle
           projectID={projectToEdit._id}
           setEventAlert={setEventAlert}

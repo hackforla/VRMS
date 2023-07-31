@@ -8,6 +8,7 @@ import validateEventForm from './utilities/validateEventForm';
 
 // This component displays current meeting times for selected project and offers the option to edit those times.
 const EditMeetingTimes = ({
+  projectToEdit,
   selectedEvent,
   setEventAlert,
   setSelectedEvent,
@@ -21,7 +22,7 @@ const EditMeetingTimes = ({
     startTimeOriginal,
     durationOriginal
   ) => async () => {
-    const errors = validateEventForm(values);
+    const errors = validateEventForm(values, projectToEdit);
     if (!errors) {
       let theUpdatedEvent = {};
 
