@@ -12,8 +12,8 @@ class EventsApiService {
   async fetchEvents() {
     try {
       const threeWeeksInMilliseconds = 3 * 7 * 24 * 60 * 60 * 1000; // 3 weeks in milliseconds
-      const threeWeeksAgo = new Date()
-      threeWeeksAgo.setTime(threeWeeksAgo.getTime() - threeWeeksInMilliseconds)
+      const threeWeeksAgo = new Date();
+      threeWeeksAgo.setTime(threeWeeksAgo.getTime() - threeWeeksInMilliseconds);
       
       const dateQuery = `?date[$gt]=${threeWeeksAgo.toISOString().split('.')[0]+"Z"}`;
 
