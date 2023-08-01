@@ -60,6 +60,8 @@ const simpleInputs = [
     name: 'githubUrl',
     type: 'text',
     placeholder: 'htttps://github.com/',
+    value: /^(https?:\/\/)?(www\.)?github\.com\/[a-zA-Z0-9_]{1,25}$/igm,
+    errorMessage: "Please enter a proper Github profile link."
   },
   {
     label: 'Slack Channel Link',
