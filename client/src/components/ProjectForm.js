@@ -119,8 +119,7 @@ export default function ProjectForm() {
       githubUrl: '',
       slackUrl: '',
       googleDriveUrl: ''
-    },
-    
+    }
   });
 
   const routeToNewProjectPage = () => {
@@ -215,11 +214,12 @@ export default function ProjectForm() {
                   {input.name === 'location' && locationRadios}
                 </Grid>
                 <TextField
+                  error={!!errors[input.name]}
                  type={input.type}
                   {...register(input.name,  {required: `${input.name} is required` , pattern: {value: input.value, message: `${input.errorMessage}`}})}
                  placeholder={input.placeholder}
+                 helperText={`${errors[input.name]?.message || ''}`}
                 />
-                <p style={{ color: '#fa114f' }}>{errors[input.name]?.message}</p>
               </Box>
             ))}
           </form>
