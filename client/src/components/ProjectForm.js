@@ -40,9 +40,13 @@ const simpleInputs = [
     label: 'Location',
     name: 'location',
     type: 'text',
-    placeholder: 'Enter project location',
+    placeholder: 'Enter location for meeting',
     value: /https:\/\/[\w-]*\.?zoom.us\/(j|my)\/[\d\w?=-]+/,
-    errorMessage: 'Please enter a valid Zoom URL'
+    errorMessage: 'Please enter a valid Zoom URL',
+    addressPlaceholder: "Enter a physical address.",
+    addressValue: '',
+    addressError: 'Please enter a proper address.',
+
   },
   // Leaving incase we want to add this back in for updating projects
   // {
@@ -214,9 +218,9 @@ export default function ProjectForm() {
                   {input.name === 'location' && locationRadios}
                 </Grid>
                 <TextField
-                 error={errors[input.name]}
+                 error={!!errors[input.name]}
                  type={input.type}
-                  {...register(input.name,  {required: `${input.name} is required` , pattern: {value: input.value, message: `${input.errorMessage}`}})}
+                  {...register(input.name,  {required: `${input.name} is required` , pattern: locationType === 'remote' ? {value: input.value, message: `${input.errorMessage}`} : {value: input.addressValue, message: `${input.addressError}`}})}
                  placeholder={input.placeholder}
                  helperText={`${errors[input.name]?.message || ''}`}
                 />
