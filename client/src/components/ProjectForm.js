@@ -214,7 +214,7 @@ export default function ProjectForm() {
                   {input.name === 'location' && locationRadios}
                 </Grid>
                 <TextField
-                  error={!!errors[input.name]}
+                 error={errors[input.name]}
                  type={input.type}
                   {...register(input.name,  {required: `${input.name} is required` , pattern: {value: input.value, message: `${input.errorMessage}`}})}
                  placeholder={input.placeholder}
