@@ -42,7 +42,9 @@ const simpleInputs = [
     type: 'text',
     placeholder: 'Enter location for meeting',
     value: /https:\/\/[\w-]*\.?zoom.us\/(j|my)\/[\d\w?=-]+/,
-    errorMessage: 'Please enter a valid Zoom URL'
+    errorMessage: 'Please enter a valid Zoom URL',
+    addressValue: '',
+    addressError: 'Invalid address'
 
   },
   // Leaving incase we want to add this back in for updating projects
@@ -56,9 +58,7 @@ const simpleInputs = [
     label: 'GitHub URL',
     name: 'githubUrl',
     type: 'text',
-    placeholder: 'htttps://github.com/',
-    value: /^(https?:\/\/)?(www\.)?github\.com\/[a-zA-Z0-9_]{1,25}$/igm,
-    errorMessage: "Please enter a proper Github profile link."
+    placeholder: 'htttps://github.com/'
   },
   {
     label: 'Slack Channel Link',
@@ -215,11 +215,16 @@ export default function ProjectForm() {
                     </InputLabel>
                   </Grid>
                   {input.name === 'location' && locationRadios}
-                </Grid>
+                </Grid>     
                 <TextField
                  error={!!errors[input.name]}
                  type={input.type}
-                  {...register(input.name,  {required: `${input.name} is required` , pattern:  {value: input.value, message: `${input.errorMessage}`} })}
+                  {...register(input.name,  {required: `${input.name} is required` , 
+                  pattern:  input.name === 'location' ? 
+                    locationType === 'remote' ? 
+                      {value: input.value, message: input.errorMessage} :
+                      {value: input.addressValue, message: input.addressError} :
+                      {value: input.value, message: input.errorMessage} } )}
                  placeholder={input.placeholder}
                  helperText={`${errors[input.name]?.message || ''}`}
                 />
