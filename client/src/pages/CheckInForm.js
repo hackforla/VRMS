@@ -237,7 +237,6 @@ const CheckInForm = (props) => {
       setErrorMessage(error);
       setIsLoading(false);
     }
-    // }
   };
 
   const submitNewProfile = (userForm) => {
@@ -302,6 +301,11 @@ const CheckInForm = (props) => {
       ) {
         setIsError(true);
         setErrorMessage("Please don't leave any fields blank");
+        ready = false;
+      }
+      if (userForm.email !== userForm.email.toLowerCase()) {
+        setIsError(true)
+        setErrorMessage("Email should be lowercase.");
         ready = false;
       }
 
@@ -402,6 +406,8 @@ const CheckInForm = (props) => {
     try {
       if (!formInput.email) {
         throw new Error('User email is required');
+      } else if (formInput.email !== formInput.email.toLowerCase()) {
+        throw new Error('User email must be lowercase');
       }
 
       setIsLoading(true);
