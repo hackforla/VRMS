@@ -226,7 +226,7 @@ export default function ProjectForm() {
                       {value: input.addressValue, message: input.addressError} :
                       {value: input.value, message: input.errorMessage} } )}
                  placeholder={input.placeholder}
-                 helperText={`${errors[input.name]?.message || ''}`}
+                 helperText={`${errors[input.name]?.message || ' '}`}
                 />
               </Box>
             ))}
