@@ -303,11 +303,6 @@ const CheckInForm = (props) => {
         setErrorMessage("Please don't leave any fields blank");
         ready = false;
       }
-      if (userForm.email !== userForm.email.toLowerCase()) {
-        setIsError(true)
-        setErrorMessage("Email should be lowercase.");
-        ready = false;
-      }
 
       const currYear = parseInt(moment().format('YYYY'));
       const currMonth = parseInt(moment().format('MM'));
@@ -406,8 +401,6 @@ const CheckInForm = (props) => {
     try {
       if (!formInput.email) {
         throw new Error('User email is required');
-      } else if (formInput.email !== formInput.email.toLowerCase()) {
-        throw new Error('User email must be lowercase');
       }
 
       setIsLoading(true);

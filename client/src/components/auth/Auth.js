@@ -46,7 +46,7 @@ const Auth = () => {
     const isEmailValid = validateEmail();
 
     if (isEmailValid) {
-      const userData = await checkUser(email, LOG_IN);
+      const userData = await checkUser(email.toLowerCase(), LOG_IN);
       if (userData) {
         if (
           userData.user.accessLevel !== ADMIN &&
@@ -59,7 +59,7 @@ const Auth = () => {
           return;
         }
 
-        const isAuth = await checkAuth(email, LOG_IN);
+        const isAuth = await checkAuth(email.toLowerCase(), LOG_IN);
         if (isAuth) {
           history.push('/emailsent');
         } else {
