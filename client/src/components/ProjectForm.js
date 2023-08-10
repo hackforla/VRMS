@@ -3,6 +3,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import ProjectApiService from '../api/ProjectApiService';
 import { ReactComponent as PlusIcon } from '../svg/PlusIcon.svg';
+import { Redirect } from 'react-router-dom'
 import {
   Typography,
   Box,
@@ -17,6 +18,7 @@ import {
   RadioGroup,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import useAuth from "../hooks/useAuth"
 
 /** Project Form Component
  *
@@ -113,6 +115,7 @@ export default function ProjectForm() {
   const [activeButton, setActiveButton] = React.useState('close');
   const [newlyCreatedID, setNewlyCreatedID] = useState(null);
   const history = useHistory();
+  const { auth } = useAuth();
   const { register, handleSubmit, formState: { errors } } = useForm({ 
     mode: 'all',
     defaultValues: {
@@ -179,7 +182,7 @@ export default function ProjectForm() {
     </Grid>
   );
 
-  return (
+  return auth && auth.user ? (
     <Box sx={{ px: 0.5 }}>
       <Box sx={{ textAlign: 'center' }}>
         <Typography variant="h1">Project Management</Typography>
@@ -257,5 +260,7 @@ export default function ProjectForm() {
         </Grid>
       </Box>
     </Box>
-  );
+  ) : (
+    <Redirect to="/login" />
+  )
 }
