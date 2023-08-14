@@ -37,7 +37,7 @@ const simpleInputs = [
     name: 'description',
     type: 'textarea',
     placeholder: 'Enter project description',
-    value: /^[a-zA-Z0-9 _.,!"'@#$%^&*()/]{0,250}$/,
+    value: /^[a-zA-Z0-9].{0,250}$/,
     errorMessage: 'Description is too long, max 250 characters allowed'
   },
   {
