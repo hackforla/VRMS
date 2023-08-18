@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import ProjectApiService from '../api/ProjectApiService';
 import { ReactComponent as PlusIcon } from '../svg/PlusIcon.svg';
 import { Redirect } from 'react-router-dom'
 import {
@@ -18,70 +17,7 @@ import {
   RadioGroup,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import useAuth from "../hooks/useAuth"
-
-/** Project Form Component
- *
- * To be used for creating and updating a project
- * */
-
-const simpleInputs = [
-  {
-    label: 'Project Name',
-    name: 'name',
-    type: 'text',
-    placeholder: 'Enter project name',
-  },
-  {
-    label: 'Project Description',
-    name: 'description',
-    type: 'textarea',
-    placeholder: 'Enter project description',
-  },
-  {
-    label: 'Location',
-    name: 'location',
-    type: 'text',
-    placeholder: 'Enter location for meeting',
-    value: /https:\/\/[\w-]*\.?zoom.us\/(j|my)\/[\d\w?=-]+/,
-    errorMessage: 'Please enter a valid Zoom URL',
-    addressValue: '',
-    addressError: 'Invalid address'
-
-  },
-  // Leaving incase we want to add this back in for updating projects
-  // {
-  //   label: 'GitHub Identifier',
-  //   name: 'githubIdentifier',
-  //   type: 'text',
-  //   placeholder: 'Enter GitHub identifier',
-  // },
-  {
-    label: 'GitHub URL',
-    name: 'githubUrl',
-    type: 'text',
-    placeholder: 'htttps://github.com/'
-  },
-  {
-    label: 'Slack Channel Link',
-    name: 'slackUrl',
-    type: 'text',
-    placeholder: 'htttps://slack.com/',
-  },
-  {
-    label: 'Google Drive URL',
-    name: 'googleDriveUrl',
-    type: 'text',
-    placeholder: 'htttps://drive.google.com/',
-  },
-  // Leaving incase we want to add this back in for updating projects
-  // {
-  //   label: 'HFLA Website URL',
-  //   name: 'hflaWebsiteUrl',
-  //   type: 'text',
-  //   placeholder: 'htttps://hackforla.org/projects/',
-  // },
-];
+import useAuth from "../hooks/useAuth" 
 
 /** STYLES
  *  -most TextField and InputLabel styles are controlled by the theme
@@ -109,12 +45,13 @@ const StyledRadio = styled(Radio)(({ theme }) => ({
  * -renders a form for creating and updating a project
  */
 
-export default function ProjectForm() {
+// Takes Array, submitForm, isEdit?
+export default function ProjectForm({arr, submitForm, isEdit}) {
   //seperate state for the location radio buttons
+  const history = useHistory();
+
   const [locationType, setLocationType] = React.useState('remote');
   const [activeButton, setActiveButton] = React.useState('close');
-  const [newlyCreatedID, setNewlyCreatedID] = useState(null);
-  const history = useHistory();
   const { auth } = useAuth();
   const { register, handleSubmit, formState: { errors } } = useForm({ 
     mode: 'all',
@@ -128,31 +65,9 @@ export default function ProjectForm() {
     }
   });
 
-  const routeToNewProjectPage = () => {
-     if(newlyCreatedID !== null) {
-      history.push(`/projects/${newlyCreatedID}`)
-    }
-  }
-  
-  useEffect(() => {
-    routeToNewProjectPage()
-  },[newlyCreatedID])
-
-  // only handles radio button change
+  // // only handles radio button change
   const handleRadioChange = (event) => {
     setLocationType(event.target.value);
-  };
-
-  const submitForm = async (data) => {
-    const projectApi = new ProjectApiService();
-    try {
-      const id = await projectApi.create(data);
-      setNewlyCreatedID(id);
-    } catch (errors) {
-      console.error(errors);
-      return;
-    }
-    setActiveButton('close');
   };
 
   const locationRadios = (
@@ -197,7 +112,7 @@ export default function ProjectForm() {
           <Box sx={{ display: 'flex' }}>
             <PlusIcon style={{ marginRight: '7px' }} />
             <Typography sx={{ fontSize: '14px', fontWeight: '600' }}>
-              Add New Project
+              {isEdit ? 'edit' : 'Add New Project'}
             </Typography>
           </Box>
         </Box>
@@ -206,7 +121,7 @@ export default function ProjectForm() {
           <form id="project-form" onSubmit={handleSubmit((data) => {
             submitForm(data)
           })}>
-            {simpleInputs.map((input) => (
+            {arr.map((input) => (
               <Box sx={{ mb: 1 }} key={input.name}>
                 <Grid container alignItems="center">
                   <Grid item xs="auto" sx={{ pr: 3 }}>
