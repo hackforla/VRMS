@@ -21,6 +21,7 @@ import ProjectLeaderDashboard from './pages/ProjectLeaderDashboard';
 import UserAdmin from './pages/UserAdmin';
 import ProjectList from './pages/ProjectList';
 import ManageProjects from './pages/ManageProjects';
+import addProject from './components/manageProjects/addProject';
 import HealthCheck from './pages/HealthCheck';
 import SecretPassword from './pages/SecretPassword';
 import UserWelcome from './pages/UserWelcome';
@@ -49,7 +50,7 @@ const routes = [
   { path: '/events', name: 'events', Component: Events },
   { path: '/useradmin', name: 'useradmin', Component: UserAdmin },
   { path: '/projects', name: 'projects', Component: ProjectList },
-  { path: '/projects/create', name: 'projectform', Component: ProjectForm },
+  { path: '/projects/create', name: 'projectform', Component:  addProject},
   {
     path: '/projects/:projectId',
     name: 'project',
