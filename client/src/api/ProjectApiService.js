@@ -22,6 +22,7 @@ class ProjectApiService {
     }
   }
 
+  // Handles the POST request and returns the projects ID.
   async create(projectData) {
     const {
       name,
@@ -58,26 +59,13 @@ class ProjectApiService {
     }
   }
 
-  async updateProject(projectId, fieldName, fieldValue) {
-    let updateValue = fieldValue;
-    // These field are arrays, but the form makes them comma separated strings,
-    // so this adds it back to db as an arrray.
-    if (
-      fieldValue &&
-      (fieldName === 'partners' || fieldName === 'recruitingCategories')
-    ) {
-      updateValue = fieldValue
-        .split(',')
-        .filter((x) => x !== '')
-        .map((y) => y.trim());
-    }
-
+  async updateProject(projectId, projectData) {
     // Update database
     const url = `${this.baseProjectUrl}${projectId}`;
     const requestOptions = {
-      method: 'PATCH',
+      method: 'PUT',
       headers: this.headers,
-      body: JSON.stringify({ [fieldName]: updateValue }),
+      body: JSON.stringify({ ...projectData }),
     };
 
     try {

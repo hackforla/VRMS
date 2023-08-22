@@ -10,6 +10,8 @@ router.post('/', ProjectController.create);
 
 router.get('/:ProjectId', ProjectController.project_by_id);
 
+router.put('/:ProjectId', ProjectController.update);
+
 router.patch('/:ProjectId', ProjectController.update);
 
 
