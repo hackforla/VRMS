@@ -22,7 +22,7 @@ const EditProject = ({
   regularEvents,
   updateRegularEvent,
 }) => {
-  const [formData, setFormData] = useState({
+  const [originalProjectData, setOriginalProjectData] = useState({
     name: projectToEdit.name,
     description: projectToEdit.description,
     location: projectToEdit.location,
@@ -31,6 +31,10 @@ const EditProject = ({
     slackUrl: projectToEdit.slackUrl,
     googleDriveUrl: projectToEdit.googleDriveUrl,
     hflaWebsiteUrl: projectToEdit.hflaWebsiteUrl,
+  });
+
+  const [formData, setFormData] = useState({
+    ...originalProjectData
   });
 
   // eslint-disable-next-line no-unused-vars
@@ -69,6 +73,12 @@ const EditProject = ({
     }
   }, [projectToEdit, recurringEvents, setREvents]);
 
+  // Updates state of formData onChange of any form input
+
+  const revertToOriginal = () => {
+    setFormData(originalProjectData);
+  }
+
   return (
     <Box sx={{ px: 0.5 }}>
       <div className={`edit-meeting-modal ${selectedEvent ? 'active' : ''}`}>
@@ -97,6 +107,8 @@ const EditProject = ({
         projectToEdit={projectToEdit}
         isEdit={true}
         setFormData={setFormData}
+        revertToOriginal={revertToOriginal}
+        setOriginalProjectData={setOriginalProjectData}
       />
 
       <TitledBox title="Recurring Events"

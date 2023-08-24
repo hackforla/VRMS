@@ -63,7 +63,8 @@ export default function ProjectForm({
   formData,
   projectToEdit,
   isEdit,
-  setFormData
+  revertToOriginal,
+  setOriginalProjectData,
 }) {
   const history = useHistory();
 
@@ -119,9 +120,8 @@ export default function ProjectForm({
       console.error(errors);
       return;
     }
-    // setOriginalProjectData(data);
-    setFormData(data);
-    setEditMode(false);
+    setOriginalProjectData(data);
+    setEditMode(true);
   };
 
   // ----------------- Handles and Toggles -----------------
