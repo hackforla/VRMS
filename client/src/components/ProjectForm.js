@@ -71,14 +71,6 @@ export default function ProjectForm({
   const [locationType, setLocationType] = useState('remote');
   // State to track the toggling from Project view to Edit Project View via edit icon.
   const [editMode, setEditMode] = useState(false);
-
-  /**
-   * 
-   * STATE
-   */
-  const initialState = [...arr]
-
-  const [arrState, setArrState] = useState(initialState)
   const { auth } = useAuth();
   const {
     register,
@@ -129,26 +121,11 @@ export default function ProjectForm({
   const handleRadioChange = (event) => {
     setLocationType(event.target.value);
   };
-
-    /**
-   * 
-   * RESET
-   */
-  
   // Toggles the project view to edit mode change.
   const handleEditMode = (event) => {
     setEditMode(!editMode);
-<<<<<<< HEAD
-    resetState()
-
-=======
     revertToOriginal();
->>>>>>> a705d73234655bc5030a643d2507b1f1376df0a4
   };
-
-  const resetState = () => {
-    // arr = [initialState]
-  }
 
   // ----------------- Icons -----------------
 
@@ -174,15 +151,17 @@ export default function ProjectForm({
   const editIcon = () => {
     return (
       <Box
-        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer' }}
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          cursor: 'pointer',
+        }}
         onClick={handleEditMode}
       >
-        <EditIcon
-          style={{ p: 1 }}
-          
-        />
+        <EditIcon style={{ p: 1}} />
         <Typography sx={{ p: 1, fontSize: '14px', fontWeight: '600' }}>
-          {editMode ? 'Cancel' : 'Edit Project'}
+          {editMode ? 'Cancel' : 'Edit Mode'}
         </Typography>
       </Box>
     );
@@ -206,14 +185,14 @@ export default function ProjectForm({
             value="remote"
             control={<StyledRadio size="small" />}
             label="Remote"
-            disabled={isEdit && !editMode}
+            disabled={!editMode}
           />
           <Box sx={{ width: '10px' }} />
           <StyledFormControlLabel
             value="in-person"
             control={<StyledRadio size="small" />}
             label="In-Person"
-            disabled={isEdit && !editMode}
+            disabled={!editMode}
           />
         </RadioGroup>
       </FormControl>
@@ -228,7 +207,7 @@ export default function ProjectForm({
         <Typography variant="h1">Project Management</Typography>
       </Box>
       <Box sx={{ bgcolor: '#F5F5F5' }}>
-        <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between' }}>
           <Box>
             <Typography sx={{ fontSize: '18px', fontWeight: '600' }}>
               {editMode ? 'Editing Project' : 'Project Information'}
@@ -324,9 +303,9 @@ export default function ProjectForm({
             <StyledButton
               type="submit"
               form="project-form"
-              variant={editMode ? 'contained' : 'secondary'}
+              variant={editMode ? "contained" : "secondary"}
               cursor="pointer"
-              disabled={isEdit ? editMode : false}
+              disabled={!editMode}
             >
               Save
             </StyledButton>
