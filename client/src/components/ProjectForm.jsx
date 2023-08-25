@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import ProjectApiService from '../api/ProjectApiService';
@@ -46,24 +46,25 @@ const StyledRadio = styled(Radio)(({ theme }) => ({
 
 /**Project Form Component
  * -renders a form for creating and updating a project
- */
 
+
+/**
+ 
 /**
  * Takes Array, formData, projectToEdit, handleChage, isEdit
  * submitForm, handleChange, and isEdit are for the edit forms.
+ * - arr - simpleInputs arr from the edit page that holds the input's properties.
  * - formData - passes the current project information to the form.
  * - projectToEdit - used to grab the of the project we are editing.
- * - handleChange - changes the input values to whatever the user changes it to.
- * - Where its creating a new project or editing one - True or False.
+ * - isEdit - Whether its creating a new project or editing one - True or False.
+ * - setFormData - allows us to updated the form data.
  * */
 export default function ProjectForm({
   arr,
   formData,
   projectToEdit,
-  handleChange,
   isEdit,
-  revertToOriginal,
-  setOriginalProjectData,
+  setFormData
 }) {
   const history = useHistory();
 
@@ -72,19 +73,27 @@ export default function ProjectForm({
   // State to track the toggling from Project view to Edit Project View via edit icon.
   const [editMode, setEditMode] = useState(false);
   const { auth } = useAuth();
+
+  /**
+   * React Hook Forms
+   *  - register
+   *  - handleSubmit
+   *  - formState
+   *  - reset
+   *  - defaultValues - holds edit project data
+   *
+   */
+
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     mode: 'all',
+    // Holds the current project data in state.
     defaultValues: {
-      name: '',
-      description: '',
-      location: '',
-      githubUrl: '',
-      slackUrl: '',
-      googleDriveUrl: '',
+      ...formData,
     },
   });
 
@@ -111,8 +120,9 @@ export default function ProjectForm({
       console.error(errors);
       return;
     }
-    setOriginalProjectData(data);
-    setEditMode(true);
+    // setOriginalProjectData(data);
+    setFormData(data);
+    setEditMode(false);
   };
 
   // ----------------- Handles and Toggles -----------------
@@ -121,10 +131,14 @@ export default function ProjectForm({
   const handleRadioChange = (event) => {
     setLocationType(event.target.value);
   };
+
   // Toggles the project view to edit mode change.
   const handleEditMode = (event) => {
     setEditMode(!editMode);
-    revertToOriginal();
+    // React hook form method to reset data back to original values. Triggered when Edit Mode is cancelled.
+    reset({
+      ...formData,
+    });
   };
 
   // ----------------- Icons -----------------
@@ -262,8 +276,6 @@ export default function ProjectForm({
                     })}
                     placeholder={input.placeholder}
                     helperText={`${errors[input.name]?.message || ' '}`}
-                    onChange={handleChange}
-                    value={formData[input.name]}
                     disabled={!editMode}
                   />
                 ) : (
@@ -293,32 +305,32 @@ export default function ProjectForm({
               </Box>
             ))}
           </form>
+          <Box>
+            <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
+              <Grid item xs="auto">
+                <StyledButton
+                  type="submit"
+                  form="project-form"
+                  variant={!editMode ? 'contained' : 'secondary'}
+                  cursor="pointer"
+                  disabled={isEdit ? !editMode : false}
+                >
+                  Save
+                </StyledButton>
+              </Grid>
+              <Grid item xs="auto">
+                <StyledButton
+                  component={Link}
+                  to="/projects"
+                  variant="contained"
+                  cursor="pointer"
+                >
+                  Close
+                </StyledButton>
+              </Grid>
+            </Grid>
+          </Box>
         </Box>
-      </Box>
-      <Box>
-        <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
-          <Grid item xs="auto">
-            <StyledButton
-              type="submit"
-              form="project-form"
-              variant={editMode ? "contained" : "secondary"}
-              cursor="pointer"
-              disabled={isEdit ? !editMode : false}
-            >
-              Save
-            </StyledButton>
-          </Grid>
-          <Grid item xs="auto">
-            <StyledButton
-              component={Link}
-              to="/projects"
-              variant="contained"
-              cursor="pointer"
-            >
-              Close
-            </StyledButton>
-          </Grid>
-        </Grid>
       </Box>
     </Box>
   ) : (

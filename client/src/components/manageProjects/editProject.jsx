@@ -20,7 +20,7 @@ const EditProject = ({
   regularEvents,
   updateRegularEvent,
 }) => {
-  const [originalProjectData, setOriginalProjectData] = useState({
+  const [formData, setFormData] = useState({
     name: projectToEdit.name,
     description: projectToEdit.description,
     location: projectToEdit.location,
@@ -29,10 +29,6 @@ const EditProject = ({
     slackUrl: projectToEdit.slackUrl,
     googleDriveUrl: projectToEdit.googleDriveUrl,
     // hflaWebsiteUrl: projectToEdit.name,
-  });
-
-  const [formData, setFormData] = useState({
-    ...originalProjectData
   });
 
   // eslint-disable-next-line no-unused-vars
@@ -77,6 +73,9 @@ const EditProject = ({
       name: 'location',
       type: 'text',
       value: projectToEdit.location,
+      errorMessage: 'Please enter a valid Zoom URL',
+      addressValue: '',
+      addressError: 'Invalid address',
     },
     // Leaving incase we want to add this back in for updating projects
     // {
@@ -125,20 +124,6 @@ const EditProject = ({
     }
   }, [projectToEdit, recurringEvents, setREvents]);
 
-  // Updates state of formData onChange of any form input
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setFormData((fData) => ({
-      ...fData,
-      [name]: value,
-    }));
-  };
-
-  const revertToOriginal = () => {
-    setFormData(originalProjectData);
-  }
-
   return (
     <Box sx={{ px: 0.5 }}>
       <div className={`edit-meeting-modal ${selectedEvent ? 'active' : ''}`}>
@@ -165,10 +150,8 @@ const EditProject = ({
         arr={simpleInputs}
         formData={formData}
         projectToEdit={projectToEdit}
-        handleChange={handleChange}
         isEdit={true}
-        revertToOriginal={revertToOriginal}
-        setOriginalProjectData={setOriginalProjectData}
+        setFormData={setFormData}
       />
       <Box sx={{ bgcolor: '#F5F5F5', my: 2 }}>
         <Box
