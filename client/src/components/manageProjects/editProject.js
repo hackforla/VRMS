@@ -17,6 +17,8 @@ const EditProject = ({
   createNewRecurringEvent,
   deleteRecurringEvent,
   updateRecurringEvent,
+  regularEvents,
+  updateRegularEvent,
 }) => {
   const [originalProjectData, setOriginalProjectData] = useState({
     name: projectToEdit.name,
@@ -36,11 +38,25 @@ const EditProject = ({
   // eslint-disable-next-line no-unused-vars
 
   const [rEvents, setREvents] = useState([]);
+  const [regularEventsState, setRegularEventsState] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState();
   const [isCreateNew, setIsCreateNew] = useState();
 
   // States for alerts
   const [eventAlert, setEventAlert] = useState(null);
+
+  // test
+  useEffect(() => {
+    if (regularEvents) {
+      setRegularEventsState(
+        regularEvents
+          // eslint-disable-next-line no-underscore-dangle
+          .filter((e) => e?.project?._id === projectToEdit._id)
+          .map((item) => ({...item, ...readableEvent(item), raw: item}))
+          .reverse() // sorts most recent events first
+      );
+    }
+  }, [projectToEdit, regularEvents, setRegularEventsState]);
 
   // Form inputs.
   const simpleInputs = [
@@ -208,12 +224,56 @@ const EditProject = ({
               ))}
             </ul>
           </div>
-          <div className="display-events"></div>
+          {/* <div className="display-events"></div> */}
         </Box>
       </Box>
-      <Box sx={{ textAlign: 'center' }}></Box>
+
+      <Box sx={{ bgcolor: '#F5F5F5', my: 3 }}>
+        <Box
+          sx={{
+            p: 2,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <Box>
+            <Typography sx={{ fontSize: '18px', fontWeight: '600' }}>
+              Manually Edit Events Checkin
+            </Typography>
+          </Box>
+        </Box>
+        <Divider sx={{ borderColor: 'rgba(0,0,0,1)' }} />
+        <Box sx={{ py: 2, px: 4 }}>
+          <div className="event-list">
+            <h2 className="event-alert">{eventAlert}</h2>
+            <ul>
+              {regularEventsState.map((event, index) => (
+                
+                // eslint-dis able-next-line no-underscore-dangle
+                <RegularEvent event={event} key={event._id} updateRegularEvent={updateRegularEvent} />
+              ))}              
+            </ul>
+          </div>
+        </Box>
+        
+      </Box>
     </Box>
   );
 };
+
+function RegularEvent({event, updateRegularEvent}) {
+  return (
+    <li key={`${event.event_id}`}>
+      <button type="button" onClick={async () => updateRegularEvent({checkInReady: !event.checkInReady}, event.event_id)}>
+        <div>{event.name}</div>
+        <div className="event-list-details">
+          {`${event.dayOfTheWeek}, ${event.startTime} - ${event.endTime}; ${event.eventType}`} {`${new Date(event.raw.startTime).toLocaleDateString()}`}
+        </div>
+        <div className="event-list-description">Is this event available for check in now?: <strong>{`${event.checkInReady ? "Yes" : "No"}`}</strong></div>
+      </button>
+    </li>
+  )
+}
 
 export default EditProject;
