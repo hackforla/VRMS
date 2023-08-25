@@ -199,8 +199,6 @@ export default function ProjectForm({
     </Grid>
   );
 
-  // ----------------- Textfields -----------------
-
   return auth && auth.user ? (
     <Box sx={{ px: 0.5 }}>
       <Box sx={{ textAlign: 'center' }}>
