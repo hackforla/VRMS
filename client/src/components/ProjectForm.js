@@ -130,14 +130,10 @@ export default function ProjectForm({
   const handleRadioChange = (event) => {
     setLocationType(event.target.value);
   };
-
   // Toggles the project view to edit mode change.
   const handleEditMode = (event) => {
     setEditMode(!editMode);
-    // React hook form method to reset data back to original values. Triggered when Edit Mode is cancelled.
-    reset({
-      ...formData,
-    });
+    revertToOriginal();
   };
 
   // ----------------- Icons -----------------
