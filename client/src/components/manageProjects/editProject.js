@@ -72,7 +72,7 @@ const EditProject = ({
       label: 'Location',
       name: 'location',
       type: 'text',
-      value: projectToEdit.location,
+      value: /https:\/\/[\w-]*\.?zoom.us\/(j|my)\/[\d\w?=-]+/,
       errorMessage: 'Please enter a valid Zoom URL',
       addressValue: '',
       addressError: 'Invalid address',
