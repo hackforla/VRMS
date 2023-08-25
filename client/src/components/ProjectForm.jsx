@@ -185,14 +185,14 @@ export default function ProjectForm({
             value="remote"
             control={<StyledRadio size="small" />}
             label="Remote"
-            disabled={!editMode}
+            disabled={isEdit ? !editMode : false}
           />
           <Box sx={{ width: '10px' }} />
           <StyledFormControlLabel
             value="in-person"
             control={<StyledRadio size="small" />}
             label="In-Person"
-            disabled={!editMode}
+            disabled={isEdit ? !editMode : false}
           />
         </RadioGroup>
       </FormControl>
@@ -303,7 +303,7 @@ export default function ProjectForm({
               form="project-form"
               variant={editMode ? "contained" : "secondary"}
               cursor="pointer"
-              disabled={!editMode}
+              disabled={isEdit ? !editMode : false}
             >
               Save
             </StyledButton>
