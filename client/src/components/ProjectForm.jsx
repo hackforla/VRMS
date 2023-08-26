@@ -311,7 +311,7 @@ export default function ProjectForm({
                 <StyledButton
                   type="submit"
                   form="project-form"
-                  variant={!editMode ? 'contained' : 'secondary'}
+                  variant={!isEdit ? 'secondary' : !editMode ? 'contained' : 'secondary'}
                   cursor="pointer"
                   disabled={isEdit ? !editMode : false}
                 >
