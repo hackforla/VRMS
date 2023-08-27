@@ -21,7 +21,7 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import useAuth from '../hooks/useAuth';
-import ValidatedTextField from './parts/medium/ValidatedTextField';
+import ValidatedTextField from './parts/form/ValidatedTextField';
 
 /** STYLES
  *  -most TextField and InputLabel styles are controlled by the theme
