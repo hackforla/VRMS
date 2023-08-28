@@ -1,6 +1,20 @@
 import React from 'react';
 import { Box, Grid, InputLabel, TextField } from "@mui/material";
 
+/**
+ * A validated text field component for forms.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Function} props.register - Function used for registering the input field with react-hook-form.
+ * @param {Object} props.errors - Object containing form validation errors.
+ * @param {boolean} props.isEdit - Boolean indicating if the form is in edit mode.
+ * @param {boolean} props.editMode - Boolean indicating if the component is in edit mode.
+ * @param {string} props.locationType - The type of location.
+ * @param {ReactNode} props.locationRadios - Radio Buttons for selecting location type.
+ * @param {Object} props.input - The input configuration for the text field.
+ * @returns {ReactElement} The rendered component.
+ */
 function ValidatedTextField({
   register,
   errors,
