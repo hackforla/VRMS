@@ -73,7 +73,7 @@ describe('UPDATE', () => {
 
     // Update project
     const res2 = await request
-      .patch(`/api/projects/${res.body._id}`)
+      .put(`/api/projects/${res.body._id}`)
       .set(headers)
       .send(updatedDataPayload);
     expect(res2.status).toBe(200);
