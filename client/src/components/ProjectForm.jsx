@@ -1,17 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import ProjectApiService from '../api/ProjectApiService';
-
-import { ReactComponent as EditIcon } from '../svg/Icon_Edit.svg';
-import { ReactComponent as PlusIcon } from '../svg/PlusIcon.svg';
 import { Redirect } from 'react-router-dom';
 import {
   Typography,
   Box,
   Divider,
-  TextField,
-  InputLabel,
   Button,
   Grid,
   Radio,
@@ -20,7 +14,11 @@ import {
   RadioGroup,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+
 import useAuth from '../hooks/useAuth';
+import ProjectApiService from '../api/ProjectApiService';
+import { ReactComponent as EditIcon } from '../svg/Icon_Edit.svg';
+import { ReactComponent as PlusIcon } from '../svg/PlusIcon.svg';
 import ValidatedTextField from './parts/form/ValidatedTextField';
 
 /** STYLES
