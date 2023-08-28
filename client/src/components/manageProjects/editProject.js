@@ -67,6 +67,8 @@ const EditProject = ({
       name: 'description',
       type: 'textarea',
       value: projectToEdit.description,
+      value: /^[a-zA-Z0-9].{0,250}$/,
+      errorMessage: 'Description must start with alphanumeric characters, 250 char limit'
     },
     {
       label: 'Location',
