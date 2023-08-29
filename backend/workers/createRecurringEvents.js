@@ -8,7 +8,7 @@ module.exports = (cron, fetch) => {
     let RECURRING_EVENTS;
     let TODAY_DATE;
     let TODAY;
-    const URL = process.env.NODE_ENV === 'prod' ? 'https://www.vrms.io' : 'http://localhost:4000';
+    const URL = process.env.NODE_ENV === 'prod' ? 'https://www.vrms.io' : `http://localhost:${process.env.BACKEND_PORT}`;
 
     const headerToSend = process.env.CUSTOM_REQUEST_HEADER;
     const fetchEvents = async () => {
