@@ -36,6 +36,18 @@ const validateEventForm = (vals, projectToEdit) => {
             videoConferenceLink: 'Invalid link',
           };
         }
+        if (!containsHttps(vals[key])) {
+          newErrors = {
+            ...newErrors,
+            videoConferenceLink: 'Your link must start with https://',
+          };
+        }
+        if (!containsZoomOrGMeet(vals[key])) {
+          newErrors = {
+            ...newErrors,
+            videoConferenceLink: 'This does not look like a valid Zoom or Google Meet link',
+          };
+        }
         break;
 
       default:
@@ -49,4 +61,13 @@ export default validateEventForm;
 
 function validateLink(str) {
   return validator.isURL(str);
+}
+
+function containsHttps(str){
+  return str.toLowerCase().includes('https://');
+}
+
+function containsZoomOrGMeet(str){
+  return str.toLowerCase().includes('meet.google.com/') ||
+    str.toLowerCase().includes('zoom.us');
 }
