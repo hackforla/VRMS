@@ -26,13 +26,12 @@ function addProject() {
       addressValue: '',
       addressError: 'Invalid address',
     },
-    // Leaving incase we want to add this back in for updating projects
-    // {
-    //   label: 'GitHub Identifier',
-    //   name: 'githubIdentifier',
-    //   type: 'text',
-    //   placeholder: 'Enter GitHub identifier',
-    // },
+    {
+      label: 'GitHub Identifier',
+      name: 'githubIdentifier',
+      type: 'text',
+      placeholder: 'Enter GitHub identifier',
+    },
     {
       label: 'GitHub URL',
       name: 'githubUrl',
@@ -51,13 +50,12 @@ function addProject() {
       type: 'text',
       placeholder: 'htttps://drive.google.com/',
     },
-    // Leaving incase we want to add this back in for updating projects
-    // {
-    //   label: 'HFLA Website URL',
-    //   name: 'hflaWebsiteUrl',
-    //   type: 'text',
-    //   placeholder: 'htttps://hackforla.org/projects/',
-    // },
+    {
+      label: 'HFLA Website URL',
+      name: 'hflaWebsiteUrl',
+      type: 'text',
+      placeholder: 'htttps://hackforla.org/projects/',
+    },
   ];
 
   return (
