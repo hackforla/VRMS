@@ -77,13 +77,12 @@ const EditProject = ({
       addressValue: '',
       addressError: 'Invalid address',
     },
-    // Leaving incase we want to add this back in for updating projects
-    // {
-    //   label: 'GitHub Identifier',
-    //   name: 'githubIdentifier',
-    //   type: 'text',
-    //   placeholder: 'Enter GitHub identifier',
-    // },
+    {
+      label: 'GitHub Identifier',
+      name: 'githubIdentifier',
+      type: 'text',
+      placeholder: 'Enter GitHub identifier',
+    },
     {
       label: 'GitHub URL',
       name: 'githubUrl',
@@ -102,13 +101,12 @@ const EditProject = ({
       type: 'text',
       value: projectToEdit.googleDriveUrl,
     },
-    // Leaving incase we want to add this back in for updating projects
-    // {
-    //   label: 'HFLA Website URL',
-    //   name: 'hflaWebsiteUrl',
-    //   type: 'text',
-    //   value: projectToEdit.hflaWebsiteUrl,
-    // },
+    {
+      label: 'HFLA Website URL',
+      name: 'hflaWebsiteUrl',
+      type: 'text',
+      value: projectToEdit.hflaWebsiteUrl,
+    },
   ];
 
   // Get project recurring events when component loads
