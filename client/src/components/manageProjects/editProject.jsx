@@ -3,6 +3,7 @@ import EditMeetingTimes from './editMeetingTimes';
 import CreateNewEvent from './createNewEvent';
 import readableEvent from './utilities/readableEvent';
 import ProjectForm from '../ProjectForm';
+import { simpleInputs } from '../data';
 
 import { ReactComponent as EditIcon } from '../../svg/Icon_Edit.svg';
 import { ReactComponent as PlusIcon } from '../../svg/PlusIcon.svg';
@@ -53,61 +54,6 @@ const EditProject = ({
       );
     }
   }, [projectToEdit, regularEvents, setRegularEventsState]);
-
-  // Form inputs.
-  const simpleInputs = [
-    {
-      label: 'Project Name',
-      name: 'name',
-      type: 'text',
-      value: projectToEdit.name,
-    },
-    {
-      label: 'Project Description',
-      name: 'description',
-      type: 'textarea',
-      value: projectToEdit.description,
-    },
-    {
-      label: 'Location',
-      name: 'location',
-      type: 'text',
-      value: /https:\/\/[\w-]*\.?zoom.us\/(j|my)\/[\d\w?=-]+/,
-      errorMessage: 'Please enter a valid Zoom URL',
-      addressValue: '',
-      addressError: 'Invalid address',
-    },
-    {
-      label: 'GitHub Identifier',
-      name: 'githubIdentifier',
-      type: 'text',
-      placeholder: 'Enter GitHub identifier',
-    },
-    {
-      label: 'GitHub URL',
-      name: 'githubUrl',
-      type: 'text',
-      value: projectToEdit.githubUrl,
-    },
-    {
-      label: 'Slack Channel Link',
-      name: 'slackUrl',
-      type: 'text',
-      value: projectToEdit.slackUrl,
-    },
-    {
-      label: 'Google Drive URL',
-      name: 'googleDriveUrl',
-      type: 'text',
-      value: projectToEdit.googleDriveUrl,
-    },
-    {
-      label: 'HFLA Website URL',
-      name: 'hflaWebsiteUrl',
-      type: 'text',
-      value: projectToEdit.hflaWebsiteUrl,
-    },
-  ];
 
   // Get project recurring events when component loads
   useEffect(() => {
