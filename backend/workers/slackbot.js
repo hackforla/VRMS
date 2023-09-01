@@ -9,7 +9,7 @@ module.exports = (fetch) => {
 
   const fetchEvents = async () => {
     try {
-      const res = await fetch('http://localhost:4000/api/events', {
+      const res = await fetch(`http://localhost:${process.env.BACKEND_PORT}/api/events`, {
         headers: {
           'x-customrequired-header': headerToSend,
         },
