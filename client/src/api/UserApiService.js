@@ -46,13 +46,29 @@ class UserApiService {
     const requestOptions = {
       method: 'PATCH',
       headers: this.headers,
-      body: JSON.stringify({ isActive })
-    }
+      body: JSON.stringify({ isActive }),
+    };
 
     try {
       return await fetch(url, requestOptions);
     } catch (err) {
-      console.error('update is-active error', err)
+      console.error('update is-active error', err);
+      alert('server not responding.  Please try again.');
+    }
+  }
+
+  async updateUserDbEmail(userToEdit, email) {
+    const url = `${this.baseUserUrl}${userToEdit._id}`;
+    const requestOptions = {
+      method: 'PATCH',
+      headers: this.headers,
+      body: JSON.stringify({ email }),
+    };
+
+    try {
+      return await fetch(url, requestOptions);
+    } catch (err) {
+      console.error('update use email error', err);
       alert('server not responding.  Please try again.');
     }
   }
