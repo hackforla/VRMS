@@ -11,13 +11,23 @@ const validateEventForm = (vals, projectToEdit) => {
           newErrors = { ...newErrors, name: 'Event name is required' };
         } else if (
           isWordInArrayInString(
-            ['meeting', 'mtg', projectToEdit.name.toLowerCase()],
+            ['meeting', 'mtg'],
             vals[key].toLowerCase()
           )
         ) {
           newErrors = {
             ...newErrors,
-            name: "Event name cannot contain 'meeting' or 'mtg' or the project name",
+            name: "Event name cannot contain 'meeting' or 'mtg'",
+          };
+        } else if (
+          isWordInArrayInString(
+            [projectToEdit.name.toLowerCase()],
+            vals[key].toLowerCase()
+          )
+        ) {
+          newErrors = {
+            ...newErrors,
+            name: `Event name cannot contain the Project Name: '${projectToEdit.name}'`,
           };
         }
         break;
