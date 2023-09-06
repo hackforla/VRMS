@@ -59,10 +59,11 @@ class UserApiService {
 
   async updateUserDbEmail(userToEdit, email) {
     const url = `${this.baseUserUrl}${userToEdit._id}`;
+    const lowercaseEmail = email.toLowerCase();
     const requestOptions = {
       method: 'PATCH',
       headers: this.headers,
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ lowercaseEmail }),
     };
 
     try {
