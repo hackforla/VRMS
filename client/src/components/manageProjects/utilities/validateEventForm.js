@@ -1,5 +1,6 @@
 import validator from 'validator';
 import { isWordInArrayInString } from './../../../utils/stringUtils.js';
+import { el } from 'date-fns/locale';
 
 const validateEventForm = (vals, projectToEdit) => {
   let newErrors = {};
@@ -25,10 +26,14 @@ const validateEventForm = (vals, projectToEdit) => {
             vals[key].toLowerCase()
           )
         ) {
-          newErrors = {
-            ...newErrors,
-            name: `Event name cannot contain the Project Name: '${projectToEdit.name}'`,
-          };
+          if (projectToEdit.name.toLowerCase() === 'onboarding') {
+            // Do nothing, word `onboarding` has been white-listed
+          } else {
+            newErrors = {
+              ...newErrors,
+              name: `Event name cannot contain the Project Name: '${projectToEdit.name}'`,
+            };
+          }
         }
         break;
 
