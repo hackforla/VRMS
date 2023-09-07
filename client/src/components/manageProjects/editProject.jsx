@@ -25,11 +25,11 @@ const EditProject = ({
     name: projectToEdit.name,
     description: projectToEdit.description,
     location: projectToEdit.location,
-    // githubIdentifier: projectToEdit.name,
+    githubIdentifier: projectToEdit.githubIdentifier,
     githubUrl: projectToEdit.githubUrl,
     slackUrl: projectToEdit.slackUrl,
     googleDriveUrl: projectToEdit.googleDriveUrl,
-    // hflaWebsiteUrl: projectToEdit.name,
+    hflaWebsiteUrl: projectToEdit.hflaWebsiteUrl,
   });
 
   // eslint-disable-next-line no-unused-vars
