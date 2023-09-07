@@ -31,6 +31,8 @@ class ProjectApiService {
       githubUrl,
       slackUrl,
       googleDriveUrl,
+      hflaWebsiteUrl,
+      githubIdentifier,
     } = projectData;
     const requestOptions = {
       method: 'POST',
@@ -42,6 +44,8 @@ class ProjectApiService {
         githubUrl,
         slackUrl,
         googleDriveUrl,
+        hflaWebsiteUrl,
+        githubIdentifier,
         projectStatus: 'Active',
       }),
     };
