@@ -1,8 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import {
-  validateEditableField,
-  generateErrorEditableField,
-} from './utilities/validateEditableField';
 import '../../sass/ManageProjects.scss';
 
 const EditableField = ({
@@ -31,12 +27,6 @@ const EditableField = ({
     className: 'editable-field',
     onBlur: () => {
       setEditable(false);
-      if (!validateEditableField(fieldName, fieldValue)) {
-        alert(generateErrorEditableField(fieldName));
-        return;
-      }
-      let trimmedFieldValue = fieldValue.trim();
-      setFieldValue(trimmedFieldValue);
       updateProject(fieldName, fieldValue);
     },
     onChange: ({ target }) => {
@@ -57,7 +47,7 @@ const EditableField = ({
     <div className="editable-field-div">
       <div className="project-edit-title">
         {fieldTitle}
-        {notRestricted && (
+        {notRestricted &&
           <button
             type="button"
             className="project-edit-button"
@@ -67,8 +57,9 @@ const EditableField = ({
           >
             [edit]
           </button>
-        )}
+        }
       </div>
+
       {editable ? (
         <>
           {fieldType === 'textarea' ? (
