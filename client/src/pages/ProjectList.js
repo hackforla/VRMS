@@ -12,6 +12,7 @@ import {
   Button,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
+import TitledBox from '../components/parts/boxes/TitledBox';
 
 const StyledTypography = styled(Typography)({
   textTransform: 'uppercase',
@@ -98,12 +99,7 @@ export default function ProjectList() {
         </Box>
       )}
 
-      <Box sx={{ bgcolor: '#F5F5F5' }}>
-        <Box sx={{ p: 2 }}>
-          <Typography variant="h3">Active Projects</Typography>
-        </Box>
-        <Divider sx={{ borderColor: 'rgba(0,0,0,1)' }} />
-        <Box sx={{ p: 2 }}>
+      <TitledBox title="Active Projects" childrenBoxSx={{ p: 2 }}>
           {projects.map((project) => (
             <Box key={project._id} sx={{ mb: 0.35 }}>
               <StyledTypography
@@ -114,8 +110,7 @@ export default function ProjectList() {
               </StyledTypography>
             </Box>
           ))}
-        </Box>
-      </Box>
+      </TitledBox>
     </Box>
   );
 }
