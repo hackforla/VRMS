@@ -98,20 +98,9 @@ const EditProject = ({
         isEdit={true}
         setFormData={setFormData}
       />
-      <Box sx={{ bgcolor: '#F5F5F5', my: 2 }}>
-        <Box
-          sx={{
-            p: 2,
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <Box>
-            <Typography sx={{ fontSize: '18px', fontWeight: '600' }}>
-              Recurring Events
-            </Typography>
-          </Box>
+
+      <TitledBox title="Recurring Events"
+        badge={
           <Box
             sx={{
               display: 'flex',
@@ -129,32 +118,29 @@ const EditProject = ({
               Add New Event
             </Typography>
           </Box>
-        </Box>
-        <Divider sx={{ borderColor: 'rgba(0,0,0,1)' }} />
-        <Box sx={{ py: 2, px: 4 }}>
-          <div className="event-list">
-            <h2 className="event-alert">{eventAlert}</h2>
-            <ul>
-              {rEvents.map((event) => (
-                // eslint-disable-next-line no-underscore-dangle
-                <li key={`${event.event_id}`}>
-                  <button type="button" onClick={() => setSelectedEvent(event)}>
-                    <div>{event.name}</div>
-                    <div className="event-list-details">
-                      {`${event.dayOfTheWeek}, ${event.startTime} - ${event.endTime}; ${event.eventType}`}
-                      <div className="edit-icon">
-                        <EditIcon cursor="pointer" />
-                      </div>
+        }
+      >
+        <div className="event-list">
+          <h2 className="event-alert">{eventAlert}</h2>
+          <ul>
+            {rEvents.map((event) => (
+              // eslint-disable-next-line no-underscore-dangle
+              <li key={`${event.event_id}`}>
+                <button type="button" onClick={() => setSelectedEvent(event)}>
+                  <div>{event.name}</div>
+                  <div className="event-list-details">
+                    {`${event.dayOfTheWeek}, ${event.startTime} - ${event.endTime}; ${event.eventType}`}
+                    <div className="edit-icon">
+                      <EditIcon cursor="pointer" />
                     </div>
-                    <div className="event-list-description">{`${event.description}`}</div>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-          {/* <div className="display-events"></div> */}
-        </Box>
-      </Box>
+                  </div>
+                  <div className="event-list-description">{`${event.description}`}</div>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </TitledBox>
 
       <TitledBox title="Manually Edit Events Checkin">
         <div className="event-list">
