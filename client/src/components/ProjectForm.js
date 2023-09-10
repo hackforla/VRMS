@@ -13,72 +13,13 @@ import {
   RadioGroup,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import useAuth from "../hooks/useAuth"
 
-/** Project Form Component
- *
- * To be used for creating and updating a project
- * */
-
-const simpleInputs = [
-  {
-    label: 'Project Name',
-    name: 'name',
-    type: 'text',
-    placeholder: 'Enter project name',
-  },
-  {
-    label: 'Project Description',
-    name: 'description',
-    type: 'textarea',
-    placeholder: 'Enter project description',
-    value: /^[a-zA-Z0-9 _.,!"'@#$%^&*()/]{0,250}$/,
-    errorMessage: 'Description is too long, max 250 characters allowed'
-  },
-  {
-    label: 'Location',
-    name: 'location',
-    type: 'text',
-    placeholder: 'Enter location for meeting',
-    value: /https:\/\/[\w-]*\.?zoom.us\/(j|my)\/[\d\w?=-]+/,
-    errorMessage: 'Please enter a valid Zoom URL',
-    addressValue: '',
-    addressError: 'Invalid address'
-
-  },
-  // Leaving incase we want to add this back in for updating projects
-  // {
-  //   label: 'GitHub Identifier',
-  //   name: 'githubIdentifier',
-  //   type: 'text',
-  //   placeholder: 'Enter GitHub identifier',
-  // },
-  {
-    label: 'GitHub URL',
-    name: 'githubUrl',
-    type: 'text',
-    placeholder: 'htttps://github.com/'
-  },
-  {
-    label: 'Slack Channel Link',
-    name: 'slackUrl',
-    type: 'text',
-    placeholder: 'htttps://slack.com/',
-  },
-  {
-    label: 'Google Drive URL',
-    name: 'googleDriveUrl',
-    type: 'text',
-    placeholder: 'htttps://drive.google.com/',
-  },
-  // Leaving incase we want to add this back in for updating projects
-  // {
-  //   label: 'HFLA Website URL',
-  //   name: 'hflaWebsiteUrl',
-  //   type: 'text',
-  //   placeholder: 'htttps://hackforla.org/projects/',
-  // },
-];
+import useAuth from '../hooks/useAuth';
+import ProjectApiService from '../api/ProjectApiService';
+import { ReactComponent as EditIcon } from '../svg/Icon_Edit.svg';
+import { ReactComponent as PlusIcon } from '../svg/PlusIcon.svg';
+import ValidatedTextField from './parts/form/ValidatedTextField';
+import TitledBox from './parts/boxes/TitledBox';
 
 /** STYLES
  *  -most TextField and InputLabel styles are controlled by the theme
