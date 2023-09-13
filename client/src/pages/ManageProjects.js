@@ -43,7 +43,7 @@ const ManageProjects = () => {
     const eventsRes = await EventsApiService.fetchEvents();
     setRegularEvents(eventsRes);
     setEventsLoading(false);
-  }, [recurringEventsApiService]);
+  }, [EventsApiService]);
 
   const fetchRecurringEvents = useCallback(async () => {
     setEventsLoading(true);
@@ -100,7 +100,7 @@ const ManageProjects = () => {
       );
       fetchRegularEvents();
     },
-    [recurringEventsApiService, fetchRegularEvents]
+    [fetchRegularEvents, EventsApiService]
   );
 
   useEffect(() => {
