@@ -19,6 +19,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
+    localStorage.removeItem('token')
     const res = await authApi.fetchLogout();
 
     if (!res.ok) {

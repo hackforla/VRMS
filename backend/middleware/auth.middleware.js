@@ -35,8 +35,40 @@ function verifyCookie(req, res, next) {
   });
 }
 
+function protect(req, res, next) {
+  
+  const bearer = req.headers.authorization;
+
+  if(!bearer) {
+    res.status(401)
+    res.json({message: "You aren't authorized to do this."})
+    return
+  }
+
+  const [ , token] = bearer.split(' ');
+
+  if (!token) {
+    res.status(401)
+    res.json({message: "You don't have a valid token."})
+    return
+  }
+
+  try {
+    const user = jwt.verify(token, CONFIG_AUTH.SECRET)
+    req.user = user
+    next()
+  } catch(e) {
+    console.log(e)
+    res.status(401)
+    res.json({message: "You need a valid token, try again."})
+    return
+  }
+
+}
+
 const AuthUtil = {
   verifyToken,
   verifyCookie,
+  protect
 };
 module.exports = AuthUtil;

@@ -151,6 +151,7 @@ UserController.signin = function (req, res) {
         return res.sendStatus(401);
       }
       const jsonToken = generateAccessToken(user, auth_origin);
+    
       EmailController.sendLoginLink(
         req.body.email,
         req.body.auth_origin,
@@ -159,7 +160,9 @@ UserController.signin = function (req, res) {
         req.cookie,
         origin,
       );
-      return res.sendStatus(200);
+       res.status(200)
+       res.json({ token: jsonToken})
+       return
     })
     .catch((err) => {
       console.log(err);

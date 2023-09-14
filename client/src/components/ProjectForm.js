@@ -100,9 +100,13 @@ export default function ProjectForm({
 
   // Handles POST request found in api/ProjectApiService.
   const submitNewProject = async (data) => {
+    const token = localStorage.getItem('token')
+    if(!token) {
+      return null
+    }
     const projectApi = new ProjectApiService();
     try {
-      const id = await projectApi.create(data);
+      const id = await projectApi.create(data, token);
       history.push(`/projects/${id}`);
     } catch (errors) {
       console.error(errors);

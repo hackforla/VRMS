@@ -39,7 +39,9 @@ export async function checkAuth(email, auth_origin) {
       headers: HEADERS,
       body: JSON.stringify({ email: email, auth_origin: auth_origin }),
     });
-    return response.status === 200;
+   
+    const token = await response.json()
+    return token
   } catch (error) {
     console.log('User is not authorized in app');
     console.log(error);

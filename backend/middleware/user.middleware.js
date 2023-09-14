@@ -15,7 +15,8 @@ function isAdminByEmail(req, res, next) {
       return res.sendStatus(400);
     } else {
       const role = user.accessLevel;
-      if (req.get('origin').includes('3001') || role === 'admin' || user.managedProjects.length > 0) {
+      // removed the check for origin === 3001 it was hanging up in Postman
+      if (role === 'admin' || user.managedProjects.length > 0) {
         next();
       } else {
         next(res.sendStatus(401));

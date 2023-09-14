@@ -23,7 +23,7 @@ class ProjectApiService {
   }
 
   // Handles the POST request and returns the projects ID.
-  async create(projectData) {
+  async create(projectData, token) {
     const {
       name,
       description,
@@ -36,7 +36,10 @@ class ProjectApiService {
     } = projectData;
     const requestOptions = {
       method: 'POST',
-      headers: this.headers,
+      headers: {
+        ...this.headers,
+        'Authorization': `Bearer ${token}`
+      },
       body: JSON.stringify({
         name,
         description,

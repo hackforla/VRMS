@@ -60,6 +60,8 @@ const Auth = () => {
         }
 
         const isAuth = await checkAuth(email, LOG_IN);
+        localStorage.setItem('token', isAuth.token);
+        
         if (isAuth) {
           history.push('/emailsent');
         } else {
