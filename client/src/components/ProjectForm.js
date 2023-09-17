@@ -63,7 +63,7 @@ export default function ProjectForm({
   formData,
   projectToEdit,
   isEdit,
-  setFormData
+  setFormData,
 }) {
   const history = useHistory();
 
@@ -72,7 +72,6 @@ export default function ProjectForm({
   // State to track the toggling from Project view to Edit Project View via edit icon.
   const [editMode, setEditMode] = useState(false);
   const { auth } = useAuth();
-
   /**
    * React Hook Forms
    *  - register
@@ -172,7 +171,7 @@ export default function ProjectForm({
         }}
         onClick={handleEditMode}
       >
-        <EditIcon style={{ p: 1}} />
+        <EditIcon style={{ p: 1 }} />
         <Typography sx={{ p: 1, fontSize: '14px', fontWeight: '600' }}>
           {editMode ? 'Cancel' : 'Edit Mode'}
         </Typography>
@@ -244,7 +243,7 @@ export default function ProjectForm({
                 locationRadios={locationRadios}
                 errors={errors}
                 input={input}
-            />
+              />
             ))}
           </form>
           <Box>
@@ -253,7 +252,13 @@ export default function ProjectForm({
                 <StyledButton
                   type="submit"
                   form="project-form"
-                  variant={!isEdit ? 'secondary' : !editMode ? 'contained' : 'secondary'}
+                  variant={
+                    !isEdit
+                      ? 'secondary'
+                      : !editMode
+                      ? 'contained'
+                      : 'secondary'
+                  }
                   cursor="pointer"
                   disabled={isEdit ? !editMode : false}
                 >
@@ -270,6 +275,16 @@ export default function ProjectForm({
                   Close
                 </StyledButton>
               </Grid>
+              {editMode && <Grid item xs="auto" sx={{ marginTop: '15px'}}>
+                <StyledButton
+                  component={Link}
+                  color="error"
+                  variant="outlined"
+                  cursor="pointer"
+                >
+                  Delete Project
+                </StyledButton>
+              </Grid>}
             </Grid>
           </Box>
         </Box>
