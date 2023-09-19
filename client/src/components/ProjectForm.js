@@ -20,6 +20,7 @@ import ProjectApiService from '../api/ProjectApiService';
 import { ReactComponent as EditIcon } from '../svg/Icon_Edit.svg';
 import { ReactComponent as PlusIcon } from '../svg/PlusIcon.svg';
 import ValidatedTextField from './parts/form/ValidatedTextField';
+import TitledBox from './parts/boxes/TitledBox';
 
 /** STYLES
  *  -most TextField and InputLabel styles are controlled by the theme
@@ -172,7 +173,7 @@ export default function ProjectForm({
         }}
         onClick={handleEditMode}
       >
-        <EditIcon style={{ p: 1}} />
+        <EditIcon style={{ p: 1 }} />
         <Typography sx={{ p: 1, fontSize: '14px', fontWeight: '600' }}>
           {editMode ? 'Cancel' : 'Edit Mode'}
         </Typography>
@@ -217,63 +218,55 @@ export default function ProjectForm({
       <Box sx={{ textAlign: 'center' }}>
         <Typography variant="h1">Project Management</Typography>
       </Box>
-      <Box sx={{ bgcolor: '#F5F5F5' }}>
-        <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between' }}>
-          <Box>
-            <Typography sx={{ fontSize: '18px', fontWeight: '600' }}>
-              {editMode ? 'Editing Project' : 'Project Information'}
-            </Typography>
-          </Box>
-          {isEdit ? editIcon() : addIcon()}
-        </Box>
-        <Divider sx={{ borderColor: 'rgba(0,0,0,1)' }} />
-        <Box sx={{ py: 2, px: 4 }}>
-          <form
-            id="project-form"
-            onSubmit={handleSubmit((data) => {
-              isEdit ? submitEditProject(data) : submitNewProject(data);
-            })}
-          >
-            {arr.map((input) => (
-              <ValidatedTextField
-                key={input.name}
-                register={register}
-                isEdit={isEdit}
-                editMode={editMode}
-                locationType={locationType}
-                locationRadios={locationRadios}
-                errors={errors}
-                input={input}
+      <TitledBox
+        title={editMode ? 'Editing Project' : 'Project Information'}
+        badge={isEdit ? editIcon() : addIcon()}
+      >
+        <form
+          id="project-form"
+          onSubmit={handleSubmit((data) => {
+            isEdit ? submitEditProject(data) : submitNewProject(data);
+          })}
+        >
+          {arr.map((input) => (
+            <ValidatedTextField
+              key={input.name}
+              register={register}
+              isEdit={isEdit}
+              editMode={editMode}
+              locationType={locationType}
+              locationRadios={locationRadios}
+              errors={errors}
+              input={input}
             />
-            ))}
-          </form>
-          <Box>
-            <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
-              <Grid item xs="auto">
-                <StyledButton
-                  type="submit"
-                  form="project-form"
-                  variant={!isEdit ? 'secondary' : !editMode ? 'contained' : 'secondary'}
-                  cursor="pointer"
-                  disabled={isEdit ? !editMode : false}
-                >
-                  Save
-                </StyledButton>
-              </Grid>
-              <Grid item xs="auto">
-                <StyledButton
-                  component={Link}
-                  to="/projects"
-                  variant="contained"
-                  cursor="pointer"
-                >
-                  Close
-                </StyledButton>
-              </Grid>
+          ))}
+        </form>
+        <Box>
+          <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
+            <Grid item xs="auto">
+              <StyledButton
+                type="submit"
+                form="project-form"
+                variant={!isEdit ? 'secondary' : !editMode ? 'contained' : 'secondary'}
+                cursor="pointer"
+                disabled={isEdit ? !editMode : false}
+              >
+                Save
+              </StyledButton>
             </Grid>
-          </Box>
+            <Grid item xs="auto">
+              <StyledButton
+                component={Link}
+                to="/projects"
+                variant="contained"
+                cursor="pointer"
+              >
+                Close
+              </StyledButton>
+            </Grid>
+          </Grid>
         </Box>
-      </Box>
+      </TitledBox>
     </Box>
   ) : (
     <Redirect to="/login" />

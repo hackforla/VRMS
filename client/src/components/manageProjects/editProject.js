@@ -4,6 +4,7 @@ import CreateNewEvent from './createNewEvent';
 import readableEvent from './utilities/readableEvent';
 import ProjectForm from '../ProjectForm';
 import { simpleInputs } from '../data';
+import TitledBox from '../parts/boxes/TitledBox';
 
 import { ReactComponent as EditIcon } from '../../svg/Icon_Edit.svg';
 import { ReactComponent as PlusIcon } from '../../svg/PlusIcon.svg';
@@ -49,7 +50,7 @@ const EditProject = ({
         regularEvents
           // eslint-disable-next-line no-underscore-dangle
           .filter((e) => e?.project?._id === projectToEdit._id)
-          .map((item) => ({...item, ...readableEvent(item), raw: item}))
+          .map((item) => ({ ...item, ...readableEvent(item), raw: item }))
           .reverse() // sorts most recent events first
       );
     }
@@ -97,20 +98,9 @@ const EditProject = ({
         isEdit={true}
         setFormData={setFormData}
       />
-      <Box sx={{ bgcolor: '#F5F5F5', my: 2 }}>
-        <Box
-          sx={{
-            p: 2,
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <Box>
-            <Typography sx={{ fontSize: '18px', fontWeight: '600' }}>
-              Recurring Events
-            </Typography>
-          </Box>
+
+      <TitledBox title="Recurring Events"
+        badge={
           <Box
             sx={{
               display: 'flex',
@@ -128,71 +118,50 @@ const EditProject = ({
               Add New Event
             </Typography>
           </Box>
-        </Box>
-        <Divider sx={{ borderColor: 'rgba(0,0,0,1)' }} />
-        <Box sx={{ py: 2, px: 4 }}>
-          <div className="event-list">
-            <h2 className="event-alert">{eventAlert}</h2>
-            <ul>
-              {rEvents.map((event) => (
-                // eslint-disable-next-line no-underscore-dangle
-                <li key={`${event.event_id}`}>
-                  <button type="button" onClick={() => setSelectedEvent(event)}>
-                    <div>{event.name}</div>
-                    <div className="event-list-details">
-                      {`${event.dayOfTheWeek}, ${event.startTime} - ${event.endTime}; ${event.eventType}`}
-                      <div className="edit-icon">
-                        <EditIcon cursor="pointer" />
-                      </div>
+        }
+      >
+        <div className="event-list">
+          <h2 className="event-alert">{eventAlert}</h2>
+          <ul>
+            {rEvents.map((event) => (
+              // eslint-disable-next-line no-underscore-dangle
+              <li key={`${event.event_id}`}>
+                <button type="button" onClick={() => setSelectedEvent(event)}>
+                  <div>{event.name}</div>
+                  <div className="event-list-details">
+                    {`${event.dayOfTheWeek}, ${event.startTime} - ${event.endTime}; ${event.eventType}`}
+                    <div className="edit-icon">
+                      <EditIcon cursor="pointer" />
                     </div>
-                    <div className="event-list-description">{`${event.description}`}</div>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-          {/* <div className="display-events"></div> */}
-        </Box>
-      </Box>
+                  </div>
+                  <div className="event-list-description">{`${event.description}`}</div>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </TitledBox>
 
-      <Box sx={{ bgcolor: '#F5F5F5', my: 3 }}>
-        <Box
-          sx={{
-            p: 2,
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <Box>
-            <Typography sx={{ fontSize: '18px', fontWeight: '600' }}>
-              Manually Edit Events Checkin
-            </Typography>
-          </Box>
-        </Box>
-        <Divider sx={{ borderColor: 'rgba(0,0,0,1)' }} />
-        <Box sx={{ py: 2, px: 4 }}>
-          <div className="event-list">
-            <h2 className="event-alert">{eventAlert}</h2>
-            <ul>
-              {regularEventsState.map((event, index) => (
-                
-                // eslint-dis able-next-line no-underscore-dangle
-                <RegularEvent event={event} key={event._id} updateRegularEvent={updateRegularEvent} />
-              ))}              
-            </ul>
-          </div>
-        </Box>
-        
-      </Box>
+      <TitledBox title="Manually Edit Events Checkin">
+        <div className="event-list">
+          <h2 className="event-alert">{eventAlert}</h2>
+          <ul>
+            {regularEventsState.map((event, index) => (
+
+              // eslint-dis able-next-line no-underscore-dangle
+              <RegularEvent event={event} key={event._id} updateRegularEvent={updateRegularEvent} />
+            ))}
+          </ul>
+        </div>
+      </TitledBox>
     </Box>
   );
 };
 
-function RegularEvent({event, updateRegularEvent}) {
+function RegularEvent({ event, updateRegularEvent }) {
   return (
     <li key={`${event.event_id}`}>
-      <button type="button" onClick={async () => updateRegularEvent({checkInReady: !event.checkInReady}, event.event_id)}>
+      <button type="button" onClick={async () => updateRegularEvent({ checkInReady: !event.checkInReady }, event.event_id)}>
         <div>{event.name}</div>
         <div className="event-list-details">
           {`${event.dayOfTheWeek}, ${event.startTime} - ${event.endTime}; ${event.eventType}`} {`${new Date(event.raw.startTime).toLocaleDateString()}`}
@@ -202,5 +171,7 @@ function RegularEvent({event, updateRegularEvent}) {
     </li>
   )
 }
+
+
 
 export default EditProject;
