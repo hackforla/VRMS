@@ -8,7 +8,6 @@ import {
   Box,
   CircularProgress,
   Typography,
-  Divider,
   Button,
 } from '@mui/material';
 import { Link } from 'react-router-dom';

@@ -1,6 +1,5 @@
 import validator from 'validator';
 import { isWordInArrayInString } from './../../../utils/stringUtils.js';
-import { el } from 'date-fns/locale';
 
 const validateEventForm = (vals, projectToEdit) => {
   let newErrors = {};
