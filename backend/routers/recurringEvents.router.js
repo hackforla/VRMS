@@ -4,6 +4,7 @@ const cors = require('cors');
 
 const { RecurringEvent } = require('../models/recurringEvent.model');
 const { RecurringEventController } = require('../controllers/');
+const { AuthUtil } = require('../middleware');
 
 // GET /api/recurringevents/
 router.get('/', cors(), (req, res) => {
@@ -34,10 +35,10 @@ router.get('/:id', (req, res) => {
         });
 });
 
-router.post('/', RecurringEventController.create);
+router.post('/', AuthUtil.verifyCookie, RecurringEventController.create);
 
-router.patch('/:RecurringEventId', RecurringEventController.update);
+router.patch('/:RecurringEventId', AuthUtil.verifyCookie, RecurringEventController.update);
 
-router.delete('/:RecurringEventId', RecurringEventController.destroy);
+router.delete('/:RecurringEventId', AuthUtil.verifyCookie, RecurringEventController.destroy);
 
 module.exports = router;

@@ -25,6 +25,7 @@ EventController.event_by_id = async function (req, res) {
 };
 
 EventController.create = async function (req, res) {
+  console.log("PROJ", req.cookies)
   const { body } = req;
 
   try {
