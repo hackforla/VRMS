@@ -81,6 +81,7 @@ describe('READ', () => {
       const res = await request
         .post('/api/projects/')
         .set(headers)
+        .set('Cookie', [`token=${token}`])
         .send(submittedData);
       expect(res.status).toBe(201);
 
@@ -95,7 +96,25 @@ describe('READ', () => {
 });
 
 describe('UPDATE', () => {
-  test('Update a project with PATCH to /api/projects/:id', async (done) => {
+  beforeAll(async () => {
+    const submittedData = {
+      name: {
+        firstName: 'test',
+        lastName: 'user',
+      },
+      email: 'newtest@test.com',
+    };
+    const user = await User.create(submittedData);
+    const auth_origin = 'TEST';
+    token = jwt.sign(
+      { id: user.id, role: user.accessLevel, auth_origin },
+      CONFIG_AUTH.SECRET,
+      {
+        expiresIn: `${CONFIG_AUTH.TOKEN_EXPIRATION_SEC}s`,
+      },
+    );
+  })
+  test('Update a project with PATCH to /api/projects/:id without a token', async (done) => {
     // Test Data
     const submittedData = {
       name: 'projectName',
@@ -105,6 +124,7 @@ describe('UPDATE', () => {
     const res = await request
       .post('/api/projects/')
       .set(headers)
+      .set('Cookie', [`token=${token}`])
       .send(submittedData);
     expect(res.status).toBe(201);
 
@@ -117,11 +137,44 @@ describe('UPDATE', () => {
       .put(`/api/projects/${res.body._id}`)
       .set(headers)
       .send(updatedDataPayload);
-    expect(res2.status).toBe(200);
+    expect(res2.status).toBe(401);
 
     // Get project
     const res3 = await request.get(`/api/projects/${res.body._id}`)
     .set(headers);
+    expect(res3.status).toBe(200);
+    done();
+  });
+  test('Update a project with PATCH to /api/projects/:id with a token', async (done) => {
+    // Test Data
+    const submittedData = {
+      name: 'projectName',
+    };
+
+    // Submit a project
+    const res = await request
+      .post('/api/projects/')
+      .set(headers)
+      .set('Cookie', [`token=${token}`])
+      .send(submittedData);
+    expect(res.status).toBe(201);
+
+    const updatedDataPayload = {
+      name: 'updatedProjectName',
+    };
+
+    // Update project
+    const res2 = await request
+      .put(`/api/projects/${res.body._id}`)
+      .set(headers)
+      .set('Cookie', [`token=${token}`])
+      .send(updatedDataPayload);
+    expect(res2.status).toBe(200)
+
+    // Get project
+    const res3 = await request.get(`/api/projects/${res.body._id}`)
+    .set(headers)
+    .set('Cookie', [`token=${token}`])
     expect(res3.status).toBe(200);
 
     const APIData = res3.body;
