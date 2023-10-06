@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import { isValidToken } from '../../services/user.service';
-import {authLevelRedirect} from '../../utils/authUtils'
+import { authLevelRedirect } from '../../utils/authUtils';
 
 import '../../sass/MagicLink.scss';
 import useAuth from '../../hooks/useAuth';
@@ -17,47 +17,59 @@ const HandleAuth = (props) => {
     const params = new URLSearchParams(search);
     const api_token = params.get('token');
 
-    if(!api_token) return;
+    if (!api_token) return;
     isValidToken(api_token).then((isValid) => {
-      setMagicLink(isValid)
+      setMagicLink(isValid);
     });
   }, [props.location.search]);
 
   // Step 2: Refresh user auth (requires valid Magic Link)
   useEffect(() => {
-    if(!isMagicLinkValid) return;
-    if(!auth?.isError) return;
+    if (!isMagicLinkValid) return;
+    if (!auth?.isError) return;
 
     refreshAuth();
-  },[isMagicLinkValid, refreshAuth, auth])
+  }, [isMagicLinkValid, refreshAuth, auth]);
 
   // Step 3: Set IsLoaded value to render Component
   useEffect(() => {
-    if(!isMagicLinkValid) {
+    if (!isMagicLinkValid) {
       setIsLoaded(true);
       return;
-    };
+    }
 
-    if(!auth || auth.isError) return;
-    
+    if (!auth || auth.isError) return;
+
     setIsLoaded(true);
-    },[isMagicLinkValid, setIsLoaded, auth])
+  }, [isMagicLinkValid, setIsLoaded, auth]);
 
-  if(!isLoaded) 
-    return (
-      <div>Loading...</div>
-    );
+  if (!isLoaded) return <div>Loading...</div>;
+
+  const Delayed = ({ children, waitBeforeShow = 500 }) => {
+    const [isShown, setIsShown] = useState(false);
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setIsShown(true);
+      }, waitBeforeShow);
+
+      return () => clearTimeout(timer);
+    }, [waitBeforeShow]);
+
+    return isShown ? children : null;
+  };
+
+  let loginRedirect = '';
 
   if (auth?.user) {
-    const loginRedirect = authLevelRedirect(auth.user);
-    return (
-      <Redirect to={loginRedirect} />
-    );
+    loginRedirect = authLevelRedirect(auth.user);
   }
 
   return (
     <div className="flex-container">
-      <div>Sorry, the link is not valid anymore.</div>
+      <Delayed waitBeforeShow={1000}>
+        <div>Sorry, the link is not valid anymore.</div>
+      </Delayed>
+      {auth?.user && <Redirect to={loginRedirect} /> /* Redirect to /welcome */}
     </div>
   );
 };
