@@ -9,7 +9,7 @@ import TitledBox from '../parts/boxes/TitledBox';
 import { ReactComponent as EditIcon } from '../../svg/Icon_Edit.svg';
 import { ReactComponent as PlusIcon } from '../../svg/PlusIcon.svg';
 
-import { Typography, Box, Divider } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 
 // Need to hold user state to check which type of user they are and conditionally render editing fields in this component
 // for user level block access to all except for the ones checked
