@@ -12,7 +12,8 @@ export const simpleInputs = [
     type: 'textarea',
     placeholder: 'Enter project description',
     value: /^[a-zA-Z0-9].{0,250}$/,
-    errorMessage: 'Description must start with alphanumeric characters, 250 char limit'
+    errorMessage:
+      'Description must start with alphanumeric characters, 250 char limit',
   },
   {
     label: 'Location',
@@ -34,24 +35,27 @@ export const simpleInputs = [
     label: 'GitHub URL',
     name: 'githubUrl',
     type: 'text',
-    placeholder: 'htttps://github.com/',
+    placeholder: 'https://github.com/',
   },
   {
     label: 'Slack Channel Link',
     name: 'slackUrl',
     type: 'text',
-    placeholder: 'htttps://slack.com/',
+    placeholder: 'https://slack.com/',
   },
   {
     label: 'Google Drive URL',
     name: 'googleDriveUrl',
     type: 'text',
-    placeholder: 'htttps://drive.google.com/',
+    placeholder: 'https://drive.google.com/',
+    validate: function (value) {
+      return value.startsWith('https://drive.google.com/');
+    },
   },
   {
     label: 'HFLA Website URL',
     name: 'hflaWebsiteUrl',
     type: 'text',
-    placeholder: 'htttps://hackforla.org/projects/',
+    placeholder: 'https://hackforla.org/projects/',
   },
 ];
