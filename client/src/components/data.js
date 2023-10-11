@@ -55,3 +55,36 @@ export const simpleInputs = [
     placeholder: 'htttps://hackforla.org/projects/',
   },
 ];
+
+export const additionalInputsForEdit = [
+  {
+    label: 'Partners',
+    name: 'partners',
+    type: 'text',
+    placeholder: 'partners',
+  },
+  {
+    label: 'Managed by Users',
+    name: 'mangedByUsers',
+    type: 'text',
+    placeholder: 'Managed by Users'
+  },
+  {
+    label: 'Project Status',
+    name: 'projectStatus',
+    type: 'text',
+    placeholder: 'Project Status'
+  },
+   {
+    label: 'Google Drive ID',
+    name: 'googleDriveId',
+    type: 'text',
+    placeholder: 'htttps://drive.google.com/',
+  },
+  {
+    label: 'Created at',
+    name: 'createdAt',
+    type: 'text',
+    placeholder: 'Created At'
+  }
+]

@@ -3,7 +3,7 @@ import EditMeetingTimes from './editMeetingTimes';
 import CreateNewEvent from './createNewEvent';
 import readableEvent from './utilities/readableEvent';
 import ProjectForm from '../ProjectForm';
-import { simpleInputs } from '../data';
+import { simpleInputs, additionalInputsForEdit } from '../data';
 import TitledBox from '../parts/boxes/TitledBox';
 
 import { ReactComponent as EditIcon } from '../../svg/Icon_Edit.svg';
@@ -92,7 +92,7 @@ const EditProject = ({
         />
       </div>
       <ProjectForm
-        arr={simpleInputs}
+        arr={[...simpleInputs, ...additionalInputsForEdit]}
         formData={formData}
         projectToEdit={projectToEdit}
         isEdit={true}
