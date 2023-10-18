@@ -5,6 +5,7 @@ export const simpleInputs = [
     name: 'name',
     type: 'text',
     placeholder: 'Enter project name',
+    disabled: false
   },
   {
     label: 'Project Description',
@@ -12,7 +13,8 @@ export const simpleInputs = [
     type: 'textarea',
     placeholder: 'Enter project description',
     value: /^[a-zA-Z0-9].{0,250}$/,
-    errorMessage: 'Description must start with alphanumeric characters, 250 char limit'
+    errorMessage: 'Description must start with alphanumeric characters, 250 char limit',
+    disabled: false
   },
   {
     label: 'Location',
@@ -23,36 +25,42 @@ export const simpleInputs = [
     errorMessage: 'Please enter a valid Zoom URL',
     addressValue: '',
     addressError: 'Invalid address',
+    disabled: false
   },
   {
     label: 'GitHub Identifier',
     name: 'githubIdentifier',
     type: 'text',
     placeholder: 'Enter GitHub identifier',
+    disabled: false
   },
   {
     label: 'GitHub URL',
     name: 'githubUrl',
     type: 'text',
     placeholder: 'htttps://github.com/',
+    disabled: false
   },
   {
     label: 'Slack Channel Link',
     name: 'slackUrl',
     type: 'text',
     placeholder: 'htttps://slack.com/',
+    disabled: false
   },
   {
     label: 'Google Drive URL',
     name: 'googleDriveUrl',
     type: 'text',
     placeholder: 'htttps://drive.google.com/',
+    disabled: false
   },
   {
     label: 'HFLA Website URL',
     name: 'hflaWebsiteUrl',
     type: 'text',
     placeholder: 'htttps://hackforla.org/projects/',
+    disabled: false
   },
 ];
 
@@ -62,29 +70,34 @@ export const additionalInputsForEdit = [
     name: 'partners',
     type: 'text',
     placeholder: 'partners',
+    disabled: false
   },
   {
     label: 'Managed by Users',
-    name: 'mangedByUsers',
+    name: 'managedByUsers',
     type: 'text',
-    placeholder: 'Managed by Users'
+    placeholder: 'Managed by Users',
+    disabled: false
   },
   {
     label: 'Project Status',
     name: 'projectStatus',
     type: 'text',
-    placeholder: 'Project Status'
+    placeholder: 'Project Status',
+    disabled: false
   },
    {
     label: 'Google Drive ID',
     name: 'googleDriveId',
     type: 'text',
     placeholder: 'htttps://drive.google.com/',
+    disabled: false
   },
   {
-    label: 'Created at',
-    name: 'createdAt',
+    label: 'Created Date',
+    name: 'createdDate',
     type: 'text',
-    placeholder: 'Created At'
+    placeholder: 'Created Date',
+    disabled: true
   }
 ]
