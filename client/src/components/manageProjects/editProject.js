@@ -3,7 +3,7 @@ import EditMeetingTimes from './editMeetingTimes';
 import CreateNewEvent from './createNewEvent';
 import readableEvent from './utilities/readableEvent';
 import ProjectForm from '../ProjectForm';
-import { simpleInputs } from '../data';
+import { simpleInputs, additionalInputsForEdit } from '../data';
 import TitledBox from '../parts/boxes/TitledBox';
 
 import { ReactComponent as EditIcon } from '../../svg/Icon_Edit.svg';
@@ -31,6 +31,11 @@ const EditProject = ({
     slackUrl: projectToEdit.slackUrl,
     googleDriveUrl: projectToEdit.googleDriveUrl,
     hflaWebsiteUrl: projectToEdit.hflaWebsiteUrl,
+    partners: projectToEdit.partners,
+    managedByUsers: projectToEdit.managedByUsers,
+    projectStatus: projectToEdit.projectStatus,
+    googleDriveId: projectToEdit.googleDriveId,
+    createdDate: new Date(projectToEdit.createdDate)
   });
 
   // eslint-disable-next-line no-unused-vars
@@ -92,7 +97,7 @@ const EditProject = ({
         />
       </div>
       <ProjectForm
-        arr={simpleInputs}
+        arr={[...simpleInputs, ...additionalInputsForEdit]}
         formData={formData}
         projectToEdit={projectToEdit}
         isEdit={true}
