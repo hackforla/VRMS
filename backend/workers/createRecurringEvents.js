@@ -63,13 +63,13 @@ module.exports = (cron, fetch) => {
 
                 if (eventExists) {
                     //Do nothing
-                    console.log("Not going to run ceateEvent");
+                    console.log("➖ Not going to run ceateEvent");
                 } else {
                     // Create new event
                     const eventToCreate = generateEventData(filteredEvent);
                     
                     const created = await createEvent(eventToCreate);
-                    console.log(created);
+                    console.log("➕", created);
                 };
             };
         };
