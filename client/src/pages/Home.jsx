@@ -49,7 +49,7 @@ const Home = () => {
         <h2>Volunteer Relationship Management System</h2>
       </div>
 
-      {events && events.length >= 1 && (
+      {events && events.length > 0 ? (
         <div className="meeting-select-container">
           <form
             className="form-select-meeting"
@@ -85,21 +85,25 @@ const Home = () => {
             </div>
           </form>
         </div>
-      )}
+      ):(
 
       <div className="home-buttons">
         {/* If no events with checkInReady: true */}
-        {events.length === 0 && <CreateNewProfileButton />}
-
+        {/* If no meetings available*/}
+        <p>No meetings available</p>
+        <CreateNewProfileButton />
+      </div>
+      )}  
         {/* If any events with checkInReady: true */}
         {events.length > 0 && (
-          <CheckInButtons
-            disabled={selectedEvent === ''}
-            event={selectedEvent}
-            events={events}
-          />
+          <div className="home-buttons">
+            <CheckInButtons
+              disabled={selectedEvent === ''}
+              event={selectedEvent}
+              events={events}
+            />
+          </div>  
         )}
-      </div>
     </div>
   );
 };
