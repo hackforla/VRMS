@@ -90,7 +90,7 @@ const Home = () => {
       <div className="home-buttons">
         {/* If no events with checkInReady: true */}
         {/* If no meetings available*/}
-        <p>No meetings available</p>
+        <h4>No meetings available</h4>
         <CreateNewProfileButton />
       </div>
       )}  
