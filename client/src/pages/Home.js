@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import CheckInButtons from '../components/presentational/CheckInButtons';
 import CreateNewProfileButton from '../components/presentational/CreateNewProfileButton';
 import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend } from '../utils/globalSettings';
-import { CircularProgress, Box } from '@mui/material';
+import { CircularProgress, Box, Typography } from '@mui/material';
 
 import '../sass/Home.scss';
 
@@ -43,25 +43,25 @@ const Home = () => {
   }
 
   return (
-    <div className="home">
-      <div className="home-headers">
-        <h1>VRMS</h1>
-        <h2>Volunteer Relationship Management System</h2>
-      </div>
+    <Box className="home">
+      <Box className="home-headers">
+        <Typography variant='h1' sx={{fontSize: '7em', lineHeight: '0.85em', letterSpacing: '0.05em' }}>VRMS</Typography>
+        <Typography variant='h2' sx={{fontSize: '2.8em', lineHeight: '1.05em', letterSpacing: '0.025em'}}>Volunteer Relationship Management System</Typography>
+      </Box>
 
       {events && events.length > 0 ? (
-        <div className="meeting-select-container">
+        <Box className="meeting-select-container">
           <form
             className="form-select-meeting"
             autoComplete="off"
             onSubmit={(e) => e.preventDefault()}
           >
-            <div className="form-row">
-              <div className="form-input-select">
+            <Box className="form-row">
+              <Box className="form-input-select">
                 <label htmlFor={'meeting-checkin'}>
                   Select a meeting to check-in:
                 </label>
-                <div className="radio-buttons">
+                <Box className="radio-buttons">
                   <select
                     name={'meeting-checkin'}
                     className="select-meeting-dropdown"
@@ -80,31 +80,31 @@ const Home = () => {
                       );
                     })}
                   </select>
-                </div>
-              </div>
-            </div>
+                </Box>
+              </Box>
+            </Box>
           </form>
-        </div>
+        </Box>
       ):(
 
-      <div className="home-buttons">
+      <Box className="home-buttons">
         {/* If no events with checkInReady: true */}
         {/* If no meetings available*/}
-        <h4>No meetings available</h4>
+        <Typography variant='h4' sx={{fontSize: '2em'}}>No meetings available</Typography>
         <CreateNewProfileButton />
-      </div>
+      </Box>
       )}  
         {/* If any events with checkInReady: true */}
         {events.length > 0 && (
-          <div className="home-buttons">
+          <Box className="home-buttons">
             <CheckInButtons
               disabled={selectedEvent === ''}
               event={selectedEvent}
               events={events}
             />
-          </div>  
+          </Box>  
         )}
-    </div>
+    </Box>
   );
 };
 
