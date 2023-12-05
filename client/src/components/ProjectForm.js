@@ -20,6 +20,7 @@ import { ReactComponent as EditIcon } from '../svg/Icon_Edit.svg';
 import { ReactComponent as PlusIcon } from '../svg/PlusIcon.svg';
 import ValidatedTextField from './parts/form/ValidatedTextField';
 import TitledBox from './parts/boxes/TitledBox';
+import ChangesModal from './ChangesModal';
 
 /** STYLES
  *  -most TextField and InputLabel styles are controlled by the theme
@@ -27,7 +28,7 @@ import TitledBox from './parts/boxes/TitledBox';
  *  -the rest are inline
  */
 
-const StyledButton = styled(Button)(({ theme }) => ({
+export const StyledButton = styled(Button)(({ theme }) => ({
   width: '150px',
 }));
 
@@ -72,6 +73,21 @@ export default function ProjectForm({
   // State to track the toggling from Project view to Edit Project View via edit icon.
   const [editMode, setEditMode] = useState(false);
   const { auth } = useAuth();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleOpen = () => setIsModalOpen(true)
+  const handleClose = () => setIsModalOpen(false)
+
+  const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
   /**
    * React Hook Forms
@@ -123,6 +139,8 @@ export default function ProjectForm({
     setFormData(data);
     setEditMode(false);
   };
+
+
 
   // ----------------- Handles and Toggles -----------------
 
@@ -221,6 +239,13 @@ export default function ProjectForm({
         title={editMode ? 'Editing Project' : 'Project Information'}
         badge={isEdit ? editIcon() : addIcon()}
       >
+       <ChangesModal 
+        open={isModalOpen} 
+        onClose={handleClose} 
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description" 
+        handleClose={handleClose}
+        />
         <form
           id="project-form"
           onSubmit={handleSubmit((data) => {
@@ -255,10 +280,9 @@ export default function ProjectForm({
             </Grid>
             <Grid item xs="auto">
               <StyledButton
-                component={Link}
-                to="/projects"
                 variant="contained"
                 cursor="pointer"
+                onClick={handleOpen}
               >
                 Close
               </StyledButton>
