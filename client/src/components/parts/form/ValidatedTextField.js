@@ -61,7 +61,7 @@ function ValidatedTextField({
       type={input.type}
       placeholder={input.placeholder}
       helperText={`${errors[input.name]?.message || ' '}`}
-      disabled={isEdit ? !editMode : undefined} // handles edit mode for EditProjcet form
+      disabled={isEdit ? !editMode || input.disabled : undefined} // handles edit mode for EditProjcet form
     />
   </Box>
   );
