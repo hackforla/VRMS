@@ -1,6 +1,7 @@
-import validator from 'validator'
+import validator from 'validator';
+import { isWordInArrayInString } from './../../../utils/stringUtils.js';
 
-const validateEventForm = (vals) => {
+const validateEventForm = (vals, projectToEdit) => {
   let newErrors = {};
   Object.keys(vals).forEach((key) => {
     switch (key) {
@@ -8,6 +9,30 @@ const validateEventForm = (vals) => {
         // Required
         if (!vals[key]) {
           newErrors = { ...newErrors, name: 'Event name is required' };
+        } else if (
+          isWordInArrayInString(
+            ['meeting', 'mtg'],
+            vals[key].toLowerCase()
+          )
+        ) {
+          newErrors = {
+            ...newErrors,
+            name: "Event name cannot contain 'meeting' or 'mtg'",
+          };
+        } else if (
+          isWordInArrayInString(
+            [projectToEdit.name.toLowerCase()],
+            vals[key].toLowerCase()
+          )
+        ) {
+          if (projectToEdit.name.toLowerCase() === 'onboarding') {
+            // Do nothing, word `onboarding` has been white-listed
+          } else {
+            newErrors = {
+              ...newErrors,
+              name: `Event name cannot contain the Project Name: '${projectToEdit.name}'`,
+            };
+          }
         }
         break;
 
@@ -22,8 +47,8 @@ const validateEventForm = (vals) => {
         if (!validateLink(vals[key])) {
           newErrors = {
             ...newErrors,
-            videoConferenceLink: 'Invalid link'
-          }
+            videoConferenceLink: 'Invalid link',
+          };
         }
         break;
 
