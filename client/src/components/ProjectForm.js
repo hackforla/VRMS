@@ -5,7 +5,6 @@ import { Redirect } from 'react-router-dom';
 import {
   Typography,
   Box,
-  Divider,
   Button,
   Grid,
   Radio,

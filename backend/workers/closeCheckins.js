@@ -28,6 +28,12 @@ module.exports = (cron, fetch) => {
         if (events && events.length > 0) {
 
             const sortedEvents = events.filter(event => {
+                if (!event.date) {
+                    // handle if event date is null/undefined
+                    // false meaning don't include in sortedEvents
+                    return false
+                }
+
                 const currentTimeISO = new Date().toISOString();
                 const threeHoursFromStartTime = new Date(event.date).getTime() + 10800000;
                 const threeHoursISO = new Date(threeHoursFromStartTime).toISOString();
