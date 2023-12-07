@@ -21,7 +21,7 @@
     "@babel/eslint-plugin": "^7.14.5",
     "@shelf/jest-mongodb": "^1.2.3",
     "concurrently": "^5.1.0",
-    "debug": "^4.1.1",
+    "debug": "^4.3.1",
     "eslint": "^7.9.0",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-config-airbnb-base": "^14.2.0",
