@@ -48,7 +48,7 @@ let theme = createTheme({
     MuiTextField: {
       defaultProps: {
         inputProps: {
-          style: { width: '100%', color: uiKitColors.black, border: 'none' },
+          style: { width: '100%', color: uiKitColors.black, border: 'none', paddingLeft: '0.5em' },
         },
         fullWidth: true,
       },

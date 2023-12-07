@@ -7,7 +7,7 @@ import validateEventForm from './utilities/validateEventForm';
 import EventForm from './eventForm';
 
 const CreateNewEvent = ({
-  projectName,
+  projectToEdit,
   projectID,
   createNewRecurringEvent,
   setEventAlert,
@@ -72,7 +72,7 @@ const CreateNewEvent = ({
 
   // Handle submission of new recurring event form
   const handleFormSubmit = async () => {
-    const errors = validateEventForm(formValues);
+    const errors = validateEventForm(formValues, projectToEdit);
     if (!errors) {
       handleEventCreate();
       setFormValues(initialFormValues);
