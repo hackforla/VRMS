@@ -3,7 +3,7 @@ module.exports = (cron, fetch) => {
     // Check to see if any events are about to start,
     // and if so, open their respective check-ins
 
-    const url = process.env.NODE_ENV === 'prod' ? 'https://www.vrms.io' : 'http://localhost:4000';
+    const url = process.env.NODE_ENV === 'prod' ? 'https://www.vrms.io' : `http://localhost:${process.env.BACKEND_PORT}`;
     const headerToSend = process.env.CUSTOM_REQUEST_HEADER;
 
     async function fetchEvents() {
@@ -28,6 +28,12 @@ module.exports = (cron, fetch) => {
         if (events && events.length > 0) {
 
             const sortedEvents = events.filter(event => {
+                if (!event.date) {
+                    // handle if event date is null/undefined
+                    // false meaning don't include in sortedEvents
+                    return false
+                }
+
                 const currentTimeISO = new Date().toISOString();
                 const threeHoursFromStartTime = new Date(event.date).getTime() + 10800000;
                 const threeHoursISO = new Date(threeHoursFromStartTime).toISOString();
