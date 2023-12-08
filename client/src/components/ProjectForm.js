@@ -76,7 +76,6 @@ export default function ProjectForm({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleOpen = () => setIsModalOpen(true)
   const handleClose = () => setIsModalOpen(false)
-  console.log("FDATA", formData)
 
   /**
    * React Hook Forms
