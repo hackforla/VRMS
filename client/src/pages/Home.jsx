@@ -45,8 +45,8 @@ const Home = () => {
   return (
     <Box className="home">
       <Box className="home-headers">
-        <Typography variant='h1' sx={{fontSize: '7em', lineHeight: '0.85em', letterSpacing: '0.05em' }}>VRMS</Typography>
-        <Typography variant='h2' sx={{fontSize: '2.8em', lineHeight: '1.05em', letterSpacing: '0.025em'}}>Volunteer Relationship Management System</Typography>
+        <h1>VRMS</h1>
+        <h2>Volunteer Relationship Management System</h2>
       </Box>
 
       {events && events.length > 0 ? (
@@ -90,7 +90,7 @@ const Home = () => {
       <Box className="home-buttons">
         {/* If no events with checkInReady: true */}
         {/* If no meetings available*/}
-        <Typography variant='h4' sx={{fontSize: '2em'}}>No meetings available</Typography>
+        <h4>No meetings available</h4>
         <CreateNewProfileButton />
       </Box>
       )}  
