@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+import { useForm, useFormState } from 'react-hook-form';
 import { Redirect } from 'react-router-dom';
 import {
   Typography,
@@ -76,6 +76,9 @@ export default function ProjectForm({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleOpen = () => setIsModalOpen(true)
   const handleClose = () => setIsModalOpen(false)
+  const checkFields = () => {
+     history.push("/projects")
+  }
 
   /**
    * React Hook Forms
@@ -92,6 +95,7 @@ export default function ProjectForm({
     handleSubmit,
     reset,
     formState: { errors },
+    control
   } = useForm({
     mode: 'all',
     // Holds the current project data in state.
@@ -99,6 +103,8 @@ export default function ProjectForm({
       ...formData,
     },
   });
+
+  const { dirtyFields } = useFormState({control})
 
   // ----------------- Submit requests -----------------
 
@@ -227,20 +233,14 @@ export default function ProjectForm({
         title={editMode ? 'Editing Project' : 'Project Information'}
         badge={isEdit ? editIcon() : addIcon()}
       >
-       <ChangesModal 
-        open={isModalOpen} 
-        onClose={handleClose} 
-        destination={'/projects'}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description" 
-        handleClose={handleClose}
-        />
+       
         <form
           id="project-form"
           onSubmit={handleSubmit((data) => {
             isEdit ? submitEditProject(data) : submitNewProject(data);
           })}
         >
+        
           {arr.map((input) => (
             <ValidatedTextField
               key={input.name}
@@ -253,6 +253,14 @@ export default function ProjectForm({
               input={input}
             />
           ))}
+          <ChangesModal 
+        open={isModalOpen} 
+        onClose={handleClose} 
+        destination={'/projects'}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description" 
+        handleClose={handleClose}
+        />
         </form>
         <Box>
           <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
@@ -271,7 +279,7 @@ export default function ProjectForm({
               <StyledButton
                 variant="contained"
                 cursor="pointer"
-                onClick={handleOpen}
+                onClick={Object.keys(dirtyFields).length > 0 ? handleOpen: checkFields}
               >
                 Close
               </StyledButton>
