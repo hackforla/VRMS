@@ -5,6 +5,7 @@ import { default as palette, uiKitColors } from './palette';
 let theme = createTheme({
   palette,
   typography: {
+    // to achieve the same font as original
     fontFamily: ['aliseoregular',
      '-apple-system',
       'BlinkMacSystemFont', 
@@ -18,13 +19,19 @@ let theme = createTheme({
       '"Helvetica Neue"',
       'sans-serif',].join(','),
     h1: {
-      //fontFamily: 'Source Code Pro',
       fontWeight: 'bold',
+      // size copied from index.scss
       fontSize: '7rem',
-      //marginBottom: '1.5rem',
+      // crafted to achieve the same spacing as original page
+      marginTop: '-1.6rem',
     },
+    // newly added style
     h2: {
+      // size copied from index.scss
       fontSize: '2.8rem',
+      // crafted to achieve the same spacing as original page
+      marginTop: '-1.6rem', 
+      fontWeight: 'bold',
     },
     h3: {
       fontFamily: 'Source Sans Pro',
@@ -32,7 +39,12 @@ let theme = createTheme({
       fontSize: '16px',
     },
     h4: {
+      // size copied from index.scss
       fontSize: '2rem',
+      // crafted to achieve the same spacing as original page
+      fontWeight: 'bold',
+      marginTop: '-0.6rem',
+      marginBottom: '-0.6rem',
     }
   },
   components: {

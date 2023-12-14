@@ -51,7 +51,7 @@ const Home = () => {
           <Typography variant='h2'>Volunteer Relationship Management System</Typography>
         </Box>
 
-        {false ? (
+        {events && events.length > 0 ? (
           <Box className="meeting-select-container">
             <form
               className="form-select-meeting"
