@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+import { useHistory } from 'react-router-dom';
+import { useForm, useFormState } from 'react-hook-form';
 import { Redirect } from 'react-router-dom';
 import {
   Typography,
@@ -20,6 +20,7 @@ import { ReactComponent as EditIcon } from '../svg/Icon_Edit.svg';
 import { ReactComponent as PlusIcon } from '../svg/PlusIcon.svg';
 import ValidatedTextField from './parts/form/ValidatedTextField';
 import TitledBox from './parts/boxes/TitledBox';
+import ChangesModal from './ChangesModal';
 
 /** STYLES
  *  -most TextField and InputLabel styles are controlled by the theme
@@ -27,7 +28,7 @@ import TitledBox from './parts/boxes/TitledBox';
  *  -the rest are inline
  */
 
-const StyledButton = styled(Button)(({ theme }) => ({
+export const StyledButton = styled(Button)(({ theme }) => ({
   width: '150px',
 }));
 
@@ -72,6 +73,12 @@ export default function ProjectForm({
   // State to track the toggling from Project view to Edit Project View via edit icon.
   const [editMode, setEditMode] = useState(false);
   const { auth } = useAuth();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleOpen = () => setIsModalOpen(true)
+  const handleClose = () => setIsModalOpen(false)
+  const checkFields = () => {
+     history.push("/projects")
+  }
 
   /**
    * React Hook Forms
@@ -88,6 +95,7 @@ export default function ProjectForm({
     handleSubmit,
     reset,
     formState: { errors },
+    control
   } = useForm({
     mode: 'all',
     // Holds the current project data in state.
@@ -95,6 +103,8 @@ export default function ProjectForm({
       ...formData,
     },
   });
+
+  const { dirtyFields } = useFormState({control})
 
   // ----------------- Submit requests -----------------
 
@@ -123,6 +133,8 @@ export default function ProjectForm({
     setFormData(data);
     setEditMode(false);
   };
+
+
 
   // ----------------- Handles and Toggles -----------------
 
@@ -221,12 +233,14 @@ export default function ProjectForm({
         title={editMode ? 'Editing Project' : 'Project Information'}
         badge={isEdit ? editIcon() : addIcon()}
       >
+       
         <form
           id="project-form"
           onSubmit={handleSubmit((data) => {
             isEdit ? submitEditProject(data) : submitNewProject(data);
           })}
         >
+        
           {arr.map((input) => (
             <ValidatedTextField
               key={input.name}
@@ -239,6 +253,14 @@ export default function ProjectForm({
               input={input}
             />
           ))}
+          <ChangesModal 
+        open={isModalOpen} 
+        onClose={handleClose} 
+        destination={'/projects'}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description" 
+        handleClose={handleClose}
+        />
         </form>
         <Box>
           <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
@@ -255,10 +277,9 @@ export default function ProjectForm({
             </Grid>
             <Grid item xs="auto">
               <StyledButton
-                component={Link}
-                to="/projects"
                 variant="contained"
                 cursor="pointer"
+                onClick={Object.keys(dirtyFields).length > 0 ? handleOpen: checkFields}
               >
                 Close
               </StyledButton>
