@@ -5,47 +5,24 @@ import { default as palette, uiKitColors } from './palette';
 let theme = createTheme({
   palette,
   typography: {
-    // to achieve the same font as original
-    fontFamily: ['aliseoregular',
-     '-apple-system',
-      'BlinkMacSystemFont', 
-      'Segoe UI',
+    fontFamily: [
+      'Source Sans Pro',
       'Roboto',
-      'Oxygen',
-      'Ubuntu',
-      'Cantarell',
-      '"Fira Sans"',
-      '"Droid Sans"',
       '"Helvetica Neue"',
-      'sans-serif',].join(','),
+      'Arial',
+      'sans-serif',
+    ].join(','),
     h1: {
+      fontFamily: 'Source Code Pro',
       fontWeight: 'bold',
-      // size copied from index.scss
-      fontSize: '7rem',
-      // crafted to achieve the same spacing as original page
-      marginTop: '-1.6rem',
-    },
-    // newly added style
-    h2: {
-      // size copied from index.scss
-      fontSize: '2.8rem',
-      // crafted to achieve the same spacing as original page
-      marginTop: '-1.6rem', 
-      fontWeight: 'bold',
+      fontSize: '30px',
+      marginBottom: '1.5rem',
     },
     h3: {
       fontFamily: 'Source Sans Pro',
       fontWeight: 600,
       fontSize: '16px',
     },
-    h4: {
-      // size copied from index.scss
-      fontSize: '2rem',
-      // crafted to achieve the same spacing as original page
-      fontWeight: 'bold',
-      marginTop: '-0.6rem',
-      marginBottom: '-0.6rem',
-    }
   },
   components: {
     MuiButton: {
