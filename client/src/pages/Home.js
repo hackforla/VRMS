@@ -3,10 +3,26 @@ import CheckInButtons from '../components/presentational/CheckInButtons';
 import CreateNewProfileButton from '../components/presentational/CreateNewProfileButton';
 import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend } from '../utils/globalSettings';
 import { CircularProgress, Box, Typography } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import '../sass/Home.scss';
 
+const h1sx = {
+  fontFamily: 'aliseoregular',
+  fontWeight: 'bold',
+  fontSize: {xs: "5.3rem"},
+  marginBottom: `0rem`,
+}
+
+const h2sx = {
+  ...h1sx,
+  fontSize: {xs: '2.8rem'},
+  marginTop: '-0.9rem',
+}
+
+const h4sx = {
+  ...h1sx,
+  fontSize: {xs: '1.8rem'},
+}
 
 const Home = () => {
   const [events, setEvents] = useState(null);
@@ -47,8 +63,8 @@ const Home = () => {
   return (
       <Box className="home">
         <Box className="home-headers">
-          <Typography variant='h1'>VRMS</Typography>
-          <Typography variant='h2'>Volunteer Relationship Management System</Typography>
+          <Typography variant='h1' sx={h1sx}>VRMS</Typography>
+          <Typography variant='h2' sx={h2sx}>Volunteer Relationship Management System</Typography>
         </Box>
 
         {events && events.length > 0 ? (
@@ -92,7 +108,7 @@ const Home = () => {
         <Box className="home-buttons">
           {/* If no events with checkInReady: true */}
           {/* If no meetings available*/}
-          <Typography variant='h4'>No meetings available</Typography>
+          <Typography variant='h4' sx={h4sx}>No meetings available</Typography>
           <CreateNewProfileButton />
         </Box>
         )}  
