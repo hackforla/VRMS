@@ -17,6 +17,7 @@ const h2sx = {
   ...h1sx,
   fontSize: {xs: '2.8rem'},
   marginTop: '-0.9rem',
+  lineHeight: '1.06rem'
 }
 
 const h4sx = {
