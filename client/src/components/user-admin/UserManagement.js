@@ -1,15 +1,30 @@
 import React, { useState } from 'react';
-import {Box, Button, ButtonGroup, TextField,Typography } from '@mui/material';
+import {Box, Button, ButtonGroup, TextField, Typography, List, ListItem, ListItemButton} from '@mui/material';
 
 
 import '../../sass/UserAdmin.scss';
 
-const h3sx = {
-  fontFamily: 'aliseoregular',
-  fontSize: {xs: "1.6rem"},
-  marginBottom: `1rem`,
-  marginTop: `1rem`,
-  textAlign: "center",
+// const h3sx = {
+//   fontFamily: 'aliseoregular',
+//   fontSize: {xs: "1.6rem"},
+//   marginBottom: `1rem`,
+//   marginTop: `1rem`,
+//   textAlign: "center",
+// }
+const ButtonGroupsx = {
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'center',
+  minWidth: '127%',
+}
+const Boxsx = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  width: '75%'
+}
+const Buttonsx = {
+  p: '0.1rem'
 }
 
 const UserManagement = ({ users, setUserToEdit }) => {
@@ -54,57 +69,69 @@ const UserManagement = ({ users, setUserToEdit }) => {
   }
   return (
     <div className="container--usermanagement">
-      <div>
-        <Typography variant='h3' sx={h3sx}>User Management</Typography>
+      <Box sx={Boxsx}>
+        <Typography variant='h1'>User Management</Typography>
         
         <div className="tab-buttons">
-          <ButtonGroup>
-            <div>
+          <ButtonGroup sx={ButtonGroupsx}>
               <Button
+                sx={Buttonsx}
                 type="button"
-                className={
+                variant={
                   searchResultType === 'name'
-                    ? 'select-button selected'
-                    : 'select-button'
+                  ? 'contained'
+                  : 'secondary'
                 }
-                variant='secondary'
-                onClick={buttonSwap}
-                disabled={searchResultType === 'name'}
+                onClick={buttonSwap
+                }
               >
                 Results by Name
               </Button>
-            </div>
-            <div>
               <Button
+                sx={Buttonsx}
                 type="button"
-                className={
+                variant={
                   searchResultType === 'email'
-                    ? 'select-button selected'
-                    : 'select-button'
+                  ? 'contained'
+                  : 'secondary'
                 }
-                variant='secondary'
-                onClick={buttonSwap}
-                disabled={searchResultType === 'email'}
+                onClick={buttonSwap
+                }
               >
                 Results by Email
               </Button>
-            </div>
           </ButtonGroup>
         </div>
         <TextField
+          sx={{
+            mt: '0.43rem',
+          }}
           type="text"
-          placeholder="Search by name and email..."
+          placeholder="Enter name and / or email to find a user."
+          variant='standard'
           value={searchTerm}
           onChange={handleChange}
         />
-        <Box>
-          <div>
-              <ul className="search-results">
+        <Box sx={{ bgcolor: '#F5F5F5', my: 3, width: '125%'}}>
+          <Box>
+              <List className="search-results disablePadding">
                 {searchResults.map((u) => {
                   return (
                     // eslint-disable-next-line no-underscore-dangle
-                    <li key={`result_${u._id}`}>
-                      <button
+                    <ListItem
+                    sx={{
+                      px: '1.2rem',
+                      py: '0.25rem'
+                      
+                    }} 
+                      key={`result_${u._id}`}>
+                      <ListItemButton
+                        sx={{
+                          px: '0.12rem',
+                          py: '0.18rem',
+                          display: 'flex',
+                          justifyContent: 'space-between'
+                        }}
                         className="search-results-button"
                         type="button"
                         onClick={() => setUserToEdit(u)}
@@ -112,22 +139,25 @@ const UserManagement = ({ users, setUserToEdit }) => {
                         {searchResultType === 'name'
                           ? `${u.name?.firstName} ${u.name?.lastName} ( ${u.email} )`
                           : `${u.email} ( ${u.name?.firstName} ${u.name?.lastName} )`}
-                      </button>
-                    </li>
+                      </ListItemButton>
+                    </ListItem>
                   );
                 })}
-              </ul>
-          </div>
+              </List>
+          </Box>
         </Box>
         <div>
           <Button
+            sx={{
+
+            }}
             type='button'
             variant='secondary'
           >
             Add a New User
           </Button>
         </div>
-      </div>
+      </Box>
     </div>
   );
 };
