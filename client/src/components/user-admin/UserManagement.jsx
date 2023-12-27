@@ -21,11 +21,10 @@ const Boxsx = {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  width: '75%'
+  width: '75%',
+  pt: '40px',
 }
-const Buttonsx = {
-  p: '0.1rem'
-}
+
 
 const UserManagement = ({ users, setUserToEdit }) => {
   let searchResults = [];
@@ -75,7 +74,7 @@ const UserManagement = ({ users, setUserToEdit }) => {
         <div className="tab-buttons">
           <ButtonGroup sx={ButtonGroupsx}>
               <Button
-                sx={Buttonsx}
+                sx={{p: '0.1rem'}}
                 type="button"
                 variant={
                   searchResultType === 'name'
@@ -88,7 +87,7 @@ const UserManagement = ({ users, setUserToEdit }) => {
                 Results by Name
               </Button>
               <Button
-                sx={Buttonsx}
+                sx={{p: '0.1rem'}}
                 type="button"
                 variant={
                   searchResultType === 'email'
@@ -103,16 +102,18 @@ const UserManagement = ({ users, setUserToEdit }) => {
           </ButtonGroup>
         </div>
         <TextField
-          sx={{
-            mt: '0.43rem',
-          }}
           type="text"
           placeholder="Enter name and / or email to find a user."
           variant='standard'
           value={searchTerm}
           onChange={handleChange}
         />
-        <Box sx={{ bgcolor: '#F5F5F5', my: 3, width: '125%'}}>
+        <Box sx={{ 
+          bgcolor: searchResults.length>0? '#F5F5F5': 'transparent',
+          my: 1.2,
+          width: '120%',
+          borderRadius: '1%',
+          }}>
           <Box>
               <List className="search-results disablePadding">
                 {searchResults.map((u) => {
@@ -121,16 +122,16 @@ const UserManagement = ({ users, setUserToEdit }) => {
                     <ListItem
                     sx={{
                       px: '1.2rem',
-                      py: '0.25rem'
-                      
+                      py: '0.25rem',
+                      borderBottom: 1.6,
+                      borderBottomColor: 'grey.300'
                     }} 
                       key={`result_${u._id}`}>
                       <ListItemButton
                         sx={{
                           px: '0.12rem',
                           py: '0.18rem',
-                          display: 'flex',
-                          justifyContent: 'space-between'
+                          color: 'primary.main',
                         }}
                         className="search-results-button"
                         type="button"
