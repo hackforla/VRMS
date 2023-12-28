@@ -23,6 +23,7 @@ const Boxsx = {
   alignItems: 'center',
   width: '75%',
   pt: '40px',
+  height: '100%',
 }
 
 
@@ -113,8 +114,10 @@ const UserManagement = ({ users, setUserToEdit }) => {
           my: 1.2,
           width: '120%',
           borderRadius: '1%',
+          display: 'flex',
+          flexGrow: 1,
           }}>
-          <Box>
+          <Box sx={{width: '120%'}}>
               <List className="search-results disablePadding">
                 {searchResults.map((u) => {
                   return (
