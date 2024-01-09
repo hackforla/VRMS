@@ -11,21 +11,10 @@ import '../../sass/UserAdmin.scss';
 //   marginTop: `1rem`,
 //   textAlign: "center",
 // }
-const ButtonGroupsx = {
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'center',
-  minWidth: '127%',
+const Buttonsx = {
+  p: "0.1rem",
+  fontSize: {xs: '14.52px', sm: '18px'}
 }
-const Boxsx = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  width: '75%',
-  pt: '40px',
-  height: '100%',
-}
-
 
 const UserManagement = ({ users, setUserToEdit }) => {
   let searchResults = [];
@@ -69,13 +58,26 @@ const UserManagement = ({ users, setUserToEdit }) => {
   }
   return (
     <div className="container--usermanagement">
-      <Box sx={Boxsx}>
+      <Box sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        width: '75%',
+        pt: '40px',
+        height: '100%',
+      }}>
         <Typography variant='h1'>User Management</Typography>
         
         <div className="tab-buttons">
-          <ButtonGroup sx={ButtonGroupsx}>
+          <ButtonGroup sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            minWidth: '127%',
+            whiteSpace: 'nowrap',
+            }}>
               <Button
-                sx={{p: '0.1rem'}}
+                sx={Buttonsx}
                 type="button"
                 variant={
                   searchResultType === 'name'
@@ -88,7 +90,7 @@ const UserManagement = ({ users, setUserToEdit }) => {
                 Results by Name
               </Button>
               <Button
-                sx={{p: '0.1rem'}}
+                sx={Buttonsx}
                 type="button"
                 variant={
                   searchResultType === 'email'
