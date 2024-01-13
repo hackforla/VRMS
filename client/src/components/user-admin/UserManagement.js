@@ -5,8 +5,7 @@ import {Box, Button, ButtonGroup, TextField, Typography, List, ListItem, ListIte
 import '../../sass/UserAdmin.scss';
 
 const Buttonsx = {
-  p: "0.1rem",
-  fontSize: {xs: '14.52px', sm: '18px'}
+  px: "1rem",
 }
 
 const UserManagement = ({ users, setUserToEdit }) => {
@@ -50,12 +49,11 @@ const UserManagement = ({ users, setUserToEdit }) => {
             );
   }
   return (
-    <Box className="container--usermanagement">
+    <Box className="container--usermanagement" sx={{px: '1.8rem'}}>
       <Box sx={{
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        
         pt: '40px',
         height: '100%',
       }}>
@@ -67,6 +65,7 @@ const UserManagement = ({ users, setUserToEdit }) => {
             flexDirection: 'row',
             justifyContent: 'center',
             whiteSpace: 'nowrap',
+            mx: '0.5rem'
             }}>
               <Button
                 sx={Buttonsx}
@@ -108,7 +107,7 @@ const UserManagement = ({ users, setUserToEdit }) => {
           display: 'flex',
           flexGrow: 1,
           }}>
-          <Box sx={{width: '120%'}}>
+          <Box>
               <List className="search-results disablePadding">
                 {searchResults.map((u) => {
                   return (
@@ -118,7 +117,7 @@ const UserManagement = ({ users, setUserToEdit }) => {
                       px: '1.2rem',
                       py: '0.25rem',
                       borderBottom: 1.6,
-                      borderBottomColor: 'grey.300'
+                      borderBottomColor: 'grey.300',
                     }} 
                       key={`result_${u._id}`}>
                       <ListItemButton
@@ -126,6 +125,7 @@ const UserManagement = ({ users, setUserToEdit }) => {
                           px: '0.12rem',
                           py: '0.18rem',
                           color: 'primary.main',
+                          mx: '0.7rem',
                         }}
                         className="search-results-button"
                         type="button"
