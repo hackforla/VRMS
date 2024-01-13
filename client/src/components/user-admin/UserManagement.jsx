@@ -5,7 +5,8 @@ import {Box, Button, ButtonGroup, TextField, Typography, List, ListItem, ListIte
 import '../../sass/UserAdmin.scss';
 
 const Buttonsx = {
-  px: "1rem",
+  px: 2,
+  py: 0.5,
 }
 
 const UserManagement = ({ users, setUserToEdit }) => {
@@ -54,8 +55,9 @@ const UserManagement = ({ users, setUserToEdit }) => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        pt: '40px',
+        pt: 5,
         height: '100%',
+        width: 1/1,
       }}>
         <Typography variant='h1'>User Management</Typography>
         
@@ -65,7 +67,7 @@ const UserManagement = ({ users, setUserToEdit }) => {
             flexDirection: 'row',
             justifyContent: 'center',
             whiteSpace: 'nowrap',
-            mx: '0.5rem'
+            mx: 1,
             }}>
               <Button
                 sx={Buttonsx}
@@ -104,8 +106,8 @@ const UserManagement = ({ users, setUserToEdit }) => {
           bgcolor: searchResults.length>0? '#F5F5F5': 'transparent',
           my: 1.2,
           borderRadius: 1,
-          display: 'flex',
           flexGrow: 1,
+          width: 1/1,
           }}>
           <Box>
               <List className="search-results disablePadding">
@@ -114,18 +116,18 @@ const UserManagement = ({ users, setUserToEdit }) => {
                     // eslint-disable-next-line no-underscore-dangle
                     <ListItem
                     sx={{
-                      px: '1.2rem',
-                      py: '0.25rem',
+                      px: 2.4,
+                      py: 1,
                       borderBottom: 1.6,
                       borderBottomColor: 'grey.300',
                     }} 
                       key={`result_${u._id}`}>
                       <ListItemButton
                         sx={{
-                          px: '0.12rem',
-                          py: '0.18rem',
+                          px: 0.25,
+                          py: 0.36,
                           color: 'primary.main',
-                          mx: '0.7rem',
+                          mx: 0.16,
                         }}
                         className="search-results-button"
                         type="button"
