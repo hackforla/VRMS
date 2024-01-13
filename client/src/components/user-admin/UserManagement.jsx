@@ -4,13 +4,6 @@ import {Box, Button, ButtonGroup, TextField, Typography, List, ListItem, ListIte
 
 import '../../sass/UserAdmin.scss';
 
-// const h3sx = {
-//   fontFamily: 'aliseoregular',
-//   fontSize: {xs: "1.6rem"},
-//   marginBottom: `1rem`,
-//   marginTop: `1rem`,
-//   textAlign: "center",
-// }
 const Buttonsx = {
   p: "0.1rem",
   fontSize: {xs: '14.52px', sm: '18px'}
@@ -57,23 +50,22 @@ const UserManagement = ({ users, setUserToEdit }) => {
             );
   }
   return (
-    <div className="container--usermanagement">
+    <Box className="container--usermanagement">
       <Box sx={{
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        width: '75%',
+        
         pt: '40px',
         height: '100%',
       }}>
         <Typography variant='h1'>User Management</Typography>
         
-        <div className="tab-buttons">
+        <Box className="tab-buttons">
           <ButtonGroup sx={{
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'center',
-            minWidth: '127%',
             whiteSpace: 'nowrap',
             }}>
               <Button
@@ -84,8 +76,7 @@ const UserManagement = ({ users, setUserToEdit }) => {
                   ? 'contained'
                   : 'secondary'
                 }
-                onClick={buttonSwap
-                }
+                onClick={buttonSwap}
               >
                 Results by Name
               </Button>
@@ -97,13 +88,12 @@ const UserManagement = ({ users, setUserToEdit }) => {
                   ? 'contained'
                   : 'secondary'
                 }
-                onClick={buttonSwap
-                }
+                onClick={buttonSwap}
               >
                 Results by Email
               </Button>
           </ButtonGroup>
-        </div>
+        </Box>
         <TextField
           type="text"
           placeholder="Enter name and / or email to find a user."
@@ -114,8 +104,7 @@ const UserManagement = ({ users, setUserToEdit }) => {
         <Box sx={{ 
           bgcolor: searchResults.length>0? '#F5F5F5': 'transparent',
           my: 1.2,
-          width: '120%',
-          borderRadius: '1%',
+          borderRadius: 1,
           display: 'flex',
           flexGrow: 1,
           }}>
@@ -152,19 +141,16 @@ const UserManagement = ({ users, setUserToEdit }) => {
               </List>
           </Box>
         </Box>
-        <div>
+        <Box>
           <Button
-            sx={{
-
-            }}
             type='button'
             variant='secondary'
           >
             Add a New User
           </Button>
-        </div>
+        </Box>
       </Box>
-    </div>
+    </Box>
   );
 };
 
