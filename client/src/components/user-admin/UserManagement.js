@@ -50,7 +50,7 @@ const UserManagement = ({ users, setUserToEdit }) => {
             );
   }
   return (
-    <Box className="container--usermanagement" sx={{px: '1.8rem'}}>
+    <Box className="container--usermanagement" sx={{px: '1.8rem', mb: 0,}}>
       <Box sx={{
         display: 'flex',
         flexDirection: 'column',
