@@ -114,14 +114,12 @@ Note: Understanding how git remotes work will make collaborating much easier. Yo
 
    - `cd vrms/` and run `yarn install`
    - `cd client` and run `yarn install`
-   - `cd client-mvp-04` and run `yarn install`
    - `cd ../backend` and run `yarn install`
 
 1. Add your required environment variables for the frontend and backend directories:
 
    - `touch vrms/backend/.env`
    - `touch vrms/client/.env`
-   - `touch vrms/client-mvp-04/.env`
 
    Note 1: In the above example you are trying to create an empty file called `.env` in each of the listed directories: backend, client and client-mvp-04. You can use either `touch <path-to-directory> .env` or navigate to the directory and use `touch .env`
 
