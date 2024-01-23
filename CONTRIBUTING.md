@@ -121,7 +121,7 @@ Note: Understanding how git remotes work will make collaborating much easier. Yo
    - `touch vrms/backend/.env`
    - `touch vrms/client/.env`
 
-   Note 1: Note 1: In the above example you are trying to create an empty file called .env in each of the listed directories: backend and client. You can use either touch <path-to-directory> .env or navigate to the directory and use touch .env
+   Note 1: In the above example you are trying to create an empty file called .env in each of the listed directories: backend and client. You can use either touch <path-to-directory> .env or navigate to the directory and use touch .env
 
    Note 2: `touch` is a Unix/Linux or Mac command; It is not available in Windows. In Windows, use a text editor (e.g. Notepad) to create an empty file and save it in each of the locations as `.env` . (If you use Windows Explorer to create the file it will create a file called `.env.txt`, which will not work.)
 
