@@ -16,17 +16,18 @@ export const simpleInputs = [
     errorMessage: 'Description must start with alphanumeric characters, 250 char limit',
     disabled: false
   },
-  {
-    label: 'Location',
-    name: 'location',
-    type: 'text',
-    placeholder: 'Enter location for meeting',
-    value: /https:\/\/[\w-]*\.?zoom.us\/(j|my)\/[\d\w?=-]+/,
-    errorMessage: 'Please enter a valid Zoom URL',
-    addressValue: '',
-    addressError: 'Invalid address',
-    disabled: false
-  },
+  //this feature is commented out as per the PR #1567
+  // {
+  //   label: 'Location',
+  //   name: 'location',
+  //   type: 'text',
+  //   placeholder: 'Enter location for meeting',
+  //   value: /https:\/\/[\w-]*\.?zoom.us\/(j|my)\/[\d\w?=-]+/,
+  //   errorMessage: 'Please enter a valid Zoom URL',
+  //   addressValue: '',
+  //   addressError: 'Invalid address',
+  //   disabled: false
+  // },
   {
     label: 'GitHub Identifier',
     name: 'githubIdentifier',

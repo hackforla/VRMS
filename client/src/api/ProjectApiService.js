@@ -27,7 +27,7 @@ class ProjectApiService {
     const {
       name,
       description,
-      location,
+      //location, this feature is commented out as per the PR #1567
       githubUrl,
       slackUrl,
       googleDriveUrl,
@@ -40,7 +40,7 @@ class ProjectApiService {
       body: JSON.stringify({
         name,
         description,
-        location,
+        // location, this feature is commented out as per the PR #1567
         githubUrl,
         slackUrl,
         googleDriveUrl,
