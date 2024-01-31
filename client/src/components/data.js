@@ -16,6 +16,7 @@ export const simpleInputs = [
     errorMessage: 'Description must start with alphanumeric characters, 250 char limit',
     disabled: false
   },
+  //this feature is commented out as per the PR #1567
   // {
   //   label: 'Location',
   //   name: 'location',
