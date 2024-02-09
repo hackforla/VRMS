@@ -2,39 +2,41 @@ import React, { createContext, useContext, useState } from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
-export const SnackbarContext = createContext();
+const SnackbarContext = createContext();
 
-export const SnackbarProvider = ({children}) => {
-    const [error, setError] =  useState();
+export const useSnackbar = () => useContext(SnackbarContext);
 
-    const showError = (message) =>{
-        setError(message);
-    }
+export const SnackbarProvider = ({ children }) => {
+  const [snackbarState, setSnackbarState] = useState({
+    open: false,
+    message: '',
+    severity: '',
+  });
 
-    const clearError = () =>{
-        setError("");
-    };
-
-    return (
-        <SnackbarContext.Provider>
-            {children}
-            <Snackbar
-                open = {!!error}
-                autoHideDuration={4000}
-                onClose={clearError}
-            >
-                <Alert severity='error' onClose={clearError}>
-                    {error}
-                </Alert>
-            </Snackbar>
-        </SnackbarContext.Provider>
-    );
-};
-
-export const useSnackbar = () => {
-    const context = useContext(SnackbarContext);
-    if (!context) {
-      throw new Error('useSnackbar must be used within a SnackbarProvider');
-    }
-    return context;
+  const showSnackbar = (message, severity = 'success') => {
+    setSnackbarState({ open: true, message, severity });
   };
+
+  const hideSnackbar = () => {
+    setSnackbarState({ ...snackbarState, open: false });
+  };
+
+  return (
+    <SnackbarContext.Provider value={{ showSnackbar, hideSnackbar }}>
+      {children}
+      <Snackbar
+        open={snackbarState.open}
+        autoHideDuration={6000}
+        onClose={hideSnackbar}
+      >
+        <Alert
+          icon={false}
+          onClose={hideSnackbar}
+          severity={snackbarState.severity || 'info'}
+        >
+          {snackbarState.message}
+        </Alert>
+      </Snackbar>
+    </SnackbarContext.Provider>
+  );
+};
