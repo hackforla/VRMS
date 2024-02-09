@@ -1,3 +1,6 @@
+const generateEventData = require('./lib/generateEventData').generateEventData;
+const fs = require('fs');
+
 module.exports = (cron, fetch) => {
 
     // Check to see if any recurring events are happening today,
@@ -25,6 +28,7 @@ module.exports = (cron, fetch) => {
         } catch(error) {
             console.log(error);
         };
+        return EVENTS;
     };
 
     const fetchRecurringEvents = async () => {
@@ -40,6 +44,7 @@ module.exports = (cron, fetch) => {
         } catch(error) {
             console.log(error);
         };
+        return RECURRING_EVENTS
     };
 
     async function filterAndCreateEvents() {
@@ -58,6 +63,15 @@ module.exports = (cron, fetch) => {
             // For each recurring event, check to see if an event already
             // exists for it and do something if true/false. Can't use
             // forEach function with async/await.
+
+            // fs.writeFile("data--filteredRecurringEvents.json", JSON.stringify(
+            //     // {"boop":"beep"},
+            //     filteredEvents,
+            //     null, 2), (err) => {
+            //     if (err) throw err;
+            //     console.log('Data written to file 📝', "data--filteredRecurringEvents.json");
+            // });
+            
             for (filteredEvent of filteredEvents) {
                 const eventExists = await checkIfEventExists(filteredEvent.name);
 
@@ -73,43 +87,6 @@ module.exports = (cron, fetch) => {
                 };
             };
         };
-    };
-
-    function generateEventData(eventData, TODAY_DATE = new Date()) {
-        const eventDate = new Date(eventData.startTime);
-        // Create new event
-        const hours = eventDate.getHours();
-        const minutes = eventDate.getMinutes();
-        const seconds = eventDate.getSeconds();
-        const milliseconds = eventDate.getMilliseconds();
-
-        const yearToday = TODAY_DATE.getFullYear();
-        const monthToday = TODAY_DATE.getMonth();
-        const dateToday = TODAY_DATE.getDate();
-
-        const newEventDate = new Date(yearToday, monthToday, dateToday, hours, minutes, seconds, milliseconds);
-
-        const newEndTime = new Date(yearToday, monthToday, dateToday, hours + filteredEvent.hours, minutes, seconds, milliseconds)
-
-        const eventToCreate = {
-            name: eventData.name && eventData.name,
-            hacknight: eventData.hacknight && eventData.hacknight,
-            eventType: eventData.eventType && eventData.eventType,
-            description: eventData.eventDescription && eventData.eventDescription,
-            project: eventData.project && eventData.project,
-            date: eventData.date && newEventDate,
-            startTime: eventData.startTime && newEventDate,
-            endTime: eventData.endTime && newEndTime,
-            hours: eventData.hours && eventData.hours
-        }
-        if (eventData.hasOwnProperty("location")) {
-            eventToCreate.location = {
-                city: eventData.location.city ? eventData.location.city : 'REMOTE',
-                state: eventData.location.state ? eventData.location.state : 'REMOTE',
-                country: eventData.location.country ? eventData.location.country : 'REMOTE'
-            };
-        }
-        return eventToCreate
     };
 
     async function checkIfEventExists(eventName) {
@@ -160,14 +137,41 @@ module.exports = (cron, fetch) => {
 
     async function runTask() {
         console.log("Creating today's events");
-
-        await fetchEvents();
-        await fetchRecurringEvents();
+        
+        const events = await fetchEvents();
+        const recurringEvents = await fetchRecurringEvents();
         await filterAndCreateEvents();
+
+        // fs write to file fetchEvents
+        const filename = 'data--recurringEvents.json';
+        const filename2 = 'data--events.json';
+
+        setTimeout(() => {
+            // fs.writeFile(filename, JSON.stringify(
+            //     // {"boop":"beep"},
+            //     recurringEvents,
+            //     null, 2), (err) => {
+            //     if (err) throw err;
+            //     console.log('Data written to file 📝', filename);
+            // });
+            // fs.writeFile(filename2, JSON.stringify(
+            //     // {"boop":"beep"},
+            //     events,
+            //     null, 2), (err) => {
+            //     if (err) throw err;
+            //     console.log('Data written to file 📝', filename);
+            // });
+        }, 4000)
+
 
         console.log("Today's events are created");
 
     };
+
+    // setTimeout(() => {
+    //     runTask();
+    //     console.log("🦄 runTask()")
+    // }, 3500);
 
     const scheduledTask = cron.schedule('*/30 * * * *', () => {
         runTask();
