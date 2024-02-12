@@ -61,7 +61,8 @@ export const simpleInputs = [
     name: 'hflaWebsiteUrl',
     type: 'text',
     placeholder: 'htttps://hackforla.org/projects/',
-    disabled: false
+    disabled: false,
+    required: false
   },
 ];
 
