@@ -24,9 +24,7 @@ function ValidatedTextField({
   locationRadios,
   input,
 }) {
-  const registerObj = {
-    ...register(input.name, {
-    required: `${input.name} is required`,
+  const inputObj = {
     pattern:
       input.name === 'location'
         ? locationType === 'remote'
@@ -39,8 +37,15 @@ function ValidatedTextField({
               message: input.addressError,
             }
         : { value: input.value, message: input.errorMessage },
-    }
-  )}
+  };
+  if ('required' in input && input.required === false) {
+    // if required is set to false, don't add required attribute to object
+  } else {
+    inputObj.required = `${input.name} is required`;
+  }
+  const registerObj = {
+    ...register(input.name, inputObj),
+  }
 
   return (
   <Box sx={{ mb: 1 }} key={input.name}>
