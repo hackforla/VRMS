@@ -25,7 +25,7 @@ const CreateNewEvent = ({
   };
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState({});
-  const { showSnackbar, hideSnackbar } = useSnackbar();
+  const { showSnackbar } = useSnackbar();
 
   // Handle form input changes
   const handleInputChange = (event) => {
@@ -79,9 +79,6 @@ const CreateNewEvent = ({
       setFormValues(initialFormValues);
       setIsCreateNew(false);
       showSnackbar('Event created!', 'success');
-      await setTimeout(() => {
-        hideSnackbar();
-      }, 5000);
     }
     setFormErrors(errors);
   };
