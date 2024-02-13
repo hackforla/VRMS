@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSnackbar } from '../../context/snackbarContext';
 import '../../sass/ManageProjects.scss';
 import { findNextOccuranceOfDay } from './utilities/findNextDayOccuranceOfDay';
 import { addDurationToTime } from './utilities/addDurationToTime';
@@ -10,7 +11,6 @@ const CreateNewEvent = ({
   projectToEdit,
   projectID,
   createNewRecurringEvent,
-  setEventAlert,
   setIsCreateNew,
 }) => {
   // These are the initial form values
@@ -25,6 +25,7 @@ const CreateNewEvent = ({
   };
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState({});
+  const { showSnackbar, hideSnackbar } = useSnackbar();
 
   // Handle form input changes
   const handleInputChange = (event) => {
@@ -77,9 +78,9 @@ const CreateNewEvent = ({
       handleEventCreate();
       setFormValues(initialFormValues);
       setIsCreateNew(false);
-      setEventAlert('Event created!');
+      showSnackbar('Event created!', 'success');
       await setTimeout(() => {
-        setEventAlert(null);
+        hideSnackbar();
       }, 5000);
     }
     setFormErrors(errors);
