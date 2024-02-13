@@ -94,7 +94,8 @@ export const additionalInputsForEdit = [
     name: 'googleDriveId',
     type: 'text',
     placeholder: 'htttps://drive.google.com/',
-    disabled: false
+    disabled: false,
+    required: false
   },
   // this feature is commented out as per the PR #1577
   // {
