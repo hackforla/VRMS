@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../../sass/ManageProjects.scss';
+import { useSnackbar } from '../../context/snackbarContext';
 import EditableMeeting from './editableMeeting';
 import { findNextOccuranceOfDay } from './utilities/findNextDayOccuranceOfDay';
 import { addDurationToTime } from './utilities/addDurationToTime';
@@ -10,12 +11,12 @@ import validateEventForm from './utilities/validateEventForm';
 const EditMeetingTimes = ({
   projectToEdit,
   selectedEvent,
-  setEventAlert,
   setSelectedEvent,
   deleteRecurringEvent,
   updateRecurringEvent,
 }) => {
   const [formErrors, setFormErrors] = useState({});
+  const { showSnackbar } = useSnackbar();
   const handleEventUpdate = (
     eventID,
     values,
@@ -108,10 +109,7 @@ const EditMeetingTimes = ({
       }
 
       updateRecurringEvent(theUpdatedEvent, eventID);
-      setEventAlert("Event updated!")
-      await setTimeout(() => {
-        setEventAlert(null);
-      }, 5000)
+      showSnackbar("Event updated!", 'info')
       setSelectedEvent(null);
     }
     setFormErrors(errors);
@@ -120,10 +118,7 @@ const EditMeetingTimes = ({
   const handleEventDelete = (eventID) => async () => {
     deleteRecurringEvent(eventID);
     setSelectedEvent(null);
-    setEventAlert("Event deleted!");
-    await setTimeout(() => {
-      setEventAlert(null);
-    }, 5000);
+    showSnackbar("Event deleted!", 'warning');
   };
 
   return (
