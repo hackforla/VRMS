@@ -6,7 +6,6 @@ import { authLevelRedirect } from '../../utils/authUtils';
 
 import useAuth from '../../hooks/useAuth';
 import '../../sass/AdminLogin.scss';
-import { useSnackbar } from '../../context/snackbarContext';
 
 /** At the moment only users with the 'admin' accessLevel can login
  * and see the dashboard
@@ -19,7 +18,6 @@ const Auth = () => {
 
   const history = useHistory();
   const { auth } = useAuth();
-  const { showSnackbar } = useSnackbar();
 
   const [email, setEmail] = useState('');
   const [isDisabled, setIsDisabled] = useState(true);
@@ -64,7 +62,6 @@ const Auth = () => {
         const isAuth = await checkAuth(email, LOG_IN);
         if (isAuth) {
           history.push('/emailsent');
-          showSnackbar('Email Sent!!');
         } else {
           showError(
             'We don’t recognize your email address. Please, create an account.'
