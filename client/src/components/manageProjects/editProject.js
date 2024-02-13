@@ -35,7 +35,8 @@ const EditProject = ({
     // partners: projectToEdit.partners,
     // managedByUsers: projectToEdit.managedByUsers,
     // projectStatus: projectToEdit.projectStatus,
-    googleDriveId: projectToEdit.googleDriveId,
+    // comment out as per PR #1584
+    // googleDriveId: projectToEdit.googleDriveId,
     // createdDate: new Date(projectToEdit.createdDate)
   });
 
