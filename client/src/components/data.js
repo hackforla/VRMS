@@ -54,7 +54,8 @@ export const simpleInputs = [
     name: 'googleDriveUrl',
     type: 'text',
     placeholder: 'htttps://drive.google.com/',
-    disabled: false
+    disabled: false,
+    required: false
   },
   {
     label: 'HFLA Website URL',
