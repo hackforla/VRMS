@@ -54,51 +54,57 @@ export const simpleInputs = [
     name: 'googleDriveUrl',
     type: 'text',
     placeholder: 'htttps://drive.google.com/',
-    disabled: false
+    disabled: false,
+    required: false
   },
   {
     label: 'HFLA Website URL',
     name: 'hflaWebsiteUrl',
     type: 'text',
     placeholder: 'htttps://hackforla.org/projects/',
-    disabled: false
+    disabled: false,
+    required: false
   },
 ];
 
 export const additionalInputsForEdit = [
-  {
-    label: 'Partners',
-    name: 'partners',
-    type: 'text',
-    placeholder: 'partners',
-    disabled: false
-  },
-  {
-    label: 'Managed by Users',
-    name: 'managedByUsers',
-    type: 'text',
-    placeholder: 'Managed by Users',
-    disabled: false
-  },
-  {
-    label: 'Project Status',
-    name: 'projectStatus',
-    type: 'text',
-    placeholder: 'Project Status',
-    disabled: false
-  },
-   {
-    label: 'Google Drive ID',
-    name: 'googleDriveId',
-    type: 'text',
-    placeholder: 'htttps://drive.google.com/',
-    disabled: false
-  },
-  {
-    label: 'Created Date',
-    name: 'createdDate',
-    type: 'text',
-    placeholder: 'Created Date',
-    disabled: true
-  }
+  // this feature is commented out as per the PR #1577
+  // {
+  //   label: 'Partners',
+  //   name: 'partners',
+  //   type: 'text',
+  //   placeholder: 'partners',
+  //   disabled: false
+  // },
+  // {
+  //   label: 'Managed by Users',
+  //   name: 'managedByUsers',
+  //   type: 'text',
+  //   placeholder: 'Managed by Users',
+  //   disabled: false
+  // },
+  // {
+  //   label: 'Project Status',
+  //   name: 'projectStatus',
+  //   type: 'text',
+  //   placeholder: 'Project Status',
+  //   disabled: false
+  // },
+  // Comment out as per the PR #1584
+  //  {
+  //   label: 'Google Drive ID',
+  //   name: 'googleDriveId',
+  //   type: 'text',
+  //   placeholder: 'htttps://drive.google.com/',
+  //   disabled: false,
+  //   required: false
+  // },
+  // this feature is commented out as per the PR #1577
+  // {
+  //   label: 'Created Date',
+  //   name: 'createdDate',
+  //   type: 'text',
+  //   placeholder: 'Created Date',
+  //   disabled: true
+  // }
 ]

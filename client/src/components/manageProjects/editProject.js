@@ -31,11 +31,13 @@ const EditProject = ({
     slackUrl: projectToEdit.slackUrl,
     googleDriveUrl: projectToEdit.googleDriveUrl,
     hflaWebsiteUrl: projectToEdit.hflaWebsiteUrl,
-    partners: projectToEdit.partners,
-    managedByUsers: projectToEdit.managedByUsers,
-    projectStatus: projectToEdit.projectStatus,
-    googleDriveId: projectToEdit.googleDriveId,
-    createdDate: new Date(projectToEdit.createdDate)
+    // this feature is commented out as per the PR #1577
+    // partners: projectToEdit.partners,
+    // managedByUsers: projectToEdit.managedByUsers,
+    // projectStatus: projectToEdit.projectStatus,
+    // comment out as per PR #1584
+    // googleDriveId: projectToEdit.googleDriveId,
+    // createdDate: new Date(projectToEdit.createdDate)
   });
 
   // eslint-disable-next-line no-unused-vars
