@@ -109,7 +109,7 @@ const EditMeetingTimes = ({
       }
 
       updateRecurringEvent(theUpdatedEvent, eventID);
-      showSnackbar("Event updated!", 'info')
+      showSnackbar("Recurring event updated", 'info')
       setSelectedEvent(null);
     }
     setFormErrors(errors);
@@ -118,7 +118,7 @@ const EditMeetingTimes = ({
   const handleEventDelete = (eventID) => async () => {
     deleteRecurringEvent(eventID);
     setSelectedEvent(null);
-    showSnackbar("Event deleted!", 'warning');
+    showSnackbar("Recurring event deleted", 'info');
   };
 
   return (
