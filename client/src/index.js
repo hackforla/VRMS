@@ -3,10 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.scss';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
+import { SnackbarProvider } from './context/snackbarContext';
 
 ReactDOM.render(
     <BrowserRouter>
-        <App />
+        <SnackbarProvider>
+            <App />
+        </SnackbarProvider>
     </BrowserRouter>, 
     document.getElementById('root')
 );
