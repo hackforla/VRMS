@@ -1,37 +1,22 @@
-// grab the updatedDate
-// get the timeZone offset
-// if timeZone offset differs from the updatedDate to now
-// normalize time to the updatedDate
-
 function generateEventData(eventObj, TODAY_DATE = new Date()) {
     /**
      * Generates event data based on the provided event object and date.
      * In the cron job this function normally runs in, it is expected that eventObj.date is the same as TODAY_DATE.
      */
-    
-    const oldStartTime = new Date(eventObj.startTime);
+    const eventDate = new Date(eventObj.startTime);
     // Create new event
-    const oldHours = oldStartTime.getHours();
-    const oldMinutes = oldStartTime.getMinutes();
-    const oldSeconds = oldStartTime.getSeconds();
-    const oldMilliseconds = oldStartTime.getMilliseconds();
+    const hours = eventDate.getHours();
+    const minutes = eventDate.getMinutes();
+    const seconds = eventDate.getSeconds();
+    const milliseconds = eventDate.getMilliseconds();
 
-    const newYear = TODAY_DATE.getFullYear();
-    const newMonth = TODAY_DATE.getMonth();
-    const newDate = TODAY_DATE.getDate();
-    
-    const oldTz = oldStartTime.getTimezoneOffset();
-    const newTz = TODAY_DATE.getTimezoneOffset();
-    const tzDiff = oldTz - newTz;
+    const yearToday = TODAY_DATE.getFullYear();
+    const monthToday = TODAY_DATE.getMonth();
+    const dateToday = TODAY_DATE.getDate();
 
-    const newEventDate = new Date(newYear, newMonth, newDate, oldHours, oldMinutes, oldSeconds, oldMilliseconds);
+    const newEventDate = new Date(yearToday, monthToday, dateToday, hours, minutes, seconds, milliseconds);
 
-    const newEndTime = new Date(newYear, newMonth, newDate, oldHours + eventObj.hours, oldMinutes, oldSeconds, oldMilliseconds)
-
-    if (tzDiff != 0) {
-        newEventDate.setMinutes(newEventDate.getMinutes() + tzDiff)
-        newEndTime.setMinutes(newEndTime.getMinutes() + tzDiff)
-    }
+    const newEndTime = new Date(yearToday, monthToday, dateToday, hours + eventObj.hours, minutes, seconds, milliseconds)
 
     const eventToCreate = {
         name: eventObj.name && eventObj.name,
