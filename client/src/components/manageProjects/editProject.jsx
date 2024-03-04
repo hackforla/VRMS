@@ -18,7 +18,7 @@ const EditProject = ({
   deleteRecurringEvent,
   updateRecurringEvent,
 }) => {
-  const [formData, setFormData] = useState({
+  const [originalProjectData, setOriginalProjectData] = useState({
     name: projectToEdit.name,
     description: projectToEdit.description,
     location: projectToEdit.location,
@@ -27,6 +27,10 @@ const EditProject = ({
     slackUrl: projectToEdit.slackUrl,
     googleDriveUrl: projectToEdit.googleDriveUrl,
     // hflaWebsiteUrl: projectToEdit.name,
+  });
+
+  const [formData, setFormData] = useState({
+    ...originalProjectData
   });
 
   // eslint-disable-next-line no-unused-vars
@@ -115,6 +119,10 @@ const EditProject = ({
     }));
   };
 
+  const revertToOriginal = () => {
+    setFormData(originalProjectData);
+  }
+
   return (
     <Box sx={{ px: 0.5 }}>
       <div className={`edit-meeting-modal ${selectedEvent ? 'active' : ''}`}>
@@ -143,6 +151,8 @@ const EditProject = ({
         projectToEdit={projectToEdit}
         handleChange={handleChange}
         isEdit={true}
+        revertToOriginal={revertToOriginal}
+        setOriginalProjectData={setOriginalProjectData}
       />
       <Box sx={{ bgcolor: '#F5F5F5', my: 2 }}>
         <Box

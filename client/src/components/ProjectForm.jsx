@@ -62,6 +62,8 @@ export default function ProjectForm({
   projectToEdit,
   handleChange,
   isEdit,
+  revertToOriginal,
+  setOriginalProjectData,
 }) {
   const history = useHistory();
 
@@ -117,6 +119,7 @@ export default function ProjectForm({
       console.error(errors);
       return;
     }
+    setOriginalProjectData(data);
     setEditMode(true);
   };
 
@@ -135,8 +138,12 @@ export default function ProjectForm({
   // Toggles the project view to edit mode change.
   const handleEditMode = (event) => {
     setEditMode(!editMode);
+<<<<<<< HEAD:client/src/components/ProjectForm.jsx
     resetState()
 
+=======
+    revertToOriginal();
+>>>>>>> 9875937 (feat: Add press edit agian to revert data):client/src/components/ProjectForm.js
   };
 
   const resetState = () => {
