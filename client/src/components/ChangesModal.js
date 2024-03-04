@@ -1,14 +1,13 @@
-import React, {useState} from 'react'
+import React from 'react'
 import { 
     Modal,
     Box,
     Typography,
     Grid
  } from '@mui/material'
- import { IoWarningOutline } from "react-icons/io5";
- import { styled } from '@mui/material/styles';
  import { StyledButton } from './ProjectForm';
  import { Link } from 'react-router-dom';
+ import WarningAmberRoundedIcon from '@mui/icons-material/WarningAmberRounded';
 
 
  const style = {
@@ -24,7 +23,7 @@ import {
 };
 
 
- export default function ChangesModal({open, onClose, handleClose}) {
+ export default function ChangesModal({open, onClose, handleClose, destination }) {
     return (
       
       <Modal
@@ -35,21 +34,21 @@ import {
       >
         <Box sx={style}>
           <Typography sx={{textAlign: 'center'}} id="modal-modal-title" variant="h4" component="h3">
-            <IoWarningOutline color="red" />
+           <WarningAmberRoundedIcon fontSize="large" color="error" />
          </Typography>
 
           <Typography sx={{textAlign: 'center'}} id="modal-modal-title" variant="h4" component="h4">
            Wait! You made some changes.
           </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+          <Typography id="modal-modal-description" sx={{ mt: 2, textAlign: 'center' }}>
             Are you sure you want to exit without saving?
           </Typography>
             <Grid direction="column" spacing={3} container alignContent="center" sx={{ my: 3 }}>
             <Grid item xs="auto">
               <StyledButton
-               component={Link}
-                to="/projects"
-               variant="secondary"
+                component={Link}
+                to={destination}
+                variant="secondary"
                 cursor="pointer"
                 
               >
@@ -61,9 +60,8 @@ import {
                 type="submit"
                 form="project-form"
                 cursor="pointer"
-                 variant="contained"
+                variant="contained"
                 onClick={handleClose}
-                // disabled={isEdit ? !editMode : false}
               >
                 No
               </StyledButton>

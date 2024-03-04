@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import ProjectApiService from '../api/ProjectApiService';
 import { ReactComponent as PlusIcon } from '../svg/PlusIcon.svg';
@@ -65,18 +65,7 @@ export default function ProjectForm() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleOpen = () => setIsModalOpen(true)
   const handleClose = () => setIsModalOpen(false)
-
-  const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
+  console.log("FDATA", formData)
 
   /**
    * React Hook Forms
@@ -232,6 +221,7 @@ export default function ProjectForm() {
        <ChangesModal 
         open={isModalOpen} 
         onClose={handleClose} 
+        destination={'/projects'}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description" 
         handleClose={handleClose}

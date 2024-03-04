@@ -17,11 +17,11 @@
     "test:all": "cross-env NODE_ENV=test npm run test:client && npm run test:client-mvp && npm run test:backend && npm run test:cy"
   },
   "dependencies": {
+    "@mui/icons-material": "^5.14.19",
     "concurrently": "^5.3.0",
     "cross-env": "^7.0.2",
     "cross-var": "^1.1.0",
-    "dotenv-cli": "^3.2.0",
-    "react-icons": "^4.12.0"
+    "dotenv-cli": "^3.2.0"
   },
   "devDependencies": {
     "cypress": "^5.0.0",
