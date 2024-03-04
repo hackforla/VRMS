@@ -19,6 +19,7 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import useAuth from "../hooks/useAuth"
+import TitledBox from './TitledBox';
 
 /** Project Form Component
  *
@@ -157,8 +158,6 @@ export default function ProjectForm() {
     setActiveButton('close');
   };
 
-<<<<<<< HEAD
-=======
   // ----------------- Icons -----------------
 
   // Holds the Add New Project Icon and styling.
@@ -202,7 +201,6 @@ export default function ProjectForm() {
   // ----------------- Location radio -----------------
 
   // Holdes the location radios styling.
->>>>>>> 08e0b51 (feat: Refactor ProjectForm to use TitledBox)
   const locationRadios = (
     <Grid item>
       <FormControl>
@@ -235,80 +233,6 @@ export default function ProjectForm() {
       <Box sx={{ textAlign: 'center' }}>
         <Typography variant="h1">Project Management</Typography>
       </Box>
-<<<<<<< HEAD
-      <Box sx={{ bgcolor: '#F5F5F5' }}>
-        <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between' }}>
-          <Box>
-            <Typography sx={{ fontSize: '18px', fontWeight: '600' }}>
-              Project Information
-            </Typography>
-          </Box>
-          <Box sx={{ display: 'flex' }}>
-            <PlusIcon style={{ marginRight: '7px' }} />
-            <Typography sx={{ fontSize: '14px', fontWeight: '600' }}>
-              Add New Project
-            </Typography>
-          </Box>
-        </Box>
-        <Divider sx={{ borderColor: 'rgba(0,0,0,1)' }} />
-        <Box sx={{ py: 2, px: 4 }}>
-          <form id="project-form" onSubmit={handleSubmit((data) => {
-            submitForm(data)
-          })}>
-            {simpleInputs.map((input) => (
-              <Box sx={{ mb: 1 }} key={input.name}>
-                <Grid container alignItems="center">
-                  <Grid item xs="auto" sx={{ pr: 3 }}>
-                    <InputLabel
-                      sx={{ width: 'max-content', ml: 0.5, mb: 0.5 }}
-                      id={input.name}
-                    >
-                      {input.label}
-                    </InputLabel>
-                  </Grid>
-                  {input.name === 'location' && locationRadios}
-                </Grid>     
-                <TextField
-                 error={!!errors[input.name]}
-                 type={input.type}
-                  {...register(input.name,  {required: `${input.name} is required` , 
-                  pattern:  input.name === 'location' ? 
-                    locationType === 'remote' ? 
-                      {value: input.value, message: input.errorMessage} :
-                      {value: input.addressValue, message: input.addressError} :
-                      {value: input.value, message: input.errorMessage} } )}
-                 placeholder={input.placeholder}
-                 helperText={`${errors[input.name]?.message || ' '}`}
-                />
-              </Box>
-            ))}
-          </form>
-        </Box>
-      </Box>
-      <Box>
-        <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
-          <Grid item xs="auto">
-            <StyledButton
-              type="submit"
-              form="project-form"
-              variant={activeButton === 'save' ? 'contained' : 'secondary'}
-            >
-              Save
-            </StyledButton>
-          </Grid>
-          <Grid item xs="auto">
-            <StyledButton
-              component={Link}
-              to="/projects"
-              variant={activeButton === 'close' ? 'contained' : 'secondary'}
-              disabled={activeButton !== 'close'}
-            >
-              Close
-            </StyledButton>
-          </Grid>
-        </Grid>
-      </Box>
-=======
       <TitledBox
         title={editMode ? 'Editing Project' : 'Project Information'}
         badge={isEdit ? editIcon() : addIcon()}
@@ -358,7 +282,6 @@ export default function ProjectForm() {
           </Grid>
         </Box>
       </TitledBox>
->>>>>>> 08e0b51 (feat: Refactor ProjectForm to use TitledBox)
     </Box>
   ) : (
     <Redirect to="/login" />
