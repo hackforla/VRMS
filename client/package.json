@@ -30,11 +30,11 @@
     "vite-plugin-svgr": "^3.2.0"
   },
   "scripts": {
-    "start": "dotenv -e .env -e ../backend/.env -- cross-var cross-env PORT=%CLIENT_PORT% react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --watchAll=false",
-    "test:watch": "react-scripts test",
-    "eject": "react-scripts eject",
+    "vite": "vite",
+    "start": "dotenv -e .env -e ../backend/.env -- cross-var cross-env PORT=%CLIENT_PORT% vite",
+    "build": "vite build",
+    "test": "vitest",
+    "preview": "vite preview",
     "heroku-postbuild": "npm run build"
   },
   "eslintConfig": {
