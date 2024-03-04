@@ -157,6 +157,52 @@ export default function ProjectForm() {
     setActiveButton('close');
   };
 
+<<<<<<< HEAD
+=======
+  // ----------------- Icons -----------------
+
+  // Holds the Add New Project Icon and styling.
+  const addIcon = () => {
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          cursor: 'pointer',
+        }}
+      >
+        <PlusIcon style={{ p: 1 }} />
+        <Typography sx={{ p: 1, fontSize: '14px', fontWeight: '600' }}>
+          Add New Project
+        </Typography>
+      </Box>
+    );
+  };
+  // Holds the Edit New Project Icon and styling.
+  const editIcon = () => {
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          cursor: 'pointer',
+        }}
+        onClick={handleEditMode}
+      >
+        <EditIcon style={{ p: 1 }} />
+        <Typography sx={{ p: 1, fontSize: '14px', fontWeight: '600' }}>
+          {editMode ? 'Cancel' : 'Edit Mode'}
+        </Typography>
+      </Box>
+    );
+  };
+
+  // ----------------- Location radio -----------------
+
+  // Holdes the location radios styling.
+>>>>>>> 08e0b51 (feat: Refactor ProjectForm to use TitledBox)
   const locationRadios = (
     <Grid item>
       <FormControl>
@@ -189,6 +235,7 @@ export default function ProjectForm() {
       <Box sx={{ textAlign: 'center' }}>
         <Typography variant="h1">Project Management</Typography>
       </Box>
+<<<<<<< HEAD
       <Box sx={{ bgcolor: '#F5F5F5' }}>
         <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between' }}>
           <Box>
@@ -261,6 +308,57 @@ export default function ProjectForm() {
           </Grid>
         </Grid>
       </Box>
+=======
+      <TitledBox
+        title={editMode ? 'Editing Project' : 'Project Information'}
+        badge={isEdit ? editIcon() : addIcon()}
+      >
+        <form
+          id="project-form"
+          onSubmit={handleSubmit((data) => {
+            isEdit ? submitEditProject(data) : submitNewProject(data);
+          })}
+        >
+          {arr.map((input) => (
+            <ValidatedTextField
+              key={input.name}
+              register={register}
+              isEdit={isEdit}
+              editMode={editMode}
+              locationType={locationType}
+              locationRadios={locationRadios}
+              errors={errors}
+              input={input}
+            />
+          ))}
+        </form>
+        <Box>
+          <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
+            <Grid item xs="auto">
+              <StyledButton
+                type="submit"
+                form="project-form"
+                variant={!isEdit ? 'secondary' : !editMode ? 'contained' : 'secondary'}
+                cursor="pointer"
+                disabled={isEdit ? !editMode : false}
+              >
+                Save
+              </StyledButton>
+            </Grid>
+            <Grid item xs="auto">
+              <StyledButton
+                component={Link}
+                to="/projects"
+                variant="contained"
+                cursor="pointer"
+              >
+                Close
+              </StyledButton>
+            </Grid>
+          </Grid>
+        </Box>
+      </TitledBox>
+>>>>>>> 08e0b51 (feat: Refactor ProjectForm to use TitledBox)
     </Box>
   ) : (
     <Redirect to="/login" />
