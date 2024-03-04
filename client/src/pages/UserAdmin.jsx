@@ -47,9 +47,9 @@ const UserAdmin = () => {
     fetchProjects();
   }, [fetchUsers, fetchProjects]);
 
-  const backToSearch = () => {
-    setUserToEdit({});
-  };
+  // const backToSearch = () => {
+  //   setUserToEdit({});
+  // };
 
   if (!auth && !auth?.user) {
     return <Redirect to="/login" />;
@@ -63,7 +63,7 @@ const UserAdmin = () => {
         userToEdit={userToEdit}
         projects={projects}
         updateUserDb={updateUserDb}
-        backToSearch={backToSearch}
+        // backToSearch={backToSearch}
         updateUserActiveStatus={updateUserActiveStatus}
       />
     );

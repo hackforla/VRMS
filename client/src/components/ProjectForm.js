@@ -21,70 +21,13 @@ import { styled } from '@mui/material/styles';
 import useAuth from "../hooks/useAuth"
 import TitledBox from './TitledBox';
 
-/** Project Form Component
- *
- * To be used for creating and updating a project
- * */
-
-const simpleInputs = [
-  {
-    label: 'Project Name',
-    name: 'name',
-    type: 'text',
-    placeholder: 'Enter project name',
-  },
-  {
-    label: 'Project Description',
-    name: 'description',
-    type: 'textarea',
-    placeholder: 'Enter project description',
-    value: /^[a-zA-Z0-9].{0,250}$/,
-    errorMessage: 'Description is too long, max 250 characters allowed'
-  },
-  {
-    label: 'Location',
-    name: 'location',
-    type: 'text',
-    placeholder: 'Enter location for meeting',
-    value: /https:\/\/[\w-]*\.?zoom.us\/(j|my)\/[\d\w?=-]+/,
-    errorMessage: 'Please enter a valid Zoom URL',
-    addressValue: '',
-    addressError: 'Invalid address'
-
-  },
-  // Leaving incase we want to add this back in for updating projects
-  // {
-  //   label: 'GitHub Identifier',
-  //   name: 'githubIdentifier',
-  //   type: 'text',
-  //   placeholder: 'Enter GitHub identifier',
-  // },
-  {
-    label: 'GitHub URL',
-    name: 'githubUrl',
-    type: 'text',
-    placeholder: 'htttps://github.com/'
-  },
-  {
-    label: 'Slack Channel Link',
-    name: 'slackUrl',
-    type: 'text',
-    placeholder: 'htttps://slack.com/',
-  },
-  {
-    label: 'Google Drive URL',
-    name: 'googleDriveUrl',
-    type: 'text',
-    placeholder: 'htttps://drive.google.com/',
-  },
-  // Leaving incase we want to add this back in for updating projects
-  // {
-  //   label: 'HFLA Website URL',
-  //   name: 'hflaWebsiteUrl',
-  //   type: 'text',
-  //   placeholder: 'htttps://hackforla.org/projects/',
-  // },
-];
+import useAuth from '../hooks/useAuth';
+import ProjectApiService from '../api/ProjectApiService';
+import { ReactComponent as EditIcon } from '../svg/Icon_Edit.svg';
+import { ReactComponent as PlusIcon } from '../svg/PlusIcon.svg';
+import ValidatedTextField from './parts/form/ValidatedTextField';
+import TitledBox from './parts/boxes/TitledBox';
+import ChangesModal from './ChangesModal';
 
 /** STYLES
  *  -most TextField and InputLabel styles are controlled by the theme
@@ -92,7 +35,7 @@ const simpleInputs = [
  *  -the rest are inline
  */
 
-const StyledButton = styled(Button)(({ theme }) => ({
+export const StyledButton = styled(Button)(({ theme }) => ({
   width: '150px',
 }));
 
@@ -119,7 +62,38 @@ export default function ProjectForm() {
   const [newlyCreatedID, setNewlyCreatedID] = useState(null);
   const history = useHistory();
   const { auth } = useAuth();
-  const { register, handleSubmit, formState: { errors } } = useForm({ 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleOpen = () => setIsModalOpen(true)
+  const handleClose = () => setIsModalOpen(false)
+
+  const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
+  /**
+   * React Hook Forms
+   *  - register
+   *  - handleSubmit
+   *  - formState
+   *  - reset
+   *  - defaultValues - holds edit project data
+   *
+   */
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
     mode: 'all',
     defaultValues: {
       name: '',
@@ -141,7 +115,25 @@ export default function ProjectForm() {
     routeToNewProjectPage()
   },[newlyCreatedID])
 
-  // only handles radio button change
+  // Fires PUT request to update the project,
+  const submitEditProject = async (data) => {
+    const projectApi = new ProjectApiService();
+    try {
+      await projectApi.updateProject(projectToEdit._id, data);
+    } catch (errors) {
+      console.error(errors);
+      return;
+    }
+    // setOriginalProjectData(data);
+    setFormData(data);
+    setEditMode(false);
+  };
+
+
+
+  // ----------------- Handles and Toggles -----------------
+
+  // Handles the location radio button change.
   const handleRadioChange = (event) => {
     setLocationType(event.target.value);
   };
@@ -237,6 +229,13 @@ export default function ProjectForm() {
         title={editMode ? 'Editing Project' : 'Project Information'}
         badge={isEdit ? editIcon() : addIcon()}
       >
+       <ChangesModal 
+        open={isModalOpen} 
+        onClose={handleClose} 
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description" 
+        handleClose={handleClose}
+        />
         <form
           id="project-form"
           onSubmit={handleSubmit((data) => {
@@ -271,10 +270,9 @@ export default function ProjectForm() {
             </Grid>
             <Grid item xs="auto">
               <StyledButton
-                component={Link}
-                to="/projects"
                 variant="contained"
                 cursor="pointer"
+                onClick={handleOpen}
               >
                 Close
               </StyledButton>
