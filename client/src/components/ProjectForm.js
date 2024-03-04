@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import ProjectApiService from '../api/ProjectApiService';
-import { ReactComponent as PlusIcon } from '../svg/PlusIcon.svg';
-import { Redirect } from 'react-router-dom'
+import { useForm, useFormState } from 'react-hook-form';
+import { Redirect } from 'react-router-dom';
 import {
   Typography,
   Box,
@@ -65,6 +63,9 @@ export default function ProjectForm() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleOpen = () => setIsModalOpen(true)
   const handleClose = () => setIsModalOpen(false)
+  const checkFields = () => {
+     history.push("/projects")
+  }
 
   /**
    * React Hook Forms
@@ -81,6 +82,7 @@ export default function ProjectForm() {
     handleSubmit,
     reset,
     formState: { errors },
+    control
   } = useForm({
     mode: 'all',
     defaultValues: {
@@ -93,9 +95,19 @@ export default function ProjectForm() {
     }
   });
 
-  const routeToNewProjectPage = () => {
-     if(newlyCreatedID !== null) {
-      history.push(`/projects/${newlyCreatedID}`)
+  const { dirtyFields } = useFormState({control})
+
+  // ----------------- Submit requests -----------------
+
+  // Handles POST request found in api/ProjectApiService.
+  const submitNewProject = async (data) => {
+    const projectApi = new ProjectApiService();
+    try {
+      const id = await projectApi.create(data);
+      history.push(`/projects/${id}`);
+    } catch (errors) {
+      console.error(errors);
+      return;
     }
   }
   
@@ -217,20 +229,14 @@ export default function ProjectForm() {
         title={editMode ? 'Editing Project' : 'Project Information'}
         badge={isEdit ? editIcon() : addIcon()}
       >
-       <ChangesModal 
-        open={isModalOpen} 
-        onClose={handleClose} 
-        destination={'/projects'}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description" 
-        handleClose={handleClose}
-        />
+       
         <form
           id="project-form"
           onSubmit={handleSubmit((data) => {
             isEdit ? submitEditProject(data) : submitNewProject(data);
           })}
         >
+        
           {arr.map((input) => (
             <ValidatedTextField
               key={input.name}
@@ -243,6 +249,14 @@ export default function ProjectForm() {
               input={input}
             />
           ))}
+          <ChangesModal 
+        open={isModalOpen} 
+        onClose={handleClose} 
+        destination={'/projects'}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description" 
+        handleClose={handleClose}
+        />
         </form>
         <Box>
           <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
@@ -261,7 +275,7 @@ export default function ProjectForm() {
               <StyledButton
                 variant="contained"
                 cursor="pointer"
-                onClick={handleOpen}
+                onClick={Object.keys(dirtyFields).length > 0 ? handleOpen: checkFields}
               >
                 Close
               </StyledButton>
