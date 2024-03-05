@@ -1,3 +1,5 @@
+const generateEventData = require('./lib/generateEventData');
+
 module.exports = (cron, fetch) => {
 
     // Check to see if any recurring events are happening today,
