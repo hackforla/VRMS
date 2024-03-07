@@ -1,4 +1,4 @@
-FROM node:18.12.0 AS api-development
+FROM node:20.11 AS api-development
 RUN mkdir /srv/backend
 WORKDIR /srv/backend
 RUN mkdir -p node_modules
@@ -6,14 +6,14 @@ COPY package.json yarn.lock ./
 RUN yarn install --pure-lockfile
 COPY . .
 
-FROM node:18.12.0 AS api-test
+FROM node:20.11 AS api-test
 RUN mkdir /srv/backend
 WORKDIR /srv/backend
 COPY package.json yarn.lock ./
 RUN yarn install --silent
 RUN mkdir -p node_modules
 
-FROM node:18.12.0-slim AS api-production
+FROM node:20.11-slim AS api-production
 EXPOSE 4000
 USER node
 WORKDIR /srv/backend
