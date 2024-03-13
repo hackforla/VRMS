@@ -1,4 +1,4 @@
-const generateEventData = require('./lib/generateEventData');
+const { generateEventData } = require('./lib/generateEventData');
 
 module.exports = (cron, fetch) => {
 
