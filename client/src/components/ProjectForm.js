@@ -278,10 +278,13 @@ export default function ProjectForm({
                 variant="contained"
                 cursor="pointer"
                 onClick={
-                  isEdit
+                  !editMode || Object.keys(dirtyFields).length === 0
                     ? checkFields
-                    : // Object.keys(dirtyFields).length > 0 ?
-                      handleOpen
+                    : handleOpen
+
+                  // Object.keys(dirtyFields).length > 0 ? handleOpen : checkFields
+                  // dirtyFields === 0 ? checkFields : handleOpen
+                  // isEdit ? handleOpen : checkFields
                 }
               >
                 Close
