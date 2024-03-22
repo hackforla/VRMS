@@ -54,7 +54,8 @@ export const simpleInputs = [
     name: 'googleDriveUrl',
     type: 'text',
     placeholder: 'htttps://drive.google.com/',
-    disabled: false
+    disabled: false,
+    required: false
   },
   {
     label: 'HFLA Website URL',
@@ -89,13 +90,15 @@ export const additionalInputsForEdit = [
   //   placeholder: 'Project Status',
   //   disabled: false
   // },
-   {
-    label: 'Google Drive ID',
-    name: 'googleDriveId',
-    type: 'text',
-    placeholder: 'htttps://drive.google.com/',
-    disabled: false
-  },
+  // Comment out as per the PR #1584
+  //  {
+  //   label: 'Google Drive ID',
+  //   name: 'googleDriveId',
+  //   type: 'text',
+  //   placeholder: 'htttps://drive.google.com/',
+  //   disabled: false,
+  //   required: false
+  // },
   // this feature is commented out as per the PR #1577
   // {
   //   label: 'Created Date',
