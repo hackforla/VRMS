@@ -104,7 +104,7 @@ export default function ProjectForm({
     },
   });
 
-  const { dirtyFields } = useFormState({ control })
+  const { dirtyFields } = useFormState({control})
 
   // ----------------- Submit requests -----------------
 
