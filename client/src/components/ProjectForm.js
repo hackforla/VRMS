@@ -64,7 +64,7 @@ export default function ProjectForm({
   formData,
   projectToEdit,
   isEdit,
-  setFormData,
+  setFormData
 }) {
   const history = useHistory();
 
@@ -74,11 +74,11 @@ export default function ProjectForm({
   const [editMode, setEditMode] = useState(false);
   const { auth } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const handleOpen = () => setIsModalOpen(true);
-  const handleClose = () => setIsModalOpen(false);
+  const handleOpen = () => setIsModalOpen(true)
+  const handleClose = () => setIsModalOpen(false)
   const checkFields = () => {
-    history.push('/projects');
-  };
+    history.push("/projects")
+  }
 
   /**
    * React Hook Forms
@@ -95,7 +95,7 @@ export default function ProjectForm({
     handleSubmit,
     reset,
     formState: { errors },
-    control,
+    control
   } = useForm({
     mode: 'all',
     // Holds the current project data in state.
@@ -104,7 +104,7 @@ export default function ProjectForm({
     },
   });
 
-  const { dirtyFields } = useFormState({ control });
+  const { dirtyFields } = useFormState({ control })
 
   // ----------------- Submit requests -----------------
 
@@ -133,6 +133,8 @@ export default function ProjectForm({
     setFormData(data);
     setEditMode(false);
   };
+
+
 
   // ----------------- Handles and Toggles -----------------
 
@@ -231,12 +233,14 @@ export default function ProjectForm({
         title={editMode ? 'Editing Project' : 'Project Information'}
         badge={isEdit ? editIcon() : addIcon()}
       >
+
         <form
           id="project-form"
           onSubmit={handleSubmit((data) => {
             isEdit ? submitEditProject(data) : submitNewProject(data);
           })}
         >
+
           {arr.map((input) => (
             <ValidatedTextField
               key={input.name}
@@ -250,13 +254,13 @@ export default function ProjectForm({
             />
           ))}
           <ChangesModal
-            open={isModalOpen}
-            onClose={handleClose}
-            destination={'/projects'}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-            handleClose={handleClose}
-          />
+        open={isModalOpen}
+        onClose={handleClose}
+        destination={'/projects'}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        handleClose={handleClose}
+        />
         </form>
         <Box>
           <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
@@ -264,9 +268,7 @@ export default function ProjectForm({
               <StyledButton
                 type="submit"
                 form="project-form"
-                variant={
-                  !isEdit ? 'secondary' : !editMode ? 'contained' : 'secondary'
-                }
+                variant={!isEdit ? 'secondary' : !editMode ? 'contained' : 'secondary'}
                 cursor="pointer"
                 disabled={isEdit ? !editMode : false}
               >
@@ -277,15 +279,7 @@ export default function ProjectForm({
               <StyledButton
                 variant="contained"
                 cursor="pointer"
-                onClick={
-                  !editMode || Object.keys(dirtyFields).length === 0
-                    ? checkFields
-                    : handleOpen
-
-                  // Object.keys(dirtyFields).length > 0 ? handleOpen : checkFields
-                  // dirtyFields === 0 ? checkFields : handleOpen
-                  // isEdit ? handleOpen : checkFields
-                }
+                onClick={!editMode || Object.keys(dirtyFields).length === 0 ? checkFields: handleOpen}
               >
                 Close
               </StyledButton>
