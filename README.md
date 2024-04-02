@@ -1,5 +1,5 @@
 # Volunteer Relationship Management System
-Live Site: [https://vrms.io](https://vrms.io)
+Live Site: [https://www.vrms.io](https://www.vrms.io)
 
 VRMS is a tool used for the engagement, support, and retention of a network of volunteers.
 

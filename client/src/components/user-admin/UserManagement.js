@@ -144,12 +144,12 @@ const UserManagement = ({ users, setUserToEdit }) => {
           </Box>
         </Box>
         <Box>
-          <Button
+          {/* <Button
             type='button'
             variant='secondary'
           >
             Add a New User
-          </Button>
+          </Button> */}
         </Box>
       </Box>
     </Box>

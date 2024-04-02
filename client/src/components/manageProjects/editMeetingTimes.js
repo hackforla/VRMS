@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../../sass/ManageProjects.scss';
+import { useSnackbar } from '../../context/snackbarContext';
 import EditableMeeting from './editableMeeting';
 import { findNextOccuranceOfDay } from './utilities/findNextDayOccuranceOfDay';
 import { addDurationToTime } from './utilities/addDurationToTime';
@@ -10,12 +11,12 @@ import validateEventForm from './utilities/validateEventForm';
 const EditMeetingTimes = ({
   projectToEdit,
   selectedEvent,
-  setEventAlert,
   setSelectedEvent,
   deleteRecurringEvent,
   updateRecurringEvent,
 }) => {
   const [formErrors, setFormErrors] = useState({});
+  const { showSnackbar } = useSnackbar();
   const handleEventUpdate = (
     eventID,
     values,
@@ -40,13 +41,10 @@ const EditMeetingTimes = ({
         };
       }
 
-      //if there is a description or a blank description
-      if (values.description || !values.description) {
-        theUpdatedEvent = {
-          ...theUpdatedEvent,
-          description: values.description,
-        };
-      }
+      theUpdatedEvent = {
+        ...theUpdatedEvent,
+        description: values.description,
+      };
 
       if (values.videoConferenceLink) {
         theUpdatedEvent = {
@@ -62,56 +60,26 @@ const EditMeetingTimes = ({
         updatedDate,
       };
 
-      // If the day has been changed, find the next occurence of the changed day
-      if (values.day) {
-        const date = findNextOccuranceOfDay(values.day);
-        const dateGMT = new Date(date).toISOString();
+      // Find next occurance of Day in the future
+      // Assign new start time and end time
+      const date = findNextOccuranceOfDay(values.day);
+      const startTimeDate = timeConvertFromForm(date, values.startTime);
+      const endTime = addDurationToTime(startTimeDate, values.duration);
 
-        theUpdatedEvent = {
-          ...theUpdatedEvent,
-          date: dateGMT,
-        };
-      }
-
-      // Set start time, End time and Duration if either start time or duration is changed
-      if (values.startTime || values.duration) {
-        /*
-        We need a start time and a duration to calculate everything we need.  
-        If only the start time or only the duration is changing, 
-        we use the previous time or duration for the calculation.
-        */
-
-        let startTimeToUse = startTimeOriginal;
-        let durationToUse = durationOriginal;
-
-        if (values.startTime) {
-          startTimeToUse = values.startTime;
-        }
-
-        if (values.duration) {
-          durationToUse = values.duration;
-        }
-
-        const timeDate = timeConvertFromForm(new Date(), startTimeToUse);
-        const endTime = addDurationToTime(timeDate, durationToUse);
-
-        // convert to ISO and GMT
-        const startTimeGMT = new Date(timeDate).toISOString();
-        const endTimeGMT = new Date(endTime).toISOString();
-
-        theUpdatedEvent = {
-          ...theUpdatedEvent,
-          startTime: startTimeGMT,
-          endTime: endTimeGMT,
-          hours: durationToUse,
-        };
-      }
+      // Revert timestamps to GMT
+      const startDateTimeGMT = new Date(startTimeDate).toISOString();
+      const endTimeGMT = new Date(endTime).toISOString();
+        
+      theUpdatedEvent = {
+        ...theUpdatedEvent,
+        date: startDateTimeGMT,
+        startTime: startDateTimeGMT,
+        endTime: endTimeGMT,
+        duration: values.duration
+      };
 
       updateRecurringEvent(theUpdatedEvent, eventID);
-      setEventAlert("Event updated!")
-      await setTimeout(() => {
-        setEventAlert(null);
-      }, 5000)
+      showSnackbar("Recurring event updated", 'info')
       setSelectedEvent(null);
     }
     setFormErrors(errors);
@@ -120,10 +88,7 @@ const EditMeetingTimes = ({
   const handleEventDelete = (eventID) => async () => {
     deleteRecurringEvent(eventID);
     setSelectedEvent(null);
-    setEventAlert("Event deleted!");
-    await setTimeout(() => {
-      setEventAlert(null);
-    }, 5000);
+    showSnackbar("Recurring event deleted", 'info');
   };
 
   return (
