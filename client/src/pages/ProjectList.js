@@ -41,25 +41,15 @@ export default function ProjectList() {
   // On component mount, request projects data from API
   useEffect(
     function getProjectsOnMount() {
-      async function fetchAllProjects() {
-        let projectsData = await projectApiService.fetchProjects();
-
-        //sort the projects alphabetically
-        projectsData = projectsData.sort((a, b) =>
-          a.name?.localeCompare(b.name)
-        );
-
+      async function fetUsersProjects() {
+        let projectData;
         // if user is not admin, but is a project manager, only show projects they manage
-        if (user?.accessLevel !== 'admin' && user?.managedProjects.length > 0) {
-          projectsData = projectsData.filter((project) =>
-            user.managedProjects.includes(project._id)
-          );
+        if(user?.accessLevel  !== 'admin' && user?.managedProjects.length > 0) {
+           projectData = await projectApiService.fetchProjectByID(user.managedProjects[0]);
         }
-
-        setProjects(projectsData);
+        setProjects(projectData);
       }
-
-      fetchAllProjects();
+      fetUsersProjects();
     },
     [projectApiService, user.accessLevel, user.managedProjects]
   );
@@ -99,16 +89,16 @@ export default function ProjectList() {
       )}
 
       <TitledBox title="Active Projects" childrenBoxSx={{ p: 2 }}>
-          {projects.map((project) => (
-            <Box key={project._id} sx={{ mb: 0.35 }}>
+         
+            <Box key={projects._id} sx={{ mb: 0.35 }}>
               <StyledTypography
                 component={Link}
-                to={`/projects/${project._id}`}
+                to={`/projects/${projects._id}`}
               >
-                {project.name}
+                {projects.name}
               </StyledTypography>
             </Box>
-          ))}
+          
       </TitledBox>
     </Box>
   );
