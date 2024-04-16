@@ -86,9 +86,11 @@ class ProjectApiService {
   }
 
   async fetchProjectByID(projectID) {
+    
     try {
       const res = await fetch(`${this.baseProjectUrl}${projectID}`, {headers: this.headers})
       const json = await res.json()
+      console.log("JSON", json)
       return json
     } catch(err) {
       console.error(err)
