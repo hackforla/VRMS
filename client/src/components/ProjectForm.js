@@ -77,7 +77,7 @@ export default function ProjectForm({
   const handleOpen = () => setIsModalOpen(true)
   const handleClose = () => setIsModalOpen(false)
   const checkFields = () => {
-     history.push("/projects")
+    history.push("/projects")
   }
 
   /**
@@ -233,14 +233,14 @@ export default function ProjectForm({
         title={editMode ? 'Editing Project' : 'Project Information'}
         badge={isEdit ? editIcon() : addIcon()}
       >
-       
+
         <form
           id="project-form"
           onSubmit={handleSubmit((data) => {
             isEdit ? submitEditProject(data) : submitNewProject(data);
           })}
         >
-        
+
           {arr.map((input) => (
             <ValidatedTextField
               key={input.name}
@@ -253,12 +253,12 @@ export default function ProjectForm({
               input={input}
             />
           ))}
-          <ChangesModal 
-        open={isModalOpen} 
-        onClose={handleClose} 
+          <ChangesModal
+        open={isModalOpen}
+        onClose={handleClose}
         destination={'/projects'}
         aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description" 
+        aria-describedby="modal-modal-description"
         handleClose={handleClose}
         />
         </form>
@@ -279,7 +279,7 @@ export default function ProjectForm({
               <StyledButton
                 variant="contained"
                 cursor="pointer"
-                onClick={Object.keys(dirtyFields).length > 0 ? handleOpen: checkFields}
+                onClick={!editMode || Object.keys(dirtyFields).length === 0 ? checkFields: handleOpen}
               >
                 Close
               </StyledButton>
