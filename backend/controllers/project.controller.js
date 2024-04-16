@@ -25,10 +25,10 @@ ProjectController.create = async function (req, res) {
 };
 
 ProjectController.project_by_id = async function (req, res) {
-  const { ProjectId } = req.params;
+  const { projectId } = req.params;
 
   try {
-    const project = await Project.findById(ProjectId);
+    const project = await Project.findById(projectId);
     return res.status(200).send(project);
   } catch (err) {
     return res.sendStatus(400);
