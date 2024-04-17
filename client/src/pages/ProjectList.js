@@ -31,6 +31,7 @@ const StyledTypography = styled(Typography)({
  */
 
 export default function ProjectList() {
+  const [project, setProject] = useState(null);
   const [projects, setProjects] = useState(null);
   const [projectApiService] = useState(new ProjectApiService());
 
@@ -43,12 +44,18 @@ export default function ProjectList() {
     function getProjectsOnMount() {
       async function fetUsersProjects() {
         let projectData;
+
+        if (user?.accessLevel === 'admin') {
+          projectData = await projectApiService.fetchProjects()
+          setProjects(projectData)
+        }
         // if user is not admin, but is a project manager, only show projects they manage
         if(user?.accessLevel  !== 'admin' && user?.managedProjects.length > 0) {
            projectData = await projectApiService.fetchProjectByID(user.managedProjects[0]);
+           setProject(projectData);
         }
-        setProjects(projectData);
       }
+      
       fetUsersProjects();
     },
     [projectApiService, user.accessLevel, user.managedProjects]
@@ -60,7 +67,7 @@ export default function ProjectList() {
   }
 
   // Render loading circle until project data is served from API
-  if (!projects)
+  if (!project && !projects)
     return (
       <Box sx={{ textAlign: 'center', pt: 10 }}>
         <CircularProgress />
@@ -89,15 +96,28 @@ export default function ProjectList() {
       )}
 
       <TitledBox title="Active Projects" childrenBoxSx={{ p: 2 }}>
-         
-            <Box key={projects._id} sx={{ mb: 0.35 }}>
+         {user?.accessLevel !== 'admin' && project && 
+            (<Box key={project._id} sx={{ mb: 0.35 }}>
               <StyledTypography
                 component={Link}
-                to={`/projects/${projects._id}`}
+                to={`/projects/${project._id}`}
               >
-                {projects.name}
+                {project.name}
+              </StyledTypography>
+            </Box>)
+}
+
+        
+            {user?.accessLevel === 'admin' && projects && projects.map((project) => (
+            <Box key={project._id} sx={{ mb: 0.35 }}>
+              <StyledTypography
+                component={Link}
+                to={`/projects/${project._id}`}
+              >
+                {project.name}
               </StyledTypography>
             </Box>
+          ))}
           
       </TitledBox>
     </Box>
