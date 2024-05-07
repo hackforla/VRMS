@@ -235,7 +235,7 @@ export default function ProjectForm({
       <Box sx={{ textAlign: 'center' }}>
         <Typography variant="h1">Project Management</Typography>
       </Box>
-      {auth.isAdmin ? (
+      {auth.user.accessLevel === 'admin' ? (
         <TitledBox
           title={editMode ? 'Editing Project' : 'Project Information'}
           badge={isEdit ? editIcon() : addIcon()}
@@ -270,7 +270,7 @@ export default function ProjectForm({
           handleClose={handleClose}
         />
       </form>
-      {auth.isAdmin ? (
+      {auth.user.accessLevel === 'admin' ? (
         <Box>
           <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
             <Grid item xs="auto">
