@@ -169,7 +169,7 @@ const NewUserForm = (props) => {
             <div className="error">{props.errorMessage}</div>
           }
 
-          {!props.isLoading? (
+          {!props.isLoading ? (
             <div className="form-row">
               <div className="form-input-button">
                 <button
