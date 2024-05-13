@@ -169,7 +169,7 @@ const NewUserForm = (props) => {
             <div className="error">{props.errorMessage}</div>
           }
 
-          {!props.isLoading ? (
+          {!props.isLoading? (
             <div className="form-row">
               <div className="form-input-button">
                 <button
@@ -177,7 +177,7 @@ const NewUserForm = (props) => {
                   className="form-check-in-submit"
                   onClick={(e) => props.checkInNewUser(e)}
                 >
-                  CHECK IN
+                  {props.newMember ? 'CREATE A NEW PROFILE' : 'CHECK IN'}
                 </button>
               </div>
             </div>
