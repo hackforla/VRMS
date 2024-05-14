@@ -221,14 +221,6 @@ export default function ProjectForm({
       </FormControl>
     </Grid>
   );
-  console.log(
-    'project form component - auth.user.accessLevel: ',
-    auth.user.accessLevel
-  );
-  console.log('project form component - auth.isAdmin: ', auth.isAdmin);
-  /**
-   * user.auth.accessLevel: 'admin'
-   */
 
   return auth && auth.user ? (
     <Box sx={{ px: 0.5 }}>
