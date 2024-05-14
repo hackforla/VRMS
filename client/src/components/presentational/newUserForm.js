@@ -177,7 +177,7 @@ const NewUserForm = (props) => {
                   className="form-check-in-submit"
                   onClick={(e) => props.checkInNewUser(e)}
                 >
-                  {props.newMember ? 'CREATE A NEW PROFILE' : 'CHECK IN'}
+                  {props.newMember ? 'CREATE PROFILE' : 'CHECK IN'}
                 </button>
               </div>
             </div>
