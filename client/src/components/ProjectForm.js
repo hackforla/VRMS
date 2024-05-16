@@ -81,7 +81,6 @@ export default function ProjectForm({
   const checkFields = () => {
     history.push('/projects');
   };
-  // const handleLoading = () => setIsLoading(!isLoading);
 
   /**
    * React Hook Forms
@@ -113,12 +112,15 @@ export default function ProjectForm({
 
   // Handles POST request found in api/ProjectApiService.
   const submitNewProject = async (data) => {
+    setIsLoading(true);
     const projectApi = new ProjectApiService();
     try {
       const id = await projectApi.create(data);
       history.push(`/projects/${id}`);
+      setIsLoading(false);
     } catch (errors) {
       console.error(errors);
+      setIsLoading(false);
       return;
     }
   };
@@ -126,11 +128,9 @@ export default function ProjectForm({
   // Fires PUT request to update the project,
   const submitEditProject = async (data) => {
     setIsLoading(true);
-    console.log('pre-API call isLoading: ', isLoading);
     const projectApi = new ProjectApiService();
     try {
       const res = await projectApi.updateProject(projectToEdit._id, data);
-      console.log('res: ', res);
     } catch (errors) {
       console.error(errors);
       setIsLoading(false);
@@ -139,7 +139,6 @@ export default function ProjectForm({
     // setOriginalProjectData(data);
 
     setIsLoading(false);
-    console.log('post-API call isLoading: ', isLoading);
     setFormData(data);
     setEditMode(false);
   };
