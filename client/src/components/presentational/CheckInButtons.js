@@ -14,14 +14,14 @@ const CheckInButtons = (props) => {
       </Link>
       <Link
         to={`/checkIn/newUser?eventId=${props.event}`}
-        className={`home-button`}
+        className={`home-button ${props.disabled && "disabled"}`}
       >
         CHECK IN AS NEW USER
       </Link>
      
       {props.events.length > 1 && (
-        <Link to={`/newProfile`} className={`home-button-light`}>
-          ...OR CREATE A NEW PROFILE
+        <Link to={`/newProfile`} className={`home-button`}>
+          CREATE A NEW PROFILE
         </Link>
       )}
     </>
