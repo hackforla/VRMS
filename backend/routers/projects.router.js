@@ -7,7 +7,8 @@ const { AuthUtil } = require("../middleware");
 // The base is /api/projects
 router.get('/', ProjectController.project_list);
 
-router.put('/', ProjectController.projects);
+// Its a put because we have to send the PM projects to be filtered here
+router.put('/', ProjectController.pm_filtered_projects);
 
 router.post('/', AuthUtil.verifyCookie, ProjectController.create);
 
