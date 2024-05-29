@@ -7,6 +7,8 @@ const { AuthUtil } = require("../middleware");
 // The base is /api/projects
 router.get('/', ProjectController.project_list);
 
+router.put('/', ProjectController.projects);
+
 router.post('/', AuthUtil.verifyCookie, ProjectController.create);
 
 router.get('/:ProjectId', ProjectController.project_by_id);
