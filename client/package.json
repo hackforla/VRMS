@@ -34,6 +34,7 @@
   },
   "scripts": {
     "vite": "vite",
+    "dev": "vite",
     "start": "dotenv -e .env -e ../backend/.env -- cross-var cross-env PORT=%CLIENT_PORT% vite",
     "build": "vite build",
     "test": "vitest",
