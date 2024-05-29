@@ -5,6 +5,7 @@
   align-items: center;
   z-index: 1;
   margin-bottom: 200px;
+  height: 100%;
 }
 
 .edit-users {
@@ -62,6 +63,22 @@
   flex-direction: column;
   flex-basis: 85%;
   margin-bottom: 8px;
+}
+
+.user-is-active-column-left {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 15%;
+}
+
+.active-status {
+  margin-right: 15px;
+  width: 25px;
+}
+
+.is-active-flex {
+  display: flex;
+  align-items: center;
 }
 
 .button-remove {

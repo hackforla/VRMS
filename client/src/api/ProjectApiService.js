@@ -22,29 +22,30 @@ class ProjectApiService {
     }
   }
 
+  // Handles the POST request and returns the projects ID.
   async create(projectData) {
     const {
       name,
       description,
-      location,
-      githubIdentifier,
+      //location, this feature is commented out as per the PR #1567
       githubUrl,
       slackUrl,
       googleDriveUrl,
       hflaWebsiteUrl,
+      githubIdentifier,
     } = projectData;
     const requestOptions = {
       method: 'POST',
       headers: this.headers,
       body: JSON.stringify({
-        name: name,
-        description: description,
-        location: location,
-        githubIdentifier: githubIdentifier,
-        githubUrl: githubUrl,
-        slackUrl: slackUrl,
-        googleDriveUrl: googleDriveUrl,
-        hflaWebsiteUrl: hflaWebsiteUrl,
+        name,
+        description,
+        // location, this feature is commented out as per the PR #1567
+        githubUrl,
+        slackUrl,
+        googleDriveUrl,
+        hflaWebsiteUrl,
+        githubIdentifier,
         projectStatus: 'Active',
       }),
     };
@@ -62,26 +63,13 @@ class ProjectApiService {
     }
   }
 
-  async updateProject(projectId, fieldName, fieldValue) {
-    let updateValue = fieldValue;
-    // These field are arrays, but the form makes them comma separated strings,
-    // so this adds it back to db as an arrray.
-    if (
-      fieldValue &&
-      (fieldName === 'partners' || fieldName === 'recruitingCategories')
-    ) {
-      updateValue = fieldValue
-        .split(',')
-        .filter((x) => x !== '')
-        .map((y) => y.trim());
-    }
-
+  async updateProject(projectId, projectData) {
     // Update database
     const url = `${this.baseProjectUrl}${projectId}`;
     const requestOptions = {
-      method: 'PATCH',
+      method: 'PUT',
       headers: this.headers,
-      body: JSON.stringify({ [fieldName]: updateValue }),
+      body: JSON.stringify({ ...projectData }),
     };
 
     try {

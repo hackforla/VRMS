@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import ProjectApiService from '../api/ProjectApiService';
-import { ReactComponent as PlusIcon } from '../svg/PlusIcon.svg';
-
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useForm, useFormState } from 'react-hook-form';
+import { Redirect } from 'react-router-dom';
 import {
   Typography,
   Box,
-  Divider,
-  TextField,
-  InputLabel,
   Button,
   Grid,
   Radio,
@@ -16,66 +12,15 @@ import {
   FormControlLabel,
   RadioGroup,
 } from '@mui/material';
-
 import { styled } from '@mui/material/styles';
 
-/** Project Form Component
- *
- * To be used for creating and updating a project
- * */
-
-const simpleInputs = [
-  {
-    label: 'Project Name',
-    name: 'name',
-    type: 'text',
-    placeholder: 'Enter project name',
-  },
-  {
-    label: 'Project Description',
-    name: 'description',
-    type: 'textarea',
-    placeholder: 'Enter project description',
-  },
-  {
-    label: 'Location',
-    name: 'location',
-    type: 'text',
-    placeholder: 'Enter project location',
-  },
-  // Leaving incase we want to add this back in for updating projects
-  // {
-  //   label: 'GitHub Identifier',
-  //   name: 'githubIdentifier',
-  //   type: 'text',
-  //   placeholder: 'Enter GitHub identifier',
-  // },
-  {
-    label: 'GitHub URL',
-    name: 'githubUrl',
-    type: 'text',
-    placeholder: 'htttps://github.com/',
-  },
-  {
-    label: 'Slack Channel Link',
-    name: 'slackUrl',
-    type: 'text',
-    placeholder: 'htttps://slack.com/',
-  },
-  {
-    label: 'Google Drive URL',
-    name: 'googleDriveUrl',
-    type: 'text',
-    placeholder: 'htttps://drive.google.com/',
-  },
-  // Leaving incase we want to add this back in for updating projects
-  // {
-  //   label: 'HFLA Website URL',
-  //   name: 'hflaWebsiteUrl',
-  //   type: 'text',
-  //   placeholder: 'htttps://hackforla.org/projects/',
-  // },
-];
+import useAuth from '../hooks/useAuth';
+import ProjectApiService from '../api/ProjectApiService';
+import { ReactComponent as EditIcon } from '../svg/Icon_Edit.svg';
+import { ReactComponent as PlusIcon } from '../svg/PlusIcon.svg';
+import ValidatedTextField from './parts/form/ValidatedTextField';
+import TitledBox from './parts/boxes/TitledBox';
+import ChangesModal from './ChangesModal';
 
 /** STYLES
  *  -most TextField and InputLabel styles are controlled by the theme
@@ -83,7 +28,7 @@ const simpleInputs = [
  *  -the rest are inline
  */
 
-const StyledButton = styled(Button)(({ theme }) => ({
+export const StyledButton = styled(Button)(({ theme }) => ({
   width: '150px',
 }));
 
@@ -101,80 +46,153 @@ const StyledRadio = styled(Radio)(({ theme }) => ({
 
 /**Project Form Component
  * -renders a form for creating and updating a project
- */
 
-export default function ProjectForm() {
-  const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    location: '',
-    // githubIdentifier: '',
-    githubUrl: '',
-    slackUrl: '',
-    googleDriveUrl: '',
-    // hflaWebsiteUrl: '',
-  });
 
-  //seperate state for the location radio buttons
-  const [locationType, setLocationType] = React.useState('remote');
-
-  const [activeButton, setActiveButton] = React.useState('close');
-
-  const [newlyCreatedID, setNewlyCreatedID] = useState(null);
+/**
+ 
+/**
+ * Takes Array, formData, projectToEdit, handleChage, isEdit
+ * submitForm, handleChange, and isEdit are for the edit forms.
+ * - arr - simpleInputs arr from the edit page that holds the input's properties.
+ * - formData - passes the current project information to the form.
+ * - projectToEdit - used to grab the of the project we are editing.
+ * - isEdit - Whether its creating a new project or editing one - True or False.
+ * - setFormData - allows us to updated the form data.
+ * */
+export default function ProjectForm({
+  arr,
+  formData,
+  projectToEdit,
+  isEdit,
+  setFormData,
+}) {
   const history = useHistory();
 
-  const routeToNewProjectPage = () => {
-     if(newlyCreatedID !== null) {
-      history.push(`/projects/${newlyCreatedID}`)
-    }
-  }
-  
-
-  useEffect(() => {
-    routeToNewProjectPage()
-  },[newlyCreatedID])
-
-  
-
-  // only handles radio button change
-  const handleRadioChange = (event) => {
-    setLocationType(event.target.value);
+  // ----------------- States -----------------
+  const [locationType, setLocationType] = useState('remote');
+  // State to track the toggling from Project view to Edit Project View via edit icon.
+  const [editMode, setEditMode] = useState(false);
+  const { auth } = useAuth();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleOpen = () => setIsModalOpen(true);
+  const handleClose = () => setIsModalOpen(false);
+  const checkFields = () => {
+    history.push('/projects');
   };
 
-  //updates state of formData onChange of any form input
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  /**
+   * React Hook Forms
+   *  - register
+   *  - handleSubmit
+   *  - formState
+   *  - reset
+   *  - defaultValues - holds edit project data
+   *
+   */
 
-    setFormData((fData) => ({
-      ...fData,
-      [name]: value,
-    }));
-  };
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+    control,
+  } = useForm({
+    mode: 'all',
+    // Holds the current project data in state.
+    defaultValues: {
+      ...formData,
+    },
+  });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const { dirtyFields } = useFormState({ control });
+
+  // ----------------- Submit requests -----------------
+
+  // Handles POST request found in api/ProjectApiService.
+  const submitNewProject = async (data) => {
     const projectApi = new ProjectApiService();
     try {
-      // fires POST request to create a new project,
-      // but the server response does not include the newly created project id that we need
-      const id = await projectApi.create(formData);
-      setNewlyCreatedID(id);
+      const id = await projectApi.create(data);
+      history.push(`/projects/${id}`);
     } catch (errors) {
       console.error(errors);
       return;
     }
-    setActiveButton('close');
   };
 
-  // Basic validation : if all inputs have values, enable the submit button
-  useEffect(() => {
-    if (Object.values(formData).every((val) => val !== '')) {
-      setActiveButton('save');
-    } else {
-      setActiveButton('close');
+  // Fires PUT request to update the project,
+  const submitEditProject = async (data) => {
+    const projectApi = new ProjectApiService();
+    try {
+      await projectApi.updateProject(projectToEdit._id, data);
+    } catch (errors) {
+      console.error(errors);
+      return;
     }
-  }, [formData]);
+    // setOriginalProjectData(data);
+    setFormData(data);
+    setEditMode(false);
+  };
 
+  // ----------------- Handles and Toggles -----------------
+
+  // Handles the location radio button change.
+  const handleRadioChange = (event) => {
+    setLocationType(event.target.value);
+  };
+
+  // Toggles the project view to edit mode change.
+  const handleEditMode = (event) => {
+    setEditMode(!editMode);
+    // React hook form method to reset data back to original values. Triggered when Edit Mode is cancelled.
+    reset({
+      ...formData,
+    });
+  };
+
+  // ----------------- Icons -----------------
+
+  // Holds the Add New Project Icon and styling.
+  const addIcon = () => {
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          cursor: 'pointer',
+        }}
+      >
+        <PlusIcon style={{ p: 1 }} />
+        <Typography sx={{ p: 1, fontSize: '14px', fontWeight: '600' }}>
+          Add New Project
+        </Typography>
+      </Box>
+    );
+  };
+  // Holds the Edit New Project Icon and styling.
+  const editIcon = () => {
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          cursor: 'pointer',
+        }}
+        onClick={handleEditMode}
+      >
+        <EditIcon style={{ p: 1 }} />
+        <Typography sx={{ p: 1, fontSize: '14px', fontWeight: '600' }}>
+          {editMode ? 'Cancel' : 'Edit Mode'}
+        </Typography>
+      </Box>
+    );
+  };
+
+  // ----------------- Location radio -----------------
+
+  // Holdes the location radios styling.
   const locationRadios = (
     <Grid item>
       <FormControl>
@@ -190,110 +208,96 @@ export default function ProjectForm() {
             value="remote"
             control={<StyledRadio size="small" />}
             label="Remote"
+            disabled={isEdit ? !editMode : false}
           />
           <Box sx={{ width: '10px' }} />
           <StyledFormControlLabel
             value="in-person"
             control={<StyledRadio size="small" />}
             label="In-Person"
+            disabled={isEdit ? !editMode : false}
           />
         </RadioGroup>
       </FormControl>
     </Grid>
   );
 
-  return (
+  return auth && auth.user ? (
     <Box sx={{ px: 0.5 }}>
       <Box sx={{ textAlign: 'center' }}>
         <Typography variant="h1">Project Management</Typography>
       </Box>
-      <Box sx={{ bgcolor: '#F5F5F5' }}>
-        <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between' }}>
-          <Box>
-            <Typography sx={{ fontSize: '18px', fontWeight: '600' }}>
-              Project Information
-            </Typography>
-          </Box>
-          <Box sx={{ display: 'flex' }}>
-            <PlusIcon style={{ marginRight: '7px' }} />
-            <Typography sx={{ fontSize: '14px', fontWeight: '600' }}>
-              Add New Project
-            </Typography>
-          </Box>
-        </Box>
-        <Divider sx={{ borderColor: 'rgba(0,0,0,1)' }} />
-        <Box sx={{ py: 2, px: 4 }}>
-          <form id="project-form" onSubmit={handleSubmit}>
-            {simpleInputs.map((input) => (
-              <Box sx={{ mb: 1 }} key={input.name}>
-                <Grid container alignItems="center">
-                  <Grid item xs="auto" sx={{ pr: 3 }}>
-                    <InputLabel
-                      sx={{ width: 'max-content', ml: 0.5, mb: 0.5 }}
-                      id={input.name}
-                    >
-                      {input.label}
-                    </InputLabel>
-                  </Grid>
-
-                  {input.name === 'location' && locationRadios}
-                </Grid>
-
-                <TextField
-                  id={input.name}
-                  name={input.name}
-                  placeholder={
-                    input.name === 'location'
-                      ? locationType === 'remote'
-                        ? 'Enter project zoom link'
-                        : 'Enter project street address'
-                      : input.placeholder
-                  }
-                  variant="outlined"
-                  type={input.type}
-                  onChange={handleChange}
-                  helperText=" "
-                  value={formData[input.name]}
-                  {...(input.type === 'textarea' && {
-                    multiline: true,
-                    minRows: 3,
-                    sx: {
-                      '& .MuiInputBase-root': {
-                        px: '4px',
-                        py: '5px',
-                      },
-                    },
-                  })}
-                />
-              </Box>
-            ))}
-          </form>
-        </Box>
-      </Box>
-      <Box>
-        <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
-          <Grid item xs="auto">
-            <StyledButton
-              type="submit"
-              form="project-form"
-              variant={activeButton === 'save' ? 'contained' : 'secondary'}
-              disabled={activeButton !== 'save'}
-            >
-              Save
-            </StyledButton>
+      {auth.user.accessLevel === 'admin' ? (
+        <TitledBox
+          title={editMode ? 'Editing Project' : 'Project Information'}
+          badge={isEdit ? editIcon() : addIcon()}
+        />
+      ) : (
+        <TitledBox title={'Project Information'} />
+      )}
+      <form
+        id="project-form"
+        onSubmit={handleSubmit((data) => {
+          isEdit ? submitEditProject(data) : submitNewProject(data);
+        })}
+      >
+        {arr.map((input) => (
+          <ValidatedTextField
+            key={input.name}
+            register={register}
+            isEdit={isEdit}
+            editMode={editMode}
+            locationType={locationType}
+            locationRadios={locationRadios}
+            errors={errors}
+            input={input}
+          />
+        ))}
+        <ChangesModal
+          open={isModalOpen}
+          onClose={handleClose}
+          destination={'/projects'}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          handleClose={handleClose}
+        />
+      </form>
+      {auth.user.accessLevel === 'admin' ? (
+        <Box>
+          <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
+            <Grid item xs="auto">
+              <StyledButton
+                type="submit"
+                form="project-form"
+                variant={
+                  !isEdit ? 'secondary' : !editMode ? 'contained' : 'secondary'
+                }
+                cursor="pointer"
+                disabled={isEdit ? !editMode : false}
+              >
+                Save
+              </StyledButton>
+            </Grid>
+            <Grid item xs="auto">
+              <StyledButton
+                variant="contained"
+                cursor="pointer"
+                onClick={
+                  !editMode || Object.keys(dirtyFields).length === 0
+                    ? checkFields
+                    : handleOpen
+                }
+              >
+                Close
+              </StyledButton>
+            </Grid>
           </Grid>
-          <Grid item xs="auto">
-            <StyledButton
-              component={Link}
-              to="/projects"
-              variant={activeButton === 'close' ? 'contained' : 'secondary'}
-              disabled={activeButton !== 'close'}
-            >
-              Close
-            </StyledButton>
-          </Grid>
-        </Grid>
-      </Box>
+        </Box>
+      ) : (
+        ''
+      )}
     </Box>
+  ) : (
+    <Redirect to="/login" />
   );
 }
