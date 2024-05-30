@@ -236,73 +236,56 @@ export default function ProjectForm({
       <Box sx={{ textAlign: 'center' }}>
         <Typography variant="h1">Project Management</Typography>
       </Box>
-      <TitledBox
-        title={editMode ? 'Editing Project' : 'Project Information'}
-        badge={isEdit ? editIcon() : addIcon()}
+      {auth.user.accessLevel === 'admin' ? (
+        <TitledBox
+          title={editMode ? 'Editing Project' : 'Project Information'}
+          badge={isEdit ? editIcon() : addIcon()}
+        />
+      ) : (
+        <TitledBox title={'Project Information'} />
+      )}
+      <form
+        id="project-form"
+        onSubmit={handleSubmit((data) => {
+          isEdit ? submitEditProject(data) : submitNewProject(data);
+        })}
       >
-        <form
-          id="project-form"
-          onSubmit={handleSubmit((data) => {
-            isEdit ? submitEditProject(data) : submitNewProject(data);
-          })}
-        >
-          {arr.map((input) => (
-            <ValidatedTextField
-              key={input.name}
-              register={register}
-              isEdit={isEdit}
-              editMode={editMode}
-              locationType={locationType}
-              locationRadios={locationRadios}
-              errors={errors}
-              input={input}
-            />
-          ))}
-          <ChangesModal
-            open={isModalOpen}
-            onClose={handleClose}
-            destination={'/projects'}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-            handleClose={handleClose}
+        {arr.map((input) => (
+          <ValidatedTextField
+            key={input.name}
+            register={register}
+            isEdit={isEdit}
+            editMode={editMode}
+            locationType={locationType}
+            locationRadios={locationRadios}
+            errors={errors}
+            input={input}
           />
-        </form>
+        ))}
+        <ChangesModal
+          open={isModalOpen}
+          onClose={handleClose}
+          destination={'/projects'}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          handleClose={handleClose}
+        />
+      </form>
+      {auth.user.accessLevel === 'admin' ? (
         <Box>
           <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
             <Grid item xs="auto">
-              {isLoading ? (
-                <StyledButton
-                  type="submit"
-                  form="project-form"
-                  variant={
-                    !isEdit
-                      ? 'secondary'
-                      : !editMode
-                      ? 'contained'
-                      : 'secondary'
-                  }
-                  cursor="pointer"
-                  disabled={isEdit && !isLoading ? !editMode : false}
-                >
-                  <CircularProgress />
-                </StyledButton>
-              ) : (
-                <StyledButton
-                  type="submit"
-                  form="project-form"
-                  variant={
-                    !isEdit
-                      ? 'secondary'
-                      : !editMode
-                      ? 'contained'
-                      : 'secondary'
-                  }
-                  cursor="pointer"
-                  disabled={isEdit && !isLoading ? !editMode : false}
-                >
-                  Save
-                </StyledButton>
-              )}
+              <StyledButton
+                type="submit"
+                form="project-form"
+                variant={
+                  !isEdit ? 'secondary' : !editMode ? 'contained' : 'secondary'
+                }
+                cursor="pointer"
+                disabled={isEdit ? !editMode : false}
+              >
+                Save
+              </StyledButton>
             </Grid>
             <Grid item xs="auto">
               <StyledButton
@@ -319,7 +302,9 @@ export default function ProjectForm({
             </Grid>
           </Grid>
         </Box>
-      </TitledBox>
+      ) : (
+        ''
+      )}
     </Box>
   ) : (
     <Redirect to="/login" />
