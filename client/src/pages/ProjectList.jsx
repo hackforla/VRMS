@@ -42,21 +42,18 @@ export default function ProjectList() {
   useEffect(
     function getProjectsOnMount() {
       async function fetchAllProjects() {
-        let projectsData = await projectApiService.fetchProjects();
+        let projectData;
 
-        //sort the projects alphabetically
-        projectsData = projectsData.sort((a, b) =>
-          a.name?.localeCompare(b.name)
-        );
+        if(user?.accessLevel === 'admin') {
+          projectData = await projectApiService.fetchProjects();
+          setProjects(projectData);
+        }
 
         // if user is not admin, but is a project manager, only show projects they manage
         if (user?.accessLevel !== 'admin' && user?.managedProjects.length > 0) {
-          projectsData = projectsData.filter((project) =>
-            user.managedProjects.includes(project._id)
-          );
+          projectData = await projectApiService.fetchPMProjects(user.managedProjects);
+          setProjects(projectData);
         }
-
-        setProjects(projectsData);
       }
 
       fetchAllProjects();

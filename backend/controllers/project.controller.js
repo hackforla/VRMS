@@ -13,6 +13,16 @@ ProjectController.project_list = async function (req, res) {
   }
 };
 
+ProjectController.pm_filtered_projects = async function(req, res) {
+  try {
+    const projectList = await Project.find({})
+    const projects = projectList.filter(proj => req.body.includes(proj._id.toString()))
+    return res.status(200).send(projects)
+  } catch(e) {
+    return res.sendStatus(400)
+  }
+}
+
 ProjectController.create = async function (req, res) {
   const { body } = req;
 

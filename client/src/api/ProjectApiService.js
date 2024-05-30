@@ -83,6 +83,21 @@ class ProjectApiService {
       return undefined;
     }
   }
+
+  async fetchPMProjects(projects) {
+    const requestOptions = {
+      headers: this.headers,
+      method: "PUT",
+      body: JSON.stringify(projects)
+    }
+    try {
+        const res = await fetch(this.baseProjectUrl, requestOptions);
+        return await res.json();
+    } catch(e) {
+      console.error(e);
+      return undefined;
+    }
+  }
 }
 
 export default ProjectApiService;
