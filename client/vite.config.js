@@ -12,6 +12,7 @@ export default defineConfig(({ mode }) => {
     ],
     server: {
       port: env.CLIENT_PORT,
+      host: true,
       proxy: {
         '/api': {
           target: env.REACT_APP_PROXY,
