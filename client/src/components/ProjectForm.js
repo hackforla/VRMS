@@ -114,6 +114,7 @@ export default function ProjectForm({
   const submitNewProject = async (data) => {
     setIsLoading(true);
     const projectApi = new ProjectApiService();
+
     try {
       const id = await projectApi.create(data);
       history.push(`/projects/${id}`);
@@ -121,6 +122,7 @@ export default function ProjectForm({
     } catch (errors) {
       console.error(errors);
       setIsLoading(false);
+
       return;
     }
   };
@@ -275,17 +277,39 @@ export default function ProjectForm({
         <Box>
           <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
             <Grid item xs="auto">
-              <StyledButton
-                type="submit"
-                form="project-form"
-                variant={
-                  !isEdit ? 'secondary' : !editMode ? 'contained' : 'secondary'
-                }
-                cursor="pointer"
-                disabled={isEdit ? !editMode : false}
-              >
-                Save
-              </StyledButton>
+              {isLoading ? (
+                <StyledButton
+                  type="submit"
+                  form="project-form"
+                  variant={
+                    !isEdit
+                      ? 'secondary'
+                      : !editMode
+                      ? 'contained'
+                      : 'secondary'
+                  }
+                  cursor="pointer"
+                  disabled={isEdit && !isLoading ? !editMode : false}
+                >
+                  <CircularProgress />
+                </StyledButton>
+              ) : (
+                <StyledButton
+                  type="submit"
+                  form="project-form"
+                  variant={
+                    !isEdit
+                      ? 'secondary'
+                      : !editMode
+                      ? 'contained'
+                      : 'secondary'
+                  }
+                  cursor="pointer"
+                  disabled={isEdit && !isLoading ? !editMode : false}
+                >
+                  Save
+                </StyledButton>
+              )}
             </Grid>
             <Grid item xs="auto">
               <StyledButton
