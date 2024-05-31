@@ -70,11 +70,11 @@ export default function ProjectForm({
   const history = useHistory();
 
   // ----------------- States -----------------
+  const { auth } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [locationType, setLocationType] = useState('remote');
   // State to track the toggling from Project view to Edit Project View via edit icon.
   const [editMode, setEditMode] = useState(false);
-  const { auth } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleOpen = () => setIsModalOpen(true);
   const handleClose = () => setIsModalOpen(false);
@@ -112,27 +112,24 @@ export default function ProjectForm({
 
   // Handles POST request found in api/ProjectApiService.
   const submitNewProject = async (data) => {
-    setIsLoading(true);
     const projectApi = new ProjectApiService();
 
     try {
+      setIsLoading(true);
       const id = await projectApi.create(data);
       history.push(`/projects/${id}`);
-      setIsLoading(false);
     } catch (errors) {
       console.error(errors);
-      setIsLoading(false);
-
-      return;
     }
+    return () => setIsLoading(false);
   };
 
   // Fires PUT request to update the project,
   const submitEditProject = async (data) => {
-    setIsLoading(true);
     const projectApi = new ProjectApiService();
     try {
-      const res = await projectApi.updateProject(projectToEdit._id, data);
+      setIsLoading(true);
+      await projectApi.updateProject(projectToEdit._id, data);
     } catch (errors) {
       console.error(errors);
       setIsLoading(false);
