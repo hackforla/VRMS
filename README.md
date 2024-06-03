@@ -1,5 +1,5 @@
 # Volunteer Relationship Management System
-Live Site: [https://vrms.io](https://vrms.io)
+Live Site: [https://www.vrms.io](https://www.vrms.io)
 
 VRMS is a tool used for the engagement, support, and retention of a network of volunteers.
 
@@ -14,7 +14,7 @@ We require all code contributors to
 ## Wiki Highlights
 1. [Introduction](https://github.com/hackforla/VRMS/wiki/Introduction)
 2. [Technology Stack](https://github.com/hackforla/VRMS/wiki/Technology)
-3. [Team Meetigns](https://github.com/hackforla/VRMS/wiki/Team-Meetings)
+3. [Team Meetings](https://github.com/hackforla/VRMS/wiki/Team-Meetings)
 
 ## We Love Our Stars ⭐⭐⭐
 

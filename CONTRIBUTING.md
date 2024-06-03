@@ -50,50 +50,53 @@ These steps are manditory in order to contribute to all HackforLA projects.
 ## **Part 2: How to set up the development environment**
 
 ### **2.1 Fork the repository**
+*A fork is a copy of the repository that will be placed on your GitHub account url.*
 
-In https://github.com/hackforla/VRMS, look for the fork icon in the top right. Click it and create a fork of the repository.
+* In https://github.com/hackforla/VRMS, look for the fork icon in the top right. Click it and create a fork of the repository. 
 
-For git beginners, a fork is a copy of the repository that will be placed on your GitHub account url.
+* It should create a copy here: https://github.com/YOUR_GITHUB_USERNAME/vrms, where `YOUR_GITHUB_USERNAME` is replaced with your github username.
 
-It should create a copy here: https://github.com/your_GitHub_user_name/vrms, where `your_GitHub_user_name` is replaced with exactly that.
+> NOTE: This copy is on a remote server on the GitHub website and not on your computer yet.
 
-Note that this copy is on a remote server on the GitHub website and not on your computer yet.
-
-If you click the icon again, it will not create a new fork but instead give you the URL associated with your fork.
+* Click the icon again, it will give you the URL associated with your forked repository and not create a new fork.
 
 ### **2.2 Clone the remote repository to your local computer**
 
 The following process will make a copy of the fork that you just created on your local computer.
 
-First create a new folder on your local computer that will contain `hackforla` projects.
+1. Create a new folder on your local computer that will contain `hackforla` projects.
 
-In your shell, navigate there then run the following commands:
+2. In your shell (terminal), navigate to this folder then run the following commands:
+	```bash
+	git clone https://github.com/YOUR_GITHUB_USERNAME/vrms.git
+	```
 
-```bash
-git clone https://github.com/your_GitHub_user_name/vrms.git
-```
+	You should now have a new folder in your `hackforla` folder called `vrms`.
 
-You should now have a new folder in your `hackforla` folder called `vrms`.
+3. Verify which URL your `origin` remote is pointing to:
+	```bash
+	git remote show origin
+	```
+	Your terminal should return:
+	```bash
+	remote origin
+	Fetch URL: https://github.com/YOUR_GITHUB_USERNAME/vrms.git
+	Push URL: https://github.com/YOUR_GITHUB_USERNAME/vrms.git
+	...
+	```	
 
-Verify which URL your `origin` remote is pointing to:
+	If you accidentally cloned the `hackforla/vrms.git` then you can change your local copy to upload to your fork with the following:
 
-```bash
-git remote show origin
-```
+	```bash
+	git remote set-url origin https://github.com/YOUR_GITHUB_USERNAME/vrms.git
+	```
 
-If you accidentally cloned the `hackforla/vrms.git` then you can change your local copy to upload to your fork with the following:
+4. Add another remote called `vrms` that points to the `hackforla` version of the repository. This will allow you to incorporate changes later:
+	```bash
+	git remote add vrms https://github.com/hackforla/vrms.git
+	```
 
-```bash
-git remote set-url origin https://github.com/your_user_name/vrms.git
-```
-
-Add another remote called `vrms` that points to the `hackforla` version of the repository. This will allow you to incorporate changes later:
-
-```bash
-git remote add vrms https://github.com/hackforla/vrms.git
-```
-
-Note: Understanding how git remotes work will make collaborating much easier. You can learn more about remotes [here](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/configuring-a-remote-for-a-fork) and [here](https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes)
+Note: Understanding how git remotes work will make collaborating much easier. You can learn more about remotes [here](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/configuring-a-remote-for-a-fork) and [here](https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes).
 
 
 ### **2.3 Get up and running**   
@@ -114,20 +117,19 @@ Note: Understanding how git remotes work will make collaborating much easier. Yo
 
    - `cd vrms/` and run `yarn install`
    - `cd client` and run `yarn install`
-   - `cd client-mvp-04` and run `yarn install`
    - `cd ../backend` and run `yarn install`
 
 1. Add your required environment variables for the frontend and backend directories:
 
    - `touch vrms/backend/.env`
    - `touch vrms/client/.env`
-   - `touch vrms/client-mvp-04/.env`
 
-   Note 1: In the above example you are trying to create an empty file called `.env` in each of the listed directories: backend, client and client-mvp-04. You can use either `touch <path-to-directory> .env` or navigate to the directory and use `touch .env`
+   Note 1: In the above example you are trying to create an empty file called `.env` in each of the listed directories: backend and client. You can use either `touch <path-to-directory> .env` or navigate to the directory and use `touch .env`
 
    Note 2: `touch` is a Unix/Linux or Mac command; It is not available in Windows. In Windows, use a text editor (e.g. Notepad) to create an empty file and save it in each of the locations as `.env` . (If you use Windows Explorer to create the file it will create a file called `.env.txt`, which will not work.)
 
-   - Then paste the content from the [document](https://docs.google.com/document/d/1yDF6UmyO-MPNrl3y_Mw0mkm_WaixlSkXzWbudCzHXDY/edit?usp=sharing). It is accessible for the project team members only.
+   - Then paste the content from the [document](https://docs.google.com/document/d/1yDF6UmyO-MPNrl3y_Mw0mkm_WaixlSkXzWbudCzHXDY/edit?usp=sharing). It is accessible for the project team members only. 
+
    - _Please note that the `ports` for the frontend and backend are set in this location_
 
 1. Take a second to review the `app.js` and `server.js` files in the `vrms/backend` folder. These two files are a blueprint for the back end, so please familiarize yourself with it. You'll see folders for the database collection models, routes for the API, and a config file which loads the necessary environment variables.
@@ -186,21 +188,21 @@ Claiming an issue is a two step process:
 
 
 ### **3.2 Create a new branch for each issue you work on**
-Create a new branch for each issue you work on. Doing all your work on feature branches leaves your repository's main branch unmodified and greatly simplifies keeping your fork in sync with the main project.
+You will create a new branch for each issue you work on. Doing all your work on feature branches leaves your repository's main branch unmodified and greatly simplifies keeping your fork in sync with the main project.
 
 
-Before creating a new branch, always make sure you are currently on the `development` branch by using the command 
-```
-git branch
-```
-Before creating a new branch, always pull down the latest changes from the `development` branch by using the command
-```
-git pull vrms development
-```
-Finally, create a new branch where you will work on your issue by using the command 
-```
-git checkout -b your-branch-name
-```
+1. Before creating a new branch, always make sure you are currently on the `development` branch by using the command 
+	```bash
+	git branch
+	```
+2. Before creating a new branch, always pull down the latest changes from the `development` branch by using the command
+	```bash
+	git pull vrms development
+	```
+3. Finally, create a new branch where you will work on your issue by using the command:
+	```bash
+	git checkout -b your-branch-name
+	```
 
 ### **3.3 Work on the Issue**
 Every issue will contain action items you must complete before you are ready to submit a pull request. Be sure to use the checkboxes as you complete each action item so we can track your progress!
@@ -215,14 +217,14 @@ git commit -m "your commit message"
 
 ## **Part 4: How to create pull requests**
 ### **4.1 Push changes to your forked repository**
-Before pushing code, always pull down the latest changes from the `development` branch by using the command
-```
-git pull vrms development
-```
-Once you are satisfied with your changes, push them to the feature branch you made within your remote repository.
-```
-git push --set-upstream origin your-branch-name
-```
+1. Before pushing code, always pull down the latest changes from the `development` branch by using the command
+	```
+	git pull vrms development
+	```
+2. Once you are satisfied with your changes, push them to the feature branch you made within your remote repository.
+	```
+	git push --set-upstream origin your-branch-name
+	```
 ### **4.2 Create a pull request on the VRMS repository**
 1. Go to your fork of the VRMS repository on GitHub and click on the `Compare & pull request` button. <details><summary>See screenshot</summary> <img src="https://user-images.githubusercontent.com/73561520/220488394-09bc759e-98d9-4a09-86c6-66378cf50923.png"/></details>
 2. Be sure to title your pull request by summarizing the changes you made

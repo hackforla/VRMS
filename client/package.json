@@ -7,6 +7,7 @@
     "@babel/plugin-transform-react-jsx-self": "^7.10.4",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
+    "@mui/icons-material": "^5.14.19",
     "@mui/material": "^5.11.12",
     "@vitejs/plugin-react": "^4.0.3",
     "@vitejs/plugin-react-swc": "^3.3.2",
@@ -33,6 +34,7 @@
   },
   "scripts": {
     "vite": "vite",
+    "dev": "vite",
     "start": "dotenv -e .env -e ../backend/.env -- cross-var cross-env PORT=%CLIENT_PORT% vite",
     "build": "vite build",
     "test": "vitest",
@@ -68,7 +70,7 @@
     "prettier": "^2.1.1",
     "react-test-renderer": "^18.2.0",
     "sass": "^1.49.7",
-    "vitest": "^0.33.0"
+    "vitest": "^1.6.0"
   },
   "engines": {
     "node": "<=18.0.0"
