@@ -2,7 +2,6 @@
 
 // Load in all of our node modules. Their uses are explained below as they are called.
 const express = require('express');
-const bodyParser = require('body-parser');
 const cron = require('node-cron');
 const fetch = require('node-fetch');
 const morgan = require('morgan');
@@ -43,8 +42,8 @@ require('assert-env')([
 const app = express();
 
 // Required to view Request Body (req.body) in JSON
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Used to save JWT token from MagicLink
 app.use(cookieParser());
