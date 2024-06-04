@@ -231,70 +231,102 @@ export default function ProjectForm({
         <TitledBox
           title={editMode ? 'Editing Project' : 'Project Information'}
           badge={isEdit ? editIcon() : addIcon()}
-        />
-      ) : (
-        <TitledBox title={'Project Information'} />
-      )}
-      <form
-        id="project-form"
-        onSubmit={handleSubmit((data) => {
-          isEdit ? submitEditProject(data) : submitNewProject(data);
-        })}
-      >
-        {arr.map((input) => (
-          <ValidatedTextField
-            key={input.name}
-            register={register}
-            isEdit={isEdit}
-            editMode={editMode}
-            locationType={locationType}
-            locationRadios={locationRadios}
-            errors={errors}
-            input={input}
-          />
-        ))}
-        <ChangesModal
-          open={isModalOpen}
-          onClose={handleClose}
-          destination={'/projects'}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-          handleClose={handleClose}
-        />
-      </form>
-      {auth.user.accessLevel === 'admin' ? (
-        <Box>
-          <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
-            <Grid item xs="auto">
-              <StyledButton
-                type="submit"
-                form="project-form"
-                variant={
-                  !isEdit ? 'secondary' : !editMode ? 'contained' : 'secondary'
-                }
-                cursor="pointer"
-                disabled={isEdit ? !editMode : false}
-              >
-                Save
-              </StyledButton>
+        >
+          {' '}
+          <form
+            id="project-form"
+            onSubmit={handleSubmit((data) => {
+              isEdit ? submitEditProject(data) : submitNewProject(data);
+            })}
+          >
+            {arr.map((input) => (
+              <ValidatedTextField
+                key={input.name}
+                register={register}
+                isEdit={isEdit}
+                editMode={editMode}
+                locationType={locationType}
+                locationRadios={locationRadios}
+                errors={errors}
+                input={input}
+              />
+            ))}
+            <ChangesModal
+              open={isModalOpen}
+              onClose={handleClose}
+              destination={'/projects'}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+              handleClose={handleClose}
+            />
+          </form>
+          <Box>
+            <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
+              <Grid item xs="auto">
+                <StyledButton
+                  type="submit"
+                  form="project-form"
+                  variant={
+                    !isEdit
+                      ? 'secondary'
+                      : !editMode
+                      ? 'contained'
+                      : 'secondary'
+                  }
+                  cursor="pointer"
+                  disabled={isEdit && !isLoading ? !editMode : false}
+                >
+                  Save
+                </StyledButton>
+              </Grid>
+              <Grid item xs="auto">
+                <StyledButton
+                  variant="contained"
+                  cursor="pointer"
+                  onClick={
+                    !editMode || Object.keys(dirtyFields).length === 0
+                      ? checkFields
+                      : handleOpen
+                  }
+                >
+                  Close
+                </StyledButton>
+              </Grid>
             </Grid>
-            <Grid item xs="auto">
-              <StyledButton
-                variant="contained"
-                cursor="pointer"
-                onClick={
-                  !editMode || Object.keys(dirtyFields).length === 0
-                    ? checkFields
-                    : handleOpen
-                }
-              >
-                Close
-              </StyledButton>
-            </Grid>
-          </Grid>
-        </Box>
+          </Box>
+        </TitledBox>
       ) : (
-        ''
+        <TitledBox title={'Project Information'}>
+          {' '}
+          <form
+            id="project-form"
+            onSubmit={handleSubmit((data) => {
+              isEdit ? submitEditProject(data) : submitNewProject(data);
+            })}
+          >
+            {arr.map((input) => (
+              <ValidatedTextField
+                key={input.name}
+                register={register}
+                isEdit={isEdit}
+                editMode={editMode}
+                locationType={locationType}
+                locationRadios={locationRadios}
+                errors={errors}
+                input={input}
+              />
+            ))}
+            <ChangesModal
+              open={isModalOpen}
+              onClose={handleClose}
+              destination={'/projects'}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+              handleClose={handleClose}
+            />
+          </form>
+          {''}
+        </TitledBox>
       )}
     </Box>
   ) : (
