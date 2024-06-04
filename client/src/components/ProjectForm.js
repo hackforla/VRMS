@@ -274,39 +274,17 @@ export default function ProjectForm({
         <Box>
           <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
             <Grid item xs="auto">
-              {isLoading ? (
-                <StyledButton
-                  type="submit"
-                  form="project-form"
-                  variant={
-                    !isEdit
-                      ? 'secondary'
-                      : !editMode
-                      ? 'contained'
-                      : 'secondary'
-                  }
-                  cursor="pointer"
-                  disabled={isEdit && !isLoading ? !editMode : false}
-                >
-                  <CircularProgress />
-                </StyledButton>
-              ) : (
-                <StyledButton
-                  type="submit"
-                  form="project-form"
-                  variant={
-                    !isEdit
-                      ? 'secondary'
-                      : !editMode
-                      ? 'contained'
-                      : 'secondary'
-                  }
-                  cursor="pointer"
-                  disabled={isEdit && !isLoading ? !editMode : false}
-                >
-                  Save
-                </StyledButton>
-              )}
+              <StyledButton
+                type="submit"
+                form="project-form"
+                variant={
+                  !isEdit ? 'secondary' : !editMode ? 'contained' : 'secondary'
+                }
+                cursor="pointer"
+                disabled={isEdit && !isLoading ? !editMode : false}
+              >
+                {isLoading ? <CircularProgress /> : 'Save'}
+              </StyledButton>
             </Grid>
             <Grid item xs="auto">
               <StyledButton
