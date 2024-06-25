@@ -274,7 +274,7 @@ export default function ProjectForm({
                       : 'secondary'
                   }
                   cursor="pointer"
-                  disabled={isEdit && !isLoading ? !editMode : false}
+                  disabled={isEdit ? !editMode : false}
                 >
                   Save
                 </StyledButton>
