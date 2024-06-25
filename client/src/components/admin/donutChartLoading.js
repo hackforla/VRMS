@@ -1,20 +1,19 @@
-import React from "react";
-import Loading from "../../svg/22.gif";
-
-import "../../sass/Dashboard.scss";
+import React from 'react';
+import { Box, Container, CircularProgress, Typography } from '@mui/material';
+import '../../sass/Dashboard.scss';
 
 const DonutChartLoading = (props) => (
-  <div className="dashboard-stats">
-    <div className="dashboard-stat-container">
-      <div className="stat-header">
-        <p className="stat-header-text"></p>
-      </div>
-      <div className="stat-number"></div>
-    </div>
-    <div className="dashboard-chart-container">
-      <img src={Loading} alt="Logo" />
-    </div>
-  </div>
+  <Container className="dashboard-stats">
+    <Box className="dashboard-stat-container">
+      <Box className="stat-header">
+        <Typography className="stat-header-text"></Typography>
+      </Box>
+      <Box className="stat-number"></Box>
+    </Box>
+    <Box className="dashboard-chart-container">
+      <CircularProgress />
+    </Box>
+  </Container>
 );
 
 export default DonutChartLoading;
