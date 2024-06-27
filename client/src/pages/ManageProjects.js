@@ -31,7 +31,7 @@ const ManageProjects = () => {
 
   const user = auth?.user;
 
-    const fetchProjects = useCallback(async () => {
+  const fetchProjects = useCallback(async () => {
     setProjectsLoading(true);
     const projectRes = await projectApiService.fetchProjects();
     setProjects(projectRes);
@@ -43,7 +43,7 @@ const ManageProjects = () => {
     const eventsRes = await EventsApiService.fetchEvents();
     setRegularEvents(eventsRes);
     setEventsLoading(false);
-  }, [recurringEventsApiService]);
+  }, [EventsApiService]);
 
   const fetchRecurringEvents = useCallback(async () => {
     setEventsLoading(true);
@@ -94,13 +94,10 @@ const ManageProjects = () => {
 
   const updateRegularEvent = useCallback(
     async (eventToUpdate, eventId) => {
-      await EventsApiService.updateEvent(
-        eventToUpdate,
-        eventId
-      );
+      await EventsApiService.updateEvent(eventToUpdate, eventId);
       fetchRegularEvents();
     },
-    [recurringEventsApiService, fetchRegularEvents]
+    [fetchRegularEvents, EventsApiService]
   );
 
   useEffect(() => {
