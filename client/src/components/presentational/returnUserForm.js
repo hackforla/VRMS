@@ -1,12 +1,13 @@
 import React from 'react';
+import { Box, Container, CircularProgress, Typography } from '@mui/material';
 
 const ReturnUserForm = (props) => {
   return (
-    <div className="check-in-container">
-      <div className="check-in-headers">
-        <h3>Welcome back!</h3>
-      </div>
-      <div className="check-in-form">
+    <Container className="check-in-container">
+      <Box className="check-in-headers">
+        <Typography variant='h3'>Welcome back!</Typography>
+      </Box>
+      <Box className="check-in-form">
         <form
           className="form-check-in"
           autoComplete="on"
@@ -28,16 +29,16 @@ const ReturnUserForm = (props) => {
                 autoComplete="email"
               />
             </div>
-            <p>
+            <Typography>
               {"(This allows easy use of the app. We'll never sell your data!)"}
-            </p>
+            </Typography>
           </div>
 
           {props.isError && props.errorMessage.length > 1 &&
-            <div className="error">{props.errorMessage}</div>
+            <Box className="error">{props.errorMessage}</Box>
           }
           {props.user === false && (
-            <div className="error">Try entering your email again.</div>
+            <Box className="error">Try entering your email again.</Box>
           )}
 
           {!props.user && !props.isLoading ? (
@@ -69,8 +70,8 @@ const ReturnUserForm = (props) => {
             </div>
           )}
         </form>
-      </div>
-    </div>
+      </Box>
+    </Container>
   );
 };
 export default ReturnUserForm;
