@@ -4,6 +4,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../../../common/datepicker/index.scss';
 import './index.scss';
+import { Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper } from '@mui/material';
 
 const LocationTableReport = ({eventTypeStats, hackNightTypeStats, handleFilteredData, processedEvents}) => {
     const headerGroups = ['Location', 'Volunteers', 'Hours', 'Avg Hours'];
@@ -151,146 +152,150 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats, handleFiltered
     }
 
     return (
-        <div className="table-report-wrap">
-            {!isLoading ? (
-                <div className="admin-table-report">
-                    {isFilterButton &&
-                        <button
-                            className="filter-button"
+        <Box className="table-report-wrap">
+        {!isLoading ? (
+            <Box className="admin-table-report">
+                {isFilterButton &&
+                    <Button
+                        className="filter-button"
+                        type="button"
+                        onClick={handleSetFilterBtn}
+                    >
+                        Set Filter
+                    </Button>
+                }
+
+                {isDatepicker &&
+                    <Box className="datepicker-section">
+                        <Box className="datepicker-wrap">
+                            <Typography className="datepicker-name">Start</Typography>
+                            <DatePicker
+                                placeholderText='Start date range'
+                                selected={startDate}
+                                onChange={handleChangeStartDate}
+                                selectsStart
+                                startDate={startDate}
+                                endDate={endDate}
+                                maxDate={endDate}
+                            />
+                        </Box>
+
+                        <Box className="datepicker-wrap">
+                            <Typography className="datepicker-name">End</Typography>
+                            <DatePicker
+                                placeholderText='End data range'
+                                selected={endDate}
+                                onChange={handleChangeEndDate}
+                                selectsEnd
+                                startDate={startDate}
+                                endDate={endDate}
+                                maxDate={new Date()}
+                            />
+                        </Box>
+
+                        <Button
+                            className="filter-button calc-button"
                             type="button"
-                            onClick={() => handleSetFilterBtn()}
+                            onClick={handleCalculateStatsBtn}
                         >
-                            Set Filter
-                        </button>
-                    }
+                            Calculate Stats
+                        </Button>
+                    </Box>
+                }
 
-                    {isDatepicker &&
-                        <div className="datepicker-section">
-                            <div className="datepicker-wrap">
-                                <p className="datepicker-name">Start</p>
-                                <DatePicker
-                                    placeholderText='Start date range'
-                                    selected={startDate}
-                                    onChange={date => handleChangeStartDate(date)}
-                                    selectsStart
-                                    startDate={startDate}
-                                    endDate={endDate}
-                                    maxDate={endDate}
-                                />
-                            </div>
-
-                            <div className="datepicker-wrap">
-                                <p className="datepicker-name">End</p>
-                                <DatePicker
-                                    placeholderText='End data range'
-                                    selected={endDate}
-                                    onChange={date => handleChangeEndDate(date)}
-                                    selectsEnd
-                                    startDate={startDate}
-                                    endDate={endDate}
-                                    maxDate={new Date()}
-                                />
-                            </div>
-
-                            <button
-                                className="filter-button calc-button"
-                                type="button"
-                                onClick={(event) => handleCalculateStatsBtn(event)}
-                            >
-                                Calculate Stats
-                            </button>
-                        </div>
-                    }
-
-                    <div className="stats-section">
-                        <div className="time-description">
-                            <span>Stats calculated by: </span>
-                            {!isFiltered ? (
-                                <span>all time</span>
-                            ) : (
-                                <span>
-                           <span>{startTextDate}</span>
-                           <span> - </span>
-                           <span>{endTextDate}</span>
-                       </span>
-                            )}
-                        </div>
-
-                        <div className="table-header m-t-small">All Events By Event Type</div>
-                        {isStatsByLocation ? (
-                            <table className="admin-table">
-                                <thead>
-                                <tr>
-                                    {headerGroups.map(header => (
-                                        <th key={header}>{header}</th>
-                                    ))}
-                                </tr>
-                                </thead>
-
-                                <tbody>
-                                {dataForAllEventsReport.map((event) => (
-                                    <tr key={`events-${event.location}`}>
-                                        <td key={`${event.location + event.id}`}>{event.location}</td>
-                                        <td key={`v-${event.totalVolunteers + event.id}`}>{event.totalVolunteers}</td>
-                                        <td key={`h-${event.totalVolunteerHours + event.id}`}>{event.totalVolunteerHours}</td>
-                                        <td key={`ha-${event.totalVolunteerAvgHours + event.id}`}>{event.totalVolunteerAvgHours}</td>
-                                    </tr>
-                                ))}
-
-                                {totalForAllEvents &&
-                                    <tr>
-                                        <td key={`events-total`}>Total</td>
-                                        {totalForAllEvents.map((total, i) => (
-                                            <td key={`${headerGroups[i]}-events-total`}>{total}</td>
-                                        ))}
-                                    </tr>
-                                }
-                                </tbody>
-                            </table>
+                <Box className="stats-section">
+                    <Box className="time-description">
+                        <Typography>Stats calculated by: </Typography>
+                        {!isFiltered ? (
+                            <Typography>all time</Typography>
                         ) : (
-                            <div>No data for calculation stats</div>
+                            <Typography>
+                                <span>{startTextDate}</span>
+                                <span> - </span>
+                                <span>{endTextDate}</span>
+                            </Typography>
                         )}
+                    </Box>
 
-
-                        <div className="table-header">HackNight Only</div>
-                        {isStatsByHackNight ? (
-                            <table className="admin-table">
-                                <thead>
-                                <tr>
-                                    {headerGroups.map(header => (
-                                        <th key={header}>{header}</th>
-                                    ))}
-                                </tr>
-                                </thead>
-
-                                <tbody>
-                                {isStatsByHackNight && dataForHackNightReport.map((event) => (
-                                    <tr key={`hack-night-${event.location}`}>
-                                        <td key={`${event.location + event.id}`}>{event.location}</td>
-                                        <td key={`tv-${event.totalVolunteers + event.id}`}>{event.totalVolunteers}</td>
-                                        <td key={`th-${event.totalVolunteerHours + event.id}`}>{event.totalVolunteerHours}</td>
-                                        <td key={`ah-${event.totalVolunteerAvgHours + event.id}`}>{event.totalVolunteerAvgHours}</td>
-                                    </tr>
-                                ))}
-
-                                {totalForHackNight &&
-                                    <tr>
-                                        <td key={`hack-night-total`}>Total</td>
-                                        {totalForHackNight.map((total, i) => (
-                                            <td key={`${headerGroups[i]}-hack-total`}>{total}</td>
+                    <Typography className="table-header m-t-small">All Events By Event Type</Typography>
+                    {isStatsByLocation ? (
+                        <TableContainer component={Paper}>
+                            <Table className="admin-table">
+                                <TableHead>
+                                    <TableRow>
+                                        {headerGroups.map(header => (
+                                            <TableCell key={header}>{header}</TableCell>
                                         ))}
-                                    </tr>
-                                }
-                                </tbody>
-                            </table>
-                        ) : (
-                            <div>No data for calculation stats</div>
-                        )}
-                    </div>
-                </div>
-            ) : <Loading /> }
-        </div>
-    );
+                                    </TableRow>
+                                </TableHead>
+
+                                <TableBody>
+                                    {dataForAllEventsReport.map((event) => (
+                                        <TableRow key={`events-${event.location}`}>
+                                            <TableCell>{event.location}</TableCell>
+                                            <TableCell>{event.totalVolunteers}</TableCell>
+                                            <TableCell>{event.totalVolunteerHours}</TableCell>
+                                            <TableCell>{event.totalVolunteerAvgHours}</TableCell>
+                                        </TableRow>
+                                    ))}
+
+                                    {totalForAllEvents &&
+                                        <TableRow>
+                                            <TableCell>Total</TableCell>
+                                            {totalForAllEvents.map((total, i) => (
+                                                <TableCell key={`${headerGroups[i]}-events-total`}>{total}</TableCell>
+                                            ))}
+                                        </TableRow>
+                                    }
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    ) : (
+                        <Typography>No data for calculation stats</Typography>
+                    )}
+
+
+                    <Typography className="table-header">HackNight Only</Typography>
+                    {isStatsByHackNight ? (
+                        <TableContainer component={Paper}>
+                            <Table className="admin-table">
+                                <TableHead>
+                                    <TableRow>
+                                        {headerGroups.map(header => (
+                                            <TableCell key={header}>{header}</TableCell>
+                                        ))}
+                                    </TableRow>
+                                </TableHead>
+
+                                <TableBody>
+                                    {dataForHackNightReport.map((event) => (
+                                        <TableRow key={`hack-night-${event.location}`}>
+                                            <TableCell>{event.location}</TableCell>
+                                            <TableCell>{event.totalVolunteers}</TableCell>
+                                            <TableCell>{event.totalVolunteerHours}</TableCell>
+                                            <TableCell>{event.totalVolunteerAvgHours}</TableCell>
+                                        </TableRow>
+                                    ))}
+
+                                    {totalForHackNight &&
+                                        <TableRow>
+                                            <TableCell>Total</TableCell>
+                                            {totalForHackNight.map((total, i) => (
+                                                <TableCell key={`${headerGroups[i]}-hack-total`}>{total}</TableCell>
+                                            ))}
+                                        </TableRow>
+                                    }
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    ) : (
+                        <Typography>No data for calculation stats</Typography>
+                    )}
+                </Box>
+            </Box>
+        ) : <Loading /> }
+    </Box>
+);
 };
 
 export default LocationTableReport;
