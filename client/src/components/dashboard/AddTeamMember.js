@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import "../../sass/AddTeamMember.scss";
 
 const AddTeamMember = (props) => {
@@ -7,19 +8,19 @@ const AddTeamMember = (props) => {
     const handleInputChange = (e) => setEmail(e.currentTarget.value);
 
     return (
-        <div className="flex-container">
-            <div className="addmember-container">
+        <Box className="flex-container">
+            <Box className="addmember-container">
                 <form
                 className="form-add-member"
                 autoComplete="off"
                 onSubmit={(e) => props.addToTeamHandler(e, email)}
                 >
-                <div className="form-row">
-                    <div className="form-input-text">
-                    <label htmlFor="email">Add team member:</label>
-                    <input
-                        type="email"
-                        name="email"
+                <Box className="form-row">
+                    <Box className="form-input-text">
+                    <TextField 
+                        label = "Add team member"
+                        type = "email"
+                        name=  "email"
                         placeholder="Email Address"
                         value={email.toString()}
                         onChange={(e) => handleInputChange(e)}
@@ -27,22 +28,24 @@ const AddTeamMember = (props) => {
                         autoComplete="none"
                         required="required"
                     />
-                    </div>
-                </div>
+                    </Box>
+                </Box>
 
-                <div className="form-input-button">
-                    <button
-                    type="submit"
-                    className="addmember-button"
+                <Box className="form-input-button">
+                    <Button
+                        type="submit"
+                        className="addmember-button"
+                        variant="contained"
+                        color="primary"
                     >
-                    Add
-                    </button>
-                </div>
+                        Add
+                    </Button>
+                </Box>
                 </form>
-                {props.isSuccess ? <p className="addmember-success">User Added</p> : null}
-                <div className="addmember-warning">{props.isError ? props.errorMessage : null}</div>
-            </div>
-        </div>
+                {props.isSuccess && <Typography className="addmember-success">User Added</Typography>}
+                {props.isError && <Typography className="addmember-warning">{props.errorMessage}</Typography>}
+            </Box>
+        </Box>
     );
 };
 
