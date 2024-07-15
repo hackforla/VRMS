@@ -37,7 +37,7 @@
     "dev": "vite",
     "start": "dotenv -e .env -e ../backend/.env -- cross-var cross-env PORT=%CLIENT_PORT% vite",
     "build": "vite build",
-    "test": "vitest",
+    "test": "vitest run",
     "preview": "vite preview",
     "heroku-postbuild": "npm run build"
   },
