@@ -1,22 +1,24 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`renders without crashing 1`] = `
-<div
-  className="flexcenter-container"
->
+<div>
   <div
-    className="dashboard-header"
+    class="flexcenter-container"
   >
-    <p
-      className="dashboard-header-text-large"
+    <div
+      class="dashboard-header"
     >
-      Volunteer Leaderboard
-    </p>
-  </div>
-  <div
-    className="events-list"
-  >
-    <ul />
+      <p
+        class="dashboard-header-text-large"
+      >
+        Volunteer Leaderboard
+      </p>
+    </div>
+    <div
+      class="events-list"
+    >
+      <ul />
+    </div>
   </div>
 </div>
 `;
