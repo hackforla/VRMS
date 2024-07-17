@@ -5,10 +5,10 @@
     <img alt="logo" src="client/src/svg/hflalogo_white.png">
     <br />
     <a href="https://www.vrms.io">Live Site</a>
-    ·
+    <!-- ·
     <a href="https://github.com/hackforla/VRMS/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
     ·
-    <a href="https://github.com/hackforla/VRMS/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+    <a href="https://github.com/hackforla/VRMS/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a> -->
   </p>
 </div>
 
