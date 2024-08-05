@@ -22,7 +22,7 @@ const Auth = () => {
   const [email, setEmail] = useState('');
   const [isDisabled, setIsDisabled] = useState(true);
   const [isError, setIsError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState(' ');
 
   const validateEmail = () => {
     if (email.search(pattern) !== -1) {
@@ -102,7 +102,11 @@ const Auth = () => {
         <div className="adminlogin-headers">
           <h3>Welcome Back!</h3>
         </div>
-        <form onSubmit={handleLogin} className="form-check-in" autoComplete="off">
+        <form
+          onSubmit={handleLogin}
+          className="form-check-in"
+          autoComplete="off"
+        >
           <div className="form-row">
             <div className="form-input-text">
               <label htmlFor="email">Enter your email address:</label>
@@ -120,7 +124,12 @@ const Auth = () => {
           </div>
         </form>
 
-        {isError && <div className="adminlogin-warning">{errorMessage}</div>}
+        <div
+          className="adminlogin-warning"
+          style={{ visibility: isError ? 'visible' : 'hidden' }}
+        >
+          {errorMessage}
+        </div>
 
         <div className="form-input-button">
           <button
