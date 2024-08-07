@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Container, CircularProgress, Typography } from '@mui/material';
+import { Box, Container, CircularProgress, FormControl, Typography } from '@mui/material';
 
 const ReturnUserForm = (props) => {
   return (
@@ -13,8 +13,8 @@ const ReturnUserForm = (props) => {
           autoComplete="on"
           onSubmit={(e) => e.preventDefault()}
         >
-          <div className="form-row">
-            <div className="form-input-text">
+          <Box className="form-row">
+            <Box className="form-input-text">
               <label htmlFor="email">
                 Which email address did you use to check-in last time?
               </label>
@@ -28,11 +28,11 @@ const ReturnUserForm = (props) => {
                 required
                 autoComplete="email"
               />
-            </div>
+            </Box>
             <Typography>
               {"(This allows easy use of the app. We'll never sell your data!)"}
             </Typography>
-          </div>
+          </Box>
 
           {props.isError && props.errorMessage.length > 1 &&
             <Box className="error">{props.errorMessage}</Box>
@@ -42,8 +42,8 @@ const ReturnUserForm = (props) => {
           )}
 
           {!props.user && !props.isLoading ? (
-            <div className="form-row">
-              <div className="form-input-button">
+            <Box className="form-row">
+              <Box className="form-input-button">
                 <button
                   type="submit"
                   className="form-check-in-submit"
@@ -54,11 +54,11 @@ const ReturnUserForm = (props) => {
                 >
                   CHECK IN
                 </button>
-              </div>
-            </div>
+              </Box>
+            </Box>
           ) : (
-            <div className="form-row">
-              <div className="form-input-button">
+            <Box className="form-row">
+              <Box className="form-input-button">
                 <button
                   type="submit"
                   className="form-check-in-submit block"
@@ -66,8 +66,8 @@ const ReturnUserForm = (props) => {
                 >
                   CHECKING IN...
                 </button>
-              </div>
-            </div>
+              </Box>
+            </Box>
           )}
         </form>
       </Box>
