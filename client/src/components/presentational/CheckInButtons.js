@@ -1,28 +1,35 @@
-import React from "react";
-import { Link } from "react-router-dom";
-
-import "../../sass/Home.scss";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import Button from '@mui/material/Button';
 
 const CheckInButtons = (props) => {
   return (
     <>
-      <Link
+      <Button
+        component={Link}
         to={`/checkIn/returningUser?eventId=${props.event}`}
-        className={`home-button ${props.disabled && "disabled"}`}
+        disabled={props.disabled}
+        variant="text"
       >
         CHECK IN AS RETURNING USER
-      </Link>
-      <Link
+      </Button>
+      <Button
+        component={Link}
         to={`/checkIn/newUser?eventId=${props.event}`}
-        className={`home-button ${props.disabled && "disabled"}`}
+        disabled={props.disabled}
+        variant="text"
       >
         CHECK IN AS NEW USER
-      </Link>
+      </Button>
      
       {props.events.length > 1 && (
-        <Link to={`/newProfile`} className={`home-button`}>
+        <Button
+          component={Link}
+          to={`/newProfile`}
+          variant="text"
+        >
           CREATE A NEW PROFILE
-        </Link>
+        </Button>
       )}
     </>
   );
