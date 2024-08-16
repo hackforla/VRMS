@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../../sass/UserAdmin.scss';
-import { FormGroup, FormControlLabel, Switch } from '@mui/material'
+import { FormGroup, FormControlLabel, Switch, Box, Typography, Button, MenuItem, Select, List, ListItem, IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 // child of UserAdmin. Displays form to update users.
 const EditUsers = ({ userToEdit, backToSearch, updateUserDb, projects, updateUserActiveStatus }) => {
@@ -65,74 +66,68 @@ const EditUsers = ({ userToEdit, backToSearch, updateUserDb, projects, updateUse
   }
 
   return (
-    <div className="edit-users">
-      <div className="ua-row">
-        <div className="user-display-column-left">Name:</div>
-        <div className="user-display-column-right">{userName}</div>
-      </div>
-      <div className="ua-row">
-        <div className="user-display-column-left">Email:</div>
-        <div className="user-display-column-right">{userEmail}</div>
-      </div>
-      <div className="ua-row is-active-flex">
-        <div className="user-is-active-column-left">Is Active:</div>
-        <div className="is-active-flex">
-          <span className="active-status">{isActive.toString()}</span>
+    <Box className="edit-users">
+      <Box className="ua-row">
+        <Box className="user-display-column-left">Name:</Box>
+        <Box className="user-display-column-right">{userName}</Box>
+      </Box>
+      <Box className="ua-row">
+        <Box className="user-display-column-left">Email:</Box>
+        <Box className="user-display-column-right">{userEmail}</Box>
+      </Box>
+      <Box className="ua-row is-active-flex">
+        <Box className="user-is-active-column-left">Is Active:</Box>
+        <Box className="is-active-flex">
+          <Typography className="active-status">{isActive.toString()}</Typography>
           <FormGroup>
-            <FormControlLabel control={<Switch checked={isActive} />} onClick={() => handleSetIsActive()} />
+            <FormControlLabel control={<Switch checked={isActive} onClick={handleSetIsActive} />} />
           </FormGroup>
-        </div>
-      </div>
-      <div className="ua-row">
-        <div className="user-display-column-left">Projects:</div>
-        <div className="user-display-column-right">
-          <ul className="project-list">
-            {userProjectsToDisplay.map((result) => {
-              return (
-                <li key={`remove_${result[0]}`}>
-                  {result[1]}
-                  <button
-                    type="button"
-                    className="button-remove"
-                    onClick={() => handleRemoveProject(result[0])}
-                  >
-                    (remove)
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      </div>
-      <div>
+        </Box>
+      </Box>
+      <Box className="ua-row">
+        <Box className="user-display-column-left">Projects:</Box>
+        <Box className="user-display-column-right">
+          <List className="project-list">
+            {userProjectsToDisplay.map((result) => (
+              <ListItem key={`remove_${result[0]}`} secondaryAction={
+                <IconButton edge="end" aria-label="delete" onClick={() => handleRemoveProject(result[0])}>
+                  <DeleteIcon />
+                </IconButton>
+              }>
+                {result[1]}
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      </Box>
+      <Box>
         <form onSubmit={onSubmit}>
-          <select
+          <Select
             className="project-select"
             value={projectValue}
             onChange={(event) => {
               setProjectValue(event.target.value);
             }}
+            displayEmpty
           >
-            <option value="default">Select a project..</option>
-            {activeProjects.map((result) => {
-              return (
-                <option key={`select_${result[0]}`} value={result[0]}>
-                  {result[1]}
-                </option>
-              );
-            })}
-          </select>
-          <button className="button-add" type="submit">
+            <MenuItem value="default">Select a project..</MenuItem>
+            {activeProjects.map((result) => (
+              <MenuItem key={`select_${result[0]}`} value={result[0]}>
+                {result[1]}
+              </MenuItem>
+            ))}
+          </Select>
+          <Button className="button-add" type="submit" variant="contained" color="primary">
             Add project
-          </button>
+          </Button>
         </form>
-        <div>
-          <button type="button" className="button-back" onClick={backToSearch}>
+        <Box>
+          <Button className="button-back" onClick={backToSearch} variant="outlined">
             Back to search
-          </button>
-        </div>
-      </div>
-    </div>
+          </Button>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 
