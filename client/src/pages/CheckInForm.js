@@ -242,7 +242,7 @@ const CheckInForm = (props) => {
 
   const submitNewProfile = (userForm) => {
     // First, create a new user in the user collection
-
+    userForm.email = userForm.email.toLowerCase();
     fetch('/api/users', {
       method: 'POST',
       body: JSON.stringify(userForm),
@@ -322,7 +322,7 @@ const CheckInForm = (props) => {
       }
       // SUBMIT all of the user's info from the userForm object
       if (ready) {
-        submitForm(userForm);
+        submitForm({ ...userForm, email: userForm.email.toLowerCase() });
       }
 
       setIsLoading(false);
@@ -412,7 +412,7 @@ const CheckInForm = (props) => {
           'Content-Type': 'application/json',
           'x-customrequired-header': headerToSend,
         },
-        body: JSON.stringify({ email: formInput.email }),
+        body: JSON.stringify({ email: formInput.email.toLowerCase() }),
       })
         .then((res) => {
           if (res.ok) {
