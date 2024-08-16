@@ -10,7 +10,8 @@ import Tab from '../../../common/tabs/tab';
 import LocationTableReport from '../reports';
 import '../../../sass/Dashboard.scss';
 import './index.scss';
-import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend} from '../../../utils/globalSettings';
+import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend } from '../../../utils/globalSettings';
+import { Typography } from '@mui/material';
 
 const AdminDashboard = () => {
   const { auth } = useAuth();
@@ -33,31 +34,23 @@ const AdminDashboard = () => {
   const [processedCheckins, setCheckins] = useState(null);
 
   // Volunteers SignedIn By Event Type
-  const [
-    totalVolunteersByEventType,
-    setVolunteersSignedInByEventType,
-  ] = useState({});
-  const [
-    totalVolunteerHoursByEventType,
-    setVolunteeredHoursByEventType,
-  ] = useState({});
+  const [totalVolunteersByEventType, setVolunteersSignedInByEventType] =
+    useState({});
+  const [totalVolunteerHoursByEventType, setVolunteeredHoursByEventType] =
+    useState({});
   const [totalVolunteerAvgHoursByEventType, setAvgHoursByEventType] = useState(
     {}
   );
 
   // Volunteers SignedIn By HackNight Property
-  const [
-    totalVolunteersByHackNightProp,
-    setVolunteersSignedInByHackNightProp,
-  ] = useState({});
+  const [totalVolunteersByHackNightProp, setVolunteersSignedInByHackNightProp] =
+    useState({});
   const [
     totalVolunteerHoursByHackNightProp,
     setVolunteeredHoursByHackNightProp,
   ] = useState({});
-  const [
-    totalVolunteerAvgHoursByHackNightProp,
-    setAvgHoursByHackNightProp,
-  ] = useState({});
+  const [totalVolunteerAvgHoursByHackNightProp, setAvgHoursByHackNightProp] =
+    useState({});
 
   // Volunteers To Chart
   const [totalVolunteers, setVolunteersToChart] = useState({});
@@ -380,23 +373,25 @@ const AdminDashboard = () => {
     return function cleanup() {
       abortController.abort();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return auth && auth.user ? (
     <div className="flex-container">
       <div className="dashboard admin-dashboard-wrap">
         <div className="admin-header">
-          <h1>Stats by Location - Volunteer Hours</h1>
+          <Typography variant="h1" component="h1">
+            Stats by Location - Volunteer Hours
+          </Typography>
         </div>
 
         {!isLoading && nextEvent.length ? (
-          !isCheckInReady &&
+          !isCheckInReady && (
             <div className="event-header">You have 1 upcoming event:</div>
-          ) : (
-            <div className="event-header">Current event:</div>
           )
-        }
+        ) : (
+          <div className="event-header">Current event:</div>
+        )}
 
         <div className="admin-upcoming-event">
           {isLoading ? (
