@@ -6,6 +6,8 @@ import { findNextOccuranceOfDay } from './utilities/findNextDayOccuranceOfDay';
 import { addDurationToTime } from './utilities/addDurationToTime';
 import { timeConvertFromForm } from './utilities/timeConvertFromForm';
 import validateEventForm from './utilities/validateEventForm';
+import { IconButton, Box } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 // This component displays current meeting times for selected project and offers the option to edit those times.
 const EditMeetingTimes = ({
@@ -92,17 +94,15 @@ const EditMeetingTimes = ({
   };
 
   return (
-    <div>
-      <button
-        type="button"
-        className="meeting-cancel-button"
+    <Box>
+      <IconButton
         onClick={() => {
           setFormErrors(null);
           setSelectedEvent(null);
         }}
       >
-        X
-      </button>
+        <CloseIcon />
+      </IconButton>
       {selectedEvent && (
         <EditableMeeting
           key={selectedEvent.event_id}
@@ -120,7 +120,7 @@ const EditMeetingTimes = ({
           handleEventDelete={handleEventDelete}
         />
       )}
-    </div>
+    </Box>
   );
 };
 export default EditMeetingTimes;
