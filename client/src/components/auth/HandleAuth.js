@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import { isValidToken } from '../../services/user.service';
 import { authLevelRedirect } from '../../utils/authUtils';
+import { Box, Typography, CircularProgress } from '@mui/material';
 
 import '../../sass/MagicLink.scss';
 import useAuth from '../../hooks/useAuth';
@@ -43,7 +44,7 @@ const HandleAuth = (props) => {
     setIsLoaded(true);
   }, [isMagicLinkValid, setIsLoaded, auth]);
 
-  if (!isLoaded) return <div>Loading...</div>;
+  if (!isLoaded) return <Box display="flex" justifyContent="center" alignItems="center" height="100vh"><CircularProgress /></Box>;
 
   const Delayed = ({ children, waitBeforeShow = 500 }) => {
     const [isShown, setIsShown] = useState(false);
@@ -65,12 +66,12 @@ const HandleAuth = (props) => {
   }
 
   return (
-    <div className="flex-container">
+    <Box className="flex-container">
       <Delayed waitBeforeShow={1000}>
-        <div>Sorry, the link is not valid anymore.</div>
+        <Typography variant="body1">Sorry, the link is not valid anymore.</Typography>
       </Delayed>
       {auth?.user && <Redirect to={loginRedirect} /> /* Redirect to /welcome */}
-    </div>
+    </Box>
   );
 };
 
