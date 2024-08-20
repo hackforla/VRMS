@@ -1,19 +1,20 @@
 import React from 'react';
+import { Box } from '@mui/material';
 
 const ReturnUserForm = (props) => {
   return (
-    <div className="check-in-container">
-      <div className="check-in-headers">
-        <h3>Welcome back!</h3>
-      </div>
-      <div className="check-in-form">
+    <Box className="check-in-container">
+      <Box className="check-in-headers">
+        <Typography variant="h3">Welcome back!</Typography>
+      </Box>
+      <Box className="check-in-form">
         <form
           className="form-check-in"
           autoComplete="on"
           onSubmit={(e) => e.preventDefault()}
         >
-          <div className="form-row">
-            <div className="form-input-text">
+          <Box className="form-row">
+            <Box className="form-input-text">
               <label htmlFor="email">
                 Which email address did you use to check-in last time?
               </label>
@@ -27,22 +28,22 @@ const ReturnUserForm = (props) => {
                 required
                 autoComplete="email"
               />
-            </div>
+            </Box>
             <p>
               {"(This allows easy use of the app. We'll never sell your data!)"}
             </p>
-          </div>
+          </Box>
 
-          {props.isError && props.errorMessage.length > 1 &&
-            <div className="error">{props.errorMessage}</div>
-          }
+          {props.isError && props.errorMessage.length > 1 && (
+            <Box className="error">{props.errorMessage}</Box>
+          )}
           {props.user === false && (
-            <div className="error">Try entering your email again.</div>
+            <Box className="error">Try entering your email again.</Box>
           )}
 
           {!props.user && !props.isLoading ? (
-            <div className="form-row">
-              <div className="form-input-button">
+            <Box className="form-row">
+              <Box className="form-input-button">
                 <button
                   type="submit"
                   className="form-check-in-submit"
@@ -53,11 +54,11 @@ const ReturnUserForm = (props) => {
                 >
                   CHECK IN
                 </button>
-              </div>
-            </div>
+              </Box>
+            </Box>
           ) : (
-            <div className="form-row">
-              <div className="form-input-button">
+            <Box className="form-row">
+              <Box className="form-input-button">
                 <button
                   type="submit"
                   className="form-check-in-submit block"
@@ -65,12 +66,12 @@ const ReturnUserForm = (props) => {
                 >
                   CHECKING IN...
                 </button>
-              </div>
-            </div>
+              </Box>
+            </Box>
           )}
         </form>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 export default ReturnUserForm;
