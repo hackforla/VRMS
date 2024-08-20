@@ -20,7 +20,7 @@ const Leaderboard = (props) => {
 
             setUsers(resJson);
         } catch(error) {
-            alert(error);
+            console.log(error);
         }
     };
 
