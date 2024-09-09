@@ -26,7 +26,7 @@ import HealthCheck from './pages/HealthCheck';
 import SecretPassword from './pages/SecretPassword';
 import UserWelcome from './pages/UserWelcome';
 
-import { ThemeProvider } from '@mui/material';
+import { Box, ThemeProvider } from '@mui/material';
 import theme from './theme';
 
 import './App.scss';
@@ -48,7 +48,7 @@ const routes = [
   { path: '/events', name: 'events', Component: Events },
   { path: '/useradmin', name: 'useradmin', Component: UserAdmin },
   { path: '/projects', name: 'projects', Component: ProjectList },
-  { path: '/projects/create', name: 'projectform', Component:  addProject},
+  { path: '/projects/create', name: 'projectform', Component: addProject },
   {
     path: '/projects/:projectId',
     name: 'project',
@@ -72,20 +72,47 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <AuthProvider>
-        <div className="app">
-          <div className="app-container">
+        <Box
+          sx={{
+            height: '100%',
+            width: '100vw',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            overflow: 'hidden',
+            maxHeight: '90vh',
+            margin: '5vh 0',
+          }}
+        >
+          <Box
+            sx={{
+              position: 'relative',
+              maxWidth: '500px',
+              width: '100%',
+              backgroundColor: 'white',
+              overflow: 'hidden',
+              borderRadius: '10px',
+              padding: '15px',
+            }}
+          >
             <Navbar />
-            <main role="main" className="main">
+            <Box
+              component="main"
+              sx={{
+                height: 'calc(90vh - 160px)',
+                overflowY: 'scroll',
+              }}
+            >
               <Switch>
                 {routes.map(({ path, Component }) => (
                   <Route key={path} exact path={path} component={Component} />
                 ))}
                 <Redirect to="/" />
               </Switch>
-            </main>
+            </Box>
             <Footer />
-          </div>
-        </div>
+          </Box>
+        </Box>
       </AuthProvider>
     </ThemeProvider>
   );
