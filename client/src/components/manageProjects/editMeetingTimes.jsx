@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Modal, Box, Typography, Button } from '@mui/material';
 import '../../sass/ManageProjects.scss';
 import { useSnackbar } from '../../context/snackbarContext';
 import EditableMeeting from './editableMeeting';
@@ -17,6 +18,20 @@ const EditMeetingTimes = ({
 }) => {
   const [formErrors, setFormErrors] = useState({});
   const { showSnackbar } = useSnackbar();
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (selectedEvent) {
+      setOpen(true);
+    }
+  }, [selectedEvent]);
+
+  const handleClose = () => {
+    setOpen(false);
+    setFormErrors(null);
+    setSelectedEvent(null);
+  };
+
   const handleEventUpdate = (
     eventID,
     values,
@@ -80,47 +95,64 @@ const EditMeetingTimes = ({
 
       updateRecurringEvent(theUpdatedEvent, eventID);
       showSnackbar("Recurring event updated", 'info')
-      setSelectedEvent(null);
+      handleClose();
     }
     setFormErrors(errors);
   };
 
   const handleEventDelete = (eventID) => async () => {
     deleteRecurringEvent(eventID);
-    setSelectedEvent(null);
     showSnackbar("Recurring event deleted", 'info');
+    handleClose();
   };
 
   return (
     <div>
-      <button
-        type="button"
-        className="meeting-cancel-button"
-        onClick={() => {
-          setFormErrors(null);
-          setSelectedEvent(null);
-        }}
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="edit-meeting-modal-title"
+        aria-describedby="edit-meeting-modal-description"
       >
-        X
-      </button>
-      {selectedEvent && (
-        <EditableMeeting
-          key={selectedEvent.event_id}
-          eventId={selectedEvent.event_id}
-          eventName={selectedEvent.name}
-          eventDescription={selectedEvent.description}
-          eventType={selectedEvent.eventType}
-          eventDayNumber={selectedEvent.dayOfTheWeekNumber}
-          eventStartTime={selectedEvent.startTime}
-          eventEndTime={selectedEvent.endTime}
-          eventDuration={selectedEvent.duration}
-          videoConferenceLink={selectedEvent.videoConferenceLink}
-          formErrors={formErrors}
-          handleEventUpdate={handleEventUpdate}
-          handleEventDelete={handleEventDelete}
-        />
-      )}
+        <Box
+          className="modal-box"
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 450,
+            bgcolor: 'background.paper',
+            border: '2px solid #000',
+            boxShadow: 24,
+            p: 4,
+          }}
+        >
+          <Typography variant="h6" id="edit-meeting-modal-title">
+            Edit Meeting Times
+          </Typography>
+          {selectedEvent && (
+            <EditableMeeting
+              key={selectedEvent.event_id}
+              eventId={selectedEvent.event_id}
+              eventName={selectedEvent.name}
+              eventDescription={selectedEvent.description}
+              eventType={selectedEvent.eventType}
+              eventDayNumber={selectedEvent.dayOfTheWeekNumber}
+              eventStartTime={selectedEvent.startTime}
+              eventEndTime={selectedEvent.endTime}
+              eventDuration={selectedEvent.duration}
+              videoConferenceLink={selectedEvent.videoConferenceLink}
+              formErrors={formErrors}
+              handleEventUpdate={handleEventUpdate}
+              handleEventDelete={handleEventDelete}
+            />
+          )}
+          <Button onClick={handleClose}>Close</Button>
+        </Box>
+      </Modal>
     </div>
   );
 };
+
 export default EditMeetingTimes;
