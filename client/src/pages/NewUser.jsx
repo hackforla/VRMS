@@ -41,7 +41,7 @@ const NewUser = (props) => {
             sx={{
               fontWeight: 900,
               textTransform: 'uppercase',
-              fontSize: '3rem',
+              fontSize: '39.2px',
               letterSpacing: '-1px',
               lineHeight: '1',
             }}
@@ -53,7 +53,7 @@ const NewUser = (props) => {
             sx={{
               fontWeight: 700,
               textTransform: 'uppercase',
-              fontSize: '1.5rem',
+              fontSize: '28px',
               letterSpacing: '-1px',
               lineHeight: '1',
             }}
