@@ -3,10 +3,11 @@ import '../../sass/UserAdmin.scss';
 import { FormGroup, FormControlLabel, Switch } from '@mui/material'
 
 // child of UserAdmin. Displays form to update users.
-const EditUsers = ({ userToEdit, backToSearch, updateUserDb, projects, updateUserActiveStatus }) => {
+const EditUsers = ({ userToEdit, backToSearch, updateUserDb, projects, updateUserActiveStatus, updateUserAdminStatus }) => {
   const [userManagedProjects, setUserManagedProjects] = useState([]); //  The projects that the selected user is assigned
   const [projectValue, setProjectValue] = useState(''); // State and handler for form in EditUsers
   const [isActive, setIsActive] = useState(userToEdit.isActive);
+  const [isAdmin, setIsAdmin] = useState(userToEdit.isAdmin);
 
   // Prepare data for display
   const userName = `${userToEdit.name?.firstName} ${userToEdit.name?.lastName}`;
@@ -64,6 +65,10 @@ const EditUsers = ({ userToEdit, backToSearch, updateUserDb, projects, updateUse
     updateUserActiveStatus(userToEdit, !isActive)
   }
 
+  const handleSetIsAdmin = () => {
+    setIsAdmin(!isAdmin)
+    updateUserAdminStatus(userToEdit, !isAdmin)
+  }
   return (
     <div className="edit-users">
       <div className="ua-row">
@@ -74,12 +79,21 @@ const EditUsers = ({ userToEdit, backToSearch, updateUserDb, projects, updateUse
         <div className="user-display-column-left">Email:</div>
         <div className="user-display-column-right">{userEmail}</div>
       </div>
-      <div className="ua-row is-active-flex">
-        <div className="user-is-active-column-left">Is Active:</div>
-        <div className="is-active-flex">
-          <span className="active-status">{isActive.toString()}</span>
+      <div className="ua-row toggle-flex">
+        <div className="user-toggle-column-left">Is Active:</div>
+        <div className="toggle-flex">
+          <span className="toggle-status">{isActive.toString()}</span>
           <FormGroup>
             <FormControlLabel control={<Switch checked={isActive} />} onClick={() => handleSetIsActive()} />
+          </FormGroup>
+        </div>
+      </div>
+      <div className="ua-row toggle-flex">
+        <div className="user-toggle-column-left">Is Admin:</div>
+        <div className="toggle-flex">
+          <span className="toggle-status">{isAdmin.toString()}</span>
+          <FormGroup>
+            <FormControlLabel control={<Switch checked={isAdmin} />} onClick={() => handleSetIsAdmin()} />
           </FormGroup>
         </div>
       </div>

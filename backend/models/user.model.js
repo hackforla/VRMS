@@ -36,7 +36,8 @@ const userSchema = mongoose.Schema({
   managedProjects: [{ type: String}], // Which projects managed by user.
   //currentProject: { type: String }              // no longer need this as we can get it from Project Team Member table
   // password: { type: String, required: true }
-  isActive: { type: Boolean, default: true }
+  isActive: { type: Boolean, default: true },
+  isAdmin: {type: Boolean, default: false} // Signifies if a user is an admin or not
 });
 
 userSchema.methods.serialize = function () {
@@ -67,7 +68,8 @@ userSchema.methods.serialize = function () {
     githubPublic2FA: this.githubPublic2FA,
     availability: this.availability,
     managedProjects: this.managedProjects,
-    isActive: this.isActive
+    isActive: this.isActive,
+    isAdmin: this.isAmdin
   };
 };
 

@@ -37,6 +37,13 @@ const UserAdmin = () => {
     }, [userApiService, fetchUsers]
   )
 
+  const updateUserAdminStatus = useCallback(
+    async (user, isAdmin) => {
+      await userApiService.updateUserDbIsAdmin(user, isAdmin);
+      fetchUsers()
+    }, [userApiService, fetchUsers]
+  )
+
   const fetchProjects = useCallback(async () => {
     const projectRes = await projectApiService.fetchProjects();
     setProjects(projectRes);
@@ -65,6 +72,7 @@ const UserAdmin = () => {
         updateUserDb={updateUserDb}
         backToSearch={backToSearch}
         updateUserActiveStatus={updateUserActiveStatus}
+        updateUserAdminStatus={updateUserAdminStatus}
       />
     );
   }

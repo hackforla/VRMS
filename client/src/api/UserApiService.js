@@ -73,6 +73,22 @@ class UserApiService {
       alert('server not responding.  Please try again.');
     }
   }
+
+  async updateUserDbIsAdmin(userToEdit, isAdmin) {
+    const url = `${this.baseUserUrl}${userToEdit._id}`;
+    const requestOptions = {
+      method: 'PATCH',
+      headers: this.headers,
+      body: JSON.stringify({ isAdmin }),
+    };
+
+    try {
+      return await fetch(url, requestOptions);
+    } catch (err) {
+      console.error('update is-admin error', err);
+      alert('server not responding.  Please try again.');
+    }
+  }
 }
 
 export default UserApiService;
