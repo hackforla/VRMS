@@ -229,7 +229,7 @@ export default function ProjectForm({
       </FormControl>
     </Grid>
   );
-
+  // adding a comment to have a change to compare
   return auth && auth.user ? (
     <Box sx={{ px: 0.5 }}>
       <Box sx={{ textAlign: 'center' }}>
