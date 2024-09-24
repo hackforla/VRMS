@@ -235,9 +235,6 @@ export default function ProjectForm({
       <Box sx={{ textAlign: 'center' }}>
         <Typography variant="h1">Project Management</Typography>
       </Box>
-      {/* ) : (
-      <TitledBox title={'Project Information'} />
-      )} */}
       {auth.user.accessLevel === 'admin' ? (
         <TitledBox
           title={editMode ? 'Editing Project' : 'Project Information'}

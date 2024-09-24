@@ -1,7 +1,10 @@
 const { User } = require('./user.model');
 
 const { setupDB } = require("../setup-test");
-setupDB("user-model");
+
+beforeAll(async () => {
+  await setupDB("user-model");
+});
 
 // Please add and expand on this simple test.
 describe("Question Model saves the correct values", () => {
