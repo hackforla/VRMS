@@ -37,6 +37,15 @@ const UserAdmin = () => {
     }, [userApiService, fetchUsers]
   )
 
+  // Update user's access level (admin/user)
+  const updateUserAccessLevel = useCallback(
+    async (user, newAccessLevel) => {
+      await userApiService.updateUserAccessLevel(user, newAccessLevel);
+      fetchUsers();
+    },
+    [userApiService, fetchUsers]
+  );
+
   const fetchProjects = useCallback(async () => {
     const projectRes = await projectApiService.fetchProjects();
     setProjects(projectRes);
@@ -65,6 +74,7 @@ const UserAdmin = () => {
         updateUserDb={updateUserDb}
         backToSearch={backToSearch}
         updateUserActiveStatus={updateUserActiveStatus}
+        updateUserAccessLevel={updateUserAccessLevel}
       />
     );
   }
