@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import Loading from '../donutChartLoading';
 import DatePicker from 'react-datepicker';
+import { Box, Button, Table, TableHead, TableRow, TableCell, TableBody, Typography } from '@mui/material';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../../../common/datepicker/index.scss';
 import './index.scss';
@@ -25,6 +26,87 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats, handleFiltered
     const [isFiltered, setFilterState] = useState(false);
     const [startTextDate, setStartTextDate] = useState(new Date().toLocaleDateString("en-US"));
     const [endTextDate, setEndTextDate] = useState(new Date().toLocaleDateString("en-US"));
+
+    const styles = {
+        adminTableReport: {
+            margin: '10px 0',
+            fontSize: '15px',
+            textAlign: 'center',
+        },
+        statsSection: {
+            marginTop: '10px',
+            textAlign: 'right'
+        },
+        tableHeader: {
+            fontSize: '15px',
+            fontWeight: 'bold',
+            backgroundColor: '#3d5a6c47',
+            margin: '20px 0 5px',
+            padding: '5px',
+            borderRadius: '7px 7px 0 0',
+            textAlign: 'center'
+        },
+        adminTable: {
+            width: '100%',
+            marginTop: '10px',
+            borderCollapse: 'collapse',
+            border: 'none',
+        },
+        tableCell: {
+            textAlign: 'center',
+            height: '30px',
+            border: 'none',
+        },
+        lastRowCell: {
+            color: '#3D5A6C',
+            fontWeight: 'bold',
+            borderTop: '1px solid lightgray',
+            borderBottom: 'none',     
+            textAlign: 'center',
+            height: '30px',
+            
+        },
+        firstRowCell: {
+            color: '#3D5A6C',
+            fontWeight: 'bold',
+            borderBottom: 'none',
+            textAlign: 'center',
+            height: '30px',
+            
+        },
+        filterButton: {
+            color: '#3D5A6C',
+            border: '1px solid lightgray',
+            borderRadius: '20px',
+            lineHeight: '1',
+            padding: '10px 20px',
+            margin: '0 auto',
+            transition: '.3s ease',
+            maxWidth: '120px',
+            minWidth: '120px',
+            height: 'auto',
+            fontFamily: "'Open Sans', sans-serif",
+            fontSize: '15px',
+        },
+        calcButton: {
+            maxWidth: '150px',
+            minWidth: '150px',
+        },
+        chartImage: {
+            maxWidth: '90px',
+        },
+        timeDescription: {
+            fontSize: '13px',
+            textAlign: 'right',
+            marginTop: '10px',
+        },
+        boldText: {
+            fontWeight: 'bold',
+            fontSize: '18px',
+            color: '#3D5A6C',
+        },
+        
+    };
 
     prepareDataForReport(
         eventTypeStats,
@@ -151,23 +233,19 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats, handleFiltered
     }
 
     return (
-        <div className="table-report-wrap">
+        <Box className="table-report-wrap">
             {!isLoading ? (
-                <div className="admin-table-report">
-                    {isFilterButton &&
-                        <button
-                            className="filter-button"
-                            type="button"
-                            onClick={() => handleSetFilterBtn()}
-                        >
+                <Box style={styles.adminTableReport}>
+                    {isFilterButton && (
+                        <Button style={styles.filterButton} onClick={() => handleSetFilterBtn()}>
                             Set Filter
-                        </button>
-                    }
+                        </Button>
+                    )}
 
                     {isDatepicker &&
-                        <div className="datepicker-section">
-                            <div className="datepicker-wrap">
-                                <p className="datepicker-name">Start</p>
+                        <Box>
+                            <Box>
+                                <Typography>Start</Typography>
                                 <DatePicker
                                     placeholderText='Start date range'
                                     selected={startDate}
@@ -177,10 +255,10 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats, handleFiltered
                                     endDate={endDate}
                                     maxDate={endDate}
                                 />
-                            </div>
+                            </Box>
 
-                            <div className="datepicker-wrap">
-                                <p className="datepicker-name">End</p>
+                            <Box>
+                                <Typography>End</Typography>
                                 <DatePicker
                                     placeholderText='End data range'
                                     selected={endDate}
@@ -190,107 +268,96 @@ const LocationTableReport = ({eventTypeStats, hackNightTypeStats, handleFiltered
                                     endDate={endDate}
                                     maxDate={new Date()}
                                 />
-                            </div>
+                            </Box>
 
-                            <button
-                                className="filter-button calc-button"
-                                type="button"
-                                onClick={(event) => handleCalculateStatsBtn(event)}
-                            >
+                            <Button variant="outlined" style = {styles.filterButton} onClick={(event) => handleCalculateStatsBtn(event)}>
                                 Calculate Stats
-                            </button>
-                        </div>
+                            </Button>
+                        </Box>
                     }
 
-                    <div className="stats-section">
-                        <div className="time-description">
-                            <span>Stats calculated by: </span>
-                            {!isFiltered ? (
-                                <span>all time</span>
-                            ) : (
-                                <span>
-                           <span>{startTextDate}</span>
-                           <span> - </span>
-                           <span>{endTextDate}</span>
-                       </span>
-                            )}
-                        </div>
+                    <Box style={styles.statsSection}>
+                        <Typography variant="body1">
+                            Stats calculated by: {!isFiltered ? 'all time' : `${startTextDate} - ${endTextDate}`}
+                        </Typography>
 
-                        <div className="table-header m-t-small">All Events By Event Type</div>
+                        <Box>
+                            <Typography variant="h6" style={styles.tableHeader}>All Events By Event Type</Typography>
+                        </Box>
                         {isStatsByLocation ? (
-                            <table className="admin-table">
-                                <thead>
-                                <tr>
-                                    {headerGroups.map(header => (
-                                        <th key={header}>{header}</th>
-                                    ))}
-                                </tr>
-                                </thead>
-
-                                <tbody>
-                                {dataForAllEventsReport.map((event) => (
-                                    <tr key={`events-${event.location}`}>
-                                        <td key={`${event.location + event.id}`}>{event.location}</td>
-                                        <td key={`v-${event.totalVolunteers + event.id}`}>{event.totalVolunteers}</td>
-                                        <td key={`h-${event.totalVolunteerHours + event.id}`}>{event.totalVolunteerHours}</td>
-                                        <td key={`ha-${event.totalVolunteerAvgHours + event.id}`}>{event.totalVolunteerAvgHours}</td>
-                                    </tr>
-                                ))}
-
-                                {totalForAllEvents &&
-                                    <tr>
-                                        <td key={`events-total`}>Total</td>
-                                        {totalForAllEvents.map((total, i) => (
-                                            <td key={`${headerGroups[i]}-events-total`}>{total}</td>
+                            <Table style={styles.adminTable}>
+                                <TableHead>
+                                    <TableRow>
+                                        {headerGroups.map((header) => (
+                                            <TableCell key={header}style={styles.firstRowCell}>{header}</TableCell>
                                         ))}
-                                    </tr>
-                                }
-                                </tbody>
-                            </table>
-                        ) : (
-                            <div>No data for calculation stats</div>
-                        )}
-
-
-                        <div className="table-header">HackNight Only</div>
-                        {isStatsByHackNight ? (
-                            <table className="admin-table">
-                                <thead>
-                                <tr>
-                                    {headerGroups.map(header => (
-                                        <th key={header}>{header}</th>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {dataForAllEventsReport.map((event) => (
+                                        <TableRow key={`events-${event.location}`}>
+                                            <TableCell style={styles.tableCell}>{event.location}</TableCell>
+                                            <TableCell style={styles.tableCell}>{event.totalVolunteers}</TableCell>
+                                            <TableCell style={styles.tableCell}>{event.totalVolunteerHours}</TableCell>
+                                            <TableCell style={styles.tableCell}>{event.totalVolunteerAvgHours}</TableCell>
+                                        </TableRow>
                                     ))}
-                                </tr>
-                                </thead>
-
-                                <tbody>
-                                {isStatsByHackNight && dataForHackNightReport.map((event) => (
-                                    <tr key={`hack-night-${event.location}`}>
-                                        <td key={`${event.location + event.id}`}>{event.location}</td>
-                                        <td key={`tv-${event.totalVolunteers + event.id}`}>{event.totalVolunteers}</td>
-                                        <td key={`th-${event.totalVolunteerHours + event.id}`}>{event.totalVolunteerHours}</td>
-                                        <td key={`ah-${event.totalVolunteerAvgHours + event.id}`}>{event.totalVolunteerAvgHours}</td>
-                                    </tr>
-                                ))}
-
-                                {totalForHackNight &&
-                                    <tr>
-                                        <td key={`hack-night-total`}>Total</td>
-                                        {totalForHackNight.map((total, i) => (
-                                            <td key={`${headerGroups[i]}-hack-total`}>{total}</td>
-                                        ))}
-                                    </tr>
-                                }
-                                </tbody>
-                            </table>
+                                    {totalForAllEvents && (
+                                        <TableRow>
+                                            <TableCell style={styles.lastRowCell}>Total</TableCell>
+                                            {totalForAllEvents.map((total, i) => (
+                                                <TableCell key={`${headerGroups[i]}-events-total`}style={styles.lastRowCell}>{total}</TableCell>
+                                            ))}
+                                        </TableRow>
+                                    )}
+                                </TableBody>
+                            </Table>
                         ) : (
-                            <div>No data for calculation stats</div>
+                            <Typography>No data for calculation stats</Typography>
                         )}
-                    </div>
-                </div>
-            ) : <Loading /> }
-        </div>
+              
+                        <Box>
+                            <Typography variant="h6" style={styles.tableHeader}>HackNight Only</Typography>
+                        </Box>
+                            {isStatsByHackNight ? (
+                                <Table style={styles.adminTable}>
+                                    <TableHead>
+                                        <TableRow>
+                                            {headerGroups.map((header) => (
+                                                <TableCell key={header} style={styles.firstRowCell}>{header}</TableCell>
+                                            ))}
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {dataForHackNightReport.map((event) => (
+                                            <TableRow key={`hack-night-${event.location}`}>
+                                                <TableCell style={styles.tableCell}>{event.location}</TableCell>
+                                                <TableCell style={styles.tableCell}>{event.totalVolunteers}</TableCell>
+                                                <TableCell style={styles.tableCell}>{event.totalVolunteerHours}</TableCell>
+                                                <TableCell style={styles.tableCell}>{event.totalVolunteerAvgHours}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                        {totalForHackNight && (
+                                            <TableRow>
+                                                <TableCell style={styles.lastRowCell}>Total</TableCell>
+                                                {totalForHackNight.map((total, i) => (
+                                                    <TableCell key={`${headerGroups[i]}-hack-total`} style={styles.lastRowCell}>{total}</TableCell>
+                                                ))}
+                                            </TableRow>
+                                        )}
+                                    </TableBody>
+                                </Table>
+                            ) : (
+                                <Typography>No data for calculation stats</Typography>
+                            )}
+                        </Box>
+                    </Box>
+            ) : (
+                <Loading />
+            )}
+        </Box>
     );
 };
 
 export default LocationTableReport;
+        
