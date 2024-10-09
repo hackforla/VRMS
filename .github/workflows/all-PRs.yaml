@@ -24,7 +24,7 @@ jobs:
   test-backend-integration:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v1
         with:
@@ -54,7 +54,7 @@ jobs:
   test-client-unit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Build the client container
         run: docker-compose build client
       - name: Run client unit test suite
@@ -63,7 +63,7 @@ jobs:
 #   test-mvp-unit:
 #     runs-on: ubuntu-latest
 #     steps:
-#       - uses: actions/checkout@v2
+#       - uses: actions/checkout@v4
 #       - name: Build the client mvp container
 #         run: docker-compose build client-mvp-04
 #       - name: Run frontend unit test suite
