@@ -9,7 +9,7 @@ jobs:
   Add-Pull-Request-Instructions:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       # Create the message to post
       - name: Create Instruction
