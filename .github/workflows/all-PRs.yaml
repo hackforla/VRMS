@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Make envfile
-        uses: SpicyPizza/create-envfile@v1
+        uses: SpicyPizza/create-envfile@v2
         with:
           envkey_BACKEND_PORT: ${{ secrets.BACKEND_PORT }}
           envkey_REACT_APP_PROXY: ${{ secrets.REACT_APP_PROXY }}
@@ -26,7 +26,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Make envfile
-        uses: SpicyPizza/create-envfile@v1
+        uses: SpicyPizza/create-envfile@v2
         with:
           envkey_CUSTOM_REQUEST_HEADER: ${{ secrets.CUSTOM_REQUEST_HEADER }}
           envkey_SLACK_OAUTH_TOKEN: ${{ secrets.SLACK_OAUTH_TOKEN }}
