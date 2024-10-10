@@ -21,6 +21,7 @@ import PlusIcon from '../svg/PlusIcon.svg?react';
 import ValidatedTextField from './parts/form/ValidatedTextField';
 import TitledBox from './parts/boxes/TitledBox';
 import ChangesModal from './ChangesModal';
+import { simpleInputs, additionalInputsForEdit } from './data';
 
 /** STYLES
  *  -most TextField and InputLabel styles are controlled by the theme
@@ -268,7 +269,7 @@ export default function ProjectForm({
               aria-describedby="modal-modal-description"
               handleClose={handleClose}
             />
-          </form>{' '}
+          </form>
           <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
             <Grid item xs="auto">
               <StyledButton
@@ -300,7 +301,6 @@ export default function ProjectForm({
         </TitledBox>
       ) : (
         <TitledBox title={'Project Information'} expandable={true}>
-          {' '}
           <form
             id="project-form"
             onSubmit={handleSubmit((data) => {
@@ -328,7 +328,6 @@ export default function ProjectForm({
               handleClose={handleClose}
             />
           </form>
-          {''}
         </TitledBox>
       )}
     </Box>
