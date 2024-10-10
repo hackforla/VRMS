@@ -22,6 +22,7 @@ import { ReactComponent as PlusIcon } from '../svg/PlusIcon.svg';
 import ValidatedTextField from './parts/form/ValidatedTextField';
 import TitledBox from './parts/boxes/TitledBox';
 import ChangesModal from './ChangesModal';
+import { simpleInputs, additionalInputsForEdit } from './data';
 
 /** STYLES
  *  -most TextField and InputLabel styles are controlled by the theme
@@ -249,7 +250,7 @@ export default function ProjectForm({
           isEdit ? submitEditProject(data) : submitNewProject(data);
         })}
       >
-        {arr.map((input) => (
+        {simpleInputs.map((input) => (
           <ValidatedTextField
             key={input.name}
             register={register}
@@ -261,6 +262,19 @@ export default function ProjectForm({
             input={input}
           />
         ))}
+        {isEdit &&
+          additionalInputsForEdit.map((input) => (
+            <ValidatedTextField
+              key={input.name}
+              register={register}
+              isEdit={isEdit}
+              editMode={editMode}
+              locationType={locationType}
+              locationRadios={locationRadios}
+              errors={errors}
+              input={input}
+            />
+          ))}
         <ChangesModal
           open={isModalOpen}
           onClose={handleClose}
