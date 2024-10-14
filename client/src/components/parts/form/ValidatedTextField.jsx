@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Grid, InputLabel, TextField } from "@mui/material";
+import { Box, Grid, InputLabel, TextField } from '@mui/material';
 
 /**
  * A validated text field component for forms.
@@ -24,52 +24,61 @@ function ValidatedTextField({
   locationRadios,
   input,
 }) {
-  const inputObj = {
-    pattern:
-      input.name === 'location'
-        ? locationType === 'remote'
-          ? {
-              value: input.value,
-              message: input.errorMessage,
-            }
-          : {
-              value: input.addressValue,
-              message: input.addressError,
-            }
-        : { value: input.value, message: input.errorMessage },
-  };
-  if ('required' in input && input.required === false) {
-    // if required is set to false, don't add required attribute to object
+  const inputObj = {};
+
+  if (input.name === 'location') {
+    if (locationType === 'remote') {
+      inputObj.pattern = {
+        value: input.value,
+        message: input.errorMessage,
+      };
+    } else {
+      inputObj.pattern = {
+        value: input.addressValue,
+        message: input.addressError,
+      };
+    }
   } else {
-    inputObj.required = `${input.name} is required`;
-  }
-  const registerObj = {
-    ...register(input.name, inputObj),
+    if (input.value) {
+      inputObj.pattern = {
+        value: input.value,
+        message:
+          input.errorMessage || `${input.label} is not in the correct format`,
+      };
+    }
   }
 
+  if (input.required !== false) {
+    inputObj.required = `${input.label} is required`;
+  }
+
+  const registerObj = {
+    ...register(input.name, inputObj),
+  };
+
   return (
-  <Box sx={{ mb: 1 }} key={input.name}>
-    <Grid container alignItems="center">
-      <Grid item xs="auto" sx={{ pr: 3 }}>
-        <InputLabel
-          sx={{ width: 'max-content', ml: 0.5, mb: 0.5 }}
-          id={input.name}
-        >
-          {input.label}
-        </InputLabel>
+    <Box sx={{ mb: 1 }} key={input.name}>
+      <Grid container alignItems="center">
+        <Grid item xs="auto" sx={{ pr: 3 }}>
+          <InputLabel
+            sx={{ width: 'max-content', ml: 0.5, mb: 0.5 }}
+            id={input.name}
+          >
+            {input.label}
+          </InputLabel>
+        </Grid>
+        {input.name === 'location' && locationRadios}
       </Grid>
-      {input.name === 'location' && locationRadios}
-    </Grid>
-    <TextField
-      {...registerObj}
-      error={!!errors[input.name]}
-      type={input.type}
-      placeholder={input.placeholder}
-      helperText={`${errors[input.name]?.message || ' '}`}
-      disabled={isEdit ? !editMode || input.disabled : undefined} // handles edit mode for EditProjcet form
-    />
-  </Box>
+      <TextField
+        {...registerObj}
+        error={!!errors[input.name]}
+        type={input.type}
+        placeholder={input.placeholder}
+        helperText={`${errors[input.name]?.message || ' '}`}
+        disabled={isEdit ? !editMode || input.disabled : undefined} // handles edit mode for EditProjcet form
+      />
+    </Box>
   );
-};
+}
 
 export default ValidatedTextField;
