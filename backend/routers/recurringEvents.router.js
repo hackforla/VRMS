@@ -13,6 +13,8 @@ router.get('/', cors(), (req, res) => {
     RecurringEvent
         // .find(query.checkInReady === 'true' ? query : undefined)
         .find()
+        // This will deselect the video conference link field
+        .select("-videoConferenceLink")
         .populate('project')
         .then(recurringEvents => {
             return res.status(200).send(recurringEvents);
@@ -22,6 +24,19 @@ router.get('/', cors(), (req, res) => {
             return res.sendStatus(400);
         });
 });
+
+router.get("/internal", (req, res) => {
+    RecurringEvent
+        .find()
+        .populate('project')
+        .then(recurringEvents => {
+            return res.status(200).send(recurringEvents)
+        })
+        .catch(err => {
+            console.error(err)
+            return res.status(400);
+        })
+} )
 
 router.get('/:id', (req, res) => {
     RecurringEvent
