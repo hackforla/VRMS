@@ -9,7 +9,7 @@ const EditUsers = ({ userToEdit, backToSearch, updateUserDb, projects, updateUse
   const [isActive, setIsActive] = useState(userToEdit.isActive);
   const [isAdmin, setIsAdmin] = useState(userToEdit.accessLevel === "admin");
 
-  // Function to check if the current user is the super admin
+  // Boolean to check if the current user is the super admin
   const isSuperAdmin = userToEdit.accessLevel === "superadmin";
 
   // Prepare data for display
