@@ -6,7 +6,7 @@ RUN mkdir -p node_modules
 COPY --chown=node:node package.json package.json ./
 RUN npm install --no-update-notifier
 
-FROM node:18-slim AS client-builder
+FROM node:20-alpine AS client-builder
 USER node
 WORKDIR /srv/client
 COPY --from=node-modules-install /srv/client/node_modules node_modules
