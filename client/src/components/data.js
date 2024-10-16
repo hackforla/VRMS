@@ -39,29 +39,31 @@ export const simpleInputs = [
     label: 'GitHub URL',
     name: 'githubUrl',
     type: 'text',
-    placeholder: 'htttps://github.com/',
+    placeholder: 'https://github.com/',
     disabled: false
   },
   {
     label: 'Slack Channel Link',
     name: 'slackUrl',
     type: 'text',
-    placeholder: 'htttps://slack.com/',
+    placeholder: 'https://slack.com/',
     disabled: false
   },
   {
     label: 'Google Drive URL',
     name: 'googleDriveUrl',
     type: 'text',
-    placeholder: 'htttps://drive.google.com/',
+    placeholder: 'https://drive.google.com/',
     disabled: false,
-    required: false
+    required: true,
+    pattern: /^https:\/\/drive\.google\.com\/.+$/, 
+    errorMessage: 'Invalid Google Drive URL'
   },
   {
     label: 'HFLA Website URL',
     name: 'hflaWebsiteUrl',
     type: 'text',
-    placeholder: 'htttps://hackforla.org/projects/',
+    placeholder: 'https://hackforla.org/projects/',
     disabled: false,
     required: false
   },
