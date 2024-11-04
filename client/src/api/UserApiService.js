@@ -73,6 +73,23 @@ class UserApiService {
       alert('server not responding.  Please try again.');
     }
   }
+
+  // Update user's access level (admin/user)
+  async updateUserAccessLevel(userToEdit, accessLevel) {
+    const url = `${this.baseUserUrl}${userToEdit._id}`;
+    const requestOptions = {
+      method: 'PATCH',
+      headers: this.headers,
+      body: JSON.stringify({ accessLevel }),
+    };
+
+    try {
+      return await fetch(url, requestOptions);
+    } catch (err) {
+      console.error('update access level error', err);
+      alert('server not responding.  Please try again.');
+    }
+  }
 }
 
 export default UserApiService;
