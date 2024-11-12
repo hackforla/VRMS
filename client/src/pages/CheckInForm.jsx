@@ -307,7 +307,7 @@ const CheckInForm = (props) => {
       const currMonth = parseInt(moment().format('MM'));
       const yearJoined = parseInt(year);
       const monthJoined = parseInt(moment(month + ' 9, 2020').format('MM'));
-
+     
       if (
         yearJoined > currYear ||
         (yearJoined === currYear && monthJoined > currMonth)
