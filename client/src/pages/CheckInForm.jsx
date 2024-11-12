@@ -4,6 +4,7 @@ import NewUserForm from './../components/presentational/newUserForm';
 import ReturnUserForm from './../components/presentational/returnUserForm';
 import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend } from '../utils/globalSettings';
 import { format } from 'date-fns';
+import { validateEmail } from '../utils/validateEmail'
 
 import '../sass/CheckIn.scss';
 
@@ -300,6 +301,12 @@ const CheckInForm = (props) => {
       ) {
         setIsError(true);
         setErrorMessage("Please don't leave any fields blank");
+        ready = false;
+      }
+
+      if (userForm.email.length > 0 && !validateEmail(userForm.email) ) {
+        setIsError(true);
+        setErrorMessage("Please use a valid email address");
         ready = false;
       }
 
