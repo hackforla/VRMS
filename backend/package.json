@@ -44,7 +44,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "dotenv-expand": "^5.1.0",
-    "express": "^4.17.1",
+    "express": "^4.20.0",
     "express-validator": "^6.6.1",
     "googleapis": "^59.0.0",
     "helmet": "^3.22.0",

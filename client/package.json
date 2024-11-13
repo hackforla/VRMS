@@ -5,10 +5,11 @@
   "homepage": "https://www.vrms.io",
   "dependencies": {
     "@babel/plugin-transform-react-jsx-self": "^7.10.4",
-    "@emotion/react": "^11.10.6",
-    "@emotion/styled": "^11.10.6",
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^5.14.19",
-    "@mui/material": "^5.11.12",
+    "@mui/material": "^5.16.7",
+    "@mui/x-date-pickers": "^7.21.0",
     "@vitejs/plugin-react": "^4.0.3",
     "@vitejs/plugin-react-swc": "^3.3.2",
     "classnames": "^2.2.6",
@@ -29,7 +30,7 @@
     "react-hook-form": "^7.44.3",
     "react-router-dom": "^5.1.2",
     "validator": "^13.7.0",
-    "vite": "^4.4.4",
+    "vite": "^4.5.5",
     "vite-plugin-svgr": "^3.2.0"
   },
   "scripts": {
