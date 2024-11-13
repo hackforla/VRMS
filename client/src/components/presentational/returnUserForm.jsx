@@ -1,5 +1,7 @@
 import React from 'react';
 import { Box } from '@mui/material';
+import Button from '@mui/material/Button';
+import { FormControl, FormLabel, TextField } from '@mui/material';
 
 const ReturnUserForm = (props) => {
   return (
@@ -8,17 +10,17 @@ const ReturnUserForm = (props) => {
         <Typography variant="h3">Welcome back!</Typography>
       </Box>
       <Box className="check-in-form">
-        <form
+        <FormControl
           className="form-check-in"
           autoComplete="on"
           onSubmit={(e) => e.preventDefault()}
         >
           <Box className="form-row">
             <Box className="form-input-text">
-              <label htmlFor="email">
+              <FormLabel htmlFor="email">
                 Which email address did you use to check-in last time?
-              </label>
-              <input
+              </FormLabel>
+              <TextField
                 type="email"
                 name="email"
                 placeholder="Email Address"
@@ -44,7 +46,8 @@ const ReturnUserForm = (props) => {
           {!props.user && !props.isLoading ? (
             <Box className="form-row">
               <Box className="form-input-button">
-                <button
+                <Button
+                  variant="contained"
                   type="submit"
                   className="form-check-in-submit"
                   onClick={(e) => props.checkEmail(e)}
@@ -53,23 +56,24 @@ const ReturnUserForm = (props) => {
                   }
                 >
                   CHECK IN
-                </button>
+                </Button>
               </Box>
             </Box>
           ) : (
             <Box className="form-row">
               <Box className="form-input-button">
-                <button
+                <Button
+                  variant="contained"
                   type="submit"
                   className="form-check-in-submit block"
                   onClick={(e) => e.preventDefault()}
                 >
                   CHECKING IN...
-                </button>
+                </Button>
               </Box>
             </Box>
           )}
-        </form>
+        </FormControl>
       </Box>
     </Box>
   );
