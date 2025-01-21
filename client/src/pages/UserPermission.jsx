@@ -3,12 +3,13 @@ import { Redirect } from 'react-router-dom';
 import '../sass/UserAdmin.scss';
 import useAuth from '../hooks/useAuth';
 import EditUsers from '../components/user-admin/EditUsers';
+import UserPermissionSearch from '../components/user-admin/UserPermissionSearch';
 import UserApiService from '../api/UserApiService';
 import ProjectApiService from '../api/ProjectApiService';
-import UserManagement from '../components/user-admin/UserManagement';
-import UserPermissionSearch from './UserPermissionSearch';
 
-const UserAdmin = () => {
+//NOTE: This page is based off of "UserAdmin.jsx" for now. It should be update as part of #1801.
+
+const UserPermission = () => {
   // Initialize state hooks
   const { auth } = useAuth();
   const [users, setUsers] = useState([]); // All users pulled from database
@@ -18,6 +19,7 @@ const UserAdmin = () => {
   const [userApiService] = useState(new UserApiService());
   const [projectApiService] = useState(new ProjectApiService());
 
+  // NOTE: will have to be updated as part of #1801
   const fetchUsers = useCallback(async () => {
     const userRes = await userApiService.fetchUsers();
     setUsers(userRes);
@@ -67,7 +69,7 @@ const UserAdmin = () => {
   }
 
   if (Object.keys(userToEdit).length === 0) {
-    return <UserManagement users={users} setUserToEdit={setUserToEdit} />;
+    return <UserPermissionSearch users={users} setUserToEdit={setUserToEdit} />;
   } else {
     return (
       <EditUsers
@@ -82,4 +84,4 @@ const UserAdmin = () => {
   }
 };
 
-export default UserAdmin;
+export default UserPermission;

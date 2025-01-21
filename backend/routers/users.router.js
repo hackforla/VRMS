@@ -6,6 +6,8 @@ const { UserController } = require('../controllers');
 // The base is /api/users
 router.get('/', UserController.user_list);
 
+router.get('/admins', UserController.admin_list);
+
 router.post('/', UserController.create);
 
 router.get('/:UserId', UserController.user_by_id);

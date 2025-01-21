@@ -26,6 +26,23 @@ UserController.user_list = async function (req, res) {
   }
 };
 
+// Get list of Users with accessLevel 'admin' or 'superadmin' with GET
+UserController.admin_list = async function (req, res) {
+  const { headers } = req;
+  
+  if (headers['x-customrequired-header'] !== expectedHeader) {
+    return res.sendStatus(403);
+  }
+
+  try {
+    const admins = await User.find({ accessLevel: { $in: ["admin", "superadmin"] } });
+    return res.status(200).send(admins);
+  } catch (err) {
+    return res.sendStatus(400);
+  }
+};
+
+
 // Get User by id with GET
 UserController.user_by_id = async function (req, res) {
   const { headers } = req;
