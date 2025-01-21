@@ -67,4 +67,26 @@ ProjectController.destroy = async function (req, res) {
 };
 
 
+ProjectController.getProjectManagers = async function (req, res) {
+  try {
+    const userProjectMap = {};
+    const projects = await Project.find({
+      managedByUsers: { $exists: true, $ne: [] }
+    });
+
+    for (const project of projects) {
+      for (const user of project.managedByUsers) {
+        if (!userProjectMap[user]) {
+          userProjectMap[user] = [];
+        }
+        userProjectMap[user].push(project.name);
+      }
+    }
+    return res.status(200).send(userProjectMap);
+  } catch (err) {
+    return res.sendStatus(400);
+  }
+};
+
+
 module.exports = ProjectController;

@@ -5,6 +5,9 @@ const { ProjectController } = require('../controllers');
 const { AuthUtil } = require("../middleware");
 
 // The base is /api/projects
+
+router.get('/projectManagers', ProjectController.getProjectManagers);
+
 router.get('/', ProjectController.project_list);
 
 // Its a put because we have to send the PM projects to be filtered here
