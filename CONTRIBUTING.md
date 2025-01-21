@@ -138,6 +138,14 @@ Note: Understanding how git remotes work will make collaborating much easier. Yo
 
 1. Take a second to review the `app.js` and `server.js` files in the `vrms/backend` folder. These two files are a blueprint for the back end, so please familiarize yourself with it. You'll see folders for the database collection models, routes for the API, and a config file which loads the necessary environment variables.
 
+1. CD into each the `client/` and `backend/` directories, install dependencies. 
+
+   - `cd client`
+   - `npm install`
+  
+   - `cd backend`
+   - `npm install`
+
 1. Start the local development servers (frontend & backend).
 
    To run `client`:
