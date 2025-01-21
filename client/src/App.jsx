@@ -26,6 +26,8 @@ import addProject from './components/manageProjects/addProject';
 import HealthCheck from './pages/HealthCheck';
 import SecretPassword from './pages/SecretPassword';
 import UserWelcome from './pages/UserWelcome';
+// Added User Permission Search component
+import UserPermissionSearch from './pages/UserPermissionSearch';
 import UserPermission from './pages/UserPermission';
 
 import { ThemeProvider } from '@mui/material';
