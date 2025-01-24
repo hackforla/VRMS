@@ -299,10 +299,12 @@ textarea {
 .create-form-button {
   width: 250px;
   height: 43px;
-  background-color: black;
-  color: white;
-  font-size: 20px;
-  margin: 0 10px 10px 0;
+  background-color: black!important;
+  color: white!important;
+  font-size: 20px!important;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace!important;
+  font-weight: 400!important;
+  margin: 0 10px 10px 0!important;
   padding: 10px;
   border-radius: 5px;
 }
