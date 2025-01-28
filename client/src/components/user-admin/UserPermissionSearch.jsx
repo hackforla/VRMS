@@ -19,88 +19,88 @@ const Buttonsx = {
   py: 0.5,
 };
 
-const dummyData = [
-  {
-    _id: 1,
-    name: {
-      firstName: 'John',
-      lastName: 'Doe',
-    },
-    accessLevel: 'admin',
-    email: 'johndoe@hackforla.org',
-    projects: [],
-  },
-  {
-    _id: 2,
-    name: {
-      firstName: 'Vinny',
-      lastName: 'Harris',
-    },
-    accessLevel: 'admin',
-    email: 'vinnyharris@hackforla.org',
-    projects: [],
-  },
-  {
-    _id: 3,
-    name: {
-      firstName: 'Gary',
-      lastName: 'Jones',
-    },
-    accessLevel: 'admin',
-    email: 'garyjones@hackforla.org',
-    projects: [],
-  },
-  {
-    _id: 4,
-    name: {
-      firstName: 'Jane',
-      lastName: 'Smith',
-    },
-    accessLevel: 'projectLead',
-    email: 'janesmith@hackforla.org',
-    projects: ['VRMS', 'Mobile'],
-  },
-  {
-    _id: 5,
-    name: {
-      firstName: 'Bonnie',
-      lastName: 'Wolfe',
-    },
-    accessLevel: 'projectLead',
-    email: 'bonnie@hackforla.org',
-    projects: ['Home Unite Us'],
-  },
-  {
-    _id: 6,
-    name: {
-      firstName: 'Diana',
-      lastName: 'Loeb',
-    },
-    accessLevel: 'projectLead',
-    email: 'dianaloeb@hackforla.org',
-    projects: ['HackforLA Mobile', 'LA TDM Calculator'],
-  },
-  {
-    _id: 7,
-    name: {
-      firstName: 'Zack',
-      lastName: 'Cruz',
-    },
-    accessLevel: 'projectLead',
-    email: 'dianaloeb@hackforla.org',
-    projects: ['LA TDM Calculator', 'VRMS backend'],
-  },
-  {
-    _id: 8,
-    name: {
-      firstName: 'Iris',
-      lastName: 'Sosa',
-    },
-    accessLevel: 'projectLead',
-    email: 'irissosa@hackforla.org',
-    projects: ['Home Unite Us', 'VRMS Support'],
-  },
-];
+// const dummyData = [
+//   {
+//     _id: 1,
+//     name: {
+//       firstName: 'John',
+//       lastName: 'Doe',
+//     },
+//     accessLevel: 'admin',
+//     email: 'johndoe@hackforla.org',
+//     projects: [],
+//   },
+//   {
+//     _id: 2,
+//     name: {
+//       firstName: 'Vinny',
+//       lastName: 'Harris',
+//     },
+//     accessLevel: 'admin',
+//     email: 'vinnyharris@hackforla.org',
+//     projects: [],
+//   },
+//   {
+//     _id: 3,
+//     name: {
+//       firstName: 'Gary',
+//       lastName: 'Jones',
+//     },
+//     accessLevel: 'admin',
+//     email: 'garyjones@hackforla.org',
+//     projects: [],
+//   },
+//   {
+//     _id: 4,
+//     name: {
+//       firstName: 'Jane',
+//       lastName: 'Smith',
+//     },
+//     accessLevel: 'projectLead',
+//     email: 'janesmith@hackforla.org',
+//     projects: ['VRMS', 'Mobile'],
+//   },
+//   {
+//     _id: 5,
+//     name: {
+//       firstName: 'Bonnie',
+//       lastName: 'Wolfe',
+//     },
+//     accessLevel: 'projectLead',
+//     email: 'bonnie@hackforla.org',
+//     projects: ['Home Unite Us'],
+//   },
+//   {
+//     _id: 6,
+//     name: {
+//       firstName: 'Diana',
+//       lastName: 'Loeb',
+//     },
+//     accessLevel: 'projectLead',
+//     email: 'dianaloeb@hackforla.org',
+//     projects: ['HackforLA Mobile', 'LA TDM Calculator'],
+//   },
+//   {
+//     _id: 7,
+//     name: {
+//       firstName: 'Zack',
+//       lastName: 'Cruz',
+//     },
+//     accessLevel: 'projectLead',
+//     email: 'dianaloeb@hackforla.org',
+//     projects: ['LA TDM Calculator', 'VRMS backend'],
+//   },
+//   {
+//     _id: 8,
+//     name: {
+//       firstName: 'Iris',
+//       lastName: 'Sosa',
+//     },
+//     accessLevel: 'projectLead',
+//     email: 'irissosa@hackforla.org',
+//     projects: ['Home Unite Us', 'VRMS Support'],
+//   },
+// ];
 
 const DummyComponent = ({ data, type, setUserToEdit }) => {
   return (
@@ -183,7 +183,7 @@ const DummyComponent = ({ data, type, setUserToEdit }) => {
   );
 };
 
-const UserPermissionSearch = ({ users, setUserToEdit }) => {
+const UserPermissionSearch = ({ admins, setUserToEdit }) => {
   const [userType, setUserType] = useState('admin'); // Which results will display
   const [searchText, setSearchText] = useState(''); // Search term for the admin/PM search
 
@@ -211,10 +211,10 @@ const UserPermissionSearch = ({ users, setUserToEdit }) => {
     setSearchText(event.target.value);
   };
 
-  const getFilteredData = (dummyData, searchText, userType) => {
+  const getFilteredData = (admins, searchText, userType) => {
     const searchTextLowerCase = searchText.trim().toLowerCase();
 
-    let filteredData = dummyData
+    let filteredData = admins
       .filter((user) => user.accessLevel === userType)
       .flatMap((user) =>
         userType === 'projectLead' && user.projects.length > 0
@@ -246,7 +246,7 @@ const UserPermissionSearch = ({ users, setUserToEdit }) => {
   // Filtering logic
   let filteredData;
   if (!searchText) {
-    filteredData = dummyData.filter((user) => user.accessLevel === userType);
+    filteredData = admins.filter((user) => user.accessLevel === userType);
     if (userType === 'admin') {
       // Default display for admins, sorted ASC based on first name
       filteredData.sort((u1, u2) =>
@@ -269,7 +269,7 @@ const UserPermissionSearch = ({ users, setUserToEdit }) => {
     }
   } else {
     // NOTE: Using "users" instead of "dummyData" to check the link to user profile
-    filteredData = getFilteredData(users, searchText, userType);
+    filteredData = getFilteredData(admins, searchText, userType);
   }
 
   return (
@@ -330,7 +330,7 @@ const UserPermissionSearch = ({ users, setUserToEdit }) => {
         />
         <Box
           sx={{
-            bgcolor: dummyData.length > 0 ? '#F5F5F5' : 'transparent',
+            bgcolor: admins.length > 0 ? '#F5F5F5' : 'transparent',
             my: 1.2,
             borderRadius: 1,
             flexGrow: 1,

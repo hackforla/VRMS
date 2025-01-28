@@ -12,7 +12,7 @@ import ProjectApiService from '../api/ProjectApiService';
 const UserPermission = () => {
   // Initialize state hooks
   const { auth } = useAuth();
-  const [users, setUsers] = useState([]); // All users pulled from database
+  const [admins, setAdmins] = useState([]); // All admins pulled from database
   const [projects, setProjects] = useState([]); // All projects pulled from db
   const [userToEdit, setUserToEdit] = useState({}); // The selected user that is being edited
 
@@ -20,34 +20,35 @@ const UserPermission = () => {
   const [projectApiService] = useState(new ProjectApiService());
 
   // NOTE: will have to be updated as part of #1801
-  const fetchUsers = useCallback(async () => {
-    const userRes = await userApiService.fetchUsers();
-    setUsers(userRes);
+  const fetchAdmins = useCallback(async () => {
+    const userRes = await userApiService.fetchAdmins();
+    console.log(userRes);
+    setAdmins(userRes);
   }, [userApiService]);
 
   const updateUserDb = useCallback(
     async (user, managedProjects) => {
       await userApiService.updateUserDbProjects(user, managedProjects);
-      fetchUsers();
+      fetchAdmins();
     },
-    [userApiService, fetchUsers]
+    [userApiService, fetchAdmins]
   );
 
   const updateUserActiveStatus = useCallback(
     async (user, isActive) => {
-      await userApiService.updateUserDbIsActive(user, isActive);
-      fetchUsers();
+      await userApiService.updateUserDbIsActive(admins, isActive);
+      fetchAdmins();
     },
-    [userApiService, fetchUsers]
+    [userApiService, fetchAdmins]
   );
 
   // Update user's access level (admin/user)
   const updateUserAccessLevel = useCallback(
-    async (user, newAccessLevel) => {
-      await userApiService.updateUserAccessLevel(user, newAccessLevel);
-      fetchUsers();
+    async (admin, newAccessLevel) => {
+      await userApiService.updateUserAccessLevel(admin, newAccessLevel);
+      fetchAdmins();
     },
-    [userApiService, fetchUsers]
+    [userApiService, fetchAdmins]
   );
 
   const fetchProjects = useCallback(async () => {
@@ -56,9 +57,9 @@ const UserPermission = () => {
   }, [projectApiService]);
 
   useEffect(() => {
-    fetchUsers();
+    fetchAdmins();
     fetchProjects();
-  }, [fetchUsers, fetchProjects]);
+  }, [fetchAdmins, fetchProjects]);
 
   const backToSearch = () => {
     setUserToEdit({});
@@ -69,7 +70,9 @@ const UserPermission = () => {
   }
 
   if (Object.keys(userToEdit).length === 0) {
-    return <UserPermissionSearch users={users} setUserToEdit={setUserToEdit} />;
+    return (
+      <UserPermissionSearch admins={admins} setUserToEdit={setUserToEdit} />
+    );
   } else {
     return (
       <EditUsers

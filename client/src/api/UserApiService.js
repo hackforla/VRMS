@@ -22,6 +22,20 @@ class UserApiService {
     return [];
   }
 
+  async fetchAdmins() {
+    try {
+      const route = this.baseUserUrl + '/admins';
+      const res = await fetch(route, {
+        headers: this.headers,
+      });
+      return await res.json();
+    } catch (error) {
+      console.error(`fetchAdmins error: ${error}`);
+      alert('Server not responding.  Please refresh the page.');
+    }
+    return [];
+  }
+
   // Updates user projects in db
   async updateUserDbProjects(userToEdit, managedProjects) {
     // eslint-disable-next-line no-underscore-dangle

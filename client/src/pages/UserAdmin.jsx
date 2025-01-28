@@ -6,7 +6,6 @@ import EditUsers from '../components/user-admin/EditUsers';
 import UserApiService from '../api/UserApiService';
 import ProjectApiService from '../api/ProjectApiService';
 import UserManagement from '../components/user-admin/UserManagement';
-import UserPermissionSearch from './UserPermissionSearch';
 
 const UserAdmin = () => {
   // Initialize state hooks
