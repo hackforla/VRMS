@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { Box, Button, TextareaAutosize, TextField } from '@mui/material';
 import '../../sass/ManageProjects.scss';
 
 const EditableField = ({
@@ -44,11 +45,11 @@ const EditableField = ({
 
   return (
     // this button will be disabled if user !admin
-    <div className="editable-field-div">
-      <div className="project-edit-title">
+    <Box className="editable-field-div">
+      <Box className="project-edit-title">
         {fieldTitle}
         {notRestricted &&
-          <button
+          <Button
             type="button"
             className="project-edit-button"
             onClick={() => {
@@ -56,24 +57,24 @@ const EditableField = ({
             }}
           >
             [edit]
-          </button>
+          </Button>
         }
-      </div>
+      </Box>
 
       {editable ? (
         <>
           {fieldType === 'textarea' ? (
             /* eslint-disable react/jsx-props-no-spreading */
-            <textarea {...inputProps} />
+            <TextareaAutosize {...inputProps} />
           ) : (
-            <input {...inputProps} />
+            <TextField {...inputProps} />
             /* eslint-enable react/jsx-props-no-spreading */
           )}
         </>
       ) : (
-        <div className="section-content">{fieldData}</div>
+        <Box className="section-content">{fieldData}</Box>
       )}
-    </div>
+    </Box>
   );
 };
 
