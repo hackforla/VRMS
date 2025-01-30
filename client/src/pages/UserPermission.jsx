@@ -14,6 +14,7 @@ const UserPermission = () => {
   const { auth } = useAuth();
   const [admins, setAdmins] = useState([]); // All admins pulled from database
   const [projects, setProjects] = useState([]); // All projects pulled from db
+  const [projectManagers, setProjectManagers] = useState([]); //All project managers pulled from db
   const [userToEdit, setUserToEdit] = useState({}); // The selected user that is being edited
 
   const [userApiService] = useState(new UserApiService());
@@ -25,6 +26,12 @@ const UserPermission = () => {
     console.log(userRes);
     setAdmins(userRes);
   }, [userApiService]);
+
+  const fetchProjectsManagers = useCallback(async () => {
+    const pmRes = await projectApiService.fetchProjectsManagers();
+    console.log(pmRes);
+    setProjectManagers(pmRes);
+  }, [projectApiService]);
 
   const updateUserDb = useCallback(
     async (user, managedProjects) => {
@@ -59,7 +66,8 @@ const UserPermission = () => {
   useEffect(() => {
     fetchAdmins();
     fetchProjects();
-  }, [fetchAdmins, fetchProjects]);
+    fetchProjectsManagers();
+  }, [fetchAdmins, fetchProjects, fetchProjectsManagers]);
 
   const backToSearch = () => {
     setUserToEdit({});
@@ -71,7 +79,11 @@ const UserPermission = () => {
 
   if (Object.keys(userToEdit).length === 0) {
     return (
-      <UserPermissionSearch admins={admins} setUserToEdit={setUserToEdit} />
+      <UserPermissionSearch
+        admins={admins}
+        projectLeads={projectManagers}
+        setUserToEdit={setUserToEdit}
+      />
     );
   } else {
     return (

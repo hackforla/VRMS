@@ -90,6 +90,16 @@ const Buttonsx = {
 //     email: 'dianaloeb@hackforla.org',
 //     projects: ['LA TDM Calculator', 'VRMS backend'],
 //   },
+//   [{
+//     _id: 1,
+//     name: {
+//       firstName: 'John',
+//       lastName: 'Doe',
+//     },
+//     accessLevel: 'admin',
+//     email: 'johndoe@hackforla.org',
+//     projects: [],
+//   },
 //   {
 //     _id: 8,
 //     name: {
@@ -99,8 +109,7 @@ const Buttonsx = {
 //     accessLevel: 'projectLead',
 //     email: 'irissosa@hackforla.org',
 //     projects: ['Home Unite Us', 'VRMS Support'],
-//   },
-// ];
+//   }];
 
 const DummyComponent = ({ data, type, setUserToEdit }) => {
   return (
@@ -183,11 +192,12 @@ const DummyComponent = ({ data, type, setUserToEdit }) => {
   );
 };
 
-const UserPermissionSearch = ({ admins, setUserToEdit }) => {
+const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
   const [userType, setUserType] = useState('admin'); // Which results will display
   const [searchText, setSearchText] = useState(''); // Search term for the admin/PM search
 
   const location = useLocation();
+  console.log(projectLeads);
 
   useEffect(() => {
     // Edit url by adding '/admin' upon loading
