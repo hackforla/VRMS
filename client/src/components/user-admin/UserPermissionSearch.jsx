@@ -180,7 +180,7 @@ const DummyComponent = ({ data, type, setUserToEdit }) => {
                 </Grid>
                 <Grid item>
                   <Typography style={{ fontWeight: 600 }} color="black">
-                    {u.project}
+                    {u.managedProject}
                   </Typography>
                 </Grid>
               </Grid>
@@ -197,7 +197,9 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
   const [searchText, setSearchText] = useState(''); // Search term for the admin/PM search
 
   const location = useLocation();
-  console.log(projectLeads);
+
+  const resultData = [...admins, ...projectLeads];
+  // console.log(resultData);
 
   useEffect(() => {
     // Edit url by adding '/admin' upon loading
@@ -221,20 +223,25 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
     setSearchText(event.target.value);
   };
 
-  const getFilteredData = (admins, searchText, userType) => {
+  const getFilteredData = (resultData, searchText, userType) => {
     const searchTextLowerCase = searchText.trim().toLowerCase();
 
-    let filteredData = admins
+    let filteredData = resultData
       .filter((user) => user.accessLevel === userType)
       .flatMap((user) =>
-        userType === 'projectLead' && user.projects.length > 0
-          ? user.projects.map((project) => ({ ...user, project }))
+        userType === 'projectLead' && user.managedProjects.length > 0
+          ? user.managedProjects.map((managedProject) => ({
+              ...user,
+              managedProject,
+            }))
           : [{ ...user }]
       )
       .filter((user) => {
         const fullName =
           `${user.name.firstName} ${user.name.lastName}`.toLowerCase();
-        const projectName = user.project ? user.project.toLowerCase() : '';
+        const projectName = user.managedProject
+          ? user.managedProject.toLowerCase()
+          : '';
         return (
           fullName.includes(searchTextLowerCase) ||
           (userType === 'projectLead' &&
@@ -245,7 +252,7 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
     return filteredData.sort((a, b) => {
       if (userType === 'projectLead') {
         return (
-          a.project.localeCompare(b.project) ||
+          a.managedProject.localeCompare(b.managedProject) ||
           a.name.firstName.localeCompare(b.name.firstName)
         );
       }
@@ -256,7 +263,7 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
   // Filtering logic
   let filteredData;
   if (!searchText) {
-    filteredData = admins.filter((user) => user.accessLevel === userType);
+    filteredData = resultData.filter((user) => user.accessLevel === userType);
     if (userType === 'admin') {
       // Default display for admins, sorted ASC based on first name
       filteredData.sort((u1, u2) =>
@@ -266,20 +273,21 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
       // Default display of all PMs, sorted ASC based on project name, then first name
       let tempFilter = [];
       filteredData.forEach((user) => {
-        user.projects.forEach((project) => {
-          tempFilter.push({ ...user, project });
+        user.managedProjects.forEach((managedProject) => {
+          tempFilter.push({ ...user, managedProject });
         });
       });
       tempFilter.sort(
         (u1, u2) =>
-          u1.project.localeCompare(u2.project) ||
+          u1.managedProject.localeCompare(u2.managedProject) ||
           u1.name?.firstName.localeCompare(u2.name?.firstName)
       );
       filteredData = [...tempFilter];
+      console.log(filteredData);
     }
   } else {
     // NOTE: Using "users" instead of "dummyData" to check the link to user profile
-    filteredData = getFilteredData(admins, searchText, userType);
+    filteredData = getFilteredData(resultData, searchText, userType);
   }
 
   return (

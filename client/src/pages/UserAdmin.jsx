@@ -20,6 +20,7 @@ const UserAdmin = () => {
   const fetchUsers = useCallback(async () => {
     const userRes = await userApiService.fetchUsers();
     setUsers(userRes);
+    console.log(userRes);
   }, [userApiService]);
 
   const updateUserDb = useCallback(
