@@ -227,7 +227,11 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
     const searchTextLowerCase = searchText.trim().toLowerCase();
 
     let filteredData = resultData
-      .filter((user) => user.accessLevel === userType)
+      .filter((user) =>
+        userType === 'admin'
+          ? user.accessLevel === 'admin' || user.accessLevel === 'superadmin'
+          : user.accessLevel === 'projectLead'
+      )
       .flatMap((user) =>
         userType === 'projectLead' && user.managedProjects.length > 0
           ? user.managedProjects.map((managedProject) => ({
@@ -263,7 +267,12 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
   // Filtering logic
   let filteredData;
   if (!searchText) {
-    filteredData = resultData.filter((user) => user.accessLevel === userType);
+    filteredData = resultData.filter((user) =>
+      userType === 'admin'
+        ? user.accessLevel === 'admin' || user.accessLevel === 'superadmin'
+        : user.accessLevel === 'projectLead'
+    );
+
     if (userType === 'admin') {
       // Default display for admins, sorted ASC based on first name
       filteredData.sort((u1, u2) =>
