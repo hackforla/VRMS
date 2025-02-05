@@ -57,10 +57,6 @@ const UserAdmin = () => {
     setUserToEdit({});
   };
 
-  // if (!auth && !auth?.user) {
-  //   return <Redirect to="/login" />;
-  // }
-
   if (Object.keys(userToEdit).length === 0) {
     return <UserManagement users={users} setUserToEdit={setUserToEdit} />;
   } else {
