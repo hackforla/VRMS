@@ -31,6 +31,16 @@ import theme from './theme';
 
 import './App.scss';
 
+/* 
+   withAuth Hook
+   Wraps component with withAuth hook to manage automatic redirect to login page if user is not logged in
+   An example (inside routes object):
+   { path: '/endpoint', name: 'endpoint', Component: withAuth(ComponentName) },
+   Return <Redirect to="/login" /> if user is not logged in
+   Return <ComponentName {...props} auth={auth} /> if user is logged in
+*/
+import withAuth from './hooks/withAuth';
+
 const routes = [
   { path: '/', name: 'home', Component: Home },
   { path: '/admin', name: 'admindashboard', Component: AdminDashboard },
@@ -45,14 +55,14 @@ const routes = [
   { path: '/success', name: 'success', Component: Success },
   { path: '/handleauth', name: 'handleauth', Component: HandleAuth },
   { path: '/emailsent', name: 'emailsent', Component: EmailSent },
-  { path: '/events', name: 'events', Component: Events },
-  { path: '/useradmin', name: 'useradmin', Component: UserAdmin },
-  { path: '/projects', name: 'projects', Component: ProjectList },
-  { path: '/projects/create', name: 'projectform', Component:  addProject},
+  { path: '/events', name: 'events', Component: withAuth(Events) },
+  { path: '/useradmin', name: 'useradmin', Component: withAuth(UserAdmin) },
+  { path: '/projects', name: 'projects', Component: withAuth(ProjectList) },
+  { path: '/projects/create', name: 'projectform', Component: addProject },
   {
     path: '/projects/:projectId',
     name: 'project',
-    Component: ManageProjects,
+    Component: withAuth(ManageProjects),
   },
   {
     path: '/projectleader',
