@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const EmailController = require('./email.controller');
 const { CONFIG_AUTH } = require('../config');
 
-const { User } = require('../models');
+const { User, Project } = require('../models');
 
 const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
 
@@ -29,19 +29,55 @@ UserController.user_list = async function (req, res) {
 // Get list of Users with accessLevel 'admin' or 'superadmin' with GET
 UserController.admin_list = async function (req, res) {
   const { headers } = req;
-  
+
   if (headers['x-customrequired-header'] !== expectedHeader) {
     return res.sendStatus(403);
   }
 
   try {
-    const admins = await User.find({ accessLevel: { $in: ["admin", "superadmin"] } });
+    const admins = await User.find({ accessLevel: { $in: ['admin', 'superadmin'] } });
     return res.status(200).send(admins);
   } catch (err) {
     return res.sendStatus(400);
   }
 };
 
+// Get list of Users with accessLevel 'admin' or 'superadmin' and also managed projects with GET
+UserController.projectLead_list = async function (req, res) {
+  const { headers } = req;
+
+  if (headers['x-customrequired-header'] !== expectedHeader) {
+    return res.sendStatus(403);
+  }
+
+  try {
+    const projectManagers = await User.find({
+      $and: [
+        { accessLevel: { $in: ['admin', 'superadmin'] } },
+        { managedProjects: { $exists: true, $type: 'array', $ne: [] } },
+      ],
+    });
+
+    for (const projectManager of projectManagers) {
+      projectManager.accessLevel = 'projectLead';
+
+      const projectNames = [];
+
+      for (const projectId of projectManager.managedProjects) {
+        const projectDetail = await Project.findById(projectId);
+        if (projectDetail && projectDetail.name) {
+          projectNames.push(projectDetail.name);
+        } else {
+          console.warn('Project detail is null, cannot access name');
+        }
+      }
+      projectManager.managedProjects = projectNames;
+    }
+    return res.status(200).send(projectManagers);
+  } catch (err) {
+    return res.sendStatus(400);
+  }
+};
 
 // Get User by id with GET
 UserController.user_by_id = async function (req, res) {
@@ -68,12 +104,11 @@ UserController.create = async function (req, res) {
     return res.sendStatus(403);
   }
 
-
   try {
-  const newUser = {
-    ...req.body,
-    email: req.body.email.toLowerCase()
-  }
+    const newUser = {
+      ...req.body,
+      email: req.body.email.toLowerCase(),
+    };
     const user = await User.create(newUser);
     return res.status(201).send(user);
   } catch (error) {
@@ -97,7 +132,7 @@ UserController.update = async function (req, res) {
   }
 
   try {
-    const user = await User.findOneAndUpdate({_id: UserId}, req.body, { new: true });
+    const user = await User.findOneAndUpdate({ _id: UserId }, req.body, { new: true });
     return res.status(200).send(user);
   } catch (err) {
     return res.sendStatus(400);
@@ -209,10 +244,7 @@ UserController.verifyMe = async function (req, res) {
 };
 
 UserController.logout = async function (req, res) {
-  return res
-    .clearCookie('token')
-    .status(200)
-    .send('Successfully logged out.');
-}
+  return res.clearCookie('token').status(200).send('Successfully logged out.');
+};
 
 module.exports = UserController;

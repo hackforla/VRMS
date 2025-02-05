@@ -199,7 +199,6 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
   const location = useLocation();
 
   const resultData = [...admins, ...projectLeads];
-  // console.log(resultData);
 
   useEffect(() => {
     // Edit url by adding '/admin' upon loading
@@ -292,7 +291,7 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
           u1.name?.firstName.localeCompare(u2.name?.firstName)
       );
       filteredData = [...tempFilter];
-      console.log(filteredData);
+      console.log('expanded projectLead', filteredData);
     }
   } else {
     // NOTE: Using "users" instead of "dummyData" to check the link to user profile

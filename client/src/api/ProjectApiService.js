@@ -98,20 +98,6 @@ class ProjectApiService {
       return undefined;
     }
   }
-
-  async fetchProjectsManagers() {
-    try {
-      const route = this.baseProjectUrl + '/projectManagers';
-      const res = await fetch(route, {
-        headers: this.headers,
-      });
-      return await res.json();
-    } catch (error) {
-      console.error(`fetchProjects error: ${error}`);
-      alert('Server not responding. Please refresh the page.');
-      return [];
-    }
-  }
 }
 
 export default ProjectApiService;

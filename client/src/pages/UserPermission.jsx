@@ -7,8 +7,6 @@ import UserPermissionSearch from '../components/user-admin/UserPermissionSearch'
 import UserApiService from '../api/UserApiService';
 import ProjectApiService from '../api/ProjectApiService';
 
-//NOTE: This page is based off of "UserAdmin.jsx" for now. It should be update as part of #1801.
-
 const UserPermission = () => {
   // Initialize state hooks
   const { auth } = useAuth();
@@ -20,18 +18,17 @@ const UserPermission = () => {
   const [userApiService] = useState(new UserApiService());
   const [projectApiService] = useState(new ProjectApiService());
 
-  // NOTE: will have to be updated as part of #1801
   const fetchAdmins = useCallback(async () => {
     const userRes = await userApiService.fetchAdmins();
-    console.log(userRes);
+    console.log('admin_list', userRes);
     setAdmins(userRes);
   }, [userApiService]);
 
   const fetchProjectsManagers = useCallback(async () => {
-    const pmRes = await projectApiService.fetchProjectsManagers();
-    console.log(pmRes);
+    const pmRes = await userApiService.fetchProjectsManagers();
+    console.log('projectLead_list', pmRes);
     setProjectManagers(pmRes);
-  }, [projectApiService]);
+  }, [userApiService]);
 
   const updateUserDb = useCallback(
     async (user, managedProjects) => {

@@ -8,6 +8,8 @@ router.get('/', UserController.user_list);
 
 router.get('/admins', UserController.admin_list);
 
+router.get('/projectManagers', UserController.projectLead_list);
+
 router.post('/', UserController.create);
 
 router.get('/:UserId', UserController.user_by_id);
