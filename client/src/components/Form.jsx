@@ -1,3 +1,6 @@
+// Form.jsx contains several unused components, including abstractions for button and form elements.
+// They are not currently being used in the codebase.
+
 import React from "react";
 
 import "../sass/Form.scss";
