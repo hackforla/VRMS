@@ -8,7 +8,7 @@ import RecurringEventsApiService from '../api/RecurringEventsApiService';
 import Loading from '../svg/22.gif';
 import '../sass/ManageProjects.scss';
 import EventsApiService_ from '../api/EventsApiService';
-import { Typography, Box } from '@mui/material';
+import { Box } from '@mui/material';
 
 const PAGES = Object.freeze({
   selectProject: 'selectProject',
@@ -178,13 +178,13 @@ const ManageProjects = () => {
   }
   return (
     <>
-      <Typography
+      <Box
         sx={eventsLoading || projectsLoading ? loadingStyle : noStyle}
         component='span'
         display='inline'
       >
         <Box component='img' src={Loading} alt="Logo" />
-      </Typography>
+      </Box>
       {displayedComponent}
     </>
   );
