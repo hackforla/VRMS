@@ -188,6 +188,9 @@ Claiming an issue is a two step process:
 1. Assign yourself to the issue using the gear icon in the upper right corner of the issue where it says "Assignees"
 2. Move the issue from the `Prioritized Backlog` to the `In Progress` column of the project board
 
+You may want to consider bookmarking your Github Issues page to track your current tasks:
+[https://github.com/issues/assigned](https://github.com/issues/assigned)
+
 ### **3.2 Create a new branch for each issue you work on**
 
 You will create a new branch for each issue you work on. Doing all your work on feature branches leaves your repository's main branch unmodified and greatly simplifies keeping your fork in sync with the main project.
