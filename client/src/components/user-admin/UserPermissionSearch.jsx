@@ -19,98 +19,6 @@ const Buttonsx = {
   py: 0.5,
 };
 
-// const dummyData = [
-//   {
-//     _id: 1,
-//     name: {
-//       firstName: 'John',
-//       lastName: 'Doe',
-//     },
-//     accessLevel: 'admin',
-//     email: 'johndoe@hackforla.org',
-//     projects: [],
-//   },
-//   {
-//     _id: 2,
-//     name: {
-//       firstName: 'Vinny',
-//       lastName: 'Harris',
-//     },
-//     accessLevel: 'admin',
-//     email: 'vinnyharris@hackforla.org',
-//     projects: [],
-//   },
-//   {
-//     _id: 3,
-//     name: {
-//       firstName: 'Gary',
-//       lastName: 'Jones',
-//     },
-//     accessLevel: 'admin',
-//     email: 'garyjones@hackforla.org',
-//     projects: [],
-//   },
-//   {
-//     _id: 4,
-//     name: {
-//       firstName: 'Jane',
-//       lastName: 'Smith',
-//     },
-//     accessLevel: 'projectLead',
-//     email: 'janesmith@hackforla.org',
-//     projects: ['VRMS', 'Mobile'],
-//   },
-//   {
-//     _id: 5,
-//     name: {
-//       firstName: 'Bonnie',
-//       lastName: 'Wolfe',
-//     },
-//     accessLevel: 'projectLead',
-//     email: 'bonnie@hackforla.org',
-//     projects: ['Home Unite Us'],
-//   },
-//   {
-//     _id: 6,
-//     name: {
-//       firstName: 'Diana',
-//       lastName: 'Loeb',
-//     },
-//     accessLevel: 'projectLead',
-//     email: 'dianaloeb@hackforla.org',
-//     projects: ['HackforLA Mobile', 'LA TDM Calculator'],
-//   },
-//   {
-//     _id: 7,
-//     name: {
-//       firstName: 'Zack',
-//       lastName: 'Cruz',
-//     },
-//     accessLevel: 'projectLead',
-//     email: 'dianaloeb@hackforla.org',
-//     projects: ['LA TDM Calculator', 'VRMS backend'],
-//   },
-//   [{
-//     _id: 1,
-//     name: {
-//       firstName: 'John',
-//       lastName: 'Doe',
-//     },
-//     accessLevel: 'admin',
-//     email: 'johndoe@hackforla.org',
-//     projects: [],
-//   },
-//   {
-//     _id: 8,
-//     name: {
-//       firstName: 'Iris',
-//       lastName: 'Sosa',
-//     },
-//     accessLevel: 'projectLead',
-//     email: 'irissosa@hackforla.org',
-//     projects: ['Home Unite Us', 'VRMS Support'],
-//   }];
-
 const DummyComponent = ({ data, type, setUserToEdit }) => {
   return (
     <List className="search-results disablePadding">
@@ -291,7 +199,6 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
           u1.name?.firstName.localeCompare(u2.name?.firstName)
       );
       filteredData = [...tempFilter];
-      console.log('expanded projectLead', filteredData);
     }
   } else {
     // NOTE: Using "users" instead of "dummyData" to check the link to user profile
