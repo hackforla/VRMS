@@ -8,7 +8,7 @@ const EditableField = ({
   fieldType = 'text',
   fieldTitle,
   accessLevel,
-  canEdit = ['admin'],
+  canEdit = ['admin', 'superadmin'],
 }) => {
   const [fieldValue, setFieldValue] = useState(fieldData);
   const [editable, setEditable] = useState(false);

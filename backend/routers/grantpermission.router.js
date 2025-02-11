@@ -73,7 +73,7 @@ router.post("/gitHub", async (req, res) => {
 
   const teamSlugs = [baseTeamSlug, managerTeamSlug];
 
-  if (accessLevel === "admin") teamSlugs.push(adminTeamSlug);
+  if (accessLevel === "admin" || accessLevel === "superadmin") teamSlugs.push(adminTeamSlug);
 
   function createSlug(string) {
     let slug = string.toLowerCase();

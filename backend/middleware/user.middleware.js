@@ -15,7 +15,7 @@ function isAdminByEmail(req, res, next) {
       return res.sendStatus(400);
     } else {
       const role = user.accessLevel;
-      if (role === 'admin' || user.managedProjects.length > 0) {
+      if (role === 'admin' || role === 'superadmin' || user.managedProjects.length > 0) {
         next();
       } else {
         next(res.sendStatus(401));

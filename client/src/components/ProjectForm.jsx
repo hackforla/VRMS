@@ -235,7 +235,7 @@ export default function ProjectForm({
       <Box sx={{ textAlign: 'center' }}>
         <Typography variant="h1">Project Management</Typography>
       </Box>
-      {auth.user.accessLevel === 'admin' ? (
+      {(auth.user.accessLevel === 'admin'  || auth.user.accessLevel == 'superadmin' )? (
         <TitledBox
           title={editMode ? 'Editing Project' : 'Project Information'}
           badge={isEdit ? editIcon() : addIcon()}
