@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import CheckInButtons from '../components/presentational/CheckInButtons';
 import CreateNewProfileButton from '../components/presentational/CreateNewProfileButton';
 import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend } from '../utils/globalSettings';
-import { CircularProgress, Box, Typography, Select, MenuItem, FormControl } from '@mui/material';
+import { CircularProgress, Box, Typography, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 
 import '../sass/Home.scss';
 
@@ -23,20 +23,6 @@ const h2sx = {
 const h4sx = {
   ...h1sx,
   fontSize: {xs: '1.8rem'},
-}
-
-// CSS for MUI label 
-const labelsx = {
-  fontFamily: 'aliseoregular',
-  fontSize: 18,
-}
-
-// CSS for MUI MenuItem
-const menuItemSx = {
-    width: '100%',
-    fontSize: 18,
-    color: 'rgb(250, 17, 79)',
-    backgroundColor: 'inhert',
 }
 
 
@@ -95,12 +81,12 @@ const Home = () => {
             >
               <Box className="form-row">
                 <Box className="form-input-select">
-                  <Typography sx={labelsx}>
+                  <InputLabel id='select-meeting-label'>
                     Select a meeting to check-in:
-                  </Typography>
+                  </InputLabel>
                   <Box className="radio-buttons">
                     <Select
-                      labelId='select-label'
+                      labelId='select-meeting-label'
                       className="select-meeting-dropdown"
                       value={selectedEvent ? selectedEvent : "--SELECT ONE--"}
                       renderValue={(selected) => (
@@ -112,8 +98,8 @@ const Home = () => {
                     >
                       {events.map((event) => {
                         return (
-                          <MenuItem key={event._id || 0} value={event.project?.name + ' - ' + event.name} sx={menuItemSx}>
-                            <Typography sx={menuItemSx}>
+                          <MenuItem key={event._id || 0} value={event.project?.name + ' - ' + event.name}>
+                            <Typography>
                               {event?.project?.name + ' - ' + event.name}
                             </Typography>
                           </MenuItem>
