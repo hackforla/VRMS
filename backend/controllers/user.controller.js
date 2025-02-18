@@ -58,12 +58,14 @@ UserController.projectLead_list = async function (req, res) {
       ],
     });
 
-    for (const projectManager of projectManagers) {
-      projectManager.accessLevel = 'projectLead';
+    const updatedProjectManagers = [];
 
+    for (const projectManager of projectManagers) {
+      const projectManagerObj = projectManager.toObject();
+      projectManagerObj.isProjectLead = true;
       const projectNames = [];
 
-      for (const projectId of projectManager.managedProjects) {
+      for (const projectId of projectManagerObj.managedProjects) {
         const projectDetail = await Project.findById(projectId);
         if (projectDetail && projectDetail.name) {
           projectNames.push(projectDetail.name);
@@ -71,9 +73,11 @@ UserController.projectLead_list = async function (req, res) {
           console.warn('Project detail is null, cannot access name');
         }
       }
-      projectManager.managedProjects = projectNames;
+      projectManagerObj.managedProjectNames = projectNames;
+
+      updatedProjectManagers.push(projectManagerObj);
     }
-    return res.status(200).send(projectManagers);
+    return res.status(200).send(updatedProjectManagers);
   } catch (err) {
     return res.sendStatus(400);
   }

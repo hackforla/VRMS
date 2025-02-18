@@ -19,14 +19,14 @@ const Buttonsx = {
   py: 0.5,
 };
 
-const DummyComponent = ({ data, type, setUserToEdit }) => {
+const DummyComponent = ({ data, isProjectLead, setUserToEdit }) => {
   return (
     <List className="search-results disablePadding">
       {data.map((u, idx) => {
         // Destructure user object
         const { _id, name, email } = u;
         // return projects.length === 0 ?
-        return type === 'admin' ? (
+        return !isProjectLead ? (
           <ListItem
             sx={{
               px: 2.4,
@@ -88,7 +88,7 @@ const DummyComponent = ({ data, type, setUserToEdit }) => {
                 </Grid>
                 <Grid item>
                   <Typography style={{ fontWeight: 600 }} color="black">
-                    {u.managedProject}
+                    {u.managedProjectName}
                   </Typography>
                 </Grid>
               </Grid>
@@ -103,6 +103,7 @@ const DummyComponent = ({ data, type, setUserToEdit }) => {
 const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
   const [userType, setUserType] = useState('admin'); // Which results will display
   const [searchText, setSearchText] = useState(''); // Search term for the admin/PM search
+  const [isProjectLead, setIsProjectLead] = useState(false);
 
   const location = useLocation();
 
@@ -121,49 +122,46 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
 
   // Swaps the buttons and displayed panels for the search results, by email or by name
   const buttonSwap = () =>
-    userType === 'projectLead'
-      ? setUserType('admin')
-      : setUserType('projectLead');
+    isProjectLead ? setIsProjectLead(false) : setIsProjectLead(true);
 
   // Handle change on input in search form
   const handleChange = (event) => {
     setSearchText(event.target.value);
   };
 
-  const getFilteredData = (resultData, searchText, userType) => {
+  const getFilteredData = (resultData, searchText, isProjectLead) => {
     const searchTextLowerCase = searchText.trim().toLowerCase();
 
     let filteredData = resultData
       .filter((user) =>
-        userType === 'admin'
-          ? user.accessLevel === 'admin' || user.accessLevel === 'superadmin'
-          : user.accessLevel === 'projectLead'
+        isProjectLead
+          ? user.isProjectLead === true
+          : user.isProjectLead === undefined
       )
       .flatMap((user) =>
-        userType === 'projectLead' && user.managedProjects.length > 0
-          ? user.managedProjects.map((managedProject) => ({
+        isProjectLead && user.managedProjectNames.length > 0
+          ? user.managedProjectNames.map((managedProjectName) => ({
               ...user,
-              managedProject,
+              managedProjectName,
             }))
           : [{ ...user }]
       )
       .filter((user) => {
         const fullName =
           `${user.name.firstName} ${user.name.lastName}`.toLowerCase();
-        const projectName = user.managedProject
-          ? user.managedProject.toLowerCase()
+        const projectName = user.managedProjectName
+          ? user.managedProjectName.toLowerCase()
           : '';
         return (
           fullName.includes(searchTextLowerCase) ||
-          (userType === 'projectLead' &&
-            projectName.includes(searchTextLowerCase))
+          (isProjectLead && projectName.includes(searchTextLowerCase))
         );
       });
 
     return filteredData.sort((a, b) => {
-      if (userType === 'projectLead') {
+      if (isProjectLead) {
         return (
-          a.managedProject.localeCompare(b.managedProject) ||
+          a.managedProjectName.localeCompare(b.managedProjectName) ||
           a.name.firstName.localeCompare(b.name.firstName)
         );
       }
@@ -175,12 +173,12 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
   let filteredData;
   if (!searchText) {
     filteredData = resultData.filter((user) =>
-      userType === 'admin'
-        ? user.accessLevel === 'admin' || user.accessLevel === 'superadmin'
-        : user.accessLevel === 'projectLead'
+      isProjectLead
+        ? user.isProjectLead === true
+        : user.isProjectLead === undefined
     );
 
-    if (userType === 'admin') {
+    if (!isProjectLead) {
       // Default display for admins, sorted ASC based on first name
       filteredData.sort((u1, u2) =>
         u1.name?.firstName.localeCompare(u2.name?.firstName)
@@ -189,20 +187,21 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
       // Default display of all PMs, sorted ASC based on project name, then first name
       let tempFilter = [];
       filteredData.forEach((user) => {
-        user.managedProjects.forEach((managedProject) => {
-          tempFilter.push({ ...user, managedProject });
+        console.log('user', user);
+        user.managedProjectNames.forEach((managedProjectName) => {
+          tempFilter.push({ ...user, managedProjectName });
         });
       });
       tempFilter.sort(
         (u1, u2) =>
-          u1.managedProject.localeCompare(u2.managedProject) ||
+          u1.managedProjectName.localeCompare(u2.managedProjectName) ||
           u1.name?.firstName.localeCompare(u2.name?.firstName)
       );
       filteredData = [...tempFilter];
     }
   } else {
     // NOTE: Using "users" instead of "dummyData" to check the link to user profile
-    filteredData = getFilteredData(resultData, searchText, userType);
+    filteredData = getFilteredData(resultData, searchText, isProjectLead);
   }
 
   return (
@@ -237,7 +236,7 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
             <Button
               sx={Buttonsx}
               type="button"
-              variant={userType === 'admin' ? 'contained' : 'secondary'}
+              variant={!isProjectLead ? 'contained' : 'secondary'}
               onClick={buttonSwap}
             >
               Admins
@@ -245,7 +244,7 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
             <Button
               sx={Buttonsx}
               type="button"
-              variant={userType === 'projectLead' ? 'contained' : 'secondary'}
+              variant={isProjectLead ? 'contained' : 'secondary'}
               onClick={buttonSwap}
             >
               Project Leads
@@ -254,9 +253,7 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
         </Box>
         <TextField
           type="text"
-          placeholder={
-            userType === 'admin' ? 'Search name' : 'Search name or project'
-          }
+          placeholder={isProjectLead ? 'Search name or project' : 'Search name'}
           variant="standard"
           value={searchText}
           onChange={handleChange}
@@ -274,7 +271,7 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
             {/*Component to render admins and PMs*/}
             <DummyComponent
               data={filteredData}
-              type={userType}
+              isProjectLead={isProjectLead}
               setUserToEdit={setUserToEdit}
             />
           </Box>
