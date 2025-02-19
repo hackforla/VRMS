@@ -187,7 +187,6 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
       // Default display of all PMs, sorted ASC based on project name, then first name
       let tempFilter = [];
       filteredData.forEach((user) => {
-        console.log('user', user);
         user.managedProjectNames.forEach((managedProjectName) => {
           tempFilter.push({ ...user, managedProjectName });
         });

@@ -20,13 +20,11 @@ const UserPermission = () => {
 
   const fetchAdmins = useCallback(async () => {
     const userRes = await userApiService.fetchAdmins();
-    console.log(userRes);
     setAdmins(userRes);
   }, [userApiService]);
 
   const fetchProjectsManagers = useCallback(async () => {
     const pmRes = await userApiService.fetchProjectsManagers();
-    console.log(pmRes);
     setProjectManagers(pmRes);
   }, [userApiService]);
 
