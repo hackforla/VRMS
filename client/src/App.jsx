@@ -43,7 +43,7 @@ import withAuth from './hooks/withAuth';
 
 const routes = [
   { path: '/', name: 'home', Component: Home },
-  { path: '/admin', name: 'admindashboard', Component: AdminDashboard },
+  { path: '/admin', name: 'admindashboard', Component: withAuth(AdminDashboard) },
   { path: '/user', name: 'userdashboard', Component: UserDashboard },
   { path: '/profile', name: 'profile', Component: UserProfile },
   { path: '/event/:id', name: 'event', Component: Event },
@@ -58,7 +58,7 @@ const routes = [
   { path: '/events', name: 'events', Component: withAuth(Events) },
   { path: '/useradmin', name: 'useradmin', Component: withAuth(UserAdmin) },
   { path: '/projects', name: 'projects', Component: withAuth(ProjectList) },
-  { path: '/projects/create', name: 'projectform', Component: addProject },
+  { path: '/projects/create', name: 'projectform', Component: withAuth(addProject) },
   {
     path: '/projects/:projectId',
     name: 'project',
