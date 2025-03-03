@@ -9,7 +9,8 @@ const CheckInButtons = (props) => {
         component={Link}
         to={`/checkIn/returningUser?eventId=${props.event}`}
         disabled={props.disabled}
-        variant="text"
+        variant="outlined"
+        sx={{ mb: 1}}
       >
         CHECK IN AS RETURNING USER
       </Button>
@@ -17,16 +18,16 @@ const CheckInButtons = (props) => {
         component={Link}
         to={`/checkIn/newUser?eventId=${props.event}`}
         disabled={props.disabled}
-        variant="text"
+        variant="outlined"
+        sx={{ mb: 1 }}
       >
         CHECK IN AS NEW USER
       </Button>
-     
       {props.events.length > 1 && (
         <Button
           component={Link}
           to={`/newProfile`}
-          variant="text"
+          variant="outlined"
         >
           CREATE A NEW PROFILE
         </Button>
