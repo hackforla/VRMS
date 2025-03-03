@@ -9,7 +9,11 @@ const userSchema = mongoose.Schema({
     lastName: { type: String },
   },
   email: { type: String, unique: true },
-  accessLevel: { type: String, default: "user" },
+  accessLevel: { 
+    type: String, 
+    enum: ["user", "admin", "superadmin"], // restricts values to "user", "admin" and "superadmin"
+    default: "user" 
+  },
   createdDate: { type: Date, default: Date.now },
   currentRole: { type: String }, // will remove but need to update check-in form
   desiredRole: { type: String }, // will remove but need to update check-in form
