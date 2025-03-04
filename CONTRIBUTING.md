@@ -182,6 +182,8 @@ Developers may choose from issues with the following `role` labels:
 - `role: Front End`
 - `role: Back End`
 - `role: Database`
+- `role: devops`
+- *_Lead developers may choose from the above labels, as well as issues with the label:_ `role: Dev Lead`
 
 Claiming an issue is a two step process:
 
