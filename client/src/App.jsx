@@ -18,6 +18,7 @@ import HandleAuth from './components/auth/HandleAuth';
 import EmailSent from './pages/EmailSent';
 import Events from './pages/Events';
 import ProjectLeaderDashboard from './pages/ProjectLeaderDashboard';
+import Users from './pages/Users';
 import UserAdmin from './pages/UserAdmin';
 import ProjectList from './pages/ProjectList';
 import ManageProjects from './pages/ManageProjects';
@@ -25,6 +26,9 @@ import addProject from './components/manageProjects/addProject';
 import HealthCheck from './pages/HealthCheck';
 import SecretPassword from './pages/SecretPassword';
 import UserWelcome from './pages/UserWelcome';
+// Added User Permission Search component
+import UserPermissionSearch from './pages/UserPermissionSearch';
+import UserPermission from './pages/UserPermission';
 
 import { ThemeProvider } from '@mui/material';
 import theme from './theme';
@@ -46,9 +50,16 @@ const routes = [
   { path: '/handleauth', name: 'handleauth', Component: HandleAuth },
   { path: '/emailsent', name: 'emailsent', Component: EmailSent },
   { path: '/events', name: 'events', Component: Events },
-  { path: '/useradmin', name: 'useradmin', Component: UserAdmin },
+  { path: '/users', name: 'users', Component: Users },
+
+  { path: '/users/user-search', name: 'useradmin', Component: UserAdmin },
+  {
+    path: '/users/permission-search',
+    name: 'useradmin',
+    Component: UserPermission,
+  },
   { path: '/projects', name: 'projects', Component: ProjectList },
-  { path: '/projects/create', name: 'projectform', Component:  addProject},
+  { path: '/projects/create', name: 'projectform', Component: addProject },
   {
     path: '/projects/:projectId',
     name: 'project',
