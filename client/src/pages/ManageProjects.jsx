@@ -7,12 +7,35 @@ import RecurringEventsApiService from '../api/RecurringEventsApiService';
 import Loading from '../svg/22.gif';
 import '../sass/ManageProjects.scss';
 import EventsApiService_ from '../api/EventsApiService';
+import { Box } from '@mui/material';
 
 const PAGES = Object.freeze({
   selectProject: 'selectProject',
   editProjectInfo: 'editProjectInfo',
   editMeetingTimes: 'editMeetingTimes',
 });
+
+// Added styles for MUI components
+const loadingStyle = {
+  "display": "none",
+  "position": "absolute",
+  "display": "flex",
+  "flexDirection": "row",
+  "alignItems": "center",
+  "justifyContent": "center",
+  "zIndex": 1,
+  "top": 0,
+  "left": 0,
+  "right": 0,
+  "backgroundColor": "white",
+  "height": '100%',
+  "opacity": 0.6,
+}
+
+const noStyle = {
+  "opacity": 0,
+  "display": "none",
+}
 
 const ManageProjects = ({ auth }) => {
   const { projectId } = useParams();
@@ -148,13 +171,13 @@ const ManageProjects = ({ auth }) => {
   }
   return (
     <>
-      <span
-        className={`bg-overlay ${
-          eventsLoading || projectsLoading ? 'active' : ''
-        }`}
+      <Box
+        sx={eventsLoading || projectsLoading ? loadingStyle : noStyle}
+        component='span'
+        display='inline'
       >
-        <img src={Loading} alt="Logo" />
-      </span>
+        <Box component='img' src={Loading} alt="Logo" />
+      </Box>
       {displayedComponent}
     </>
   );
