@@ -23,15 +23,13 @@ const CheckInButtons = (props) => {
       >
         CHECK IN AS NEW USER
       </Button>
-      {props.events.length > 1 && (
-        <Button
-          component={Link}
-          to={`/newProfile`}
-          variant="outlined"
-        >
-          CREATE A NEW PROFILE
-        </Button>
-      )}
+      <Button
+        component={Link}
+        to={`/newProfile`}
+        variant="outlined"
+      >
+        CREATE A NEW PROFILE
+      </Button>
     </>
   );
 };
