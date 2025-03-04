@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Box, Button, TextareaAutosize, TextField } from '@mui/material';
+import { Box, Button, TextareaAutosize, TextField, Typography } from '@mui/material';
 import '../../sass/ManageProjects.scss';
 
 const EditableField = ({
@@ -47,11 +47,16 @@ const EditableField = ({
     // this button will be disabled if user !admin
     <Box className="editable-field-div">
       <Box className="project-edit-title">
-        {fieldTitle}
+        <Typography
+          sx={{ font:"inherit"}}
+        >
+          {fieldTitle}
+        </Typography>
         {notRestricted &&
           <Button
             type="button"
             className="project-edit-button"
+            sx={{ maxWidth:'0', font: 'inherit', padding: 0 }}
             onClick={() => {
               setEditable(true);
             }}
