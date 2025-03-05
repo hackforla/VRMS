@@ -9,24 +9,24 @@ jobs:
   test-backend-unit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Make envfile
-        uses: SpicyPizza/create-envfile@v1
+        uses: SpicyPizza/create-envfile@v2
         with:
           envkey_BACKEND_PORT: ${{ secrets.BACKEND_PORT }}
           envkey_REACT_APP_PROXY: ${{ secrets.REACT_APP_PROXY }}
           file_name: backend/.env
       - name: Build the backend container
-        run: docker-compose build backend
+        run: docker compose build backend
       - name: Run backend unit test suite
-        run: docker-compose run --rm backend yarn run test --testPathIgnorePatterns=routers
+        run: docker compose run --rm backend yarn run test --testPathIgnorePatterns=routers
 
   test-backend-integration:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Make envfile
-        uses: SpicyPizza/create-envfile@v1
+        uses: SpicyPizza/create-envfile@v2
         with:
           envkey_CUSTOM_REQUEST_HEADER: ${{ secrets.CUSTOM_REQUEST_HEADER }}
           envkey_SLACK_OAUTH_TOKEN: ${{ secrets.SLACK_OAUTH_TOKEN }}
@@ -47,24 +47,24 @@ jobs:
           envkey_MAILHOG_PASSWORD: ${{ secrets.MAILHOG_PASSWORD }}
           file_name: backend/.env
       - name: Build the backend container
-        run: docker-compose build backend
+        run: docker compose build backend
       - name: Run backend integration test suite
-        run: docker-compose run --rm backend yarn run test backend/routers/
+        run: docker compose run --rm backend yarn run test backend/routers/
 
   test-client-unit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Build the client container
-        run: docker-compose build client
+        run: docker compose build client
       - name: Run client unit test suite
-        run: docker-compose run --rm client yarn run test
+        run: docker compose run --rm client yarn run test
 
 #   test-mvp-unit:
 #     runs-on: ubuntu-latest
 #     steps:
-#       - uses: actions/checkout@v2
+#       - uses: actions/checkout@v4
 #       - name: Build the client mvp container
-#         run: docker-compose build client-mvp-04
+#         run: docker compose build client-mvp-04
 #       - name: Run frontend unit test suite
-#         run: docker-compose run --rm client-mvp-04 yarn run test
+#         run: docker compose run --rm client-mvp-04 yarn run test

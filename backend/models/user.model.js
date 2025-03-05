@@ -11,7 +11,7 @@ const userSchema = mongoose.Schema({
   email: { type: String, unique: true },
   accessLevel: { 
     type: String, 
-    enum: ["user", "admin"], // restricts values to "user" and "admin"
+    enum: ["user", "admin", "superadmin"], // restricts values to "user", "admin" and "superadmin"
     default: "user" 
   },
   createdDate: { type: Date, default: Date.now },
