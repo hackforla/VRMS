@@ -61,14 +61,14 @@
 .user-display-column-right {
   display: flex;
   flex-direction: column;
-  flex-basis: 85%;
+  flex-basis: 80%;
   margin-bottom: 8px;
 }
 
 .user-toggle-column-left {
   display: flex;
   flex-direction: column;
-  flex-basis: 15%;
+  flex-basis: 20%;
 }
 
 .toggle-status {
@@ -107,6 +107,10 @@
   border-radius: 5px;
   margin-top: 10px;
   margin-bottom: 10px;
+}
+.button-add-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .button-back {

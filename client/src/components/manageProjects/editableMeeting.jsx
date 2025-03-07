@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import EventForm from './eventForm';
+import { Box, Button } from '@mui/material';
 import '../../sass/ManageProjects.scss';
 
 const EditableMeeting = ({
@@ -48,9 +49,10 @@ const EditableMeeting = ({
       handleInputChange={handleInputChange}
       formValues={formValues}
       formErrors={formErrors}
+      title="Edit Recurring Event"
     >
-      <div>
-        <button
+      <Box>
+        <Button
           type="button"
           className="create-form-button"
           onClick={handleEventUpdate(
@@ -61,22 +63,22 @@ const EditableMeeting = ({
           )}
         >
           UPDATE
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
           className="create-form-button"
           onClick={handleResetEvent(eventId)}
         >
           RESET
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
           className="create-form-button"
           onClick={handleEventDelete(eventId)}
         >
           DELETE
-        </button>
-      </div>
+        </Button>
+      </Box>
     </EventForm>
   );
 };
