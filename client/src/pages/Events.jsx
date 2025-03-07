@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import moment from 'moment';
-import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend} from '../utils/globalSettings';
+import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend } from '../utils/globalSettings';
+import { Box, List } from '@mui/material';
 
 import '../sass/Events.scss';
 import useAuth from '../hooks/useAuth';
@@ -20,25 +21,27 @@ const Events = (props) => {
           },
         });
         const resJson = await res.json();
-  
+
         setEvents(resJson);
       } catch (error) {
         alert(error);
       }
     }
-    
+
     fetchData();
   }, []);
 
   return auth && auth.user ? (
-    <div className="events-list">
-      <p>Filter:</p>
-      <input
-        style={{ marginBottom: '10px' }}
+    <Box className="events-list">
+      <TextField
+        variant="outlined"
+        sx={{ mb: 2 }}
         value={eventSearchParam}
         onChange={(e) => setEventSearchParam(e.target.value)}
+        placeholder="Search events..."
       />
-      <ul>
+
+      <List>
         {events
           .filter((event) => {
             return (
@@ -48,23 +51,23 @@ const Events = (props) => {
           })
           .map((event, index) => {
             return (
-              <li key={index}>
-                <div key={index} className="list-event-container">
-                  <div className="list-event-headers">
+              <ListItem key={index}>
+                <Box className="list-event-container">
+                  <Box className="list-event-headers">
                     <Link to={`/event/${event._id}`}>
-                      <p className="event-name">
+                      <ListItemText className="event-name">
                         {' '}
-                        {event.name}
-                        ({moment(event.date).format('ddd, MMM D @ h:mm a')})
-                      </p>
+                        {event.name}(
+                        {moment(event.date).format('ddd, MMM D @ h:mm a')})
+                      </ListItemText>
                     </Link>
-                  </div>
-                </div>
-              </li>
+                  </Box>
+                </Box>
+              </ListItem>
             );
           })}
-      </ul>
-    </div>
+      </List>
+    </Box>
   ) : (
     <Redirect to="/login" />
   );
