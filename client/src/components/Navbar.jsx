@@ -61,7 +61,7 @@ const Navbar = (props) => {
           {/* Admin auth -> Displays 2 links -> 'Users' and 'Projects'. */}
           {auth?.user?.accessLevel === 'admin' && (
             <>
-              <StyledButton component={NavLink} to="/useradmin">
+              <StyledButton component={NavLink} to="/users">
                 USERS
               </StyledButton>
               <StyledButton component={NavLink} to="/projects">

@@ -3,6 +3,8 @@ import moment from 'moment';
 import NewUserForm from './../components/presentational/newUserForm';
 import ReturnUserForm from './../components/presentational/returnUserForm';
 import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend } from '../utils/globalSettings';
+import { format } from 'date-fns';
+import { Box } from '@mui/material';
 
 import '../sass/CheckIn.scss';
 
@@ -50,17 +52,14 @@ const CheckInForm = (props) => {
     'NOV',
     'DEC',
   ];
-  const years = [
-    '2021',
-    '2020',
-    '2019',
-    '2018',
-    '2017',
-    '2016',
-    '2015',
-    '2014',
-    '2013',
-  ];
+  const currentYear = new Date().getFullYear();
+  const startYear = 2013;
+  const years = [];
+
+  for (let year = currentYear; year >= startYear; year--) {
+    years.push(year.toString());
+  }
+
   const reasons = [
     '--SELECT ONE--',
     'Open Data',
@@ -271,10 +270,10 @@ const CheckInForm = (props) => {
       });
   };
 
-  const checkInNewUser = (e) => {
+  const checkInNewUser = (e, selectedDate) => {
     e.preventDefault();
 
-    const firstAttended = `${month} ${year}`;
+    const firstAttended = format(selectedDate, 'MMM yyyy').toUpperCase();
 
     // SET all of the user's info from useState objects
     const userForm = {
@@ -308,8 +307,8 @@ const CheckInForm = (props) => {
       const currYear = parseInt(moment().format('YYYY'));
       const currMonth = parseInt(moment().format('MM'));
       const yearJoined = parseInt(year);
-      // extra date info needed to be recognized as a date
       const monthJoined = parseInt(moment(month + ' 9, 2020').format('MM'));
+
       if (
         yearJoined > currYear ||
         (yearJoined === currYear && monthJoined > currMonth)
@@ -320,14 +319,14 @@ const CheckInForm = (props) => {
         );
         ready = false;
       }
-      // SUBMIT all of the user's info from the userForm object
+
       if (ready) {
         submitForm(userForm);
       }
 
       setIsLoading(false);
     } catch (error) {
-      console.log(error);
+      console.log('Error during form submission:', error);
       setIsLoading(false);
     }
   };
@@ -442,7 +441,7 @@ const CheckInForm = (props) => {
   }, []);
 
   return (
-    <div className="flex-container">
+    <Box className="flex-container">
       {props.location.pathname === '/newProfile' && (
         <NewUserForm
           firstName={firstName}
@@ -507,7 +506,7 @@ const CheckInForm = (props) => {
           checkInNewUser={checkInNewUser}
         />
       )}
-    </div>
+    </Box>
   );
 };
 

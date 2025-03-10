@@ -22,6 +22,7 @@
     "cross-env": "^7.0.2",
     "cross-var": "^1.1.0",
     "dotenv-cli": "^3.2.0",
+    "styled-components": "^6.1.13",
     "vite": "^5.4.8"
   },
   "devDependencies": {
