@@ -18,6 +18,7 @@ import HandleAuth from './components/auth/HandleAuth';
 import EmailSent from './pages/EmailSent';
 import Events from './pages/Events';
 import ProjectLeaderDashboard from './pages/ProjectLeaderDashboard';
+import Users from './pages/Users';
 import UserAdmin from './pages/UserAdmin';
 import ProjectList from './pages/ProjectList';
 import ManageProjects from './pages/ManageProjects';
@@ -25,6 +26,9 @@ import addProject from './components/manageProjects/addProject';
 import HealthCheck from './pages/HealthCheck';
 import SecretPassword from './pages/SecretPassword';
 import UserWelcome from './pages/UserWelcome';
+// Added User Permission Search component
+import UserPermissionSearch from './pages/UserPermissionSearch';
+import UserPermission from './pages/UserPermission';
 
 import { ThemeProvider } from '@mui/material';
 import theme from './theme';
@@ -59,6 +63,12 @@ const routes = [
   { path: '/useradmin', name: 'useradmin', Component: withAuth(UserAdmin) },
   { path: '/projects', name: 'projects', Component: withAuth(ProjectList) },
   { path: '/projects/create', name: 'projectform', Component: withAuth(addProject) },
+  { path: '/users', name: 'users', Component: Users },
+  {
+    path: '/users/permission-search',
+    name: 'useradmin',
+    Component: UserPermission,
+  },
   {
     path: '/projects/:projectId',
     name: 'project',
