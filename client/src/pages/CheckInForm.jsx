@@ -4,6 +4,7 @@ import NewUserForm from './../components/presentational/newUserForm';
 import ReturnUserForm from './../components/presentational/returnUserForm';
 import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend } from '../utils/globalSettings';
 import { format } from 'date-fns';
+import { Box } from '@mui/material';
 
 import '../sass/CheckIn.scss';
 
@@ -440,7 +441,7 @@ const CheckInForm = (props) => {
   }, []);
 
   return (
-    <div className="flex-container">
+    <Box className="flex-container">
       {props.location.pathname === '/newProfile' && (
         <NewUserForm
           firstName={firstName}
@@ -505,7 +506,7 @@ const CheckInForm = (props) => {
           checkInNewUser={checkInNewUser}
         />
       )}
-    </div>
+    </Box>
   );
 };
 
