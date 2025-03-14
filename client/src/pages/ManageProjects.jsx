@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Redirect, useParams } from 'react-router-dom';
-import useAuth from '../hooks/useAuth';
+import { useParams } from 'react-router-dom';
 import SelectProject from '../components/manageProjects/selectProject';
 import EditProject from '../components/manageProjects/editProject';
 import ProjectApiService from '../api/ProjectApiService';
@@ -38,9 +37,8 @@ const noStyle = {
   "display": "none",
 }
 
-const ManageProjects = () => {
+const ManageProjects = ({ auth }) => {
   const { projectId } = useParams();
-  const { auth } = useAuth();
   const [projects, setProjects] = useState();
   const [projectToEdit, setProjectToEdit] = useState();
   const [recurringEvents, setRecurringEvents] = useState();
@@ -141,11 +139,6 @@ const ManageProjects = () => {
     fetchRecurringEvents();
     fetchRegularEvents();
   }, [fetchProjects, fetchRecurringEvents, fetchRegularEvents]);
-
-  // If not logged in, redirect to login page
-  if (!auth && !auth?.user) {
-    return <Redirect to="/login" />;
-  }
 
   let displayedComponent;
 

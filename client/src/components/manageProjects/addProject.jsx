@@ -2,7 +2,7 @@ import React from 'react';
 import ProjectForm from '../ProjectForm';
 import { simpleInputs } from '../data';
 
-function addProject() {
+function addProject({auth}) {
   return (
     <div>
       <ProjectForm
@@ -10,6 +10,7 @@ function addProject() {
         formData={null}
         handleChange={null}
         isEdit={false}
+        auth={auth}
       />
     </div>
   );
