@@ -12,10 +12,8 @@ import {
 } from '@mui/material';
 
 import '../sass/Events.scss';
-import useAuth from '../hooks/useAuth';
 
 const Events = (props) => {
-  const { auth } = useAuth();
   const [events, setEvents] = useState(null);
   const [eventSearchParam, setEventSearchParam] = useState('');
 
