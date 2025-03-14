@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ProjectApiService from '../api/ProjectApiService';
 import { styled } from '@mui/system';
-import useAuth from '../hooks/useAuth';
-import { Redirect } from 'react-router-dom';
 
 import {
   Box,
@@ -30,12 +28,10 @@ const StyledTypography = styled(Typography)({
  *   - will not see button to add a new project
  */
 
-export default function ProjectList() {
+export default function ProjectList({ auth }) {
   const [projects, setProjects] = useState(null);
   const [projectApiService] = useState(new ProjectApiService());
-
-  // destructuring auth from context object created by AuthContext.Provider
-  const { auth } = useAuth();
+  
   const user = auth?.user;
 
   // On component mount, request projects data from API
@@ -66,10 +62,7 @@ export default function ProjectList() {
     [projectApiService, user.accessLevel, user.managedProjects]
   );
 
-  // Figure out better way to block unauthorized users from accessing this page
-  if (!auth) {
-    return <Redirect to="/login" />;
-  }
+
 
   // Render loading circle until project data is served from API
   if (!projects)
