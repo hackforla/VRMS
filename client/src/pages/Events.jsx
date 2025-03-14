@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend } from '../utils/globalSettings';
 import {
@@ -43,7 +43,7 @@ const Events = (props) => {
       event.name.toLowerCase().match(eventSearchParam.toLowerCase())
   );
 
-  return auth && auth.user ? (
+  return (
     <Box className="events-list">
       <TextField
         label="Filter:"
@@ -72,9 +72,7 @@ const Events = (props) => {
         </List>
       )}
     </Box>
-  ) : (
-    <Redirect to="/login" />
-  );
+  )
 };
 
 export default Events;
