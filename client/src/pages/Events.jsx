@@ -37,11 +37,7 @@ const Events = (props) => {
     fetchData();
   }, []);
 
-  if (events === null) {
-    return <Typography sx={{ my: 2 }}>Loading data...</Typography>;
-  }
-
-  const filteredEvents = events.filter(
+  const filteredEvents = events?.filter(
     (event) =>
       typeof event.name === 'string' &&
       event.name.toLowerCase().match(eventSearchParam.toLowerCase())
@@ -57,7 +53,9 @@ const Events = (props) => {
         onChange={(e) => setEventSearchParam(e.target.value)}
         placeholder="Search events..."
       />
-      {filteredEvents.length === 0 ? (
+      {events === null ? (
+        <Typography sx={{ my: 2 }}>Loading data...</Typography>
+      ) : filteredEvents.length === 0 ? (
         <Typography sx={{ my: 2 }}>No events found.</Typography>
       ) : (
         <List>
