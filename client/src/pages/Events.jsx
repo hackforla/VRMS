@@ -54,15 +54,15 @@ const Events = (props) => {
         placeholder="Search events..."
       />
       {events === null ? (
-        <Typography sx={{ my: 2 }}>Loading data...</Typography>
+        <Typography>Loading data...</Typography>
       ) : filteredEvents.length === 0 ? (
-        <Typography sx={{ my: 2 }}>No events found.</Typography>
+        <Typography>No events found.</Typography>
       ) : (
-        <List>
+        <List >
           {filteredEvents.map((event, index) => (
-            <ListItem key={index}>
+            <ListItem key={index}  className="event-name">
               <Link to={`/event/${event._id}`}>
-                <ListItemText className="event-name">
+                <ListItemText>
                   {event.name} (
                   {moment(event.date).format('ddd, MMM D @ h:mm a')})
                 </ListItemText>
