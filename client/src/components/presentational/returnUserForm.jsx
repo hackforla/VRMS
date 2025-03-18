@@ -1,23 +1,26 @@
 import React from 'react';
+import { Box, Button, FormControl, Input, Typography } from '@mui/material';
 
 const ReturnUserForm = (props) => {
   return (
-    <div className="check-in-container">
-      <div className="check-in-headers">
-        <h3>Welcome back!</h3>
-      </div>
-      <div className="check-in-form">
-        <form
+    <Box className="check-in-container">
+      <Box className="check-in-headers">
+        {/* This styling serves as a temporary default for UI/UX team. */}
+        <Typography variant='h3' component='h3' style={{ fontSize: 40, fontWeight: 'bold' }}>WELCOME BACK!</Typography>
+      </Box>
+      <Box className="check-in-form">
+        <FormControl
+          autoComplete
           className="form-check-in"
-          autoComplete="on"
           onSubmit={(e) => e.preventDefault()}
         >
-          <div className="form-row">
-            <div className="form-input-text">
-              <label htmlFor="email">
+          <Box className="form-row">
+            <Box className="form-input-text">
+              {/* Typography seems to work better than MUI InputLabel in this instance; again, just a placeholder for UI/UX team. */}
+              <Typography>
                 Which email address did you use to check-in last time?
-              </label>
-              <input
+              </Typography>
+              <Input
                 type="email"
                 name="email"
                 placeholder="Email Address"
@@ -27,23 +30,23 @@ const ReturnUserForm = (props) => {
                 required
                 autoComplete="email"
               />
-            </div>
-            <p>
+            </Box>
+            <Typography>
               {"(This allows easy use of the app. We'll never sell your data!)"}
-            </p>
-          </div>
+            </Typography>
+          </Box>
 
           {props.isError && props.errorMessage.length > 1 &&
-            <div className="error">{props.errorMessage}</div>
+            <Box className="error">{props.errorMessage}</Box>
           }
           {props.user === false && (
-            <div className="error">Try entering your email again.</div>
+            <Box className="error">Try entering your email again.</Box>
           )}
 
           {!props.user && !props.isLoading ? (
-            <div className="form-row">
-              <div className="form-input-button">
-                <button
+            <Box className="form-row">
+              <Box className="form-input-button">
+                <Button
                   type="submit"
                   className="form-check-in-submit"
                   onClick={(e) => props.checkEmail(e)}
@@ -52,25 +55,25 @@ const ReturnUserForm = (props) => {
                   }
                 >
                   CHECK IN
-                </button>
-              </div>
-            </div>
+                </Button>
+              </Box>
+            </Box>
           ) : (
-            <div className="form-row">
-              <div className="form-input-button">
-                <button
+            <Box className="form-row">
+              <Box className="form-input-button">
+                <Button
                   type="submit"
                   className="form-check-in-submit block"
                   onClick={(e) => e.preventDefault()}
                 >
                   CHECKING IN...
-                </button>
-              </div>
-            </div>
+                </Button>
+              </Box>
+            </Box>
           )}
-        </form>
-      </div>
-    </div>
+        </FormControl>
+      </Box>
+    </Box>
   );
 };
 export default ReturnUserForm;
