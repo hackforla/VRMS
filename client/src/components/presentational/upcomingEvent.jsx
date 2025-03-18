@@ -2,33 +2,34 @@ import React from "react";
 import { ReactComponent as ClockIcon } from "../../svg/Icon_Clock.svg";
 import { ReactComponent as LocationIcon } from "../../svg/Icon_Location.svg";
 import { Link } from "react-router-dom";
+import { Box, Typography } from "@mui/material";
 
 import moment from "moment";
 
 const upcomingEvent = (props) => {
     return props.nextEvent[0] ? (
-        <div className="warning-event">
-            <div className="warning-event-headers">
-                <p className="event-name">{props.nextEvent[0].name}</p>
-                <div className="event-info-wrapper">
+        <Box className="warning-event">
+            <Box className="warning-event-headers">
+                <Typography className="event-name">{props.nextEvent[0].name}</Typography>
+                <Box className="event-info-wrapper">
                     <ClockIcon />
-                    <p className="event-info">
+                    <Typography className="event-info" sx={{ margin: '0px 0px 0px 12px' }}>
                         {moment(props.nextEvent[0].date).format(
                             "ddd, MMM D @ h:mm a"
                         )}
-                    </p>
-                </div>
+                    </Typography>
+                </Box>
                 {props.nextEvent[0].location.city !== "" &&
-                    <div className="event-info-wrapper">
+                    <Box className="event-info-wrapper">
                         <LocationIcon />
-                        <p className="event-info">
+                        <Typography className="event-info" sx={{ margin: '0px 0px 0px 12px' }}>
                             {props.nextEvent[0].location.city},{" "}
                             {props.nextEvent[0].location.state}
-                        </p>
-                    </div>
+                        </Typography>
+                    </Box>
                 }
-            </div>
-            <div className="warning-event-toggle">
+            </Box>
+            <Box className="warning-event-toggle">
                 {props.nextEvent[0] && props.isCheckInReady === false ? (
                     <Link
                         to={`/events/${props.nextEvent[0]._id}`}
@@ -50,10 +51,10 @@ const upcomingEvent = (props) => {
                         CLOSE CHECK-IN
                     </Link>
                 )}
-            </div>
-        </div>
+            </Box>
+        </Box>
     ) : (
-        <div>No events coming up!</div>
+        <Box>No events coming up!</Box>
     );
 };
 export default upcomingEvent;

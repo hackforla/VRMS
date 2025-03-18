@@ -53,9 +53,9 @@ class ProjectApiService {
     console.log('THIS BASEPROJECT URL', this.baseProjectUrl);
 
     try {
-      const proj =  await fetch(this.baseProjectUrl, requestOptions);
-      const projectDetails = await proj.json()
-      return projectDetails._id
+      const proj = await fetch(this.baseProjectUrl, requestOptions);
+      const projectDetails = await proj.json();
+      return projectDetails._id;
     } catch (error) {
       console.error(`Add project error: `, error);
       alert('Server not responding.  Please try again.');
@@ -87,13 +87,13 @@ class ProjectApiService {
   async fetchPMProjects(projects) {
     const requestOptions = {
       headers: this.headers,
-      method: "PUT",
-      body: JSON.stringify(projects)
-    }
+      method: 'PUT',
+      body: JSON.stringify(projects),
+    };
     try {
-        const res = await fetch(this.baseProjectUrl, requestOptions);
-        return await res.json();
-    } catch(e) {
+      const res = await fetch(this.baseProjectUrl, requestOptions);
+      return await res.json();
+    } catch (e) {
       console.error(e);
       return undefined;
     }

@@ -24,27 +24,36 @@ function ValidatedTextField({
   locationRadios,
   input,
 }) {
-  const inputObj = {
-    pattern:
-      input.name === 'location'
-        ? locationType === 'remote'
-          ? {
-              value: input.value,
-              message: input.errorMessage,
-            }
-          : {
-              value: input.addressValue,
-              message: input.addressError,
-            }
-        : { value: input.value, message: input.errorMessage },
-  };
-  if ('required' in input && input.required === false) {
-    // if required is set to false, don't add required attribute to object
-  } else {
-    inputObj.required = `${input.name} is required`;
+  
+  const validationRules = {};
+
+  // Validation rules for Google Drive URL
+  if (input.required) {
+    validationRules.required = `${input.label || input.name} is required`
   }
+  if(input.name === 'googleDriveUrl'){
+    validationRules.pattern = {
+      value: /^https:\/\/drive\.google\.com\/.+$/,
+      message: "Invalid Google Drive URL", // Pattern validation for Google Drive URL
+    };
+  }
+
+  if (input.name === 'location') {
+    if (locationType === 'remote') {
+      validationRules.pattern = {
+        value: input.value,
+        message: input.errorMessage || "Invalid remote location URL",
+      };
+    } else {
+      validationRules.pattern = {
+        value: input.addressValue,
+        message: input.addressError || "Invalid physical address",
+      };
+    }
+  }
+  
   const registerObj = {
-    ...register(input.name, inputObj),
+    ...register(input.name, validationRules),
   }
 
   return (

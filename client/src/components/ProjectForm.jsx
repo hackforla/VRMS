@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useForm, useFormState } from 'react-hook-form';
-import { Redirect } from 'react-router-dom';
 import {
   CircularProgress,
   Typography,
@@ -230,7 +229,7 @@ export default function ProjectForm({
     </Grid>
   );
 
-  return auth && auth.user ? (
+  return (
     <Box sx={{ px: 0.5 }}>
       <Box sx={{ textAlign: 'center' }}>
         <Typography variant="h1">Project Management</Typography>
@@ -330,7 +329,5 @@ export default function ProjectForm({
         </TitledBox>
       )}
     </Box>
-  ) : (
-    <Redirect to="/login" />
   );
 }

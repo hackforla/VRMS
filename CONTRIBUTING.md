@@ -182,11 +182,16 @@ Developers may choose from issues with the following `role` labels:
 - `role: Front End`
 - `role: Back End`
 - `role: Database`
+- `role: devops`
+- *_Lead developers may choose from the above labels, as well as issues with the label:_ `role: Dev Lead`
 
 Claiming an issue is a two step process:
 
 1. Assign yourself to the issue using the gear icon in the upper right corner of the issue where it says "Assignees"
 2. Move the issue from the `Prioritized Backlog` to the `In Progress` column of the project board
+
+You may want to consider bookmarking your Github Issues page to track your current tasks:
+[https://github.com/issues/assigned](https://github.com/issues/assigned)
 
 ### **3.2 Create a new branch for each issue you work on**
 
