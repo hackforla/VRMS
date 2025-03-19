@@ -28,6 +28,11 @@ describe('createRecurringEvents Module Tests', () => {
   let mockEvents;
   let mockRecurringEvents;
 
+  fetch.mockResolvedValue({
+    ok: true,
+    json: jest.fn().mockResolvedValue(mockEvents),
+  });
+
   beforeEach(() => {
     MockDate.set('2023-11-02T00:00:00Z');
 
