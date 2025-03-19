@@ -7,7 +7,7 @@ const {
   filterAndCreateEvents,
   runTask,
   scheduleTask,
-} = require('./createRecurringEvents');
+} = jest.requireActual('./createRecurringEvents');
 const { generateEventData } = require('./lib/generateEventData');
 
 const MockDate = require('mockdate');
@@ -22,7 +22,6 @@ jest.mock('./lib/generateEventData', () => ({
 
 jest.mock('node-fetch', () => jest.fn());
 const fetch = require('node-fetch');
-
 describe('createRecurringEvents Module Tests', () => {
   const mockURL = 'http://localhost:3000';
   const mockHeader = 'mock-header';
