@@ -7,7 +7,7 @@ const {
   filterAndCreateEvents,
   runTask,
   scheduleTask,
-} = require('./createRecurringEvents');
+} = jest.requireActual('./createRecurringEvents');
 const { generateEventData } = require('./lib/generateEventData');
 
 const MockDate = require('mockdate');
@@ -28,6 +28,11 @@ describe('createRecurringEvents Module Tests', () => {
   const mockHeader = 'mock-header';
   let mockEvents;
   let mockRecurringEvents;
+
+  fetch.mockResolvedValue({
+    ok: true,
+    json: jest.fn().mockResolvedValue(mockEvents),
+  });
 
   beforeEach(() => {
     MockDate.set('2023-11-02T00:00:00Z');
