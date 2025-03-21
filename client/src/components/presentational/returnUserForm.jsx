@@ -1,12 +1,17 @@
 import React from 'react';
-import { Box, Button, FormControl, Input, Typography } from '@mui/material';
+import { Box, Button, FormControl, TextField, Typography } from '@mui/material';
 
 const ReturnUserForm = (props) => {
   return (
     <Box className="check-in-container">
       <Box className="check-in-headers">
-        {/* This styling serves as a temporary default for UI/UX team. */}
-        <Typography variant='h3' component='h3' style={{ fontSize: 40, fontWeight: 'bold' }}>WELCOME BACK!</Typography>
+        <Typography
+          variant="h3"
+          component="h3"
+          style={{ fontSize: 40, fontWeight: 'bold', marginBottom: 18 }}
+        >
+          WELCOME BACK!
+        </Typography>
       </Box>
       <Box className="check-in-form">
         <FormControl
@@ -16,29 +21,38 @@ const ReturnUserForm = (props) => {
         >
           <Box className="form-row">
             <Box className="form-input-text">
-              {/* Typography seems to work better than MUI InputLabel in this instance; again, just a placeholder for UI/UX team. */}
-              <Typography>
+              <Typography style={{ marginBottom: 30 }}>
                 Which email address did you use to check-in last time?
               </Typography>
-              <Input
+              <TextField
+                label="Enter your email address:"
                 type="email"
                 name="email"
                 placeholder="Email Address"
+                required="required"
                 value={props.formInput.email.toString()}
                 onChange={props.handleInputChange}
                 aria-label="Email Address"
-                required
+                data-test="input-email"
                 autoComplete="email"
               />
             </Box>
-            <Typography>
+            <Typography
+              style={{
+                fontStyle: 'italic',
+                fontSize: 10,
+                fontWeight: 'normal',
+                marginTop: 5,
+              }}
+            >
               {"(This allows easy use of the app. We'll never sell your data!)"}
             </Typography>
           </Box>
 
-          {props.isError && props.errorMessage.length > 1 &&
+          {props.isError && props.errorMessage.length > 1 && (
             <Box className="error">{props.errorMessage}</Box>
-          }
+          )}
+
           {props.user === false && (
             <Box className="error">Try entering your email again.</Box>
           )}
