@@ -42,6 +42,8 @@ jobs:
   build:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     needs: [setup_env]
     steps:
     - name: Checkout
