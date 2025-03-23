@@ -80,13 +80,13 @@ jobs:
       id: build-push-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: $AWS_APP_NAME
+        ECR_REPOSITORY: ${{ env.AWS_APP_NAME }}
       run: |
         cd $DOCKER_PATH
         docker build \
           -f ${{ env.DOCKERFILE }} \
-          -t $ECR_REGISTRY/$ECR_REPOSITORY:${{ needs.setup_env.outputs.IMAGE_TAG }} \
-          -t $ECR_REGISTRY/$ECR_REPOSITORY:test \
+          -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ needs.setup_env.outputs.IMAGE_TAG }} \
+          -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:test \
           .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
   # deploy:
