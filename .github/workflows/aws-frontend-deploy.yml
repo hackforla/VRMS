@@ -15,7 +15,7 @@ env:
   AWS_SHARED_CLUSTER: incubator-prod
   AWS_APP_NAME: vrms-frontend
   AWS_REGION: us-west-2
-  DOCKERFILE: client/Dockerfile.prod
+  DOCKERFILE: Dockerfile.prod
   DOCKER_PATH: client
 jobs:
   setup_env:
