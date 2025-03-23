@@ -88,7 +88,7 @@ jobs:
           -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ needs.setup_env.outputs.IMAGE_TAG }} \
           -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:test \
           .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ needs.setup_env.outputs.IMAGE_TAG }}
   # deploy:
   #   name: Deploy to AWS ECS
   #   runs-on: ubuntu-latest
