@@ -2,9 +2,7 @@ const { Project } = require('./project.model');
 
 const { setupDB } = require("../setup-test");
 
-beforeAll(async () => {
-  await setupDB("user-model");
-});
+setupDB("user-model");
 
 describe("Project Model saves the correct values", () => {
   test("Save a model instance and then read from the db", async (done) => {
