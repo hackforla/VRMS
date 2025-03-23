@@ -96,7 +96,7 @@ jobs:
     needs: [setup_env, build]
     steps:
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
+      uses: aws-actions/configure-aws-credentials@v3
       with:
         role-to-assume: arn:aws:iam::035866691871:role/incubator-cicd-vrms
         role-session-name: incubator-cicd-vrms-gha
