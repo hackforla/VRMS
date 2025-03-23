@@ -15,7 +15,7 @@ env:
   AWS_SHARED_CLUSTER: incubator-prod
   AWS_APP_NAME: vrms-backend
   AWS_REGION: us-west-2
-  DOCKERFILE: backend/Dockerfile.prod
+  DOCKERFILE: Dockerfile.prod
   DOCKER_PATH: backend
 jobs:
   setup_env:
@@ -83,7 +83,7 @@ jobs:
         ECR_REPOSITORY: ${{ env.AWS_APP_NAME }}
       run: |
         ls
-        cd ${{ env.DOCKER_PATH }}
+        cd ./${{ env.DOCKER_PATH }}
         docker build \
           -f ${{ env.DOCKERFILE }} \
           -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ needs.setup_env.outputs.IMAGE_TAG }} \
