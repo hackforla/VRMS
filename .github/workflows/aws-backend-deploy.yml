@@ -59,12 +59,12 @@ jobs:
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
-    - name: Init Docker Cache
-      uses: jpribyl/action-docker-layer-caching@v0.1.0
-      with:
-        key: ${{ github.workflow }}-2-{hash}
-        restore-keys: |
-          ${{ github.workflow }}-2-
+    # - name: Init Docker Cache
+    #   uses: jpribyl/action-docker-layer-caching@v0.1.0
+    #   with:
+    #     key: ${{ github.workflow }}-2-{hash}
+    #     restore-keys: |
+    #       ${{ github.workflow }}-2-
     # - name: Build & Push Image to ECR
     #   uses: kciter/aws-ecr-action@v3
     #   with:
@@ -89,7 +89,7 @@ jobs:
           -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ needs.setup_env.outputs.IMAGE_TAG }} \
           -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:test \
           .
-        docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ needs.setup_env.outputs.IMAGE_TAG }}
+        docker image push --all-tags ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ needs.setup_env.outputs.IMAGE_TAG }}
   # deploy:
   #   name: Deploy to AWS ECS
   #   runs-on: ubuntu-latest
