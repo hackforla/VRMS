@@ -82,6 +82,7 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ env.AWS_APP_NAME }}
       run: |
+        ls
         cd ${{ env.DOCKER_PATH }}
         docker build \
           -f ${{ env.DOCKERFILE }} \
