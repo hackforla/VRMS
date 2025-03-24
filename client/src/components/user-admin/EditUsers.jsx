@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../../sass/UserAdmin.scss';
-import { FormGroup, FormControlLabel, Switch } from '@mui/material'
+import { FormGroup, FormControlLabel, Switch } from '@mui/material';
 
 // child of UserAdmin. Displays form to update users.
 const EditUsers = ({ userToEdit, backToSearch, updateUserDb, projects, updateUserActiveStatus, updateUserAccessLevel }) => {
@@ -8,6 +8,9 @@ const EditUsers = ({ userToEdit, backToSearch, updateUserDb, projects, updateUse
   const [projectValue, setProjectValue] = useState(''); // State and handler for form in EditUsers
   const [isActive, setIsActive] = useState(userToEdit.isActive);
   const [isAdmin, setIsAdmin] = useState(userToEdit.accessLevel === "admin");
+
+  // Boolean to check if the current user is the super admin
+  const isSuperAdmin = userToEdit.accessLevel === "superadmin";
 
   // Prepare data for display
   const userName = `${userToEdit.name?.firstName} ${userToEdit.name?.lastName}`;
@@ -18,7 +21,6 @@ const EditUsers = ({ userToEdit, backToSearch, updateUserDb, projects, updateUse
   const activeProjects = Object.values(projects)
     .filter((project) => project.projectStatus === 'Active')
     .sort((a, b) => a.name?.localeCompare(b.name))
-    // eslint-disable-next-line no-underscore-dangle
     .map((p) => [p._id, p.name]);
 
   // add user projects to state
@@ -35,11 +37,7 @@ const EditUsers = ({ userToEdit, backToSearch, updateUserDb, projects, updateUse
   const onSubmit = (event) => {
     event.preventDefault();
 
-    if (
-      projectValue.length > 0 &&
-      projectValue !== 'default' &&
-      !userManagedProjects.includes(projectValue)
-    ) {
+    if (!isSuperAdmin && projectValue.length > 0 && projectValue !== 'default' && !userManagedProjects.includes(projectValue)) {
       const newProjects = [...userManagedProjects, projectValue];
       updateUserDb(userToEdit, newProjects);
       setUserManagedProjects(newProjects);
@@ -51,24 +49,26 @@ const EditUsers = ({ userToEdit, backToSearch, updateUserDb, projects, updateUse
 
   // Remove projects from db
   const handleRemoveProject = (projectToRemove) => {
-    if (userManagedProjects.length > 0) {
-      const newProjects = userManagedProjects.filter(
-        (p) => p !== projectToRemove
-      );
+    if (!isSuperAdmin && userManagedProjects.length > 0) {
+      const newProjects = userManagedProjects.filter((p) => p !== projectToRemove);
       updateUserDb(userToEdit, newProjects);
       setUserManagedProjects(newProjects);
     }
   };
 
   const handleSetIsActive = () => {
-    setIsActive(!isActive)
-    updateUserActiveStatus(userToEdit, !isActive)
-  }
+    if (!isSuperAdmin) {
+      setIsActive(!isActive);
+      updateUserActiveStatus(userToEdit, !isActive);
+    }
+  };
 
   const handleSetAccessLevel = () => {
-    const newAccessLevel = isAdmin ? "user" : "admin";
-    setIsAdmin(!isAdmin);
-    updateUserAccessLevel(userToEdit, newAccessLevel);
+    if (!isSuperAdmin) {
+      const newAccessLevel = isAdmin ? "user" : "admin";
+      setIsAdmin(!isAdmin);
+      updateUserAccessLevel(userToEdit, newAccessLevel);
+    }
   };
 
   return (
@@ -86,16 +86,24 @@ const EditUsers = ({ userToEdit, backToSearch, updateUserDb, projects, updateUse
         <div className="toggle-flex">
           <span className="toggle-status">{isActive.toString()}</span>
           <FormGroup>
-            <FormControlLabel control={<Switch checked={isActive} />} onClick={() => handleSetIsActive()} />
+            <FormControlLabel 
+              disabled={isSuperAdmin} 
+              control={<Switch checked={isActive} />} 
+              onClick={handleSetIsActive} 
+            />
           </FormGroup>
         </div>
       </div>
       <div className="ua-row toggle-flex">
-        <div className="user-toggle-column-left">VRSM Admin:</div>
+        <div className="user-toggle-column-left">VRMS Admin:</div>
         <div className="toggle-flex">
-          <span className="toggle-status">{isAdmin ? "Yes" : "No"}</span>
+          <span className="toggle-status">{isAdmin || isSuperAdmin ? "Yes" : "No"}</span>
           <FormGroup>
-            <FormControlLabel control={<Switch checked={isAdmin} />} onClick={() => handleSetAccessLevel()} />
+            <FormControlLabel 
+              disabled={isSuperAdmin} 
+              control={<Switch checked={isAdmin || isSuperAdmin} />} 
+              onClick={handleSetAccessLevel} 
+            />
           </FormGroup>
         </div>
       </div>
@@ -110,6 +118,7 @@ const EditUsers = ({ userToEdit, backToSearch, updateUserDb, projects, updateUse
                   <button
                     type="button"
                     className="button-remove"
+                    disabled={isSuperAdmin}
                     onClick={() => handleRemoveProject(result[0])}
                   >
                     (remove)
@@ -128,6 +137,7 @@ const EditUsers = ({ userToEdit, backToSearch, updateUserDb, projects, updateUse
             onChange={(event) => {
               setProjectValue(event.target.value);
             }}
+            disabled={isSuperAdmin}
           >
             <option value="default">Select a project..</option>
             {activeProjects.map((result) => {
@@ -138,13 +148,15 @@ const EditUsers = ({ userToEdit, backToSearch, updateUserDb, projects, updateUse
               );
             })}
           </select>
-          <button className="button-add" type="submit">
+          <button className={`button-add ${isSuperAdmin ? 'button-add-disabled' : ''}`}
+            type="submit"
+            disabled={isSuperAdmin}>
             Add project
           </button>
         </form>
         <div>
           <button type="button" className="button-back" onClick={backToSearch}>
-            Back to search
+            Back to search  
           </button>
         </div>
       </div>
