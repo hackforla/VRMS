@@ -64,7 +64,7 @@ export default function SecretPassword() {
       <Box>
         <Box sx={{ py: 2, px: 4 }}>
           {!state.success && (
-            <form id="secret-password">
+            <Box component='form' id="secret-password">
               <Box sx={{ mb: 1 }}>
                 <Grid container alignItems="center">
                   <Grid item xs="auto" sx={{ pr: 3 }}>
@@ -104,7 +104,7 @@ export default function SecretPassword() {
               >
                 Submit
               </Button>
-            </form>
+            </Box>
           )}
         </Box>
       </Box>

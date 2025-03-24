@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Redirect, useParams } from 'react-router-dom';
-import useAuth from '../hooks/useAuth';
+import { useParams } from 'react-router-dom';
 import SelectProject from '../components/manageProjects/selectProject';
 import EditProject from '../components/manageProjects/editProject';
 import ProjectApiService from '../api/ProjectApiService';
@@ -8,6 +7,7 @@ import RecurringEventsApiService from '../api/RecurringEventsApiService';
 import Loading from '../svg/22.gif';
 import '../sass/ManageProjects.scss';
 import EventsApiService_ from '../api/EventsApiService';
+import { Box } from '@mui/material';
 
 const PAGES = Object.freeze({
   selectProject: 'selectProject',
@@ -15,9 +15,30 @@ const PAGES = Object.freeze({
   editMeetingTimes: 'editMeetingTimes',
 });
 
-const ManageProjects = () => {
+// Added styles for MUI components
+const loadingStyle = {
+  "display": "none",
+  "position": "absolute",
+  "display": "flex",
+  "flexDirection": "row",
+  "alignItems": "center",
+  "justifyContent": "center",
+  "zIndex": 1,
+  "top": 0,
+  "left": 0,
+  "right": 0,
+  "backgroundColor": "white",
+  "height": '100%',
+  "opacity": 0.6,
+}
+
+const noStyle = {
+  "opacity": 0,
+  "display": "none",
+}
+
+const ManageProjects = ({ auth }) => {
   const { projectId } = useParams();
-  const { auth } = useAuth();
   const [projects, setProjects] = useState();
   const [projectToEdit, setProjectToEdit] = useState();
   const [recurringEvents, setRecurringEvents] = useState();
@@ -119,11 +140,6 @@ const ManageProjects = () => {
     fetchRegularEvents();
   }, [fetchProjects, fetchRecurringEvents, fetchRegularEvents]);
 
-  // If not logged in, redirect to login page
-  if (!auth && !auth?.user) {
-    return <Redirect to="/login" />;
-  }
-
   let displayedComponent;
 
   switch (componentToDisplay) {
@@ -155,13 +171,13 @@ const ManageProjects = () => {
   }
   return (
     <>
-      <span
-        className={`bg-overlay ${
-          eventsLoading || projectsLoading ? 'active' : ''
-        }`}
+      <Box
+        sx={eventsLoading || projectsLoading ? loadingStyle : noStyle}
+        component='span'
+        display='inline'
       >
-        <img src={Loading} alt="Logo" />
-      </span>
+        <Box component='img' src={Loading} alt="Logo" />
+      </Box>
       {displayedComponent}
     </>
   );
