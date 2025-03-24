@@ -13,15 +13,15 @@ ProjectController.project_list = async function (req, res) {
   }
 };
 
-ProjectController.pm_filtered_projects = async function(req, res) {
+ProjectController.pm_filtered_projects = async function (req, res) {
   try {
-    const projectList = await Project.find({})
-    const projects = projectList.filter(proj => req.body.includes(proj._id.toString()))
-    return res.status(200).send(projects)
-  } catch(e) {
-    return res.sendStatus(400)
+    const projectList = await Project.find({});
+    const projects = projectList.filter((proj) => req.body.includes(proj._id.toString()));
+    return res.status(200).send(projects);
+  } catch (e) {
+    return res.sendStatus(400);
   }
-}
+};
 
 ProjectController.create = async function (req, res) {
   const { body } = req;
@@ -48,7 +48,7 @@ ProjectController.project_by_id = async function (req, res) {
 ProjectController.update = async function (req, res) {
   const { ProjectId } = req.params;
   try {
-    const project = await Project.findOneAndUpdate({_id: ProjectId}, req.body, {new: true});
+    const project = await Project.findOneAndUpdate({ _id: ProjectId }, req.body, { new: true });
     return res.status(200).send(project);
   } catch (err) {
     return res.sendStatus(400);
@@ -65,6 +65,5 @@ ProjectController.destroy = async function (req, res) {
     return res.sendStatus(400);
   }
 };
-
 
 module.exports = ProjectController;

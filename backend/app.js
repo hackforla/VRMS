@@ -54,7 +54,10 @@ app.use(morgan('dev'));
 // WORKERS
 const runOpenCheckinWorker = require('./workers/openCheckins')(cron, fetch);
 const runCloseCheckinWorker = require('./workers/closeCheckins')(cron, fetch);
-const runCreateRecurringEventsWorker = require('./workers/createRecurringEvents')(cron, fetch);
+
+const { createRecurringEvents } = require('./workers/createRecurringEvents');
+const runCreateRecurringEventsWorker = createRecurringEvents(cron, fetch);
+
 // const runSlackBot = require("./workers/slackbot")(fetch);
 
 // MIDDLEWARE

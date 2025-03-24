@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
-import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend} from '../utils/globalSettings';
+import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend } from '../utils/globalSettings';
 
 import '../sass/Events.scss';
-import useAuth from '../hooks/useAuth';
 
 const Events = (props) => {
-  const { auth } = useAuth();
   const [events, setEvents] = useState([]);
   const [eventSearchParam, setEventSearchParam] = useState('');
 
@@ -20,17 +18,17 @@ const Events = (props) => {
           },
         });
         const resJson = await res.json();
-  
+
         setEvents(resJson);
       } catch (error) {
         alert(error);
       }
     }
-    
+
     fetchData();
   }, []);
 
-  return auth && auth.user ? (
+  return (
     <div className="events-list">
       <p>Filter:</p>
       <input
@@ -54,8 +52,8 @@ const Events = (props) => {
                     <Link to={`/event/${event._id}`}>
                       <p className="event-name">
                         {' '}
-                        {event.name}
-                        ({moment(event.date).format('ddd, MMM D @ h:mm a')})
+                        {event.name}(
+                        {moment(event.date).format('ddd, MMM D @ h:mm a')})
                       </p>
                     </Link>
                   </div>
@@ -65,8 +63,6 @@ const Events = (props) => {
           })}
       </ul>
     </div>
-  ) : (
-    <Redirect to="/login" />
   );
 };
 
