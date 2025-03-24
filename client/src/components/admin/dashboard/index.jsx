@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Redirect } from 'react-router-dom';
-import useAuth from '../../../hooks/useAuth';
 import UpcomingEvent from '../../presentational/upcomingEvent';
 import EventOverview from '../eventOverview';
 import DonutChartContainer from '../donutChartContainer';
@@ -13,7 +11,6 @@ import './index.scss';
 import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend} from '../../../utils/globalSettings';
 
 const AdminDashboard = () => {
-  const { auth } = useAuth();
   const defaultChartType = 'All Events';
   const eventsArr = [];
 
@@ -383,7 +380,7 @@ const AdminDashboard = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return auth && auth.user ? (
+  return (
     <div className="flex-container">
       <div className="dashboard admin-dashboard-wrap">
         <div className="admin-header">
@@ -472,8 +469,6 @@ const AdminDashboard = () => {
         </TabsContainer>
       </div>
     </div>
-  ) : (
-    <Redirect to="/login" />
   );
 };
 

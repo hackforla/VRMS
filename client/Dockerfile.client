@@ -1,4 +1,4 @@
-FROM node:18-alpine AS client-development
+FROM node:20-alpine AS client-development
 RUN mkdir /srv/client && chown node:node /srv/client
 WORKDIR /srv/client
 USER node
@@ -6,7 +6,7 @@ RUN mkdir -p node_modules
 COPY --chown=node:node package.json package.json ./
 RUN npm install --silent
 
-FROM node:18.12.0-slim AS client-builder
+FROM node:20-alpine AS client-builder
 USER node
 WORKDIR /srv/client
 COPY --from=client-development /srv/client/node_modules node_modules
