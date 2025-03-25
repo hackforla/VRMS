@@ -83,7 +83,7 @@ const Auth = () => {
   };
 
   function handleInputChange(e) {
-    const inputValue = e.currentTarget.value.toString();
+    const inputValue = e.currentTarget.value.toString().toLowerCase();
     validateEmail();
     if (!inputValue) {
       setIsDisabled(true);
@@ -91,7 +91,7 @@ const Auth = () => {
     } else {
       setIsDisabled(false);
       setIsError(false);
-      setEmail(e.currentTarget.value.toString());
+      setEmail(e.currentTarget.value.toString().toLowerCase());
     }
   }
 

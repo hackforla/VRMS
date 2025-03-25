@@ -21,7 +21,7 @@ const ReturnUserForm = (props) => {
                 type="email"
                 name="email"
                 placeholder="Email Address"
-                value={props.formInput.email.toString()}
+                value={props.formInput.email.toString().toLowerCase()}
                 onChange={props.handleInputChange}
                 aria-label="Email Address"
                 required
