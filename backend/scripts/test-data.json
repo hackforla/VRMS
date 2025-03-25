@@ -1,0 +1,1116 @@
+[
+    {
+      "name": {
+        "firstName": "John",
+        "lastName": "Doe"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": ["60d13ff818317127044e7f08"],
+      "isActive": true,
+      "_id": "5f1d23fe316d2f00345ef06a",
+      "email": "johnDoe@civic.org",
+      "currentRole": "most common human name",
+      "desiredRole": "most desired human name",
+      "newMember": false,
+      "firstAttended": "NOV 2015",
+      "createdDate": "2020-01-14T02:14:22.407Z",
+      "__v": 0,
+      "attendanceReason": "Civic Engagement",
+      "currentProject": "Undebate"
+    },
+    {
+      "name": {
+        "firstName": "Iggy",
+        "lastName": "Stoic"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "5e1d2490316d2f00172ef072",
+      "email": "iggystoic@gmail.com",
+      "currentRole": "Tech Consulting",
+      "desiredRole": "Technical Product",
+      "newMember": true,
+      "firstAttended": "JAN 2020",
+      "createdDate": "2020-01-14T02:16:48.597Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "TEST",
+        "lastName": "PERSON"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "5e1e76c20ab172001790f806",
+      "email": "TEST@GMAIL.com",
+      "currentRole": "Test Developer",
+      "desiredRole": "Senior Test Developer",
+      "newMember": true,
+      "firstAttended": "JAN 2020",
+      "createdDate": "2020-01-15T02:19:46.780Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "Test",
+        "lastName": "Person"
+      },
+      "accessLevel": "admin",
+      "skillsToMatch": ["Testing", "Quality Management"],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": ["60d13ff818317127044e7f09"],
+      "isActive": true,
+      "_id": "5f4bfbc8e9f4f121e8c1eb42",
+      "email": "test@gmail.com",
+      "currentRole": "Test Student",
+      "desiredRole": "Software Developer",
+      "newMember": false,
+      "attendanceReason": "Environment",
+      "currentProject": "VRMS",
+      "firstAttended": "JAN 2019",
+      "createdDate": "2024-05-10T03:37:30.363Z"
+    },
+    {
+      "name": {
+        "firstName": "John",
+        "lastName": "Atkins"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": ["acting"],
+      "projects": ["Mr. Bean"],
+      "textingOk": true,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "5e1e74030ab172001790f7ea",
+      "email": "JOHN.J.ATKINS@GMAIL.COM",
+      "currentRole": "Mr. Bean",
+      "desiredRole": "Johnny English",
+      "newMember": true,
+      "firstAttended": "JAN 2020",
+      "createdDate": "2020-01-15T02:08:03.024Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "Alex",
+        "lastName": "Chu"
+      },
+      "accessLevel": "admin",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [
+        "5edeac78ce228b001778facd",
+        "60d13ff818317127044e7f08"
+      ],
+      "isActive": true,
+      "_id": "5f164d2839cb9c001736f4cf",
+      "email": "chu.alex@gmail.com",
+      "currentRole": "Software engineer",
+      "desiredRole": "Software engineer",
+      "newMember": false,
+      "firstAttended": "JUL 2020",
+      "createdDate": "2020-07-21T02:04:24.241Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "Boston",
+        "lastName": "Langford"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "5e1d27d9316d2f00172ef090",
+      "email": "boston@snl.com",
+      "currentRole": "PM",
+      "desiredRole": "PM",
+      "newMember": true,
+      "firstAttended": "JAN 2020",
+      "createdDate": "2020-01-14T02:30:49.449Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "Cole",
+        "lastName": "Bennett"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "5e1d2323316d2f00172ef064",
+      "email": "bennett.cole@gmail.com",
+      "currentRole": "idk",
+      "desiredRole": "idk",
+      "newMember": true,
+      "firstAttended": "APR 2020",
+      "createdDate": "2020-01-14T02:10:43.978Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "Cole",
+        "lastName": "Bennett"
+      },
+      "accessLevel": "admin",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "5e1d2081316d2f00172ef052",
+      "email": "BENNETT.COLE@GMAIL.COM",
+      "currentRole": "Dir of MUSIC",
+      "desiredRole": "None",
+      "newMember": true,
+      "firstAttended": "JAN 2020",
+      "createdDate": "2020-01-14T01:59:29.273Z",
+      "__v": 0,
+      "attendanceReason": "Social Justice/Equity"
+    },
+    {
+      "name": {
+        "firstName": "John",
+        "lastName": "Atkins"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": ["comic"],
+      "projects": ["Johnny English"],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "5e1d2137316d2f00172ef056",
+      "email": "john.j.atkins@gmail.com",
+      "currentRole": "High School Student",
+      "desiredRole": "Software/Research",
+      "newMember": false,
+      "firstAttended": "DEC 2019",
+      "createdDate": "2020-01-14T02:02:31.455Z",
+      "__v": 0,
+      "attendanceReason": "Open Data",
+      "currentProject": "New Schools Today"
+    },
+    {
+      "name": {
+        "firstName": "Greg",
+        "lastName": "Smith"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "5eec3e16411acc00174869a3",
+      "email": "gregpawpetrol@gmail.com",
+      "currentRole": "Data Consultant",
+      "desiredRole": "Data Scientist",
+      "newMember": false,
+      "firstAttended": "NOV 2019",
+      "createdDate": "2020-06-19T04:24:54.887Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "Ryan",
+        "lastName": "Gosling"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "5e30e8a80b9d2300177d3b20",
+      "email": "rgosling@gmail.com",
+      "currentRole": "Data Scientist",
+      "desiredRole": "Data Scientist",
+      "newMember": false,
+      "firstAttended": "OCT 2019",
+      "createdDate": "2020-01-29T02:06:32.192Z",
+      "__v": 0,
+      "attendanceReason": "Open Data",
+      "currentProject": "311 Data"
+    },
+    {
+      "name": {
+        "firstName": "Jared",
+        "lastName": "Maxwell"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "5e38d3cf8d52770017ae8a91",
+      "email": "jmax812@max.com",
+      "currentRole": "freelance dev",
+      "desiredRole": "employed def",
+      "newMember": false,
+      "firstAttended": "JAN 2020",
+      "createdDate": "2020-02-04T02:15:43.745Z",
+      "__v": 0,
+      "attendanceReason": "Civic Engagement",
+      "currentProject": "VRMS"
+    },
+    {
+      "name": {
+        "firstName": "Dexter",
+        "lastName": "Robinson"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "5f28c25206f21000177e690a",
+      "email": "Dexterlab@gmail.com",
+      "currentRole": "Software Developer",
+      "desiredRole": "Frontend Developer",
+      "newMember": true,
+      "firstAttended": "AUG 2020",
+      "createdDate": "2020-08-04T02:05:06.309Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "Sharon",
+        "lastName": "Wesley"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "5e4ca746b73a2a001732f49a",
+      "email": "sharonwesleycodes@gmail.com",
+      "currentRole": "Student",
+      "desiredRole": "Programmer",
+      "newMember": true,
+      "firstAttended": "JAN 2020",
+      "createdDate": "2020-02-19T03:11:02.863Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "Mr",
+        "lastName": "Awesome"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "5e421328ccd154001772603b",
+      "email": "pseudo.randsome@gmail.clm",
+      "currentRole": "Engineer",
+      "desiredRole": "God",
+      "newMember": true,
+      "firstAttended": "JAN 2020",
+      "createdDate": "2020-02-11T02:36:24.529Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "chichi",
+        "lastName": "hughes"
+      },
+      "accessLevel": "admin",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "5ea74d2720cec100179465cf",
+      "email": "chichi.hughes@gmail.com",
+      "currentRole": "UX/UI Designer",
+      "desiredRole": "UX/UI Designer",
+      "newMember": false,
+      "firstAttended": "APR 2020",
+      "createdDate": "2020-04-27T21:22:47.465Z",
+      "__v": 0,
+      "attendanceReason": "Open Data"
+    },
+    {
+      "name": {
+        "firstName": "asim",
+        "lastName": "rahman"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "60d777c20707783dc86d6101",
+      "email": "asim.radhat@gmail.comdfm34",
+      "currentRole": "zxc",
+      "desiredRole": "zxc",
+      "newMember": true,
+      "firstAttended": "JUN 2021",
+      "createdDate": "2021-06-26T18:53:54.935Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "asim",
+        "lastName": "rahman"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "60d95ead26878d41f48aa15f",
+      "email": "asim.rhalskdfm10923knzdst@gmail.com",
+      "currentRole": "asldkm",
+      "desiredRole": "sdlkfm",
+      "newMember": true,
+      "createdDate": "2021-06-28T05:31:25.482Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "Glen",
+        "lastName": "Steven"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "61523ca806ddd96310eb3e49",
+      "email": "kpop51367@bts123.net",
+      "currentRole": "Test",
+      "desiredRole": "Test",
+      "newMember": true,
+      "firstAttended": "JAN 2021",
+      "createdDate": "2021-01-27T21:50:32.255Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "Glen",
+        "lastName": "Steven"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": true,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "61523fa80e0025656e23371d",
+      "email": "KPOP51367@BTS123.net",
+      "currentRole": "Test",
+      "desiredRole": "Test",
+      "newMember": true,
+      "firstAttended": "SEP 2021",
+      "createdDate": "2021-09-27T22:03:20.465Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "Arthur",
+        "lastName": "Doyle"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "615cbd3a18c36c001e7b03b1",
+      "email": "Doyle@atemybread.com",
+      "currentRole": "baker",
+      "desiredRole": "better baker",
+      "newMember": true,
+      "firstAttended": "OCT 2021",
+      "createdDate": "2021-10-05T21:01:46.941Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "rare",
+        "lastName": "person"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "61947ec1ef53983193f54ae7",
+      "email": "Rareisreal@fm.com",
+      "currentRole": "aerga",
+      "desiredRole": "arga",
+      "newMember": true,
+      "firstAttended": "NOV 2021",
+      "createdDate": "2021-11-17T04:02:09.726Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "Glen",
+        "lastName": "Steven"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "6208327f7da35707d018e13c",
+      "email": "Stevedude73842@pet.com",
+      "currentRole": "Test",
+      "desiredRole": "Test",
+      "newMember": false,
+      "firstAttended": "FEB 2022",
+      "createdDate": "2022-02-12T22:19:43.301Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "Shaun",
+        "lastName": "Murphy"
+      },
+      "accessLevel": "admin",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [
+        "5edeac78ce228b001778facd",
+        "5edea961ce228b001778faca",
+        "620859fa46807266c6cbcf20",
+        "6205ceb5aaf98b0021b3c204",
+        "619af6c86a8afa609cd5c419"
+      ],
+      "isActive": true,
+      "_id": "620840ad46807266c6cbcf1e",
+      "email": "smurf@gmail.com",
+      "currentRole": "dev",
+      "desiredRole": "dev",
+      "newMember": false,
+      "firstAttended": "FEB 2022",
+      "createdDate": "2022-02-12T23:20:13.331Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "Tommy",
+        "lastName": "Smith"
+      },
+      "accessLevel": "admin",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "633b9a74d98663001f8b5c46",
+      "email": "tommy@thatsfabulous.com",
+      "currentRole": "Supreme Leader",
+      "desiredRole": "Front end developer",
+      "newMember": false,
+      "firstAttended": "OCT 2022",
+      "createdDate": "2022-10-04T02:29:08.363Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "Testing",
+        "lastName": "test12"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "645986720659c772705c6bcb",
+      "email": "testrn@gmail.com",
+      "currentRole": "Test",
+      "desiredRole": "Test",
+      "newMember": true,
+      "firstAttended": "MAY 2023",
+      "createdDate": "2023-05-08T23:32:02.575Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "Enola",
+        "lastName": "Holmes"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "5e1e764c0ab172001790f804",
+      "email": "enola@gmail.com",
+      "currentRole": "front-end web dev",
+      "desiredRole": "unsure",
+      "newMember": true,
+      "firstAttended": "JAN 2020",
+      "createdDate": "2020-01-15T02:17:48.287Z",
+      "__v": 0,
+      "attendanceReason": "Open Data"
+    },
+    {
+      "name": {
+        "firstName": "Phoebe",
+        "lastName": "Phoenix"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "5e54818892b678001759b45a",
+      "email": "phoenixcodes@gmail.com",
+      "currentRole": "Freelance Fullstack JS Dev",
+      "desiredRole": "Fullstack JS Dev",
+      "newMember": false,
+      "firstAttended": "JAN 2020",
+      "createdDate": "2020-02-25T02:08:08.775Z",
+      "__v": 0,
+      "attendanceReason": "Social Justice/Equity",
+      "currentProject": "VRMS"
+    },
+    {
+      "name": {
+        "firstName": "Abby",
+        "lastName": "Jordan"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "5f33508b0d62580017d78228",
+      "email": "hippyjordan@gmail.com",
+      "currentRole": "Product Manager",
+      "desiredRole": "Product Manager",
+      "newMember": false,
+      "firstAttended": "AUG 2020",
+      "createdDate": "2020-08-12T02:14:35.725Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "Susan",
+        "lastName": "Lee"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "5e8bd28080fe360017694654",
+      "email": "xoxosusy@gmail.com",
+      "currentRole": "Student",
+      "desiredRole": "Software Engineer",
+      "newMember": false,
+      "firstAttended": "NOV 2019",
+      "createdDate": "2020-04-07T01:08:16.639Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "Calvin ",
+        "lastName": "Klien"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "5ed84b1bb68bcc00179b27de",
+      "email": "info@ck.com",
+      "currentRole": "PHP Developer",
+      "desiredRole": "CEO",
+      "newMember": true,
+      "firstAttended": "JUN 2020",
+      "createdDate": "2020-06-04T01:15:07.602Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "Sophia",
+        "lastName": "Yang"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "5e1e74390ab172001790f7ec",
+      "email": "slice212@gmail.com",
+      "currentRole": "applying",
+      "desiredRole": "Data Science",
+      "newMember": false,
+      "firstAttended": "JAN 2020",
+      "createdDate": "2020-01-15T02:08:57.796Z",
+      "__v": 0,
+      "attendanceReason": "Homelessness",
+      "currentProject": "Host Home"
+    },
+    {
+      "name": {
+        "firstName": "Aston",
+        "lastName": "Martin"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "5ebdfa8005963b0017c6dd5c",
+      "email": "rickandmorty@gmail.com",
+      "currentRole": "Data Analyst/Scientist",
+      "desiredRole": "Data Analyst/Scientist",
+      "newMember": false,
+      "firstAttended": "MAY 2020",
+      "createdDate": "2020-05-15T02:12:16.545Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "Selena",
+        "lastName": "Gomez"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "5e27ae4b4530cd0017eee422",
+      "email": "selena.gomez@gmail.com",
+      "currentRole": "SW Engineer",
+      "desiredRole": "Developer",
+      "newMember": true,
+      "firstAttended": "JAN 2020",
+      "createdDate": "2020-01-22T02:07:07.734Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "Amrit",
+        "lastName": "Mann"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "5e8bd1aa80fe36001769464d",
+      "email": "amritmann@gmail.com",
+      "currentRole": "Dev",
+      "desiredRole": "Dev",
+      "newMember": false,
+      "firstAttended": "APR 2020",
+      "createdDate": "2020-04-07T01:04:42.306Z",
+      "__v": 0,
+      "attendanceReason": "Open Data"
+    },
+    {
+      "name": {
+        "firstName": "Jennifer",
+        "lastName": "Winget"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "5e4364fdef67e100175c1eff",
+      "email": "jenny@valorie.com",
+      "currentRole": "Civic Engagement",
+      "desiredRole": "Dev Ops",
+      "newMember": true,
+      "firstAttended": "JAN 2020",
+      "createdDate": "2020-02-12T02:37:49.626Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "asim",
+        "lastName": "rahman"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "60d7772c0707783dc86d60ff",
+      "email": "6k1.nyarly636@gmail.com",
+      "currentRole": "sdfasd",
+      "desiredRole": "asdasd",
+      "newMember": true,
+      "firstAttended": "JUN 2021",
+      "createdDate": "2021-06-26T18:51:24.004Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "Glen",
+        "lastName": "Clark"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "61440e3218c36c001e7b03b0",
+      "email": "xoxoclark@debate.com",
+      "currentRole": "Test",
+      "desiredRole": "Test",
+      "newMember": true,
+      "firstAttended": "SEP 2021",
+      "createdDate": "2021-09-17T03:40:34.500Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "Glen",
+        "lastName": "Clark"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "6157d8d979effa437122d670",
+      "email": "XOXOclark@debate.com",
+      "currentRole": "Test",
+      "desiredRole": "Test",
+      "newMember": true,
+      "firstAttended": "OCT 2021",
+      "createdDate": "2021-10-02T03:58:17.700Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "Larry",
+        "lastName": "Page"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "5e435ce7ef67e100175c1ee3",
+      "email": "Larry@LarryPage.com",
+      "currentRole": "Student",
+      "desiredRole": "Python Developer",
+      "newMember": true,
+      "firstAttended": "JAN 2020",
+      "createdDate": "2020-02-12T02:03:19.149Z",
+      "__v": 0,
+      "attendanceReason": "Homelessness",
+      "currentProject": "Food Oasis"
+    },
+    {
+      "name": {
+        "firstName": "asim",
+        "lastName": "rahman"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "60d7765b7eec843150f7cd7d",
+      "email": "654k1.nyarly636@gmail.com",
+      "currentRole": "sdfasd",
+      "desiredRole": "asdasd",
+      "newMember": true,
+      "firstAttended": "JUN 2021",
+      "createdDate": "2021-06-26T18:47:55.487Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "Shark",
+        "lastName": "User"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "6101db234815993498437084",
+      "email": "WE@sharktank.com",
+      "currentRole": "af",
+      "desiredRole": "argfg",
+      "newMember": true,
+      "firstAttended": "JUL 2021",
+      "createdDate": "2021-07-28T22:33:07.120Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "JASON",
+        "lastName": "YANG"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "5e38d1568d52770017ae8a86",
+      "email": "JASC68.JYANG@GMAIL.COM",
+      "currentRole": "DATA SCIENTIST",
+      "desiredRole": "DATA SCIENTIST",
+      "newMember": false,
+      "firstAttended": "SEP 2019",
+      "createdDate": "2020-02-04T02:05:10.999Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "Jonathon",
+        "lastName": "Dooley"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "5f0540b24f31cf00174d7538",
+      "email": "DooleyJM0902@student.laccd.edu",
+      "currentRole": "Student",
+      "desiredRole": "Developer",
+      "newMember": false,
+      "firstAttended": "JUL 2020",
+      "createdDate": "2020-07-08T03:42:42.621Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "Jason",
+        "lastName": "Yang"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "5e66e6fcbe3e0b001761a814",
+      "email": "jasc68.jyang@gmail.com",
+      "currentRole": "data scientist",
+      "desiredRole": "data scientist",
+      "newMember": false,
+      "firstAttended": "SEP 2019",
+      "createdDate": "2020-03-10T01:01:48.651Z",
+      "__v": 0,
+      "attendanceReason": "Open Data",
+      "currentProject": "None"
+    },
+    {
+      "name": {
+        "firstName": "Julia",
+        "lastName": "Fong"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [
+        "5ec326c7a973810017c0de0c",
+        "619af6c86a8afa609cd5c419"
+      ],
+      "isActive": true,
+      "_id": "5e435911ef67e100175c1ecb",
+      "email": "Juliamzfong@gmail.com",
+      "currentRole": "fellow",
+      "desiredRole": "front-end developer",
+      "newMember": true,
+      "firstAttended": "JAN 2020",
+      "createdDate": "2020-02-12T01:46:57.788Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "RYAN",
+        "lastName": "COLLINS"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "5e38d10a8d52770017ae8a81",
+      "email": "RMCOLLINS95@GMAIL.COM",
+      "currentRole": "NONE",
+      "desiredRole": "DATA SCIENTIST",
+      "newMember": true,
+      "firstAttended": "JAN 2020",
+      "createdDate": "2020-02-04T02:03:54.970Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "asim",
+        "lastName": "rahman"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "60d775d47eec843150f7cd7b",
+      "email": "6541.ny636fm@gmail.com",
+      "currentRole": "sdfasd",
+      "desiredRole": "asdasd",
+      "newMember": true,
+      "firstAttended": "JUN 2021",
+      "createdDate": "2021-06-26T18:45:40.564Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "asim",
+        "lastName": "rahman"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "60d76d8a7eec843150f7cd6c",
+      "email": "olafake908@gmail.com",
+      "currentRole": "asd",
+      "desiredRole": "asd",
+      "newMember": true,
+      "firstAttended": "JUN 2021",
+      "createdDate": "2021-06-26T18:10:18.494Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "asim",
+        "lastName": "rahman"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "60d775727eec843150f7cd76",
+      "email": "6541.ny619@gmail.com",
+      "currentRole": "sdfasd",
+      "desiredRole": "asdasd",
+      "newMember": true,
+      "firstAttended": "JUN 2021",
+      "createdDate": "2021-06-26T18:44:02.536Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "Bojack",
+        "lastName": "Horseman"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "64163f87ffac46b48a4abc87",
+      "email": "bojack@gmail.com",
+      "currentRole": "horse",
+      "desiredRole": "man",
+      "newMember": true,
+      "firstAttended": "MAR 2023",
+      "createdDate": "2023-03-18T22:47:35.138Z",
+      "__v": 0
+    },
+    {
+      "name": {
+        "firstName": "Chris",
+        "lastName": "Schmitz"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "5e30ee120b9d2300177d3b38",
+      "email": "Christopher.A.Schmitz@gmail.com",
+      "currentRole": "Mobile Engineering Manager",
+      "desiredRole": "Mobile Engineering Manager",
+      "newMember": false,
+      "firstAttended": "MAY 2017",
+      "createdDate": "2020-01-29T02:29:38.664Z",
+      "__v": 0,
+      "attendanceReason": "Civic Engagement",
+      "currentProject": "None"
+    },
+    {
+      "name": {
+        "firstName": "asim",
+        "lastName": "rahman"
+      },
+      "accessLevel": "user",
+      "skillsToMatch": [],
+      "projects": [],
+      "textingOk": false,
+      "managedProjects": [],
+      "isActive": true,
+      "_id": "60d77e950707783dc86d6103",
+      "email": "234asim.radhat@gmail.com34a",
+      "currentRole": "sdf",
+      "desiredRole": "sdf",
+      "newMember": true,
+      "firstAttended": "JUN 2021",
+      "createdDate": "2021-06-26T19:23:01.866Z",
+      "__v": 0
+    }
+  ]
