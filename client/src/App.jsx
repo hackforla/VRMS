@@ -18,6 +18,7 @@ import HandleAuth from './components/auth/HandleAuth';
 import EmailSent from './pages/EmailSent';
 import Events from './pages/Events';
 import ProjectLeaderDashboard from './pages/ProjectLeaderDashboard';
+import Users from './pages/Users';
 import UserAdmin from './pages/UserAdmin';
 import ProjectList from './pages/ProjectList';
 import ManageProjects from './pages/ManageProjects';
@@ -25,15 +26,28 @@ import addProject from './components/manageProjects/addProject';
 import HealthCheck from './pages/HealthCheck';
 import SecretPassword from './pages/SecretPassword';
 import UserWelcome from './pages/UserWelcome';
+// Added User Permission Search component
+import UserPermissionSearch from './pages/UserPermissionSearch';
+import UserPermission from './pages/UserPermission';
 
 import { ThemeProvider } from '@mui/material';
 import theme from './theme';
 
 import './App.scss';
 
+/* 
+   withAuth Hook
+   Wraps component with withAuth hook to manage automatic redirect to login page if user is not logged in
+   An example (inside routes object):
+   { path: '/endpoint', name: 'endpoint', Component: withAuth(ComponentName) },
+   Return <Redirect to="/login" /> if user is not logged in
+   Return <ComponentName {...props} auth={auth} /> if user is logged in
+*/
+import withAuth from './hooks/withAuth';
+
 const routes = [
   { path: '/', name: 'home', Component: Home },
-  { path: '/admin', name: 'admindashboard', Component: AdminDashboard },
+  { path: '/admin', name: 'admindashboard', Component: withAuth(AdminDashboard) },
   { path: '/user', name: 'userdashboard', Component: UserDashboard },
   { path: '/profile', name: 'profile', Component: UserProfile },
   { path: '/event/:id', name: 'event', Component: Event },
@@ -45,14 +59,21 @@ const routes = [
   { path: '/success', name: 'success', Component: Success },
   { path: '/handleauth', name: 'handleauth', Component: HandleAuth },
   { path: '/emailsent', name: 'emailsent', Component: EmailSent },
-  { path: '/events', name: 'events', Component: Events },
-  { path: '/useradmin', name: 'useradmin', Component: UserAdmin },
-  { path: '/projects', name: 'projects', Component: ProjectList },
-  { path: '/projects/create', name: 'projectform', Component:  addProject},
+  { path: '/events', name: 'events', Component: withAuth(Events) },
+  { path: '/useradmin', name: 'useradmin', Component: withAuth(UserAdmin) },
+  { path: '/projects', name: 'projects', Component: withAuth(ProjectList) },
+  { path: '/projects/create', name: 'projectform', Component: withAuth(addProject) },
+  { path: '/users', name: 'users', Component: Users },
+  { path: '/users/user-search', name: 'useradmin', Component: withAuth(UserAdmin) },
+  {
+    path: '/users/permission-search',
+    name: 'useradmin',
+    Component: UserPermission,
+  },
   {
     path: '/projects/:projectId',
     name: 'project',
-    Component: ManageProjects,
+    Component: withAuth(ManageProjects),
   },
   {
     path: '/projectleader',
