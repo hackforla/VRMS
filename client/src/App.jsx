@@ -64,6 +64,7 @@ const routes = [
   { path: '/projects', name: 'projects', Component: withAuth(ProjectList) },
   { path: '/projects/create', name: 'projectform', Component: withAuth(addProject) },
   { path: '/users', name: 'users', Component: Users },
+  { path: '/users/user-search', name: 'useradmin', Component: withAuth(UserAdmin) },
   {
     path: '/users/permission-search',
     name: 'useradmin',
