@@ -1,0 +1,116 @@
+// Mock and import CheckIn model
+jest.mock('../models/checkIn.model');
+jest.mock('../models/user.model');
+const { CheckIn, User } = require('../models');
+
+// Import the check-ins router
+const express = require('express');
+const supertest = require('supertest');
+const checkInsRouter = require('./checkIns.router');
+
+// Create a new Express application for testing
+const testapp = express();
+testapp.use('/api/checkins', checkInsRouter);
+const request = supertest(testapp);
+
+describe('Unit tests for checkIns router', () => {
+  // Mock data for check-ins
+  const mockCheckIns = [
+    { id: 1, eventId: 'event1', userId: 'user1', checkedIn: true, createdDate: String(new Date()) },
+    { id: 2, eventId: 'event2', userId: 'user2', checkedIn: true, createdDate: String(new Date()) },
+  ];
+
+  // Clear mocks after each test
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  describe('READ', () => {
+    it('should return a list of check-ins with GET /api/checkins', async (done) => {
+      // Mock Mongoose method
+      CheckIn.find.mockResolvedValue(mockCheckIns);
+
+      const response = await request.get('/api/checkins');
+
+      // Tests
+      expect(CheckIn.find).toHaveBeenCalled();
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(mockCheckIns);
+
+      // Marks completion of test
+      done();
+    });
+
+    it('should return a single check-in by id with GET /api/checkins/:id', async (done) => {
+      // Mock Mongoose method
+      CheckIn.findById.mockResolvedValue(mockCheckIns[0]);
+
+      const response = await request.get('/api/checkins/1');
+
+      // Tests
+      expect(CheckIn.findById).toHaveBeenCalledWith('1');
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(mockCheckIns[0]);
+
+      // Marks completion of test
+      done();
+    });
+
+    it('should return a single check-in by eventId with GET /api/checkins/findEvent/:id', async (done) => {
+      // Mock user for populating documents from User model
+      const mockUser = {
+        id: 'user2',
+        name: {
+          firstName: 'test',
+          lastName: 'user',
+        },
+      };
+
+      // Mock Mongoose methods
+      User.findById.mockResolvedValue(mockUser);
+      CheckIn.find.mockReturnValue({
+        populate: jest.fn().mockResolvedValue({ ...mockCheckIns[1], userId: 'user2' }),
+      });
+
+      const response = await request.get('/api/checkins/findEvent/event2');
+
+      // Tests
+
+      expect(CheckIn.find).toHaveBeenCalledWith({
+        eventId: 'event2',
+        userId: { $ne: 'undefined' },
+      });
+      expect(CheckIn.find().populate).toHaveBeenCalledWith({ path: 'userId', model: 'User' });
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(mockCheckIns[1]);
+
+      // Marks completion of test
+      done();
+    });
+  });
+
+  describe('CREATE', () => {
+    it('should create a new check-in with POST /api/checkins', async (done) => {
+      // Mock new check-in data
+      const newCheckIn = {
+        id: 3,
+        eventId: 'event3',
+        userId: 'user3',
+        checkedIn: true,
+        createdDate: String(new Date()),
+      };
+
+      // Mock create method
+      CheckIn.create.mockResolvedValue(newCheckIn);
+
+      const response = await request.post('/api/checkins').send(newCheckIn);
+
+      // Tests
+      expect(CheckIn.create).toHaveBeenCalled();
+      expect(response.status).toBe(201);
+
+      // Marks completion of test
+      done();
+    });
+  });
+});
