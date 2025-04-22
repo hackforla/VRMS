@@ -9,7 +9,7 @@ const SelectProject = ({ projects, accessLevel, user }) => {
   // If access level is 'user' display user managed projects.
   const managedProjects = projects
     ?.filter((proj) => {
-      if (accessLevel === 'admin') {
+      if (accessLevel === 'admin' || accessLevel === 'superadmin') {
         return proj.projectStatus === 'Active';
       }
 
@@ -31,7 +31,7 @@ const SelectProject = ({ projects, accessLevel, user }) => {
     <div className="container--ManageProjects">
       <Typography variant="h3">Project Management</Typography>
       <div className="project-sub-heading" style={{ margin: '0 auto' }}>
-        {accessLevel === 'admin' && (
+        {accessLevel === 'admin' || accessLevel === 'superadmin' && (
           <Link to="/projects/create">
             {' '}
             <Button variant="secondary" sx={{ mb: 3 }}>
