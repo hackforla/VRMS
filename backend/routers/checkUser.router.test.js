@@ -9,6 +9,7 @@ const checkUserRouter = require('./checkUser.router');
 
 // Create a new Express application for testing
 const testapp = express();
+// express.json() is a body parser needed for POST API requests
 testapp.use(express.json());
 testapp.use('/api/checkuser', checkUserRouter);
 const request = supertest(testapp);
@@ -53,8 +54,8 @@ describe('Unit tests for checkUser router', () => {
       const response = await request
         .post('/api/checkuser')
         .send({ email: 'mockuser@gmail.com', auth_origin });
-      
-        // Tests
+
+      // Tests
       expect(User.findOne).toHaveBeenCalledWith({ email: 'mockuser@gmail.com' });
       expect(response.status).toBe(200);
       expect(response.body).toEqual({ user: mockUser, auth_origin: auth_origin });
