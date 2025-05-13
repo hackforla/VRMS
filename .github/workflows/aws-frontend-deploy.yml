@@ -12,10 +12,10 @@ on:
         description: 'Branch, Tag, or SHA'
         required: true
 env:
-  AWS_SHARED_CLUSTER: incubator-prod
-  AWS_APP_NAME: vrms-client
+  AWS_SHARED_CLUSTER: incubator-prod 
+  AWS_APP_NAME: vrms-client # vrms-frontend
   AWS_REGION: us-west-2
-  DOCKERFILE: client/Dockerfile.prod
+  DOCKERFILE: client/Dockerfile.prod # Dockerfile.prod
   DOCKER_PATH: client
 jobs:
   setup_env:
@@ -59,6 +59,9 @@ jobs:
         aws-access-key-id: ${{ secrets.INCUBATOR_AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.INCUBATOR_AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
+        # role-to-assume: arn:aws:iam::035866691871:role/incubator-cicd-vrms
+        # role-session-name: incubator-cicd-vrms-gha
+        # aws-region: us-west-2
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
@@ -102,13 +105,13 @@ jobs:
           jq 'del(.taskDefinitionArn,.revision,.status,.registeredBy,.registeredAt,.compatibilities,.requiresAttributes)' > task-def.json
     - name: Interpolate new Docker Image into Task Definition
       id: task-definition
-      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      uses: aws-actions/amazon-ecs-render-task-definition@v1.7.2
       with:
         task-definition: task-def.json
         container-name: ${{ needs.setup_env.outputs.AWS_APPENV }}
         image: ${{ steps.login-ecr.outputs.registry }}/${{ needs.setup_env.outputs.AWS_APPENV }}:${{ needs.setup_env.outputs.IMAGE_TAG }}
     - name: Deploy Amazon ECS
-      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v2.3.2
       with:
         task-definition: ${{ steps.task-definition.outputs.task-definition }}
         service: ${{ needs.setup_env.outputs.AWS_APPENV }}
