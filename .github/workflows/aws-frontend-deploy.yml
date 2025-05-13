@@ -117,5 +117,6 @@ jobs:
         service: ${{ needs.setup_env.outputs.AWS_APPENV }}
         cluster: ${{ env.AWS_SHARED_CLUSTER }}
         wait-for-service-stability: true
+        force-new-deployment: true
         wait-for-minutes: 5 minutes
 
