@@ -24,6 +24,8 @@ jobs:
     steps:
     - name: Debug Action
       uses: hmarr/debug-action@v2
+    - name: Debug Input Reference
+      run: echo "Reference input is '${{ github.event.inputs.ref }}'"
     - name: Checkout
       uses: actions/checkout@v4
       with:
@@ -63,7 +65,7 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
     - name: Init Docker Cache
-      uses: jpribyl/action-docker-layer-caching@v0.1.0
+      uses: jpribyl/action-docker-layer-caching@v0.1.1
       with:
         key: ${{ github.workflow }}-2-{hash}
         restore-keys: |
