@@ -24,6 +24,14 @@ jobs:
     steps:
     - name: Debug Action
       uses: hmarr/debug-action@v2
+    - name: Debug Input Reference
+      run: echo "Reference input is '${{ github.event.inputs.ref }}'"
+    - name: Checkout without specific ref
+      uses: actions/checkout@v4    
+    - name: Fetch and checkout specific ref
+      run: |
+        git fetch --no-tags --prune --progress --no-recurse-submodules origin
+        git checkout -f "${{ github.event.inputs.ref }}" || git checkout -f "origin/${{ github.event.inputs.ref }}"
     - name: Checkout
       uses: actions/checkout@v4
       with:
