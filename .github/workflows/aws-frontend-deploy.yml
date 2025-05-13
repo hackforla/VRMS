@@ -65,7 +65,7 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
     - name: Init Docker Cache
-      uses: actions/cache@v3
+      uses: jpribyl/action-docker-layer-caching@v0.1.1
       with:
         key: ${{ github.workflow }}-2-{hash}
         restore-keys: |
