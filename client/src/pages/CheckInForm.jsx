@@ -427,6 +427,12 @@ const CheckInForm = (props) => {
         .catch((err) => {
           console.log(err);
           setIsLoading(false);
+          
+          // Fixes for error messages
+          setUser(false);
+          setIsError(true);
+          setErrorMessage('Invalid email.');
+          // end
         });
     } catch (error) {
       console.log(error);

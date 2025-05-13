@@ -1,49 +1,66 @@
 import React from 'react';
+import { Box, Button, FormControl, TextField, Typography } from '@mui/material';
 
 const ReturnUserForm = (props) => {
   return (
-    <div className="check-in-container">
-      <div className="check-in-headers">
-        <h3>Welcome back!</h3>
-      </div>
-      <div className="check-in-form">
-        <form
+    <Box className="check-in-container">
+      <Box className="check-in-headers">
+        <Typography
+          variant="h3"
+          component="h3"
+          style={{ fontSize: 40, fontWeight: 'bold', marginBottom: 18 }}
+        >
+          WELCOME BACK!
+        </Typography>
+      </Box>
+      <Box className="check-in-form">
+        <FormControl
+          autoComplete
           className="form-check-in"
-          autoComplete="on"
           onSubmit={(e) => e.preventDefault()}
         >
-          <div className="form-row">
-            <div className="form-input-text">
-              <label htmlFor="email">
+          <Box className="form-row">
+            <Box className="form-input-text">
+              <Typography style={{ marginBottom: 30 }}>
                 Which email address did you use to check-in last time?
-              </label>
-              <input
+              </Typography>
+              <TextField
+                label="Enter your email address:"
                 type="email"
                 name="email"
                 placeholder="Email Address"
+                required="required"
                 value={props.formInput.email.toString()}
                 onChange={props.handleInputChange}
                 aria-label="Email Address"
-                required
+                data-test="input-email"
                 autoComplete="email"
               />
-            </div>
-            <p>
+            </Box>
+            <Typography
+              style={{
+                fontStyle: 'italic',
+                fontSize: 10,
+                fontWeight: 'normal',
+                marginTop: 5,
+              }}
+            >
               {"(This allows easy use of the app. We'll never sell your data!)"}
-            </p>
-          </div>
+            </Typography>
+          </Box>
 
-          {props.isError && props.errorMessage.length > 1 &&
-            <div className="error">{props.errorMessage}</div>
-          }
+          {props.isError && props.errorMessage.length > 1 && (
+            <Box className="error">{props.errorMessage}</Box>
+          )}
+
           {props.user === false && (
-            <div className="error">Try entering your email again.</div>
+            <Box className="error">Try entering your email again.</Box>
           )}
 
           {!props.user && !props.isLoading ? (
-            <div className="form-row">
-              <div className="form-input-button">
-                <button
+            <Box className="form-row">
+              <Box className="form-input-button">
+                <Button
                   type="submit"
                   className="form-check-in-submit"
                   onClick={(e) => props.checkEmail(e)}
@@ -52,25 +69,25 @@ const ReturnUserForm = (props) => {
                   }
                 >
                   CHECK IN
-                </button>
-              </div>
-            </div>
+                </Button>
+              </Box>
+            </Box>
           ) : (
-            <div className="form-row">
-              <div className="form-input-button">
-                <button
+            <Box className="form-row">
+              <Box className="form-input-button">
+                <Button
                   type="submit"
                   className="form-check-in-submit block"
                   onClick={(e) => e.preventDefault()}
                 >
                   CHECKING IN...
-                </button>
-              </div>
-            </div>
+                </Button>
+              </Box>
+            </Box>
           )}
-        </form>
-      </div>
-    </div>
+        </FormControl>
+      </Box>
+    </Box>
   );
 };
 export default ReturnUserForm;
