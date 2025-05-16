@@ -83,8 +83,10 @@
     justify-content: flex-start;
     align-items: flex-start;
     margin-left: 12px;
-    margin-bottom: 2vh;
-    padding-top: 6vh;
+    @media (max-width: 450px) { // for mobile platform
+        padding: 1vh 1vh 3vh 1vh;
+    }
+    padding: 3vh;
     z-index: 1;
 
     & h2 {
