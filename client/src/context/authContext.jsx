@@ -51,7 +51,7 @@ const fetchAuth = async () => {
       return { user: null, isAdmin: false, isError: true };
 
     const user = await response.json();
-    return { user, isAdmin: user.accessLevel === 'admin', isError: false };
+    return { user, isAdmin: (user.accessLevel === 'admin' || user.accessLevel === 'superadmin'), isError: false };
   } catch (error) {
     // this should never be hit...
     console.error('fetchAuth - error', error);
