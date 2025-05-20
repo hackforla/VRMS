@@ -1,5 +1,6 @@
 module.exports = {
-  preset: '@shelf/jest-mongodb',
+  testEnvironment: 'node',
   setupFilesAfterEnv: ['./jest.setup.js'],
   watchPathIgnorePatterns: ['globalConfig'],
+  testPathIgnorePatterns: ['/test/old-tests/'],
 };
