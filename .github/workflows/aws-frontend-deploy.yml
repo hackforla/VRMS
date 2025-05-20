@@ -68,17 +68,20 @@ jobs:
           key: ${{ github.workflow }}-2-{hash}
           restore-keys: |
             ${{ github.workflow }}-2-
-      - name: Build & Push Image to ECR
-        uses: kciter/aws-ecr-action@v3
-        with:
-          access_key_id: ${{ secrets.INCUBATOR_AWS_ACCESS_KEY_ID }}
-          secret_access_key: ${{ secrets.INCUBATOR_AWS_SECRET_ACCESS_KEY }}
-          account_id: ${{ secrets.INCUBATOR_AWS_ACCOUNT_ID }}
-          repo: ${{ needs.setup_env.outputs.AWS_APPENV }}
-          region: ${{ env.AWS_REGION }}
-          tags: latest,${{ needs.setup_env.outputs.IMAGE_TAG }}
-          dockerfile: ${{ env.DOCKERFILE }}
-          path: ${{ env.DOCKER_PATH }}
+      - name: Build, tag, and push the image to Amazon ECR
+        id: build-push-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ env.AWS_APP_NAME }}
+        run: |
+          ls
+          cd ./${{ env.DOCKER_PATH }}
+          docker build \
+            -f ${{ env.DOCKERFILE }} \
+            -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ needs.setup_env.outputs.IMAGE_TAG }} \
+            -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:test \
+            .
+          docker image push --all-tags ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}
   deploy:
     name: Deploy to AWS ECS
     runs-on: ubuntu-latest
