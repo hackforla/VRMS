@@ -80,13 +80,10 @@
 .home-headers {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    margin-left: 12px;
-    @media (max-width: 450px) { // for mobile platform
-        padding: 1vh 1vh 3vh 1vh;
-    }
-    padding: 3vh;
+    align-self: center;
+    width: 80%;
+    margin-top: 3vh;
+    margin-bottom: 3vh;
     z-index: 1;
 
     & h2 {
@@ -190,6 +187,10 @@
     // }
 
     .home-buttons {
+        width: 90%;
+    }
+
+    .home-headers {
         width: 90%;
     }
 }
