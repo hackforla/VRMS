@@ -85,6 +85,8 @@ jobs:
   deploy:
     name: Deploy to AWS ECS
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     needs: [setup_env, build]
     steps:
       - name: Configure AWS credentials
