@@ -105,36 +105,33 @@ const Auth = () => {
             Welcome Back!
           </Typography>
         </div>
-        <FormControl
+        <form
           onSubmit={handleLogin}
           className="form-check-in"
           autoComplete="off"
         >
-          <div className="form-row">
-            <div className="form-input-text">
-              <Box className="form-row">
-                <Box className="form-input-text">
-                  <TextField
-                    label="Enter your email address:"
-                    type="email"
-                    name="email"
-                    placeholder="Email Address"
-                    required="required"
-                    onChange={handleInputChange}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        handleLogin(e);
-                      }
-                    }}
-                    aria-label="Email Address"
-                    data-test="input-email"
-                    autoComplete="email"
-                  />
+          <FormControl>
+            <div className="form-row">
+              <div className="form-input-text">
+                <Box className="form-row">
+                  <Box className="form-input-text">
+                    <TextField
+                      label="Enter your email address:"
+                      type="email"
+                      name="email"
+                      placeholder="Email Address"
+                      required="required"
+                      onChange={handleInputChange}
+                      aria-label="Email Address"
+                      data-test="input-email"
+                      autoComplete="email"
+                    />
+                  </Box>
                 </Box>
-              </Box>
+              </div>
             </div>
-          </div>
-        </FormControl>
+          </FormControl>
+        </form>
 
         <div
           className="adminlogin-warning"
