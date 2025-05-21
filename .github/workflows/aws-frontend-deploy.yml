@@ -37,7 +37,7 @@ jobs:
               echo IMAGE_TAG=$SHORT_SHA >> $GITHUB_ENV
           fi
     outputs:
-      AWS_APPENV: ${{ env.AWS_APPENV }}
+      AWS_APPENV: ${{ env.AWS_APPENV }}git checkou
       IMAGE_TAG: ${{ env.IMAGE_TAG }}
   build:
     name: Build & Push Docker Image

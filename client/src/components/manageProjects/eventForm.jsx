@@ -1,5 +1,6 @@
 import React from 'react';
 import { createClockHours } from '../../utils/createClockHours';
+import validateEventForm from './utilities/validateEventForm';
 import {
   Box,
   TextField,
@@ -14,12 +15,18 @@ const EventForm = ({
   title,
   formValues,
   formErrors,
+  setFormErrors,
   handleInputChange,
   children,
 }) => {
   // This creates the clock hours for the form
   const clockHours = createClockHours();
-
+  const handleInputChangeWithValidation = (e) => {
+    const { name, value } = e.target;
+    handleInputChange(e);
+    const errors = validateEventForm({ ...formValues, [name]: value });
+    setFormErrors(errors || {});
+  };
   return (
     <Box className="event-form-box">
       {title && <h3 className="event-form-title">{title}</h3>}
