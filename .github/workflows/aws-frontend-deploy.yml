@@ -13,9 +13,9 @@ on:
         required: true
 env:
   AWS_SHARED_CLUSTER: incubator-prod
-  AWS_APP_NAME: vrms-client # vrms-frontend
+  AWS_APP_NAME: vrms-frontend
   AWS_REGION: us-west-2
-  DOCKERFILE: client/Dockerfile.prod # Dockerfile.prod
+  DOCKERFILE: Dockerfile.prod
   DOCKER_PATH: client
 jobs:
   setup_env:
@@ -25,7 +25,7 @@ jobs:
       - name: Debug Action
         uses: hmarr/debug-action@v2
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           ref: ${{ github.event.inputs.ref }}
       - name: Set AWS Env & Image Tag per workflow
@@ -42,6 +42,8 @@ jobs:
   build:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     needs: [setup_env]
     steps:
       - name: Checkout
@@ -49,78 +51,49 @@ jobs:
         with:
           ref: ${{ github.event.inputs.ref }}
       - name: Checkout
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: 'npm'
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:
-          # aws-access-key-id: ${{ secrets.INCUBATOR_AWS_ACCESS_KEY_ID }}
-          # aws-secret-access-key: ${{ secrets.INCUBATOR_AWS_SECRET_ACCESS_KEY }}
-          # aws-region: ${{ env.AWS_REGION }}
           role-to-assume: arn:aws:iam::035866691871:role/incubator-cicd-vrms
           role-session-name: incubator-cicd-vrms-gha
           aws-region: us-west-2
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-      - name: Init Docker Cache
-        uses: jpribyl/action-docker-layer-caching@v0.1.1
-        with:
-          key: ${{ github.workflow }}-2-{hash}
-          restore-keys: |
-            ${{ github.workflow }}-2-
-      - name: Build & Push Image to ECR
-        uses: kciter/aws-ecr-action@v3
-        with:
-          access_key_id: ${{ secrets.INCUBATOR_AWS_ACCESS_KEY_ID }}
-          secret_access_key: ${{ secrets.INCUBATOR_AWS_SECRET_ACCESS_KEY }}
-          account_id: ${{ secrets.INCUBATOR_AWS_ACCOUNT_ID }}
-          repo: ${{ needs.setup_env.outputs.AWS_APPENV }}
-          region: ${{ env.AWS_REGION }}
-          tags: latest,${{ needs.setup_env.outputs.IMAGE_TAG }}
-          dockerfile: ${{ env.DOCKERFILE }}
-          path: ${{ env.DOCKER_PATH }}
+      - name: Build, tag, and push the image to Amazon ECR
+        id: build-push-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ env.AWS_APP_NAME }}
+        run: |
+          ls
+          cd ./${{ env.DOCKER_PATH }}
+          docker build \
+            -f ${{ env.DOCKERFILE }} \
+            -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ needs.setup_env.outputs.IMAGE_TAG }} \
+            -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.event.inputs.env }} \
+            .
+          docker image push --all-tags ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}
   deploy:
     name: Deploy to AWS ECS
     runs-on: ubuntu-latest
+    needs: [setup_env, build]
     permissions:
       id-token: write
-    needs: [setup_env, build]
     steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:
-          # aws-access-key-id: ${{ secrets.INCUBATOR_AWS_ACCESS_KEY_ID }}
-          # aws-secret-access-key: ${{ secrets.INCUBATOR_AWS_SECRET_ACCESS_KEY }}
-          # aws-region: ${{ env.AWS_REGION }}
           role-to-assume: arn:aws:iam::035866691871:role/incubator-cicd-vrms
           role-session-name: incubator-cicd-vrms-gha
           aws-region: us-west-2
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-      - name: Pull Task Definition & write to file
-        id: aws-task-definition
+      - name: Restart ECS Service
+        id: redeploy-service
+        env:
+          SERVICE_NAME: ${{env.AWS_APP_NAME}}-${{ github.event.inputs.env }}
         run: |
-          aws ecs describe-task-definition \
-            --task-definition ${{ needs.setup_env.outputs.AWS_APPENV }} \
-            --query taskDefinition | \
-            jq 'del(.taskDefinitionArn,.revision,.status,.registeredBy,.registeredAt,.compatibilities,.requiresAttributes)' > task-def.json
-      - name: Interpolate new Docker Image into Task Definition
-        id: task-definition
-        uses: aws-actions/amazon-ecs-render-task-definition@v1.7.2
-        with:
-          task-definition: task-def.json
-          container-name: ${{ needs.setup_env.outputs.AWS_APPENV }}
-          image: ${{ steps.login-ecr.outputs.registry }}/${{ needs.setup_env.outputs.AWS_APPENV }}:${{ needs.setup_env.outputs.IMAGE_TAG }}
-      - name: Deploy Amazon ECS
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v2.3.2
-        with:
-          task-definition: ${{ steps.task-definition.outputs.task-definition }}
-          service: ${{ needs.setup_env.outputs.AWS_APPENV }}
-          cluster: ${{ env.AWS_SHARED_CLUSTER }}
-          wait-for-service-stability: true
-          force-new-deployment: true
-          wait-for-minutes: 5 minutes
+          aws ecs update-service --force-new-deployment --service $SERVICE_NAME --cluster $AWS_SHARED_CLUSTER
