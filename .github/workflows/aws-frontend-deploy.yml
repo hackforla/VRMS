@@ -76,7 +76,6 @@ jobs:
             -f ${{ env.DOCKERFILE }} \
             -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ needs.setup_env.outputs.IMAGE_TAG }} \
             -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.event.inputs.env }} \
-
             .
           docker image push --all-tags ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}
   deploy:
