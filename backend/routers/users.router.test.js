@@ -9,6 +9,8 @@ const supertest = require('supertest');
 
 // Setup testapp with just usersRouter which calls mocked UserController
 const testapp = express();
+testapp.use(express.json());
+testapp.use(express.urlencoded({ extended: false }));
 testapp.use('/api/users', usersRouter);
 const request = supertest(testapp);
 
@@ -45,7 +47,11 @@ describe('Unit Tests for userRouter', () => {
                 .send(mockUser);
 
             //Test
-            expect(UserController.create).toHaveBeenCalled();
+            expect(UserController.create).toHaveBeenCalledWith(
+                expect.objectContaining({body: mockUser}),
+                expect.anything(), // Mock the response object
+                expect.anything() // Mock the next function
+            );
             expect(response.status).toBe(201);
             expect(response.body).toEqual(mockUser);
 
