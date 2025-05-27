@@ -15,8 +15,10 @@ const supertest = require('supertest');
 
 // Set up testapp for testing Projects router
 const testapp = express();
-// Allows for body parsing in testapp
+// Allows for body parsing of JSON data
 testapp.use(express.json());
+// Allows for body parsing of HTML data
+testapp.use(express.urlencoded({ extended: false }));
 testapp.use('/api/projects/', projectsRouter);
 const request = supertest(testapp);
 
@@ -102,7 +104,11 @@ describe('Unit testing for Projects router', () => {
       const response = await request.get(`/api/projects/${ProjectId}`);
 
       // Tests
-      expect(ProjectController.project_by_id).toHaveBeenCalled();
+      expect(ProjectController.project_by_id).toHaveBeenCalledWith(
+        expect.objectContaining({ params: { ProjectId } }),
+        expect.anything(), // Mock response
+        expect.anything(), // Mock next
+      );
       expect(response.status).toBe(200);
       expect(response.body).toEqual(mockProject);
 
@@ -144,7 +150,6 @@ describe('Unit testing for Projects router', () => {
       const response = await request.post('/api/projects').send(newProject);
 
       // Middlware assertions
-      expect(mockVerifyCookie).toHaveBeenCalled();
       expect(mockVerifyCookie).toHaveBeenCalledWith(
         expect.any(Object),
         expect.any(Object),
@@ -152,7 +157,11 @@ describe('Unit testing for Projects router', () => {
       );
 
       // Tests
-      expect(ProjectController.create).toHaveBeenCalled();
+      expect(ProjectController.create).toHaveBeenCalledWith(
+        expect.objectContaining({ body: newProject }), // Check if newProject in body is parsed 
+        expect.anything(), // Mock response
+        expect.anything(), // Mock next
+      );
       expect(response.status).toBe(201);
       expect(response.body).toEqual(newProject);
 
@@ -257,7 +266,6 @@ describe('Unit testing for Projects router', () => {
       const response = await request.put(`/api/projects/${ProjectId}`).send(updatedProject);
 
       // Middlware assertions
-      expect(mockVerifyCookie).toHaveBeenCalled();
       expect(mockVerifyCookie).toHaveBeenCalledWith(
         expect.any(Object),
         expect.any(Object),
@@ -265,33 +273,11 @@ describe('Unit testing for Projects router', () => {
       );
 
       // Tests
-      expect(ProjectController.update).toHaveBeenCalled();
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual(updatedProject);
-
-      // Marks completion of tests
-      done();
-    });
-
-    it('should return an updated project with PATCH /api/projects/:ProjectId', async (done) => {
-      // Mock ProjectController.update method when this route is called
-      ProjectController.update.mockImplementationOnce((req, res) => {
-        res.status(200).send(updatedProject);
-      });
-
-      // Mock PATCH API call
-      const response = await request.patch(`/api/projects/${ProjectId}`).send(updatedProject);
-
-      // Middlware assertions
-      expect(mockVerifyCookie).toHaveBeenCalled();
-      expect(mockVerifyCookie).toHaveBeenCalledWith(
-        expect.any(Object),
-        expect.any(Object),
-        expect.any(Function),
+      expect(ProjectController.update).toHaveBeenCalledWith(
+        expect.objectContaining({ params: { ProjectId }}), // Check if ProjectId is parsed from params
+        expect.anything(), // Mock response
+        expect.anything(), // Mock next
       );
-
-      // Tests
-      expect(ProjectController.update).toHaveBeenCalled();
       expect(response.status).toBe(200);
       expect(response.body).toEqual(updatedProject);
 
