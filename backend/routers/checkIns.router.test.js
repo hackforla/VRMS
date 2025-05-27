@@ -57,32 +57,26 @@ describe('Unit tests for checkIns router', () => {
       done();
     });
 
-    it('should return a single check-in by eventId with GET /api/checkins/findEvent/:id', async (done) => {
-      // Mock user for populating documents from User model
-      const mockUser = {
-        id: 'user2',
-        name: {
-          firstName: 'test',
-          lastName: 'user',
-        },
-      };
+    it('should return a list of users who have checked into a specific event with GET /api/checkins/findEvent/:id', async (done) => {
+      // Mock specific checkIn
+      const mockCheckIn = mockCheckIns[1];
+      const { eventId } = mockCheckIn;
 
       // Mock Mongoose methods
       CheckIn.find.mockReturnValue({
-        populate: jest.fn().mockResolvedValue(mockCheckIns[1]),
+        populate: jest.fn().mockResolvedValue(mockCheckIn),
       });
 
-      const response = await request.get('/api/checkins/findEvent/event2');
+      const response = await request.get(`/api/checkins/findEvent/${eventId}`);
 
       // Tests
-
       expect(CheckIn.find).toHaveBeenCalledWith({
-        eventId: 'event2',
+        eventId: eventId,
         userId: { $ne: 'undefined' },
       });
       expect(CheckIn.find().populate).toHaveBeenCalledWith({ path: 'userId', model: 'User' });
       expect(response.status).toBe(200);
-      expect(response.body).toEqual(mockCheckIns[1]);
+      expect(response.body).toEqual(mockCheckIn);
 
       // Marks completion of test
       done();
