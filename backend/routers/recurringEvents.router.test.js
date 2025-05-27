@@ -18,8 +18,10 @@ const { RecurringEventController } = require('../controllers/');
 const recurringEventsRouter = require('./recurringEvents.router');
 const express = require('express');
 const testapp = express();
-// Allow for body parsing for tests
+// Allow for body parsing of JSON data
 testapp.use(express.json());
+// Allow for body parsing of HTML data
+testapp.use(express.urlencoded({ extended: false }));
 testapp.use('/api/recurringevents', recurringEventsRouter);
 const supertest = require('supertest');
 const request = supertest(testapp);
@@ -95,17 +97,19 @@ describe('Unit tests for RecurringEvents router', () => {
     });
 
     it('should return a single event by id with GET /api/recurringevents/:id', async (done) => {
-      // Mock Mongoose method
-      RecurringEvent.findById.mockResolvedValue(mockEvents[0]);
+      // Mock event
+      const mockEvent = mockEvents[0];
+      const { id } = mockEvent;
 
-      // Sample id -> mockEvents[0]
-      const id = '1';
+      // Mock Mongoose method
+      RecurringEvent.findById.mockResolvedValue(mockEvent);
+
       const response = await request.get(`/api/recurringevents/${id}`);
 
       // Tests
-      expect(RecurringEvent.findById).toHaveBeenCalledWith(id);
+      expect(RecurringEvent.findById).toHaveBeenCalledWith(`${id}`);
       expect(response.status).toBe(200);
-      expect(response.body).toEqual(mockEvents[0]);
+      expect(response.body).toEqual(mockEvent);
 
       // Marks completion of tests
       done();
@@ -134,7 +138,11 @@ describe('Unit tests for RecurringEvents router', () => {
       const response = await request.post('/api/recurringevents/').send(newEvent);
 
       // Tests
-      expect(RecurringEventController.create).toHaveBeenCalled();
+      expect(RecurringEventController.create).toHaveBeenCalledWith(
+        expect.objectContaining({ body: newEvent }), // Checks if newEvent was passed
+        expect.anything(), // Mock the response object
+        expect.anything(), // Mock the next object
+      );
       expect(response.status).toBe(200);
       expect(response.body).toEqual(newEvent);
 
@@ -157,7 +165,7 @@ describe('Unit tests for RecurringEvents router', () => {
         project: 'update project1',
         videoConferenceLink: 'new zoom-link1',
       };
-      const id = 1;
+      const { id } = updatedEvent;
 
       RecurringEventController.update.mockImplementationOnce((req, res) => {
         return res.status(200).send(updatedEvent);
@@ -166,7 +174,11 @@ describe('Unit tests for RecurringEvents router', () => {
       const response = await request.patch(`/api/recurringevents/${id}`).send(updatedEvent);
 
       // Tests
-      expect(RecurringEventController.update).toHaveBeenCalled();
+      expect(RecurringEventController.update).toHaveBeenCalledWith(
+        expect.objectContaining({ body: updatedEvent }), // Checks if newEvent was passed
+        expect.anything(), // Mock the response object
+        expect.anything(), // Mock the next object
+      );
       expect(response.status).toBe(200);
       expect(response.body).toEqual(updatedEvent);
 
@@ -177,17 +189,25 @@ describe('Unit tests for RecurringEvents router', () => {
 
   describe('DESTROY', () => {
     it('should delete a specific event by id with DELETE /api/recurringevents/:id', async (done) => {
+      // Mock event to be deleted
+      const deleteEvent = mockEvents[0];
+      const { id } = deleteEvent;
+
       RecurringEventController.destroy.mockImplementationOnce((req, res) => {
-        return res.status(200).send(mockEvents[0]);
+        console.log('DESTROY ARGS:', req.params);
+        return res.status(200).send(deleteEvent);
       });
 
-      const id = 1;
       const response = await request.delete(`/api/recurringevents/${id}`);
 
       // Tests
-      expect(RecurringEventController.destroy).toHaveBeenCalled();
+      expect(RecurringEventController.destroy).toHaveBeenCalledWith(
+        expect.objectContaining({ params: { RecurringEventId: String(id) } }), // Check for parsing of RecurringEventId
+        expect.anything(), // Mock response
+        expect.anything(), // Mock next 
+      );
       expect(response.status).toBe(200);
-      expect(response.body).toEqual(mockEvents[0]);
+      expect(response.body).toEqual(deleteEvent);
 
       // Marks completion of tests
       done();
