@@ -8,6 +8,7 @@
     "format": "prettier --check .",
     "test": "jest",
     "test:watch": "jest --watch",
+    "test:qs": "jest --watch questions.router.test.js",
     "start": "node server.js",
     "dev": "nodemon server.js",
     "client": "npm run start --prefix client",

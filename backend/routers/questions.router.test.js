@@ -5,12 +5,14 @@ const { Question } = require('../models');
 // Import question router
 const questionsRouter = require('./questions.router');
 
-// Create a test app with Express 
+// Create a test app with Express
 const express = require('express');
 const supertest = require('supertest');
 const testapp = express();
-// Allow for body parsing in test
+// Allow for body parsing of JSON data
 testapp.use(express.json());
+// Allow for body parsing of HTML data
+testapp.use(express.urlencoded({ extended: false }));
 testapp.use('/api/questions/', questionsRouter);
 const request = supertest(testapp);
 
@@ -54,6 +56,7 @@ describe('Unit tests for questions router', () => {
       const response = await request.get('/api/questions');
 
       // Tests
+      expect(Question.find).toHaveBeenCalled();
       expect(response.status).toBe(200);
       expect(response.body).toEqual(mockQuestions);
 
@@ -63,13 +66,17 @@ describe('Unit tests for questions router', () => {
 
     it('should return a specific question with GET /api/questions/:id', async (done) => {
       // Mock the Question.findById() method
-      const questionId = 1;
-      Question.findById.mockResolvedValue(mockQuestions[0]);
+      const mockQuestion = mockQuestions[0];
+      const { id } = mockQuestion;
+      Question.findById.mockResolvedValue(mockQuestion);
+
       // Mock the request to the API
-      const response = await request.get(`/api/questions/${questionId}`);
+      const response = await request.get(`/api/questions/${id}`);
+
       // Tests
+      expect(Question.findById).toHaveBeenCalledWith(`${id}`);
       expect(response.status).toBe(200);
-      expect(response.body).toEqual(mockQuestions[0]);
+      expect(response.body).toEqual(mockQuestion);
 
       // Marks completion of tests
       done();
@@ -91,6 +98,7 @@ describe('Unit tests for questions router', () => {
         },
       };
 
+      // Mock Question.create method
       Question.create.mockResolvedValue(newQuestion);
 
       // Mock the request to the API
