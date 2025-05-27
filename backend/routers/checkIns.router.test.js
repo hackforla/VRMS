@@ -1,7 +1,6 @@
 // Mock and import CheckIn model
 jest.mock('../models/checkIn.model');
-jest.mock('../models/user.model');
-const { CheckIn, User } = require('../models');
+const { CheckIn } = require('../models');
 
 // Import the check-ins router
 const express = require('express');
@@ -10,6 +9,8 @@ const checkInsRouter = require('./checkIns.router');
 
 // Create a new Express application for testing
 const testapp = express();
+// Allows for body parsing
+testapp.use(express.json());
 testapp.use('/api/checkins', checkInsRouter);
 const request = supertest(testapp);
 
@@ -67,9 +68,8 @@ describe('Unit tests for checkIns router', () => {
       };
 
       // Mock Mongoose methods
-      User.findById.mockResolvedValue(mockUser);
       CheckIn.find.mockReturnValue({
-        populate: jest.fn().mockResolvedValue({ ...mockCheckIns[1], userId: 'user2' }),
+        populate: jest.fn().mockResolvedValue(mockCheckIns[1]),
       });
 
       const response = await request.get('/api/checkins/findEvent/event2');
@@ -106,7 +106,7 @@ describe('Unit tests for checkIns router', () => {
       const response = await request.post('/api/checkins').send(newCheckIn);
 
       // Tests
-      expect(CheckIn.create).toHaveBeenCalled();
+      expect(CheckIn.create).toHaveBeenCalledWith(newCheckIn);
       expect(response.status).toBe(201);
 
       // Marks completion of test
