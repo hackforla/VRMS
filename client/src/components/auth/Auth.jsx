@@ -3,13 +3,7 @@ import { Redirect } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import { checkUser, checkAuth } from '../../services/user.service';
 import { authLevelRedirect } from '../../utils/authUtils';
-import {
-  Typography,
-  Button,
-  FormControl,
-  Box,
-  TextField
-} from '@mui/material';
+import { Typography, Button, FormControl, Box, TextField } from '@mui/material';
 
 import useAuth from '../../hooks/useAuth';
 import '../../sass/AdminLogin.scss';
@@ -107,33 +101,37 @@ const Auth = () => {
     <div className="flex-container">
       <div className="adminlogin-container">
         <div className="adminlogin-headers">
-        <Typography variant="h3" sx={{fontSize:'2.8em'}}>Welcome Back!</Typography>
+          <Typography variant="h3" sx={{ fontSize: '2.8em' }}>
+            Welcome Back!
+          </Typography>
         </div>
-        <FormControl
+        <form
           onSubmit={handleLogin}
           className="form-check-in"
           autoComplete="off"
         >
-          <div className="form-row">
-            <div className="form-input-text">
-            <Box className="form-row">
-                    <Box className="form-input-text">
+          <FormControl>
+            <div className="form-row">
+              <div className="form-input-text">
+                <Box className="form-row">
+                  <Box className="form-input-text">
                     <TextField
-                        label = "Enter your email address:"
-                        type="email"
-                        name="email"
-                        placeholder="Email Address"
-                        required="required"
-                        onChange={handleInputChange}
-                        aria-label="Email Address"
-                        data-test="input-email"
-                        autoComplete="email"
-                        />
-                    </Box>
+                      label="Enter your email address:"
+                      type="email"
+                      name="email"
+                      placeholder="Email Address"
+                      required="required"
+                      onChange={handleInputChange}
+                      aria-label="Email Address"
+                      data-test="input-email"
+                      autoComplete="email"
+                    />
+                  </Box>
                 </Box>
+              </div>
             </div>
-          </div>
-        </FormControl>
+          </FormControl>
+        </form>
 
         <div
           className="adminlogin-warning"
@@ -149,7 +147,7 @@ const Auth = () => {
             className="login-button"
             data-test="login-btn"
             disabled={isDisabled}
-            sx={{color: 'black'}}
+            sx={{ color: 'black' }}
           >
             LOGIN
           </Button>
