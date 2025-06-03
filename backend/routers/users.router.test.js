@@ -153,7 +153,11 @@ describe('Unit Tests for userRouter', () => {
                 .get(`/api/users/${mockId}`);
 
             //Test
-            expect(UserController.user_by_id).toHaveBeenCalled();
+            expect(UserController.user_by_id).toHaveBeenCalledWith(
+                expect.objectContaining({params: {UserId: mockId}}),
+                expect.anything(), // Mock the response object
+                expect.anything() // Mock the next function
+            );
             expect(response.status).toBe(200);
             expect(response.body).toEqual(mockUser);
 
@@ -176,7 +180,11 @@ describe('Unit Tests for userRouter', () => {
                 .send(mockUpdatedEmail);
 
             //Test
-            expect(UserController.update).toHaveBeenCalled();
+            expect(UserController.update).toHaveBeenCalledWith(
+                expect.objectContaining({params: {UserId: mockId}}),
+                expect.anything(), // Mock the response object
+                expect.anything() // Mock the next function
+            );
             expect(response.status).toBe(200);
             expect(response.body).toEqual(mockUser);
 
@@ -198,7 +206,11 @@ describe('Unit Tests for userRouter', () => {
                 .send(mockUpdatedEmail);
 
             //Test
-            expect(UserController.delete).toHaveBeenCalled();
+            expect(UserController.delete).toHaveBeenCalledWith(
+                expect.objectContaining({params: {UserId: mockId}}),
+                expect.anything(), // Mock the response object
+                expect.anything() // Mock the next function
+            );
             expect(response.status).toBe(200);
             expect(response.body).toEqual(mockUser);
 
