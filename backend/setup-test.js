@@ -33,36 +33,6 @@ async function dropAllCollections() {
 }
 let mongoServer;
 module.exports = {
-  setupDB(databaseName) {
-    // Connect to Mongoose
-    beforeAll(async () => {
-      mongoServer = new MongoMemoryServer({
-        instance: { dbName: databaseName },
-      });
-      const mongoUri = await mongoServer.getUri();
-      const opts = {
-        useNewUrlParser: true,
-        useFindAndModify: false,
-        useCreateIndex: true,
-        useUnifiedTopology: true,
-      };
-      await mongoose.connect(mongoUri, opts, (err) => {
-        if (err) console.error(err);
-      });
-    });
-
-    // Cleans up database between each test
-    afterEach(async () => {
-      await removeAllCollections();
-    });
-
-    // Disconnect Mongoose
-    afterAll(async () => {
-      await dropAllCollections();
-      await mongoose.connection.close();
-      await mongoServer.stop();
-    });
-  },
   setupIntegrationDB(databaseName) {
     // Connect to Mongoose
     beforeAll(async () => {
