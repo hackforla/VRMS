@@ -15,7 +15,8 @@
     "test:cy": "dotenv -e ./backend/.env -e ./client/.env cross-var start-test dev:api %BACKEND_PORT% dev:client %CLIENT_PORT% cy:run",
     "test:backend": "cd backend && npm run test",
     "test:client": "cd client && npm run test",
-    "test:all": "cross-env NODE_ENV=test npm run test:client && npm run test:backend"
+    "test:all": "cross-env NODE_ENV=test npm run test:client && npm run test:backend",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@mui/icons-material": "^5.14.19",
@@ -23,10 +24,10 @@
     "cross-env": "^7.0.2",
     "cross-var": "^1.1.0",
     "dotenv-cli": "^3.2.0",
-    "styled-components": "^6.1.13",
-    "vite": "^5.4.19"
+    "styled-components": "^6.1.13"
   },
   "devDependencies": {
+    "autoprefixer": "^10.4.21",
     "cypress": "^5.0.0",
     "eslint": "9.9.1",
     "eslint-config-prettier": "9.1.0",
