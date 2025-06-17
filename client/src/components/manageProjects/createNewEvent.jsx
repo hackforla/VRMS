@@ -99,6 +99,7 @@ const CreateNewEvent = ({
         handleInputChange={handleInputChange}
         formValues={formValues}
         formErrors={formErrors}
+        setFormErrors={setFormErrors}
         title="Create New Recurring Event"
       >
         <div className="button-box">
