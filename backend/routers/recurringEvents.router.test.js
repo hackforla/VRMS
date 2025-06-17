@@ -79,6 +79,30 @@ describe('Unit tests for RecurringEvents router', () => {
       done();
     });
 
+    it('should throw an error, console log error, and return status code of 400 for unsuccessful GET /api/recurringevents/', async (done) => {
+      // Mock the test error
+      const error = new Error('test error');
+
+      // Mock db methods
+      RecurringEvent.find.mockImplementationOnce(() => ({
+        select: () => ({
+          populate: () => Promise.reject(error),
+        }),
+      }));
+
+      // Creates a spy on console log function to track any calls during test
+      const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+
+      const response = await request.get('/api/recurringevents/');
+
+      // Tests
+      expect(logSpy).toHaveBeenCalledWith(error);
+      expect(response.status).toBe(400);
+
+      // Marks completion of tests
+      done();
+    });
+
     it('should return a list of events with GET /api/recurringevents/internal', async (done) => {
       // Mock Mongoose method
       RecurringEvent.find.mockReturnValue({
@@ -96,8 +120,30 @@ describe('Unit tests for RecurringEvents router', () => {
       done();
     });
 
+    it('should throw an error, console log error, and return status code of 400 for unsuccessful GET /api/recurringevents/internal', async (done) => {
+      // Mock the test error
+      const error = new Error('test error');
+
+      // Mock db methods
+      RecurringEvent.find.mockReturnValue({
+        populate: jest.fn().mockResolvedValue(error),
+      });
+
+      // Creates a spy on console log function to track any calls during test
+      const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+
+      const response = await request.get('/api/recurringevents/internal');
+
+      // Tests
+      expect(logSpy).toHaveBeenCalledWith(error);
+      expect(response.status).toBe(400);
+
+      // Marks completion of tests
+      done();
+    });
+
     it('should return a single event by id with GET /api/recurringevents/:id', async (done) => {
-      // Mock event
+      // Mock event and id
       const mockEvent = mockEvents[0];
       const { id } = mockEvent;
 
@@ -110,6 +156,28 @@ describe('Unit tests for RecurringEvents router', () => {
       expect(RecurringEvent.findById).toHaveBeenCalledWith(`${id}`);
       expect(response.status).toBe(200);
       expect(response.body).toEqual(mockEvent);
+
+      // Marks completion of tests
+      done();
+    });
+
+    it('should throw an error, console log error, and return status code of 400 for unsuccessful GET /api/recurringevents/:id', async (done) => {
+      // Mock the test error
+      const error = new Error('test error');
+
+      // Mock db method to throw error
+      RecurringEvent.findById.mockImplementation(() => {
+        throw error;
+      });
+
+      // Creates a spy on console log function to track any calls during test
+      const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+
+      const response = await request.get('/api/recurringevents/123');
+
+      // Tests
+      expect(logSpy).toHaveBeenCalledWith(error);
+      expect(response.status).toBe(400);
 
       // Marks completion of tests
       done();
@@ -194,7 +262,6 @@ describe('Unit tests for RecurringEvents router', () => {
       const { id } = deleteEvent;
 
       RecurringEventController.destroy.mockImplementationOnce((req, res) => {
-        console.log('DESTROY ARGS:', req.params);
         return res.status(200).send(deleteEvent);
       });
 
@@ -204,7 +271,7 @@ describe('Unit tests for RecurringEvents router', () => {
       expect(RecurringEventController.destroy).toHaveBeenCalledWith(
         expect.objectContaining({ params: { RecurringEventId: String(id) } }), // Check for parsing of RecurringEventId
         expect.anything(), // Mock response
-        expect.anything(), // Mock next 
+        expect.anything(), // Mock next
       );
       expect(response.status).toBe(200);
       expect(response.body).toEqual(deleteEvent);
