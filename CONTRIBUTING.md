@@ -223,6 +223,7 @@ You will create a new branch for each issue you work on. Doing all your work on 
    git checkout -b your-branch-name
    ```
 
+<<<<<<< HEAD
 ### **3.2.1 Check for and resolve linting/prettier errors before making changes**
 
 Before you begin working on any part of a file, always check for existing code errors in the codebase. This helps prevent introducing new issues and ensures a stable foundation for your work.
@@ -237,6 +238,15 @@ Before you begin working on any part of a file, always check for existing code e
 - If you are unsure how to fix an error, ask for help in the team Slack channel or consult the documentation.
 - Only begin implementing new features or fixes after confirming the file is error-free.
 - If you are unable to resolve the errors after making a reasonable effort, it is acceptable to use `--no-verify` when committing or pushing your changes. Please leave a comment in your pull request explaining why this was necessary.
+=======
+### **3.2.1 Check for and resolve code errors before making changes**
+
+Before you begin working on any part of a file, always check for existing code errors in the codebase. This helps prevent introducing new issues and ensures a stable foundation for your work.
+
+- Use your code editor's error checking tools or run the appropriate linting/compilation commands (e.g., `yarn lint`, `npm run lint`, or your IDE's error panel) to identify any errors in the files you plan to edit.
+- Resolve any errors you find before proceeding with your changes. If you are unsure how to fix an error, ask for help in the team Slack channel or consult the documentation.
+- Only begin implementing new features or fixes after confirming the file is error-free.
+>>>>>>> 4a24addc (docs: Update directions on how to resolve lint errors beofre making features)
 
 ### **3.3 Work on the Issue**
 
