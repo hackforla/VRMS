@@ -137,6 +137,18 @@ Note: Understanding how git remotes work will make collaborating much easier. Yo
 
    - _Please note that the `ports` for the frontend and backend are set in this location_
 
+1. Set up Husky for Git hooks (required for all contributors):
+
+   To help enforce code quality and prevent errors from being committed, we use [Husky](https://typicode.github.io/husky/) to manage Git hooks. Please follow these steps after installing dependencies:
+
+   - In the root of the project, run:
+
+     ```sh
+     npx husky install
+     ```
+
+   - If you encounter issues, see the [Husky documentation](https://typicode.github.io/husky/#/) or reach out on slack!
+
 1. Take a second to review the `app.js` and `server.js` files in the `vrms/backend` folder. These two files are a blueprint for the back end, so please familiarize yourself with it. You'll see folders for the database collection models, routes for the API, and a config file which loads the necessary environment variables.
 
 1. Start the local development servers (frontend & backend).
@@ -210,6 +222,21 @@ You will create a new branch for each issue you work on. Doing all your work on 
    ```bash
    git checkout -b your-branch-name
    ```
+
+### **3.2.1 Check for and resolve linting/prettier errors before making changes**
+
+Before you begin working on any part of a file, always check for existing code errors in the codebase. This helps prevent introducing new issues and ensures a stable foundation for your work.
+
+- Use your code editor's error checking tools or run the appropriate linting/compilation commands (e.g., `yarn lint (filename)`, or your IDE's error panel) to identify any errors in the files you plan to edit. (This isn't your fault, it's just an old codebase 🤷‍️)
+- If you find errors, resolve them in a **separate commit** before starting your feature or fix work. Use a clear commit message such as:
+
+> fix: Resolve existing linting and compilation errors
+
+(This makes it easier for reviewers to distinguish between error fixes and your new changes.)
+
+- If you are unsure how to fix an error, ask for help in the team Slack channel or consult the documentation.
+- Only begin implementing new features or fixes after confirming the file is error-free.
+- If you are unable to resolve the errors after making a reasonable effort, it is acceptable to use `--no-verify` when committing or pushing your changes. Please leave a comment in your pull request explaining why this was necessary.
 
 ### **3.3 Work on the Issue**
 
