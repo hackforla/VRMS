@@ -218,7 +218,6 @@ div.editable-field {
   background-color: white;
 }
 
-// create new event form on createNewEvent.js
 .event-form-box {
   min-width: 100%;
   min-height: 540px;
@@ -227,63 +226,38 @@ div.editable-field {
   border: solid black 2px;
   display: flex;
   flex-direction: column;
+  gap: 20px;
   background-color: white;
+
+  // Temporary solution until Globally applied CSS is refactored/removed
+
+  // Resets the label text size on EventForm.tsx Text Fields
+  // A global variable was interacting with MUI styles and overflowing the label on <TextField> in EventForm.tsx
+  .MuiInputLabel-root {
+    font-size: inherit;
+  }
+
+  // Forces horizontal padding inside EventForm.tsx Text Fields
+  // A global variable was interacting with MUI styles and affecting padding inside <TextField> in EventForm.tsx
+  .MuiInputBase-input {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
 }
 
-.event-form-box .event-form-title {
+.event-form-title {
   font-size: 20px;
-  margin-bottom: 16px;
 }
 
 .event-form-row {
   display: flex;
   flex-direction: row;
-}
-
-.event-form-label {
-  display: block;
-  margin-top: 4px;
-  select {
-    display: block;
-  }
+  gap: 16px;
 }
 
 .event-form-error {
   color: red;
   margin-bottom: 10px;
-}
-
-.event-form-box input,
-textarea {
-  display: block;
-  width: 100%;
-  padding: 2px 0 15px 10px;
-  margin: 5px 0;
-  border: 1px;
-  border-radius: 5px;
-  font-size: 20px;
-  color: black;
-}
-
-.event-form-box select {
-  color: black;
-  width: 140px;
-  padding: 6px;
-  font-size: 16px;
-  font-weight: bold;
-  border: 1px solid black;
-  border-radius: 0px;
-  margin: 12px;
-}
-
-.event-form-box textarea {
-  height: 25px;
-}
-
-.event-form-box label {
-  font-size: 15px;
-  width: 100%;
-  display: block;
 }
 
 .button-box {
@@ -312,7 +286,7 @@ textarea {
 }
 
 .event-list-details {
- display: flex;
+  display: flex;
 }
 
 .edit-icon {

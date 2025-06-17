@@ -126,18 +126,18 @@
         }
     
         p {
-            text-align: left;
+            text-align: center;
             font-weight: bold;
-            letter-spacing: .05em;
+            letter-spacing: 0.075em;
         }
     }
 }
 
-// .radio-buttons {
-//     display: flex;
-//     justify-content: space-around;
-//     margin: 8px;
-// }
+.radio-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin: 8px;
+}
 
 .select-meeting-dropdown:-webkit-autofill,
 .select-meeting-dropdown:-webkit-autofill:hover,
