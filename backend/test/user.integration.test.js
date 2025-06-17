@@ -31,6 +31,19 @@ describe('CREATE', () => {
 
     done();
   });
+
+  test('Fail when creating a User with duplicate email', async (done) => {
+    // Submit a User
+    const res = await request
+      .post('/api/users/')
+      .set('Accept', 'application/json')
+      .set('x-customrequired-header', backendHeaders)
+      .send(submittedData);
+    expect(res.status).toBe(409);
+    expect(res.body).toMatchObject({error: { code: 11000, driver: true, name: 'MongoError', index: 0 }, message: 'User already exists'});
+
+    done();
+  });
 });
 
 describe('READ', () => {
