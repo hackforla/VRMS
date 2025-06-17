@@ -6,8 +6,11 @@ import { addDurationToTime } from './utilities/addDurationToTime';
 import { timeConvertFromForm } from './utilities/timeConvertFromForm';
 import validateEventForm from './utilities/validateEventForm';
 import EventForm from './eventForm';
+import { Box, Button, Modal } from '@mui/material';
 
 const CreateNewEvent = ({
+  isOpen,
+  onClose,
   projectToEdit,
   projectID,
   createNewRecurringEvent,
@@ -71,6 +74,14 @@ const CreateNewEvent = ({
     createNewRecurringEvent(theNewEvent);
   };
 
+  const handleClose = (event, reason) => {
+    setFormErrors({});
+    setFormValues(initialFormValues);
+    if (onClose) {
+      onClose(event, reason);
+    }
+  };
+
   // Handle submission of new recurring event form
   const handleFormSubmit = async () => {
     const errors = validateEventForm(formValues, projectToEdit);
@@ -82,39 +93,47 @@ const CreateNewEvent = ({
     }
     setFormErrors(errors);
   };
+
   return (
-    <div>
-      <button
-        type="button"
-        className="meeting-cancel-button"
-        onClick={() => {
-          setFormValues(initialFormValues);
-          setFormErrors(null);
-          setIsCreateNew(false);
+    <Modal open={isOpen} onClose={handleClose}>
+      <Box
+        className="modal-box"
+        sx={{
+          position: 'absolute',
+          top: '42%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: 450,
+          bgcolor: 'background.paper',
+          border: '2px solid #000',
+          boxShadow: 24,
+          pt: 4,
+          px: 4,
+          pb: 2,
         }}
       >
-        X
-      </button>
-      <EventForm
-        handleInputChange={handleInputChange}
-        formValues={formValues}
-        formErrors={formErrors}
-        setFormErrors={setFormErrors}
-        title="Create New Recurring Event"
-      >
-        <div className="button-box">
-          <button
-            type="button"
-            className="create-form-button"
-            onClick={() => {
-              handleFormSubmit();
-            }}
-          >
-            Create New Event
-          </button>
-        </div>
-      </EventForm>
-    </div>
+        <EventForm
+          handleInputChange={handleInputChange}
+          formValues={formValues}
+          formErrors={formErrors}
+          setFormErrors={setFormErrors}
+          title="Create New Recurring Event"
+        >
+          <div className="button-box">
+            <button
+              type="button"
+              className="create-form-button"
+              onClick={() => {
+                handleFormSubmit();
+              }}
+            >
+              Create New Event
+            </button>
+          </div>
+        </EventForm>
+        <Button onClick={handleClose}>Close</Button>
+      </Box>
+    </Modal>
   );
 };
 
