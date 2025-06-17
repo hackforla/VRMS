@@ -46,7 +46,7 @@ Once you have accepted the GitHub invite (via email or in your GitHub notificati
 
 1. Setup two factor authentication on your account https://github.com/hackforla/governance/issues/20
 
-These steps are manditory in order to contribute to all HackforLA projects.
+These steps are mandatory in order to contribute to all HackforLA projects.
 
 ## **Part 2: How to set up the development environment**
 
@@ -176,7 +176,7 @@ To run all of the tests run `npm run test:all` from the root folder.
 
 ### **2.5 Using the development database**
 
-The application uses MongoDB. We have created a shared development database using MongoDB Cloud and MongoDB Atlas. The conection string for the development database is included in the environmental variables that you pasted into your backend/.env file in step 5 of the "Get Up and Running" setion. If you completed that step successfully you should not need to do anything else.
+The application uses MongoDB. We have created a shared development database using MongoDB Cloud and MongoDB Atlas. The connection string for the development database is included in the environmental variables that you pasted into your backend/.env file in step 5 of the "Get Up and Running" section. If you completed that step successfully you should not need to do anything else.
 
 To view and edit the development database manually, you can download [MongoDB Compass](https://www.mongodb.com/try/download/compass). To connect to the development database you will use the "DATABASE_URL" from the [document](https://docs.google.com/document/d/1yDF6UmyO-MPNrl3y_Mw0mkm_WaixlSkXzWbudCzHXDY/edit?usp=sharing) that contained the environmental variables. The string will start with "mongodb+srv://".
 
@@ -270,7 +270,7 @@ git commit -m "your commit message"
 4. Fill out the "What changes did you make and why?" section of the pull request template
 5. Include before & after images with your pull request if there are visual changes to the user interface
 6. Request a review from another developer on the team
-7. Review another developers pull request while you are waiting for your pull request to be reviewed
+7. Review another developer's pull request while you are waiting for your pull request to be reviewed
 
 ## **Part 5: How to review pull requests**
 
