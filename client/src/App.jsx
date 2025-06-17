@@ -34,7 +34,6 @@ import { Box, ThemeProvider } from '@mui/material';
 import theme from './theme';
 
 import './App.scss';
-import './tailwind.css';
 
 /* 
    withAuth Hook
