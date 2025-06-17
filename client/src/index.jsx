@@ -7,12 +7,12 @@ import { BrowserRouter } from 'react-router-dom';
 import { SnackbarProvider } from './context/snackbarContext';
 
 ReactDOM.render(
-  <BrowserRouter>
-    <SnackbarProvider>
-      <App />
-    </SnackbarProvider>
-  </BrowserRouter>,
-  document.getElementById('root')
+    <BrowserRouter>
+        <SnackbarProvider>
+            <App />
+        </SnackbarProvider>
+    </BrowserRouter>, 
+    document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change
