@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
+import './tailwind.css';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import { SnackbarProvider } from './context/snackbarContext';
