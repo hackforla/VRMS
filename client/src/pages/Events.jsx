@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
-import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend} from '../utils/globalSettings';
+import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend } from '../utils/globalSettings';
+import {
+  Box,
+  List,
+  TextField,
+  ListItem,
+  ListItemText,
+  Typography,
+} from '@mui/material';
 
 import '../sass/Events.scss';
-import useAuth from '../hooks/useAuth';
 
 const Events = (props) => {
-  const { auth } = useAuth();
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState(null);
   const [eventSearchParam, setEventSearchParam] = useState('');
 
   useEffect(() => {
@@ -20,54 +26,51 @@ const Events = (props) => {
           },
         });
         const resJson = await res.json();
-  
         setEvents(resJson);
       } catch (error) {
         alert(error);
+        setEvents([]);
       }
     }
-    
     fetchData();
   }, []);
 
-  return auth && auth.user ? (
-    <div className="events-list">
-      <p>Filter:</p>
-      <input
-        style={{ marginBottom: '10px' }}
+  const filteredEvents = events?.filter(
+    (event) =>
+      typeof event.name === 'string' &&
+      event.name.toLowerCase().match(eventSearchParam.toLowerCase())
+  );
+
+  return (
+    <Box className="events-list">
+      <TextField
+        label="Filter:"
+        variant="outlined"
+        sx={{ my: 2 }}
         value={eventSearchParam}
         onChange={(e) => setEventSearchParam(e.target.value)}
+        placeholder="Search events..."
       />
-      <ul>
-        {events
-          .filter((event) => {
-            return (
-              typeof event.name === 'string' &&
-              event.name.toLowerCase().match(eventSearchParam.toLowerCase())
-            );
-          })
-          .map((event, index) => {
-            return (
-              <li key={index}>
-                <div key={index} className="list-event-container">
-                  <div className="list-event-headers">
-                    <Link to={`/event/${event._id}`}>
-                      <p className="event-name">
-                        {' '}
-                        {event.name}
-                        ({moment(event.date).format('ddd, MMM D @ h:mm a')})
-                      </p>
-                    </Link>
-                  </div>
-                </div>
-              </li>
-            );
-          })}
-      </ul>
-    </div>
-  ) : (
-    <Redirect to="/login" />
-  );
+      {events === null ? (
+        <Typography>Loading data...</Typography>
+      ) : filteredEvents.length === 0 ? (
+        <Typography>No events found.</Typography>
+      ) : (
+        <List >
+          {filteredEvents.map((event, index) => (
+            <ListItem key={index}  className="event-name">
+              <Link to={`/event/${event._id}`}>
+                <ListItemText>
+                  {event.name} (
+                  {moment(event.date).format('ddd, MMM D @ h:mm a')})
+                </ListItemText>
+              </Link>
+            </ListItem>
+          ))}
+        </List>
+      )}
+    </Box>
+  )
 };
 
 export default Events;

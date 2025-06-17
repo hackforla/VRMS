@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import { checkUser, checkAuth } from '../../services/user.service';
 import { authLevelRedirect } from '../../utils/authUtils';
+import { Typography, Button, FormControl, Box, TextField } from '@mui/material';
 
 import useAuth from '../../hooks/useAuth';
 import '../../sass/AdminLogin.scss';
@@ -100,28 +101,36 @@ const Auth = () => {
     <div className="flex-container">
       <div className="adminlogin-container">
         <div className="adminlogin-headers">
-          <h3>Welcome Back!</h3>
+          <Typography variant="h3" sx={{ fontSize: '2.8em' }}>
+            Welcome Back!
+          </Typography>
         </div>
         <form
           onSubmit={handleLogin}
           className="form-check-in"
           autoComplete="off"
         >
-          <div className="form-row">
-            <div className="form-input-text">
-              <label htmlFor="email">Enter your email address:</label>
-              <input
-                type="email"
-                name="email"
-                placeholder="Email Address"
-                onChange={handleInputChange}
-                aria-label="Email Address"
-                data-test="input-email"
-                autoComplete="email"
-                required="required"
-              />
+          <FormControl>
+            <div className="form-row">
+              <div className="form-input-text">
+                <Box className="form-row">
+                  <Box className="form-input-text">
+                    <TextField
+                      label="Enter your email address:"
+                      type="email"
+                      name="email"
+                      placeholder="Email Address"
+                      required="required"
+                      onChange={handleInputChange}
+                      aria-label="Email Address"
+                      data-test="input-email"
+                      autoComplete="email"
+                    />
+                  </Box>
+                </Box>
+              </div>
             </div>
-          </div>
+          </FormControl>
         </form>
 
         <div
@@ -132,15 +141,16 @@ const Auth = () => {
         </div>
 
         <div className="form-input-button">
-          <button
+          <Button
             type="submit"
             onClick={handleLogin}
             className="login-button"
             data-test="login-btn"
             disabled={isDisabled}
+            sx={{ color: 'black' }}
           >
             LOGIN
-          </button>
+          </Button>
         </div>
       </div>
     </div>

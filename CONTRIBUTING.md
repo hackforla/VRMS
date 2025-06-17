@@ -22,6 +22,7 @@
 - [**Part 4: How to create pull requests**](#part-4-how-to-create-pull-requests)
   - [**4.1 Push changes to your forked repository**](#41-push-changes-to-your-forked-repository)
   - [**4.2 Create a pull request on the VRMS repository**](#42-create-a-pull-request-on-the-vrms-repository)
+- [**Part 5: How to review pull requests**](#part-5-how-to-review-pull-requests)
 
 ## **Part 1 : How to join the team**
 
@@ -182,11 +183,16 @@ Developers may choose from issues with the following `role` labels:
 - `role: Front End`
 - `role: Back End`
 - `role: Database`
+- `role: devops`
+- _Lead developers may choose from the above labels, as well as issues with the label:_ `role: Dev Lead`
 
 Claiming an issue is a two step process:
 
 1. Assign yourself to the issue using the gear icon in the upper right corner of the issue where it says "Assignees"
 2. Move the issue from the `Prioritized Backlog` to the `In Progress` column of the project board
+
+You may want to consider bookmarking your Github Issues page to track your current tasks:
+[https://github.com/issues/assigned](https://github.com/issues/assigned)
 
 ### **3.2 Create a new branch for each issue you work on**
 
@@ -238,3 +244,69 @@ git commit -m "your commit message"
 5. Include before & after images with your pull request if there are visual changes to the user interface
 6. Request a review from another developer on the team
 7. Review another developers pull request while you are waiting for your pull request to be reviewed
+
+## **Part 5: How to review pull requests**
+
+Reviewing pull requests is an important part of maintaining code quality and helping team members improve their contributions. Here’s how to review a pull request on the VRMS repository:
+
+1. **Navigate to the Pull Requests tab**  
+   Go to the [Pull Requests](https://github.com/hackforla/VRMS/pulls) section of the repository to see open pull requests.
+
+2. **Select a pull request to review**  
+   Choose a pull request that is ready for review (look for those assigned to you or marked as "Ready for review").
+
+3. **Read the pull request description**  
+   Review the summary, linked issue(s), and any screenshots or documentation provided by the author.
+
+4. **Check the code changes**
+
+   - Click on the "Files changed" tab to see the code diff.
+   - Look for code quality, readability, and adherence to project conventions.
+   - Ensure the code addresses the issue and does not introduce bugs.
+
+5. **Run the code locally (optional but recommended)**
+
+   - Pull the branch to your local machine.
+   - Follow the setup instructions to test the changes.
+   - Run tests to verify nothing is broken.
+
+6. **Leave feedback**
+
+   - Use GitHub’s review tools to comment on specific lines or leave general feedback.
+   - Be constructive and respectful in your comments.
+
+7. **Approve or request changes**
+
+   - If the pull request is ready, click "Approve".
+   - If changes are needed, click "Request changes" and specify what needs to be addressed.
+
+8. **Merge the pull request (if authorized)**
+   - If you have permission and the pull request meets all requirements, you may merge it.
+   - Otherwise, notify the author or a maintainer that it is ready to merge.
+
+**Tip:** You can use the following helpful git alias to quickly check out a pull request locally:
+
+```sh
+# This git alias allows you to quickly check out a pull request by its number.
+# eg "git pr 1820 vrms"
+git config alias.pr '!f() { \
+  # If no arguments are provided, print usage instructions
+  if [ $# -lt 1 ]; then \
+    echo "Usage: git pr <id> [<remote>] # assuming <remote>[=origin] is on GitHub"; \
+    echo "    eg: git pr 1340 upstream"; \
+  else \
+    # Save current HEAD (optional, for safety)
+    git checkout -q "$(git rev-parse --verify HEAD)" && \
+    # Fetch the pull request from the specified remote (default: origin) into a local branch
+    git fetch -fv "${2:-origin}" pull/"$1"/head:pr/"$1" && \
+    # Check out the fetched PR branch
+    git checkout pr/"$1"; \
+  fi; \
+}; f'
+```
+
+This allows you to run `git pr <PR_NUMBER>` to fetch and check out a pull request by its number. For example: `git pr 1234 upstream`.
+
+**Resources:**
+
+- [GitHub: Reviewing proposed changes in a pull request](https://docs.github.com/en/github/collaborating-with-pull-requests/reviewing-changes-in-pull-requests)

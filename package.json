@@ -15,8 +15,7 @@
     "test:cy": "dotenv -e ./backend/.env -e ./client/.env cross-var start-test dev:api %BACKEND_PORT% dev:client %CLIENT_PORT% cy:run",
     "test:backend": "cd backend && npm run test",
     "test:client": "cd client && npm run test",
-    "test:client-mvp": "cd client-mvp-04 && npm run test",
-    "test:all": "cross-env NODE_ENV=test npm run test:client && npm run test:client-mvp && npm run test:backend && npm run test:cy"
+    "test:all": "cross-env NODE_ENV=test npm run test:client && npm run test:backend"
   },
   "dependencies": {
     "@mui/icons-material": "^5.14.19",
@@ -25,7 +24,7 @@
     "cross-var": "^1.1.0",
     "dotenv-cli": "^3.2.0",
     "styled-components": "^6.1.13",
-    "vite": "^5.4.8"
+    "vite": "^5.4.19"
   },
   "devDependencies": {
     "cypress": "^5.0.0",
