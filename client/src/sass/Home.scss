@@ -80,11 +80,10 @@
 .home-headers {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    margin-left: 12px;
-    margin-bottom: 2vh;
-    padding-top: 6vh;
+    align-self: center;
+    width: 80%;
+    padding-top: 3em;
+    padding-bottom: 3em;
     z-index: 1;
 
     & h2 {
@@ -188,6 +187,10 @@
     // }
 
     .home-buttons {
+        width: 90%;
+    }
+
+    .home-headers {
         width: 90%;
     }
 }
