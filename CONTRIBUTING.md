@@ -139,15 +139,15 @@ Note: Understanding how git remotes work will make collaborating much easier. Yo
 
 1. Set up Husky for Git hooks (required for all contributors):
 
-   To help enforce code quality and prevent errors from being committed, we use [Husky](https://typicode.github.io/husky/) to manage Git hooks. Please follow these steps after installing dependencies:
+   To help enforce code quality and prevent errors from being committed, we use [Husky](https://typicode.github.io/husky/) to manage Git hooks. Husky should install itself automatically after you install dependencies (thanks to the `prepare` script in `package.json`).
 
-   - In the root of the project, run:
+   If you notice that Git hooks are not working (for example, you don't see linting or formatting checks when committing), you may need to set up Husky manually. To do this, run the following in the root of the project:
 
-     ```sh
-     npx husky install
-     ```
+   ```sh
+   npx husky install
+   ```
 
-   - If you encounter issues, see the [Husky documentation](https://typicode.github.io/husky/#/) or reach out on slack!
+   If you encounter issues, see the [Husky documentation](https://typicode.github.io/husky/#/) or reach out on Slack!
 
 1. Take a second to review the `app.js` and `server.js` files in the `vrms/backend` folder. These two files are a blueprint for the back end, so please familiarize yourself with it. You'll see folders for the database collection models, routes for the API, and a config file which loads the necessary environment variables.
 
@@ -223,7 +223,6 @@ You will create a new branch for each issue you work on. Doing all your work on 
    git checkout -b your-branch-name
    ```
 
-<<<<<<< HEAD
 ### **3.2.1 Check for and resolve linting/prettier errors before making changes**
 
 Before you begin working on any part of a file, always check for existing code errors in the codebase. This helps prevent introducing new issues and ensures a stable foundation for your work.
@@ -238,15 +237,6 @@ Before you begin working on any part of a file, always check for existing code e
 - If you are unsure how to fix an error, ask for help in the team Slack channel or consult the documentation.
 - Only begin implementing new features or fixes after confirming the file is error-free.
 - If you are unable to resolve the errors after making a reasonable effort, it is acceptable to use `--no-verify` when committing or pushing your changes. Please leave a comment in your pull request explaining why this was necessary.
-=======
-### **3.2.1 Check for and resolve code errors before making changes**
-
-Before you begin working on any part of a file, always check for existing code errors in the codebase. This helps prevent introducing new issues and ensures a stable foundation for your work.
-
-- Use your code editor's error checking tools or run the appropriate linting/compilation commands (e.g., `yarn lint`, `npm run lint`, or your IDE's error panel) to identify any errors in the files you plan to edit.
-- Resolve any errors you find before proceeding with your changes. If you are unsure how to fix an error, ask for help in the team Slack channel or consult the documentation.
-- Only begin implementing new features or fixes after confirming the file is error-free.
->>>>>>> 4a24addc (docs: Update directions on how to resolve lint errors beofre making features)
 
 ### **3.3 Work on the Issue**
 
