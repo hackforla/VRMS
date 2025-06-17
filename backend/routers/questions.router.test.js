@@ -1,8 +1,6 @@
-// Mock and import Question model
+// Mock and import Question model, import question router
 jest.mock('../models/question.model');
 const { Question } = require('../models');
-
-// Import question router
 const questionsRouter = require('./questions.router');
 
 // Create a test app with Express
@@ -17,6 +15,7 @@ testapp.use('/api/questions/', questionsRouter);
 const request = supertest(testapp);
 
 describe('Unit tests for questions router', () => {
+  // Clear all mocks after each test
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -64,6 +63,28 @@ describe('Unit tests for questions router', () => {
       done();
     });
 
+    it('should return 400 status code when there is an error with GET /api/questions', async (done) => {
+      // Mock the error thrown when find method is called
+      const error = new Error('Database error');
+      Question.find.mockRejectedValue(error);
+
+      // Mock console log function
+      const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+
+      // Mock the request to the API
+      const response = await request.get('/api/questions');
+
+      // Tests
+      expect(Question.find).toHaveBeenCalled();
+      expect(consoleLogSpy).toHaveBeenCalledWith(error);
+      expect(response.status).toBe(400);
+
+      // Clean up and restores original console log function
+      consoleLogSpy.mockRestore();
+      // Marks completion of tests
+      done();
+    });
+
     it('should return a specific question with GET /api/questions/:id', async (done) => {
       // Mock the Question.findById() method
       const mockQuestion = mockQuestions[0];
@@ -78,6 +99,31 @@ describe('Unit tests for questions router', () => {
       expect(response.status).toBe(200);
       expect(response.body).toEqual(mockQuestion);
 
+      // Marks completion of tests
+      done();
+    });
+
+    it('should return 400 status code when there is an error with GET /api/questions/:id', async (done) => {
+      // Mock user id
+      const id = mockQuestions[0].id;
+
+      // Mock the error when findById method is called
+      const error = new Error('Database error');
+      Question.findById.mockRejectedValue(error);
+
+      // Mock console log function
+      const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+
+      // Mock the request to the API
+      const response = await request.get(`/api/questions/${id}`);
+
+      // Tests
+      expect(Question.findById).toHaveBeenCalledWith(`${id}`);
+      expect(consoleLogSpy).toHaveBeenCalledWith(error);
+      expect(response.status).toBe(400);
+
+      // Clean up and restores original console log function
+      consoleLogSpy.mockRestore();
       // Marks completion of tests
       done();
     });
@@ -108,6 +154,28 @@ describe('Unit tests for questions router', () => {
       expect(Question.create).toHaveBeenCalledWith(newQuestion);
       expect(response.status).toBe(201);
 
+      // Marks completion of tests
+      done();
+    });
+
+    it('should return 400 status code when there is an error with POST /api/questions', async (done) => {
+      // Mock the error thrown when create method is called
+      const error = new Error('Database error');
+      Question.create.mockRejectedValue(error);
+
+      // Mock console log function
+      const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+
+      // Mock the request to the API
+      const response = await request.post('/api/questions');
+
+      // Tests
+      expect(Question.create).toHaveBeenCalled();
+      expect(consoleLogSpy).toHaveBeenCalledWith(error);
+      expect(response.status).toBe(400);
+
+      // Clean up and restores original console log function
+      consoleLogSpy.mockRestore();
       // Marks completion of tests
       done();
     });
