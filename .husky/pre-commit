@@ -1,1 +1,1 @@
-yarn run format && yarn run lint
+npx lint-staged
