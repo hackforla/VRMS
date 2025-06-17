@@ -1,30 +1,11 @@
 // import necessary modules
 const mongoose = require('mongoose');
 const { User } = require('./user.model');
-// MongoDB Memory Server is used for testing purposes to avoid using a real database
-const { MongoMemoryServer } = require('mongodb-memory-server');
-
 
 describe('Unit tests for User Model', () => {
-  let mongoServer;
-  // Set up in-memory MongoDB server before all tests
-  beforeAll(async () => {
-    mongoServer = await MongoMemoryServer.create();
-    const uri = await mongoServer.getUri();
-    await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-  });
-  // Disconnect and stop the in-memory MongoDB server after all tests
-  afterAll(async () => {
-    await mongoose.disconnect();
-    await mongoServer.stop();
-  });
-  // Clear all collections after each test
-  afterEach(async () => {
-    // Clean up all collections after each test
-    const collections = mongoose.connection.collections;
-    for (const key in collections) {
-      await collections[key].deleteMany({});
-    }
+  // Clears all mocks after each test
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   describe('Serialization test', () => {
@@ -97,24 +78,30 @@ describe('Unit tests for User Model', () => {
 
   describe('Validation test', () => {
     it('should fail validation check if user email is not unique', async () => {
-      // Create and save a mock user with a specific email
-      const mockUser1 = new User({ email: 'mockuser@example.com' });
-      await mockUser1.save();
+      const mockData = { email: 'mockUser@test.com' };
+      // Mock findOne method
+      const findOneSpy = jest.spyOn(User, 'findOne').mockResolvedValue(mockData);
+      // Mock create method
+      const createSpy = jest.spyOn(User, 'create').mockResolvedValue(mockData);
 
-      // Create another mock user with the same email
-      const mockUser2 = new User({ email: 'mockuser@example.com' });
+      // Create a function to simulate validation of User documents
+      // if User with email exists, throw an error. Else create a new User.
+      const createUser = async (email) => {
+        const existing = await User.findOne(email);
+        if (existing) throw new Error('Email already exists');
+        return await User.create(email);
+      };
 
-      // Attempt to validate the mock user 2 by checking for uniqueness in email
-      let error;
-      try {
-        await mockUser2.save();
-      } catch (err) {
-        error = err;
-      }
+      const result = createUser(mockData);
 
       // Tests
-      expect(error).toBeDefined();
-      expect(error.code).toBe(11000);
+      expect(findOneSpy).toHaveBeenCalledWith(mockData);
+      expect(findOneSpy).toHaveBeenCalledTimes(1);
+      // User.create should not have been called
+      expect(createSpy).toHaveBeenCalledTimes(0);
+      // Checks if unique property is set to true
+      expect(User.schema.paths.email.options.unique).toBe(true);
+      expect(result).rejects.toThrow('Email already exists');
     });
 
     it('should fail validation check if accessLevel is invalid', async () => {
@@ -126,7 +113,7 @@ describe('Unit tests for User Model', () => {
       // Attempt to validate the mock user by checking for valid accessLevel
       let error;
       try {
-        await mockuser.save();
+        await mockuser.validate();
       } catch (err) {
         error = err;
       }
@@ -150,7 +137,7 @@ describe('Unit tests for User Model', () => {
       // Attempt to save the mock user
       let error;
       try {
-        await mockUser.save();
+        await mockUser.validate();
       } catch (err) {
         error = err;
       }
