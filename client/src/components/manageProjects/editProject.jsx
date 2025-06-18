@@ -227,24 +227,11 @@ const EditProject = ({
             m: 0,
             p: 2,
             display: 'flex',
-            justifyContent: 'space-between',
+            justifyContent: 'flex-end',
             alignItems: 'center',
             minHeight: '64px',
           }}
         >
-          <Typography
-            variant="h6"
-            component="span"
-            sx={{
-              flexGrow: 1, // Allows text to take available horizontal space
-              flexShrink: 1,
-              noWrap: true, // Prevents text from wrapping to a new line
-              overflow: 'hidden', // Hides any overflow if text is too long
-              minWidth: '50%',
-            }}
-          >
-            Edit Meeting Times
-          </Typography>
           <IconButton
             aria-label="close"
             onClick={handleCloseEditMeetingModal}
@@ -290,24 +277,11 @@ const EditProject = ({
             m: 0,
             p: 2,
             display: 'flex',
-            justifyContent: 'space-between',
+            justifyContent: 'flex-end',
             alignItems: 'center',
             minHeight: '64px',
           }}
         >
-          <Typography
-            component="span"
-            sx={{
-              flexGrow: 1,
-              flexShrink: 1,
-              minWidth: '50%',
-              noWrap: true,
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-            }}
-          >
-            Create New Event
-          </Typography>
           <IconButton
             aria-label="close"
             onClick={handleCloseCreateNewModal}
@@ -321,7 +295,7 @@ const EditProject = ({
               height: '40px',
               padding: '0',
               overflow: 'hidden',
-              '& .MuiSvgIcon-root': { fontSize: '1.5rem' },
+              '& .MuiSvgIcon-root': { fontSize: '1.75rem' },
             }}
           >
             <CloseIcon />
