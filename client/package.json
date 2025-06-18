@@ -64,6 +64,7 @@
   "devDependencies": {
     "@testing-library/dom": "^10.3.2",
     "@testing-library/react": "^16.0.0",
+    "autoprefixer": "^10.4.21",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-config-prettier": "^6.11.0",
