@@ -32,8 +32,8 @@
     "react-router-dom": "^5.1.2",
     "tailwindcss": "^4.1.10",
     "validator": "^13.7.0",
-    "vite": "^5.4.19",
-    "vite-plugin-svgr": "^3.2.0"
+    "vite": "^6.3.5",
+    "vite-plugin-svgr": "^4.3.0"
   },
   "scripts": {
     "vite": "vite",
@@ -64,6 +64,7 @@
   "devDependencies": {
     "@testing-library/dom": "^10.3.2",
     "@testing-library/react": "^16.0.0",
+    "autoprefixer": "^10.4.21",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-config-prettier": "^6.11.0",
