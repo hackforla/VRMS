@@ -16,8 +16,8 @@ import { styled } from '@mui/material/styles';
 
 import useAuth from '../hooks/useAuth';
 import ProjectApiService from '../api/ProjectApiService';
-import { ReactComponent as EditIcon } from '../svg/Icon_Edit.svg';
-import { ReactComponent as PlusIcon } from '../svg/PlusIcon.svg';
+import EditIcon from '../svg/Icon_Edit.svg?react';
+import PlusIcon from '../svg/PlusIcon.svg?react';
 import ValidatedTextField from './parts/form/ValidatedTextField';
 import TitledBox from './parts/boxes/TitledBox';
 import ChangesModal from './ChangesModal';
@@ -234,7 +234,8 @@ export default function ProjectForm({
       <Box sx={{ textAlign: 'center' }}>
         <Typography variant="h1">Project Management</Typography>
       </Box>
-      {(auth.user.accessLevel === 'admin'  || auth.user.accessLevel == 'superadmin' )? (
+      {auth.user.accessLevel === 'admin' ||
+      auth.user.accessLevel == 'superadmin' ? (
         <TitledBox
           title={editMode ? 'Editing Project' : 'Project Information'}
           badge={isEdit ? editIcon() : addIcon()}
