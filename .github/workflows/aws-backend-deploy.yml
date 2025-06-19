@@ -57,40 +57,17 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-      - name: Init Docker Cache
-        uses: jpribyl/action-docker-layer-caching@v0.1.0
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build and push Docker image with registry cache
+        uses: docker/build-push-action@v5
         with:
-          key: ${{ github.workflow }}-2-{hash}
-          restore-keys: |
-            ${{ github.workflow }}-2-
-      - name: Docker Layer Caching (retry on cache failure)
-        uses: jpribyl/action-docker-layer-caching@v0.1.0
-        with:
-          key: Backend Build and Deploy-2-${{ hashFiles('backend/Dockerfile.prod') }}
-          restore-keys: Backend Build and Deploy-2-
-          concurrency: 4
-          skip-save: false
-        env:
-          AWS_SHARED_CLUSTER: incubator-prod
-          AWS_APP_NAME: vrms-backend
-          AWS_REGION: us-west-2
-          DOCKERFILE: backend/Dockerfile.prod
-          DOCKER_PATH: backend
-          AWS_DEFAULT_REGION: us-west-2
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        continue-on-error: true
-      - name: Build & Push Image to ECR
-        uses: kciter/aws-ecr-action@v3
-        with:
-          access_key_id: ${{ secrets.INCUBATOR_AWS_ACCESS_KEY_ID }}
-          secret_access_key: ${{ secrets.INCUBATOR_AWS_SECRET_ACCESS_KEY }}
-          account_id: ${{ secrets.INCUBATOR_AWS_ACCOUNT_ID }}
-          repo: ${{ needs.setup_env.outputs.AWS_APPENV }}
-          region: ${{ env.AWS_REGION }}
-          tags: latest,${{ needs.setup_env.outputs.IMAGE_TAG }}
-          dockerfile: ${{ env.DOCKERFILE }}
-          path: ${{ env.DOCKER_PATH }}
+          context: .
+          push: true
+          tags: ${{ steps.login-ecr.outputs.registry }}/${{ needs.setup_env.outputs.AWS_APPENV }}:${{ needs.setup_env.outputs.IMAGE_TAG }}
+          cache-from: type=registry,ref=${{ steps.login-ecr.outputs.registry }}/${{ needs.setup_env.outputs.AWS_APPENV }}:buildcache
+          cache-to: type=registry,ref=${{ steps.login-ecr.outputs.registry }}/${{ needs.setup_env.outputs.AWS_APPENV }}:buildcache,mode=max
+          file: ${{ env.DOCKERFILE }}
   deploy:
     name: Deploy to AWS ECS
     runs-on: ubuntu-latest
