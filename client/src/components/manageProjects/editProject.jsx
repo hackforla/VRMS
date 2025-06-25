@@ -6,8 +6,8 @@ import ProjectForm from '../ProjectForm';
 import { simpleInputs, additionalInputsForEdit } from '../data';
 import TitledBox from '../parts/boxes/TitledBox';
 
-import { ReactComponent as EditIcon } from '../../svg/Icon_Edit.svg';
-import { ReactComponent as PlusIcon } from '../../svg/PlusIcon.svg';
+import EditIcon from '../../svg/Icon_Edit.svg?react';
+import PlusIcon from '../../svg/PlusIcon.svg?react';
 
 import { Typography, Box } from '@mui/material';
 
@@ -106,7 +106,8 @@ const EditProject = ({
         setFormData={setFormData}
       />
 
-      <TitledBox title="Recurring Events"
+      <TitledBox
+        title="Recurring Events"
         badge={
           <Box
             sx={{
@@ -154,9 +155,12 @@ const EditProject = ({
           <h2 className="event-alert">{eventAlert}</h2>
           <ul>
             {regularEventsState.map((event, index) => (
-
               // eslint-dis able-next-line no-underscore-dangle
-              <RegularEvent event={event} key={event._id} updateRegularEvent={updateRegularEvent} />
+              <RegularEvent
+                event={event}
+                key={event._id}
+                updateRegularEvent={updateRegularEvent}
+              />
             ))}
           </ul>
         </div>
@@ -168,17 +172,27 @@ const EditProject = ({
 function RegularEvent({ event, updateRegularEvent }) {
   return (
     <li key={`${event.event_id}`}>
-      <button type="button" onClick={async () => updateRegularEvent({ checkInReady: !event.checkInReady }, event.event_id)}>
+      <button
+        type="button"
+        onClick={async () =>
+          updateRegularEvent(
+            { checkInReady: !event.checkInReady },
+            event.event_id
+          )
+        }
+      >
         <div>{event.name}</div>
         <div className="event-list-details">
-          {`${event.dayOfTheWeek}, ${event.startTime} - ${event.endTime}; ${event.eventType}`} {`${new Date(event.raw.startTime).toLocaleDateString()}`}
+          {`${event.dayOfTheWeek}, ${event.startTime} - ${event.endTime}; ${event.eventType}`}{' '}
+          {`${new Date(event.raw.startTime).toLocaleDateString()}`}
         </div>
-        <div className="event-list-description">Is this event available for check in now?: <strong>{`${event.checkInReady ? "Yes" : "No"}`}</strong></div>
+        <div className="event-list-description">
+          Is this event available for check in now?:{' '}
+          <strong>{`${event.checkInReady ? 'Yes' : 'No'}`}</strong>
+        </div>
       </button>
     </li>
-  )
+  );
 }
-
-
 
 export default EditProject;
