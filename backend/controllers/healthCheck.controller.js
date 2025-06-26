@@ -27,7 +27,7 @@ function getBuildInfo() {
 
   // Method 3: Try git command (for local development)
   try {
-    const gitSha = execSync('git rev-parse --short HEAD 2>/dev/null', { encoding: 'utf8' }).trim();
+    const gitSha = execSync('git rev-parse --short HEAD 2>/dev/null', { encoding: 'utf8', shell: true }).trim();
     if (gitSha && gitSha !== '' && gitSha !== 'unknown') {
       return gitSha;
     }
