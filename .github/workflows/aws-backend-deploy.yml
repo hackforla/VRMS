@@ -70,6 +70,7 @@ jobs:
             --cache-from type=gha \
             --cache-to type=gha,mode=max \
             --push \
+            --build-arg BUILD_SHA=$IMAGE_TAG \
             -f ${{ env.DOCKERFILE }} \
             -t $ECR_REGISTRY/$ECR_REPOSITORY:latest \
             -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \

@@ -12,4 +12,5 @@ USER node
 WORKDIR /srv/backend
 COPY --from=api-builder /srv/backend/node_modules ./node_modules
 COPY . .
+ENV BUILD_SHA=${BUILD_SHA}
 CMD ["npm", "run", "start"]
