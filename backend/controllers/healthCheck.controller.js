@@ -38,9 +38,16 @@ function getBuildInfo() {
   return 'unknown';
 }
 
+// Cache build info at startup to avoid repeated file I/O and Git calls
+const cachedBuildInfo = getBuildInfo();
+const buildTimestamp = new Date().toISOString();
+
 HealthCheckController.isAlive = (_, res) => {
-  const buildInfo = getBuildInfo();
-  res.status(200).send(`I'm Alive! Build: ${buildInfo} - ${new Date().toISOString()}`);
+  res
+    .status(200)
+    .send(
+      `I'm Alive! Build: ${cachedBuildInfo} | Built: ${buildTimestamp} | Checked: ${new Date().toISOString()}`,
+    );
 };
 
 module.exports = HealthCheckController;
