@@ -30,15 +30,16 @@ jobs:
           ref: ${{ github.event.inputs.ref }}
       - name: Set AWS Env & Image Tag per workflow
         run: |
-          SHORT_SHA=$(git rev-parse --short HEAD)
           if [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
               INPUT_ENV=${{ github.event.inputs.env }}; INPUT_REF=${{ github.event.inputs.ref }}
               echo AWS_APPENV="$AWS_APP_NAME"-$INPUT_ENV >> $GITHUB_ENV
-              echo IMAGE_TAG=$SHORT_SHA >> $GITHUB_ENV
+              echo IMAGE_TAG=$(git rev-parse --short HEAD) >> $GITHUB_ENV
+              echo BUILD_SHA=$(git rev-parse --short HEAD) >> $GITHUB_ENV
           fi
     outputs:
       AWS_APPENV: ${{ env.AWS_APPENV }}
       IMAGE_TAG: ${{ env.IMAGE_TAG }}
+      BUILD_SHA: ${{ env.BUILD_SHA }}
   build:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
@@ -59,18 +60,30 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+      - name: Debug Build Variables
+        env:
+          BUILD_SHA: ${{ needs.setup_env.outputs.BUILD_SHA }}
+          IMAGE_TAG: ${{ needs.setup_env.outputs.IMAGE_TAG }}
+        run: |
+          echo "=== Build Debug Information ==="
+          echo "BUILD_SHA: $BUILD_SHA"
+          echo "IMAGE_TAG: $IMAGE_TAG"
+          echo "DOCKERFILE: ${{ env.DOCKERFILE }}"
+          echo "DOCKER_PATH: ${{ env.DOCKER_PATH }}"
+          echo "================================"
       - name: Build & Push Image to ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ needs.setup_env.outputs.AWS_APPENV }}
           IMAGE_TAG: ${{ needs.setup_env.outputs.IMAGE_TAG }}
+          BUILD_SHA: ${{ needs.setup_env.outputs.BUILD_SHA }}
         run: |
           docker buildx build \
             --platform linux/amd64 \
             --cache-from type=gha \
             --cache-to type=gha,mode=max \
             --push \
-            --build-arg BUILD_SHA=$IMAGE_TAG \
+            --build-arg BUILD_SHA=$BUILD_SHA \
             -f ${{ env.DOCKERFILE }} \
             -t $ECR_REGISTRY/$ECR_REPOSITORY:latest \
             -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
