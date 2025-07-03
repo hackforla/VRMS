@@ -43,7 +43,7 @@ UserController.admin_list = async function (req, res) {
 };
 
 // Get list of Users with accessLevel 'admin' or 'superadmin' and also managed projects with GET
-UserController.projectLead_list = async function (req, res) {
+UserController.projectManager_list = async function (req, res) {
   const { headers } = req;
 
   if (headers['x-customrequired-header'] !== expectedHeader) {
@@ -52,33 +52,44 @@ UserController.projectLead_list = async function (req, res) {
 
   try {
     const projectManagers = await User.find({
-      $and: [
-        { accessLevel: { $in: ['admin', 'superadmin'] } },
-        { managedProjects: { $exists: true, $type: 'array', $ne: [] } },
-      ],
+      managedProjects: { $exists: true, $type: 'array', $not: { $size: 0 } },
     });
 
     const updatedProjectManagers = [];
 
     for (const projectManager of projectManagers) {
       const projectManagerObj = projectManager.toObject();
-      projectManagerObj.isProjectLead = true;
+
+      /* Due to the way MongoDB searches for non-empty arrays, sometimes an empty array gets passed
+       so we need to check if managedProjects is empty */
+      if (projectManagerObj.managedProjects.length === 0) continue;
+
+      projectManagerObj.isProjectMember = true;
       const projectNames = [];
 
       for (const projectId of projectManagerObj.managedProjects) {
-        const projectDetail = await Project.findById(projectId);
-        if (projectDetail && projectDetail.name) {
-          projectNames.push(projectDetail.name);
-        } else {
-          console.warn('Project detail is null, cannot access name');
+        // using try-catch block because old user data had invalid strings (aka 'false') for ProjectIds
+        try {
+          const projectDetail = await Project.findById(projectId);
+          if (projectDetail && projectDetail.name) {
+            projectNames.push(projectDetail.name);
+          } else {
+            console.warn('Project detail is null, cannot access name');
+          }
+        } catch (error) {
+          console.warn('Failed to fetch project details for ID:', projectId, error);
         }
       }
-      projectManagerObj.managedProjectNames = projectNames;
 
-      updatedProjectManagers.push(projectManagerObj);
+      if (projectNames.length) {
+        projectManagerObj.managedProjectNames = projectNames;
+        updatedProjectManagers.push(projectManagerObj);
+      }
     }
+
     return res.status(200).send(updatedProjectManagers);
   } catch (err) {
+    console.log('Projectlead error', err);
     return res.sendStatus(400);
   }
 };
