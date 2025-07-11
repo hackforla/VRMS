@@ -22,6 +22,7 @@
 - [**Part 4: How to create pull requests**](#part-4-how-to-create-pull-requests)
   - [**4.1 Push changes to your forked repository**](#41-push-changes-to-your-forked-repository)
   - [**4.2 Create a pull request on the VRMS repository**](#42-create-a-pull-request-on-the-vrms-repository)
+- [**Part 5: How to review pull requests**](#part-5-how-to-review-pull-requests)
 
 ## **Part 1 : How to join the team**
 
@@ -45,7 +46,7 @@ Once you have accepted the GitHub invite (via email or in your GitHub notificati
 
 1. Setup two factor authentication on your account https://github.com/hackforla/governance/issues/20
 
-These steps are manditory in order to contribute to all HackforLA projects.
+These steps are mandatory in order to contribute to all HackforLA projects.
 
 ## **Part 2: How to set up the development environment**
 
@@ -136,6 +137,18 @@ Note: Understanding how git remotes work will make collaborating much easier. Yo
 
    - _Please note that the `ports` for the frontend and backend are set in this location_
 
+1. Set up Husky for Git hooks (required for all contributors):
+
+   To help enforce code quality and prevent errors from being committed, we use [Husky](https://typicode.github.io/husky/) to manage Git hooks. Husky should install itself automatically after you install dependencies (thanks to the `prepare` script in `package.json`).
+
+   If you notice that Git hooks are not working (for example, you don't see linting or formatting checks when committing), you may need to set up Husky manually. To do this, run the following in the root of the project:
+
+   ```sh
+   npx husky install
+   ```
+
+   If you encounter issues, see the [Husky documentation](https://typicode.github.io/husky/#/) or reach out on Slack!
+
 1. Take a second to review the `app.js` and `server.js` files in the `vrms/backend` folder. These two files are a blueprint for the back end, so please familiarize yourself with it. You'll see folders for the database collection models, routes for the API, and a config file which loads the necessary environment variables.
 
 1. Start the local development servers (frontend & backend).
@@ -163,7 +176,7 @@ To run all of the tests run `npm run test:all` from the root folder.
 
 ### **2.5 Using the development database**
 
-The application uses MongoDB. We have created a shared development database using MongoDB Cloud and MongoDB Atlas. The conection string for the development database is included in the environmental variables that you pasted into your backend/.env file in step 5 of the "Get Up and Running" setion. If you completed that step successfully you should not need to do anything else.
+The application uses MongoDB. We have created a shared development database using MongoDB Cloud and MongoDB Atlas. The connection string for the development database is included in the environmental variables that you pasted into your backend/.env file in step 5 of the "Get Up and Running" section. If you completed that step successfully you should not need to do anything else.
 
 To view and edit the development database manually, you can download [MongoDB Compass](https://www.mongodb.com/try/download/compass). To connect to the development database you will use the "DATABASE_URL" from the [document](https://docs.google.com/document/d/1yDF6UmyO-MPNrl3y_Mw0mkm_WaixlSkXzWbudCzHXDY/edit?usp=sharing) that contained the environmental variables. The string will start with "mongodb+srv://".
 
@@ -183,7 +196,7 @@ Developers may choose from issues with the following `role` labels:
 - `role: Back End`
 - `role: Database`
 - `role: devops`
-- *_Lead developers may choose from the above labels, as well as issues with the label:_ `role: Dev Lead`
+- _Lead developers may choose from the above labels, as well as issues with the label:_ `role: Dev Lead`
 
 Claiming an issue is a two step process:
 
@@ -209,6 +222,21 @@ You will create a new branch for each issue you work on. Doing all your work on 
    ```bash
    git checkout -b your-branch-name
    ```
+
+### **3.2.1 Check for and resolve linting/prettier errors before making changes**
+
+Before you begin working on any part of a file, always check for existing code errors in the codebase. This helps prevent introducing new issues and ensures a stable foundation for your work.
+
+- Use your code editor's error checking tools or run the appropriate linting/compilation commands (e.g., `yarn lint (filename)`, or your IDE's error panel) to identify any errors in the files you plan to edit. (This isn't your fault, it's just an old codebase 🤷‍️)
+- If you find errors, resolve them in a **separate commit** before starting your feature or fix work. Use a clear commit message such as:
+
+> fix: Resolve existing linting and compilation errors
+
+(This makes it easier for reviewers to distinguish between error fixes and your new changes.)
+
+- If you are unsure how to fix an error, ask for help in the team Slack channel or consult the documentation.
+- Only begin implementing new features or fixes after confirming the file is error-free.
+- If you are unable to resolve the errors after making a reasonable effort, it is acceptable to use `--no-verify` when committing or pushing your changes. Please leave a comment in your pull request explaining why this was necessary.
 
 ### **3.3 Work on the Issue**
 
@@ -242,4 +270,70 @@ git commit -m "your commit message"
 4. Fill out the "What changes did you make and why?" section of the pull request template
 5. Include before & after images with your pull request if there are visual changes to the user interface
 6. Request a review from another developer on the team
-7. Review another developers pull request while you are waiting for your pull request to be reviewed
+7. Review another developer's pull request while you are waiting for your pull request to be reviewed
+
+## **Part 5: How to review pull requests**
+
+Reviewing pull requests is an important part of maintaining code quality and helping team members improve their contributions. Here’s how to review a pull request on the VRMS repository:
+
+1. **Navigate to the Pull Requests tab**  
+   Go to the [Pull Requests](https://github.com/hackforla/VRMS/pulls) section of the repository to see open pull requests.
+
+2. **Select a pull request to review**  
+   Choose a pull request that is ready for review (look for those assigned to you or marked as "Ready for review").
+
+3. **Read the pull request description**  
+   Review the summary, linked issue(s), and any screenshots or documentation provided by the author.
+
+4. **Check the code changes**
+
+   - Click on the "Files changed" tab to see the code diff.
+   - Look for code quality, readability, and adherence to project conventions.
+   - Ensure the code addresses the issue and does not introduce bugs.
+
+5. **Run the code locally (optional but recommended)**
+
+   - Pull the branch to your local machine.
+   - Follow the setup instructions to test the changes.
+   - Run tests to verify nothing is broken.
+
+6. **Leave feedback**
+
+   - Use GitHub’s review tools to comment on specific lines or leave general feedback.
+   - Be constructive and respectful in your comments.
+
+7. **Approve or request changes**
+
+   - If the pull request is ready, click "Approve".
+   - If changes are needed, click "Request changes" and specify what needs to be addressed.
+
+8. **Merge the pull request (if authorized)**
+   - If you have permission and the pull request meets all requirements, you may merge it.
+   - Otherwise, notify the author or a maintainer that it is ready to merge.
+
+**Tip:** You can use the following helpful git alias to quickly check out a pull request locally:
+
+```sh
+# This git alias allows you to quickly check out a pull request by its number.
+# eg "git pr 1820 vrms"
+git config alias.pr '!f() { \
+  # If no arguments are provided, print usage instructions
+  if [ $# -lt 1 ]; then \
+    echo "Usage: git pr <id> [<remote>] # assuming <remote>[=origin] is on GitHub"; \
+    echo "    eg: git pr 1340 upstream"; \
+  else \
+    # Save current HEAD (optional, for safety)
+    git checkout -q "$(git rev-parse --verify HEAD)" && \
+    # Fetch the pull request from the specified remote (default: origin) into a local branch
+    git fetch -fv "${2:-origin}" pull/"$1"/head:pr/"$1" && \
+    # Check out the fetched PR branch
+    git checkout pr/"$1"; \
+  fi; \
+}; f'
+```
+
+This allows you to run `git pr <PR_NUMBER>` to fetch and check out a pull request by its number. For example: `git pr 1234 upstream`.
+
+**Resources:**
+
+- [GitHub: Reviewing proposed changes in a pull request](https://docs.github.com/en/github/collaborating-with-pull-requests/reviewing-changes-in-pull-requests)

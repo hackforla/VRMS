@@ -40,12 +40,13 @@ export default function ProjectList({ auth }) {
       async function fetchAllProjects() {
         let projectData;
 
-        if(user?.accessLevel === 'admin' || user?.accessLevel === 'superadmin') {
+        if (
+          user?.accessLevel === 'admin' ||
+          user?.accessLevel === 'superadmin'
+        ) {
           projectData = await projectApiService.fetchProjects();
-        }
-
-        // if user is not admin, but is a project manager, only show projects they manage
-        if ((user?.accessLevel !== 'admin' || user?.accessLevel !== 'superadmin') && user?.managedProjects.length > 0) {
+        } else if (user?.managedProjects?.length > 0) {
+          // if user is not admin, but is a project manager, only show projects they manage
           projectData = await projectApiService.fetchPMProjects(user.managedProjects);
         }
         
