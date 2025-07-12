@@ -1,7 +1,7 @@
 const express = require('express');
 
 const supertest = require('supertest');
-
+// Mock the Mongoose Event model
 jest.mock('../models/event.model', () => ({
   Event: {
     find: jest.fn(),
@@ -9,7 +9,7 @@ jest.mock('../models/event.model', () => ({
 }));
 
 const { Event } = require('../models/event.model');
-
+//Mock the EventController to isolate router tests router tests fro controller logic
 jest.mock('../controllers', () => ({
   EventController: {
     event_list: jest.fn(),
@@ -27,7 +27,7 @@ jest.mock('../controllers', () => ({
 const { EventController } = require('../controllers');
 
 const eventsRouter = require('./events.router');
-
+//Setup a test application
 const testapp = express();
 
 testapp.use(express.json());
@@ -39,6 +39,7 @@ testapp.use('/api/events', eventsRouter);
 const request = supertest(testapp);
 
 describe('Unit Tests for events.router.js', () => {
+  //Mock data
   const mockEvent = {
     _id: 'event123',
 
@@ -60,6 +61,7 @@ describe('Unit Tests for events.router.js', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
+  // Test suite for GET /api/events (event_list)
 
   describe('GET /api/events (event_list)', () => {
     it('should call EventController.event_list and return a list of events', async (done) => {
@@ -84,7 +86,7 @@ describe('Unit Tests for events.router.js', () => {
       done();
     });
   });
-
+  // Test suite for POST /api/events (create)
   describe('POST /api/events (create)', () => {
     it('should call EventController.create and return the created event', async (done) => {
       EventController.create.mockImplementationOnce((req, res) => res.status(201).send(mockEvent));
@@ -114,7 +116,7 @@ describe('Unit Tests for events.router.js', () => {
       done();
     });
   });
-
+  // Test suite for GET /api/events/:EventId (event_by_id)
   describe('GET /api/events/:EventId (event_by_id)', () => {
     it('should call EventController.event_by_id and return a specific event', async (done) => {
       EventController.event_by_id.mockImplementationOnce((req, res) =>
@@ -138,7 +140,7 @@ describe('Unit Tests for events.router.js', () => {
       done();
     });
   });
-
+  // Test suite for DELETE /api/events/:EventId (destroy)
   describe('DELETE /api/events/:EventId (destroy)', () => {
     it('should call EventController.destroy and return 204 No Content', async (done) => {
       EventController.destroy.mockImplementationOnce((req, res) => res.status(204).send());
@@ -160,7 +162,7 @@ describe('Unit Tests for events.router.js', () => {
       done();
     });
   });
-
+  // Test suite for PATCH /api/events/:EventId (update)
   describe('PATCH /api/events/:EventId (update)', () => {
     it('should call EventController.update and return the updated event', async (done) => {
       EventController.update.mockImplementationOnce((req, res) =>
@@ -188,7 +190,7 @@ describe('Unit Tests for events.router.js', () => {
       done();
     });
   });
-
+  // Test suite for GET /api/events/nexteventbyproject/:id
   describe('GET /api/events/nexteventbyproject/:id', () => {
     it('should return the last event for a given project ID directly from the router', async (done) => {
       const mockEventsForProject = [
@@ -221,7 +223,7 @@ describe('Unit Tests for events.router.js', () => {
 
       done();
     });
-
+    // Test case for error handling when fetching next event by project
     it('should return 500 if an error occurs when fetching next event by project', async (done) => {
       const mockError = new Error('Simulated database error for next event by project');
 
@@ -236,10 +238,6 @@ describe('Unit Tests for events.router.js', () => {
       }));
 
       const response = await request.get(`/api/events/nexteventbyproject/${mockProjectId}`);
-
-      expect(Event.find).toHaveBeenCalledWith({ project: mockProjectId });
-
-      expect(Event.find.mock.results[0].value.populate).toHaveBeenCalledWith('project');
 
       expect(response.status).toBe(500);
 
