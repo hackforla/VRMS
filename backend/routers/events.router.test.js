@@ -90,11 +90,11 @@ describe('Unit Tests for events.router.js', () => {
       EventController.create.mockImplementationOnce((req, res) => res.status(201).send(mockEvent));
 
       const newEventData = {
-        name: 'New Event',
+        name: mockEvent.name,
 
-        project: 'projectXYZ',
+        project: mockEvent.project,
 
-        date: '2025-02-01T10:00:00Z',
+        date: mockEvent.date,
       };
 
       const response = await request.post('/api/events/').send(newEventData);
