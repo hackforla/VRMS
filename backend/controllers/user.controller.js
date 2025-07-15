@@ -42,8 +42,7 @@ UserController.admin_list = async function (req, res) {
   }
 };
 
-// Get list of Users with accessLevel 'admin' or 'superadmin' and also managed projects with GET
-UserController.projectLead_list = async function (req, res) {
+UserController.projectManager_list = async function (req, res) {
   const { headers } = req;
 
   if (headers['x-customrequired-header'] !== expectedHeader) {
@@ -52,33 +51,68 @@ UserController.projectLead_list = async function (req, res) {
 
   try {
     const projectManagers = await User.find({
-      $and: [
-        { accessLevel: { $in: ['admin', 'superadmin'] } },
-        { managedProjects: { $exists: true, $type: 'array', $ne: [] } },
-      ],
+      managedProjects: { $exists: true, $type: 'array', $not: { $size: 0 } },
+    });
+
+    // Filter out managers with empty arrays early
+    const validProjectManagers = projectManagers.filter(
+      (manager) => manager.managedProjects && manager.managedProjects.length > 0,
+    );
+
+    if (validProjectManagers.length === 0) {
+      return res.status(200).send([]);
+    }
+
+    // Collect all unique project IDs to fetch in one query
+    const allProjectIds = new Set();
+    validProjectManagers.forEach((manager) => {
+      manager.managedProjects.forEach((projectId) => {
+        // Filter out invalid project IDs (non-string or obviously invalid values)
+        if (typeof projectId === 'string' && projectId !== 'false' && projectId.length > 0) {
+          allProjectIds.add(projectId);
+        }
+      });
+    });
+
+    // Fetch all projects in a single query
+    const projects = await Project.find({ _id: { $in: Array.from(allProjectIds) } });
+
+    // Create a map for O(1) lookup
+    const projectMap = new Map();
+    projects.forEach((project) => {
+      projectMap.set(project._id.toString(), project.name);
     });
 
     const updatedProjectManagers = [];
 
-    for (const projectManager of projectManagers) {
+    for (const projectManager of validProjectManagers) {
       const projectManagerObj = projectManager.toObject();
-      projectManagerObj.isProjectLead = true;
+      projectManagerObj.isProjectMember = true;
       const projectNames = [];
 
       for (const projectId of projectManagerObj.managedProjects) {
-        const projectDetail = await Project.findById(projectId);
-        if (projectDetail && projectDetail.name) {
-          projectNames.push(projectDetail.name);
-        } else {
-          console.warn('Project detail is null, cannot access name');
+        // using try-catch block because old user data had invalid strings (aka 'false') for ProjectIds
+        try {
+          const projectName = projectMap.get(projectId.toString());
+          if (projectName) {
+            projectNames.push(projectName);
+          } else {
+            console.warn('Project detail is null, cannot access name');
+          }
+        } catch (error) {
+          console.warn('Failed to fetch project details for ID:', projectId, error);
         }
       }
-      projectManagerObj.managedProjectNames = projectNames;
 
-      updatedProjectManagers.push(projectManagerObj);
+      if (projectNames.length) {
+        projectManagerObj.managedProjectNames = projectNames;
+        updatedProjectManagers.push(projectManagerObj);
+      }
     }
+
     return res.status(200).send(updatedProjectManagers);
   } catch (err) {
+    console.log('Projectlead error', err);
     return res.sendStatus(400);
   }
 };
@@ -94,6 +128,8 @@ UserController.user_by_id = async function (req, res) {
 
   try {
     const user = await User.findById(UserId);
+    // TODO throw 404 if User.findById returns empty object
+    // and look downstream to see whether 404 would break anything
     return res.status(200).send(user);
   } catch (err) {
     return res.sendStatus(400);

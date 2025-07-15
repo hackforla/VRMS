@@ -11,22 +11,27 @@ import {
   ListItemButton,
 } from '@mui/material';
 import { useLocation } from 'react-router-dom';
-
 import '../../sass/UserAdmin.scss';
 
-const Buttonsx = {
-  px: 2,
-  py: 0.5,
+const buttonSX = {
+  adminButton: {
+    px: 2,
+    py: 0.5,
+  },
+  projMemsButton: {
+    px: 6,
+    py: 0.5,
+  }
 };
 
-const DummyComponent = ({ data, isProjectLead, setUserToEdit }) => {
+const ListComponent = ({ data, isProjectMember, setUserToEdit }) => {
   return (
     <List className="search-results disablePadding">
-      {data.map((u, idx) => {
+      {data.map((user, idx) => {
         // Destructure user object
-        const { _id, name, email } = u;
+        const { _id, name, email } = user;
         // return projects.length === 0 ?
-        return !isProjectLead ? (
+        return !isProjectMember ? (
           <ListItem
             sx={{
               px: 2.4,
@@ -45,7 +50,7 @@ const DummyComponent = ({ data, isProjectLead, setUserToEdit }) => {
               }}
               className="search-results-button"
               type="button"
-              onClick={() => setUserToEdit(u)}
+              onClick={() => setUserToEdit(user)}
             >
               <Grid container>
                 <Grid item>
@@ -76,7 +81,7 @@ const DummyComponent = ({ data, isProjectLead, setUserToEdit }) => {
               }}
               className="search-results-button"
               type="button"
-              onClick={() => setUserToEdit(u)}
+              onClick={() => setUserToEdit(user)}
             >
               <Grid container justifyContent={'space-between'}>
                 <Grid item>
@@ -88,7 +93,7 @@ const DummyComponent = ({ data, isProjectLead, setUserToEdit }) => {
                 </Grid>
                 <Grid item>
                   <Typography style={{ fontWeight: 600 }} color="black">
-                    {u.managedProjectName}
+                    {user.managedProjectName}
                   </Typography>
                 </Grid>
               </Grid>
@@ -101,9 +106,8 @@ const DummyComponent = ({ data, isProjectLead, setUserToEdit }) => {
 };
 
 const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
-  const [userType, setUserType] = useState('admin'); // Which results will display
   const [searchText, setSearchText] = useState(''); // Search term for the admin/PM search
-  const [isProjectLead, setIsProjectLead] = useState(false);
+  const [isProjectMember, setIsProjectMember] = useState(false);
 
   const location = useLocation();
 
@@ -112,34 +116,34 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
   useEffect(() => {
     // Edit url by adding '/admin' upon loading
     let editURL = '';
-    if (userType === 'admin') {
+    if (!isProjectMember) {
       editURL = location.pathname + '/admin';
     } else {
       editURL = location.pathname + '/projects';
     }
     window.history.replaceState({}, '', editURL);
-  }, [userType]);
+  }, [isProjectMember]);
 
   // Swaps the buttons and displayed panels for the search results, by email or by name
   const buttonSwap = () =>
-    isProjectLead ? setIsProjectLead(false) : setIsProjectLead(true);
+    isProjectMember ? setIsProjectMember(false) : setIsProjectMember(true);
 
   // Handle change on input in search form
   const handleChange = (event) => {
     setSearchText(event.target.value);
   };
 
-  const getFilteredData = (resultData, searchText, isProjectLead) => {
+  const getFilteredData = (resultData, searchText, isProjectMember) => {
     const searchTextLowerCase = searchText.trim().toLowerCase();
 
-    let filteredData = resultData
+    let filteredUsers = resultData
       .filter((user) =>
-        isProjectLead
-          ? user.isProjectLead === true
-          : user.isProjectLead === undefined
+        isProjectMember
+          ? user.isProjectMember === true
+          : user.isProjectMember === undefined
       )
       .flatMap((user) =>
-        isProjectLead && user.managedProjectNames.length > 0
+        isProjectMember && user.managedProjectNames.length > 0
           ? user.managedProjectNames.map((managedProjectName) => ({
               ...user,
               managedProjectName,
@@ -154,12 +158,12 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
           : '';
         return (
           fullName.includes(searchTextLowerCase) ||
-          (isProjectLead && projectName.includes(searchTextLowerCase))
+          (isProjectMember && projectName.includes(searchTextLowerCase))
         );
       });
 
-    return filteredData.sort((a, b) => {
-      if (isProjectLead) {
+    return filteredUsers.sort((a, b) => {
+      if (isProjectMember) {
         return (
           a.managedProjectName.localeCompare(b.managedProjectName) ||
           a.name.firstName.localeCompare(b.name.firstName)
@@ -173,12 +177,12 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
   let filteredData;
   if (!searchText) {
     filteredData = resultData.filter((user) =>
-      isProjectLead
-        ? user.isProjectLead === true
-        : user.isProjectLead === undefined
+      isProjectMember
+        ? user.isProjectMember === true
+        : user.isProjectMember === undefined
     );
 
-    if (!isProjectLead) {
+    if (!isProjectMember) {
       // Default display for admins, sorted ASC based on first name
       filteredData.sort((u1, u2) =>
         u1.name?.firstName.localeCompare(u2.name?.firstName)
@@ -200,7 +204,7 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
     }
   } else {
     // NOTE: Using "users" instead of "dummyData" to check the link to user profile
-    filteredData = getFilteredData(resultData, searchText, isProjectLead);
+    filteredData = getFilteredData(resultData, searchText, isProjectMember);
   }
 
   return (
@@ -233,26 +237,26 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
             }}
           >
             <Button
-              sx={Buttonsx}
+              sx={buttonSX.adminButton}
               type="button"
-              variant={!isProjectLead ? 'contained' : 'secondary'}
+              variant={!isProjectMember ? 'contained' : 'secondary'}
               onClick={buttonSwap}
             >
               Admins
             </Button>
             <Button
-              sx={Buttonsx}
+              sx={buttonSX.projMemsButton}
               type="button"
-              variant={isProjectLead ? 'contained' : 'secondary'}
+              variant={isProjectMember ? 'contained' : 'secondary'}
               onClick={buttonSwap}
             >
-              Project Leads
+              Project Members
             </Button>
           </ButtonGroup>
         </Box>
         <TextField
           type="text"
-          placeholder={isProjectLead ? 'Search name or project' : 'Search name'}
+          placeholder={isProjectMember ? 'Search name or project' : 'Search name'}
           variant="standard"
           value={searchText}
           onChange={handleChange}
@@ -268,9 +272,9 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
         >
           <Box>
             {/*Component to render admins and PMs*/}
-            <DummyComponent
+            <ListComponent
               data={filteredData}
-              isProjectLead={isProjectLead}
+              isProjectMember={isProjectMember}
               setUserToEdit={setUserToEdit}
             />
           </Box>

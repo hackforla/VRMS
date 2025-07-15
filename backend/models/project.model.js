@@ -16,7 +16,7 @@ Idea for the future: programmingLanguages, numberGithubContributions (pull these
 */
 
 const projectSchema = mongoose.Schema({
-    name: { type: String, trim: true },
+    name: { type: String, trim: true, required: true },
     description: { type: String, trim: true },
     githubIdentifier: { type: String, trim: true },
     projectStatus: { type: String },                    // Active, Completed, or Paused
