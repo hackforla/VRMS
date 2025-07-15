@@ -42,7 +42,6 @@ UserController.admin_list = async function (req, res) {
   }
 };
 
-// Get list of Users with accessLevel 'admin' or 'superadmin' and also managed projects with GET
 UserController.projectManager_list = async function (req, res) {
   const { headers } = req;
 
@@ -55,24 +54,48 @@ UserController.projectManager_list = async function (req, res) {
       managedProjects: { $exists: true, $type: 'array', $not: { $size: 0 } },
     });
 
+    // Filter out managers with empty arrays early
+    const validProjectManagers = projectManagers.filter(
+      (manager) => manager.managedProjects && manager.managedProjects.length > 0,
+    );
+
+    if (validProjectManagers.length === 0) {
+      return res.status(200).send([]);
+    }
+
+    // Collect all unique project IDs to fetch in one query
+    const allProjectIds = new Set();
+    validProjectManagers.forEach((manager) => {
+      manager.managedProjects.forEach((projectId) => {
+        // Filter out invalid project IDs (non-string or obviously invalid values)
+        if (typeof projectId === 'string' && projectId !== 'false' && projectId.length > 0) {
+          allProjectIds.add(projectId);
+        }
+      });
+    });
+
+    // Fetch all projects in a single query
+    const projects = await Project.find({ _id: { $in: Array.from(allProjectIds) } });
+
+    // Create a map for O(1) lookup
+    const projectMap = new Map();
+    projects.forEach((project) => {
+      projectMap.set(project._id.toString(), project.name);
+    });
+
     const updatedProjectManagers = [];
 
-    for (const projectManager of projectManagers) {
+    for (const projectManager of validProjectManagers) {
       const projectManagerObj = projectManager.toObject();
-
-      /* Due to the way MongoDB searches for non-empty arrays, sometimes an empty array gets passed
-       so we need to check if managedProjects is empty */
-      if (projectManagerObj.managedProjects.length === 0) continue;
-
       projectManagerObj.isProjectMember = true;
       const projectNames = [];
 
       for (const projectId of projectManagerObj.managedProjects) {
         // using try-catch block because old user data had invalid strings (aka 'false') for ProjectIds
         try {
-          const projectDetail = await Project.findById(projectId);
-          if (projectDetail && projectDetail.name) {
-            projectNames.push(projectDetail.name);
+          const projectName = projectMap.get(projectId.toString());
+          if (projectName) {
+            projectNames.push(projectName);
           } else {
             console.warn('Project detail is null, cannot access name');
           }
