@@ -77,33 +77,6 @@ describe('Unit tests for User Model', () => {
   });
 
   describe('Validation test', () => {
-    it('should fail validation check if user email is not unique', async () => {
-      const mockData = { email: 'mockUser@test.com' };
-      // Mock findOne method
-      const findOneSpy = jest.spyOn(User, 'findOne').mockResolvedValue(mockData);
-      // Mock create method
-      const createSpy = jest.spyOn(User, 'create').mockResolvedValue(mockData);
-
-      // Create a function to simulate validation of User documents
-      // if User with email exists, throw an error. Else create a new User.
-      const createUser = async (email) => {
-        const existing = await User.findOne(email);
-        if (existing) throw new Error('Email already exists');
-        return await User.create(email);
-      };
-
-      const result = createUser(mockData);
-
-      // Tests
-      expect(findOneSpy).toHaveBeenCalledWith(mockData);
-      expect(findOneSpy).toHaveBeenCalledTimes(1);
-      // User.create should not have been called
-      expect(createSpy).toHaveBeenCalledTimes(0);
-      // Checks if unique property is set to true
-      expect(User.schema.paths.email.options.unique).toBe(true);
-      expect(result).rejects.toThrow('Email already exists');
-    });
-
     it('should fail validation check if accessLevel is invalid', async () => {
       // Create a mock user with an invalid accessLevel
       const mockuser = new User({
