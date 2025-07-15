@@ -81,7 +81,7 @@ const ListComponent = ({ data, isProjectMember, setUserToEdit }) => {
               }}
               className="search-results-button"
               type="button"
-              onClick={() => setUserToEdit(u)}
+              onClick={() => setUserToEdit(user)}
             >
               <Grid container justifyContent={'space-between'}>
                 <Grid item>
