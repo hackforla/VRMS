@@ -42,7 +42,6 @@ UserController.admin_list = async function (req, res) {
   }
 };
 
-// Get list of Users with accessLevel 'admin' or 'superadmin' and also managed projects with GET
 UserController.projectManager_list = async function (req, res) {
   const { headers } = req;
 
