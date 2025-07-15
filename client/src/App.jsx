@@ -26,10 +26,15 @@ import addProject from './components/manageProjects/addProject';
 import HealthCheck from './pages/HealthCheck';
 import SecretPassword from './pages/SecretPassword';
 import UserWelcome from './pages/UserWelcome';
+// Added User Permission Search component
+import UserPermissionSearch from './pages/UserPermissionSearch';
 import UserPermission from './pages/UserPermission';
+
 import { Box, ThemeProvider } from '@mui/material';
 import theme from './theme';
+
 import './App.scss';
+
 /* 
    withAuth Hook
    Wraps component with withAuth hook to manage automatic redirect to login page if user is not logged in
