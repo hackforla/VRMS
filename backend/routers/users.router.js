@@ -8,7 +8,7 @@ router.get('/', UserController.user_list);
 
 router.get('/admins', UserController.admin_list);
 
-router.get('/projectManagers', UserController.projectLead_list);
+router.get('/projectManagers', UserController.projectManager_list);
 
 router.post('/', UserController.create);
 
