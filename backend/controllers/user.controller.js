@@ -22,7 +22,7 @@ UserController.user_list = async function (req, res) {
     const user = await User.find(query);
     return res.status(200).send(user);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return res.sendStatus(400);
   }
 };
@@ -39,7 +39,7 @@ UserController.admin_list = async function (req, res) {
     const admins = await User.find({ accessLevel: { $in: ['admin', 'superadmin'] } });
     return res.status(200).send(admins);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return res.sendStatus(400);
   }
 };
@@ -80,7 +80,8 @@ UserController.projectManager_list = async function (req, res) {
 
     return res.status(200).send(updatedProjectManagers);
   } catch (err) {
-    console.log(err);
+    console.error(err);
+    console.log('Projectlead error', err);
     return res.sendStatus(400);
   }
 };
@@ -100,7 +101,7 @@ UserController.user_by_id = async function (req, res) {
     // and look downstream to see whether 404 would break anything
     return res.status(200).send(user);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return res.sendStatus(400);
   }
 };
@@ -144,7 +145,7 @@ UserController.update = async function (req, res) {
     const user = await User.findOneAndUpdate({ _id: UserId }, req.body, { new: true });
     return res.status(200).send(user);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return res.sendStatus(400);
   }
 };
@@ -162,7 +163,7 @@ UserController.delete = async function (req, res) {
     const user = await User.findByIdAndDelete(UserId);
     return res.status(200).send(user);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return res.sendStatus(400);
   }
 };
@@ -232,7 +233,6 @@ UserController.signin = function (req, res) {
 };
 
 UserController.verifySignIn = async function (req, res) {
-   
   let token = req.headers['x-access-token'] || req.headers['authorization'];
   if (token.startsWith('Bearer ')) {
     // Remove Bearer from string
@@ -245,7 +245,7 @@ UserController.verifySignIn = async function (req, res) {
     res.cookie('token', token, { httpOnly: true });
     return res.send(user);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return res.status(403);
   }
 };
