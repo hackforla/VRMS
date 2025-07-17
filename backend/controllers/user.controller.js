@@ -22,6 +22,7 @@ UserController.user_list = async function (req, res) {
     const user = await User.find(query);
     return res.status(200).send(user);
   } catch (err) {
+    console.log(err);
     return res.sendStatus(400);
   }
 };
@@ -38,6 +39,7 @@ UserController.admin_list = async function (req, res) {
     const admins = await User.find({ accessLevel: { $in: ['admin', 'superadmin'] } });
     return res.status(200).send(admins);
   } catch (err) {
+    console.log(err);
     return res.sendStatus(400);
   }
 };
@@ -58,11 +60,7 @@ UserController.projectManager_list = async function (req, res) {
     });
 
     // Collect all unique project IDs
-    const allProjectIds = [
-      ...new Set(
-        projectManagers.flatMap(pm => pm.managedProjects)
-      ),
-    ];
+    const allProjectIds = [...new Set(projectManagers.flatMap((pm) => pm.managedProjects))];
 
     // Fetch all projects in one query
     const projects = await Project.find({ _id: { $in: allProjectIds } });
@@ -71,17 +69,18 @@ UserController.projectManager_list = async function (req, res) {
       projectIdToName[project._id.toString()] = project.name;
     }
 
-    const updatedProjectManagers = projectManagers.map(pm => {
+    const updatedProjectManagers = projectManagers.map((pm) => {
       const pmObj = pm.toObject();
       pmObj.isProjectLead = true;
-      pmObj.managedProjectNames = (pmObj.managedProjects || []).map(
-        pid => projectIdToName[pid.toString()] || null
-      ).filter(Boolean);
+      pmObj.managedProjectNames = (pmObj.managedProjects || [])
+        .map((pid) => projectIdToName[pid.toString()] || null)
+        .filter(Boolean);
       return pmObj;
     });
 
     return res.status(200).send(updatedProjectManagers);
   } catch (err) {
+    console.log(err);
     return res.sendStatus(400);
   }
 };
@@ -101,6 +100,7 @@ UserController.user_by_id = async function (req, res) {
     // and look downstream to see whether 404 would break anything
     return res.status(200).send(user);
   } catch (err) {
+    console.log(err);
     return res.sendStatus(400);
   }
 };
@@ -144,6 +144,7 @@ UserController.update = async function (req, res) {
     const user = await User.findOneAndUpdate({ _id: UserId }, req.body, { new: true });
     return res.status(200).send(user);
   } catch (err) {
+    console.log(err);
     return res.sendStatus(400);
   }
 };
@@ -161,6 +162,7 @@ UserController.delete = async function (req, res) {
     const user = await User.findByIdAndDelete(UserId);
     return res.status(200).send(user);
   } catch (err) {
+    console.log(err);
     return res.sendStatus(400);
   }
 };
@@ -230,7 +232,7 @@ UserController.signin = function (req, res) {
 };
 
 UserController.verifySignIn = async function (req, res) {
-  // eslint-disable-next-line dot-notation
+   
   let token = req.headers['x-access-token'] || req.headers['authorization'];
   if (token.startsWith('Bearer ')) {
     // Remove Bearer from string
@@ -243,6 +245,7 @@ UserController.verifySignIn = async function (req, res) {
     res.cookie('token', token, { httpOnly: true });
     return res.send(user);
   } catch (err) {
+    console.log(err);
     return res.status(403);
   }
 };
