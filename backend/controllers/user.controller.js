@@ -57,25 +57,29 @@ UserController.projectManager_list = async function (req, res) {
       ],
     });
 
-    const updatedProjectManagers = [];
+    // Collect all unique project IDs
+    const allProjectIds = [
+      ...new Set(
+        projectManagers.flatMap(pm => pm.managedProjects)
+      ),
+    ];
 
-    for (const projectManager of projectManagers) {
-      const projectManagerObj = projectManager.toObject();
-      projectManagerObj.isProjectLead = true;
-      const projectNames = [];
-
-      for (const projectId of projectManagerObj.managedProjects) {
-        const projectDetail = await Project.findById(projectId);
-        if (projectDetail && projectDetail.name) {
-          projectNames.push(projectDetail.name);
-        } else {
-          console.warn('Project detail is null, cannot access name');
-        }
-      }
-      projectManagerObj.managedProjectNames = projectNames;
-
-      updatedProjectManagers.push(projectManagerObj);
+    // Fetch all projects in one query
+    const projects = await Project.find({ _id: { $in: allProjectIds } });
+    const projectIdToName = {};
+    for (const project of projects) {
+      projectIdToName[project._id.toString()] = project.name;
     }
+
+    const updatedProjectManagers = projectManagers.map(pm => {
+      const pmObj = pm.toObject();
+      pmObj.isProjectLead = true;
+      pmObj.managedProjectNames = (pmObj.managedProjects || []).map(
+        pid => projectIdToName[pid.toString()] || null
+      ).filter(Boolean);
+      return pmObj;
+    });
+
     return res.status(200).send(updatedProjectManagers);
   } catch (err) {
     return res.sendStatus(400);
