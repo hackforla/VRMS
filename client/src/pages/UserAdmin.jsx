@@ -21,8 +21,7 @@ const UserAdmin = () => {
 
   const updateUserDb = useCallback(
     async (user, managedProjects) => {
-      console.log(user, managedProjects);
-      // await userApiService.updateUserDbProjects(user, managedProjects);
+      await userApiService.updateUserDbProjects(user, managedProjects);
       fetchUsers();
     },
     [userApiService, fetchUsers]
