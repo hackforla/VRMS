@@ -259,4 +259,28 @@ UserController.logout = async function (req, res) {
   return res.clearCookie('token').status(200).send('Successfully logged out.');
 };
 
+UserController.updateManagedProjects = async function (req, res) {
+  const { headers } = req;
+  const { userId } = req.params;
+  const { projectId } = req.body;
+
+  if (headers['x-customrequired-header'] !== expectedHeader) {
+    return res.sendStatus(403);
+  }
+
+  // Update the managedProjects array for the user
+  try {
+    const user = await User.findOneAndUpdate(
+      { _id: userId },
+      { managedProjects },
+      { new: true }
+    );
+    return res.status(200).send(user);
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(400);
+  }
+  
+};
+
 module.exports = UserController;
