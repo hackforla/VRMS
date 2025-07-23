@@ -232,7 +232,6 @@ UserController.signin = function (req, res) {
 };
 
 UserController.verifySignIn = async function (req, res) {
-   
   let token = req.headers['x-access-token'] || req.headers['authorization'];
   if (token.startsWith('Bearer ')) {
     // Remove Bearer from string
@@ -259,28 +258,47 @@ UserController.logout = async function (req, res) {
   return res.clearCookie('token').status(200).send('Successfully logged out.');
 };
 
+// Update user's managedProjects
 UserController.updateManagedProjects = async function (req, res) {
   const { headers } = req;
-  const { userId } = req.params;
-  const { projectId } = req.body;
+  const { UserId } = req.params;
+  const { action, projectId } = req.body; // action - 'add' or 'remove'
+  // console.log('action:', action, 'projectId:', projectId);
 
   if (headers['x-customrequired-header'] !== expectedHeader) {
     return res.sendStatus(403);
   }
 
-  // Update the managedProjects array for the user
   try {
-    const user = await User.findOneAndUpdate(
-      { _id: userId },
-      { managedProjects },
-      { new: true }
-    );
-    return res.status(200).send(user);
+    // Update user's managedProjects and the project's managedByUsers
+    const user = await User.findById(UserId);
+    let managedProjects = user.managedProjects || [];
+
+    const project = await Project.findById(projectId);
+    let managedByUsers = project.managedByUsers || [];
+
+    if (action === 'add') {
+      managedProjects = [...managedProjects, projectId];
+      managedByUsers = [...managedByUsers, UserId];
+    } else {
+      // remove case
+      managedProjects = managedProjects.filter((id) => id !== projectId);
+      managedByUsers = managedByUsers.filter((id) => id !== UserId);
+    }
+
+    // Update user's managedProjects 
+    user.managedProjects = managedProjects;
+    await user.save({ validateBeforeSave: false });
+
+    // Update project's managedByUsers
+    project.managedByUsers = managedByUsers;
+    await project.save({ validateBeforeSave: false });
+
+    return res.status(200).send({ user, project });
   } catch (err) {
     console.log(err);
     return res.sendStatus(400);
   }
-  
 };
 
 module.exports = UserController;

@@ -1,4 +1,4 @@
-const { Project } = require('../models');
+const { Project, User } = require('../models');
 
 const ProjectController = {};
 
@@ -62,6 +62,42 @@ ProjectController.destroy = async function (req, res) {
     const project = await Project.findByIdAndDelete(ProjectId);
     return res.status(200).send(project);
   } catch (err) {
+    return res.sendStatus(400);
+  }
+};
+
+ProjectController.updateManagedByUsers = async function (req, res) {
+  const { projectId } = req.params;
+  const { action, userId } = req.body; // action - 'add' or 'remove'
+
+  try {
+    // Update project's managedByUsers and the user's managedProjects
+    const project = await Project.findById(projectId);
+    let managedByUsers = project.managedByUsers || [];
+
+    const user = await User.findById(userId);
+    let managedProjects = user.managedProjects || [];
+
+    if (action === 'add') {
+      managedByUsers = [...managedByUsers, userId];
+      managedProjects = [...managedProjects, projectId];
+    } else {
+      // remove case
+      managedByUsers = managedByUsers.filter((id) => id !== userId);
+      managedProjects = managedProjects.filter((id) => id !== projectId);
+    }
+
+    // Update project's managedByUsers 
+    project.managedByUsers = managedByUsers;
+    await project.save({ validateBeforeSave: false });
+
+    // Update user's managedProjects 
+    user.managedProjects = managedProjects;
+    await user.save({ validateBeforeSave: false });
+
+    return res.status(200).send({ project, user });
+  } catch (err) {
+    console.log(err);
     return res.sendStatus(400);
   }
 };

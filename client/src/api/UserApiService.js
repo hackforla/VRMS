@@ -51,13 +51,13 @@ class UserApiService {
   }
 
   // Updates user projects in db
-  async updateUserDbProjects(userToEdit, managedProjects) {
+  async updateUserDbProjects(userToEdit, projectId, action) {
     // eslint-disable-next-line no-underscore-dangle
-    const url = `${this.baseUserUrl}${userToEdit._id}`;
+    const url = `${this.baseUserUrl}${userToEdit._id}/managedProjects`;
     const requestOptions = {
       method: 'PATCH',
       headers: this.headers,
-      body: JSON.stringify({ managedProjects }),
+      body: JSON.stringify({ action, projectId }),
     };
 
     try {
@@ -68,6 +68,24 @@ class UserApiService {
     }
     return undefined;
   }
+  // // Updates user projects in db
+  // async updateUserDbProjects(userToEdit, managedProjects) {
+  //   // eslint-disable-next-line no-underscore-dangle
+  //   const url = `${this.baseUserUrl}${userToEdit._id}`;
+  //   const requestOptions = {
+  //     method: 'PATCH',
+  //     headers: this.headers,
+  //     body: JSON.stringify({ managedProjects }),
+  //   };
+
+  //   try {
+  //     return await fetch(url, requestOptions);
+  //   } catch (error) {
+  //     console.log(`update user error: `, error);
+  //     alert('Server not responding.  Please try again.');
+  //   }
+  //   return undefined;
+  // }
 
   async updateUserDbIsActive(userToEdit, isActive) {
     const url = `${this.baseUserUrl}${userToEdit._id}`;
