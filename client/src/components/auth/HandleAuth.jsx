@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import { isValidToken } from '../../services/user.service';
 import { authLevelRedirect } from '../../utils/authUtils';
+import { Box, CircularProgress } from '@mui/material';
 
 import '../../sass/MagicLink.scss';
 import useAuth from '../../hooks/useAuth';
@@ -42,8 +43,18 @@ const HandleAuth = (props) => {
 
     setIsLoaded(true);
   }, [isMagicLinkValid, setIsLoaded, auth]);
-
-  if (!isLoaded) return <div>Loading...</div>;
+  // TODO : Improve Loading screen...
+  if (!isLoaded)
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
 
   const Delayed = ({ children, waitBeforeShow = 500 }) => {
     const [isShown, setIsShown] = useState(false);
@@ -63,7 +74,7 @@ const HandleAuth = (props) => {
   if (auth?.user) {
     loginRedirect = authLevelRedirect(auth.user);
   }
-
+  // TODO: Replacing HTML with MUI and improve response design.
   return (
     <div className="flex-container">
       <Delayed waitBeforeShow={1000}>
