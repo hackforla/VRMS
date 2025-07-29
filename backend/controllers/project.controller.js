@@ -67,12 +67,12 @@ ProjectController.destroy = async function (req, res) {
 };
 
 ProjectController.updateManagedByUsers = async function (req, res) {
-  const { projectId } = req.params;
+  const { ProjectId } = req.params;
   const { action, userId } = req.body; // action - 'add' or 'remove'
 
   try {
     // Update project's managedByUsers and the user's managedProjects
-    const project = await Project.findById(projectId);
+    const project = await Project.findById(ProjectId);
     let managedByUsers = project.managedByUsers || [];
 
     const user = await User.findById(userId);
@@ -80,11 +80,11 @@ ProjectController.updateManagedByUsers = async function (req, res) {
 
     if (action === 'add') {
       managedByUsers = [...managedByUsers, userId];
-      managedProjects = [...managedProjects, projectId];
+      managedProjects = [...managedProjects, ProjectId];
     } else {
       // remove case
       managedByUsers = managedByUsers.filter((id) => id !== userId);
-      managedProjects = managedProjects.filter((id) => id !== projectId);
+      managedProjects = managedProjects.filter((id) => id !== ProjectId);
     }
 
     // Update project's managedByUsers 
