@@ -7,9 +7,12 @@ RUN yarn install --pure-lockfile
 COPY . .
 
 FROM node:18.12.0-slim AS api-production
+ARG BUILD_SHA
 EXPOSE 4000
-USER node
 WORKDIR /srv/backend
 COPY --from=api-builder /srv/backend/node_modules ./node_modules
 COPY . .
+ENV BUILD_SHA=${BUILD_SHA}
+RUN echo "${BUILD_SHA:-unknown}" > BUILD_INFO
+USER node
 CMD ["npm", "run", "start"]

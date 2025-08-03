@@ -33,7 +33,7 @@ async function dropAllCollections() {
 }
 let mongoServer;
 module.exports = {
-  setupDB(databaseName) {
+  setupIntegrationDB(databaseName) {
     // Connect to Mongoose
     beforeAll(async () => {
       mongoServer = new MongoMemoryServer({
@@ -49,11 +49,6 @@ module.exports = {
       await mongoose.connect(mongoUri, opts, (err) => {
         if (err) console.error(err);
       });
-    });
-
-    // Cleans up database between each test
-    afterEach(async () => {
-      await removeAllCollections();
     });
 
     // Disconnect Mongoose
