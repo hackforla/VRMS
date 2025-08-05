@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import CheckInButtons from '../components/presentational/CheckInButtons';
 import CreateNewProfileButton from '../components/presentational/CreateNewProfileButton';
 import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend } from '../utils/globalSettings';
-import { CircularProgress, Box, Typography } from '@mui/material';
+import { CircularProgress, Box, Typography, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 
 import '../sass/Home.scss';
 
@@ -25,12 +25,13 @@ const h4sx = {
   fontSize: {xs: '1.8rem'},
 }
 
+
 const Home = () => {
   const [events, setEvents] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState('');
 
   const handleEventChange = (e) => {
-    setSelectedEvent(e.currentTarget.value);
+    setSelectedEvent(e.target.value);
   };
 
   // Fetching only events with checkInReady = true
@@ -61,6 +62,8 @@ const Home = () => {
     );
   }
 
+  
+
   return (
       <Box className="home">
         <Box className="home-headers">
@@ -70,39 +73,43 @@ const Home = () => {
 
         {events && events.length > 0 ? (
           <Box className="meeting-select-container">
-            <form
+            <FormControl
               className="form-select-meeting"
               autoComplete="off"
               onSubmit={(e) => e.preventDefault()}
+              variant='standard'
             >
               <Box className="form-row">
                 <Box className="form-input-select">
-                  <label htmlFor={'meeting-checkin'}>
+                  <InputLabel id='select-meeting-label'>
                     Select a meeting to check-in:
-                  </label>
+                  </InputLabel>
                   <Box className="radio-buttons">
-                    <select
-                      name={'meeting-checkin'}
+                    <Select
+                      labelId='select-meeting-label'
                       className="select-meeting-dropdown"
+                      value={selectedEvent ? selectedEvent : "--SELECT ONE--"}
+                      renderValue={(selected) => (
+                        <Typography sx={{ color: 'red'}}>
+                          {selectedEvent ? selectedEvent : "--SELECT ONE--"}
+                        </Typography>
+                      )}
                       onChange={handleEventChange}
-                      required
-                      defaultValue="--SELECT ONE--"
                     >
-                      <option value="--SELECT ONE--" disabled hidden>
-                        --SELECT ONE--
-                      </option>
                       {events.map((event) => {
                         return (
-                          <option key={event._id || 0} value={event._id}>
-                            {event?.project?.name + ' - ' + event.name}
-                          </option>
+                          <MenuItem key={event._id || 0} value={event.project?.name + ' - ' + event.name}>
+                            <Typography>
+                              {event?.project?.name + ' - ' + event.name}
+                            </Typography>
+                          </MenuItem>
                         );
                       })}
-                    </select>
+                    </Select>
                   </Box>
                 </Box>
               </Box>
-            </form>
+            </FormControl>
           </Box>
         ):(
 

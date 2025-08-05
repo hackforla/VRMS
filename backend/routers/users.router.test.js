@@ -1,199 +1,220 @@
+// Setup mocks for UserController
+jest.mock('../controllers/user.controller');
+const { UserController } = require('../controllers');
+
+// Must import usersRouter after setting up mocks for UserController
+const usersRouter = require('./users.router');
+const express = require('express');
 const supertest = require('supertest');
-const app = require('../app');
-const request = supertest(app);
 
-const { setupDB } = require('../setup-test');
-setupDB('api-users');
+// Setup testapp with just usersRouter which calls mocked UserController
+const testapp = express();
+testapp.use(express.json());
+testapp.use(express.urlencoded({ extended: false }));
+testapp.use('/api/users', usersRouter);
+const request = supertest(testapp);
 
-const backendHeaders = process.env.CUSTOM_REQUEST_HEADER;
-describe('CREATE', () => {
-  test('Create a User with POST to /api/users/', async (done) => {
-    // Test Data
-    const submittedData = {
-      name: {
-        firstName: 'test',
-        lastName: 'user',
-      },
-      email: 'newtest@test.com',
+describe('Unit Tests for userRouter', () => {
+    // Mocked user data
+    const mockUser = {
+        name: {
+            firstName: 'test',
+            lastName: 'user',
+        },
+        email: 'newtest@test.com',
+    };
+    const mockId = '12345';
+    const mockUpdatedEmail = {
+        email: 'newtest@test.com',
     };
 
-    // Submit a User
-    const res = await request
-      .post('/api/users/')
-      .set('Accept', 'application/json')
-      .set('x-customrequired-header', backendHeaders)
-      .send(submittedData);
-    expect(res.status).toBe(201);
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
 
-    done();
-  });
-});
+    describe('CREATE', () => {
+        it('should create a User through the UserController', async (done) => {
+            //Setup
+            //Mock the UserController function that this route calls with expected results
+            UserController.create.mockImplementationOnce(
+                (req, res) => { return res.status(201).send(mockUser) }
+            );
+    
+            //Functionality
+            //Post mockUser to CREATE API Endpoint
+            const response = await request
+                .post('/api/users/')
+                .send(mockUser);
 
-describe('READ', () => {
-  test('Get a list of Users with with GET to /api/users/', async (done) => {
-    // Test Data
-    const submittedData = {
-      name: {
-        firstName: 'test',
-        lastName: 'user',
-      },
-      email: 'newtest@test.com',
-    };
+            //Test
+            expect(UserController.create).toHaveBeenCalledWith(
+                expect.objectContaining({body: mockUser}),
+                expect.anything(), // Mock the response object
+                expect.anything() // Mock the next function
+            );
+            expect(response.status).toBe(201);
+            expect(response.body).toEqual(mockUser);
 
-    // Submit a User
-    const res = await request
-      .post('/api/users/')
-      .set('Accept', 'application/json')
-      .set('x-customrequired-header', backendHeaders)
-      .send(submittedData);
-    expect(res.status).toBe(201);
+            done();
+        });
+    });
+      
+    describe('READ', () => {
+        it('should get a list of Users with with GET to /api/users/ through UserController', async (done) => {
+            //Setup
+            //Mock the UserController function that this route calls with expected results
+            UserController.user_list.mockImplementationOnce(
+                (req, res) => { return res.status(200).send([mockUser]) }
+            );
+    
+            //Functionality
+            //Get list of all users from READ API Endpoint
+            const response = await request
+                .get('/api/users/');
 
-    // Get all Users
-    const res2 = await request.get('/api/users/').set('x-customrequired-header', backendHeaders);
-    expect(res2.status).toBe(200);
+            //Test
+            expect(UserController.user_list).toHaveBeenCalled();
+            expect(response.status).toBe(200);
+            expect(response.body[0]).toEqual(mockUser);
 
-    const APIData = res2.body[0];
-    expect(APIData.name).toMatchObject(submittedData.name);
+            done();
+        });
 
-    done();
-  });
-  test('Get a specific User by param with GET to /api/users?email=<query>', async (done) => {
-    // Test Data
-    const submittedData = {
-      name: {
-        firstName: 'test',
-        lastName: 'user',
-      },
-      email: 'newtest@test.com',
-    };
+        it('should get a specific User by param with GET to /api/users?email=<query> through UserController', async (done) => {
+            //Setup
+            //Mock the UserController function that this route calls with expected results
+            UserController.user_list.mockImplementationOnce(
+                (req, res) => { return res.status(200).send([mockUser]) }
+            );
+    
+            //Functionality
+            //Get a user with a specific email using a query param to READ API Endpoint
+            const response = await request
+                .get('/api/users?email=newtest@test.com');
 
-    // Submit a User
-    const res = await request
-      .post('/api/users/')
-      .set('Accept', 'application/json')
-      .set('x-customrequired-header', backendHeaders)
-      .send(submittedData);
-    expect(res.status).toBe(201);
+            //Test
+            expect(UserController.user_list).toHaveBeenCalled();
+            expect(response.status).toBe(200);
+            expect(response.body[0]).toEqual(mockUser);
 
-    // Get all Users
-    const res2 = await request
-      .get('/api/users?email=newtest@test.com')
-      .set('x-customrequired-header', backendHeaders);
-    expect(res2.status).toBe(200);
+            done();
+        });
+    
+        it('should get a list of Users with accessLevel of admin or superadmin with GET to /api/users/admins through UserController', async (done) => {
+            //Setup
+            //Mock the UserController function that this route calls with expected results
+            UserController.admin_list.mockImplementationOnce(
+                (req, res) => { return res.status(200).send([mockUser]) }
+            );
+    
+            //Functionality
+            //Get a list of admins and superadmins from READ API Endpoint for admins
+            const response = await request
+                .get('/api/users/admins');
 
-    const APIData = res2.body[0];
-    expect(APIData.name).toMatchObject(submittedData.name);
+            //Test
+            expect(UserController.admin_list).toHaveBeenCalled();
+            expect(response.status).toBe(200);
+            expect(response.body[0]).toEqual(mockUser);
 
-    done();
-  });
+            done();
+        });
+    
+        it('should get a list of Users with the ability to manage projects with GET to /api/users/projectManagers through UserController', async (done) => {
+            //Setup
+            //Mock the UserController function that this route calls with expected results
+            UserController.projectLead_list.mockImplementationOnce(
+                (req, res) => { return res.status(200).send([mockUser]) }
+            );
+    
+            //Functionality
+            //Get a list of project leads and admins from READ API Endpoint for project leads
+            const response = await request
+                .get('/api/users/projectManagers');
 
-  test('Get a specific User by UserId with GET to /api/users/:UserId', async (done) => {
-    // Test Data
-    const submittedData = {
-      name: {
-        firstName: 'test',
-        lastName: 'user',
-      },
-      email: 'newtest@test.com',
-    };
+            //Test
+            expect(UserController.projectLead_list).toHaveBeenCalled();
+            expect(response.status).toBe(200);
+            expect(response.body[0]).toEqual(mockUser);
 
-    // Submit a User
-    const res = await request
-      .post('/api/users/')
-      .set('Accept', 'application/json')
-      .set('x-customrequired-header', backendHeaders)
-      .send(submittedData);
-    expect(res.status).toBe(201);
+            done();
+        });
+    
+        it('should get a specific User by UserId with GET to /api/users/:UserId through UserController', async (done) => {
+            //Setup
+            //Mock the UserController function that this route calls with expected results
+            UserController.user_by_id.mockImplementationOnce(
+                (req, res) => { return res.status(200).send(mockUser) }
+            );
+    
+            //Functionality
+            //Get a specific user from READ API Endpoint for specific UUIDs
+            const response = await request
+                .get(`/api/users/${mockId}`);
 
-    // Get User by UserId
-    const res2 = await request
-      .get(`/api/users/${res.body._id}`)
-      .set('x-customrequired-header', backendHeaders);
-    expect(res2.status).toBe(200);
+            //Test
+            expect(UserController.user_by_id).toHaveBeenCalledWith(
+                expect.objectContaining({params: {UserId: mockId}}),
+                expect.anything(), // Mock the response object
+                expect.anything() // Mock the next function
+            );
+            expect(response.status).toBe(200);
+            expect(response.body).toEqual(mockUser);
 
-    const APIData = res2.body;
-    expect(APIData.email).toBe(submittedData.email);
-    expect(APIData.name).toMatchObject(submittedData.name);
+            done();
+        });
+    });
+    
+    describe('UPDATE', () => {
+        it('should update a User with PATCH to /api/users/:UserId through UserController', async (done) => {
+            //Setup
+            //Mock the UserController function that this route calls with expected results
+            UserController.update.mockImplementationOnce(
+                (req, res) => { return res.status(200).send(mockUser) }
+            );
+    
+            //Functionality
+            //Patch a user with a specific id by sending new user data to UPDATE API Endpoint
+            const response = await request
+                .patch(`/api/users/${mockId}`)
+                .send(mockUpdatedEmail);
 
-    done();
-  });
-});
+            //Test
+            expect(UserController.update).toHaveBeenCalledWith(
+                expect.objectContaining({params: {UserId: mockId}}),
+                expect.anything(), // Mock the response object
+                expect.anything() // Mock the next function
+            );
+            expect(response.status).toBe(200);
+            expect(response.body).toEqual(mockUser);
 
-describe('UPDATE', () => {
-  test('Update a User with PATCH to /api/users/:UserId', async (done) => {
-    // Test Data
-    const submittedData = {
-      name: {
-        firstName: 'test',
-        lastName: 'user',
-      },
-      email: 'newtest@test.com',
-    };
+            done();
+        });
+    });
+    
+    describe('DELETE', () => {
+        it('should delete a specific user by Id with DELETE /api/users/:UserId through UserController', async (done) => {
+            //Setup
+            //Mock the UserController function that this route calls with expected results
+            UserController.delete.mockImplementationOnce(
+                (req, res) => { return res.status(200).send(mockUser) }
+            );
+    
+            //Delete user with a specific id via a request to DELETE API Endpoint
+            const response = await request
+                .delete(`/api/users/${mockId}`)
+                .send(mockUpdatedEmail);
 
-    // Submit a User
-    const res = await request
-      .post('/api/users/')
-      .set('Accept', 'application/json')
-      .set('x-customrequired-header', backendHeaders)
-      .send(submittedData);
-    expect(res.status).toBe(201);
+            //Test
+            expect(UserController.delete).toHaveBeenCalledWith(
+                expect.objectContaining({params: {UserId: mockId}}),
+                expect.anything(), // Mock the response object
+                expect.anything() // Mock the next function
+            );
+            expect(response.status).toBe(200);
+            expect(response.body).toEqual(mockUser);
 
-    const updatedEmail = {
-      email: 'newtest@test.com',
-    };
-
-    // Update User
-    const resUpdate = await request
-      .patch(`/api/users/${res.body._id}`)
-      .set('Accept', 'application/json')
-      .set('x-customrequired-header', backendHeaders)
-      .send(updatedEmail);
-    expect(resUpdate.status).toBe(200);
-    // TODO: The updated User call is not returning a repsonse. Uncomment below line and
-    // run to see.
-    // expect(resUpdate.name).toMatchObject(submittedData.name);
-
-    const res2 = await request
-      .get(`/api/users/${res.body._id}`)
-      .set('x-customrequired-header', backendHeaders);
-    expect(res2.status).toBe(200);
-
-    const APIData = res2.body;
-    expect(APIData.email).toBe(updatedEmail.email);
-    expect(APIData.name).toMatchObject(submittedData.name);
-
-    done();
-  });
-});
-
-describe('DELETE', () => {
-  test('Delete a specific user by Id with DELETE /api/users/:UserId', async (done) => {
-    // Test Data
-    const submittedData = {
-      name: {
-        firstName: 'test',
-        lastName: 'user',
-      },
-      email: 'newtest@test.com',
-    };
-
-    // Submit a User
-    const res = await request
-      .post('/api/users/')
-      .set('Accept', 'application/json')
-      .set('x-customrequired-header', backendHeaders)
-      .send(submittedData);
-    expect(res.status).toBe(201);
-
-    // Delete User
-    const res2 = await request
-      .delete(`/api/users/${res.body._id}`)
-      .set('x-customrequired-header', backendHeaders);
-    expect(res2.status).toBe(200);
-
-    const APIData = res2.body;
-    expect(APIData.name).toMatchObject(submittedData.name);
-
-    done();
-  });
+            done();
+        });
+    });
 });
