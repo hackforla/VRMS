@@ -34,29 +34,26 @@ const HandleAuth = (props) => {
 
   // Step 3: Set IsLoaded value to render Component
   useEffect(() => {
-    if (!isMagicLinkValid) {
-      setIsLoaded(true);
-      return;
+    if (!isLoaded) {
+      const timer = setTimeout(() => {
+        setIsLoaded(true);
+      }, 1000);
+
+      return () => clearTimeout(timer);
     }
+  }, [isLoaded]);
 
-    if (!auth || auth.isError) return;
+  // This is the old code and logic doesn't work on loading spinner.
+  // useEffect(() => {
+  //   if (!isMagicLinkValid) {
+  //     setIsLoaded(true);
+  //     return;
+  //   }
 
-    setIsLoaded(true);
-  }, [isMagicLinkValid, setIsLoaded, auth]);
+  //   if (!auth || auth.isError) return;
 
-  if (!isLoaded)
-    return (
-      <Box
-        sx={{
-          pt: 5,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    );
+  //   setIsLoaded(true);
+  // }, [isMagicLinkValid, setIsLoaded, auth]);
 
   const Delayed = ({ children, waitBeforeShow = 500 }) => {
     const [isShown, setIsShown] = useState(false);
@@ -79,7 +76,12 @@ const HandleAuth = (props) => {
 
   return (
     <Box textAlign="center" sx={{ pt: 5, fontSize: '16px' }}>
-      <Delayed waitBeforeShow={1000}>
+      {!isLoaded && <CircularProgress />}
+      <Delayed
+        waitBeforeShow={1000}
+        isLoaded={isLoaded}
+        isSetLoaded={setIsLoaded}
+      >
         <Typography variant="p">
           Sorry, the link is not valid anymore.
         </Typography>
