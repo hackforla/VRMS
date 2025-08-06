@@ -77,11 +77,7 @@ const HandleAuth = (props) => {
   return (
     <Box textAlign="center" sx={{ pt: 5, fontSize: '16px' }}>
       {!isLoaded && <CircularProgress />}
-      <Delayed
-        waitBeforeShow={1000}
-        isLoaded={isLoaded}
-        isSetLoaded={setIsLoaded}
-      >
+      <Delayed waitBeforeShow={1000}>
         <Typography variant="p">
           Sorry, the link is not valid anymore.
         </Typography>
