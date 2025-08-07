@@ -246,7 +246,7 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
               variant={isProjectLead ? 'contained' : 'secondary'}
               onClick={buttonSwap}
             >
-              Project Leads
+              Project Members
             </Button>
           </ButtonGroup>
         </Box>
