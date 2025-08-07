@@ -53,17 +53,24 @@ UserController.projectManager_list = async function (req, res) {
 
   try {
     const projectManagers = await User.find({
-      $and: [
-        { accessLevel: { $in: ['admin', 'superadmin'] } },
-        { managedProjects: { $exists: true, $type: 'array', $ne: [] } },
-      ],
+      managedProjects: { $exists: true, $type: 'array', $ne: [] },
     });
 
     // Collect all unique project IDs
-    const allProjectIds = [...new Set(projectManagers.flatMap((pm) => pm.managedProjects))];
+    const allProjectIds = [
+      ...new Set(
+        projectManagers
+          .flatMap((pm) => pm.managedProjects)
+          .filter((id) => typeof id === 'string' && id.match(/^[a-f\d]{24}$/i)),
+      ),
+    ];
 
     // Fetch all projects in one query
-    const projects = await Project.find({ _id: { $in: allProjectIds } });
+    const projects = await Project.find(
+      { _id: { $in: allProjectIds } },
+      { _id: 1, name: 1 }, // projection
+    );
+
     const projectIdToName = {};
     for (const project of projects) {
       projectIdToName[project._id.toString()] = project.name;
