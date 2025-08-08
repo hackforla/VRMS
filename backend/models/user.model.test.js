@@ -96,6 +96,19 @@ describe('Unit tests for User Model', () => {
       expect(error.errors.accessLevel).toBeDefined();
     });
 
+    it('should enforce that emails are stored in lowercase', async () => {
+      // Create a mock user with an uppercase email
+      const uppercaseEmail = 'TEST@test.com';
+      const mockUser = new User({
+        email: uppercaseEmail,
+      });
+
+      mockUser.validate();
+      // Tests
+      expect(mockUser.email).toBe(uppercaseEmail.toLowerCase());
+    });
+
+
     it('should pass validation with valid user data', async () => {
       // Create a mock user with valid data
       const mockUser = new User({
