@@ -94,6 +94,8 @@ jobs:
     name: Deploy to AWS ECS
     runs-on: ubuntu-latest
     needs: [setup_env, build]
+    permissions:
+      id-token: write # Needed for OIDC authentication to AWS
     steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v3 # Sets AWS credentials for CLI
