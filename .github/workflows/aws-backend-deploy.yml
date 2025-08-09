@@ -32,7 +32,7 @@ jobs:
         run: |
           if [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
               INPUT_ENV=${{ github.event.inputs.env }}; INPUT_REF=${{ github.event.inputs.ref }}
-              echo AWS_APPENV="$AWS_APP_NAME"-$INPUT_ENV >> $GITHUB_ENV
+              echo AWS_APPENV=$AWS_APP_NAME >> $GITHUB_ENV
               echo IMAGE_TAG=$(git rev-parse --short HEAD) >> $GITHUB_ENV
               echo BUILD_SHA=$(git rev-parse --short HEAD) >> $GITHUB_ENV
           fi
@@ -87,7 +87,7 @@ jobs:
             --push \
             --build-arg BUILD_SHA=$BUILD_SHA \
             -f ${{ env.DOCKERFILE }} \
-            -t $ECR_REGISTRY/$ECR_REPOSITORY:latest \
+            -t $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.event.inputs.env }} \
             -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
             ${{ env.DOCKER_PATH }}
   deploy:
