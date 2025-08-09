@@ -43,6 +43,8 @@ jobs:
   build:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write # Needed for OIDC authentication to AWS
     needs: [setup_env]
     steps:
       - name: Checkout
@@ -50,11 +52,11 @@ jobs:
         with:
           ref: ${{ github.event.inputs.ref }}
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v3 # Sets AWS credentials for CLI
         with:
-          aws-access-key-id: ${{ secrets.INCUBATOR_AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.INCUBATOR_AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: arn:aws:iam::035866691871:role/incubator-cicd-vrms # IAM role for deploy
+          role-session-name: incubator-cicd-vrms-gha # Session name for audit
+          aws-region: us-west-2 # AWS region
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
@@ -94,33 +96,16 @@ jobs:
     needs: [setup_env, build]
     steps:
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v3 # Sets AWS credentials for CLI
         with:
-          aws-access-key-id: ${{ secrets.INCUBATOR_AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.INCUBATOR_AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
-      - name: Pull Task Definition & write to file
-        id: aws-task-definition
+          role-to-assume: arn:aws:iam::035866691871:role/incubator-cicd-vrms # IAM role for deploy
+          role-session-name: incubator-cicd-vrms-gha # Session name for audit
+          aws-region: us-west-2 # AWS region
+      - name: Restart ECS Service
+        id: redeploy-service
+        env:
+          SERVICE_NAME: ${{env.AWS_APP_NAME}}-${{ github.event.inputs.env }} # ECS service name
+        # Force a new deployment of the ECS service to use the latest Docker image
         run: |
-          aws ecs describe-task-definition \
-            --task-definition ${{ needs.setup_env.outputs.AWS_APPENV }} \
-            --query taskDefinition | \
-            jq 'del(.taskDefinitionArn,.revision,.status,.registeredBy,.registeredAt,.compatibilities,.requiresAttributes)' > task-def.json
-      - name: Interpolate new Docker Image into Task Definition
-        id: task-definition
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: task-def.json
-          container-name: ${{ needs.setup_env.outputs.AWS_APPENV }}
-          image: ${{ steps.login-ecr.outputs.registry }}/${{ needs.setup_env.outputs.AWS_APPENV }}:${{ needs.setup_env.outputs.IMAGE_TAG }}
-      - name: Deploy Amazon ECS
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        with:
-          task-definition: ${{ steps.task-definition.outputs.task-definition }}
-          service: ${{ needs.setup_env.outputs.AWS_APPENV }}
-          cluster: ${{ env.AWS_SHARED_CLUSTER }}
-          wait-for-service-stability: true
-          wait-for-minutes: 5
+          aws ecs update-service --force-new-deployment --service $SERVICE_NAME --cluster $AWS_SHARED_CLUSTER
+  
