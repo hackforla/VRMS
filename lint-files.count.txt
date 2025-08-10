@@ -1,0 +1,1 @@
+After running the lint found total number of the files has linting problems: 185
