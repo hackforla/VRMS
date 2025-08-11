@@ -23,6 +23,7 @@ const HandleAuth = (props) => {
       setMagicLink(isValid);
     });
   }, [props.location.search]);
+  console.debug('Step 1: isMagicLinkValid: ', isMagicLinkValid);
 
   // Step 2: Refresh user auth (requires valid Magic Link)
   useEffect(() => {
@@ -31,8 +32,32 @@ const HandleAuth = (props) => {
 
     refreshAuth();
   }, [isMagicLinkValid, refreshAuth, auth]);
+  console.debug('Step 2: auth: ', auth);
+  console.debug('Step 2: isMagicLinkValid: ', isMagicLinkValid);
 
   // Step 3: Set IsLoaded value to render Component
+  useEffect(() => {
+    if (!isMagicLinkValid) return;
+
+    if (!auth || auth.isError) return;
+
+    setIsLoaded(true);
+  }, [isMagicLinkValid, setIsLoaded, auth]);
+  console.debug('Step 3: isLoaded: ', isLoaded);
+
+  // const Delayed = ({ children, waitBeforeShow = 500 }) => {
+  //   const [isShown, setIsShown] = useState(false);
+  //   useEffect(() => {
+  //     const timer = setTimeout(() => {
+  //       setIsShown(true);
+  //     }, waitBeforeShow);
+
+  //     return () => clearTimeout(timer);
+  //   }, [waitBeforeShow]);
+
+  //   return isShown ? children : null;
+  // };
+
   useEffect(() => {
     if (!isLoaded) {
       const timer = setTimeout(() => {
@@ -43,31 +68,6 @@ const HandleAuth = (props) => {
     }
   }, [isLoaded]);
 
-  // This is the old code and logic doesn't work on loading spinner.
-  // useEffect(() => {
-  //   if (!isMagicLinkValid) {
-  //     setIsLoaded(true);
-  //     return;
-  //   }
-
-  //   if (!auth || auth.isError) return;
-
-  //   setIsLoaded(true);
-  // }, [isMagicLinkValid, setIsLoaded, auth]);
-
-  const Delayed = ({ children, waitBeforeShow = 500 }) => {
-    const [isShown, setIsShown] = useState(false);
-    useEffect(() => {
-      const timer = setTimeout(() => {
-        setIsShown(true);
-      }, waitBeforeShow);
-
-      return () => clearTimeout(timer);
-    }, [waitBeforeShow]);
-
-    return isShown ? children : null;
-  };
-
   let loginRedirect = '';
 
   if (auth?.user) {
@@ -76,12 +76,13 @@ const HandleAuth = (props) => {
 
   return (
     <Box textAlign="center" sx={{ pt: 5, fontSize: '16px' }}>
-      {!isLoaded && <CircularProgress />}
-      <Delayed waitBeforeShow={1000}>
+      {!isLoaded ? (
+        <CircularProgress />
+      ) : (
         <Typography variant="p">
           Sorry, the link is not valid anymore.
         </Typography>
-      </Delayed>
+      )}
       {auth?.user && <Redirect to={loginRedirect} /> /* Redirect to /welcome */}
     </Box>
   );
