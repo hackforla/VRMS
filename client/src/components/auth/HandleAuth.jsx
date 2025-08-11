@@ -23,7 +23,6 @@ const HandleAuth = (props) => {
       setMagicLink(isValid);
     });
   }, [props.location.search]);
-  console.debug('Step 1: isMagicLinkValid: ', isMagicLinkValid);
 
   // Step 2: Refresh user auth (requires valid Magic Link)
   useEffect(() => {
@@ -32,8 +31,6 @@ const HandleAuth = (props) => {
 
     refreshAuth();
   }, [isMagicLinkValid, refreshAuth, auth]);
-  console.debug('Step 2: auth: ', auth);
-  console.debug('Step 2: isMagicLinkValid: ', isMagicLinkValid);
 
   // Step 3: Set IsLoaded value to render Component
   useEffect(() => {
@@ -43,7 +40,6 @@ const HandleAuth = (props) => {
 
     setIsLoaded(true);
   }, [isMagicLinkValid, setIsLoaded, auth]);
-  console.debug('Step 3: isLoaded: ', isLoaded);
 
   // const Delayed = ({ children, waitBeforeShow = 500 }) => {
   //   const [isShown, setIsShown] = useState(false);
