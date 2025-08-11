@@ -8,7 +8,7 @@ const userSchema = mongoose.Schema({
     firstName: { type: String },
     lastName: { type: String },
   },
-  email: { type: String, unique: true },
+  email: { type: String, unique: true, lowercase: true },
   accessLevel: { 
     type: String, 
     enum: ["user", "admin", "superadmin"], // restricts values to "user", "admin" and "superadmin"
