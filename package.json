@@ -2,6 +2,7 @@
   "name": "vrms-server",
   "version": "0.3.0",
   "description": "VRMS Server",
+  "type": "module",
   "scripts": {
     "start": "concurrently \"cd backend && npm run start\" \"cd client && npm run start\"",
     "mvp": "concurrently \"cd backend && npm run start\" \"cd client-mvp-04 && npm run start\"",
@@ -16,7 +17,8 @@
     "test:backend": "cd backend && npm run test",
     "test:client": "cd client && npm run test",
     "test:all": "cross-env NODE_ENV=test npm run test:client && npm run test:backend",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "lint:files": "node scripts/list-lint-files.js"
   },
   "dependencies": {
     "@mui/icons-material": "^5.14.19",
