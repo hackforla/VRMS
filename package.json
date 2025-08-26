@@ -5,6 +5,8 @@
   "scripts": {
     "start": "concurrently \"cd backend && npm run start\" \"cd client && npm run start\"",
     "mvp": "concurrently \"cd backend && npm run start\" \"cd client-mvp-04 && npm run start\"",
+    "format": "prettier --write \"client/**/*.{js,jsx,css}\" \"backend/**/*.{js,jsx,css}\"",
+    "lint": "eslint",
     "dev:api": "cd backend && npm run dev",
     "dev:client": "cd client && npm run start",
     "dev": "dotenv -e backend/.env -e client/.env concurrently \"npm run dev:api\" \"npm run dev:client\"",
@@ -13,7 +15,8 @@
     "test:cy": "dotenv -e ./backend/.env -e ./client/.env cross-var start-test dev:api %BACKEND_PORT% dev:client %CLIENT_PORT% cy:run",
     "test:backend": "cd backend && npm run test",
     "test:client": "cd client && npm run test",
-    "test:all": "cross-env NODE_ENV=test npm run test:client && npm run test:backend"
+    "test:all": "cross-env NODE_ENV=test npm run test:client && npm run test:backend",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@mui/icons-material": "^5.14.19",
@@ -21,11 +24,17 @@
     "cross-env": "^7.0.2",
     "cross-var": "^1.1.0",
     "dotenv-cli": "^3.2.0",
-    "styled-components": "^6.1.13",
-    "vite": "^5.4.19"
+    "styled-components": "^6.1.13"
   },
   "devDependencies": {
+    "autoprefixer": "^10.4.21",
     "cypress": "^5.0.0",
+    "eslint": "9.9.1",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-plugin-react": "^7.37.3",
+    "globals": "15.9.0",
+    "husky": "^9.1.7",
+    "prettier": "3.4.2",
     "start-server-and-test": "^1.11.3"
   }
 }

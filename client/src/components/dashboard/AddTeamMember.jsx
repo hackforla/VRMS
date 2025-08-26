@@ -4,7 +4,7 @@ import "../../sass/AddTeamMember.scss";
 const AddTeamMember = (props) => {
     const [email, setEmail] = useState("");
 
-    const handleInputChange = (e) => setEmail(e.currentTarget.value);
+    const handleInputChange = (e) => setEmail(e.currentTarget.value.toLowerCase());
 
     return (
         <div className="flex-container">

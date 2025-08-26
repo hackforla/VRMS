@@ -5,10 +5,11 @@ import readableEvent from './utilities/readableEvent';
 import ProjectForm from '../ProjectForm';
 import { simpleInputs, additionalInputsForEdit } from '../data';
 import TitledBox from '../parts/boxes/TitledBox';
+
 import { styled } from '@mui/material/styles';
-import { ReactComponent as EditIcon } from '../../svg/Icon_Edit.svg';
-import { ReactComponent as PlusIcon } from '../../svg/PlusIcon.svg';
 import CloseIcon from '@mui/icons-material/Close';
+import EditIcon from '../../svg/Icon_Edit.svg?react';
+import PlusIcon from '../../svg/PlusIcon.svg?react';
 
 import {
   Typography,
@@ -67,6 +68,9 @@ const DetailsText = styled(Typography)(({ theme }) => ({
   textOverflow: 'ellipsis',
   display: 'block',
 }));
+
+
+
 
 // DescriptionText: Specific typography for the event description line
 const DescriptionText = styled(Typography)(({ theme }) => ({
@@ -319,6 +323,7 @@ const EditProject = ({
         isEdit={true}
         setFormData={setFormData}
       />
+
       {/* Section for displaying and managing recurring events */}
       <TitledBox
         title="Recurring Events"
