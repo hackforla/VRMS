@@ -1,0 +1,29 @@
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Jupyter runtime files
+.jupyter/
+
+# Hidden notebook state (metadata, autosaves)
+*.nbconvert.ipynb
+*.nbconvert/
+
+# VSCode / PyCharm or other IDE junk (optional, but useful)
+.vscode/
+.idea/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pkl
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Virtual environments
+venv/
+
+adjustedreqs.txt
