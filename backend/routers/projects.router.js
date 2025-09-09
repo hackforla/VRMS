@@ -12,7 +12,7 @@ router.put('/', ProjectController.pm_filtered_projects);
 
 router.post('/', AuthUtil.verifyCookie, ProjectController.create);
 
-router.get('/:ProjectId', ProjectController.project_by_id);
+router.get('/:ProjectId', AuthUtil.verifyCookie, ProjectController.project_by_id);
 
 router.put('/:ProjectId', AuthUtil.verifyCookie, ProjectController.update);
 

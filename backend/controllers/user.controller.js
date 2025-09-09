@@ -27,6 +27,25 @@ UserController.user_list = async function (req, res) {
   }
 };
 
+UserController.user_by_email = async function (req, res) {
+  const { headers } = req;
+  const { email } = req.params;
+
+  console.log('email: ', email);
+
+  if (headers['x-customrequired-header'] !== expectedHeader) {
+    return res.sendStatus(403);
+  }
+
+  try {
+    const user = await User.find({ email });
+    return res.status(200).send(user);
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(400);
+  }
+};
+
 // Get list of Users with accessLevel 'admin' or 'superadmin' with GET
 UserController.admin_list = async function (req, res) {
   const { headers } = req;
@@ -232,7 +251,6 @@ UserController.signin = function (req, res) {
 };
 
 UserController.verifySignIn = async function (req, res) {
-   
   let token = req.headers['x-access-token'] || req.headers['authorization'];
   if (token.startsWith('Bearer ')) {
     // Remove Bearer from string
