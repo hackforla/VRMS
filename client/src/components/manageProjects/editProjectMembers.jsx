@@ -21,6 +21,7 @@ import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import TitledBox from '../parts/boxes/TitledBox';
 import { StyledButton } from '../ProjectForm';
 import UserApiService from '../../api/UserApiService';
+import { set } from 'date-fns';
 
 const testProject = [
   {
@@ -98,6 +99,11 @@ const ListComponent = ({ data, editMode, setEditMode, isLoading }) => {
   const [closeConfirmModal, setCloseConfirmModal] = useState(false);
   const [showUserInfo, setShowUserInfo] = useState(""); // Store user ID state of selected user to show info
 
+  useEffect(() => {
+    // Close user info when exiting out of "Edit" mode
+    setShowUserInfo("");
+  }, [editMode])
+
   const handleSavePMs = () => {
     console.log('Save PMs')
     // Insert logic to save to database here
@@ -125,7 +131,7 @@ const ListComponent = ({ data, editMode, setEditMode, isLoading }) => {
     // Auto close confirmation modal after 2 seconds
     setTimeout(() => {
       setRemoveConfirmModal(false);
-    }, 2000);
+    }, 1500);
   }
 
   const modalStyle1 = {
@@ -198,7 +204,6 @@ const ListComponent = ({ data, editMode, setEditMode, isLoading }) => {
                         {email}
                       </Typography>
                     </Grid>
-                    {editMode && <DeleteIcon style={{ color: 'red' }} onClick={() => setOpenModal(true)} />}
                     {/* Remove Modal */}
                     <Modal
                       open={openModal}
@@ -234,6 +239,7 @@ const ListComponent = ({ data, editMode, setEditMode, isLoading }) => {
                       </Box>
                     </Modal>
                   </Grid>
+                  {editMode && <DeleteIcon style={{ color: 'red', marginLeft: 40 }} onClick={() => setOpenModal(true)} />}
                 </ListItemButton>
               </ListItem>
               {/* User information */}
@@ -262,14 +268,14 @@ const ListComponent = ({ data, editMode, setEditMode, isLoading }) => {
                       </Box>
                       <Grid container direction="column">
                         <Grid item>
-                          <Typography style={{ fontWeight: 600 }} color="black">
+                          <Typography style={{ fontWeight: 600 }} sx={{ whiteSpace: "normal", wordBreak: "break-word", color: "black"}}>
                             {name.firstName.toUpperCase() +
                               ' ' +
                               name.lastName.toUpperCase()}
                           </Typography>
                         </Grid>
                         <Grid item>
-                          <Typography color="black">
+                          <Typography sx={{ whiteSpace: "normal", wordBreak: "break-word", color: "black"}}>
                             {email}
                           </Typography>
                         </Grid>
@@ -307,7 +313,7 @@ const EditProjectMembers = ({ projectToEdit }) => {
   const { auth } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [errorMsg, setErrorMsg] = useState(false);
+  const [error, setError] = useState(false);
   const [toggleSelect, setToggleSelect] = useState(false);
   const [email, setEmail] = useState('');
   const [searchedUser, setSearchedUser] = useState({});
@@ -340,12 +346,15 @@ const EditProjectMembers = ({ projectToEdit }) => {
   };
 
   const handleEmailSearch = async (search) => {   
+    setEmail(search);
+    // Reset toggleSelect state if user starts typing again
+    if (toggleSelect) setToggleSelect(false);
+
     // RegEx for valid email check
     const emailRegEx = /^((?:[A-Za-z0-9!#$%&'*+\-\/=?^_`{|}~]|(?<=^|\.)"|"(?=$|\.|@)|(?<=".*)[ .](?=.*")|(?<!\.)\.){1,64})(@)((?:[A-Za-z0-9.\-])*(?:[A-Za-z0-9])\.(?:[A-Za-z0-9]){2,})$/gi;
     
     // Fetch user data based on email
     if (emailRegEx.test(search)) {
-      setEmail(search);
       setIsLoading(true);
       
       try {
@@ -354,17 +363,17 @@ const EditProjectMembers = ({ projectToEdit }) => {
 
         if (user[0]) {
           setSearchedUser(user[0]);
-          setErrorMsg(false);
+          setError(false);
         } else {
           setSearchedUser({});
-          setErrorMsg(true);
+          setError(true);
         }
       } catch (err) {
-        setErrorMsg(true);
+        setError(true);
         console.log(err)
       }
     } else {
-      setErrorMsg(false);
+      setError(false);
       setSearchedUser({})
     }
     setIsLoading(false);
@@ -373,15 +382,20 @@ const EditProjectMembers = ({ projectToEdit }) => {
   // Handle logic to toggle email selection and adding user to project's managedByUsers
   const handleToggleSelect = () => {
     console.log('handleToggleSelect called')
-    setToggleSelect(!toggleSelect);
+    setToggleSelect(true);
 
     // INSERT logic here to update projectToEdit's managedByUsers array & user's managedProjects array
     if (!toggleSelect) {
       // Add user to project's managedByUsers array
       setTestUsers((prevUsers) => [...prevUsers, newUser]);
-    } else {
-      setTestUsers((prevUsers) => prevUsers.filter((user) => user._id !== newUser._id));
     }
+
+    // Confirmation message disappears after 1.5 seconds
+    setTimeout(() => {
+      setEmail("");
+      setSearchedUser({});
+      setToggleSelect(false);
+    }, 1500);
   }
       
 
@@ -392,48 +406,38 @@ const EditProjectMembers = ({ projectToEdit }) => {
         badge={editIcon()}
         onClick={() => setEditMode(!editMode)}
       >
-        <Autocomplete 
-          disabled={editMode}
-          disableCloseOnSelect
-          freeSolo
-          options={searchedUser?.email ? [searchedUser.email] : []}
-          onInputChange={(event, newInputValue) => handleEmailSearch(newInputValue)}
-          renderOption={(props, option) => (
-            <Box
-              {...props}
-              display="flex"
-              alignItems="center"
-              justifyContent="space-between"
-              width="100%"
-              sx={{ px: 2 }}
-            >
-              <Typography sx={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                {!toggleSelect ? option : <Typography sx={{ fontWeight: "bold" }}>User added to project successfully</Typography>}
-              </Typography>
-              {/* Icons for adding and confirming email of new user */}
-              {!toggleSelect ? <AddCircleOutlineIcon sx={{ flexShrink: 0, ml: 2 }} onClick={handleToggleSelect} />
-              : <CheckCircleOutline color="success" onClick={handleToggleSelect} />}
-            </Box>
-          )}
-          renderInput={(params) => (
+        {/* Email search componennt */}
+        <Grid container direction="column" sx={{ width: '100%', backgroundColor: 'white' }}>
+          <Grid item>
             <TextField 
-              {...params} 
-              value={searchedUser?.email || ''} 
+              disabled={!editMode}
+              onChange={(e) => handleEmailSearch(e.target.value)}
               placeholder="Enter user email address" 
-              InputProps={{ ...params.InputProps, disableUnderline: true }}
-              sx={{
-                '& .MuiInput-underline:before, & .MuiInput-underline:after': {
-                  borderBottom: 'none !important',
-                },
-                '& .MuiInput-root:before, & .MuiInput-root:after': {
-                  borderBottom: 'none !important',
-                }
-              }} 
+              value={email} 
+              size="small"
             />
+          </Grid>
+          {searchedUser?.email && (
+            <Grid item>
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+                width="100%"
+                sx={{ px: 2, py: 2, border: 1, borderColor: 'grey.400', borderRadius: 1, mt: 1 }}
+              >
+                <Typography sx={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  {!toggleSelect ? searchedUser?.email : <Typography sx={{ fontWeight: "bold" }}>User added to project successfully</Typography>}
+                </Typography>
+                {/* Icons for adding and confirming email of new user */}
+                {!toggleSelect ? <AddCircleOutlineIcon sx={{ flexShrink: 0, ml: 2 }} onClick={handleToggleSelect} />
+                : <CheckCircleOutline color="success" />}
+              </Box>
+            </Grid>
           )}
-        />
+        </Grid>
         {/* Display error message */}
-        {errorMsg && (<Typography color="red">No account found with this email address</Typography>)}
+        {error && (<Typography color="red">No account found with this email address</Typography>)}
 
         {/* Code for test data */}
         <ListComponent data={testUsers} editMode={editMode}  setEditMode={setEditMode} isLoading={isLoading} />
@@ -444,3 +448,46 @@ const EditProjectMembers = ({ projectToEdit }) => {
 }
 
 export default EditProjectMembers
+
+
+        // {/* working component */}
+        // <Autocomplete 
+        //   disabled={!editMode}
+        //   disableCloseOnSelect
+        //   freeSolo
+        //   options={searchedUser?.email ? [searchedUser.email] : []}
+        //   onInputChange={(event, newInputValue) => handleEmailSearch(newInputValue)}
+        //   renderOption={(props, option) => (
+        //     <Box
+        //       {...props}
+        //       display="flex"
+        //       alignItems="center"
+        //       justifyContent="space-between"
+        //       width="100%"
+        //       sx={{ px: 2 }}
+        //     >
+        //       <Typography sx={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+        //         {!toggleSelect ? option : <Typography sx={{ fontWeight: "bold" }}>User added to project successfully</Typography>}
+        //       </Typography>
+        //       {/* Icons for adding and confirming email of new user */}
+        //       {!toggleSelect ? <AddCircleOutlineIcon sx={{ flexShrink: 0, ml: 2 }} onClick={handleToggleSelect} />
+        //       : <CheckCircleOutline color="success" onClick={handleToggleSelect} />}
+        //     </Box>
+        //   )}
+        //   renderInput={(params) => (
+        //     <TextField 
+        //       {...params} 
+        //       value={searchedUser?.email || ''} 
+        //       placeholder="Enter user email address" 
+        //       InputProps={{ ...params.InputProps, disableUnderline: true }}
+        //       sx={{
+        //         '& .MuiInput-underline:before, & .MuiInput-underline:after': {
+        //           borderBottom: 'none !important',
+        //         },
+        //         '& .MuiInput-root:before, & .MuiInput-root:after': {
+        //           borderBottom: 'none !important',
+        //         }
+        //       }} 
+        //     />
+        //   )}
+        // />
