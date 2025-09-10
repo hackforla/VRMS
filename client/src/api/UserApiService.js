@@ -14,6 +14,22 @@ class UserApiService {
       const res = await fetch(this.baseUserUrl, {
         headers: this.headers,
       });
+      console.log(res);
+      return await res.json();
+    } catch (error) {
+      console.error(`fetchUsers error: ${error}`);
+      alert('Server not responding.  Please refresh the page.');
+    }
+    return [];
+  }
+
+  // Fetch user by email
+  async fetchUserByEmail(email) {
+    try {
+      const uri = `${this.baseUserUrl}${email}`;
+      const res = await fetch(uri, {
+        headers: this.headers,
+      });
       return await res.json();
     } catch (error) {
       console.error(`fetchUsers error: ${error}`);
