@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'; 
 import {  
-  Autocomplete,
   CircularProgress,
   Typography,
   Box,
@@ -21,7 +20,6 @@ import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import TitledBox from '../parts/boxes/TitledBox';
 import { StyledButton } from '../ProjectForm';
 import UserApiService from '../../api/UserApiService';
-import { set } from 'date-fns';
 
 const testProject = [
   {
@@ -31,7 +29,7 @@ const testProject = [
 ];
 
 // Test Users Data
-const users = [
+const testUsers = [
   {
     _id: "1",
     name: {
@@ -67,14 +65,14 @@ const newUser =   {
   email: "test4@hackforla.com"
 };
 
-const ButtonGroup = ({ btnName1, btnName2, callBackFn1, callBackFn2, isLoading  }) => (
+const ButtonGroup = ({ btnName1, btnName2, callBackFn1, callBackFn2, isLoading }) => (
     <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
     <Grid item xs="auto">
       <StyledButton
         sx="large"
         cursor="pointer"
         variant="contained"
-        onClick={callBackFn1}
+        onClick={(btn) => callBackFn1(btn)}
       >
         {isLoading ? <CircularProgress /> : `${btnName1}`}
       </StyledButton>
@@ -93,36 +91,54 @@ const ButtonGroup = ({ btnName1, btnName2, callBackFn1, callBackFn2, isLoading  
 );
 
 
-const ListComponent = ({ data, editMode, setEditMode, isLoading }) => {
+const ListComponent = ({ projectMembers, editMode, closeConfirmModal, setChangesMade, setCloseConfirmModal, setEditMode, setProjectMembers, isLoading }) => {
   const [openModal, setOpenModal] = useState(false);
   const [removeConfirmModal, setRemoveConfirmModal] = useState(false);
-  const [closeConfirmModal, setCloseConfirmModal] = useState(false);
+  const [renderedUsers, setRenderedUsers] = useState([]);
+  const [removeId, setRemoveId] = useState("");
   const [showUserInfo, setShowUserInfo] = useState(""); // Store user ID state of selected user to show info
 
   useEffect(() => {
     // Close user info when exiting out of "Edit" mode
     setShowUserInfo("");
-  }, [editMode])
+    setRenderedUsers(projectMembers);
+
+  }, [projectMembers, editMode, renderedUsers])
 
   const handleSavePMs = () => {
-    console.log('Save PMs')
-    // Insert logic to save to database here
+    alert('Saved PMs to database')
+    // Insert logic to save "renderedUsers" to database
   }
   
   const handleClosePMs = () => setCloseConfirmModal(true);
   
-  const handleCloseOnYes = () => {
+  const handleCloseOnYes = () => {    
+    // Discard changes 
+    setChangesMade(false);
+    // TEMPORARY LOGIC: Resetting renderedUsers to projectMembers
+    setProjectMembers(testUsers);
+    /* 
+      Insert actual logic here
+
+    */
+
+    // Close modal and exit edit mode
     setCloseConfirmModal(false);
     setEditMode(false);
   }
 
   const handleCloseOnNo = () => setCloseConfirmModal(false);
 
-  const handleRemovePMs = () => {
+  const handleRemoveConfirm = () => {
     /** 
-      Add logic to remove PM from project in database here
-      
+      Insert logic to remove PM (user) from project in database here
     */
+
+    setChangesMade(true);
+
+    // Temporary logic to remove user with id from test data
+    const updatedUsers = renderedUsers.filter(user => user._id !== removeId);
+    setProjectMembers(updatedUsers);
 
     // Show confirmation modal
     setRemoveConfirmModal(true);
@@ -155,7 +171,7 @@ const ListComponent = ({ data, editMode, setEditMode, isLoading }) => {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 400,
-    bgcolor: 'background.paper',
+    bgcolor: 'white',
     border: '2px solid #000',
     boxShadow: 'none',
     p: 4,
@@ -164,9 +180,8 @@ const ListComponent = ({ data, editMode, setEditMode, isLoading }) => {
   return (
     <Grid>
       <List className="search-results disablePadding">
-        {data.map((user, idx) => {
-          // Destructure user object
-          const { _id, name, email } = user;
+        {renderedUsers.map((user, idx) => {
+          const { _id, name, email } = user; // destructure user object
           return (
             <>
               <ListItem
@@ -185,15 +200,14 @@ const ListComponent = ({ data, editMode, setEditMode, isLoading }) => {
                     color: 'primary.main',
                     mx: 0.16,
                   }}
-                  className="search-results-button"
                 >
                   <Grid container justifyContent={'space-between'}                   
                     onClick={() => {
-                      if (editMode) setShowUserInfo(_id);
+                      if (editMode && !openModal) setShowUserInfo(_id);
                     }}
                   >
                     <Grid item>
-                      <Typography style={{ fontWeight: 600 }} color="black">
+                      <Typography fontWeight="bold" color="black">
                         {name.firstName.toUpperCase() +
                           ' ' +
                           name.lastName[0].toUpperCase() + '.'}
@@ -208,23 +222,19 @@ const ListComponent = ({ data, editMode, setEditMode, isLoading }) => {
                     <Modal
                       open={openModal}
                       hideBackdrop={true}
-                      aria-labelledby="modal-modal-title"
-                      aria-describedby="modal-modal-description"
                     >
                       <Box sx={modalStyle2}>
                         <WarningAmberIcon sx={{ fontSize: 40, color: 'red' }} />
-                        <Typography id="modal-modal-title" variant="h6" component="h2" fontWeight="bold">
+                        <Typography variant="h6" component="h2" fontWeight="bold">
                           Are you sure you want to remove this user from the project?
                         </Typography>
-                        <ButtonGroup btnName1={"Yes"} btnName2={"No"} callBackFn1={handleRemovePMs} callBackFn2={() => setOpenModal(false)} isLoading={isLoading} />
+                        <ButtonGroup btnName1={"Yes"} btnName2={"No"} callBackFn1={handleRemoveConfirm} callBackFn2={() => { setShowUserInfo(""); setOpenModal(false); }} isLoading={isLoading} />
                       </Box>
                     </Modal>
                     {/* Remove Confirmation Modal */}
                     <Modal   
                       open={removeConfirmModal}
                       hideBackdrop={true}
-                      aria-labelledby="modal-modal-title"
-                      aria-describedby="modal-modal-description"
                     >
                       <Box  
                         onClick={() => setRemoveConfirmModal(false)}
@@ -232,14 +242,14 @@ const ListComponent = ({ data, editMode, setEditMode, isLoading }) => {
                       >
                         <Box sx={modalStyle2} onClick={(e) => e.stopPropagation()}>
                           <CheckCircleOutline color="success" />
-                          <Typography id="modal-modal-title" variant="h6" component="h2" fontWeight="bold">
+                          <Typography variant="h6" component="h2" fontWeight="bold">
                             User removed from project.
                           </Typography>
                         </Box>
                       </Box>
                     </Modal>
                   </Grid>
-                  {editMode && <DeleteIcon style={{ color: 'red', marginLeft: 40 }} onClick={() => setOpenModal(true)} />}
+                  {editMode && <DeleteIcon style={{ color: 'red', marginLeft: 40 }} onClick={() => { setOpenModal(true); setRemoveId(_id); }} />}
                 </ListItemButton>
               </ListItem>
               {/* User information */}
@@ -252,7 +262,6 @@ const ListComponent = ({ data, editMode, setEditMode, isLoading }) => {
                     borderBottom: 1.6,
                     borderColor: 'grey.300',
                   }}
-                  key={`result_${_id}/${idx}`}
                 >
                     <ListItemButton sx={{ position: 'relative' }}>
                       <Box 
@@ -317,14 +326,17 @@ const EditProjectMembers = ({ projectToEdit }) => {
   const [toggleSelect, setToggleSelect] = useState(false);
   const [email, setEmail] = useState('');
   const [searchedUser, setSearchedUser] = useState({});
-
-  const [testUsers, setTestUsers] = useState(users);
+  const [closeConfirmModal, setCloseConfirmModal] = useState(false);
+  const [changesMade, setChangesMade] = useState(false);
+  const [projectMembers, setProjectMembers] = useState(testUsers); // Replace testUsers with fetched project's managedByUsers
 
   // Create new instance of UserApiService class
   const userApiService = new UserApiService();
 
+  // useEffect(() => {
+  //   // GET project's managedByUsers & set to projectMembers state
+  // }, []);
 
-  useEffect(() => {}, [testUsers]);
 
   const editIcon = () => {
     return (
@@ -335,7 +347,14 @@ const EditProjectMembers = ({ projectToEdit }) => {
           alignItems: 'center',
           cursor: 'pointer',
         }}
-        onClick={() => setEditMode(!editMode)}
+        onClick={() => {
+          if (editMode && changesMade) {
+            setCloseConfirmModal(true);
+          } else {
+            setEditMode(!editMode);
+            setError(false);
+          }
+        }}
       >
         <EditIcon style={{ p: 1 }} />
         <Typography sx={{ p: 1, fontSize: '14px', fontWeight: '600' }}>
@@ -380,14 +399,16 @@ const EditProjectMembers = ({ projectToEdit }) => {
   }
 
   // Handle logic to toggle email selection and adding user to project's managedByUsers
-  const handleToggleSelect = () => {
-    console.log('handleToggleSelect called')
+  const handleToggleSelect = (addedUser) => {
     setToggleSelect(true);
 
     // INSERT logic here to update projectToEdit's managedByUsers array & user's managedProjects array
     if (!toggleSelect) {
       // Add user to project's managedByUsers array
-      setTestUsers((prevUsers) => [...prevUsers, newUser]);
+      setProjectMembers((prevMembers) => [...prevMembers, addedUser]);
+
+      // Set changes made to true
+      setChangesMade(true);
     }
 
     // Confirmation message disappears after 1.5 seconds
@@ -397,17 +418,16 @@ const EditProjectMembers = ({ projectToEdit }) => {
       setToggleSelect(false);
     }, 1500);
   }
-      
+
 
   return (
     <Box sx={{ px: 0.5 }}>
       <TitledBox
         title={'Project Members (Event Editors)'}
         badge={editIcon()}
-        onClick={() => setEditMode(!editMode)}
       >
         {/* Email search componennt */}
-        <Grid container direction="column" sx={{ width: '100%', backgroundColor: 'white' }}>
+        <Grid container direction="column" sx={{ width: '100%', backgroundColor: editMode ? 'white' : '' }}>
           <Grid item>
             <TextField 
               disabled={!editMode}
@@ -430,7 +450,7 @@ const EditProjectMembers = ({ projectToEdit }) => {
                   {!toggleSelect ? searchedUser?.email : <Typography sx={{ fontWeight: "bold" }}>User added to project successfully</Typography>}
                 </Typography>
                 {/* Icons for adding and confirming email of new user */}
-                {!toggleSelect ? <AddCircleOutlineIcon sx={{ flexShrink: 0, ml: 2 }} onClick={handleToggleSelect} />
+                {!toggleSelect ? <AddCircleOutlineIcon sx={{ flexShrink: 0, ml: 2 }} onClick={() => handleToggleSelect(searchedUser)} />
                 : <CheckCircleOutline color="success" />}
               </Box>
             </Grid>
@@ -440,7 +460,7 @@ const EditProjectMembers = ({ projectToEdit }) => {
         {error && (<Typography color="red">No account found with this email address</Typography>)}
 
         {/* Code for test data */}
-        <ListComponent data={testUsers} editMode={editMode}  setEditMode={setEditMode} isLoading={isLoading} />
+        <ListComponent projectMembers={projectMembers} editMode={editMode} setChangesMade={setChangesMade} closeConfirmModal={closeConfirmModal} setCloseConfirmModal={setCloseConfirmModal} setEditMode={setEditMode} setProjectMembers={setProjectMembers} isLoading={isLoading} />
         {/* Replace with real data */}
       </TitledBox>
     </Box>
@@ -448,46 +468,3 @@ const EditProjectMembers = ({ projectToEdit }) => {
 }
 
 export default EditProjectMembers
-
-
-        // {/* working component */}
-        // <Autocomplete 
-        //   disabled={!editMode}
-        //   disableCloseOnSelect
-        //   freeSolo
-        //   options={searchedUser?.email ? [searchedUser.email] : []}
-        //   onInputChange={(event, newInputValue) => handleEmailSearch(newInputValue)}
-        //   renderOption={(props, option) => (
-        //     <Box
-        //       {...props}
-        //       display="flex"
-        //       alignItems="center"
-        //       justifyContent="space-between"
-        //       width="100%"
-        //       sx={{ px: 2 }}
-        //     >
-        //       <Typography sx={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis' }}>
-        //         {!toggleSelect ? option : <Typography sx={{ fontWeight: "bold" }}>User added to project successfully</Typography>}
-        //       </Typography>
-        //       {/* Icons for adding and confirming email of new user */}
-        //       {!toggleSelect ? <AddCircleOutlineIcon sx={{ flexShrink: 0, ml: 2 }} onClick={handleToggleSelect} />
-        //       : <CheckCircleOutline color="success" onClick={handleToggleSelect} />}
-        //     </Box>
-        //   )}
-        //   renderInput={(params) => (
-        //     <TextField 
-        //       {...params} 
-        //       value={searchedUser?.email || ''} 
-        //       placeholder="Enter user email address" 
-        //       InputProps={{ ...params.InputProps, disableUnderline: true }}
-        //       sx={{
-        //         '& .MuiInput-underline:before, & .MuiInput-underline:after': {
-        //           borderBottom: 'none !important',
-        //         },
-        //         '& .MuiInput-root:before, & .MuiInput-root:after': {
-        //           borderBottom: 'none !important',
-        //         }
-        //       }} 
-        //     />
-        //   )}
-        // />
