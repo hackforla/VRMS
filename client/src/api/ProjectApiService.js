@@ -84,6 +84,27 @@ class ProjectApiService {
     }
   }
 
+  // update managedByUsers in Project
+  async updateManagedByUsers(projectId, userId, action) {
+    const url = `${this.baseProjectUrl}${projectId}`;
+    const requestOptions = {
+      method: 'PATCH',
+      headers: this.headers,
+      body: JSON.stringify({ action, userId }),
+    };
+
+    try {
+      const response = await fetch(url, requestOptions);
+      const resJson = await response.json();
+      console.log(resJson);
+      return resJson;
+    } catch (error) {
+      console.log(`update project error: `, error);
+      alert('Server not responding.  Please try again.');
+      return undefined;
+    }
+  }
+
   async fetchPMProjects(projects) {
     const requestOptions = {
       headers: this.headers,

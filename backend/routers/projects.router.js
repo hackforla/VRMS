@@ -16,6 +16,7 @@ router.get('/:ProjectId', AuthUtil.verifyCookie, ProjectController.project_by_id
 
 router.put('/:ProjectId', AuthUtil.verifyCookie, ProjectController.update);
 
-router.patch('/:ProjectId', AuthUtil.verifyCookie, ProjectController.update);
+// Update project's managedByUsers in db
+router.patch('/:ProjectId', AuthUtil.verifyCookie, ProjectController.updateManagedByUsers);
 
 module.exports = router;

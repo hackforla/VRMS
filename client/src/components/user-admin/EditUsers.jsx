@@ -63,7 +63,8 @@ const EditUsers = ({
       !userManagedProjects.includes(projectValue)
     ) {
       const newProjects = [...userManagedProjects, projectValue];
-      updateUserDb(userToEdit, newProjects);
+      updateUserDb(userToEdit, projectValue, 'add');
+      // updateUserDb(userToEdit, newProjects);
       setUserManagedProjects(newProjects);
       setProjectValue('');
     } else {
@@ -76,7 +77,8 @@ const EditUsers = ({
       const newProjects = userManagedProjects.filter(
         (p) => p !== projectToRemove
       );
-      updateUserDb(userToEdit, newProjects);
+      updateUserDb(userToEdit, projectToRemove, 'remove');
+      // updateUserDb(userToEdit, newProjects);
       setUserManagedProjects(newProjects);
     }
   };

@@ -22,7 +22,7 @@ UserController.user_list = async function (req, res) {
     const user = await User.find(query);
     return res.status(200).send(user);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return res.sendStatus(400);
   }
 };
@@ -58,7 +58,7 @@ UserController.admin_list = async function (req, res) {
     const admins = await User.find({ accessLevel: { $in: ['admin', 'superadmin'] } });
     return res.status(200).send(admins);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return res.sendStatus(400);
   }
 };
@@ -72,17 +72,24 @@ UserController.projectManager_list = async function (req, res) {
 
   try {
     const projectManagers = await User.find({
-      $and: [
-        { accessLevel: { $in: ['admin', 'superadmin'] } },
-        { managedProjects: { $exists: true, $type: 'array', $ne: [] } },
-      ],
+      managedProjects: { $exists: true, $type: 'array', $ne: [] },
     });
 
     // Collect all unique project IDs
-    const allProjectIds = [...new Set(projectManagers.flatMap((pm) => pm.managedProjects))];
+    const allProjectIds = [
+      ...new Set(
+        projectManagers
+          .flatMap((pm) => pm.managedProjects)
+          .filter((id) => typeof id === 'string' && id.match(/^[a-f\d]{24}$/i)),
+      ),
+    ];
 
     // Fetch all projects in one query
-    const projects = await Project.find({ _id: { $in: allProjectIds } });
+    const projects = await Project.find(
+      { _id: { $in: allProjectIds } },
+      { _id: 1, name: 1 }, // projection
+    );
+
     const projectIdToName = {};
     for (const project of projects) {
       projectIdToName[project._id.toString()] = project.name;
@@ -99,7 +106,8 @@ UserController.projectManager_list = async function (req, res) {
 
     return res.status(200).send(updatedProjectManagers);
   } catch (err) {
-    console.log(err);
+    console.error(err);
+    console.log('Projectlead error', err);
     return res.sendStatus(400);
   }
 };
@@ -119,7 +127,7 @@ UserController.user_by_id = async function (req, res) {
     // and look downstream to see whether 404 would break anything
     return res.status(200).send(user);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return res.sendStatus(400);
   }
 };
@@ -163,7 +171,7 @@ UserController.update = async function (req, res) {
     const user = await User.findOneAndUpdate({ _id: UserId }, req.body, { new: true });
     return res.status(200).send(user);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return res.sendStatus(400);
   }
 };
@@ -181,7 +189,7 @@ UserController.delete = async function (req, res) {
     const user = await User.findByIdAndDelete(UserId);
     return res.status(200).send(user);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return res.sendStatus(400);
   }
 };
@@ -263,7 +271,7 @@ UserController.verifySignIn = async function (req, res) {
     res.cookie('token', token, { httpOnly: true });
     return res.send(user);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return res.status(403);
   }
 };
@@ -275,6 +283,49 @@ UserController.verifyMe = async function (req, res) {
 
 UserController.logout = async function (req, res) {
   return res.clearCookie('token').status(200).send('Successfully logged out.');
+};
+
+// Update user's managedProjects
+UserController.updateManagedProjects = async function (req, res) {
+  const { headers } = req;
+  const { UserId } = req.params;
+  const { action, projectId } = req.body; // action - 'add' or 'remove'
+  // console.log('action:', action, 'projectId:', projectId);
+
+  if (headers['x-customrequired-header'] !== expectedHeader) {
+    return res.sendStatus(403);
+  }
+
+  try {
+    // Update user's managedProjects and the project's managedByUsers
+    const user = await User.findById(UserId);
+    let managedProjects = user.managedProjects || [];
+
+    const project = await Project.findById(projectId);
+    let managedByUsers = project.managedByUsers || [];
+
+    if (action === 'add') {
+      managedProjects = [...managedProjects, projectId];
+      managedByUsers = [...managedByUsers, UserId];
+    } else {
+      // remove case
+      managedProjects = managedProjects.filter((id) => id !== projectId);
+      managedByUsers = managedByUsers.filter((id) => id !== UserId);
+    }
+
+    // Update user's managedProjects 
+    user.managedProjects = managedProjects;
+    await user.save({ validateBeforeSave: false });
+
+    // Update project's managedByUsers
+    project.managedByUsers = managedByUsers;
+    await project.save({ validateBeforeSave: false });
+
+    return res.status(200).send({ user, project });
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(400);
+  }
 };
 
 module.exports = UserController;

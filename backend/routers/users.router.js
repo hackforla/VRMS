@@ -18,6 +18,9 @@ router.get('/:UserId', UserController.user_by_id);
 
 router.patch('/:UserId', UserController.update);
 
+// Update user projects in db
+router.patch('/:UserId/managedProjects', UserController.updateManagedProjects);
+
 router.delete('/:UserId', UserController.delete);
 
 module.exports = router;
