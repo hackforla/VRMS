@@ -266,4 +266,47 @@ UserController.logout = async function (req, res) {
   return res.clearCookie('token').status(200).send('Successfully logged out.');
 };
 
+// Update user's managedProjects
+UserController.updateManagedProjects = async function (req, res) {
+  const { headers } = req;
+  const { UserId } = req.params;
+  const { action, projectId } = req.body; // action - 'add' or 'remove'
+  // console.log('action:', action, 'projectId:', projectId);
+
+  if (headers['x-customrequired-header'] !== expectedHeader) {
+    return res.sendStatus(403);
+  }
+
+  try {
+    // Update user's managedProjects and the project's managedByUsers
+    const user = await User.findById(UserId);
+    let managedProjects = user.managedProjects || [];
+
+    const project = await Project.findById(projectId);
+    let managedByUsers = project.managedByUsers || [];
+
+    if (action === 'add') {
+      managedProjects = [...managedProjects, projectId];
+      managedByUsers = [...managedByUsers, UserId];
+    } else {
+      // remove case
+      managedProjects = managedProjects.filter((id) => id !== projectId);
+      managedByUsers = managedByUsers.filter((id) => id !== UserId);
+    }
+
+    // Update user's managedProjects 
+    user.managedProjects = managedProjects;
+    await user.save({ validateBeforeSave: false });
+
+    // Update project's managedByUsers
+    project.managedByUsers = managedByUsers;
+    await project.save({ validateBeforeSave: false });
+
+    return res.status(200).send({ user, project });
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(400);
+  }
+};
+
 module.exports = UserController;
