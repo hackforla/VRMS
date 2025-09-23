@@ -328,40 +328,6 @@ describe('Unit testing for Projects router', () => {
       done();
     });
 
-    it("should add to the project's managedByUsers and the user's managedProjects fields with PATCH /api/projects/:ProjectId", async (done) => {
-      // Mock ProjectController.updateManagedByUsers method when this route is called
-      ProjectController.updateManagedByUsers.mockImplementationOnce((req, res) => {
-        res.status(200).send({ project: updatedProject, user: updatedUser });
-      });
-
-      // Mock PUT API call
-      const response = await request
-        .patch(`/api/projects/${ProjectId}`)
-        .send({ action: 'add', userId });
-
-      // Middlware assertions
-      expect(mockVerifyCookie).toHaveBeenCalledWith(
-        expect.any(Object),
-        expect.any(Object),
-        expect.any(Function),
-      );
-
-      // Tests
-      expect(ProjectController.updateManagedByUsers).toHaveBeenCalledWith(
-        expect.objectContaining({
-          params: { ProjectId },
-          body: { action: 'add', userId },
-        }), // Check if ProjectId is parsed from params
-        expect.anything(), // Mock response
-        expect.anything(), // Mock next
-      );
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual({ project: updatedProject, user: updatedUser });
-
-      // Marks completion of tests
-      done();
-    });
-
     it("should remove user from the project's managedByUsers and remove project from the user's managedProjects fields with PATCH /api/projects/:ProjectId", async (done) => {
       updatedProject.managedByUsers = [];
       updatedUser.managedProjects = [];

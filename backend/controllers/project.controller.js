@@ -79,8 +79,8 @@ ProjectController.updateManagedByUsers = async function (req, res) {
     let managedProjects = user.managedProjects || [];
 
     if (action === 'add') {
-      managedByUsers = [...managedByUsers, userId];
-      managedProjects = [...managedProjects, ProjectId];
+      managedByUsers = [...new Set([...managedByUsers, userId])];
+      managedProjects = [...new Set([...managedProjects, ProjectId])];
     } else {
       // remove case
       managedByUsers = managedByUsers.filter((id) => id !== userId);
