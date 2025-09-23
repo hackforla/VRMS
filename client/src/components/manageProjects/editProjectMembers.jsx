@@ -336,10 +336,13 @@ const EditProjectMembers = ({ projectToEdit }) => {
   // useEffect(() => {
   //   // GET project's managedByUsers & set to projectMembers state
   // }, []);
-
-
+  
+  const accessLevel = auth?.user?.accessLevel;
+  const userId = auth?.user?._id;
+  
+  // Edit icon component only avaiable for VRMS admins and project members (users in project)
   const editIcon = () => {
-    return (
+    return (accessLevel !== 'user' || projectToEdit?.managedByUsers?.includes(userId)) && (
       <Box
         sx={{
           display: 'flex',
@@ -361,7 +364,7 @@ const EditProjectMembers = ({ projectToEdit }) => {
           {editMode ? 'Cancel' : 'Edit'}
         </Typography>
       </Box>
-    ) 
+    );
   };
 
   const handleEmailSearch = async (search) => {   
