@@ -18,15 +18,10 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import CheckCircleOutline from '@mui/icons-material/CheckCircleOutline';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import TitledBox from '../parts/boxes/TitledBox';
-import { StyledButton } from '../ProjectForm';
 import UserApiService from '../../api/UserApiService';
+import ProjectApiService from '../../api/ProjectApiService';
+import { StyledButton } from '../ProjectForm';
 
-const testProject = [
-  {
-    name: "Project1",
-    managedByUsers: ["1","2"]
-  }
-];
 
 // Test Users Data
 const testUsers = [
@@ -91,23 +86,73 @@ const ButtonGroup = ({ btnName1, btnName2, callBackFn1, callBackFn2, isLoading }
 );
 
 
-const ListComponent = ({ projectMembers, editMode, closeConfirmModal, setChangesMade, setCloseConfirmModal, setEditMode, setProjectMembers, isLoading }) => {
+const ListComponent = ({ projectId, projectMembers, setProjectMembers, editMode, closeConfirmModal, setChangesMade, setCloseConfirmModal, setEditMode, isLoading }) => {
   const [openModal, setOpenModal] = useState(false);
   const [removeConfirmModal, setRemoveConfirmModal] = useState(false);
   const [renderedUsers, setRenderedUsers] = useState([]);
   const [removeId, setRemoveId] = useState("");
-  const [showUserInfo, setShowUserInfo] = useState(""); // Store user ID state of selected user to show info
+  const [selectedUserId, setSelectedUserId] = useState(""); // Store user ID state of selected user to show info
+  
+  // Create new instance of ProjectApiService class
+  const projectApiService = new ProjectApiService();
 
   useEffect(() => {
     // Close user info when exiting out of "Edit" mode
-    setShowUserInfo("");
+    setSelectedUserId("");
     setRenderedUsers(projectMembers);
 
   }, [projectMembers, editMode, renderedUsers])
 
-  const handleSavePMs = () => {
+  const handleSavePMs = async () => {
     alert('Saved PMs to database')
-    // Insert logic to save "renderedUsers" to database
+    // Insert logic to save (update) "renderedUsers" to database
+
+    // Create addedUsers and removedUsers arrays from original projectMembers
+    const addedUsers = renderedUsers.filter(
+      newUser => !projectMembers.some(oldUser => oldUser._id === newUser._id)
+    );
+
+    const removedUsers = projectMembers.filter(
+      oldUser => !renderedUsers.some(newUser => newUser._id === oldUser._id)
+    );
+
+    try {
+      // Update using bulkWrite (bulk update)
+      const addBulkOps = [
+        ...addedUsers.map(user => ({
+          updateOne: {
+            filter: { _id: projectId },
+            update: { $addToSet: { managedByUsers: user._id } },
+          },
+        })),
+      ]
+    
+      const removeBulkOps = [
+        ...removedUsers.map(user => ({
+          updateOne: {
+            filter: { _id: projectId },
+            update: { $pull: { managedByUsers: user._id } },
+          },
+        })),  
+      ]
+
+      // // Update addedUsers in parallel
+      // await Promise.all(
+      //   addedUsers.map(userId =>
+      //     projectApiService.updateManagedByUsers(projectId, userId, "add")
+      //   )
+      // );
+
+      // // Update removedUsers in parallel
+      // await Promise.all(
+      //   removedUsers.map(userId =>
+      //     projectApiService.updateManagedByUsers(projectId, userId, "remove")
+      //   )
+      // );
+
+    } catch (err) {
+      console.log(err)
+    }
   }
   
   const handleClosePMs = () => setCloseConfirmModal(true);
@@ -115,12 +160,10 @@ const ListComponent = ({ projectMembers, editMode, closeConfirmModal, setChanges
   const handleCloseOnYes = () => {    
     // Discard changes 
     setChangesMade(false);
-    // TEMPORARY LOGIC: Resetting renderedUsers to projectMembers
-    setProjectMembers(testUsers);
-    /* 
-      Insert actual logic here
 
-    */
+    // Resetting renderedUsers to original projectMembers
+    setProjectMembers(testUsers); // temporary code for test users
+    // setProjectMembers(projectMembers); // actual code for origina projectMembers
 
     // Close modal and exit edit mode
     setCloseConfirmModal(false);
@@ -144,7 +187,7 @@ const ListComponent = ({ projectMembers, editMode, closeConfirmModal, setChanges
     setRemoveConfirmModal(true);
     setOpenModal(false);
 
-    // Auto close confirmation modal after 2 seconds
+    // Auto close confirmation modal after 1.5 seconds
     setTimeout(() => {
       setRemoveConfirmModal(false);
     }, 1500);
@@ -203,7 +246,7 @@ const ListComponent = ({ projectMembers, editMode, closeConfirmModal, setChanges
                 >
                   <Grid container justifyContent={'space-between'}                   
                     onClick={() => {
-                      if (editMode && !openModal) setShowUserInfo(_id);
+                      if (editMode && !openModal) setSelectedUserId(_id);
                     }}
                   >
                     <Grid item>
@@ -228,7 +271,7 @@ const ListComponent = ({ projectMembers, editMode, closeConfirmModal, setChanges
                         <Typography variant="h6" component="h2" fontWeight="bold">
                           Are you sure you want to remove this user from the project?
                         </Typography>
-                        <ButtonGroup btnName1={"Yes"} btnName2={"No"} callBackFn1={handleRemoveConfirm} callBackFn2={() => { setShowUserInfo(""); setOpenModal(false); }} isLoading={isLoading} />
+                        <ButtonGroup btnName1={"Yes"} btnName2={"No"} callBackFn1={handleRemoveConfirm} callBackFn2={() => { setSelectedUserId(""); setOpenModal(false); }} isLoading={isLoading} />
                       </Box>
                     </Modal>
                     {/* Remove Confirmation Modal */}
@@ -253,7 +296,7 @@ const ListComponent = ({ projectMembers, editMode, closeConfirmModal, setChanges
                 </ListItemButton>
               </ListItem>
               {/* User information */}
-              {showUserInfo === _id &&
+              {selectedUserId === _id &&
                 <ListItem                 
                   style={{ backgroundColor: 'white', display: 'flex', justifyContent: 'flex-end' }}
                   sx={{
@@ -273,7 +316,7 @@ const ListComponent = ({ projectMembers, editMode, closeConfirmModal, setChanges
                           cursor: 'pointer',
                         }}
                       >
-                        <CloseIcon onClick={() => setShowUserInfo("")} />
+                        <CloseIcon onClick={() => setSelectedUserId("")} />
                       </Box>
                       <Grid container direction="column">
                         <Grid item>
@@ -328,13 +371,34 @@ const EditProjectMembers = ({ projectToEdit }) => {
   const [searchedUser, setSearchedUser] = useState({});
   const [closeConfirmModal, setCloseConfirmModal] = useState(false);
   const [changesMade, setChangesMade] = useState(false);
-  const [projectMembers, setProjectMembers] = useState(testUsers); // Replace testUsers with fetched project's managedByUsers
-
+  const [projectMembers, setProjectMembers] = useState(testUsers);
+  // Replace testUsers with actual project members by using useEffect fetch below - default state: null
+ 
   // Create new instance of UserApiService class
   const userApiService = new UserApiService();
 
   // useEffect(() => {
-  //   // GET project's managedByUsers & set to projectMembers state
+  //   // Create an array of projectMembers (users) from project's managedByUsers (user IDs)
+  //   const fetchProjectMembers = async () => {
+  //     if (projectToEdit?.managedByUsers?.length) {  
+  //       setIsLoading(true);
+  //       try {
+  //         const members = await Promise.all(
+  //           projectToEdit.managedByUsers.map(async (userId) => {
+  //             const user = await userApiService.fetchUserById(userId);
+  //             return user;
+  //           })
+  //         );
+  //         setProjectMembers(members);
+  //       } catch (err) {
+  //         console.log(err)
+  //       }
+  //       setIsLoading(false);
+  //     } else {
+  //       setProjectMembers([]);
+  //     }
+  //   }
+  //   fetchProjectMembers();
   // }, []);
   
   const accessLevel = auth?.user?.accessLevel;
@@ -461,10 +525,8 @@ const EditProjectMembers = ({ projectToEdit }) => {
         </Grid>
         {/* Display error message */}
         {error && (<Typography color="red">No account found with this email address</Typography>)}
-
         {/* Code for test data */}
-        <ListComponent projectMembers={projectMembers} editMode={editMode} setChangesMade={setChangesMade} closeConfirmModal={closeConfirmModal} setCloseConfirmModal={setCloseConfirmModal} setEditMode={setEditMode} setProjectMembers={setProjectMembers} isLoading={isLoading} />
-        {/* Replace with real data */}
+        <ListComponent projectId={projectToEdit._id} projectMembers={projectMembers} editMode={editMode} setChangesMade={setChangesMade} closeConfirmModal={closeConfirmModal} setCloseConfirmModal={setCloseConfirmModal} setEditMode={setEditMode} setProjectMembers={setProjectMembers} isLoading={isLoading} />
       </TitledBox>
     </Box>
   )

@@ -108,7 +108,7 @@ const EditProject = ({
       />
 
       {/* Insert Project Members (Event Editors) here */}
-      <EditProjectMembers projectToEdit={projectToEdit}  />
+      <EditProjectMembers projectToEdit={projectToEdit} />
 
       <TitledBox
         title="Recurring Events"

@@ -102,4 +102,14 @@ ProjectController.updateManagedByUsers = async function (req, res) {
   }
 };
 
+ProjectController.bulkUpdateManagedByUsers = async function (req, res) {
+  const { projectId, bulkOps } = req.body;
+  try {
+    const result = await Project.bulkWrite(bulkOps);
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 module.exports = ProjectController;

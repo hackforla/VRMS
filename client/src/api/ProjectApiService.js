@@ -134,6 +134,17 @@ class ProjectApiService {
       return [];
     }
   }
+
+  async bulkUpdateManagedByUsers(projectId, bulkOps) {
+    return fetch(
+      `${this.baseProjectUrl}${projectId}/bulk-update`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ projectId, bulkOps }),
+      }
+    ).then((res) => res.json());
+  }
 }
 
 export default ProjectApiService;
