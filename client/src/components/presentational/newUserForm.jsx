@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
-import { FormControl, TextField } from '@mui/material';
+import { useState } from 'react';
+import { Box, FormControl, TextField, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { format } from 'date-fns';
 import '../../sass/CheckIn.scss';
 
 const NewUserForm = (props) => {
@@ -20,61 +19,47 @@ const NewUserForm = (props) => {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <div className="check-in-container">
-        <div className="check-in-headers">
-          <h3>Welcome!</h3>
-          <h4>Tell us a little bit about yourself:</h4>
-        </div>
-        <div className="check-in-form">
+      <Box className="check-in-container">
+        <Box className="check-in-headers">
+          <Typography variant="h3">Welcome!</Typography>
+          <Typography variant="h4">
+            Tell us a little bit about yourself:
+          </Typography>
+        </Box>
+        <Box className="check-in-form">
           <form
             className="form-check-in"
             autoComplete="off"
             onSubmit={(e) => e.preventDefault()}
           >
-            <div className="form-row">
-              <div className="form-input-text">
-                <input
-                  type="text"
-                  name="firstName"
-                  placeholder="First Name"
-                  value={props.firstName.toString()}
-                  onChange={props.handleFirstNameChange}
-                  aria-label="First Name"
-                  required
-                />
-              </div>
-            </div>
-            <div className="form-row">
-              <div className="form-input-text">
-                <input
-                  type="text"
-                  name="lastName"
-                  placeholder="Last Name"
-                  value={props.lastName.toString()}
-                  onChange={props.handleLastNameChange}
-                  aria-label="Last Name"
-                  required
-                />
-              </div>
-            </div>
-            <div className="form-row">
-              <div className="form-input-text">
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Email Address"
-                  value={props.formInput.email.toString().toLowerCase()}
-                  onChange={props.handleInputChange}
-                  aria-label="Email Address"
-                  required
-                />
-                <label htmlFor="email">
-                  {
-                    "(This allows easy use of the app. We'll never sell your data!)"
-                  }
-                </label>
-              </div>
-            </div>
+            <Box className="form-row">
+              <TextField
+                label="First Name"
+                name="firstName"
+                value={props.firstName.toString()}
+                onChange={props.handleFirstNameChange}
+                required
+              />
+            </Box>
+            <Box className="form-row">
+              <TextField
+                label="Last Name"
+                name="lastName"
+                value={props.lastName.toString()}
+                onChange={props.handleLastNameChange}
+                required
+              />
+            </Box>
+            <Box className="form-row">
+              <TextField
+                label="Email Address"
+                name="email"
+                value={props.formInput.email.toString().toLowerCase()}
+                onChange={props.handleInputChange}
+                helperText="This allows easy use of the app. We'll never sell your data!"
+                required
+              />
+            </Box>
 
             {props.questions.length !== 0 &&
               props.questions.map((question) => {
@@ -88,7 +73,7 @@ const NewUserForm = (props) => {
                           placeholder={question.placeholderText}
                           value={
                             Object.keys(props.formInput).includes(
-                              question.htmlName
+                              question.htmlName,
                             )
                               ? props.formInput[
                                   question.htmlName.toString()
@@ -176,13 +161,13 @@ const NewUserForm = (props) => {
                                 maxWidth: '300px',
                                 borderBottom: 'none',
                                 '& input[type=text]': {
-                                    height: '40px',
-                                    width: '100%',
-                                    borderBottom: 'none',
-                                    paddingLeft: '0.5rem',
-                                    color: 'rgb(250, 17, 79)',
-                                    fontWeight: '600', // semi-bold
-                                  },
+                                  height: '40px',
+                                  width: '100%',
+                                  borderBottom: 'none',
+                                  paddingLeft: '0.5rem',
+                                  color: 'rgb(250, 17, 79)',
+                                  fontWeight: '600', // semi-bold
+                                },
                               }}
                             >
                               {(params) => (
@@ -227,8 +212,8 @@ const NewUserForm = (props) => {
               </div>
             )}
           </form>
-        </div>
-      </div>
+        </Box>
+      </Box>
     </LocalizationProvider>
   );
 };
