@@ -20,8 +20,8 @@ const UserAdmin = () => {
   }, [userApiService]);
 
   const updateUserDb = useCallback(
-    async (user, managedProjects) => {
-      await userApiService.updateUserDbProjects(user, managedProjects);
+    async (user, projectId, action) => {
+      await userApiService.updateUserDbProjects(user, projectId, action);
       fetchUsers();
     },
     [userApiService, fetchUsers]
