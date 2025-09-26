@@ -86,22 +86,20 @@ const ButtonGroup = ({ btnName1, btnName2, callBackFn1, callBackFn2, isLoading }
 );
 
 
-const ListComponent = ({ projectId, projectMembers, setProjectMembers, editMode, closeConfirmModal, setChangesMade, setCloseConfirmModal, setEditMode, isLoading }) => {
+const ListComponent = ({ projectId, projectMembers, renderedUsers, setRenderedUsers, editMode, closeConfirmModal, setChangesMade, setCloseConfirmModal, setEditMode, isLoading }) => {
   const [openModal, setOpenModal] = useState(false);
   const [removeConfirmModal, setRemoveConfirmModal] = useState(false);
-  const [renderedUsers, setRenderedUsers] = useState([]);
   const [removeId, setRemoveId] = useState("");
   const [selectedUserId, setSelectedUserId] = useState(""); // Store user ID state of selected user to show info
   
-  // Create new instance of ProjectApiService class
+  // Create new instance of ProjectApiService class to access backend routers & controllers
   const projectApiService = new ProjectApiService();
 
-  useEffect(() => {
-    // Close user info when exiting out of "Edit" mode
-    setSelectedUserId("");
-    setRenderedUsers(projectMembers);
+  console.log('Initial projectMembers:', projectMembers)
 
-  }, [projectMembers, editMode, renderedUsers])
+  useEffect(() => {
+    setSelectedUserId(""); // close user info when exiting out of "Edit" mode
+  }, [projectMembers, editMode])
 
   const handleSavePMs = async () => {
     alert('Saved PMs to database')
@@ -111,7 +109,6 @@ const ListComponent = ({ projectId, projectMembers, setProjectMembers, editMode,
     const addedUsers = renderedUsers.filter(
       newUser => !projectMembers.some(oldUser => oldUser._id === newUser._id)
     );
-
     const removedUsers = projectMembers.filter(
       oldUser => !renderedUsers.some(newUser => newUser._id === oldUser._id)
     );
@@ -158,35 +155,22 @@ const ListComponent = ({ projectId, projectMembers, setProjectMembers, editMode,
   const handleClosePMs = () => setCloseConfirmModal(true);
   
   const handleCloseOnYes = () => {    
-    // Discard changes 
-    setChangesMade(false);
-
-    // Resetting renderedUsers to original projectMembers
-    setProjectMembers(testUsers); // temporary code for test users
-    // setProjectMembers(projectMembers); // actual code for origina projectMembers
-
-    // Close modal and exit edit mode
-    setCloseConfirmModal(false);
+    setChangesMade(false); // Discard changes 
+    setRenderedUsers(projectMembers); // Reset renderedUsers to original projectMembers
+    setCloseConfirmModal(false); // Close modal and exit edit mode
     setEditMode(false);
   }
 
   const handleCloseOnNo = () => setCloseConfirmModal(false);
 
   const handleRemoveConfirm = () => {
-    /** 
-      Insert logic to remove PM (user) from project in database here
-    */
-
     setChangesMade(true);
-
-    // Temporary logic to remove user with id from test data
+    // Remove user from renderedUsers state to update UI
     const updatedUsers = renderedUsers.filter(user => user._id !== removeId);
-    setProjectMembers(updatedUsers);
-
+    setRenderedUsers(updatedUsers);
     // Show confirmation modal
     setRemoveConfirmModal(true);
     setOpenModal(false);
-
     // Auto close confirmation modal after 1.5 seconds
     setTimeout(() => {
       setRemoveConfirmModal(false);
@@ -371,35 +355,34 @@ const EditProjectMembers = ({ projectToEdit }) => {
   const [searchedUser, setSearchedUser] = useState({});
   const [closeConfirmModal, setCloseConfirmModal] = useState(false);
   const [changesMade, setChangesMade] = useState(false);
-  const [projectMembers, setProjectMembers] = useState(testUsers);
-  // Replace testUsers with actual project members by using useEffect fetch below - default state: null
- 
-  // Create new instance of UserApiService class
+  const [projectMembers, setProjectMembers] = useState([]);
+  const [renderedUsers, setRenderedUsers] = useState([]);
+
+  // Create new instance of UserApiService class to access backend routers & controllers
   const userApiService = new UserApiService();
 
-  // useEffect(() => {
-  //   // Create an array of projectMembers (users) from project's managedByUsers (user IDs)
-  //   const fetchProjectMembers = async () => {
-  //     if (projectToEdit?.managedByUsers?.length) {  
-  //       setIsLoading(true);
-  //       try {
-  //         const members = await Promise.all(
-  //           projectToEdit.managedByUsers.map(async (userId) => {
-  //             const user = await userApiService.fetchUserById(userId);
-  //             return user;
-  //           })
-  //         );
-  //         setProjectMembers(members);
-  //       } catch (err) {
-  //         console.log(err)
-  //       }
-  //       setIsLoading(false);
-  //     } else {
-  //       setProjectMembers([]);
-  //     }
-  //   }
-  //   fetchProjectMembers();
-  // }, []);
+  useEffect(() => {
+    // Create an array of projectMembers (users) from project's managedByUsers (user IDs)
+    const fetchProjectMembers = async () => {
+      if (projectToEdit?.managedByUsers?.length) {  
+        setIsLoading(true);
+        try {
+          const members = await Promise.all(
+            projectToEdit.managedByUsers.map(async (userId) => {
+              const user = await userApiService.fetchUserById(userId.toString());
+              return user;
+            })
+          );
+          setProjectMembers(members);
+          setRenderedUsers(members);
+        } catch (err) { 
+          console.log(err)
+        }
+        setIsLoading(false);
+      }
+    }
+    if (!changesMade) fetchProjectMembers();
+  }, [changesMade]);
   
   const accessLevel = auth?.user?.accessLevel;
   const userId = auth?.user?._id;
@@ -466,18 +449,12 @@ const EditProjectMembers = ({ projectToEdit }) => {
   }
 
   // Handle logic to toggle email selection and adding user to project's managedByUsers
-  const handleToggleSelect = (addedUser) => {
+  const handleAddUser = (addedUser) => {
     setToggleSelect(true);
-
-    // INSERT logic here to update projectToEdit's managedByUsers array & user's managedProjects array
     if (!toggleSelect) {
-      // Add user to project's managedByUsers array
-      setProjectMembers((prevMembers) => [...prevMembers, addedUser]);
-
-      // Set changes made to true
-      setChangesMade(true);
+      setRenderedUsers((prevMembers) => [...prevMembers, addedUser]); // Add user to project's managedByUsers array
+      setChangesMade(true); // Set changes made to true
     }
-
     // Confirmation message disappears after 1.5 seconds
     setTimeout(() => {
       setEmail("");
@@ -517,7 +494,7 @@ const EditProjectMembers = ({ projectToEdit }) => {
                   {!toggleSelect ? searchedUser?.email : <Typography sx={{ fontWeight: "bold" }}>User added to project successfully</Typography>}
                 </Typography>
                 {/* Icons for adding and confirming email of new user */}
-                {!toggleSelect ? <AddCircleOutlineIcon sx={{ flexShrink: 0, ml: 2 }} onClick={() => handleToggleSelect(searchedUser)} />
+                {!toggleSelect ? <AddCircleOutlineIcon sx={{ flexShrink: 0, ml: 2 }} onClick={() => handleAddUser(searchedUser)} />
                 : <CheckCircleOutline color="success" />}
               </Box>
             </Grid>
@@ -525,8 +502,8 @@ const EditProjectMembers = ({ projectToEdit }) => {
         </Grid>
         {/* Display error message */}
         {error && (<Typography color="red">No account found with this email address</Typography>)}
-        {/* Code for test data */}
-        <ListComponent projectId={projectToEdit._id} projectMembers={projectMembers} editMode={editMode} setChangesMade={setChangesMade} closeConfirmModal={closeConfirmModal} setCloseConfirmModal={setCloseConfirmModal} setEditMode={setEditMode} setProjectMembers={setProjectMembers} isLoading={isLoading} />
+        {/* Display users */}
+        <ListComponent projectId={projectToEdit._id} projectMembers={projectMembers} editMode={editMode} setChangesMade={setChangesMade} closeConfirmModal={closeConfirmModal} setCloseConfirmModal={setCloseConfirmModal} setEditMode={setEditMode} renderedUsers={renderedUsers} setRenderedUsers={setRenderedUsers} isLoading={isLoading} />
       </TitledBox>
     </Box>
   )

@@ -123,8 +123,6 @@ UserController.user_by_id = async function (req, res) {
 
   try {
     const user = await User.findById(UserId);
-    // TODO throw 404 if User.findById returns empty object
-    // and look downstream to see whether 404 would break anything
     return res.status(200).send(user);
   } catch (err) {
     console.error(err);
