@@ -37,7 +37,7 @@ const NewUserForm = (props) => {
           </Typography>
         </Box>
         <Box className="check-in-form">
-          <Box
+          <form
             className="form-check-in"
             autoComplete="off"
             onSubmit={(e) => e.preventDefault()}
@@ -45,6 +45,7 @@ const NewUserForm = (props) => {
             <Box className="form-row">
               <TextField
                 label="First Name"
+                variant="outlined"
                 name="firstName"
                 value={props.firstName.toString()}
                 onChange={props.handleFirstNameChange}
@@ -54,6 +55,7 @@ const NewUserForm = (props) => {
             <Box className="form-row">
               <TextField
                 label="Last Name"
+                variant="outlined"
                 name="lastName"
                 value={props.lastName.toString()}
                 onChange={props.handleLastNameChange}
@@ -63,6 +65,7 @@ const NewUserForm = (props) => {
             <Box className="form-row">
               <TextField
                 label="Email Address"
+                variant="outlined"
                 name="email"
                 value={props.formInput.email.toString().toLowerCase()}
                 onChange={props.handleInputChange}
@@ -72,12 +75,13 @@ const NewUserForm = (props) => {
             </Box>
 
             {props.questions.length !== 0 &&
-              props.questions.map((question) => {
-                return (
+              props.questions.map(
+                (question) =>
                   question.type === 'text' && (
                     <Box key={question._id} className="form-row">
                       <TextField
                         label={question.questionText}
+                        variant="outlined"
                         name={question.htmlName}
                         placeholder={question.placeholderText}
                         value={
@@ -93,13 +97,12 @@ const NewUserForm = (props) => {
                         required
                       />
                     </Box>
-                  )
-                );
-              })}
+                  ),
+              )}
 
             {props.questions.length !== 0 &&
-              props.questions.map((question) => {
-                return (
+              props.questions.map(
+                (question) =>
                   question.type === 'select' && (
                     <Box key={question._id} className="form-row last-row">
                       <FormControl component="fieldset">
@@ -124,14 +127,13 @@ const NewUserForm = (props) => {
                         </RadioGroup>
                       </FormControl>
                     </Box>
-                  )
-                );
-              })}
+                  ),
+              )}
             {props.newMember === true
               ? null
               : props.questions.length !== 0 &&
-                props.questions.map((question) => {
-                  return (
+                props.questions.map(
+                  (question) =>
                     question.htmlName === 'attendanceLength' && (
                       <Box key={question._id} className="form-row">
                         <FormControl component="fieldset">
@@ -177,9 +179,8 @@ const NewUserForm = (props) => {
                           </FormControl>
                         </FormControl>
                       </Box>
-                    )
-                  );
-                })}
+                    ),
+                )}
 
             {props.isError && props.errorMessage.length > 1 && (
               <Typography className="error">{props.errorMessage}</Typography>
@@ -203,7 +204,7 @@ const NewUserForm = (props) => {
                 </Button>
               </Box>
             )}
-          </Box>
+          </form>
         </Box>
       </Box>
     </LocalizationProvider>
