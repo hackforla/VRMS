@@ -37,7 +37,7 @@ const NewUserForm = (props) => {
           </Typography>
         </Box>
         <Box className="check-in-form">
-          <form
+          <Box
             className="form-check-in"
             autoComplete="off"
             onSubmit={(e) => e.preventDefault()}
@@ -204,7 +204,7 @@ const NewUserForm = (props) => {
                 </Button>
               </Box>
             )}
-          </form>
+          </Box>
         </Box>
       </Box>
     </LocalizationProvider>
