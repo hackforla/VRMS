@@ -148,6 +148,21 @@ class UserApiService {
       alert('server not responding.  Please try again.');
     }
   }
+
+  async bulkUpdateManagedProjects(bulkOps) {
+    const url = `${this.baseUserUrl}bulk-updates`;
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: this.headers,
+        body: JSON.stringify({ bulkOps }),
+      });
+      return await res.json();
+    } catch (error) {
+      console.error(`bulkUpdateManagedProjects error: ${error}`);
+      alert('Server not responding.  Please try again.');
+    }
+  }
 }
 
 export default UserApiService;

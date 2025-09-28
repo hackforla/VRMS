@@ -20,10 +20,6 @@ router.put('/:ProjectId', AuthUtil.verifyCookie, ProjectController.update);
 router.patch('/:ProjectId', AuthUtil.verifyCookie, ProjectController.updateManagedByUsers);
 
 // Bulk update for editing project members
-router.patch(
-  '/:ProjectId/bulk-update',
-  AuthUtil.verifyCookie,
-  ProjectController.bulkUpdateManagedByUsers,
-);
+router.post('/bulk-updates', AuthUtil.verifyCookie, ProjectController.bulkUpdateManagedByUsers);
 
 module.exports = router;

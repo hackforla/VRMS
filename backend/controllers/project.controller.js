@@ -87,11 +87,11 @@ ProjectController.updateManagedByUsers = async function (req, res) {
       managedProjects = managedProjects.filter((id) => id !== ProjectId);
     }
 
-    // Update project's managedByUsers 
+    // Update project's managedByUsers
     project.managedByUsers = managedByUsers;
     await project.save({ validateBeforeSave: false });
 
-    // Update user's managedProjects 
+    // Update user's managedProjects
     user.managedProjects = managedProjects;
     await user.save({ validateBeforeSave: false });
 
@@ -103,7 +103,7 @@ ProjectController.updateManagedByUsers = async function (req, res) {
 };
 
 ProjectController.bulkUpdateManagedByUsers = async function (req, res) {
-  const { projectId, bulkOps } = req.body;
+  const { bulkOps } = req.body;
   try {
     const result = await Project.bulkWrite(bulkOps);
     res.status(200).json(result);

@@ -131,19 +131,22 @@ class ProjectApiService {
     } catch (error) {
       console.error(`fetchManagedByUsers error: ${error}`);
       alert('Server not responding.  Please refresh the page.');
-      return [];
     }
   }
 
-  async bulkUpdateManagedByUsers(projectId, bulkOps) {
-    return fetch(
-      `${this.baseProjectUrl}${projectId}/bulk-update`,
-      {
+  async bulkUpdateManagedByUsers(bulkOps) {
+    const url = `${this.baseProjectUrl}bulk-updates`;
+    try {
+      const res = await fetch(url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ projectId, bulkOps }),
-      }
-    ).then((res) => res.json());
+        headers: this.headers,
+        body: JSON.stringify({ bulkOps }),
+      });
+      return await res.json();
+    } catch (error) {
+      console.error(`bulkUpdateManagedByUsers error: ${error}`);
+      alert('Server not responding.  Please refresh the page.');
+    }
   }
 }
 

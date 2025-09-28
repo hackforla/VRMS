@@ -16,6 +16,8 @@ router.get('/projectManagers', UserController.projectManager_list);
 
 router.post('/', UserController.create);
 
+router.post('/bulk-updates', UserController.bulkUpdateManagedProjects);
+
 router.patch('/:UserId', UserController.update);
 
 router.patch('/:UserId/managedProjects', UserController.updateManagedProjects);

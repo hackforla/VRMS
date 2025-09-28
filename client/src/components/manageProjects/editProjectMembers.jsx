@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'; 
-import {  
+import { useEffect, useState } from 'react';
+import {
   CircularProgress,
   Typography,
   Box,
@@ -22,46 +22,11 @@ import UserApiService from '../../api/UserApiService';
 import ProjectApiService from '../../api/ProjectApiService';
 import { StyledButton } from '../ProjectForm';
 
-
-// Test Users Data
-const testUsers = [
-  {
-    _id: "1",
-    name: {
-      firstName: "Amber",
-      lastName: "Jones"
-    },
-    email: "amber@hackforla.com"
-  },
-  {
-    _id: "2",
-    name: {
-      firstName: "Bob",
-      lastName: "Phillips"
-    },
-    email: "Bob@hackforla.com"
-  },
-  {
-    _id: "3",
-    name: {
-      firstName: "Charlie",
-      lastName: "Murphy"
-    },
-    email: "charlie@hackforla.com"
-  },
-];
-
-const newUser =   {
-  _id: "4",
-  name: {
-    firstName: "mock",
-    lastName: "user"
-  },
-  email: "test4@hackforla.com"
-};
+const projectApiService = new ProjectApiService();
+const userApiService = new UserApiService();
 
 const ButtonGroup = ({ btnName1, btnName2, callBackFn1, callBackFn2, isLoading }) => (
-    <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
+  <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
     <Grid item xs="auto">
       <StyledButton
         sx="large"
@@ -86,25 +51,19 @@ const ButtonGroup = ({ btnName1, btnName2, callBackFn1, callBackFn2, isLoading }
 );
 
 
-const ListComponent = ({ projectId, projectMembers, renderedUsers, setRenderedUsers, editMode, closeConfirmModal, setChangesMade, setCloseConfirmModal, setEditMode, isLoading }) => {
+const ListComponent = ({ projectId, projectMembers, renderedUsers, setRenderedUsers, editMode, closeConfirmModal, setChangesMade, setCloseConfirmModal, setEditMode, isLoading, setIsLoading }) => {
   const [openModal, setOpenModal] = useState(false);
   const [removeConfirmModal, setRemoveConfirmModal] = useState(false);
   const [removeId, setRemoveId] = useState("");
   const [selectedUserId, setSelectedUserId] = useState(""); // Store user ID state of selected user to show info
-  
-  // Create new instance of ProjectApiService class to access backend routers & controllers
-  const projectApiService = new ProjectApiService();
 
-  console.log('Initial projectMembers:', projectMembers)
+  console.log('Initial projectMembers:', renderedUsers)
 
   useEffect(() => {
     setSelectedUserId(""); // close user info when exiting out of "Edit" mode
   }, [projectMembers, editMode])
 
   const handleSavePMs = async () => {
-    alert('Saved PMs to database')
-    // Insert logic to save (update) "renderedUsers" to database
-
     // Create addedUsers and removedUsers arrays from original projectMembers
     const addedUsers = renderedUsers.filter(
       newUser => !projectMembers.some(oldUser => oldUser._id === newUser._id)
@@ -113,26 +72,65 @@ const ListComponent = ({ projectId, projectMembers, renderedUsers, setRenderedUs
       oldUser => !renderedUsers.some(newUser => newUser._id === oldUser._id)
     );
 
+    if (addedUsers.length === 0 && removedUsers.length === 0) {
+      // No changes made, exit edit mode
+      console.log('No changes made');
+      setEditMode(false);
+      setChangesMade(false);
+      return;
+    }
+
+    // Use bulkWrite as opposed to a loop with Promise.all & controller for runtime and network efficiency
     try {
-      // Update using bulkWrite (bulk update)
-      const addBulkOps = [
+      setIsLoading(true);
+
+      const addUsersToProjBulkOps = [
         ...addedUsers.map(user => ({
+          // Update manageByUsers array for project
           updateOne: {
             filter: { _id: projectId },
             update: { $addToSet: { managedByUsers: user._id } },
           },
         })),
       ]
-    
-      const removeBulkOps = [
+      const removeUsersFromProjBulkOps = [
         ...removedUsers.map(user => ({
           updateOne: {
             filter: { _id: projectId },
             update: { $pull: { managedByUsers: user._id } },
           },
-        })),  
+        })),
       ]
 
+      const projBulkOps = [...addUsersToProjBulkOps, ...removeUsersFromProjBulkOps];
+
+      const addProjToUserBulkOps = [
+        ...addedUsers.map(user => ({
+          // Update managedProjects array for user
+          updateOne: {
+            filter: { _id: user._id },
+            update: { $addToSet: { managedProjects: projectId } },
+          },
+        })),
+      ]
+      const removeProjFromUserBulkOps = [
+        ...removedUsers.map(user => ({
+          updateOne: {
+            filter: { _id: user._id },
+            update: { $pull: { managedProjects: projectId } },
+          },
+        })),
+      ]
+
+      const userBulkOps = [...addProjToUserBulkOps, ...removeProjFromUserBulkOps];
+
+      await projectApiService.bulkUpdateManagedByUsers(projBulkOps); // Bulk update of each project's managedByUsers
+      await userApiService.bulkUpdateManagedProjects(userBulkOps); // Bulk update of each user's managedProjects
+
+      setChangesMade(false); // Reset changes made
+      setEditMode(false); // Exit edit mode
+      setIsLoading(false); 
+      
       // // Update addedUsers in parallel
       // await Promise.all(
       //   addedUsers.map(userId =>
@@ -146,15 +144,14 @@ const ListComponent = ({ projectId, projectMembers, renderedUsers, setRenderedUs
       //     projectApiService.updateManagedByUsers(projectId, userId, "remove")
       //   )
       // );
-
     } catch (err) {
       console.log(err)
     }
   }
-  
+
   const handleClosePMs = () => setCloseConfirmModal(true);
-  
-  const handleCloseOnYes = () => {    
+
+  const handleCloseOnYes = () => {
     setChangesMade(false); // Discard changes 
     setRenderedUsers(projectMembers); // Reset renderedUsers to original projectMembers
     setCloseConfirmModal(false); // Close modal and exit edit mode
@@ -228,7 +225,7 @@ const ListComponent = ({ projectId, projectMembers, renderedUsers, setRenderedUs
                     mx: 0.16,
                   }}
                 >
-                  <Grid container justifyContent={'space-between'}                   
+                  <Grid container justifyContent={'space-between'}
                     onClick={() => {
                       if (editMode && !openModal) setSelectedUserId(_id);
                     }}
@@ -259,11 +256,11 @@ const ListComponent = ({ projectId, projectMembers, renderedUsers, setRenderedUs
                       </Box>
                     </Modal>
                     {/* Remove Confirmation Modal */}
-                    <Modal   
+                    <Modal
                       open={removeConfirmModal}
                       hideBackdrop={true}
                     >
-                      <Box  
+                      <Box
                         onClick={() => setRemoveConfirmModal(false)}
                         sx={modalStyle1}
                       >
@@ -281,7 +278,7 @@ const ListComponent = ({ projectId, projectMembers, renderedUsers, setRenderedUs
               </ListItem>
               {/* User information */}
               {selectedUserId === _id &&
-                <ListItem                 
+                <ListItem
                   style={{ backgroundColor: 'white', display: 'flex', justifyContent: 'flex-end' }}
                   sx={{
                     borderLeft: 1.6,
@@ -290,33 +287,33 @@ const ListComponent = ({ projectId, projectMembers, renderedUsers, setRenderedUs
                     borderColor: 'grey.300',
                   }}
                 >
-                    <ListItemButton sx={{ position: 'relative' }}>
-                      <Box 
-                        sx={{
-                          position: 'absolute',
-                          top: 1,
-                          right: 1,
-                          zIndex: 1,
-                          cursor: 'pointer',
-                        }}
-                      >
-                        <CloseIcon onClick={() => setSelectedUserId("")} />
-                      </Box>
-                      <Grid container direction="column">
-                        <Grid item>
-                          <Typography style={{ fontWeight: 600 }} sx={{ whiteSpace: "normal", wordBreak: "break-word", color: "black"}}>
-                            {name.firstName.toUpperCase() +
-                              ' ' +
-                              name.lastName.toUpperCase()}
-                          </Typography>
-                        </Grid>
-                        <Grid item>
-                          <Typography sx={{ whiteSpace: "normal", wordBreak: "break-word", color: "black"}}>
-                            {email}
-                          </Typography>
-                        </Grid>
+                  <ListItemButton sx={{ position: 'relative' }}>
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        top: 1,
+                        right: 1,
+                        zIndex: 1,
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <CloseIcon onClick={() => setSelectedUserId("")} />
+                    </Box>
+                    <Grid container direction="column">
+                      <Grid item>
+                        <Typography style={{ fontWeight: 600 }} sx={{ whiteSpace: "normal", wordBreak: "break-word", color: "black" }}>
+                          {name.firstName.toUpperCase() +
+                            ' ' +
+                            name.lastName.toUpperCase()}
+                        </Typography>
                       </Grid>
-                    </ListItemButton>
+                      <Grid item>
+                        <Typography sx={{ whiteSpace: "normal", wordBreak: "break-word", color: "black" }}>
+                          {email}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  </ListItemButton>
                 </ListItem>
               }
             </>
@@ -325,7 +322,7 @@ const ListComponent = ({ projectId, projectMembers, renderedUsers, setRenderedUs
       </List>
       {editMode && <ButtonGroup btnName1={"Save"} btnName2={"Close"} callBackFn1={handleSavePMs} callBackFn2={handleClosePMs} isLoading={isLoading} />}
       {/* Close Confirmation Modal */}
-      <Modal   
+      <Modal
         open={closeConfirmModal}
         hideBackdrop={true}
         aria-labelledby="modal-modal-title"
@@ -358,13 +355,12 @@ const EditProjectMembers = ({ projectToEdit }) => {
   const [projectMembers, setProjectMembers] = useState([]);
   const [renderedUsers, setRenderedUsers] = useState([]);
 
-  // Create new instance of UserApiService class to access backend routers & controllers
-  const userApiService = new UserApiService();
+  console.log('changesMade: ', changesMade)
 
   useEffect(() => {
     // Create an array of projectMembers (users) from project's managedByUsers (user IDs)
     const fetchProjectMembers = async () => {
-      if (projectToEdit?.managedByUsers?.length) {  
+      if (projectToEdit?.managedByUsers?.length) {
         setIsLoading(true);
         try {
           const members = await Promise.all(
@@ -375,7 +371,7 @@ const EditProjectMembers = ({ projectToEdit }) => {
           );
           setProjectMembers(members);
           setRenderedUsers(members);
-        } catch (err) { 
+        } catch (err) {
           console.log(err)
         }
         setIsLoading(false);
@@ -383,10 +379,10 @@ const EditProjectMembers = ({ projectToEdit }) => {
     }
     if (!changesMade) fetchProjectMembers();
   }, [changesMade]);
-  
+
   const accessLevel = auth?.user?.accessLevel;
   const userId = auth?.user?._id;
-  
+
   // Edit icon component only avaiable for VRMS admins and project members (users in project)
   const editIcon = () => {
     return (accessLevel !== 'user' || projectToEdit?.managedByUsers?.includes(userId)) && (
@@ -414,18 +410,17 @@ const EditProjectMembers = ({ projectToEdit }) => {
     );
   };
 
-  const handleEmailSearch = async (search) => {   
+  const handleEmailSearch = async (search) => {
     setEmail(search);
     // Reset toggleSelect state if user starts typing again
     if (toggleSelect) setToggleSelect(false);
 
     // RegEx for valid email check
     const emailRegEx = /^((?:[A-Za-z0-9!#$%&'*+\-\/=?^_`{|}~]|(?<=^|\.)"|"(?=$|\.|@)|(?<=".*)[ .](?=.*")|(?<!\.)\.){1,64})(@)((?:[A-Za-z0-9.\-])*(?:[A-Za-z0-9])\.(?:[A-Za-z0-9]){2,})$/gi;
-    
+
     // Fetch user data based on email
     if (emailRegEx.test(search)) {
       setIsLoading(true);
-      
       try {
         const user = await userApiService.fetchUserByEmail(search);
         console.log(user);
@@ -473,11 +468,11 @@ const EditProjectMembers = ({ projectToEdit }) => {
         {/* Email search componennt */}
         <Grid container direction="column" sx={{ width: '100%', backgroundColor: editMode ? 'white' : '' }}>
           <Grid item>
-            <TextField 
+            <TextField
               disabled={!editMode}
               onChange={(e) => handleEmailSearch(e.target.value)}
-              placeholder="Enter user email address" 
-              value={email} 
+              placeholder="Enter user email address"
+              value={email}
               size="small"
             />
           </Grid>
@@ -495,7 +490,7 @@ const EditProjectMembers = ({ projectToEdit }) => {
                 </Typography>
                 {/* Icons for adding and confirming email of new user */}
                 {!toggleSelect ? <AddCircleOutlineIcon sx={{ flexShrink: 0, ml: 2 }} onClick={() => handleAddUser(searchedUser)} />
-                : <CheckCircleOutline color="success" />}
+                  : <CheckCircleOutline color="success" />}
               </Box>
             </Grid>
           )}
@@ -503,7 +498,7 @@ const EditProjectMembers = ({ projectToEdit }) => {
         {/* Display error message */}
         {error && (<Typography color="red">No account found with this email address</Typography>)}
         {/* Display users */}
-        <ListComponent projectId={projectToEdit._id} projectMembers={projectMembers} editMode={editMode} setChangesMade={setChangesMade} closeConfirmModal={closeConfirmModal} setCloseConfirmModal={setCloseConfirmModal} setEditMode={setEditMode} renderedUsers={renderedUsers} setRenderedUsers={setRenderedUsers} isLoading={isLoading} />
+        <ListComponent projectId={projectToEdit._id} projectMembers={projectMembers} editMode={editMode} setChangesMade={setChangesMade} closeConfirmModal={closeConfirmModal} setCloseConfirmModal={setCloseConfirmModal} setEditMode={setEditMode} renderedUsers={renderedUsers} setRenderedUsers={setRenderedUsers} isLoading={isLoading} setIsLoading={setIsLoading} />
       </TitledBox>
     </Box>
   )

@@ -326,4 +326,14 @@ UserController.updateManagedProjects = async function (req, res) {
   }
 };
 
+UserController.bulkUpdateManagedProjects = async function (req, res) {
+  const { bulkOps } = req.body;
+  try {
+    const result = await User.bulkWrite(bulkOps);
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 module.exports = UserController;
