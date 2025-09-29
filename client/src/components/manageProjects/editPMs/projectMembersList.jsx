@@ -1,63 +1,30 @@
 import { useEffect, useState } from 'react';
 import {
-  CircularProgress,
   Typography,
   Box,
   Grid,
-  TextField,
   List,
   ListItem,
   ListItemButton,
   Modal,
 } from "@mui/material";
-import useAuth from '../../hooks/useAuth';
-import EditIcon from '../../svg/Icon_Edit.svg?react';
-import CloseIcon from '@mui/icons-material/Close';
+import ButtonGroup from './buttonGroup'
 import DeleteIcon from '@mui/icons-material/Delete';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import CheckCircleOutline from '@mui/icons-material/CheckCircleOutline';
+import CloseIcon from '@mui/icons-material/Close';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
-import TitledBox from '../parts/boxes/TitledBox';
-import UserApiService from '../../api/UserApiService';
-import ProjectApiService from '../../api/ProjectApiService';
-import { StyledButton } from '../ProjectForm';
+import CheckCircleOutline from '@mui/icons-material/CheckCircleOutline';
+import UserApiService from '../../../api/UserApiService';
+import ProjectApiService from '../../../api/ProjectApiService';
 
-const projectApiService = new ProjectApiService();
 const userApiService = new UserApiService();
-
-const ButtonGroup = ({ btnName1, btnName2, callBackFn1, callBackFn2, isLoading }) => (
-  <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
-    <Grid item xs="auto">
-      <StyledButton
-        sx="large"
-        cursor="pointer"
-        variant="contained"
-        onClick={(btn) => callBackFn1(btn)}
-      >
-        {isLoading ? <CircularProgress /> : `${btnName1}`}
-      </StyledButton>
-    </Grid>
-    <Grid item xs="auto">
-      <StyledButton
-        sx="large"
-        cursor="pointer"
-        variant="contained"
-        onClick={callBackFn2}
-      >
-        {btnName2}
-      </StyledButton>
-    </Grid>
-  </Grid>
-);
+const projectApiService = new ProjectApiService();
 
 
-const ListComponent = ({ projectId, projectMembers, renderedUsers, setRenderedUsers, editMode, closeConfirmModal, setChangesMade, setCloseConfirmModal, setEditMode, isLoading, setIsLoading }) => {
+const ProjectMembersList = ({ projectId, projectMembers, renderedUsers, setRenderedUsers, editMode, closeConfirmModal, setChangesMade, setCloseConfirmModal, setEditMode, isLoading, setEmail, setIsLoading }) => {
   const [openModal, setOpenModal] = useState(false);
   const [removeConfirmModal, setRemoveConfirmModal] = useState(false);
   const [removeId, setRemoveId] = useState("");
   const [selectedUserId, setSelectedUserId] = useState(""); // Store user ID state of selected user to show info
-
-  console.log('Initial projectMembers:', renderedUsers)
 
   useEffect(() => {
     setSelectedUserId(""); // close user info when exiting out of "Edit" mode
@@ -74,7 +41,6 @@ const ListComponent = ({ projectId, projectMembers, renderedUsers, setRenderedUs
 
     if (addedUsers.length === 0 && removedUsers.length === 0) {
       // No changes made, exit edit mode
-      console.log('No changes made');
       setEditMode(false);
       setChangesMade(false);
       return;
@@ -129,24 +95,11 @@ const ListComponent = ({ projectId, projectMembers, renderedUsers, setRenderedUs
 
       setChangesMade(false); // Reset changes made
       setEditMode(false); // Exit edit mode
-      setIsLoading(false); 
-      
-      // // Update addedUsers in parallel
-      // await Promise.all(
-      //   addedUsers.map(userId =>
-      //     projectApiService.updateManagedByUsers(projectId, userId, "add")
-      //   )
-      // );
-
-      // // Update removedUsers in parallel
-      // await Promise.all(
-      //   removedUsers.map(userId =>
-      //     projectApiService.updateManagedByUsers(projectId, userId, "remove")
-      //   )
-      // );
     } catch (err) {
       console.log(err)
+      alert('Save failed. Please try again.');
     }
+    setIsLoading(false); 
   }
 
   const handleClosePMs = () => setCloseConfirmModal(true);
@@ -155,6 +108,7 @@ const ListComponent = ({ projectId, projectMembers, renderedUsers, setRenderedUs
     setChangesMade(false); // Discard changes 
     setRenderedUsers(projectMembers); // Reset renderedUsers to original projectMembers
     setCloseConfirmModal(false); // Close modal and exit edit mode
+    setEmail(""); // Clear email search field
     setEditMode(false);
   }
 
@@ -340,168 +294,4 @@ const ListComponent = ({ projectId, projectMembers, renderedUsers, setRenderedUs
   );
 };
 
-
-const EditProjectMembers = ({ projectToEdit }) => {
-  // ----------------- States -----------------
-  const { auth } = useAuth();
-  const [isLoading, setIsLoading] = useState(false);
-  const [editMode, setEditMode] = useState(false);
-  const [error, setError] = useState(false);
-  const [toggleSelect, setToggleSelect] = useState(false);
-  const [email, setEmail] = useState('');
-  const [searchedUser, setSearchedUser] = useState({});
-  const [closeConfirmModal, setCloseConfirmModal] = useState(false);
-  const [changesMade, setChangesMade] = useState(false);
-  const [projectMembers, setProjectMembers] = useState([]);
-  const [renderedUsers, setRenderedUsers] = useState([]);
-
-  console.log('changesMade: ', changesMade)
-
-  useEffect(() => {
-    // Create an array of projectMembers (users) from project's managedByUsers (user IDs)
-    const fetchProjectMembers = async () => {
-      if (projectToEdit?.managedByUsers?.length) {
-        setIsLoading(true);
-        try {
-          const members = await Promise.all(
-            projectToEdit.managedByUsers.map(async (userId) => {
-              const user = await userApiService.fetchUserById(userId.toString());
-              return user;
-            })
-          );
-          setProjectMembers(members);
-          setRenderedUsers(members);
-        } catch (err) {
-          console.log(err)
-        }
-        setIsLoading(false);
-      }
-    }
-    if (!changesMade) fetchProjectMembers();
-  }, [changesMade]);
-
-  const accessLevel = auth?.user?.accessLevel;
-  const userId = auth?.user?._id;
-
-  // Edit icon component only avaiable for VRMS admins and project members (users in project)
-  const editIcon = () => {
-    return (accessLevel !== 'user' || projectToEdit?.managedByUsers?.includes(userId)) && (
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          cursor: 'pointer',
-        }}
-        onClick={() => {
-          if (editMode && changesMade) {
-            setCloseConfirmModal(true);
-          } else {
-            setEditMode(!editMode);
-            setError(false);
-          }
-        }}
-      >
-        <EditIcon style={{ p: 1 }} />
-        <Typography sx={{ p: 1, fontSize: '14px', fontWeight: '600' }}>
-          {editMode ? 'Cancel' : 'Edit'}
-        </Typography>
-      </Box>
-    );
-  };
-
-  const handleEmailSearch = async (search) => {
-    setEmail(search);
-    // Reset toggleSelect state if user starts typing again
-    if (toggleSelect) setToggleSelect(false);
-
-    // RegEx for valid email check
-    const emailRegEx = /^((?:[A-Za-z0-9!#$%&'*+\-\/=?^_`{|}~]|(?<=^|\.)"|"(?=$|\.|@)|(?<=".*)[ .](?=.*")|(?<!\.)\.){1,64})(@)((?:[A-Za-z0-9.\-])*(?:[A-Za-z0-9])\.(?:[A-Za-z0-9]){2,})$/gi;
-
-    // Fetch user data based on email
-    if (emailRegEx.test(search)) {
-      setIsLoading(true);
-      try {
-        const user = await userApiService.fetchUserByEmail(search);
-        console.log(user);
-
-        if (user[0]) {
-          setSearchedUser(user[0]);
-          setError(false);
-        } else {
-          setSearchedUser({});
-          setError(true);
-        }
-      } catch (err) {
-        setError(true);
-        console.log(err)
-      }
-    } else {
-      setError(false);
-      setSearchedUser({})
-    }
-    setIsLoading(false);
-  }
-
-  // Handle logic to toggle email selection and adding user to project's managedByUsers
-  const handleAddUser = (addedUser) => {
-    setToggleSelect(true);
-    if (!toggleSelect) {
-      setRenderedUsers((prevMembers) => [...prevMembers, addedUser]); // Add user to project's managedByUsers array
-      setChangesMade(true); // Set changes made to true
-    }
-    // Confirmation message disappears after 1.5 seconds
-    setTimeout(() => {
-      setEmail("");
-      setSearchedUser({});
-      setToggleSelect(false);
-    }, 1500);
-  }
-
-
-  return (
-    <Box sx={{ px: 0.5 }}>
-      <TitledBox
-        title={'Project Members (Event Editors)'}
-        badge={editIcon()}
-      >
-        {/* Email search componennt */}
-        <Grid container direction="column" sx={{ width: '100%', backgroundColor: editMode ? 'white' : '' }}>
-          <Grid item>
-            <TextField
-              disabled={!editMode}
-              onChange={(e) => handleEmailSearch(e.target.value)}
-              placeholder="Enter user email address"
-              value={email}
-              size="small"
-            />
-          </Grid>
-          {searchedUser?.email && (
-            <Grid item>
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="space-between"
-                width="100%"
-                sx={{ px: 2, py: 2, border: 1, borderColor: 'grey.400', borderRadius: 1, mt: 1 }}
-              >
-                <Typography sx={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                  {!toggleSelect ? searchedUser?.email : <Typography sx={{ fontWeight: "bold" }}>User added to project successfully</Typography>}
-                </Typography>
-                {/* Icons for adding and confirming email of new user */}
-                {!toggleSelect ? <AddCircleOutlineIcon sx={{ flexShrink: 0, ml: 2 }} onClick={() => handleAddUser(searchedUser)} />
-                  : <CheckCircleOutline color="success" />}
-              </Box>
-            </Grid>
-          )}
-        </Grid>
-        {/* Display error message */}
-        {error && (<Typography color="red">No account found with this email address</Typography>)}
-        {/* Display users */}
-        <ListComponent projectId={projectToEdit._id} projectMembers={projectMembers} editMode={editMode} setChangesMade={setChangesMade} closeConfirmModal={closeConfirmModal} setCloseConfirmModal={setCloseConfirmModal} setEditMode={setEditMode} renderedUsers={renderedUsers} setRenderedUsers={setRenderedUsers} isLoading={isLoading} setIsLoading={setIsLoading} />
-      </TitledBox>
-    </Box>
-  )
-}
-
-export default EditProjectMembers
+export default ProjectMembersList
