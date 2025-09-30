@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const { ObjectId } = require('mongodb');
 
 const EmailController = require('./email.controller');
 const { CONFIG_AUTH } = require('../config');
@@ -311,7 +312,7 @@ UserController.updateManagedProjects = async function (req, res) {
       managedByUsers = managedByUsers.filter((id) => id !== UserId);
     }
 
-    // Update user's managedProjects 
+    // Update user's managedProjects
     user.managedProjects = managedProjects;
     await user.save({ validateBeforeSave: false });
 
@@ -328,6 +329,23 @@ UserController.updateManagedProjects = async function (req, res) {
 
 UserController.bulkUpdateManagedProjects = async function (req, res) {
   const { bulkOps } = req.body;
+
+  // Convert string IDs to ObjectId in bulkOps
+  bulkOps.forEach((op) => {
+    if (op?.updateOne?.filter._id) {
+      op.updateOne.filter._id = ObjectId(op.updateOne.filter._id);
+    }
+    if (op?.updateOne?.update) {
+      const update = op.updateOne.update;
+      if (update?.$addToSet?.managedProjects) {
+        update.$addToSet.managedProjects = ObjectId(update.$addToSet.managedProjects);
+      }
+      if (update?.$pull?.managedProjects) {
+        update.$pull.managedProjects = ObjectId(update.$pull.managedProjects);
+      }
+    }
+  });
+
   try {
     const result = await User.bulkWrite(bulkOps);
     res.status(200).json(result);

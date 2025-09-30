@@ -1,4 +1,5 @@
 const { Project, User } = require('../models');
+const { ObjectId } = require('mongodb');
 
 const ProjectController = {};
 
@@ -104,6 +105,23 @@ ProjectController.updateManagedByUsers = async function (req, res) {
 
 ProjectController.bulkUpdateManagedByUsers = async function (req, res) {
   const { bulkOps } = req.body;
+
+  // Convert string IDs to ObjectId in bulkOps
+  bulkOps.forEach((op) => {
+    if (op?.updateOne?.filter._id) {
+      op.updateOne.filter._id = ObjectId(op.updateOne.filter._id);
+    }
+    if (op?.updateOne?.update) {
+      const update = op.updateOne.update;
+      if (update?.$addToSet?.managedByUsers) {
+        update.$addToSet.managedByUsers = ObjectId(update.$addToSet.managedByUsers);
+      }
+      if (update?.$pull?.managedByUsers) {
+        update.$pull.managedByUsers = ObjectId(update.$pull.managedByUsers);
+      }
+    }
+  });
+
   try {
     const result = await Project.bulkWrite(bulkOps);
     res.status(200).json(result);
