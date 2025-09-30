@@ -31,7 +31,9 @@ const NewUserForm = (props) => {
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Box className="check-in-container">
         <Box className="check-in-headers">
-          <Typography variant="h3">Welcome!</Typography>
+          <Typography variant="h3" fontSize="2.8em">
+            Welcome!
+          </Typography>
           <Typography variant="h4">
             Tell us a little bit about yourself:
           </Typography>
