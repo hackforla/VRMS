@@ -26,15 +26,23 @@ const NewUserForm = (props) => {
       console.error('Invalid date selected:', newValue);
     }
   };
+  // MUI InputLabelProps Style
+  const InputLabelProps = {
+    sx: {
+      backgroundColor: 'white',
+      px: 0, // padding left/right
+      width: '17em',
+    },
+  };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Box className="check-in-container">
         <Box className="check-in-headers">
-          <Typography variant="h3" fontSize="2.8em">
+          <Typography variant="h3" fontSize="3em">
             Welcome!
           </Typography>
-          <Typography variant="h4">
+          <Typography variant="h6">
             Tell us a little bit about yourself:
           </Typography>
         </Box>
@@ -48,6 +56,13 @@ const NewUserForm = (props) => {
               <TextField
                 label="First Name"
                 variant="outlined"
+                InputLabelProps={{
+                  sx: {
+                    backgroundColor: 'white',
+                    px: 0,
+                    width: '6.3em',
+                  },
+                }}
                 name="firstName"
                 value={props.firstName.toString()}
                 onChange={props.handleFirstNameChange}
@@ -58,6 +73,13 @@ const NewUserForm = (props) => {
               <TextField
                 label="Last Name"
                 variant="outlined"
+                InputLabelProps={{
+                  sx: {
+                    backgroundColor: 'white',
+                    px: 0,
+                    width: '6.2em',
+                  },
+                }}
                 name="lastName"
                 value={props.lastName.toString()}
                 onChange={props.handleLastNameChange}
@@ -68,6 +90,13 @@ const NewUserForm = (props) => {
               <TextField
                 label="Email Address"
                 variant="outlined"
+                InputLabelProps={{
+                  sx: {
+                    backgroundColor: 'white',
+                    px: 0,
+                    width: '8em',
+                  },
+                }}
                 name="email"
                 value={props.formInput.email.toString().toLowerCase()}
                 onChange={props.handleInputChange}
@@ -84,6 +113,7 @@ const NewUserForm = (props) => {
                       <TextField
                         label={question.questionText}
                         variant="outlined"
+                        InputLabelProps={InputLabelProps}
                         name={question.htmlName}
                         placeholder={question.placeholderText}
                         value={
@@ -171,6 +201,10 @@ const NewUserForm = (props) => {
                                   paddingLeft: '0.5rem',
                                   color: 'rgb(250, 17, 79)',
                                   fontWeight: '600', // semi-bold
+                                },
+                                label: {
+                                  backgroundColor: 'white',
+                                  width: '8em',
                                 },
                               }}
                             >
