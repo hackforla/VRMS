@@ -101,6 +101,11 @@ const NewUserForm = (props) => {
                 value={props.formInput.email.toString().toLowerCase()}
                 onChange={props.handleInputChange}
                 helperText="This allows easy use of the app. We'll never sell your data!"
+                FormHelperTextProps={{
+                  sx: {
+                    marginBottom: '10px',
+                  },
+                }}
                 required
               />
             </Box>
