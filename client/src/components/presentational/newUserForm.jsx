@@ -32,7 +32,18 @@ const NewUserForm = (props) => {
       backgroundColor: 'white',
       px: 0, // padding left/right
       width: '17em',
+      '&.Mui-focused': {
+        mt: 0.4, // only applies when the input is focused
+      },
+      '&.MuiInputLabel-shrink': {
+        mt: 0.4,
+      },
     },
+  };
+  // MUI FormLabel Style
+  const FormLabelStyle = {
+    color: 'black',
+    fontWeight: 500,
   };
 
   return (
@@ -61,6 +72,12 @@ const NewUserForm = (props) => {
                     backgroundColor: 'white',
                     px: 0,
                     width: '6.3em',
+                    '&.Mui-focused': {
+                      mt: 0.4, // only applies when the input is focused
+                    },
+                    '&.MuiInputLabel-shrink': {
+                      mt: 0.4,
+                    },
                   },
                 }}
                 name="firstName"
@@ -78,6 +95,12 @@ const NewUserForm = (props) => {
                     backgroundColor: 'white',
                     px: 0,
                     width: '6.2em',
+                    '&.Mui-focused': {
+                      mt: 0.4, // only applies when the input is focused
+                    },
+                    '&.MuiInputLabel-shrink': {
+                      mt: 0.4,
+                    },
                   },
                 }}
                 name="lastName"
@@ -95,15 +118,22 @@ const NewUserForm = (props) => {
                     backgroundColor: 'white',
                     px: 0,
                     width: '8em',
+                    '&.Mui-focused': {
+                      mt: 0.4, // only applies when the input is focused
+                    },
+                    '&.MuiInputLabel-shrink': {
+                      mt: 0.4,
+                    },
                   },
                 }}
                 name="email"
                 value={props.formInput.email.toString().toLowerCase()}
                 onChange={props.handleInputChange}
-                helperText="This allows easy use of the app. We'll never sell your data!"
+                helperText="(This allows easy use of the app. We'll never sell your data!)"
                 FormHelperTextProps={{
                   sx: {
                     marginBottom: '10px',
+                    color: 'black',
                   },
                 }}
                 required
@@ -143,7 +173,7 @@ const NewUserForm = (props) => {
                   question.type === 'select' && (
                     <Box key={question._id} className="form-row last-row">
                       <FormControl component="fieldset">
-                        <FormLabel component="legend">
+                        <FormLabel component="legend" sx={FormLabelStyle}>
                           {question.questionText}
                         </FormLabel>
                         <RadioGroup
@@ -174,7 +204,7 @@ const NewUserForm = (props) => {
                     question.htmlName === 'attendanceLength' && (
                       <Box key={question._id} className="form-row">
                         <FormControl component="fieldset">
-                          <FormLabel component="legend">
+                          <FormLabel component="legend" sx={FormLabelStyle}>
                             {question.questionText}
                           </FormLabel>
                           <FormControl
