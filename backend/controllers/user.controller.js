@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const { ObjectId } = require('mongodb');
 
 const EmailController = require('./email.controller');
 const { CONFIG_AUTH } = require('../config');
@@ -23,6 +24,25 @@ UserController.user_list = async function (req, res) {
     return res.status(200).send(user);
   } catch (err) {
     console.error(err);
+    return res.sendStatus(400);
+  }
+};
+
+UserController.user_by_email = async function (req, res) {
+  const { headers } = req;
+  const { email } = req.params;
+
+  console.log('email: ', email);
+
+  if (headers['x-customrequired-header'] !== expectedHeader) {
+    return res.sendStatus(403);
+  }
+
+  try {
+    const user = await User.find({ email });
+    return res.status(200).send(user);
+  } catch (err) {
+    console.log(err);
     return res.sendStatus(400);
   }
 };
@@ -104,8 +124,6 @@ UserController.user_by_id = async function (req, res) {
 
   try {
     const user = await User.findById(UserId);
-    // TODO throw 404 if User.findById returns empty object
-    // and look downstream to see whether 404 would break anything
     return res.status(200).send(user);
   } catch (err) {
     console.error(err);
@@ -294,7 +312,7 @@ UserController.updateManagedProjects = async function (req, res) {
       managedByUsers = managedByUsers.filter((id) => id !== UserId);
     }
 
-    // Update user's managedProjects 
+    // Update user's managedProjects
     user.managedProjects = managedProjects;
     await user.save({ validateBeforeSave: false });
 
@@ -306,6 +324,33 @@ UserController.updateManagedProjects = async function (req, res) {
   } catch (err) {
     console.log(err);
     return res.sendStatus(400);
+  }
+};
+
+UserController.bulkUpdateManagedProjects = async function (req, res) {
+  const { bulkOps } = req.body;
+
+  // Convert string IDs to ObjectId in bulkOps
+  bulkOps.forEach((op) => {
+    if (op?.updateOne?.filter._id) {
+      op.updateOne.filter._id = ObjectId(op.updateOne.filter._id);
+    }
+    if (op?.updateOne?.update) {
+      const update = op.updateOne.update;
+      if (update?.$addToSet?.managedProjects) {
+        update.$addToSet.managedProjects = ObjectId(update.$addToSet.managedProjects);
+      }
+      if (update?.$pull?.managedProjects) {
+        update.$pull.managedProjects = ObjectId(update.$pull.managedProjects);
+      }
+    }
+  });
+
+  try {
+    const result = await User.bulkWrite(bulkOps);
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 };
 
