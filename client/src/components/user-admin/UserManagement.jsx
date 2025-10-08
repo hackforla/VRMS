@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import {
   Box,
   Button,
@@ -12,6 +11,7 @@ import {
 import useAuth from '../../hooks/useAuth';
 import PersonIcon from '@mui/icons-material/Person';
 import '../../sass/UserAdmin.scss';
+import { useSearchText } from '../../context/searchContext';
 
 const Buttonsx = {
   px: 2,
@@ -20,8 +20,7 @@ const Buttonsx = {
 
 const UserManagement = ({ users, setUserToEdit }) => {
   let searchResults = [];
-  const [searchResultType, setSearchResultType] = useState('name'); // Which results will diplay
-  const [searchTerm, setSearchTerm] = useState(''); // Serch term for the user/email search
+  const { searchText, setSearchText, searchResultType, setSearchResultType } = useSearchText(); // React context hook
   const { auth } = useAuth();
 
   // Swaps the buttons and displayed panels for the search results, by email or by name
@@ -32,10 +31,10 @@ const UserManagement = ({ users, setUserToEdit }) => {
 
   // Handle change on input in search form
   const handleChange = (event) => {
-    setSearchTerm(event.target.value);
+    setSearchText(event.target.value);
   };
 
-  if (!searchTerm) {
+  if (!searchText) {
     searchResults = [];
   } else {
     searchResults =
@@ -44,14 +43,14 @@ const UserManagement = ({ users, setUserToEdit }) => {
             .filter((user) =>
               user.email
                 ?.toLowerCase()
-                .includes(searchTerm.toLowerCase().trim())
+                .includes(searchText.toLowerCase().trim())
             )
             .sort((a, b) => a.email.localeCompare(b.email))
         : Object.values(users)
             .filter((user) =>
               `${user.name?.firstName} ${user.name?.lastName}`
                 .toLowerCase()
-                .includes(searchTerm.toLowerCase().trim())
+                .includes(searchText.toLowerCase().trim())
             )
             .sort((a, b) =>
               a.name?.firstName
@@ -105,7 +104,7 @@ const UserManagement = ({ users, setUserToEdit }) => {
           type="text"
           placeholder="Enter name and / or email to find a user."
           variant="standard"
-          value={searchTerm}
+          value={searchText}
           onChange={handleChange}
         />
         <Box

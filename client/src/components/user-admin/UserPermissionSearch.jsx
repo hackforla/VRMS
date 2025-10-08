@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import {
   Box,
   Button,
@@ -11,7 +11,7 @@ import {
   ListItemButton,
 } from '@mui/material';
 import { useLocation } from 'react-router-dom';
-import useAuth from '../../hooks/useAuth';
+import { useSearchText } from '../../context/searchContext';
 import PersonIcon from '@mui/icons-material/Person';
 import '../../sass/UserAdmin.scss';
 
@@ -105,9 +105,7 @@ const DummyComponent = ({ data, isProjectLead, setUserToEdit }) => {
 };
 
 const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
-  const [userType] = useState('admin'); // Which results will display
-  const [searchText, setSearchText] = useState(''); // Search term for the admin/PM search
-  const [isProjectLead, setIsProjectLead] = useState(false);
+  const { searchText, setSearchText, userType, setUserType, isProjectLead, setIsProjectLead } = useSearchText(); // React context hook
 
   const location = useLocation();
 
@@ -125,8 +123,15 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
   }, [userType]);
 
   // Swaps the buttons and displayed panels for the search results, by email or by name
-  const buttonSwap = () =>
-    isProjectLead ? setIsProjectLead(false) : setIsProjectLead(true);
+  const buttonSwap = () => {
+    if (isProjectLead) {
+      setIsProjectLead(false);
+      setUserType('admin');
+    } else {
+      setIsProjectLead(true);
+      setUserType('projectLead');
+    }
+  }
 
   // Handle change on input in search form
   const handleChange = (event) => {
