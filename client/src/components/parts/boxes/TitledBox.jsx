@@ -1,6 +1,15 @@
 import React from 'react';
 import { Box, Typography, Divider } from '@mui/material';
 
+/**
+ * Renders a titled box component with optional badge and children content.
+ * @param {Object} props - The props object.
+ * @param {string} props.title - The title to display in the box header.
+ * @param {React.ReactNode} props.children - The content to render inside the box.
+ * @param {React.ReactNode} [props.badge] - Optional badge element to display in the header.
+ * @param {Object} [props.childrenBoxSx] - Optional sx props for the children container.
+ * @returns {JSX.Element} The rendered TitledBox component.
+ */
 export default function TitledBox({ title, children, badge, childrenBoxSx }) {
   return (
     <Box sx={{ bgcolor: '#F5F5F5', my: 3 }}>
