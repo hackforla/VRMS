@@ -191,7 +191,7 @@ export default function ProjectForm({
       >
         <EditIcon style={{ p: 1 }} />
         <Typography sx={{ p: 1, fontSize: '14px', fontWeight: '600' }}>
-          {editMode ? 'Cancel' : 'Edit Mode'}
+          {editMode ? 'Cancel' : 'Edit'}
         </Typography>
       </Box>
     );
