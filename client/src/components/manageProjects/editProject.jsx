@@ -5,6 +5,7 @@ import readableEvent from './utilities/readableEvent';
 import ProjectForm from '../ProjectForm';
 import { simpleInputs, additionalInputsForEdit } from '../data';
 import TitledBox from '../parts/boxes/TitledBox';
+import TitledBoxIFrame from '../parts/boxes/TitledBoxIFrame';
 
 import EditIcon from '../../svg/Icon_Edit.svg?react';
 import PlusIcon from '../../svg/PlusIcon.svg?react';
@@ -106,6 +107,8 @@ const EditProject = ({
         isEdit={true}
         setFormData={setFormData}
       />
+
+      <TitledBoxIFrame projectName={projectToEdit.name} />
 
       {/* Insert Project Members (Event Editors) here */}
       <EditProjectMembers projectToEdit={projectToEdit} />
