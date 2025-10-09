@@ -239,6 +239,7 @@ export default function ProjectForm({
         <TitledBox
           title={editMode ? 'Editing Project' : 'Project Information'}
           badge={isEdit ? editIcon() : addIcon()}
+          expandable={true}
         >
           <form
             id="project-form"
@@ -297,7 +298,7 @@ export default function ProjectForm({
           </Grid>
         </TitledBox>
       ) : (
-        <TitledBox title={'Project Information'}>
+        <TitledBox title={'Project Information'} expandable={true}>
           {' '}
           <form
             id="project-form"
