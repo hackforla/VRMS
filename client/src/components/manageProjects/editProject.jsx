@@ -5,11 +5,13 @@ import readableEvent from './utilities/readableEvent';
 import ProjectForm from '../ProjectForm';
 import { simpleInputs, additionalInputsForEdit } from '../data';
 import TitledBox from '../parts/boxes/TitledBox';
+import TitledBoxIFrame from '../parts/boxes/TitledBoxIFrame';
 
 import EditIcon from '../../svg/Icon_Edit.svg?react';
 import PlusIcon from '../../svg/PlusIcon.svg?react';
 
 import { Typography, Box } from '@mui/material';
+import EditProjectMembers from './editPMs/editProjectMembers';
 
 // Need to hold user state to check which type of user they are and conditionally render editing fields in this component
 // for user level block access to all except for the ones checked
@@ -105,6 +107,11 @@ const EditProject = ({
         isEdit={true}
         setFormData={setFormData}
       />
+
+      <TitledBoxIFrame projectName={projectToEdit.name} />
+
+      {/* Insert Project Members (Event Editors) here */}
+      <EditProjectMembers projectToEdit={projectToEdit} />
 
       <TitledBox
         title="Recurring Events"

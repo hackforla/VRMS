@@ -47,6 +47,8 @@ const EditUsers = ({
     setUserManagedProjects(userToEdit.managedProjects);
   }, [userToEdit]);
 
+  console.log(userManagedProjects)
+
   const userProjectsToDisplay = activeProjects.filter((item) =>
     userProjects.includes(item[0])
   );
