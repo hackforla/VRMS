@@ -140,6 +140,7 @@ const EditProjectMembers = ({ projectToEdit }) => {
       <TitledBox
         title={'Project Members (Event Editors)'}
         badge={editIcon()}
+        expandable={true}
       >
         {/* Email search componennt */}
         <Grid container direction="column" sx={{ width: '100%', backgroundColor: editMode ? 'white' : '' }}>
