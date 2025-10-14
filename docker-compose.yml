@@ -20,6 +20,23 @@ services:
     networks:
       - gateway
 
+  cron:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.api
+      target: api-development
+    command: yarn run cron
+    volumes:
+      - ./backend:/srv/backend
+      - backend_node_modules:/srv/backend/node_modules
+    restart: on-failure
+    networks:
+      - gateway
+    depends_on:
+      - backend
+    env_file:
+      - ./backend/.env
+
   client:
     build:
       context: ./client

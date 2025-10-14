@@ -1,6 +1,7 @@
 const { generateEventData } = require('./lib/generateEventData');
 
-/**
+//API CALLS to GET and POST
+/** GET
  * Utility to fetch data from an API endpoint.
  * @param {string} endpoint - The API endpoint to fetch data from.
  * @param {string} URL - The base URL for API requests.
@@ -17,6 +18,31 @@ const fetchData = async (endpoint, URL, headerToSend, fetch) => {
   } catch (error) {
     console.error(`Error fetching ${endpoint}:`, error);
     return [];
+  }
+};
+
+/** POST
+ * Creates a new event by making a POST request to the events API.
+ * @param {Object} event - The event data to create.
+ * @returns {Promise<Object|null>} - The created event data or null on failure.
+ */
+const createEvent = async (event, URL, headerToSend, fetch) => {
+  if (!event) return null;
+
+  try {
+    const res = await fetch(`${URL}/api/events/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-customrequired-header': headerToSend,
+      },
+      body: JSON.stringify(event),
+    });
+    if (!res.ok) throw new Error('Failed to create event');
+    return await res.json();
+  } catch (error) {
+    console.error('Error creating event:', error);
+    return null;
   }
 };
 
@@ -47,28 +73,21 @@ const doesEventExist = (recurringEventName, today, events) =>
   });
 
 /**
- * Creates a new event by making a POST request to the events API.
- * @param {Object} event - The event data to create.
- * @returns {Promise<Object|null>} - The created event data or null on failure.
+ * Adjusts an event date to Los_Angeles time, accounting for DST offsets.
+ * @param {Date} eventDate - The event date to adjust.
+ * @returns {Date} - The adjusted event date.
  */
-const createEvent = async (event, URL, headerToSend, fetch) => {
-  if (!event) return null;
-
-  try {
-    const res = await fetch(`${URL}/api/events/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-customrequired-header': headerToSend,
-      },
-      body: JSON.stringify(event),
-    });
-    if (!res.ok) throw new Error('Failed to create event');
-    return await res.json();
-  } catch (error) {
-    console.error('Error creating event:', error);
-    return null;
-  }
+const adjustToLosAngelesTime = (eventDate) => {
+  const tempDate = new Date(eventDate);
+  const losAngelesOffsetHours = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Los_Angeles',
+    timeZoneName: 'shortOffset',
+  })
+    .formatToParts(tempDate)
+    .find((part) => part.type === 'timeZoneName')
+    .value.slice(3);
+  const offsetMinutes = parseInt(losAngelesOffsetHours, 10) * 60;
+  return new Date(tempDate.getTime() + offsetMinutes * 60000);
 };
 
 /**
@@ -109,24 +128,6 @@ const filterAndCreateEvents = async (events, recurringEvents, URL, headerToSend,
     const createdEvent = await createEvent(eventToCreate, URL, headerToSend, fetch);
     if (createdEvent) console.log('Created event:', createdEvent);
   }
-};
-
-/**
- * Adjusts an event date to Los_Angeles time, accounting for DST offsets.
- * @param {Date} eventDate - The event date to adjust.
- * @returns {Date} - The adjusted event date.
- */
-const adjustToLosAngelesTime = (eventDate) => {
-  const tempDate = new Date(eventDate);
-  const losAngelesOffsetHours = new Intl.DateTimeFormat('en-US', {
-    timeZone: 'America/Los_Angeles',
-    timeZoneName: 'shortOffset',
-  })
-    .formatToParts(tempDate)
-    .find((part) => part.type === 'timeZoneName')
-    .value.slice(3);
-  const offsetMinutes = parseInt(losAngelesOffsetHours, 10) * 60;
-  return new Date(tempDate.getTime() + offsetMinutes * 60000);
 };
 
 /**
@@ -172,7 +173,7 @@ const createRecurringEvents = (cron, fetch) => {
   const URL =
     process.env.NODE_ENV === 'prod'
       ? 'https://www.vrms.io'
-      : `http://localhost:${process.env.BACKEND_PORT}`;
+      : `http://backend:${process.env.BACKEND_PORT}`;
   const headerToSend = process.env.CUSTOM_REQUEST_HEADER;
 
   return scheduleTask(cron, fetch, URL, headerToSend);
