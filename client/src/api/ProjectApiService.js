@@ -119,6 +119,35 @@ class ProjectApiService {
       return undefined;
     }
   }
+
+  async fetchManagedByUsers(projectId) {
+    const url = `${this.baseProjectUrl}${projectId}`;
+    try {
+      const res = await fetch(url, {
+        headers: this.headers,
+        method: 'GET',
+      });
+      return await res.json();
+    } catch (error) {
+      console.error(`fetchManagedByUsers error: ${error}`);
+      alert('Server not responding.  Please refresh the page.');
+    }
+  }
+
+  async bulkUpdateManagedByUsers(bulkOps) {
+    const url = `${this.baseProjectUrl}bulk-updates`;
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: this.headers,
+        body: JSON.stringify({ bulkOps }),
+      });
+      return await res.json();
+    } catch (error) {
+      console.error(`bulkUpdateManagedByUsers error: ${error}`);
+      alert('Server not responding.  Please refresh the page.');
+    }
+  }
 }
 
 export default ProjectApiService;
