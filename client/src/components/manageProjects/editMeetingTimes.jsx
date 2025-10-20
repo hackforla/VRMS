@@ -119,7 +119,7 @@ const EditMeetingTimes = ({
         className="modal-box"
         sx={{
           position: 'absolute',
-          top: '45%',
+          top: '42%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
           width: 450,
