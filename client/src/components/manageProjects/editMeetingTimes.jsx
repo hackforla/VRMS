@@ -109,7 +109,12 @@ const EditMeetingTimes = ({
   };
 
   return (
-    <Modal open={open} onClose={handleClose}>
+    <Modal
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="edit-meeting-modal-title"
+      aria-describedby="edit-meeting-modal-description"
+    >
       <Box
         className="modal-box"
         sx={{
@@ -121,7 +126,9 @@ const EditMeetingTimes = ({
           bgcolor: 'background.paper',
           border: '2px solid #000',
           boxShadow: 24,
-          p: 4,
+          pt: 4,
+          px: 4,
+          pb: 0,
         }}
       >
         {selectedEvent && (
