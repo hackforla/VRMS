@@ -5,6 +5,7 @@ import readableEvent from './utilities/readableEvent';
 import ProjectForm from '../ProjectForm';
 import { simpleInputs, additionalInputsForEdit } from '../data';
 import TitledBox from '../parts/boxes/TitledBox';
+import TitledBoxIFrame from '../parts/boxes/TitledBoxIFrame';
 
 import EditIcon from '../../svg/Icon_Edit.svg?react';
 import PlusIcon from '../../svg/PlusIcon.svg?react';
@@ -107,6 +108,8 @@ const EditProject = ({
         setFormData={setFormData}
       />
 
+      <TitledBoxIFrame projectName={projectToEdit.name} />
+
       {/* Insert Project Members (Event Editors) here */}
       <EditProjectMembers projectToEdit={projectToEdit} />
 
@@ -118,7 +121,10 @@ const EditProject = ({
               display: 'flex',
               '&:hover': { color: 'red', cursor: 'pointer' },
             }}
-            onClick={() => setIsCreateNew(true)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsCreateNew(true);
+            }}
           >
             <PlusIcon style={{ marginRight: '7px' }} />
             <Typography
@@ -131,6 +137,7 @@ const EditProject = ({
             </Typography>
           </Box>
         }
+        expandable={true}
       >
         <div className="event-list">
           <h2 className="event-alert">{eventAlert}</h2>
@@ -154,7 +161,7 @@ const EditProject = ({
         </div>
       </TitledBox>
 
-      <TitledBox title="Manually Edit Events Checkin">
+      <TitledBox title="Manually Edit Events Checkin" expandable={true}>
         <div className="event-list">
           <h2 className="event-alert">{eventAlert}</h2>
           <ul>
