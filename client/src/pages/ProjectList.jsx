@@ -63,7 +63,8 @@ export default function ProjectList({ auth }) {
     [projectApiService, user.accessLevel, user.managedProjects]
   );
 
-
+  const projsWithUsers = projects?.filter((project) => project.managedByUsers?.length > 0);
+  console.log('Projects with users:', projsWithUsers);
 
   // Render loading circle until project data is served from API
   if (!projects)
