@@ -308,7 +308,7 @@ const CheckInForm = (props) => {
       const currMonth = parseInt(moment().format('MM'));
       const yearJoined = parseInt(year);
       const monthJoined = parseInt(moment(month + ' 9, 2020').format('MM'));
-
+     
       if (
         yearJoined > currYear ||
         (yearJoined === currYear && monthJoined > currMonth)
@@ -427,6 +427,12 @@ const CheckInForm = (props) => {
         .catch((err) => {
           console.log(err);
           setIsLoading(false);
+          
+          // Fixes for error messages
+          setUser(false);
+          setIsError(true);
+          setErrorMessage('Invalid email.');
+          // end
         });
     } catch (error) {
       console.log(error);

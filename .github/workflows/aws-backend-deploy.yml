@@ -4,12 +4,12 @@ on:
     inputs:
       env:
         type: choice
-        description: 'AWS Incubator Env'
-        options: 
-        - dev
-        - prod
+        description: "AWS Incubator Env"
+        options:
+          - dev
+          - prod
       ref:
-        description: 'Branch, Tag, or SHA'
+        description: "Branch, Tag, or SHA"
         required: true
 env:
   AWS_SHARED_CLUSTER: incubator-prod
@@ -19,93 +19,95 @@ env:
   DOCKER_PATH: backend
 jobs:
   setup_env:
-    name: Set-up environment 
+    name: Set-up environment
     runs-on: ubuntu-latest
     steps:
-    - name: Debug Action
-      uses: hmarr/debug-action@v1.0.0
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        ref: ${{ github.event.inputs.ref }}
-    - name: Set AWS Env & Image Tag per workflow
-      run: |
-        SHORT_SHA=$(git rev-parse --short HEAD)
-        if [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
-            INPUT_ENV=${{ github.event.inputs.env }}; INPUT_REF=${{ github.event.inputs.ref }}
-            echo AWS_APPENV="$AWS_APP_NAME"-$INPUT_ENV >> $GITHUB_ENV
-            echo IMAGE_TAG=$SHORT_SHA >> $GITHUB_ENV
-        fi
+      - name: Debug Action
+        uses: hmarr/debug-action@v1.0.0
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.ref }}
+      - name: Set AWS Env & Image Tag per workflow
+        run: |
+          if [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
+              INPUT_ENV=${{ github.event.inputs.env }}; INPUT_REF=${{ github.event.inputs.ref }}
+              echo AWS_APPENV=$AWS_APP_NAME >> $GITHUB_ENV
+              echo IMAGE_TAG=$(git rev-parse --short HEAD) >> $GITHUB_ENV
+              echo BUILD_SHA=$(git rev-parse --short HEAD) >> $GITHUB_ENV
+          fi
     outputs:
       AWS_APPENV: ${{ env.AWS_APPENV }}
       IMAGE_TAG: ${{ env.IMAGE_TAG }}
+      BUILD_SHA: ${{ env.BUILD_SHA }}
   build:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
-    needs: [setup_env]
     permissions:
-      id-token: write
+      id-token: write # Needed for OIDC authentication to AWS
+    needs: [setup_env]
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        ref: ${{ github.event.inputs.ref }}
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v3
-      with:
-        role-to-assume: arn:aws:iam::035866691871:role/incubator-cicd-vrms
-        role-session-name: incubator-cicd-vrms-gha
-        aws-region: us-west-2
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
-    # - name: Init Docker Cache
-    #   uses: jpribyl/action-docker-layer-caching@v0.1.0
-    #   with:
-    #     key: ${{ github.workflow }}-2-{hash}
-    #     restore-keys: |
-    #       ${{ github.workflow }}-2-
-    # - name: Build & Push Image to ECR
-    #   uses: kciter/aws-ecr-action@v3
-    #   with:
-    #     access_key_id: ${{ secrets.INCUBATOR_AWS_ACCESS_KEY_ID }}
-    #     secret_access_key: ${{ secrets.INCUBATOR_AWS_SECRET_ACCESS_KEY }}
-    #     account_id: ${{ secrets.INCUBATOR_AWS_ACCOUNT_ID }}
-    #     repo: ${{ needs.setup_env.outputs.AWS_APPENV }}
-    #     region: ${{ env.AWS_REGION }}
-    #     tags: latest,${{ needs.setup_env.outputs.IMAGE_TAG }},test
-    #     dockerfile: ${{ env.DOCKERFILE }}
-    #     path: ${{ env.DOCKER_PATH }}
-    - name: Build, tag, and push the image to Amazon ECR
-      id: build-push-image
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: ${{ env.AWS_APP_NAME }}
-      run: |
-        ls
-        cd ./${{ env.DOCKER_PATH }}
-        docker build \
-          -f ${{ env.DOCKERFILE }} \
-          -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ needs.setup_env.outputs.IMAGE_TAG }} \
-          -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.event.inputs.env }} \
-          .
-        docker image push --all-tags ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.ref }}
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3 # Sets AWS credentials for CLI
+        with:
+          role-to-assume: arn:aws:iam::035866691871:role/incubator-cicd-vrms # IAM role for deploy
+          role-session-name: incubator-cicd-vrms-gha # Session name for audit
+          aws-region: us-west-2 # AWS region
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Debug Build Variables
+        env:
+          BUILD_SHA: ${{ needs.setup_env.outputs.BUILD_SHA }}
+          IMAGE_TAG: ${{ needs.setup_env.outputs.IMAGE_TAG }}
+        run: |
+          echo "=== Build Debug Information ==="
+          echo "BUILD_SHA: $BUILD_SHA"
+          echo "IMAGE_TAG: $IMAGE_TAG"
+          echo "DOCKERFILE: ${{ env.DOCKERFILE }}"
+          echo "DOCKER_PATH: ${{ env.DOCKER_PATH }}"
+          echo "================================"
+      - name: Build & Push Image to ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ needs.setup_env.outputs.AWS_APPENV }}
+          IMAGE_TAG: ${{ needs.setup_env.outputs.IMAGE_TAG }}
+          BUILD_SHA: ${{ needs.setup_env.outputs.BUILD_SHA }}
+        run: |
+          docker buildx build \
+            --platform linux/amd64 \
+            --cache-from type=gha \
+            --cache-to type=gha,mode=max \
+            --push \
+            --build-arg BUILD_SHA=$BUILD_SHA \
+            -f ${{ env.DOCKERFILE }} \
+            -t $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.event.inputs.env }} \
+            -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
+            ${{ env.DOCKER_PATH }}
   deploy:
     name: Deploy to AWS ECS
     runs-on: ubuntu-latest
     needs: [setup_env, build]
     permissions:
-      id-token: write
+      id-token: write # Needed for OIDC authentication to AWS
     steps:
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v3
-      with:
-        role-to-assume: arn:aws:iam::035866691871:role/incubator-cicd-vrms
-        role-session-name: incubator-cicd-vrms-gha
-        aws-region: us-west-2
-    - name: Restart ECS Service
-      id: redeploy-service
-      env:
-        SERVICE_NAME: ${{env.AWS_APP_NAME}}-${{ github.event.inputs.env }}
-      run: |
-        aws ecs update-service --force-new-deployment --service $SERVICE_NAME --cluster $AWS_SHARED_CLUSTER
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3 # Sets AWS credentials for CLI
+        with:
+          role-to-assume: arn:aws:iam::035866691871:role/incubator-cicd-vrms # IAM role for deploy
+          role-session-name: incubator-cicd-vrms-gha # Session name for audit
+          aws-region: us-west-2 # AWS region
+      - name: Restart ECS Service
+        id: redeploy-service
+        env:
+          SERVICE_NAME: ${{env.AWS_APP_NAME}}-${{ github.event.inputs.env }} # ECS service name
+        # Force a new deployment of the ECS service to use the latest Docker image
+        run: |
+          aws ecs update-service --force-new-deployment --service $SERVICE_NAME --cluster $AWS_SHARED_CLUSTER
+  

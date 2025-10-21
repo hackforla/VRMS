@@ -11,7 +11,9 @@
     "start": "node server.js",
     "dev": "nodemon server.js",
     "client": "npm run start --prefix client",
-    "heroku-postbuild": "cd client && npm install && npm run build"
+    "heroku-postbuild": "cd client && npm install && npm run build",
+    "clone-or-sync-projects": "node ./scripts/cloneOrSyncCollections.js",
+    "clear-dev-collections": "node ./scripts/clearDevCollections.js"
   },
   "author": "sarL3y",
   "license": "ISC",
@@ -19,7 +21,6 @@
     "@babel/core": "^7.15.0",
     "@babel/eslint-parser": "^7.15.0",
     "@babel/eslint-plugin": "^7.14.5",
-    "@shelf/jest-mongodb": "^1.2.3",
     "concurrently": "^5.1.0",
     "debug": "^4.3.1",
     "eslint": "^7.9.0",

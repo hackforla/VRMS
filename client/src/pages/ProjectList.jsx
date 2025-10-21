@@ -40,12 +40,13 @@ export default function ProjectList({ auth }) {
       async function fetchAllProjects() {
         let projectData;
 
-        if(user?.accessLevel === 'admin') {
+        if (
+          user?.accessLevel === 'admin' ||
+          user?.accessLevel === 'superadmin'
+        ) {
           projectData = await projectApiService.fetchProjects();
-        }
-
-        // if user is not admin, but is a project manager, only show projects they manage
-        if (user?.accessLevel !== 'admin' && user?.managedProjects.length > 0) {
+        } else if (user?.managedProjects?.length > 0) {
+          // if user is not admin, but is a project manager, only show projects they manage
           projectData = await projectApiService.fetchPMProjects(user.managedProjects);
         }
         
@@ -62,7 +63,8 @@ export default function ProjectList({ auth }) {
     [projectApiService, user.accessLevel, user.managedProjects]
   );
 
-
+  const projsWithUsers = projects?.filter((project) => project.managedByUsers?.length > 0);
+  console.log('Projects with users:', projsWithUsers);
 
   // Render loading circle until project data is served from API
   if (!projects)
@@ -80,7 +82,7 @@ export default function ProjectList({ auth }) {
         </Typography>
       </Box>
 
-      {user?.accessLevel === 'admin' && (
+      {(user?.accessLevel === 'admin' || user?.accessLevel === 'superadmin') && (
         <Box sx={{ textAlign: 'center' }}>
           <Button
             component={Link}
