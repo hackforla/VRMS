@@ -229,10 +229,11 @@ export default function ProjectForm({
     </Grid>
   );
 
+  const projectName = projectToEdit?.name || '[unnamed project]';
   return (
     <Box sx={{ px: 0.5 }}>
       <Box sx={{ textAlign: 'center' }}>
-        <Typography variant="h1">Project Management</Typography>
+        <Typography variant="h1">{projectName}</Typography>
       </Box>
       {auth.user.accessLevel === 'admin' ||
       auth.user.accessLevel == 'superadmin' ? (
