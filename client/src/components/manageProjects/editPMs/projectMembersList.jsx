@@ -20,7 +20,7 @@ const userApiService = new UserApiService();
 const projectApiService = new ProjectApiService();
 
 
-const ProjectMembersList = ({ projectId, projectMembers, renderedUsers, setRenderedUsers, editMode, closeConfirmModal, setChangesMade, setCloseConfirmModal, setEditMode, isLoading, setEmail, setIsLoading }) => {
+const ProjectMembersList = ({ projectId, projectMembers, renderedUsers, setRenderedUsers, editMode, closeConfirmModal, setChangesMade, setCloseConfirmModal, setEditMode, sortUsers, isLoading, setEmail, setIsLoading }) => {
   const [openModal, setOpenModal] = useState(false);
   const [removeConfirmModal, setRemoveConfirmModal] = useState(false);
   const [removeId, setRemoveId] = useState("");
@@ -118,7 +118,8 @@ const ProjectMembersList = ({ projectId, projectMembers, renderedUsers, setRende
     setChangesMade(true);
     // Remove user from renderedUsers state to update UI
     const updatedUsers = renderedUsers.filter(user => user._id !== removeId);
-    setRenderedUsers(updatedUsers);
+    const sortedUsers = sortUsers(updatedUsers);
+    setRenderedUsers(sortedUsers);
     // Show confirmation modal
     setRemoveConfirmModal(true);
     setOpenModal(false);
