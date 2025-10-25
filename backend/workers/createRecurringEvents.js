@@ -103,30 +103,56 @@ const adjustToLosAngelesTime = (eventDate) => {
 const filterAndCreateEvents = async (events, recurringEvents, URL, headerToSend, fetch) => {
   const today = new Date();
   const todayUTCDay = today.getUTCDay();
-  // filter recurring events for today and not already existing
-  const eventsToCreate = recurringEvents.filter((recurringEvent) => {
+  const allLocalDays = [];
+  const check = [];
+  const exist = [];
+  // // filter recurring events for today and not already existing
+  const eventsToCreate = recurringEvents?.filter((recurringEvent) => {
     // we're converting the stored UTC event date to local time to compare the system DOW with the event DOW
-    const localEventDate = adjustToLosAngelesTime(recurringEvent.date);
+    const localEventDate = new Date(recurringEvent.date);
+    allLocalDays.push(localEventDate.getUTCDay());
+    check.push(localEventDate.getUTCDay() === todayUTCDay);
+    exist.push(!doesEventExist(recurringEvent.name, today, events));
     return (
       localEventDate.getUTCDay() === todayUTCDay &&
       !doesEventExist(recurringEvent.name, today, events)
     );
   });
+  console.log(
+    'Event date\n',
+    today,
+    '\nToday\n',
+    todayUTCDay,
+    '\nAll days\n',
+    allLocalDays,
+    '\nDay vs All Days comparison (Bool)\n',
+    check,
+    '\nEvent exist or not (Bool)\n',
+    exist,
+    '\nList of events to create\n',
+    eventsToCreate,
+  );
 
-  for (const event of eventsToCreate) {
-    // convert to local time for DST correction...
-    const correctedStartTime = adjustToLosAngelesTime(event.startTime);
-    const timeCorrectedEvent = {
-      ...event,
-      // ... then back to UTC for DB
-      date: correctedStartTime.toISOString(),
-      startTime: correctedStartTime.toISOString(),
-    };
-    // map/generate all event data with adjusted date, startTime
-    const eventToCreate = generateEventData(timeCorrectedEvent);
+  //Check if event exists
+  if (!eventsToCreate || eventsToCreate?.length === 0) {
+    return 'No events for today.';
+  } else {
+    for (const event of eventsToCreate) {
+      // convert to local time for DST correction...
+      const correctedStartTime = adjustToLosAngelesTime(event.startTime);
+      const timeCorrectedEvent = {
+        ...event,
+        // ... then back to UTC for DB
+        date: correctedStartTime.toISOString(),
+        startTime: correctedStartTime.toISOString(),
+      };
+      // map/generate all event data with adjusted date, startTime
+      const eventToCreate = generateEventData(timeCorrectedEvent);
 
-    const createdEvent = await createEvent(eventToCreate, URL, headerToSend, fetch);
-    if (createdEvent) console.log('Created event:', createdEvent);
+      const createdEvent = await createEvent(eventToCreate, URL, headerToSend, fetch);
+      if (createdEvent) console.log('Created event:', createdEvent);
+    }
+    return "Today's events have been created.";
   }
 };
 
@@ -145,8 +171,14 @@ const runTask = async (fetch, URL, headerToSend) => {
     fetchData('/api/recurringevents/', URL, headerToSend, fetch),
   ]);
 
-  await filterAndCreateEvents(events, recurringEvents, URL, headerToSend, fetch);
-  console.log("Today's events have been created.");
+  const checkAndCreateEvents = await filterAndCreateEvents(
+    events,
+    recurringEvents,
+    URL,
+    headerToSend,
+    fetch,
+  );
+  console.log(checkAndCreateEvents);
 };
 
 /**
