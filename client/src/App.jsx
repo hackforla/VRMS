@@ -65,7 +65,7 @@ const routes = [
   {
     path: '/users/permission-search',
     name: 'useradmin',
-    Component: UserPermission,
+    Component: withAuth(UserPermission),
   },
   {
     path: '/projects/visibility',

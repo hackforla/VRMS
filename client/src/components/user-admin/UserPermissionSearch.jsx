@@ -20,8 +20,7 @@ const Buttonsx = {
   py: 0.5,
 };
 
-const DummyComponent = ({ data, isProjectLead, setUserToEdit }) => {
-  const { auth } = useAuth();
+const ListComponent = ({ data, isProjectLead, setUserToEdit }) => {
   return (
     <List className="search-results disablePadding">
       {data.map((u, idx) => {
@@ -104,12 +103,12 @@ const DummyComponent = ({ data, isProjectLead, setUserToEdit }) => {
   );
 };
 
-const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
+const UserPermissionSearch = ({ admins, projectManagers, setUserToEdit }) => {
   const { searchText, setSearchText, userType, setUserType, isProjectLead, setIsProjectLead } = useSearchText(); // React context hook
 
   const location = useLocation();
 
-  const resultData = [...admins, ...projectLeads];
+  const resultData = [...admins, ...projectManagers];
 
   useEffect(() => {
     // Edit url by adding '/admin' upon loading
@@ -328,7 +327,7 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
         >
           <Box>
             {/*Component to render admins and PMs*/}
-            <DummyComponent
+            <ListComponent
               data={filteredData}
               isProjectLead={isProjectLead}
               setUserToEdit={setUserToEdit}
