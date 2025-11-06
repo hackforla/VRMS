@@ -83,14 +83,22 @@ export default function ProjectList({ auth }) {
       </Box>
 
       {(user?.accessLevel === 'admin' || user?.accessLevel === 'superadmin') && (
-        <Box sx={{ textAlign: 'center' }}>
+        <Box sx={{ display: 'grid', gridTemplateColumns: 'max-content', gap: 2, justifyContent: 'center', mx: 'auto' }}>
           <Button
             component={Link}
             to="/projects/create"
             variant="secondary"
-            sx={{ mb: 3, px: 4 }}
+            sx={{ px: 4 }}
           >
             Add a New Project
+          </Button>
+          <Button
+            component={Link}
+            to="/projects/visibility"
+            variant="secondary"
+            sx={{ px: 4 }}
+          >
+            On / Offboard Visibility
           </Button>
         </Box>
       )}
