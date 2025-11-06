@@ -29,6 +29,7 @@ import UserWelcome from './pages/UserWelcome';
 // Added User Permission Search component
 import UserPermissionSearch from './pages/UserPermissionSearch';
 import UserPermission from './pages/UserPermission';
+import OnboardOffboardVisibility from './pages/OnboardOffboardVisibility';
 
 import { Box, ThemeProvider } from '@mui/material';
 import theme from './theme';
@@ -69,6 +70,11 @@ const routes = [
     path: '/users/permission-search',
     name: 'useradmin',
     Component: UserPermission,
+  },
+  {
+    path: '/projects/visibility',
+    name: 'onboardoffboardvisibility',
+    Component: withAuth(OnboardOffboardVisibility),
   },
   {
     path: '/projects/:projectId',

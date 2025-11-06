@@ -130,4 +130,26 @@ ProjectController.bulkUpdateManagedByUsers = async function (req, res) {
   }
 };
 
+// Update onboard/offboard visibility for a project
+ProjectController.updateOnboardOffboardVisibility = async function (req, res) {
+  const { ProjectId } = req.params;
+  const { onboardOffboardVisible } = req.body;
+
+  try {
+    const project = await Project.findByIdAndUpdate(
+      ProjectId,
+      { onboardOffboardVisible },
+      { new: true }
+    );
+
+    if (!project) {
+      return res.status(404).send({ message: 'Project not found' });
+    }
+
+    return res.status(200).send(project);
+  } catch (err) {
+    return res.status(400).send({ message: 'Error updating visibility', error: err.message });
+  }
+};
+
 module.exports = ProjectController;
