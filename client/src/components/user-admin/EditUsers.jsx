@@ -16,6 +16,7 @@ import {
   InputLabel,
 } from '@mui/material';
 import '../../sass/UserAdmin.scss';
+import useAuth from '../../hooks/useAuth';
 
 // child of UserAdmin. Displays form to update users.
 const EditUsers = ({
@@ -30,6 +31,10 @@ const EditUsers = ({
   const [projectValue, setProjectValue] = useState(''); // State and handler for form in EditUsers
   const [isActive, setIsActive] = useState(userToEdit.isActive);
   const [isAdmin, setIsAdmin] = useState(userToEdit.accessLevel === 'admin');
+  const { auth } = useAuth();
+
+  console.log('user to edit', userToEdit);
+  console.log('auth user', auth?.user);
 
   // Boolean to check if the current user is the super admin
   const isSuperAdmin = userToEdit.accessLevel === 'superadmin';
@@ -64,7 +69,6 @@ const EditUsers = ({
     ) {
       const newProjects = [...userManagedProjects, projectValue];
       updateUserDb(userToEdit, projectValue, 'add');
-      // updateUserDb(userToEdit, newProjects);
       setUserManagedProjects(newProjects);
       setProjectValue('');
     } else {
@@ -78,7 +82,6 @@ const EditUsers = ({
         (p) => p !== projectToRemove
       );
       updateUserDb(userToEdit, projectToRemove, 'remove');
-      // updateUserDb(userToEdit, newProjects);
       setUserManagedProjects(newProjects);
     }
   };
@@ -128,7 +131,8 @@ const EditUsers = ({
             <Switch
               checked={isAdmin || isSuperAdmin}
               onChange={handleSetAccessLevel}
-              disabled={isSuperAdmin}
+              disabled={isSuperAdmin || userToEdit._id === auth?.user._id}
+              sx={{ cursor: (isSuperAdmin || userToEdit._id === auth?.user._id) ? "not-allowed" : "pointer" }}
             />
           }
           label={isAdmin || isSuperAdmin ? 'Yes' : 'No'}

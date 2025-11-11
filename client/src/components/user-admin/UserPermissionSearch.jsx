@@ -11,7 +11,8 @@ import {
   ListItemButton,
 } from '@mui/material';
 import { useLocation } from 'react-router-dom';
-
+import useAuth from '../../hooks/useAuth';
+import PersonIcon from '@mui/icons-material/Person';
 import '../../sass/UserAdmin.scss';
 
 const Buttonsx = {
@@ -20,6 +21,7 @@ const Buttonsx = {
 };
 
 const DummyComponent = ({ data, isProjectLead, setUserToEdit }) => {
+  const { auth } = useAuth();
   return (
     <List className="search-results disablePadding">
       {data.map((u, idx) => {
@@ -50,7 +52,9 @@ const DummyComponent = ({ data, isProjectLead, setUserToEdit }) => {
               <Grid container>
                 <Grid item>
                   <Typography style={{ fontWeight: 600 }}>
-                    {`${name.firstName.toUpperCase()} ${name.lastName.toUpperCase()} ( ${email.toUpperCase()} )`}
+                    {(_id === auth?.user?._id) ? 
+                      (<><PersonIcon /><b>{`${name.firstName.toUpperCase()} ${name.lastName.toUpperCase()} ( ${email.toUpperCase()} )`}</b></>) 
+                      : `${name.firstName.toUpperCase()} ${name.lastName.toUpperCase()} ( ${email.toUpperCase()} )`}
                   </Typography>
                 </Grid>
               </Grid>
@@ -81,13 +85,13 @@ const DummyComponent = ({ data, isProjectLead, setUserToEdit }) => {
               <Grid container justifyContent={'space-between'}>
                 <Grid item>
                   <Typography style={{ fontWeight: 600 }}>
-                    {name.firstName.toUpperCase() +
-                      ' ' +
-                      name.lastName.toUpperCase()}
+                      {(_id === auth?.user?._id) ? 
+                      (<><PersonIcon /><b>{`${name.firstName.toUpperCase()} ${name.lastName.toUpperCase()}`}</b></>) :
+                      `${name.firstName.toUpperCase()} ${name.lastName.toUpperCase()}`}
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Typography style={{ fontWeight: 600 }} color="black">
+                  <Typography style={{ fontWeight: (_id === auth?.user?._id) ? 'bold' : 600 }}>
                     {u.managedProjectName}
                   </Typography>
                 </Grid>
