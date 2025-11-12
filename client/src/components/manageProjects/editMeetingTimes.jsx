@@ -23,6 +23,8 @@ const EditMeetingTimes = ({
   useEffect(() => {
     if (selectedEvent) {
       setOpen(true);
+    } else {
+      setOpen(false);
     }
   }, [selectedEvent]);
 
@@ -32,75 +34,68 @@ const EditMeetingTimes = ({
     setSelectedEvent(null);
   };
 
-  const handleEventUpdate =
-    (
-      eventID,
-      values,
-      // startTimeOriginal,
-      // durationOriginal
-    ) =>
-    async () => {
-      const errors = validateEventForm(values, projectToEdit);
-      if (!errors) {
-        let theUpdatedEvent = {};
+  const handleEventUpdate = (eventID, values) => async () => {
+    const errors = validateEventForm(values, projectToEdit);
+    if (!errors) {
+      let theUpdatedEvent = {};
 
-        if (values.name) {
-          theUpdatedEvent = {
-            ...theUpdatedEvent,
-            name: values.name,
-          };
-        }
-
-        if (values.eventType) {
-          theUpdatedEvent = {
-            ...theUpdatedEvent,
-            eventType: values.eventType,
-          };
-        }
-
+      if (values.name) {
         theUpdatedEvent = {
           ...theUpdatedEvent,
-          description: values.description,
+          name: values.name,
         };
-
-        if (values.videoConferenceLink) {
-          theUpdatedEvent = {
-            ...theUpdatedEvent,
-            videoConferenceLink: values.videoConferenceLink,
-          };
-        }
-
-        // Set updated date to today and add it to the object
-        const updatedDate = new Date().toISOString();
-        theUpdatedEvent = {
-          ...theUpdatedEvent,
-          updatedDate,
-        };
-
-        // Find next occurance of Day in the future
-        // Assign new start time and end time
-        const date = findNextOccuranceOfDay(values.day);
-        const startTimeDate = timeConvertFromForm(date, values.startTime);
-        const endTime = addDurationToTime(startTimeDate, values.duration);
-
-        // Revert timestamps to GMT
-        const startDateTimeGMT = new Date(startTimeDate).toISOString();
-        const endTimeGMT = new Date(endTime).toISOString();
-
-        theUpdatedEvent = {
-          ...theUpdatedEvent,
-          date: startDateTimeGMT,
-          startTime: startDateTimeGMT,
-          endTime: endTimeGMT,
-          duration: values.duration,
-        };
-
-        updateRecurringEvent(theUpdatedEvent, eventID);
-        showSnackbar('Recurring event updated', 'info');
-        handleClose();
       }
-      setFormErrors(errors);
-    };
+
+      if (values.eventType) {
+        theUpdatedEvent = {
+          ...theUpdatedEvent,
+          eventType: values.eventType,
+        };
+      }
+
+      theUpdatedEvent = {
+        ...theUpdatedEvent,
+        description: values.description,
+      };
+
+      if (values.videoConferenceLink) {
+        theUpdatedEvent = {
+          ...theUpdatedEvent,
+          videoConferenceLink: values.videoConferenceLink,
+        };
+      }
+
+      // Set updated date to today and add it to the object
+      const updatedDate = new Date().toISOString();
+      theUpdatedEvent = {
+        ...theUpdatedEvent,
+        updatedDate,
+      };
+
+      // Find next occurrence of Day in the future
+      // Assign new start time and end time
+      const date = findNextOccuranceOfDay(values.day);
+      const startTimeDate = timeConvertFromForm(date, values.startTime);
+      const endTime = addDurationToTime(startTimeDate, values.duration);
+
+      // Revert timestamps to GMT
+      const startDateTimeGMT = new Date(startTimeDate).toISOString();
+      const endTimeGMT = new Date(endTime).toISOString();
+
+      theUpdatedEvent = {
+        ...theUpdatedEvent,
+        date: startDateTimeGMT,
+        startTime: startDateTimeGMT,
+        endTime: endTimeGMT,
+        duration: values.duration,
+      };
+
+      updateRecurringEvent(theUpdatedEvent, eventID);
+      showSnackbar('Recurring event updated', 'info');
+      handleClose();
+    }
+    setFormErrors(errors);
+  };
 
   const handleEventDelete = (eventID) => async () => {
     deleteRecurringEvent(eventID);
