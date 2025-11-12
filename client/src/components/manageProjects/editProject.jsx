@@ -108,7 +108,10 @@ const EditProject = ({
         setFormData={setFormData}
       />
 
-      <TitledBoxIFrame projectName={projectToEdit.name} />
+      {/* Only show onboarding/offboarding forms if visibility is enabled */}
+      {projectToEdit.onboardOffboardVisible !== false && (
+        <TitledBoxIFrame projectName={projectToEdit.name} />
+      )}
 
       {/* Insert Project Members (Event Editors) here */}
       <EditProjectMembers projectToEdit={projectToEdit} />
