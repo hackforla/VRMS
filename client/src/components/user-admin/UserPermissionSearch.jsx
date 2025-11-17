@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -249,7 +249,17 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
               Project Members
             </Button>
           </ButtonGroup>
+
         </Box>
+        {isProjectLead &&
+            <Box sx={{
+              mb: 2
+            }}>
+              <Button
+                sx={Buttonsx}
+                variant='secondary'>Export CSV</Button>
+            </Box>
+          }
         <TextField
           type="text"
           placeholder={isProjectLead ? 'Search name or project' : 'Search name'}
