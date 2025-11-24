@@ -104,12 +104,7 @@ const EditMeetingTimes = ({
   };
 
   return (
-    <Modal
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="edit-meeting-modal-title"
-      aria-describedby="edit-meeting-modal-description"
-    >
+    <Modal open={open} onClose={handleClose}>
       <Box
         className="modal-box"
         sx={{
