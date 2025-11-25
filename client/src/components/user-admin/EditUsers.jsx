@@ -18,7 +18,7 @@ import {
 import '../../sass/UserAdmin.scss';
 import useAuth from '../../hooks/useAuth';
 
-// child of UserAdmin. Displays form to update users.
+
 const EditUsers = ({
   userToEdit,
   backToSearch,
@@ -32,9 +32,6 @@ const EditUsers = ({
   const [isActive, setIsActive] = useState(userToEdit.isActive);
   const [isAdmin, setIsAdmin] = useState(userToEdit.accessLevel === 'admin');
   const { auth } = useAuth();
-
-  console.log('user to edit', userToEdit);
-  console.log('auth user', auth?.user);
 
   // Boolean to check if the current user is the super admin
   const isSuperAdmin = userToEdit.accessLevel === 'superadmin';
@@ -51,8 +48,6 @@ const EditUsers = ({
   useEffect(() => {
     setUserManagedProjects(userToEdit.managedProjects);
   }, [userToEdit]);
-
-  console.log(userManagedProjects)
 
   const userProjectsToDisplay = activeProjects.filter((item) =>
     userProjects.includes(item[0])
