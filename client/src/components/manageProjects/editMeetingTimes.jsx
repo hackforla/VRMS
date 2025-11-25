@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import '../../sass/ManageProjects.scss';
 import { useSnackbar } from '../../context/snackbarContext';
 import EditableMeeting from './editableMeeting';
@@ -17,19 +17,10 @@ const EditMeetingTimes = ({
   updateRecurringEvent,
 }) => {
   const [formErrors, setFormErrors] = useState({});
-  const [open, setOpen] = useState(false);
+  const open = Boolean(selectedEvent);
   const { showSnackbar } = useSnackbar();
 
-  useEffect(() => {
-    if (selectedEvent) {
-      setOpen(true);
-    } else {
-      setOpen(false);
-    }
-  }, [selectedEvent]);
-
   const handleClose = () => {
-    setOpen(false);
     setFormErrors(null);
     setSelectedEvent(null);
   };
