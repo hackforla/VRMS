@@ -22,4 +22,7 @@ router.patch('/:ProjectId', AuthUtil.verifyCookie, ProjectController.updateManag
 // Bulk update for editing project members
 router.post('/bulk-updates', AuthUtil.verifyCookie, ProjectController.bulkUpdateManagedByUsers);
 
+// Update onboard/offboard visibility for a project
+router.patch('/:ProjectId/visibility', AuthUtil.verifyCookie, ProjectController.updateOnboardOffboardVisibility);
+
 module.exports = router;
