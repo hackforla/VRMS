@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import '../../sass/ManageProjects.scss';
 import { useSnackbar } from '../../context/snackbarContext';
 import EditableMeeting from './editableMeeting';
@@ -6,6 +6,7 @@ import { findNextOccuranceOfDay } from './utilities/findNextDayOccuranceOfDay';
 import { addDurationToTime } from './utilities/addDurationToTime';
 import { timeConvertFromForm } from './utilities/timeConvertFromForm';
 import validateEventForm from './utilities/validateEventForm';
+import { Box, Button, Modal } from '@mui/material';
 
 // This component displays current meeting times for selected project and offers the option to edit those times.
 const EditMeetingTimes = ({
@@ -16,13 +17,15 @@ const EditMeetingTimes = ({
   updateRecurringEvent,
 }) => {
   const [formErrors, setFormErrors] = useState({});
+  const open = Boolean(selectedEvent);
   const { showSnackbar } = useSnackbar();
-  const handleEventUpdate = (
-    eventID,
-    values,
-    startTimeOriginal,
-    durationOriginal
-  ) => async () => {
+
+  const handleClose = () => {
+    setFormErrors(null);
+    setSelectedEvent(null);
+  };
+
+  const handleEventUpdate = (eventID, values) => async () => {
     const errors = validateEventForm(values, projectToEdit);
     if (!errors) {
       let theUpdatedEvent = {};
@@ -60,7 +63,7 @@ const EditMeetingTimes = ({
         updatedDate,
       };
 
-      // Find next occurance of Day in the future
+      // Find next occurrence of Day in the future
       // Assign new start time and end time
       const date = findNextOccuranceOfDay(values.day);
       const startTimeDate = timeConvertFromForm(date, values.startTime);
@@ -69,58 +72,66 @@ const EditMeetingTimes = ({
       // Revert timestamps to GMT
       const startDateTimeGMT = new Date(startTimeDate).toISOString();
       const endTimeGMT = new Date(endTime).toISOString();
-        
+
       theUpdatedEvent = {
         ...theUpdatedEvent,
         date: startDateTimeGMT,
         startTime: startDateTimeGMT,
         endTime: endTimeGMT,
-        duration: values.duration
+        duration: values.duration,
       };
 
       updateRecurringEvent(theUpdatedEvent, eventID);
-      showSnackbar("Recurring event updated", 'info')
-      setSelectedEvent(null);
+      showSnackbar('Recurring event updated', 'info');
+      handleClose();
     }
     setFormErrors(errors);
   };
 
   const handleEventDelete = (eventID) => async () => {
     deleteRecurringEvent(eventID);
-    setSelectedEvent(null);
-    showSnackbar("Recurring event deleted", 'info');
+    showSnackbar('Recurring event deleted', 'info');
+    handleClose();
   };
 
   return (
-    <div>
-      <button
-        type="button"
-        className="meeting-cancel-button"
-        onClick={() => {
-          setFormErrors(null);
-          setSelectedEvent(null);
+    <Modal open={open} onClose={handleClose}>
+      <Box
+        className="modal-box"
+        sx={{
+          position: 'absolute',
+          top: '42%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: 450,
+          bgcolor: 'background.paper',
+          border: '2px solid #000',
+          boxShadow: 24,
+          pt: 4,
+          px: 4,
+          pb: 0,
         }}
       >
-        X
-      </button>
-      {selectedEvent && (
-        <EditableMeeting
-          key={selectedEvent.event_id}
-          eventId={selectedEvent.event_id}
-          eventName={selectedEvent.name}
-          eventDescription={selectedEvent.description}
-          eventType={selectedEvent.eventType}
-          eventDayNumber={selectedEvent.dayOfTheWeekNumber}
-          eventStartTime={selectedEvent.startTime}
-          eventEndTime={selectedEvent.endTime}
-          eventDuration={selectedEvent.duration}
-          videoConferenceLink={selectedEvent.videoConferenceLink}
-          formErrors={formErrors}
-          handleEventUpdate={handleEventUpdate}
-          handleEventDelete={handleEventDelete}
-        />
-      )}
-    </div>
+        {selectedEvent && (
+          <EditableMeeting
+            key={selectedEvent.event_id}
+            eventId={selectedEvent.event_id}
+            eventName={selectedEvent.name}
+            eventDescription={selectedEvent.description}
+            eventType={selectedEvent.eventType}
+            eventDayNumber={selectedEvent.dayOfTheWeekNumber}
+            eventStartTime={selectedEvent.startTime}
+            eventEndTime={selectedEvent.endTime}
+            eventDuration={selectedEvent.duration}
+            videoConferenceLink={selectedEvent.videoConferenceLink}
+            formErrors={formErrors}
+            handleEventUpdate={handleEventUpdate}
+            handleEventDelete={handleEventDelete}
+          />
+        )}
+        <Button onClick={handleClose}>Close</Button>
+      </Box>
+    </Modal>
   );
 };
 export default EditMeetingTimes;
