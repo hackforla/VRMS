@@ -202,7 +202,20 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
     // NOTE: Using "users" instead of "dummyData" to check the link to user profile
     filteredData = getFilteredData(resultData, searchText, isProjectLead);
   }
+  
+  // Export CSV function
+  const downloadCSVfile = (data) => {
+    // CSV header
+    const headers = ["name", "managedProjectName"];
 
+    // Build rows
+    const rows = data.map((user) => [
+      `${user.name?.firstName ?? ""} ${user.name?.lastName ??""}`,
+      user.managedProjectName ?? ""
+    ]);
+    console.log(rows);
+  }
+  downloadCSVfile(filteredData);
   return (
     <Box className="container--usermanagement" sx={{ px: '1.8rem', mb: 0 }}>
       <Box
