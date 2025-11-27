@@ -101,7 +101,7 @@ const DummyComponent = ({ data, isProjectLead, setUserToEdit }) => {
 };
 
 const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
-  const [userType, setUserType] = useState('admin'); // Which results will display
+  const [userType] = useState('admin'); // Which results will display
   const [searchText, setSearchText] = useState(''); // Search term for the admin/PM search
   const [isProjectLead, setIsProjectLead] = useState(false);
 
@@ -136,7 +136,7 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
       .filter((user) =>
         isProjectLead
           ? user.isProjectLead === true
-          : user.isProjectLead === undefined
+          : user.isProjectLead === undefined,
       )
       .flatMap((user) =>
         isProjectLead && user.managedProjectNames.length > 0
@@ -144,7 +144,7 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
               ...user,
               managedProjectName,
             }))
-          : [{ ...user }]
+          : [{ ...user }],
       )
       .filter((user) => {
         const fullName =
@@ -175,13 +175,13 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
     filteredData = resultData.filter((user) =>
       isProjectLead
         ? user.isProjectLead === true
-        : user.isProjectLead === undefined
+        : user.isProjectLead === undefined,
     );
 
     if (!isProjectLead) {
       // Default display for admins, sorted ASC based on first name
       filteredData.sort((u1, u2) =>
-        u1.name?.firstName.localeCompare(u2.name?.firstName)
+        u1.name?.firstName.localeCompare(u2.name?.firstName),
       );
     } else {
       // Default display of all PMs, sorted ASC based on project name, then first name
@@ -194,7 +194,7 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
       tempFilter.sort(
         (u1, u2) =>
           u1.managedProjectName.localeCompare(u2.managedProjectName) ||
-          u1.name?.firstName.localeCompare(u2.name?.firstName)
+          u1.name?.firstName.localeCompare(u2.name?.firstName),
       );
       filteredData = [...tempFilter];
     }
@@ -202,20 +202,40 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
     // NOTE: Using "users" instead of "dummyData" to check the link to user profile
     filteredData = getFilteredData(resultData, searchText, isProjectLead);
   }
-  
-  // Export CSV function
-  const downloadCSVfile = (data) => {
-    // CSV header
-    const headers = ["name", "managedProjectName"];
 
-    // Build rows
-    const rows = data.map((user) => [
-      `${user.name?.firstName ?? ""} ${user.name?.lastName ??""}`,
-      user.managedProjectName ?? ""
+  // Export CSV file
+  const exportCSV = (data, fileName) => {
+    // Header row
+    const headers = ['User Name', 'Project Name'];
+
+    // Map each user into CSV row values
+    const dataItems = data.map((user) => [
+      `${user.name?.firstName ?? ''} ${user.name?.lastName ?? ''}`,
+      user.managedProjectName ?? '',
     ]);
-    console.log(rows);
-  }
-  downloadCSVfile(filteredData);
+
+    // Combine header + data rows
+    const rows = [headers, ...dataItems];
+
+    // Convert rows to CSV formatted string
+    const csvData = rows.map((row) => row.join(',')).join('\r\n');
+
+    // Create CSV Blob from string
+    const blob = new Blob([csvData], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+
+    // Create a temporary download link
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+
+    // Trigger download
+    link.click();
+
+    // Clean up object URL
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <Box className="container--usermanagement" sx={{ px: '1.8rem', mb: 0 }}>
       <Box
@@ -262,17 +282,22 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
               Project Members
             </Button>
           </ButtonGroup>
-
         </Box>
-        {isProjectLead &&
-            <Box sx={{
-              mb: 2
-            }}>
-              <Button
-                sx={Buttonsx}
-                variant='secondary'>Export CSV</Button>
-            </Box>
-          }
+        {isProjectLead && (
+          <Box
+            sx={{
+              mb: 2,
+            }}
+          >
+            <Button
+              sx={Buttonsx}
+              variant="secondary"
+              onClick={() => exportCSV(filteredData, 'project_members.csv')}
+            >
+              Export CSV
+            </Button>
+          </Box>
+        )}
         <TextField
           type="text"
           placeholder={isProjectLead ? 'Search name or project' : 'Search name'}
