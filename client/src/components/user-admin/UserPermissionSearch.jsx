@@ -203,6 +203,9 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
     filteredData = getFilteredData(resultData, searchText, isProjectLead);
   }
 
+  // No need to limit export to the search results
+  const exportAllData = getFilteredData(resultData, '', isProjectLead);
+
   // Export CSV file
   const exportCSV = (data, fileName) => {
     // Header row
@@ -292,7 +295,7 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
             <Button
               sx={Buttonsx}
               variant="secondary"
-              onClick={() => exportCSV(filteredData, 'project_members.csv')}
+              onClick={() => exportCSV(exportAllData, 'project_members.csv')}
             >
               Export CSV
             </Button>
