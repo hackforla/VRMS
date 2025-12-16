@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect } from 'react';
 import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend } from '../utils/globalSettings';
 import * as authApi from '../api/auth';
 import { useHistory } from 'react-router-dom';
@@ -46,12 +46,19 @@ const fetchAuth = async () => {
   };
 
   try {
+    // check for refresh token
+    // if refresh token exists, obtain new jwt
     const response = await fetch('/api/auth/me', request);
     if (response.status !== 200)
       return { user: null, isAdmin: false, isError: true };
 
     const user = await response.json();
-    return { user, isAdmin: (user.accessLevel === 'admin' || user.accessLevel === 'superadmin'), isError: false };
+    return {
+      user,
+      isAdmin:
+        user.accessLevel === 'admin' || user.accessLevel === 'superadmin',
+      isError: false,
+    };
   } catch (error) {
     // this should never be hit...
     console.error('fetchAuth - error', error);

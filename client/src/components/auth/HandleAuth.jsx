@@ -19,6 +19,7 @@ const HandleAuth = (props) => {
     const api_token = params.get('token');
 
     if (!api_token) return;
+    // create a refresh token
     isValidToken(api_token).then((isValid) => {
       setMagicLink(isValid);
     });

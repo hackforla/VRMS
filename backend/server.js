@@ -1,7 +1,7 @@
-const app = require("./app");
-const mongoose = require("mongoose");
+const app = require('./app');
+const mongoose = require('mongoose');
 
-const { Role } = require("./models");
+const { Role } = require('./models');
 
 // Load config variables
 const { CONFIG_DB } = require('./config/');
@@ -22,11 +22,9 @@ async function runServer(databaseUrl = CONFIG_DB.DATABASE_URL, port = CONFIG_DB.
 
   server = app
     .listen(port, () => {
-      console.log(
-        `Mongoose connected from runServer() and is listening on ${port}`
-      );
+      console.log(`Mongoose connected from runServer() and is listening on ${port}`);
     })
-    .on("error", (err) => {
+    .on('error', (err) => {
       mongoose.disconnect();
       return err;
     });
@@ -35,7 +33,7 @@ async function runServer(databaseUrl = CONFIG_DB.DATABASE_URL, port = CONFIG_DB.
 async function closeServer() {
   await mongoose.disconnect().then(() => {
     return new Promise((resolve, reject) => {
-      console.log("Closing Mongoose connection. Bye");
+      console.log('Closing Mongoose connection. Bye');
 
       server.close((err) => {
         if (err) {
@@ -52,20 +50,20 @@ function initial() {
   Role.collection.estimatedDocumentCount((err, count) => {
     if (!err && count === 0) {
       new Role({
-        name: "APP_USER",
+        name: 'APP_USER',
       }).save((err) => {
         if (err) {
-          console.log("error", err);
+          console.log('error', err);
         }
 
         console.log("added 'user' to roles collection");
       });
 
       new Role({
-        name: "APP_ADMIN",
+        name: 'APP_ADMIN',
       }).save((err) => {
         if (err) {
-          console.log("error", err);
+          console.log('error', err);
         }
 
         console.log("added 'moderator' to roles collection");

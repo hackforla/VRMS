@@ -4,7 +4,8 @@ const { ObjectId } = require('mongodb');
 const EmailController = require('./email.controller');
 const { CONFIG_AUTH } = require('../config');
 
-const { User, Project } = require('../models');
+const { User, Project, RefreshToken } = require('../models');
+const { generateRefreshToken, getClientIp, hashToken } = require('../middleware/auth.middleware');
 
 const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
 
@@ -199,7 +200,7 @@ function generateAccessToken(user, auth_origin) {
     { id: user.id, role: user.accessLevel, auth_origin: auth_origin },
     CONFIG_AUTH.SECRET,
     {
-      expiresIn: `${CONFIG_AUTH.TOKEN_EXPIRATION_SEC}s`,
+      expiresIn: `${CONFIG_AUTH.ACCESS_TOKEN_EXPIRATION_SEC}s`,
     },
   );
 }
@@ -267,7 +268,22 @@ UserController.verifySignIn = async function (req, res) {
   try {
     const payload = jwt.verify(token, CONFIG_AUTH.SECRET);
     const user = await User.findById(payload.id);
-    res.cookie('token', token, { httpOnly: true });
+    const refreshToken = generateRefreshToken();
+    const accessToken = generateAccessToken(user, payload.auth_origin);
+    const ipAddress = getClientIp(req);
+
+    await RefreshToken.create({
+      userId: user._id,
+      hash: hashToken(refreshToken),
+      deviceInfo: {
+        deviceType: req.headers['user-agent'],
+        ipAddress: ipAddress,
+      },
+    });
+
+    res.cookie('token', accessToken, { httpOnly: true });
+    res.cookie('refresh_token', refreshToken, { httpOnly: true });
+
     return res.send(user);
   } catch (err) {
     console.error(err);
@@ -281,7 +297,16 @@ UserController.verifyMe = async function (req, res) {
 };
 
 UserController.logout = async function (req, res) {
+  await RefreshToken.deleteOne({ id: req.refreshToken.doc._id });
   return res.clearCookie('token').status(200).send('Successfully logged out.');
+};
+
+UserController.refreshAccessToken = async function (req, res) {
+  const accessToken = generateAccessToken(req.user, req.auth_origin);
+  return res
+    .cookie('token', accessToken, { httpOnly: true })
+    .status(200)
+    .send('Access token refreshed.');
 };
 
 // Update user's managedProjects

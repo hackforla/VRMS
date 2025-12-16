@@ -4,7 +4,8 @@ export function authLevelRedirect(user) {
 
   switch (userAccessLevel) {
     case 'superadmin':
-      loginRedirect = '/welcome'
+      loginRedirect = '/welcome';
+      break;
     case 'admin':
       loginRedirect = '/welcome';
       break;

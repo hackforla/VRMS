@@ -2,8 +2,8 @@
 
 // Load in all of our node modules. Their uses are explained below as they are called.
 const express = require('express');
-const cron = require('node-cron');
-const fetch = require('node-fetch');
+// const cron = require('node-cron');
+// const fetch = require('node-fetch');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 
@@ -52,13 +52,17 @@ app.use(cookieParser());
 app.use(morgan('dev'));
 
 // WORKERS
-const runOpenCheckinWorker = require('./workers/openCheckins')(cron, fetch);
-const runCloseCheckinWorker = require('./workers/closeCheckins')(cron, fetch);
+// const runOpenCheckinWorker = require('./workers/openCheckins')(cron, fetch);
+// const runCloseCheckinWorker = require('./workers/closeCheckins')(cron, fetch);
 
-const { createRecurringEvents } = require('./workers/createRecurringEvents');
-const runCreateRecurringEventsWorker = createRecurringEvents(cron, fetch);
+// const { createRecurringEvents } = require('./workers/createRecurringEvents');
+// const runCreateRecurringEventsWorker = createRecurringEvents(cron, fetch);
 
 // const runSlackBot = require("./workers/slackbot")(fetch);
+
+// Run cleanup expired refresh token(s) on startup
+const { cleanupExpiredTokens } = require('./workers/tokenCleanup');
+cleanupExpiredTokens();
 
 // MIDDLEWARE
 const errorhandler = require('./middleware/errorhandler.middleware');
