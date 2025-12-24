@@ -5,7 +5,12 @@ const EmailController = require('./email.controller');
 const { CONFIG_AUTH } = require('../config');
 
 const { User, Project, RefreshToken } = require('../models');
-const { generateRefreshToken, getClientIp, hashToken } = require('../middleware/auth.middleware');
+const {
+  generateRefreshToken,
+  getClientIp,
+  hashToken,
+  generateAccessToken,
+} = require('../middleware/auth.middleware');
 
 const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
 
@@ -193,17 +198,6 @@ UserController.delete = async function (req, res) {
     return res.sendStatus(400);
   }
 };
-
-function generateAccessToken(user, auth_origin) {
-  // expires after half and hour (1800 seconds = 30 minutes)
-  return jwt.sign(
-    { id: user.id, role: user.accessLevel, auth_origin: auth_origin },
-    CONFIG_AUTH.SECRET,
-    {
-      expiresIn: `${CONFIG_AUTH.ACCESS_TOKEN_EXPIRATION_SEC}s`,
-    },
-  );
-}
 
 UserController.createUser = function (req, res) {
   const { firstName, lastName, email } = req.body;

@@ -3,19 +3,20 @@ const { CONFIG_AUTH } = require('../config');
 
 const { RefreshToken, User } = require('../models');
 const crypto = require('crypto');
-
-const { hasAnyRole } = require('../../shared/authorizationUtils');
+const AuthUtils = require('../../shared/authorizationUtils');
 
 const SECRET_KEY = process.env.JWT_SECRET;
 
 // Utility functions
 
-function generateAccessToken(user) {
+function generateAccessToken(user, auth_origin) {
   return jwt.sign(
     {
-      user_id: user._id,
+      id: user._id,
       email: user.email,
+      role: user.accessLevel,
       accessLevel: user.accessLevel,
+      auth_origin: auth_origin,
     },
     SECRET_KEY,
     { expiresIn: '30m' },
@@ -47,15 +48,18 @@ function getClientIp(req) {
 async function authenticateAccessToken(req, res, next) {
   try {
     // Extract token from Authorization header
-    const authHeader =
+    let accessToken =
       req.cookies.token || req.headers['x-access-token'] || req.headers['authorization'];
-    const token = authHeader?.split(' ')[1];
 
-    if (!token) {
+    if (!accessToken) {
       return res.status(401).json({ error: 'Access token required' });
     }
 
-    const decoded = jwt.verify(token, SECRET_KEY);
+    if (accessToken.startsWith('Bearer ')) {
+      accessToken = accessToken.slice(7, accessToken.length);
+    }
+
+    const decoded = jwt.verify(accessToken, SECRET_KEY);
     // Attach user info to request
     req.user = decoded;
 
@@ -74,7 +78,7 @@ async function authenticateAccessToken(req, res, next) {
 }
 
 // shorthand for authenticateAccessToken
-const authenticate = authenticateAccessToken;
+const authUser = authenticateAccessToken;
 
 async function authenticateRefreshToken(req, res, next) {
   try {
@@ -116,11 +120,11 @@ function requireRole(...roles) {
       return res.status(401).json({ error: 'Authentication required' });
     }
 
-    if (!hasAnyRole(req.user, roles)) {
+    if (!AuthUtils.hasAnyRole(req.user, roles)) {
       return res.status(403).json({
         error: 'Insufficient permissions',
         required_role: roles,
-        your_role: req.user.role,
+        your_role: req.user.accessLevel,
       });
     }
 
@@ -128,9 +132,27 @@ function requireRole(...roles) {
   };
 }
 
+function requireMinimumRole(role) {
+  return (req, res, next) => {
+    if (!req.user) {
+      return res.status(401).json({ error: 'Authentication required' });
+    }
+
+    const user = req.user;
+    if (!AuthUtils.hasMinimumRole(user, role)) {
+      return res.status(403).json({
+        error: 'Insufficient permissions',
+        required_minimum_role: role,
+        your_role: req.user.accessLevel,
+      });
+    }
+    next();
+  };
+}
+
 function verifyToken(req, res, next) {
   // Allow users to set token
-   
+
   let token = req.headers['x-access-token'] || req.headers['authorization'];
   if (token.startsWith('Bearer ')) {
     // Remove Bearer from string
@@ -164,9 +186,10 @@ function verifyCookie(req, res, next) {
 
 module.exports = {
   authenticateAccessToken,
-  authenticate,
+  authUser,
   authenticateRefreshToken,
   requireRole,
+  requireMinimumRole,
   generateAccessToken,
   generateRefreshToken,
   getClientIp,

@@ -14,4 +14,13 @@ const ROLE_HIERARCHY = Object.freeze({
   [ROLES.SUPER_ADMIN]: 4,
 });
 
-module.exports = { ROLES, ROLE_HIERARCHY };
+// CommonJS export (for backend)
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = {
+    ROLES,
+    ROLE_HIERARCHY,
+  };
+}
+
+// ES Module export (for frontend)
+export { ROLES, ROLE_HIERARCHY };
