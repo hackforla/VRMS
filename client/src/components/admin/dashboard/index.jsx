@@ -1,4 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+
 import UpcomingEvent from '../../presentational/upcomingEvent';
 import EventOverview from '../eventOverview';
 import DonutChartContainer from '../donutChartContainer';
@@ -8,7 +12,7 @@ import Tab from '../../../common/tabs/tab';
 import LocationTableReport from '../reports';
 import '../../../sass/Dashboard.scss';
 import './index.scss';
-import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend} from '../../../utils/globalSettings';
+import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend } from '../../../utils/globalSettings';
 
 const AdminDashboard = () => {
   const defaultChartType = 'All Events';
@@ -30,31 +34,23 @@ const AdminDashboard = () => {
   const [processedCheckins, setCheckins] = useState(null);
 
   // Volunteers SignedIn By Event Type
-  const [
-    totalVolunteersByEventType,
-    setVolunteersSignedInByEventType,
-  ] = useState({});
-  const [
-    totalVolunteerHoursByEventType,
-    setVolunteeredHoursByEventType,
-  ] = useState({});
+  const [totalVolunteersByEventType, setVolunteersSignedInByEventType] =
+    useState({});
+  const [totalVolunteerHoursByEventType, setVolunteeredHoursByEventType] =
+    useState({});
   const [totalVolunteerAvgHoursByEventType, setAvgHoursByEventType] = useState(
-    {}
+    {},
   );
 
   // Volunteers SignedIn By HackNight Property
-  const [
-    totalVolunteersByHackNightProp,
-    setVolunteersSignedInByHackNightProp,
-  ] = useState({});
+  const [totalVolunteersByHackNightProp, setVolunteersSignedInByHackNightProp] =
+    useState({});
   const [
     totalVolunteerHoursByHackNightProp,
     setVolunteeredHoursByHackNightProp,
   ] = useState({});
-  const [
-    totalVolunteerAvgHoursByHackNightProp,
-    setAvgHoursByHackNightProp,
-  ] = useState({});
+  const [totalVolunteerAvgHoursByHackNightProp, setAvgHoursByHackNightProp] =
+    useState({});
 
   // Volunteers To Chart
   const [totalVolunteers, setVolunteersToChart] = useState({});
@@ -72,7 +68,7 @@ const AdminDashboard = () => {
             'x-customrequired-header': headerToSend,
           },
         },
-        signal
+        signal,
       );
       const events = await eventsRes.json();
       const checkinsRes = await fetch(
@@ -82,7 +78,7 @@ const AdminDashboard = () => {
             'x-customrequired-header': headerToSend,
           },
         },
-        signal
+        signal,
       );
       const checkins = await checkinsRes.json();
       processData(events, checkins);
@@ -132,7 +128,7 @@ const AdminDashboard = () => {
     const capitalize = (str, lower = false) =>
       (lower ? str.toLowerCase() : str).replace(
         /(?:^|\s|["'([{])+\S/g,
-        (match) => match.toUpperCase()
+        (match) => match.toUpperCase(),
       );
     let type = capitalize(event[propName], true);
     event[propName] = type;
@@ -168,7 +164,7 @@ const AdminDashboard = () => {
       events,
       checkins,
       uniqueEventTypes,
-      'eventType'
+      'eventType',
     );
     setVolunteersSignedInByEventType(totalVolunteersByEventType);
 
@@ -176,7 +172,7 @@ const AdminDashboard = () => {
       events,
       checkins,
       hackNightUniqueLocations,
-      'hacknight'
+      'hacknight',
     );
     setVolunteersSignedInByHackNightProp(totalVolunteersByHackNightProp);
 
@@ -185,7 +181,7 @@ const AdminDashboard = () => {
       events,
       checkins,
       uniqueEventTypes,
-      'eventType'
+      'eventType',
     );
     setVolunteeredHoursByEventType(totalVolunteerHoursByEventType);
 
@@ -193,7 +189,7 @@ const AdminDashboard = () => {
       events,
       checkins,
       hackNightUniqueLocations,
-      'hacknight'
+      'hacknight',
     );
     setVolunteeredHoursByHackNightProp(totalVolunteerHoursByHackNightProp);
 
@@ -201,14 +197,14 @@ const AdminDashboard = () => {
     let totalVolunteerAvgHoursByEventType = findAverageVolunteerHours(
       totalVolunteersByEventType,
       totalVolunteerHoursByEventType,
-      uniqueEventTypes
+      uniqueEventTypes,
     );
     setAvgHoursByEventType(totalVolunteerAvgHoursByEventType);
 
     let totalVolunteerAvgHoursByHackNightProp = findAverageVolunteerHours(
       totalVolunteersByHackNightProp,
       totalVolunteerHoursByHackNightProp,
-      hackNightUniqueLocations
+      hackNightUniqueLocations,
     );
     setAvgHoursByHackNightProp(totalVolunteerAvgHoursByHackNightProp);
 
@@ -222,7 +218,7 @@ const AdminDashboard = () => {
     events,
     checkins,
     uniqueTypes,
-    propName
+    propName,
   ) {
     let result = {};
     let type;
@@ -277,7 +273,7 @@ const AdminDashboard = () => {
   function findAverageVolunteerHours(
     totalVolunteers,
     totalVolunteerHours,
-    uniqueTypes
+    uniqueTypes,
   ) {
     let result = {};
     uniqueTypes.forEach((el) => (result[el] = parseInt('0')));
@@ -377,25 +373,29 @@ const AdminDashboard = () => {
     return function cleanup() {
       abortController.abort();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <div className="flex-container">
-      <div className="dashboard admin-dashboard-wrap">
-        <div className="admin-header">
-          <h1>Stats by Location - Volunteer Hours</h1>
-        </div>
+    <Box className="flex-container">
+      <Box className="dashboard admin-dashboard-wrap">
+        <Box className="admin-header">
+          <Typography
+            variant="h1"
+            sx={{ fontFamily: '"Open Sans", sans-serif', marginBottom: '0' }}
+          >
+            Stats by Location - Volunteer Hours
+          </Typography>
+        </Box>
 
         {!isLoading && nextEvent.length ? (
-          !isCheckInReady &&
+          !isCheckInReady && (
             <div className="event-header">You have 1 upcoming event:</div>
-          ) : (
-            <div className="event-header">Current event:</div>
           )
-        }
+        ) : (
+          <div className="event-header">Current event:</div>
+        )}
 
-        <div className="admin-upcoming-event">
+        <Box className="admin-upcoming-event">
           {isLoading ? (
             <Loading />
           ) : (
@@ -405,7 +405,7 @@ const AdminDashboard = () => {
               setCheckInReady={setCheckInReady}
             />
           )}
-        </div>
+        </Box>
 
         <TabsContainer active={0}>
           <Tab title="Table Report">
@@ -467,8 +467,8 @@ const AdminDashboard = () => {
             )}
           </Tab>
         </TabsContainer>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
