@@ -47,6 +47,8 @@ const EditUsers = ({
     setUserManagedProjects(userToEdit.managedProjects);
   }, [userToEdit]);
 
+  console.log(userManagedProjects)
+
   const userProjectsToDisplay = activeProjects.filter((item) =>
     userProjects.includes(item[0])
   );
@@ -61,7 +63,8 @@ const EditUsers = ({
       !userManagedProjects.includes(projectValue)
     ) {
       const newProjects = [...userManagedProjects, projectValue];
-      updateUserDb(userToEdit, newProjects);
+      updateUserDb(userToEdit, projectValue, 'add');
+      // updateUserDb(userToEdit, newProjects);
       setUserManagedProjects(newProjects);
       setProjectValue('');
     } else {
@@ -74,7 +77,8 @@ const EditUsers = ({
       const newProjects = userManagedProjects.filter(
         (p) => p !== projectToRemove
       );
-      updateUserDb(userToEdit, newProjects);
+      updateUserDb(userToEdit, projectToRemove, 'remove');
+      // updateUserDb(userToEdit, newProjects);
       setUserManagedProjects(newProjects);
     }
   };

@@ -5,11 +5,13 @@ import readableEvent from './utilities/readableEvent';
 import ProjectForm from '../ProjectForm';
 import { simpleInputs, additionalInputsForEdit } from '../data';
 import TitledBox from '../parts/boxes/TitledBox';
+import TitledBoxIFrame from '../parts/boxes/TitledBoxIFrame';
 
-import { ReactComponent as EditIcon } from '../../svg/Icon_Edit.svg';
-import { ReactComponent as PlusIcon } from '../../svg/PlusIcon.svg';
+import EditIcon from '../../svg/Icon_Edit.svg?react';
+import PlusIcon from '../../svg/PlusIcon.svg?react';
 
 import { Typography, Box } from '@mui/material';
+import EditProjectMembers from './editPMs/editProjectMembers';
 
 // Need to hold user state to check which type of user they are and conditionally render editing fields in this component
 // for user level block access to all except for the ones checked
@@ -106,14 +108,26 @@ const EditProject = ({
         setFormData={setFormData}
       />
 
-      <TitledBox title="Recurring Events"
+      {/* Only show onboarding/offboarding forms if visibility is enabled */}
+      {projectToEdit.onboardOffboardVisible !== false && (
+        <TitledBoxIFrame projectName={projectToEdit.name} />
+      )}
+
+      {/* Insert Project Members (Event Editors) here */}
+      <EditProjectMembers projectToEdit={projectToEdit} />
+
+      <TitledBox
+        title="Recurring Events"
         badge={
           <Box
             sx={{
               display: 'flex',
               '&:hover': { color: 'red', cursor: 'pointer' },
             }}
-            onClick={() => setIsCreateNew(true)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsCreateNew(true);
+            }}
           >
             <PlusIcon style={{ marginRight: '7px' }} />
             <Typography
@@ -126,6 +140,7 @@ const EditProject = ({
             </Typography>
           </Box>
         }
+        expandable={true}
       >
         <div className="event-list">
           <h2 className="event-alert">{eventAlert}</h2>
@@ -149,14 +164,17 @@ const EditProject = ({
         </div>
       </TitledBox>
 
-      <TitledBox title="Manually Edit Events Checkin">
+      <TitledBox title="Manually Edit Events Checkin" expandable={true}>
         <div className="event-list">
           <h2 className="event-alert">{eventAlert}</h2>
           <ul>
             {regularEventsState.map((event, index) => (
-
               // eslint-dis able-next-line no-underscore-dangle
-              <RegularEvent event={event} key={event._id} updateRegularEvent={updateRegularEvent} />
+              <RegularEvent
+                event={event}
+                key={event._id}
+                updateRegularEvent={updateRegularEvent}
+              />
             ))}
           </ul>
         </div>
@@ -168,17 +186,27 @@ const EditProject = ({
 function RegularEvent({ event, updateRegularEvent }) {
   return (
     <li key={`${event.event_id}`}>
-      <button type="button" onClick={async () => updateRegularEvent({ checkInReady: !event.checkInReady }, event.event_id)}>
+      <button
+        type="button"
+        onClick={async () =>
+          updateRegularEvent(
+            { checkInReady: !event.checkInReady },
+            event.event_id
+          )
+        }
+      >
         <div>{event.name}</div>
         <div className="event-list-details">
-          {`${event.dayOfTheWeek}, ${event.startTime} - ${event.endTime}; ${event.eventType}`} {`${new Date(event.raw.startTime).toLocaleDateString()}`}
+          {`${event.dayOfTheWeek}, ${event.startTime} - ${event.endTime}; ${event.eventType}`}{' '}
+          {`${new Date(event.raw.startTime).toLocaleDateString()}`}
         </div>
-        <div className="event-list-description">Is this event available for check in now?: <strong>{`${event.checkInReady ? "Yes" : "No"}`}</strong></div>
+        <div className="event-list-description">
+          Is this event available for check in now?:{' '}
+          <strong>{`${event.checkInReady ? 'Yes' : 'No'}`}</strong>
+        </div>
       </button>
     </li>
-  )
+  );
 }
-
-
 
 export default EditProject;

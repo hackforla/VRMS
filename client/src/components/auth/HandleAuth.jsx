@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import { isValidToken } from '../../services/user.service';
 import { authLevelRedirect } from '../../utils/authUtils';
+import { Box, CircularProgress, Typography } from '@mui/material';
 
 import '../../sass/MagicLink.scss';
 import useAuth from '../../hooks/useAuth';
@@ -33,30 +34,22 @@ const HandleAuth = (props) => {
 
   // Step 3: Set IsLoaded value to render Component
   useEffect(() => {
-    if (!isMagicLinkValid) {
-      setIsLoaded(true);
-      return;
-    }
+    if (!isMagicLinkValid) return;
 
     if (!auth || auth.isError) return;
 
     setIsLoaded(true);
   }, [isMagicLinkValid, setIsLoaded, auth]);
 
-  if (!isLoaded) return <div>Loading...</div>;
-
-  const Delayed = ({ children, waitBeforeShow = 500 }) => {
-    const [isShown, setIsShown] = useState(false);
-    useEffect(() => {
+  useEffect(() => {
+    if (!isLoaded) {
       const timer = setTimeout(() => {
-        setIsShown(true);
-      }, waitBeforeShow);
+        setIsLoaded(true);
+      }, 1000);
 
       return () => clearTimeout(timer);
-    }, [waitBeforeShow]);
-
-    return isShown ? children : null;
-  };
+    }
+  }, [isLoaded]);
 
   let loginRedirect = '';
 
@@ -65,12 +58,16 @@ const HandleAuth = (props) => {
   }
 
   return (
-    <div className="flex-container">
-      <Delayed waitBeforeShow={1000}>
-        <div>Sorry, the link is not valid anymore.</div>
-      </Delayed>
+    <Box textAlign="center" sx={{ pt: 5, fontSize: '16px' }}>
+      {!isLoaded ? (
+        <CircularProgress />
+      ) : (
+        <Typography variant="p">
+          Sorry, the link is not valid anymore.
+        </Typography>
+      )}
       {auth?.user && <Redirect to={loginRedirect} /> /* Redirect to /welcome */}
-    </div>
+    </Box>
   );
 };
 

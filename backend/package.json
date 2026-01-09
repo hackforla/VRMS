@@ -11,7 +11,9 @@
     "start": "node server.js",
     "dev": "nodemon server.js",
     "client": "npm run start --prefix client",
-    "heroku-postbuild": "cd client && npm install && npm run build"
+    "heroku-postbuild": "cd client && npm install && npm run build",
+    "clone-or-sync-projects": "node ./scripts/cloneOrSyncCollections.js",
+    "clear-dev-collections": "node ./scripts/clearDevCollections.js"
   },
   "author": "sarL3y",
   "license": "ISC",
@@ -54,7 +56,7 @@
     "morgan": "^1.10.0",
     "node-cron": "^2.0.3",
     "node-fetch": "^2.6.7",
-    "nodemailer": "^6.6.1"
+    "nodemailer": "^7.0.11"
   },
   "directories": {
     "test": "test"
