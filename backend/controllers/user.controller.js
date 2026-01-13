@@ -204,7 +204,7 @@ function generateAccessToken(user, auth_origin) {
   );
 }
 
-UserController.createUser = function (req, res) {
+UserController.createUser = async function (req, res) {
   const { firstName, lastName, email } = req.body;
   const { origin } = req.headers;
 
@@ -217,13 +217,12 @@ UserController.createUser = function (req, res) {
     accessLevel: 'user',
   });
 
-  // eslint-disable-next-line
-  user.save((err, usr) => {
-    if (err) {
-      res.sendStatus(400);
-    }
+  try {
+    await user.save();
     res.sendStatus(201);
-  });
+  } catch (err) {
+    res.sendStatus(400);
+  }
 
   const jsonToken = generateAccessToken(user);
 
@@ -333,15 +332,15 @@ UserController.bulkUpdateManagedProjects = async function (req, res) {
   // Convert string IDs to ObjectId in bulkOps
   bulkOps.forEach((op) => {
     if (op?.updateOne?.filter._id) {
-      op.updateOne.filter._id = ObjectId(op.updateOne.filter._id);
+      op.updateOne.filter._id = new ObjectId(op.updateOne.filter._id);
     }
     if (op?.updateOne?.update) {
       const update = op.updateOne.update;
       if (update?.$addToSet?.managedProjects) {
-        update.$addToSet.managedProjects = ObjectId(update.$addToSet.managedProjects);
+        update.$addToSet.managedProjects = new ObjectId(update.$addToSet.managedProjects);
       }
       if (update?.$pull?.managedProjects) {
-        update.$pull.managedProjects = ObjectId(update.$pull.managedProjects);
+        update.$pull.managedProjects = new ObjectId(update.$pull.managedProjects);
       }
     }
   });
