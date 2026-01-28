@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Typography, Divider } from '@mui/material';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -22,9 +22,15 @@ export default function TitledBox({
   childrenBoxSx,
   expandable = false,
 }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   if (expandable) {
     return (
-      <Accordion sx={{ bgcolor: '#F5F5F5', my: 3 }}>
+      <Accordion
+        sx={{ bgcolor: '#F5F5F5', my: 3 }}
+        expanded={isExpanded}
+        onChange={(event, expanded) => setIsExpanded(expanded)}
+      >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel-content"
@@ -41,7 +47,13 @@ export default function TitledBox({
             <Typography sx={{ fontSize: '18px', fontWeight: '600' }}>
               {title}
             </Typography>
-            {badge}
+            <Box
+              onClick={(e) => {
+                if (isExpanded) e.stopPropagation();
+              }}
+            >
+              {badge}
+            </Box>
           </Box>
         </AccordionSummary>
         <Divider sx={{ borderColor: 'rgba(0,0,0,1)' }} />

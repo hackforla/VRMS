@@ -108,7 +108,10 @@ const EditProject = ({
         setFormData={setFormData}
       />
 
-      <TitledBoxIFrame projectName={projectToEdit.name} />
+      {/* Only show onboarding/offboarding forms if visibility is enabled */}
+      {projectToEdit.onboardOffboardVisible !== false && (
+        <TitledBoxIFrame projectName={projectToEdit.name} />
+      )}
 
       {/* Insert Project Members (Event Editors) here */}
       <EditProjectMembers projectToEdit={projectToEdit} />
@@ -121,7 +124,10 @@ const EditProject = ({
               display: 'flex',
               '&:hover': { color: 'red', cursor: 'pointer' },
             }}
-            onClick={() => setIsCreateNew(true)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsCreateNew(true);
+            }}
           >
             <PlusIcon style={{ marginRight: '7px' }} />
             <Typography
@@ -134,6 +140,7 @@ const EditProject = ({
             </Typography>
           </Box>
         }
+        expandable={true}
       >
         <div className="event-list">
           <h2 className="event-alert">{eventAlert}</h2>
@@ -157,7 +164,7 @@ const EditProject = ({
         </div>
       </TitledBox>
 
-      <TitledBox title="Manually Edit Events Checkin">
+      <TitledBox title="Manually Edit Events Checkin" expandable={true}>
         <div className="event-list">
           <h2 className="event-alert">{eventAlert}</h2>
           <ul>

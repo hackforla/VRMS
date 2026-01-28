@@ -29,6 +29,9 @@ const EditProjectMembers = ({ projectToEdit }) => {
   const [projectMembers, setProjectMembers] = useState([]);
   const [renderedUsers, setRenderedUsers] = useState([]);
 
+  // Sort users alphabetically by first name
+  const sortUsers = (userArr) => [...userArr].sort((a, b) => a.name.firstName.localeCompare(b.name.firstName));
+
   useEffect(() => {
     // Create an array of projectMembers (users) from project's managedByUsers (user IDs)
     const fetchProjectMembers = async () => {
@@ -41,8 +44,9 @@ const EditProjectMembers = ({ projectToEdit }) => {
               return user;
             })
           );
-          setProjectMembers(members);
-          setRenderedUsers(members);
+          const sortedMembers = sortUsers(members);
+          setProjectMembers(sortedMembers);
+          setRenderedUsers(sortedMembers);
         } catch (err) {
           console.log(err)
         }
@@ -123,7 +127,7 @@ const EditProjectMembers = ({ projectToEdit }) => {
 
     setToggleSelect(true);
     if (!toggleSelect) {
-      setRenderedUsers((prevUsers) => [...prevUsers, addedUser]); // Add user to project's managedByUsers array
+      setRenderedUsers((prevUsers) => sortUsers([...prevUsers, addedUser])); // Add user to project's managedByUsers array
       setChangesMade(true); // Set changes made to true
     }
     // Confirmation message disappears after 1.5 seconds
@@ -140,6 +144,7 @@ const EditProjectMembers = ({ projectToEdit }) => {
       <TitledBox
         title={'Project Members (Event Editors)'}
         badge={editIcon()}
+        expandable={true}
       >
         {/* Email search componennt */}
         <Grid container direction="column" sx={{ width: '100%', backgroundColor: editMode ? 'white' : '' }}>
@@ -174,7 +179,21 @@ const EditProjectMembers = ({ projectToEdit }) => {
         {/* Display error message */}
         {error && (<Typography color="red">{error}</Typography>)}
         {/* Display project members */}
-        <ProjectMembersList projectId={projectToEdit._id} projectMembers={projectMembers} editMode={editMode} setChangesMade={setChangesMade} closeConfirmModal={closeConfirmModal} setCloseConfirmModal={setCloseConfirmModal} setEditMode={setEditMode} renderedUsers={renderedUsers} setRenderedUsers={setRenderedUsers} isLoading={isLoading} setEmail={setEmail} setIsLoading={setIsLoading} />
+        <ProjectMembersList 
+          projectId={projectToEdit._id} 
+          projectMembers={projectMembers} 
+          editMode={editMode} 
+          setChangesMade={setChangesMade}
+          closeConfirmModal={closeConfirmModal} 
+          setCloseConfirmModal={setCloseConfirmModal} 
+          setEditMode={setEditMode} 
+          renderedUsers={renderedUsers} 
+          setRenderedUsers={setRenderedUsers} 
+          sortUsers={sortUsers} 
+          isLoading={isLoading} 
+          setEmail={setEmail} 
+          setIsLoading={setIsLoading} 
+        />
       </TitledBox>
     </Box>
   )

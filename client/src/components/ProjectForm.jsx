@@ -191,7 +191,7 @@ export default function ProjectForm({
       >
         <EditIcon style={{ p: 1 }} />
         <Typography sx={{ p: 1, fontSize: '14px', fontWeight: '600' }}>
-          {editMode ? 'Cancel' : 'Edit Mode'}
+          {editMode ? 'Cancel' : 'Edit'}
         </Typography>
       </Box>
     );
@@ -229,16 +229,18 @@ export default function ProjectForm({
     </Grid>
   );
 
+  const projectName = projectToEdit?.name || '[unnamed project]';
   return (
     <Box sx={{ px: 0.5 }}>
       <Box sx={{ textAlign: 'center' }}>
-        <Typography variant="h1">Project Management</Typography>
+        <Typography variant="h1">{projectName}</Typography>
       </Box>
       {auth.user.accessLevel === 'admin' ||
       auth.user.accessLevel == 'superadmin' ? (
         <TitledBox
           title={editMode ? 'Editing Project' : 'Project Information'}
           badge={isEdit ? editIcon() : addIcon()}
+          expandable={true}
         >
           <form
             id="project-form"
@@ -297,7 +299,7 @@ export default function ProjectForm({
           </Grid>
         </TitledBox>
       ) : (
-        <TitledBox title={'Project Information'}>
+        <TitledBox title={'Project Information'} expandable={true}>
           {' '}
           <form
             id="project-form"

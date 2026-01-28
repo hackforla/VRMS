@@ -9,7 +9,8 @@ import {
   ListItem,
   ListItemButton,
 } from '@mui/material';
-
+import useAuth from '../../hooks/useAuth';
+import PersonIcon from '@mui/icons-material/Person';
 import '../../sass/UserAdmin.scss';
 
 const Buttonsx = {
@@ -21,6 +22,7 @@ const UserManagement = ({ users, setUserToEdit }) => {
   let searchResults = [];
   const [searchResultType, setSearchResultType] = useState('name'); // Which results will diplay
   const [searchTerm, setSearchTerm] = useState(''); // Serch term for the user/email search
+  const { auth } = useAuth();
 
   // Swaps the buttons and displayed panels for the search results, by email or by name
   const buttonSwap = () =>
@@ -141,8 +143,8 @@ const UserManagement = ({ users, setUserToEdit }) => {
                       onClick={() => setUserToEdit(u)}
                     >
                       {searchResultType === 'name'
-                        ? `${u.name?.firstName} ${u.name?.lastName} ( ${u.email} )`
-                        : `${u.email} ( ${u.name?.firstName} ${u.name?.lastName} )`}
+                        ?  (u._id === auth.user._id) ? (<><PersonIcon /><b>{u.name?.firstName} {u.name?.lastName} ( {u.email} )</b></>) : `${u.name?.firstName} ${u.name?.lastName} ( ${u.email} )`
+                        :  (u._id === auth.user._id) ? (<><PersonIcon /><b>{u.email} ( {u.name?.firstName} {u.name?.lastName} )</b></>) : `${u.email} ( ${u.name?.firstName} ${u.name?.lastName} )`}
                     </ListItemButton>
                   </ListItem>
                 );
