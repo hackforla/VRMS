@@ -56,11 +56,23 @@ EventController.destroy = async function (req, res) {
 };
 
 EventController.update = async function (req, res) {
-  const { EventId } = req.params;
+  const { body } = req;
 
   try {
-    const event = await Event.findByIdAndUpdate(EventId, req.body);
-    return res.status(200).send(event);
+    if (Array.isArray(body)) {
+      const ops = body.map((e) => ({
+        updateOne: {
+          filter: { _id: e._id },
+          update: { $set: { checkInReady: e.checkInReady } },
+        },
+      }));
+      const events = await Event.bulkWrite(ops);
+      return res.status(200).send(events);
+    } else {
+      const { EventId } = req.params;
+      const event = await Event.findByIdAndUpdate(EventId, req.body);
+      return res.status(200).send(event);
+    }
   } catch (err) {
     console.error('[event.controller]', err);
     return res.sendStatus(400);
