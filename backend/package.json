@@ -10,7 +10,6 @@
     "test:watch": "jest --watch",
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "cron": "nodemon cron.js",
     "client": "npm run start --prefix client",
     "heroku-postbuild": "cd client && npm install && npm run build",
     "clone-or-sync-projects": "node ./scripts/cloneOrSyncCollections.js",

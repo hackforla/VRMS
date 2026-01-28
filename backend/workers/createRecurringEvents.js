@@ -26,7 +26,7 @@ const fetchData = async (endpoint, URL, headerToSend, fetch) => {
  * @param {Object} event - The event data to create.
  * @returns {Promise<Object|null>} - The created event data or null on failure.
  */
-const createEvent = async (event, URL, headerToSend, fetch) => {
+const createEvents = async (event, URL, headerToSend, fetch) => {
   if (!event) return null;
 
   try {
@@ -103,40 +103,43 @@ const adjustToLosAngelesTime = (eventDate) => {
 const filterAndCreateEvents = async (events, recurringEvents, URL, headerToSend, fetch) => {
   const today = new Date();
   const todayUTCDay = today.getUTCDay();
-  const allLocalDays = [];
-  const check = [];
-  const exist = [];
+  //2025-11-25
+  // const allLocalDays = [];
+  // const dateCheck = [];
+  // const eventNameExist = [];
   // // filter recurring events for today and not already existing
   const eventsToCreate = recurringEvents?.filter((recurringEvent) => {
     // we're converting the stored UTC event date to local time to compare the system DOW with the event DOW
-    const localEventDate = new Date(recurringEvent.date);
-    allLocalDays.push(localEventDate.getUTCDay());
-    check.push(localEventDate.getUTCDay() === todayUTCDay);
-    exist.push(!doesEventExist(recurringEvent.name, today, events));
+    const localEventDate = adjustToLosAngelesTime(recurringEvent.date);
+    //Logs for checking
+    // allLocalDays.push(localEventDate.getUTCDay());
+    // dateCheck.push(localEventDate.getUTCDay() === todayUTCDay);
+    // eventNameExist.push(!doesEventExist(recurringEvent.name, today, events));
     return (
       localEventDate.getUTCDay() === todayUTCDay &&
       !doesEventExist(recurringEvent.name, today, events)
     );
   });
-  console.log(
-    'Event date\n',
-    today,
-    '\nToday\n',
-    todayUTCDay,
-    '\nAll days\n',
-    allLocalDays,
-    '\nDay vs All Days comparison (Bool)\n',
-    check,
-    '\nEvent exist or not (Bool)\n',
-    exist,
-    '\nList of events to create\n',
-    eventsToCreate,
-  );
+  // console.log(
+  //   'Event date\n',
+  //   today,
+  //   '\nToday\n',
+  //   todayUTCDay,
+  //   '\nAll days\n',
+  //   allLocalDays,
+  //   '\nDay vs All Days comparison (Bool)\n',
+  //   dateCheck,
+  //   '\nEvent exist or not (Bool)\n',
+  //   eventNameExist,
+  //   '\nList of events to create\n',
+  //   eventsToCreate,
+  // );
 
   //Check if event exists
   if (!eventsToCreate || eventsToCreate?.length === 0) {
     return 'No events for today.';
   } else {
+    const batchEvents = [];
     for (const event of eventsToCreate) {
       // convert to local time for DST correction...
       const correctedStartTime = adjustToLosAngelesTime(event.startTime);
@@ -148,10 +151,10 @@ const filterAndCreateEvents = async (events, recurringEvents, URL, headerToSend,
       };
       // map/generate all event data with adjusted date, startTime
       const eventToCreate = generateEventData(timeCorrectedEvent);
-
-      const createdEvent = await createEvent(eventToCreate, URL, headerToSend, fetch);
-      if (createdEvent) console.log('Created event:', createdEvent);
+      batchEvents.push(eventToCreate);
     }
+    const createdEvents = await createEvents(batchEvents, URL, headerToSend, fetch);
+    if (createdEvents) console.log('Created events:', createdEvents);
     return "Today's events have been created.";
   }
 };
@@ -217,7 +220,7 @@ module.exports = {
   adjustToLosAngelesTime,
   isSameUTCDate,
   doesEventExist,
-  createEvent,
+  createEvents,
   filterAndCreateEvents,
   runTask,
   scheduleTask,

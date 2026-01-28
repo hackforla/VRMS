@@ -1,8 +1,11 @@
+ 
 // app.js - Entry point for our application
 
 // Load in all of our node modules. Their uses are explained below as they are called.
 const express = require('express');
 const morgan = require('morgan');
+const cron = require('node-cron');
+const fetch = require('node-fetch');
 const cookieParser = require('cookie-parser');
 
 const customRequestHeaderName = 'x-customrequired-header';
@@ -49,6 +52,15 @@ app.use(cookieParser());
 // HTTP Request Logger
 app.use(morgan('dev'));
 
+// WORKERS
+const runOpenCheckinWorker = require('./workers/openCheckins');
+runOpenCheckinWorker(cron, fetch);
+
+const runCloseCheckinWorker = require('./workers/closeCheckins');
+runCloseCheckinWorker(cron, fetch);
+
+const { createRecurringEvents } = require('./workers/createRecurringEvents');
+createRecurringEvents(cron, fetch);
 // const runSlackBot = require("./workers/slackbot")(fetch);
 
 // MIDDLEWARE
