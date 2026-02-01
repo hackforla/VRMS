@@ -208,7 +208,7 @@ const createRecurringEvents = (cron, fetch) => {
   const URL =
     process.env.NODE_ENV === 'prod'
       ? 'https://www.vrms.io'
-      : `http://backend:${process.env.BACKEND_PORT}`;
+      : `http://localhost:${process.env.BACKEND_PORT}`;
   const headerToSend = process.env.CUSTOM_REQUEST_HEADER;
 
   return scheduleTask(cron, fetch, URL, headerToSend);
