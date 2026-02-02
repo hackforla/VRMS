@@ -23,11 +23,11 @@ const fetchData = async (endpoint, URL, headerToSend, fetch) => {
 
 /** POST
  * Creates a new event by making a POST request to the events API.
- * @param {Object} event - The event data to create.
+ * @param {Object} eventArray - The events array data to create.
  * @returns {Promise<Object|null>} - The created event data or null on failure.
  */
-const createEvents = async (event, URL, headerToSend, fetch) => {
-  if (!event) return null;
+const createEvents = async (eventArray, URL, headerToSend, fetch) => {
+  if (!eventArray) return null;
 
   try {
     const res = await fetch(`${URL}/api/events/`, {
@@ -36,7 +36,7 @@ const createEvents = async (event, URL, headerToSend, fetch) => {
         'Content-Type': 'application/json',
         'x-customrequired-header': headerToSend,
       },
-      body: JSON.stringify(event),
+      body: JSON.stringify(eventArray),
     });
     if (!res.ok) throw new Error('Failed to create event');
     return await res.json();
