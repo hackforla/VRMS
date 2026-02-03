@@ -16,7 +16,8 @@
     "test:backend": "cd backend && npm run test",
     "test:client": "cd client && npm run test",
     "test:all": "cross-env NODE_ENV=test npm run test:client && npm run test:backend",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "lint:files": "node scripts/list-lint-files.mjs"
   },
   "dependencies": {
     "@mui/icons-material": "^5.14.19",

@@ -18,7 +18,7 @@ import {
 import '../../sass/UserAdmin.scss';
 import useAuth from '../../hooks/useAuth';
 
-
+// child of UserAdmin. Displays form to update users.
 const EditUsers = ({
   userToEdit,
   backToSearch,
@@ -80,7 +80,7 @@ const EditUsers = ({
       setUserManagedProjects(newProjects);
     }
   };
-
+  
   const handleSetIsActive = () => {
     if (!isSuperAdmin) {
       setIsActive(!isActive);
