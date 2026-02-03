@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useForm, useFormState } from 'react-hook-form';
 import {
@@ -11,8 +11,8 @@ import {
   FormControl,
   FormControlLabel,
   RadioGroup,
+  Paper,
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
 
 import useAuth from '../hooks/useAuth';
 import ProjectApiService from '../api/ProjectApiService';
@@ -28,28 +28,12 @@ import ChangesModal from './ChangesModal';
  *  -the rest are inline
  */
 
-export const StyledButton = styled(Button)(({ theme }) => ({
-  width: '150px',
-}));
-
-const StyledFormControlLabel = styled(FormControlLabel)(({ theme }) => ({
-  width: 'max-content',
-  '& .MuiFormControlLabel-label': {
-    fontSize: '14px',
-  },
-}));
-
-const StyledRadio = styled(Radio)(({ theme }) => ({
-  padding: '0px 0px 0px 0px',
-  marginRight: '.5rem',
-}));
-
 /**Project Form Component
  * -renders a form for creating and updating a project
 
 
 /**
- 
+
 /**
  * Takes Array, formData, projectToEdit, handleChage, isEdit
  * submitForm, handleChange, and isEdit are for the edit forms.
@@ -145,11 +129,12 @@ export default function ProjectForm({
 
   // Handles the location radio button change.
   const handleRadioChange = (event) => {
+    alert(event.target.value);
     setLocationType(event.target.value);
   };
 
   // Toggles the project view to edit mode change.
-  const handleEditMode = (event) => {
+  const handleEditMode = () => {
     setEditMode(!editMode);
     // React hook form method to reset data back to original values. Triggered when Edit Mode is cancelled.
     reset({
@@ -191,7 +176,7 @@ export default function ProjectForm({
       >
         <EditIcon style={{ p: 1 }} />
         <Typography sx={{ p: 1, fontSize: '14px', fontWeight: '600' }}>
-          {editMode ? 'Cancel' : 'Edit Mode'}
+          {editMode ? 'Cancel' : 'Edit'}
         </Typography>
       </Box>
     );
@@ -211,16 +196,16 @@ export default function ProjectForm({
           onChange={handleRadioChange}
           sx={{ mb: 0.5 }}
         >
-          <StyledFormControlLabel
+          <FormControlLabel
             value="remote"
-            control={<StyledRadio size="small" />}
+            control={<Radio size="small" />}
             label="Remote"
             disabled={isEdit ? !editMode : false}
           />
           <Box sx={{ width: '10px' }} />
-          <StyledFormControlLabel
+          <FormControlLabel
             value="in-person"
-            control={<StyledRadio size="small" />}
+            control={<Radio size="small" />}
             label="In-Person"
             disabled={isEdit ? !editMode : false}
           />
@@ -229,106 +214,118 @@ export default function ProjectForm({
     </Grid>
   );
 
+  const projectName = projectToEdit?.name || '[unnamed project]';
   return (
     <Box sx={{ px: 0.5 }}>
       <Box sx={{ textAlign: 'center' }}>
-        <Typography variant="h1">Project Management</Typography>
+        <Typography variant="h1">{projectName}</Typography>
       </Box>
-      {auth.user.accessLevel === 'admin' ||
-      auth.user.accessLevel == 'superadmin' ? (
-        <TitledBox
-          title={editMode ? 'Editing Project' : 'Project Information'}
-          badge={isEdit ? editIcon() : addIcon()}
-        >
-          <form
-            id="project-form"
-            onSubmit={handleSubmit((data) => {
-              isEdit ? submitEditProject(data) : submitNewProject(data);
-            })}
+      <Paper
+        elevation={3}
+        sx={{ padding: 3, borderRadius: 1, backgroundColor: '#f5f5f5' }}
+      >
+        {auth.user.accessLevel === 'admin' ||
+        auth.user.accessLevel === 'superadmin' ? (
+          <TitledBox
+            title={editMode ? 'Editing Project' : 'Project Information'}
+            badge={isEdit ? editIcon() : addIcon()}
+            expandable={true}
           >
-            {arr.map((input) => (
-              <ValidatedTextField
-                key={input.name}
-                register={register}
-                isEdit={isEdit}
-                editMode={editMode}
-                locationType={locationType}
-                locationRadios={locationRadios}
-                errors={errors}
-                input={input}
+            <Box
+              component="form"
+              id="project-form"
+              onSubmit={handleSubmit((data) => {
+                isEdit ? submitEditProject(data) : submitNewProject(data);
+              })}
+            >
+              {arr.map((input) => (
+                <ValidatedTextField
+                  key={input.name}
+                  register={register}
+                  isEdit={isEdit}
+                  editMode={editMode}
+                  locationType={locationType}
+                  locationRadios={locationRadios}
+                  errors={errors}
+                  input={input}
+                />
+              ))}
+              <ChangesModal
+                open={isModalOpen}
+                onClose={handleClose}
+                destination={'/projects'}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+                handleClose={handleClose}
               />
-            ))}
-            <ChangesModal
-              open={isModalOpen}
-              onClose={handleClose}
-              destination={'/projects'}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-              handleClose={handleClose}
-            />
-          </form>{' '}
-          <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
-            <Grid item xs="auto">
-              <StyledButton
-                type="submit"
-                form="project-form"
-                variant={
-                  !isEdit ? 'secondary' : !editMode ? 'contained' : 'secondary'
-                }
-                cursor="pointer"
-                disabled={isEdit && isLoading ? !editMode : false}
-              >
-                {isLoading ? <CircularProgress /> : 'Save'}
-              </StyledButton>
+            </Box>
+            <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
+              <Grid item xs="auto">
+                <Button
+                  type="submit"
+                  form="project-form"
+                  variant={
+                    !isEdit ? 'secondary' : !editMode ? 'contained' : 'secondary'
+                  }
+                  sx={{
+                    width: '150px',
+                    cursor: 'pointer',
+                  }}
+                  disabled={isEdit && isLoading ? !editMode : false}
+                >
+                  {isLoading ? <CircularProgress /> : 'Save'}
+                </Button>
+              </Grid>
+              <Grid item xs="auto">
+                <Button
+                  variant="contained"
+                  sx={{
+                    width: '150px',
+                    cursor: 'pointer',
+                  }}
+                  onClick={
+                    !editMode || Object.keys(dirtyFields).length === 0
+                      ? checkFields
+                      : handleOpen
+                  }
+                >
+                  Close
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item xs="auto">
-              <StyledButton
-                variant="contained"
-                cursor="pointer"
-                onClick={
-                  !editMode || Object.keys(dirtyFields).length === 0
-                    ? checkFields
-                    : handleOpen
-                }
-              >
-                Close
-              </StyledButton>
-            </Grid>
-          </Grid>
-        </TitledBox>
-      ) : (
-        <TitledBox title={'Project Information'}>
-          {' '}
-          <form
-            id="project-form"
-            onSubmit={handleSubmit((data) => {
-              isEdit ? submitEditProject(data) : submitNewProject(data);
-            })}
-          >
-            {arr.map((input) => (
-              <ValidatedTextField
-                key={input.name}
-                register={register}
-                isEdit={isEdit}
-                editMode={editMode}
-                locationType={locationType}
-                locationRadios={locationRadios}
-                errors={errors}
-                input={input}
+          </TitledBox>
+        ) : (
+          <TitledBox title={'Project Information'} expandable={true}>
+            <form
+              id="project-form"
+              onSubmit={handleSubmit((data) => {
+                isEdit ? submitEditProject(data) : submitNewProject(data);
+              })}
+            >
+              {arr.map((input) => (
+                <ValidatedTextField
+                  key={input.name}
+                  register={register}
+                  isEdit={isEdit}
+                  editMode={editMode}
+                  locationType={locationType}
+                  locationRadios={locationRadios}
+                  errors={errors}
+                  input={input}
+                />
+              ))}
+              <ChangesModal
+                open={isModalOpen}
+                onClose={handleClose}
+                destination={'/projects'}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+                handleClose={handleClose}
               />
-            ))}
-            <ChangesModal
-              open={isModalOpen}
-              onClose={handleClose}
-              destination={'/projects'}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-              handleClose={handleClose}
-            />
-          </form>
-          {''}
-        </TitledBox>
-      )}
+            </form>
+          </TitledBox>
+        )}
+      </Paper>
     </Box>
   );
 }

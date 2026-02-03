@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import {
   Box,
   Button,
@@ -11,7 +11,8 @@ import {
   ListItemButton,
 } from '@mui/material';
 import { useLocation } from 'react-router-dom';
-
+import { useSearchText } from '../../context/searchContext';
+import PersonIcon from '@mui/icons-material/Person';
 import '../../sass/UserAdmin.scss';
 
 const Buttonsx = {
@@ -19,7 +20,7 @@ const Buttonsx = {
   py: 0.5,
 };
 
-const DummyComponent = ({ data, isProjectLead, setUserToEdit }) => {
+const ListComponent = ({ data, isProjectLead, setUserToEdit }) => {
   return (
     <List className="search-results disablePadding">
       {data.map((u, idx) => {
@@ -50,7 +51,9 @@ const DummyComponent = ({ data, isProjectLead, setUserToEdit }) => {
               <Grid container>
                 <Grid item>
                   <Typography style={{ fontWeight: 600 }}>
-                    {`${name.firstName.toUpperCase()} ${name.lastName.toUpperCase()} ( ${email.toUpperCase()} )`}
+                    {(_id === auth?.user?._id) ? 
+                      (<><PersonIcon /><b>{`${name.firstName.toUpperCase()} ${name.lastName.toUpperCase()} ( ${email.toUpperCase()} )`}</b></>) 
+                      : `${name.firstName.toUpperCase()} ${name.lastName.toUpperCase()} ( ${email.toUpperCase()} )`}
                   </Typography>
                 </Grid>
               </Grid>
@@ -81,13 +84,13 @@ const DummyComponent = ({ data, isProjectLead, setUserToEdit }) => {
               <Grid container justifyContent={'space-between'}>
                 <Grid item>
                   <Typography style={{ fontWeight: 600 }}>
-                    {name.firstName.toUpperCase() +
-                      ' ' +
-                      name.lastName.toUpperCase()}
+                      {(_id === auth?.user?._id) ? 
+                      (<><PersonIcon /><b>{`${name.firstName.toUpperCase()} ${name.lastName.toUpperCase()}`}</b></>) :
+                      `${name.firstName.toUpperCase()} ${name.lastName.toUpperCase()}`}
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Typography style={{ fontWeight: 600 }} color="black">
+                  <Typography style={{ fontWeight: (_id === auth?.user?._id) ? 'bold' : 600 }}>
                     {u.managedProjectName}
                   </Typography>
                 </Grid>
@@ -100,14 +103,12 @@ const DummyComponent = ({ data, isProjectLead, setUserToEdit }) => {
   );
 };
 
-const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
-  const [userType, setUserType] = useState('admin'); // Which results will display
-  const [searchText, setSearchText] = useState(''); // Search term for the admin/PM search
-  const [isProjectLead, setIsProjectLead] = useState(false);
+const UserPermissionSearch = ({ admins, projectManagers, setUserToEdit }) => {
+  const { searchText, setSearchText, userType, setUserType, isProjectLead, setIsProjectLead } = useSearchText(); // React context hook
 
   const location = useLocation();
 
-  const resultData = [...admins, ...projectLeads];
+  const resultData = [...admins, ...projectManagers];
 
   useEffect(() => {
     // Edit url by adding '/admin' upon loading
@@ -121,8 +122,15 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
   }, [userType]);
 
   // Swaps the buttons and displayed panels for the search results, by email or by name
-  const buttonSwap = () =>
-    isProjectLead ? setIsProjectLead(false) : setIsProjectLead(true);
+  const buttonSwap = () => {
+    if (isProjectLead) {
+      setIsProjectLead(false);
+      setUserType('admin');
+    } else {
+      setIsProjectLead(true);
+      setUserType('projectLead');
+    }
+  }
 
   // Handle change on input in search form
   const handleChange = (event) => {
@@ -136,7 +144,7 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
       .filter((user) =>
         isProjectLead
           ? user.isProjectLead === true
-          : user.isProjectLead === undefined
+          : user.isProjectLead === undefined,
       )
       .flatMap((user) =>
         isProjectLead && user.managedProjectNames.length > 0
@@ -144,7 +152,7 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
               ...user,
               managedProjectName,
             }))
-          : [{ ...user }]
+          : [{ ...user }],
       )
       .filter((user) => {
         const fullName =
@@ -175,13 +183,13 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
     filteredData = resultData.filter((user) =>
       isProjectLead
         ? user.isProjectLead === true
-        : user.isProjectLead === undefined
+        : user.isProjectLead === undefined,
     );
 
     if (!isProjectLead) {
       // Default display for admins, sorted ASC based on first name
       filteredData.sort((u1, u2) =>
-        u1.name?.firstName.localeCompare(u2.name?.firstName)
+        u1.name?.firstName.localeCompare(u2.name?.firstName),
       );
     } else {
       // Default display of all PMs, sorted ASC based on project name, then first name
@@ -194,7 +202,7 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
       tempFilter.sort(
         (u1, u2) =>
           u1.managedProjectName.localeCompare(u2.managedProjectName) ||
-          u1.name?.firstName.localeCompare(u2.name?.firstName)
+          u1.name?.firstName.localeCompare(u2.name?.firstName),
       );
       filteredData = [...tempFilter];
     }
@@ -202,6 +210,42 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
     // NOTE: Using "users" instead of "dummyData" to check the link to user profile
     filteredData = getFilteredData(resultData, searchText, isProjectLead);
   }
+
+  // No need to limit export to the search results
+  const exportAllData = getFilteredData(resultData, '', isProjectLead);
+
+  // Export CSV file
+  const exportCSV = (data, fileName) => {
+    // Header row
+    const headers = ['User Name', 'Project Name'];
+
+    // Map each user into CSV row values
+    const dataItems = data.map((user) => [
+      `${user.name?.firstName ?? ''} ${user.name?.lastName ?? ''}`,
+      user.managedProjectName ?? '',
+    ]);
+
+    // Combine header + data rows
+    const rows = [headers, ...dataItems];
+
+    // Convert rows to CSV formatted string
+    const csvData = rows.map((row) => row.join(',')).join('\r\n');
+
+    // Create CSV Blob from string
+    const blob = new Blob([csvData], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+
+    // Create a temporary download link
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+
+    // Trigger download
+    link.click();
+
+    // Clean up object URL
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <Box className="container--usermanagement" sx={{ px: '1.8rem', mb: 0 }}>
@@ -250,6 +294,21 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
             </Button>
           </ButtonGroup>
         </Box>
+        {isProjectLead && (
+          <Box
+            sx={{
+              mb: 2,
+            }}
+          >
+            <Button
+              sx={Buttonsx}
+              variant="secondary"
+              onClick={() => exportCSV(exportAllData, 'project_members.csv')}
+            >
+              Export CSV
+            </Button>
+          </Box>
+        )}
         <TextField
           type="text"
           placeholder={isProjectLead ? 'Search name or project' : 'Search name'}
@@ -268,7 +327,7 @@ const UserPermissionSearch = ({ admins, projectLeads, setUserToEdit }) => {
         >
           <Box>
             {/*Component to render admins and PMs*/}
-            <DummyComponent
+            <ListComponent
               data={filteredData}
               isProjectLead={isProjectLead}
               setUserToEdit={setUserToEdit}

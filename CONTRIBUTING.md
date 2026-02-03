@@ -106,6 +106,22 @@ Note: Understanding how git remotes work will make collaborating much easier. Yo
 
 ### **2.3 Get up and running**
 
+1. Install [NVM (Node Version Manager)](https://github.com/nvm-sh/nvm). NVM allows you to easily manage and switch between multiple versions of Node.
+
+   - Verify the installation: `nvm --version`
+   - Once NVM is verified, run the following commands from the root of the project:
+
+   ```
+   # Install the project's Node version (specified in the .nvmrc file)
+   nvm install
+
+   # Instruct NVM to use the Node version defined in the .nvmrc file
+   nvm use
+
+   ```
+
+   > NOTE: If the major version of Node does not match the version specified in the .nvmrc file, you may need to be explicit with the version and use: `nvm install <version>` and `nvm use <version>`
+
 1. Have [Node](https://nodejs.org/en/download/) and NPM installed locally:
 
    - Verify with `node -v` and `npm -v` respectively.
