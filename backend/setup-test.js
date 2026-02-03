@@ -31,14 +31,13 @@ async function dropAllCollections() {
   }
 }
 let mongoServer;
-module.exports = {
-  setupIntegrationDB(databaseName) {
+const setupIntegrationDB = (databaseName) => {
     // Connect to Mongoose
     beforeAll(async () => {
-      mongoServer = new MongoMemoryServer({
+      mongoServer = await MongoMemoryServer.create({
         instance: { dbName: databaseName },
       });
-      const mongoUri = await mongoServer.getUri();
+      const mongoUri = mongoServer.getUri();
       try {
         await mongoose.connect(mongoUri);
       } catch (err) {
@@ -52,5 +51,9 @@ module.exports = {
       await mongoose.connection.close();
       await mongoServer.stop();
     });
-  },
+};
+
+module.exports = {
+  setupIntegrationDB,
+  setupDB: setupIntegrationDB,
 };

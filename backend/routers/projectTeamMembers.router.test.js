@@ -52,7 +52,7 @@ describe('Unit testing for project team members router', () => {
       },
     ];
 
-    it('should return a list of project team members with GET /api/projectteammembers/', async (done) => {
+    it('should return a list of project team members with GET /api/projectteammembers/', async () => {
       // Mock resolved value of ProjectTeamMember.find() method
       ProjectTeamMember.find.mockReturnValue({
         populate: jest.fn((path) => {
@@ -72,10 +72,9 @@ describe('Unit testing for project team members router', () => {
       expect(response.body).toEqual(mockMembers);
 
       // Marks completion of tests
-      done();
     });
 
-    it('should return a single project team member based on projectId with GET /api/projectteammembers/:id', async (done) => {
+    it('should return a single project team member based on projectId with GET /api/projectteammembers/:id', async () => {
       const mockMember = mockMembers[0];
       const projectId = mockMember.projectId;
 
@@ -99,10 +98,9 @@ describe('Unit testing for project team members router', () => {
       expect(response.body).toEqual(mockMember);
 
       // Marks completion of tests
-      done();
     });
 
-    it('should return a specific project team member based on projectId and userId with GET /api/projectteammembers/project/:id/:userId', async (done) => {
+    it('should return a specific project team member based on projectId and userId with GET /api/projectteammembers/project/:id/:userId', async () => {
       const mockMember = mockMembers[1];
       const projectId = mockMember.projectId;
       const userId = mockMember.userId;
@@ -127,10 +125,9 @@ describe('Unit testing for project team members router', () => {
       expect(response.body).toEqual(mockMember);
 
       // Marks completion of tests
-      done();
     });
 
-    it('should return a specific project owner that IS an vrmsProjectAdmin on userId with GET /api/projectteammembers/projectowner/:id', async (done) => {
+    it('should return a specific project owner that IS an vrmsProjectAdmin on userId with GET /api/projectteammembers/projectowner/:id', async () => {
       const mockMember = mockMembers[1];
       const userId = mockMember.userId;
 
@@ -159,10 +156,9 @@ describe('Unit testing for project team members router', () => {
       expect(response.body.vrmsProjectAdmin).toBe(true);
 
       // Marks completion of tests
-      done();
     });
 
-    it('should return a project team member that IS NOT a vrmsProjectAdmin based on userId with GET /api/projectteammembers/projectowner/:id', async (done) => {
+    it('should return a project team member that IS NOT a vrmsProjectAdmin based on userId with GET /api/projectteammembers/projectowner/:id', async () => {
       const mockMember = mockMembers[0];
       const userId = mockMember.userId;
 
@@ -190,7 +186,6 @@ describe('Unit testing for project team members router', () => {
       expect(response.body).toEqual(false);
 
       // Marks completion of tests
-      done();
     });
   });
 
@@ -211,7 +206,7 @@ describe('Unit testing for project team members router', () => {
       onProjectGoogleDrive: true,
     };
 
-    it('should create and return a new project team member with POST /api/projectteammember/', async (done) => {
+    it('should create and return a new project team member with POST /api/projectteammember/', async () => {
       // Mock ProjectTeamMember.create() method
       ProjectTeamMember.create.mockResolvedValue(newMember);
 
@@ -223,7 +218,6 @@ describe('Unit testing for project team members router', () => {
       expect(response.body).toEqual(newMember);
 
       // Marks completion of tests
-      done();
     });
   });
 
@@ -245,7 +239,7 @@ describe('Unit testing for project team members router', () => {
     };
     const id = updatedMember.id;
 
-    it('should update the updated project team member with PATCH /api/projectteammember/:id', async (done) => {
+    it('should update the updated project team member with PATCH /api/projectteammember/:id', async () => {
       // Mock ProjectTeamMember.create() method
       ProjectTeamMember.findByIdAndUpdate.mockResolvedValue(updatedMember);
 
@@ -258,7 +252,6 @@ describe('Unit testing for project team members router', () => {
       expect(response.body).toEqual(updatedMember);
 
       // Marks completion of tests
-      done();
     });
   });
 });
