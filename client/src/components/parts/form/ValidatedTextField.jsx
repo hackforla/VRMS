@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Grid, InputLabel, TextField } from "@mui/material";
+import { Box, Grid, InputLabel, TextField } from '@mui/material';
 
 /**
  * A validated text field component for forms.
@@ -24,61 +24,75 @@ function ValidatedTextField({
   locationRadios,
   input,
 }) {
-  
   const validationRules = {};
 
-  // Validation rules for Google Drive URL
-  if (input.required) {
-    validationRules.required = `${input.label || input.name} is required`
+  // Handle required validation
+  if (input.required !== false) {
+    validationRules.required = `${input.label || input.name} is required`;
   }
-  if(input.name === 'googleDriveUrl'){
+
+  // Handle custom validation function if provided
+  if (input.validate) {
+    validationRules.validate = input.validate;
+  }
+
+  // Validation rules for Google Drive URL
+  if (input.name === 'googleDriveUrl') {
     validationRules.pattern = {
       value: /^https:\/\/drive\.google\.com\/.+$/,
-      message: "Invalid Google Drive URL", // Pattern validation for Google Drive URL
+      message: 'Invalid Google Drive URL',
     };
   }
 
+  // Handle location field validation based on type
   if (input.name === 'location') {
     if (locationType === 'remote') {
       validationRules.pattern = {
         value: input.value,
-        message: input.errorMessage || "Invalid remote location URL",
+        message: input.errorMessage || 'Invalid remote location URL',
       };
     } else {
       validationRules.pattern = {
         value: input.addressValue,
-        message: input.addressError || "Invalid physical address",
+        message: input.addressError || 'Invalid physical address',
       };
     }
-  }
-  
-  const registerObj = {
-    ...register(input.name, validationRules),
+  } else if (input.value && input.name !== 'googleDriveUrl') {
+    // Handle other pattern validations
+    validationRules.pattern = {
+      value: input.value,
+      message:
+        input.errorMessage || `${input.label} is not in the correct format`,
+    };
   }
 
+  const registerObj = {
+    ...register(input.name, validationRules),
+  };
+
   return (
-  <Box sx={{ mb: 1 }} key={input.name}>
-    <Grid container alignItems="center">
-      <Grid item xs="auto" sx={{ pr: 3 }}>
-        <InputLabel
-          sx={{ width: 'max-content', ml: 0.5, mb: 0.5 }}
-          id={input.name}
-        >
-          {input.label}
-        </InputLabel>
+    <Box sx={{ mb: 1 }} key={input.name}>
+      <Grid container alignItems="center">
+        <Grid item xs="auto" sx={{ pr: 3 }}>
+          <InputLabel
+            sx={{ width: 'max-content', ml: 0.5, mb: 0.5 }}
+            id={input.name}
+          >
+            {input.label}
+          </InputLabel>
+        </Grid>
+        {input.name === 'location' && locationRadios}
       </Grid>
-      {input.name === 'location' && locationRadios}
-    </Grid>
-    <TextField
-      {...registerObj}
-      error={!!errors[input.name]}
-      type={input.type}
-      placeholder={input.placeholder}
-      helperText={`${errors[input.name]?.message || ' '}`}
-      disabled={isEdit ? !editMode || input.disabled : undefined} // handles edit mode for EditProjcet form
-    />
-  </Box>
+      <TextField
+        {...registerObj}
+        error={!!errors[input.name]}
+        type={input.type}
+        placeholder={input.placeholder}
+        helperText={`${errors[input.name]?.message || ' '}`}
+        disabled={isEdit ? !editMode || input.disabled : undefined} // handles edit mode for EditProjcet form
+      />
+    </Box>
   );
-};
+}
 
 export default ValidatedTextField;

@@ -1,7 +1,5 @@
-import React from 'react';
 import { AuthProvider } from './context/authContext';
 import { Route, Redirect, Switch } from 'react-router-dom';
-
 import Home from './pages/Home';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -26,14 +24,11 @@ import addProject from './components/manageProjects/addProject';
 import HealthCheck from './pages/HealthCheck';
 import SecretPassword from './pages/SecretPassword';
 import UserWelcome from './pages/UserWelcome';
-// Added User Permission Search component
-import UserPermissionSearch from './pages/UserPermissionSearch';
 import UserPermission from './pages/UserPermission';
 import OnboardOffboardVisibility from './pages/OnboardOffboardVisibility';
 
 import { Box, ThemeProvider } from '@mui/material';
 import theme from './theme';
-
 import './App.scss';
 
 /* 
@@ -45,6 +40,7 @@ import './App.scss';
    Return <ComponentName {...props} auth={auth} /> if user is logged in
 */
 import withAuth from './hooks/withAuth';
+import { SearchTextProvider } from './context/searchContext';
 
 const routes = [
   { path: '/', name: 'home', Component: Home },
@@ -69,7 +65,7 @@ const routes = [
   {
     path: '/users/permission-search',
     name: 'useradmin',
-    Component: UserPermission,
+    Component: withAuth(UserPermission),
   },
   {
     path: '/projects/visibility',
@@ -99,47 +95,49 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <AuthProvider>
-        <Box
-          sx={{
-            height: '100%',
-            width: '100vw',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            overflow: 'hidden',
-            maxHeight: '90vh',
-            margin: '5vh 0',
-          }}
-        >
+        <SearchTextProvider>
           <Box
             sx={{
-              position: 'relative',
-              maxWidth: '500px',
-              width: '100%',
-              backgroundColor: 'white',
+              height: '100%',
+              width: '100vw',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
               overflow: 'hidden',
-              borderRadius: '10px',
-              padding: '15px',
+              maxHeight: '90vh',
+              margin: '5vh 0',
             }}
           >
-            <Navbar />
             <Box
-              component="main"
               sx={{
-                height: 'calc(90vh - 160px)',
-                overflowY: 'scroll',
+                position: 'relative',
+                maxWidth: '500px',
+                width: '100%',
+                backgroundColor: 'white',
+                overflow: 'hidden',
+                borderRadius: '10px',
+                padding: '15px',
               }}
             >
-              <Switch>
-                {routes.map(({ path, Component }) => (
-                  <Route key={path} exact path={path} component={Component} />
-                ))}
-                <Redirect to="/" />
-              </Switch>
+              <Navbar />
+              <Box
+                component="main"
+                sx={{
+                  height: 'calc(90vh - 160px)',
+                  overflowY: 'scroll',
+                }}
+              >
+                <Switch>
+                  {routes.map(({ path, Component }) => (
+                    <Route key={path} exact path={path} component={Component} />
+                  ))}
+                  <Redirect to="/" />
+                </Switch>
+              </Box>
+              <Footer />
             </Box>
-            <Footer />
           </Box>
-        </Box>
+        </SearchTextProvider>
       </AuthProvider>
     </ThemeProvider>
   );
