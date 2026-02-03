@@ -35,7 +35,7 @@ router.get('/project/:id/:userId', (req, res) => {
   })
     .populate('userId')
     .then((teamMember) => {
-      if (!teamMember.projectId) {
+      if (!teamMember || teamMember.length === 0) {
         return res.sendStatus(400);
       } else {
         return res.status(200).send(teamMember);
@@ -65,10 +65,10 @@ router.get('/projectowner/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   ProjectTeamMember.create(req.body)
-  .then((teamMember) => {
-    return res.status(201).send(teamMember);
-  })
-  .catch((err) => {
+    .then((teamMember) => {
+      return res.status(201).send(teamMember);
+    })
+    .catch((err) => {
       console.log(err);
       return res.sendStatus(400);
     });
@@ -77,7 +77,7 @@ router.post('/', (req, res) => {
 router.patch('/:id', (req, res) => {
   ProjectTeamMember.findByIdAndUpdate(req.params.id, req.body)
     .then((edit) => res.json(edit))
-    .catch((err) => res.sendStatus(400));
+    .catch(() => res.sendStatus(400));
   // };
 });
 
