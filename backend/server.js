@@ -12,12 +12,7 @@ mongoose.Promise = global.Promise;
 let server;
 async function runServer(databaseUrl = CONFIG_DB.DATABASE_URL, port = CONFIG_DB.PORT) {
   await mongoose
-    .connect(databaseUrl, {
-      useNewUrlParser: true,
-      useCreateIndex: true,
-      useUnifiedTopology: true,
-      useFindAndModify: false,
-    })
+    .connect(databaseUrl)
     .catch((err) => err);
 
   server = app
@@ -48,35 +43,30 @@ async function closeServer() {
   });
 }
 
-function initial() {
-  Role.collection.estimatedDocumentCount((err, count) => {
-    if (!err && count === 0) {
-      new Role({
+async function initial() {
+  try {
+    const count = await Role.collection.estimatedDocumentCount();
+
+    if (count === 0) {
+      await new Role({
         name: "APP_USER",
-      }).save((err) => {
-        if (err) {
-          console.log("error", err);
-        }
+      }).save();
+      console.log("added 'user' to roles collection");
 
-        console.log("added 'user' to roles collection");
-      });
-
-      new Role({
+      await new Role({
         name: "APP_ADMIN",
-      }).save((err) => {
-        if (err) {
-          console.log("error", err);
-        }
-
-        console.log("added 'moderator' to roles collection");
-      });
+      }).save();
+      console.log("added 'moderator' to roles collection");
     }
-  });
+  } catch (err) {
+    console.log("error", err);
+  }
 }
 
 if (require.main === module) {
-  runServer().catch((err) => console.error(err));
-  initial();
+  runServer()
+    .then(() => initial())
+    .catch((err) => console.error(err));
 }
 
 module.exports = { app, runServer, closeServer };

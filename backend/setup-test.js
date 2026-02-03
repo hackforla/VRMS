@@ -1,6 +1,5 @@
 // test-setup.js
 const mongoose = require("mongoose");
-mongoose.set("useCreateIndex", true);
 mongoose.promise = global.Promise;
 
 const { MongoMemoryServer } = require("mongodb-memory-server");
@@ -40,15 +39,11 @@ module.exports = {
         instance: { dbName: databaseName },
       });
       const mongoUri = await mongoServer.getUri();
-      const opts = {
-        useNewUrlParser: true,
-        useFindAndModify: false,
-        useCreateIndex: true,
-        useUnifiedTopology: true,
-      };
-      await mongoose.connect(mongoUri, opts, (err) => {
-        if (err) console.error(err);
-      });
+      try {
+        await mongoose.connect(mongoUri);
+      } catch (err) {
+        console.error(err);
+      }
     });
 
     // Disconnect Mongoose

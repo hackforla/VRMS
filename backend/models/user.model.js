@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 // const bcrypt = require('bcrypt-nodejs');
 
 mongoose.Promise = global.Promise;
@@ -9,10 +9,10 @@ const userSchema = mongoose.Schema({
     lastName: { type: String },
   },
   email: { type: String, unique: true, lowercase: true },
-  accessLevel: { 
-    type: String, 
-    enum: ["user", "admin", "superadmin"], // restricts values to "user", "admin" and "superadmin"
-    default: "user" 
+  accessLevel: {
+    type: String,
+    enum: ['user', 'admin', 'superadmin'], // restricts values to "user", "admin" and "superadmin"
+    default: 'user',
   },
   createdDate: { type: Date, default: Date.now },
   currentRole: { type: String }, // will remove but need to update check-in form
@@ -23,11 +23,10 @@ const userSchema = mongoose.Schema({
   skillsToMatch: [{ type: String }], // skills the user either has or wants to learn - will use to match to projects
   firstAttended: { type: String },
   attendanceReason: { type: String },
-  githubHandle: { type: String },
   projects: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Project",
+      ref: 'Project',
     },
   ],
   githubHandle: { type: String }, // handle not including @, not the URL
@@ -40,7 +39,7 @@ const userSchema = mongoose.Schema({
   managedProjects: [{ type: String }], // Which projects managed by user.
   //currentProject: { type: String }              // no longer need this as we can get it from Project Team Member table
   // password: { type: String, required: true }
-  isActive: { type: Boolean, default: true }
+  isActive: { type: Boolean, default: true },
 });
 
 userSchema.methods.serialize = function () {
@@ -61,7 +60,6 @@ userSchema.methods.serialize = function () {
     skillsToMatch: this.skillsToMatch,
     firstAttended: this.firstAttended,
     attendanceReason: this.attendanceReason,
-    githubHandle: this.githubHandle,
     projects: this.projects,
     //currentProject: this.currentProject
     phone: this.phone,
@@ -71,10 +69,10 @@ userSchema.methods.serialize = function () {
     githubPublic2FA: this.githubPublic2FA,
     availability: this.availability,
     managedProjects: this.managedProjects,
-    isActive: this.isActive
+    isActive: this.isActive,
   };
 };
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model('User', userSchema);
 
 module.exports = { User };

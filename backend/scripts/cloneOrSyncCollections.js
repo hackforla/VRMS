@@ -69,8 +69,6 @@ async function connectDbs() {
   // Connect PROD using Mongoose
   await mongoose.connect(process.env.PROD_DB_URI, {
     dbName: PROD_DB_NAME,
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
   });
   // Connect DEV using MongoClient
   const dev = new MongoClient(process.env.DEV_DB_URI);
