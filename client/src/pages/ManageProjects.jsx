@@ -17,7 +17,6 @@ const PAGES = Object.freeze({
 
 // Added styles for MUI components
 const loadingStyle = {
-  "display": "none",
   "position": "absolute",
   "display": "flex",
   "flexDirection": "row",
