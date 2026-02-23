@@ -21,7 +21,6 @@ import PlusIcon from '../svg/PlusIcon.svg?react';
 import ValidatedTextField from './parts/form/ValidatedTextField';
 import TitledBox from './parts/boxes/TitledBox';
 import ChangesModal from './ChangesModal';
-import { ROLES } from '../../../shared/roles';
 
 /** STYLES
  *  -most TextField and InputLabel styles are controlled by the theme
@@ -70,7 +69,7 @@ export default function ProjectForm({
   const history = useHistory();
 
   // ----------------- States -----------------
-  const { hasMinimumRole } = useAuth();
+  const { isAdmin, isSuperAdmin } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [locationType, setLocationType] = useState('remote');
   // State to track the toggling from Project view to Edit Project View via edit icon.
@@ -236,7 +235,7 @@ export default function ProjectForm({
       <Box sx={{ textAlign: 'center' }}>
         <Typography variant="h1">{projectName}</Typography>
       </Box>
-      {hasMinimumRole(ROLES.ADMIN) ? (
+      {isAdmin() || isSuperAdmin() ? (
         <TitledBox
           title={editMode ? 'Editing Project' : 'Project Information'}
           badge={isEdit ? editIcon() : addIcon()}

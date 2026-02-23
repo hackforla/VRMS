@@ -36,7 +36,7 @@ const EditUsers = ({
   const [admin, setAdmin] = useState(isAdmin());
 
   // Boolean to check if the current user is the super admin
-  const superAdmin = isSuperAdmin;
+  const superAdmin = isSuperAdmin();
 
   const userName = `${userToEdit.name?.firstName} ${userToEdit.name?.lastName}`;
   const userEmail = userToEdit.email;
