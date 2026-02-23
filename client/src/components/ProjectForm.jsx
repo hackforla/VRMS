@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useForm, useFormState } from 'react-hook-form';
 import {
@@ -21,6 +21,7 @@ import PlusIcon from '../svg/PlusIcon.svg?react';
 import ValidatedTextField from './parts/form/ValidatedTextField';
 import TitledBox from './parts/boxes/TitledBox';
 import ChangesModal from './ChangesModal';
+import { ROLES } from '../../../shared/roles';
 
 /** STYLES
  *  -most TextField and InputLabel styles are controlled by the theme
@@ -28,18 +29,18 @@ import ChangesModal from './ChangesModal';
  *  -the rest are inline
  */
 
-export const StyledButton = styled(Button)(({ theme }) => ({
+export const StyledButton = styled(Button)(() => ({
   width: '150px',
 }));
 
-const StyledFormControlLabel = styled(FormControlLabel)(({ theme }) => ({
+const StyledFormControlLabel = styled(FormControlLabel)(() => ({
   width: 'max-content',
   '& .MuiFormControlLabel-label': {
     fontSize: '14px',
   },
 }));
 
-const StyledRadio = styled(Radio)(({ theme }) => ({
+const StyledRadio = styled(Radio)(() => ({
   padding: '0px 0px 0px 0px',
   marginRight: '.5rem',
 }));
@@ -69,7 +70,7 @@ export default function ProjectForm({
   const history = useHistory();
 
   // ----------------- States -----------------
-  const { auth } = useAuth();
+  const { hasMinimumRole } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [locationType, setLocationType] = useState('remote');
   // State to track the toggling from Project view to Edit Project View via edit icon.
@@ -149,7 +150,7 @@ export default function ProjectForm({
   };
 
   // Toggles the project view to edit mode change.
-  const handleEditMode = (event) => {
+  const handleEditMode = () => {
     setEditMode(!editMode);
     // React hook form method to reset data back to original values. Triggered when Edit Mode is cancelled.
     reset({
@@ -235,8 +236,7 @@ export default function ProjectForm({
       <Box sx={{ textAlign: 'center' }}>
         <Typography variant="h1">{projectName}</Typography>
       </Box>
-      {auth.user.accessLevel === 'admin' ||
-      auth.user.accessLevel == 'superadmin' ? (
+      {hasMinimumRole(ROLES.ADMIN) ? (
         <TitledBox
           title={editMode ? 'Editing Project' : 'Project Information'}
           badge={isEdit ? editIcon() : addIcon()}

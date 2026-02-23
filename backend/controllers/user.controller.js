@@ -286,21 +286,30 @@ UserController.verifySignIn = async function (req, res) {
 };
 
 UserController.verifyMe = async function (req, res) {
-  const user = await User.findById(req.userId);
-  return res.status(200).send(user);
+  return res.status(200).send(req.user);
 };
 
 UserController.logout = async function (req, res) {
-  await RefreshToken.deleteOne({ id: req.refreshToken.doc._id });
-  return res.clearCookie('token').status(200).send('Successfully logged out.');
+  try {
+    await RefreshToken.deleteOne({ _id: req.refreshToken._id });
+    return res.clearCookie('token').status(200).send('Successfully logged out.');
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send('Error occurred while logging out.');
+  }
 };
 
 UserController.refreshAccessToken = async function (req, res) {
   const accessToken = generateAccessToken(req.user, req.auth_origin);
+  const decoded = jwt.decode(accessToken);
+
   return res
     .cookie('token', accessToken, { httpOnly: true })
     .status(200)
-    .send('Access token refreshed.');
+    .json({
+      user: req.user,
+      expiresAt: decoded.exp * 1000, // Convert JWT exp (seconds) to milliseconds
+    });
 };
 
 // Update user's managedProjects

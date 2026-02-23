@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 
 const { ProjectController } = require('../controllers');
-const { AuthUtil } = require('../middleware');
+const { Auth } = require('../middleware');
 const { ROLES } = require('../../shared/roles');
 
-router.use(AuthUtil.authUser, AuthUtil.requireMinimumRole(ROLES.PROJECT_MANAGER));
+router.use(Auth.authUser, Auth.requireMinimumRole(ROLES.PROJECT_MANAGER));
 // The base is /api/projects
 router.get('/', ProjectController.project_list);
 

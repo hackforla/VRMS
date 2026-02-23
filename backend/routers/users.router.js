@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-
+const { Auth } = require('../middleware');
 const { UserController } = require('../controllers');
+const { ROLES } = require('../../shared/roles');
 
 // The base is /api/users
 router.get('/', UserController.user_list);
@@ -18,10 +19,18 @@ router.post('/', UserController.create);
 
 router.post('/bulk-updates', UserController.bulkUpdateManagedProjects);
 
-router.patch('/:UserId', UserController.update);
+router.patch(
+  '/:UserId',
+  [Auth.authUser, Auth.requireMinimumRole(ROLES.ADMIN)],
+  UserController.update,
+);
 
 router.patch('/:UserId/managedProjects', UserController.updateManagedProjects);
 
-router.delete('/:UserId', UserController.delete);
+router.delete(
+  '/:UserId',
+  [Auth.authUser, Auth.requireMinimumRole(ROLES.ADMIN)],
+  UserController.delete,
+);
 
 module.exports = router;

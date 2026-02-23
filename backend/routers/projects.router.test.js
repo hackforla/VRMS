@@ -1,7 +1,7 @@
 // Mock for Project controller
 jest.mock('../controllers/project.controller');
 
-// Mock AuthUtil.verifyCookie middleware
+// Mock Auth.verifyCookie middleware
 const mockVerifyCookie = jest.fn((req, res, next) => next());
 jest.mock('../middleware/auth.middleware', () => ({
   verifyCookie: mockVerifyCookie,

@@ -11,11 +11,11 @@ const refreshTokenSchema = mongoose.Schema({
     index: true,
   },
   hash: { type: String, required: true, unique: true, immutable: true },
-  createdAt: { type: Date, required: true, default: Date.now(), immutable: true },
+  createdAt: { type: Date, required: true, default: () => Date.now(), immutable: true },
   expiresAt: {
     type: Date,
     required: true,
-    default: Date.now() + CONFIG_AUTH.REFRESH_TOKEN_EXPIRATION_MS,
+    default: () => Date.now() + CONFIG_AUTH.REFRESH_TOKEN_EXPIRATION_MS,
   },
   deviceInfo: {
     ipAddress: String,

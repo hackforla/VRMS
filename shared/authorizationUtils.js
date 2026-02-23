@@ -24,7 +24,7 @@ const isSuperAdmin = (user) => {
 };
 
 const isAdmin = (user) => {
-  return hasAnyRole(user, ROLES.ADMIN, ROLES.SUPER_ADMIN);
+  return hasRole(user, ROLES.ADMIN);
 };
 
 const isProjectManager = (user) => {

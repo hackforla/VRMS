@@ -19,7 +19,7 @@ function generateAccessToken(user, auth_origin) {
       auth_origin: auth_origin,
     },
     SECRET_KEY,
-    { expiresIn: '30m' },
+    { expiresIn: CONFIG_AUTH.ACCESS_TOKEN_EXPIRATION },
   );
 }
 
@@ -104,8 +104,9 @@ async function authenticateRefreshToken(req, res, next) {
       return res.status(401).json({ error: 'User not found for this token' });
     }
 
-    // Attach user to request
+    // Attach user & refresh token to request for downstream handlers
     req.user = user;
+    req.refreshToken = tokenDoc;
 
     next();
   } catch (error) {
@@ -150,28 +151,6 @@ function requireMinimumRole(role) {
   };
 }
 
-function verifyToken(req, res, next) {
-  // Allow users to set token
-
-  let token = req.headers['x-access-token'] || req.headers['authorization'];
-  if (token.startsWith('Bearer ')) {
-    // Remove Bearer from string
-    token = token.slice(7, token.length);
-  }
-  if (!token) {
-    return res.sendStatus(403);
-  }
-
-  try {
-    const decoded = jwt.verify(token, CONFIG_AUTH.SECRET);
-    res.cookie('token', token, { httpOnly: true });
-    req.userId = decoded.id;
-    return next();
-  } catch (err) {
-    if (err) return res.sendStatus(401);
-  }
-}
-
 function verifyCookie(req, res, next) {
   jwt.verify(req.cookies.token, CONFIG_AUTH.SECRET, (err, decoded) => {
     if (err) {
@@ -194,6 +173,5 @@ module.exports = {
   generateRefreshToken,
   getClientIp,
   hashToken,
-  verifyToken,
   verifyCookie,
 };

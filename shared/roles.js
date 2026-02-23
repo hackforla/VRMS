@@ -7,6 +7,9 @@ const ROLES = Object.freeze({
   USER: "user",
 });
 
+// Define role hierarchy for minimum role checks
+// Higher number = more priviledged role
+// i.e admin has access to all project manager and user routes, but not super admin routes
 const ROLE_HIERARCHY = Object.freeze({
   [ROLES.USER]: 1,
   [ROLES.PROJECT_MANAGER]: 2,

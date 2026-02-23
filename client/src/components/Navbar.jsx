@@ -1,14 +1,14 @@
-import React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import HflaImg from '../svg/hflalogo.svg';
 import { Box, Button, Grid } from '@mui/material';
 import { styled } from '@mui/system';
 import theme from '../theme';
+import { ROLES } from '../../../shared/roles';
 
-const Navbar = (props) => {
+const Navbar = () => {
   // check user accessLevel and adjust link accordingly
-  const { auth } = useAuth();
+  const { auth, hasRole, hasMinimumRole, loggedIn } = useAuth();
 
   const StyledButton = styled(Button)({
     color: '#757575',
@@ -30,7 +30,7 @@ const Navbar = (props) => {
     <Box sx={{ my: 2, mx: { xs: 0, sm: 4 } }}>
       <Grid container>
         <Grid item>
-          <NavLink to={!auth?.user ? '/' : '/welcome'}>
+          <NavLink to={loggedIn() ? '/welcome' : '/'}>
             <Box
               component="img"
               src={HflaImg}
@@ -59,7 +59,7 @@ const Navbar = (props) => {
             </>
           )}
           {/* Admin auth -> Displays 2 links -> 'Users' and 'Projects'. */}
-          {(auth?.user?.accessLevel === 'admin' || auth?.user?.accessLevel === 'superadmin') && (
+          {hasMinimumRole(ROLES.ADMIN) && (
             <>
               <StyledButton component={NavLink} to="/users">
                 USERS
@@ -73,7 +73,7 @@ const Navbar = (props) => {
             </>
           )}
           {/* User auth -> Displays 1 link -> 'Projects' only. */}
-          {auth?.user?.accessLevel === 'user' && (
+          {hasRole(ROLES.USER) && (
             <>
               <StyledButton component={NavLink} to="/projects">
                 PROJECTS
