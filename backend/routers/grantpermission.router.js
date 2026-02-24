@@ -57,7 +57,12 @@ router.post("/googleDrive", async (req, res) => {
       return res.sendStatus(400);
     }
   } catch (err) {
-    return res.sendStatus(500);
+    // Check if error is a deliberate failure (success: false) vs a server error
+    if (err.success === false) {
+      return res.sendStatus(400);
+    } else {
+      return res.sendStatus(500);
+    }
   }
 });
 
@@ -66,6 +71,12 @@ router.post("/googleDrive", async (req, res) => {
 // Route accounts for onboaring admins or regular users
 router.post("/gitHub", async (req, res) => {
   const { teamName, accessLevel, handle } = req.body;
+  
+  // Validate required fields
+  if (!teamName || !accessLevel || !handle) {
+    return res.sendStatus(400);
+  }
+  
   const userHandle = handle;
   const baseTeamSlug = createSlug(teamName);
   const managerTeamSlug = baseTeamSlug + "-managers";
@@ -121,7 +132,7 @@ router.post("/gitHub", async (req, res) => {
 
     return res.status(200).send(result);
   } catch (err) {
-    return res.status(400);
+    return res.sendStatus(400);
   }
 });
 
@@ -377,12 +388,9 @@ function addToTeam(githubHandle, teamSlug) {
       },
     }
   )
-    .then((res) => ({
-      result: res.json(),
-      status: res.status,
-    }))
+    .then((res) => res.json().then((data) => ({ data, status: res.status })))
     .then((res) => {
-      if (res.result.message === "Not Found") {
+      if (res.data.message === "Not Found") {
         return "team not found"; // how can I just throw an error here instead?
       } else {
         console.log(res.status);
@@ -393,21 +401,32 @@ function addToTeam(githubHandle, teamSlug) {
 
 function check2FA(githubHandle) {
   return fetch(
-    `https://api.github.com/orgs/${githubOrganization}/members?filter=2fa_disabled`
-  ).then((no2FAMembersArr) => {
-    if (no2FAMembersArr.length) {
-      return !no2FAMembersArr.includes(
-        (member) => member.login === githubHandle
-      );
+    `https://api.github.com/orgs/${githubOrganization}/members?filter=2fa_disabled`,
+    {
+      headers: {
+        Authorization: `token ${process.env.GITHUB_TOKEN}`,
+      },
     }
-
-    return true;
-  });
+  )
+    .then((res) => res.json())
+    .then((no2FAMembersArr) => {
+      if (no2FAMembersArr.length) {
+        return !no2FAMembersArr.some(
+          (member) => member.login === githubHandle
+        );
+      }
+      return true;
+    });
 }
 
 function checkPublicMembership(githubHandle) {
   return fetch(
-    `https://api.github.com/orgs/${githubOrganization}/public_members/${githubHandle}`
+    `https://api.github.com/orgs/${githubOrganization}/public_members/${githubHandle}`,
+    {
+      headers: {
+        Authorization: `token ${process.env.GITHUB_TOKEN}`,
+      },
+    }
   ).then((res) => (res.status === 204 ? true : false));
 }
 
