@@ -4,6 +4,7 @@ const UserController = require('./user.controller');
 const ProjectController = require('./project.controller');
 const HealthCheckController = require('./healthCheck.controller');
 const RecurringEventController = require('./recurringEvent.controller')
+const FeatureFlagsController = require('./featureFlags.controller');
 
 module.exports = {
   EmailController,
@@ -11,5 +12,6 @@ module.exports = {
   UserController,
   ProjectController,
   HealthCheckController,
-  RecurringEventController
+  RecurringEventController,
+  FeatureFlagsController,
 };

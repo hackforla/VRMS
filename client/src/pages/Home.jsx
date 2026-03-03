@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import CheckInButtons from '../components/presentational/CheckInButtons';
 import CreateNewProfileButton from '../components/presentational/CreateNewProfileButton';
 import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend } from '../utils/globalSettings';
 import { CircularProgress, Box, Typography, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { useFeatureFlags } from '../context/featureFlagsContext';
 
 import '../sass/Home.scss';
 
@@ -29,6 +30,7 @@ const h4sx = {
 const Home = () => {
   const [events, setEvents] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState('');
+  const { flags } = useFeatureFlags();
 
   const handleEventChange = (e) => {
     setSelectedEvent(e.target.value);
@@ -66,6 +68,7 @@ const Home = () => {
 
   return (
       <Box className="home">
+        {flags.is_friendly && <div>sup</div>}
         <Box className="home-headers">
           <Typography variant='h1' sx={h1sx}>VRMS</Typography>
           <Typography variant='h2' sx={h2sx}>Volunteer Relationship Management System</Typography>

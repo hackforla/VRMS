@@ -44,7 +44,8 @@
     "morgan": "^1.10.0",
     "node-cron": "^2.0.3",
     "node-fetch": "^2.6.7",
-    "nodemailer": "^7.0.11"
+    "nodemailer": "^7.0.11",
+    "posthog-node": "^5.21.2"
   },
   "directories": {
     "test": "test"
