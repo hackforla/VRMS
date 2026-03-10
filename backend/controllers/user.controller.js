@@ -278,7 +278,10 @@ UserController.verifySignIn = async function (req, res) {
     res.cookie('token', accessToken, { httpOnly: true });
     res.cookie('refresh_token', refreshToken, { httpOnly: true });
 
-    return res.send(user);
+    return res.send({
+      user: user,
+      expiresAt: accessToken.exp * 1000, // Convert JWT exp (seconds) to milliseconds
+    });
   } catch (err) {
     console.error(err);
     return res.status(403);

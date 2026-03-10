@@ -2,10 +2,11 @@ const express = require('express');
 const router = express.Router();
 
 const { ProjectController } = require('../controllers');
-const { Auth } = require('../middleware');
-const { ROLES } = require('../../shared/roles');
+// const { Auth } = require('../middleware');
+// const { ROLES } = require('../../shared/roles');
 
-router.use(Auth.authUser, Auth.requireMinimumRole(ROLES.PROJECT_MANAGER));
+// Require user to be project manager or higher (commented out for now for current app to work succesfully without auth, will re-enable when auth is ready)
+// router.use(Auth.authUser, Auth.requireMinimumRole(ROLES.PROJECT_MANAGER));
 // The base is /api/projects
 router.get('/', ProjectController.project_list);
 

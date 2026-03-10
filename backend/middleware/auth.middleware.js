@@ -5,7 +5,7 @@ const { RefreshToken, User } = require('../models');
 const crypto = require('crypto');
 const AuthUtils = require('../../shared/authorizationUtils');
 
-const SECRET_KEY = process.env.JWT_SECRET;
+const SECRET = CONFIG_AUTH.REFRESH_SECRET;
 
 // Utility functions
 
@@ -18,7 +18,7 @@ function generateAccessToken(user, auth_origin) {
       accessLevel: user.accessLevel,
       auth_origin: auth_origin,
     },
-    SECRET_KEY,
+    SECRET,
     { expiresIn: CONFIG_AUTH.ACCESS_TOKEN_EXPIRATION },
   );
 }
@@ -59,7 +59,7 @@ async function authenticateAccessToken(req, res, next) {
       accessToken = accessToken.slice(7, accessToken.length);
     }
 
-    const decoded = jwt.verify(accessToken, SECRET_KEY);
+    const decoded = jwt.verify(accessToken, SECRET);
     // Attach user info to request
     req.user = decoded;
 
@@ -152,7 +152,7 @@ function requireMinimumRole(role) {
 }
 
 function verifyCookie(req, res, next) {
-  jwt.verify(req.cookies.token, CONFIG_AUTH.SECRET, (err, decoded) => {
+  jwt.verify(req.cookies.token, SECRET, (err, decoded) => {
     if (err) {
       return res.sendStatus(401);
     }
