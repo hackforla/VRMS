@@ -109,15 +109,15 @@ ProjectController.bulkUpdateManagedByUsers = async function (req, res) {
   // Convert string IDs to ObjectId in bulkOps
   bulkOps.forEach((op) => {
     if (op?.updateOne?.filter._id) {
-      op.updateOne.filter._id = ObjectId(op.updateOne.filter._id);
+      op.updateOne.filter._id = new ObjectId(op.updateOne.filter._id);
     }
     if (op?.updateOne?.update) {
       const update = op.updateOne.update;
       if (update?.$addToSet?.managedByUsers) {
-        update.$addToSet.managedByUsers = ObjectId(update.$addToSet.managedByUsers);
+        update.$addToSet.managedByUsers = new ObjectId(update.$addToSet.managedByUsers);
       }
       if (update?.$pull?.managedByUsers) {
-        update.$pull.managedByUsers = ObjectId(update.$pull.managedByUsers);
+        update.$pull.managedByUsers = new ObjectId(update.$pull.managedByUsers);
       }
     }
   });

@@ -28,7 +28,6 @@ describe('Unit tests for User Model', () => {
         skillsToMatch: ['Jest', 'Node.js'],
         firstAttended: '2025-01-01',
         attendanceReason: 'To learn and contribute',
-        githubHandle: 'mockuser',
         projects: ['ProjectId1', 'ProjectId2'],
         phone: '123-456-7890',
         textingOk: true,
@@ -62,7 +61,6 @@ describe('Unit tests for User Model', () => {
         skillsToMatch: mockUser.skillsToMatch,
         firstAttended: mockUser.firstAttended,
         attendanceReason: mockUser.attendanceReason,
-        githubHandle: mockUser.githubHandle,
         projects: mockUser.projects,
         phone: mockUser.phone,
         textingOk: mockUser.textingOk,
@@ -107,7 +105,6 @@ describe('Unit tests for User Model', () => {
       // Tests
       expect(mockUser.email).toBe(uppercaseEmail.toLowerCase());
     });
-
 
     it('should pass validation with valid user data', async () => {
       // Create a mock user with valid data
