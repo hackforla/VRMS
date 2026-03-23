@@ -48,7 +48,7 @@ const Auth = () => {
       const userData = await checkUser(email, LOG_IN);
       if (userData) {
         if (
-          userData.user.accessLevel !== ADMIN &&
+          userData.user.accessLevel !== ADMIN && // if he is not an admin, is a user, has no managed proejcts, he doesn't have access to view the dashboard
           userData.user.accessLevel === USER &&
           userData.user.managedProjects.length === 0
         ) {

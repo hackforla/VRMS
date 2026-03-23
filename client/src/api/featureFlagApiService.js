@@ -10,6 +10,7 @@ export const fetchFeatureFlags = async () => {
   const response = await fetch(BASE_URL, {
     method: 'GET',
     headers: DEFAULT_HEADERS,
+    credentials: 'include'
   });
 
   return response.json();

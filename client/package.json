@@ -25,6 +25,7 @@
     "minimist": "^1.2.6",
     "moment": "^2.29.2",
     "moment-recur": "^1.0.7",
+    "posthog-js": "^1.360.2",
     "react": "^18.2.0",
     "react-datepicker": "^4.16.0",
     "react-dom": "^18.2.0",

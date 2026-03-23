@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import {fetchFeatureFlags} from '../api/featureFlag';
+import {fetchFeatureFlags} from '../api/featureFlagApiService';
 
 const FeatureFlagContext = createContext();
 
