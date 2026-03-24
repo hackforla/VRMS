@@ -6,7 +6,6 @@ import { findNextOccuranceOfDay } from './utilities/findNextDayOccuranceOfDay';
 import { addDurationToTime } from './utilities/addDurationToTime';
 import { timeConvertFromForm } from './utilities/timeConvertFromForm';
 import validateEventForm from './utilities/validateEventForm';
-import { Box, Button, Modal } from '@mui/material';
 
 // This component displays current meeting times for selected project and offers the option to edit those times.
 const EditMeetingTimes = ({
@@ -17,7 +16,6 @@ const EditMeetingTimes = ({
   updateRecurringEvent,
 }) => {
   const [formErrors, setFormErrors] = useState({});
-  const open = Boolean(selectedEvent);
   const { showSnackbar } = useSnackbar();
 
   const handleClose = () => {
@@ -25,68 +23,69 @@ const EditMeetingTimes = ({
     setSelectedEvent(null);
   };
 
-  const handleEventUpdate = (eventID, values) => async () => {
-    const errors = validateEventForm(values, projectToEdit);
-    if (!errors) {
-      let theUpdatedEvent = {};
+  const handleEventUpdate =
+    (eventID, values, startTimeOriginal, durationOriginal) => async () => {
+      const errors = validateEventForm(values, projectToEdit);
+      if (!errors) {
+        let theUpdatedEvent = {};
 
-      if (values.name) {
+        if (values.name) {
+          theUpdatedEvent = {
+            ...theUpdatedEvent,
+            name: values.name,
+          };
+        }
+
+        if (values.eventType) {
+          theUpdatedEvent = {
+            ...theUpdatedEvent,
+            eventType: values.eventType,
+          };
+        }
+
         theUpdatedEvent = {
           ...theUpdatedEvent,
-          name: values.name,
+          description: values.description,
         };
-      }
 
-      if (values.eventType) {
+        if (values.videoConferenceLink) {
+          theUpdatedEvent = {
+            ...theUpdatedEvent,
+            videoConferenceLink: values.videoConferenceLink,
+          };
+        }
+
+        // Set updated date to today and add it to the object
+        const updatedDate = new Date().toISOString();
         theUpdatedEvent = {
           ...theUpdatedEvent,
-          eventType: values.eventType,
+          updatedDate,
         };
-      }
 
-      theUpdatedEvent = {
-        ...theUpdatedEvent,
-        description: values.description,
-      };
+        // Find next occurance of Day in the future
+        // Assign new start time and end time
+        const date = findNextOccuranceOfDay(values.day);
+        const startTimeDate = timeConvertFromForm(date, values.startTime);
+        const endTime = addDurationToTime(startTimeDate, values.duration);
 
-      if (values.videoConferenceLink) {
+        // Revert timestamps to GMT
+        const startDateTimeGMT = new Date(startTimeDate).toISOString();
+        const endTimeGMT = new Date(endTime).toISOString();
+
         theUpdatedEvent = {
           ...theUpdatedEvent,
-          videoConferenceLink: values.videoConferenceLink,
+          date: startDateTimeGMT,
+          startTime: startDateTimeGMT,
+          endTime: endTimeGMT,
+          duration: values.duration,
         };
+
+        updateRecurringEvent(theUpdatedEvent, eventID);
+        showSnackbar('Recurring event updated', 'info');
+        handleClose();
       }
-
-      // Set updated date to today and add it to the object
-      const updatedDate = new Date().toISOString();
-      theUpdatedEvent = {
-        ...theUpdatedEvent,
-        updatedDate,
-      };
-
-      // Find next occurrence of Day in the future
-      // Assign new start time and end time
-      const date = findNextOccuranceOfDay(values.day);
-      const startTimeDate = timeConvertFromForm(date, values.startTime);
-      const endTime = addDurationToTime(startTimeDate, values.duration);
-
-      // Revert timestamps to GMT
-      const startDateTimeGMT = new Date(startTimeDate).toISOString();
-      const endTimeGMT = new Date(endTime).toISOString();
-
-      theUpdatedEvent = {
-        ...theUpdatedEvent,
-        date: startDateTimeGMT,
-        startTime: startDateTimeGMT,
-        endTime: endTimeGMT,
-        duration: values.duration,
-      };
-
-      updateRecurringEvent(theUpdatedEvent, eventID);
-      showSnackbar('Recurring event updated', 'info');
-      handleClose();
-    }
-    setFormErrors(errors);
-  };
+      setFormErrors(errors);
+    };
 
   const handleEventDelete = (eventID) => async () => {
     deleteRecurringEvent(eventID);
@@ -95,43 +94,25 @@ const EditMeetingTimes = ({
   };
 
   return (
-    <Modal open={open} onClose={handleClose}>
-      <Box
-        className="modal-box"
-        sx={{
-          position: 'absolute',
-          top: '42%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: 450,
-          bgcolor: 'background.paper',
-          border: '2px solid #000',
-          boxShadow: 24,
-          pt: 4,
-          px: 4,
-          pb: 0,
-        }}
-      >
-        {selectedEvent && (
-          <EditableMeeting
-            key={selectedEvent.event_id}
-            eventId={selectedEvent.event_id}
-            eventName={selectedEvent.name}
-            eventDescription={selectedEvent.description}
-            eventType={selectedEvent.eventType}
-            eventDayNumber={selectedEvent.dayOfTheWeekNumber}
-            eventStartTime={selectedEvent.startTime}
-            eventEndTime={selectedEvent.endTime}
-            eventDuration={selectedEvent.duration}
-            videoConferenceLink={selectedEvent.videoConferenceLink}
-            formErrors={formErrors}
-            handleEventUpdate={handleEventUpdate}
-            handleEventDelete={handleEventDelete}
-          />
-        )}
-        <Button onClick={handleClose}>Close</Button>
-      </Box>
-    </Modal>
+    <div>
+      {selectedEvent && (
+        <EditableMeeting
+          key={selectedEvent.event_id}
+          eventId={selectedEvent.event_id}
+          eventName={selectedEvent.name}
+          eventDescription={selectedEvent.description}
+          eventType={selectedEvent.eventType}
+          eventDayNumber={selectedEvent.dayOfTheWeekNumber}
+          eventStartTime={selectedEvent.startTime}
+          eventEndTime={selectedEvent.endTime}
+          eventDuration={selectedEvent.duration}
+          videoConferenceLink={selectedEvent.videoConferenceLink}
+          formErrors={formErrors}
+          handleEventUpdate={handleEventUpdate}
+          handleEventDelete={handleEventDelete}
+        />
+      )}
+    </div>
   );
 };
 export default EditMeetingTimes;
