@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom';
-import { useHistory } from 'react-router-dom';
+import { useState } from 'react';
+import { Redirect, useHistory } from 'react-router-dom';
 import { checkUser, checkAuth } from '../../services/user.service';
-import { authLevelRedirect } from '../../utils/authUtils';
 import { Typography, Button, FormControl, Box, TextField } from '@mui/material';
 
 import useAuth from '../../hooks/useAuth';
@@ -18,7 +16,7 @@ const Auth = () => {
   const pattern = /\b[a-z0-9._]+@[a-z0-9.-]+\.[a-z]{2,4}\b/i;
 
   const history = useHistory();
-  const { auth } = useAuth();
+  const { auth, getLoginRedirect } = useAuth();
 
   const [email, setEmail] = useState('');
   const [isDisabled, setIsDisabled] = useState(true);
@@ -55,7 +53,7 @@ const Auth = () => {
           userData.user.managedProjects.length === 0
         ) {
           showError(
-            "You don't have the correct access level to view the dashboard"
+            "You don't have the correct access level to view the dashboard",
           );
           return;
         }
@@ -65,12 +63,12 @@ const Auth = () => {
           history.push('/emailsent');
         } else {
           showError(
-            'We don’t recognize your email address. Please, create an account.'
+            'We don’t recognize your email address. Please, create an account.',
           );
         }
       } else {
         showError(
-          'We don’t recognize your email address. Please, create an account.'
+          'We don’t recognize your email address. Please, create an account.',
         );
       }
     }
@@ -90,13 +88,9 @@ const Auth = () => {
   }
 
   // This allows users who are not admin, but are allowed to manage projects, to login
-  let loginRedirect = '';
-  if (auth?.user) {
-    loginRedirect = authLevelRedirect(auth.user);
-  }
 
   return auth?.user ? (
-    <Redirect to={loginRedirect} />
+    <Redirect to={getLoginRedirect()} />
   ) : (
     <div className="flex-container">
       <div className="adminlogin-container">

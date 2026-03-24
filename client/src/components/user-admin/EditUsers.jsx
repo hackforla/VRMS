@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Grid,
   FormGroup,
@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import '../../sass/UserAdmin.scss';
 import useAuth from '../../hooks/useAuth';
+import { ROLES } from '../../../../shared/roles';
 
 // child of UserAdmin. Displays form to update users.
 const EditUsers = ({
@@ -27,14 +28,15 @@ const EditUsers = ({
   updateUserActiveStatus,
   updateUserAccessLevel,
 }) => {
+  const { isAdmin, isSuperAdmin } = useAuth();
+
   const [userManagedProjects, setUserManagedProjects] = useState([]); //  The projects that the selected user is assigned
   const [projectValue, setProjectValue] = useState(''); // State and handler for form in EditUsers
   const [isActive, setIsActive] = useState(userToEdit.isActive);
-  const [isAdmin, setIsAdmin] = useState(userToEdit.accessLevel === 'admin');
-  const { auth } = useAuth();
+  const [admin, setAdmin] = useState(isAdmin());
 
   // Boolean to check if the current user is the super admin
-  const isSuperAdmin = userToEdit.accessLevel === 'superadmin';
+  const superAdmin = isSuperAdmin();
 
   const userName = `${userToEdit.name?.firstName} ${userToEdit.name?.lastName}`;
   const userEmail = userToEdit.email;
@@ -50,14 +52,14 @@ const EditUsers = ({
   }, [userToEdit]);
 
   const userProjectsToDisplay = activeProjects.filter((item) =>
-    userProjects.includes(item[0])
+    userProjects.includes(item[0]),
   );
 
   const onSubmit = (event) => {
     event.preventDefault();
 
     if (
-      !isSuperAdmin &&
+      !superAdmin &&
       projectValue.length > 0 &&
       projectValue !== 'default' &&
       !userManagedProjects.includes(projectValue)
@@ -72,26 +74,26 @@ const EditUsers = ({
   };
 
   const handleRemoveProject = (projectToRemove) => {
-    if (!isSuperAdmin && userManagedProjects.length > 0) {
+    if (!superAdmin && userManagedProjects.length > 0) {
       const newProjects = userManagedProjects.filter(
-        (p) => p !== projectToRemove
+        (p) => p !== projectToRemove,
       );
       updateUserDb(userToEdit, projectToRemove, 'remove');
       setUserManagedProjects(newProjects);
     }
   };
-  
+
   const handleSetIsActive = () => {
-    if (!isSuperAdmin) {
+    if (!superAdmin) {
       setIsActive(!isActive);
       updateUserActiveStatus(userToEdit, !isActive);
     }
   };
 
   const handleSetAccessLevel = () => {
-    if (!isSuperAdmin) {
-      const newAccessLevel = isAdmin ? 'user' : 'admin';
-      setIsAdmin(!isAdmin);
+    if (!superAdmin) {
+      const newAccessLevel = admin ? ROLES.USER : ROLES.ADMIN;
+      setAdmin(!admin);
       updateUserAccessLevel(userToEdit, newAccessLevel);
     }
   };
@@ -110,7 +112,7 @@ const EditUsers = ({
             <Switch
               checked={isActive}
               onChange={handleSetIsActive}
-              disabled={isSuperAdmin}
+              disabled={superAdmin}
             />
           }
           label={isActive.toString()}
@@ -124,13 +126,12 @@ const EditUsers = ({
           sx={{ marginLeft: 1 }}
           control={
             <Switch
-              checked={isAdmin || isSuperAdmin}
+              checked={admin || superAdmin}
               onChange={handleSetAccessLevel}
-              disabled={isSuperAdmin || userToEdit._id === auth?.user._id}
-              sx={{ cursor: (isSuperAdmin || userToEdit._id === auth?.user._id) ? "not-allowed" : "pointer" }}
+              disabled={superAdmin}
             />
           }
-          label={isAdmin || isSuperAdmin ? 'Yes' : 'No'}
+          label={admin || superAdmin ? 'Yes' : 'No'}
         />
       </FormGroup>
       <Typography variant="body1">Projects:</Typography>
@@ -147,7 +148,7 @@ const EditUsers = ({
                   color="error"
                   onClick={() => handleRemoveProject(result[0])}
                   fullWidth
-                  disabled={isSuperAdmin}
+                  disabled={superAdmin}
                 >
                   (Remove)
                 </Button>
@@ -164,7 +165,7 @@ const EditUsers = ({
           value={projectValue}
           label="Select a project"
           onChange={(event) => setProjectValue(event.target.value)}
-          disabled={isSuperAdmin}
+          disabled={superAdmin}
         >
           <MenuItem value="default">Select a project..</MenuItem>
           {activeProjects.map((result) => (
@@ -177,7 +178,7 @@ const EditUsers = ({
           variant="contained"
           onClick={onSubmit}
           style={{ marginTop: '1rem' }}
-          disabled={isSuperAdmin}
+          disabled={superAdmin}
         >
           Add project
         </Button>

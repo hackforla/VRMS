@@ -4,7 +4,13 @@ const { ObjectId } = require('mongodb');
 const EmailController = require('./email.controller');
 const { CONFIG_AUTH } = require('../config');
 
-const { User, Project } = require('../models');
+const { User, Project, RefreshToken } = require('../models');
+const {
+  generateRefreshToken,
+  getClientIp,
+  hashToken,
+  generateAccessToken,
+} = require('../middleware/auth.middleware');
 
 const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
 
@@ -193,18 +199,7 @@ UserController.delete = async function (req, res) {
   }
 };
 
-function generateAccessToken(user, auth_origin) {
-  // expires after half and hour (1800 seconds = 30 minutes)
-  return jwt.sign(
-    { id: user.id, role: user.accessLevel, auth_origin: auth_origin },
-    CONFIG_AUTH.SECRET,
-    {
-      expiresIn: `${CONFIG_AUTH.TOKEN_EXPIRATION_SEC}s`,
-    },
-  );
-}
-
-UserController.createUser = async function (req, res) {
+UserController.createUser = function (req, res) {
   const { firstName, lastName, email } = req.body;
   const { origin } = req.headers;
 
@@ -266,8 +261,26 @@ UserController.verifySignIn = async function (req, res) {
   try {
     const payload = jwt.verify(token, CONFIG_AUTH.SECRET);
     const user = await User.findById(payload.id);
-    res.cookie('token', token, { httpOnly: true });
-    return res.send(user);
+    const refreshToken = generateRefreshToken();
+    const accessToken = generateAccessToken(user, payload.auth_origin);
+    const ipAddress = getClientIp(req);
+
+    await RefreshToken.create({
+      userId: user._id,
+      hash: hashToken(refreshToken),
+      deviceInfo: {
+        deviceType: req.headers['user-agent'],
+        ipAddress: ipAddress,
+      },
+    });
+
+    res.cookie('token', accessToken, { httpOnly: true });
+    res.cookie('refresh_token', refreshToken, { httpOnly: true });
+
+    return res.send({
+      user: user,
+      expiresAt: accessToken.exp * 1000, // Convert JWT exp (seconds) to milliseconds
+    });
   } catch (err) {
     console.error(err);
     return res.status(403);
@@ -275,12 +288,30 @@ UserController.verifySignIn = async function (req, res) {
 };
 
 UserController.verifyMe = async function (req, res) {
-  const user = await User.findById(req.userId);
-  return res.status(200).send(user);
+  return res.status(200).send(req.user);
 };
 
 UserController.logout = async function (req, res) {
-  return res.clearCookie('token').status(200).send('Successfully logged out.');
+  try {
+    await RefreshToken.deleteOne({ _id: req.refreshToken._id });
+    return res.clearCookie('token').status(200).send('Successfully logged out.');
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send('Error occurred while logging out.');
+  }
+};
+
+UserController.refreshAccessToken = async function (req, res) {
+  const accessToken = generateAccessToken(req.user, req.auth_origin);
+  const decoded = jwt.decode(accessToken);
+
+  return res
+    .cookie('token', accessToken, { httpOnly: true })
+    .status(200)
+    .json({
+      user: req.user,
+      expiresAt: decoded.exp * 1000, // Convert JWT exp (seconds) to milliseconds
+    });
 };
 
 // Update user's managedProjects

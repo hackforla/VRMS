@@ -14,6 +14,7 @@ const userSchema = mongoose.Schema({
     enum: ['user', 'admin', 'superadmin'], // restricts values to "user", "admin" and "superadmin"
     default: 'user',
   },
+  role: { type: String },
   createdDate: { type: Date, default: Date.now },
   currentRole: { type: String }, // will remove but need to update check-in form
   desiredRole: { type: String }, // will remove but need to update check-in form

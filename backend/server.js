@@ -1,7 +1,7 @@
-const app = require("./app");
-const mongoose = require("mongoose");
+const app = require('./app');
+const mongoose = require('mongoose');
 
-const { Role } = require("./models");
+const { Role } = require('./models');
 
 // Load config variables
 const { CONFIG_DB } = require('./config/');
@@ -17,11 +17,9 @@ async function runServer(databaseUrl = CONFIG_DB.DATABASE_URL, port = CONFIG_DB.
 
   server = app
     .listen(port, () => {
-      console.log(
-        `Mongoose connected from runServer() and is listening on ${port}`
-      );
+      console.log(`Mongoose connected from runServer() and is listening on ${port}`);
     })
-    .on("error", (err) => {
+    .on('error', (err) => {
       mongoose.disconnect();
       return err;
     });
@@ -30,7 +28,7 @@ async function runServer(databaseUrl = CONFIG_DB.DATABASE_URL, port = CONFIG_DB.
 async function closeServer() {
   await mongoose.disconnect().then(() => {
     return new Promise((resolve, reject) => {
-      console.log("Closing Mongoose connection. Bye");
+      console.log('Closing Mongoose connection. Bye');
 
       server.close((err) => {
         if (err) {

@@ -2,25 +2,28 @@ const express = require('express');
 const router = express.Router();
 
 const { ProjectController } = require('../controllers');
-const { AuthUtil } = require('../middleware');
+// const { Auth } = require('../middleware');
+// const { ROLES } = require('../../shared/roles');
 
+// Require user to be project manager or higher (commented out for now for current app to work succesfully without auth, will re-enable when auth is ready)
+// router.use(Auth.authUser, Auth.requireMinimumRole(ROLES.PROJECT_MANAGER));
 // The base is /api/projects
 router.get('/', ProjectController.project_list);
 
 // Its a put because we have to send the PM projects to be filtered here
 router.put('/', ProjectController.pm_filtered_projects);
 
-router.post('/', AuthUtil.verifyCookie, ProjectController.create);
+router.post('/', ProjectController.create);
 
-router.get('/:ProjectId', AuthUtil.verifyCookie, ProjectController.project_by_id);
+router.get('/:ProjectId', ProjectController.project_by_id);
 
-router.put('/:ProjectId', AuthUtil.verifyCookie, ProjectController.update);
+router.put('/:ProjectId', ProjectController.update);
 
 // Update project's managedByUsers in db
-router.patch('/:ProjectId', AuthUtil.verifyCookie, ProjectController.updateManagedByUsers);
+router.patch('/:ProjectId', ProjectController.updateManagedByUsers);
 
 // Bulk update for editing project members
-router.post('/bulk-updates', AuthUtil.verifyCookie, ProjectController.bulkUpdateManagedByUsers);
+router.post('/bulk-updates', ProjectController.bulkUpdateManagedByUsers);
 
 // Update onboard/offboard visibility for a project
 router.patch('/:ProjectId/visibility', AuthUtil.verifyCookie, ProjectController.updateOnboardOffboardVisibility);

@@ -4,11 +4,10 @@ const request = supertest(app);
 const jwt = require('jsonwebtoken');
 const { CONFIG_AUTH } = require('../config');
 
-
 const { setupDB } = require('../setup-test');
 setupDB('api-projects');
 
-const { Project, User } = require('../models');
+const { User } = require('../models');
 const CONFIG = require('../config/auth.config');
 
 const headers = {};
@@ -18,9 +17,8 @@ headers.authorization = 'Bearer sometoken';
 
 let token;
 
-
 describe('CREATE', () => {
-  beforeAll( async () => {
+  beforeAll(async () => {
     const submittedData = {
       name: {
         firstName: 'test',
@@ -32,12 +30,12 @@ describe('CREATE', () => {
     const auth_origin = 'TEST';
     token = jwt.sign(
       { id: user.id, role: user.accessLevel, auth_origin },
-      CONFIG_AUTH.SECRET,
+      CONFIG_AUTH.TOKEN_SECRET,
       {
-        expiresIn: `${CONFIG_AUTH.TOKEN_EXPIRATION_SEC}s`,
+        expiresIn: `${CONFIG_AUTH.ACCESS_TOKEN_EXPIRATION_SEC}s`,
       },
     );
-  })
+  });
   test('Create a Project with POST to /api/projects/ without token', async (done) => {
     // Test Data
     const submittedData = {
@@ -45,10 +43,7 @@ describe('CREATE', () => {
     };
 
     // Submit a project
-    const res = await request
-      .post('/api/projects/')
-      .set(headers)
-      .send(submittedData);
+    const res = await request.post('/api/projects/').set(headers).send(submittedData);
     expect(res.status).toBe(401);
     done();
   });
@@ -63,7 +58,7 @@ describe('CREATE', () => {
     const res = await request
       .post('/api/projects/')
       .set(headers)
-      .set('Cookie', [`token=${token}`] )
+      .set('Cookie', [`token=${token}`])
       .send(submittedData);
     expect(res.status).toBe(201);
     done();
@@ -72,27 +67,27 @@ describe('CREATE', () => {
 
 describe('READ', () => {
   test('Get all projects with GET to /api/projects/', async (done) => {
-      // Test Data
-      const submittedData = {
-        name: 'projectName',
-      };
+    // Test Data
+    const submittedData = {
+      name: 'projectName',
+    };
 
-      // Submit a project
-      const res = await request
-        .post('/api/projects/')
-        .set(headers)
-        .set('Cookie', [`token=${token}`])
-        .send(submittedData);
-      expect(res.status).toBe(201);
+    // Submit a project
+    const res = await request
+      .post('/api/projects/')
+      .set(headers)
+      .set('Cookie', [`token=${token}`])
+      .send(submittedData);
+    expect(res.status).toBe(201);
 
-      // Get all projects
-      const res2 = await request.get('/api/projects/').set(headers);
-      expect(res2.status).toBe(200);
+    // Get all projects
+    const res2 = await request.get('/api/projects/').set(headers);
+    expect(res2.status).toBe(200);
 
-      const APIData = res2.body[0];
-      expect(APIData.name).toBe(submittedData.name);
-      done();
-  });;
+    const APIData = res2.body[0];
+    expect(APIData.name).toBe(submittedData.name);
+    done();
+  });
 });
 
 describe('UPDATE', () => {
@@ -108,12 +103,12 @@ describe('UPDATE', () => {
     const auth_origin = 'TEST';
     token = jwt.sign(
       { id: user.id, role: user.accessLevel, auth_origin },
-      CONFIG_AUTH.SECRET,
+      CONFIG_AUTH.TOKEN_SECRET,
       {
-        expiresIn: `${CONFIG_AUTH.TOKEN_EXPIRATION_SEC}s`,
+        expiresIn: `${CONFIG_AUTH.ACCESS_TOKEN_EXPIRATION_SEC}s`,
       },
     );
-  })
+  });
   test('Update a project with PATCH to /api/projects/:id without a token', async (done) => {
     // Test Data
     const submittedData = {
@@ -140,8 +135,7 @@ describe('UPDATE', () => {
     expect(res2.status).toBe(401);
 
     // Get project
-    const res3 = await request.get(`/api/projects/${res.body._id}`)
-    .set(headers);
+    const res3 = await request.get(`/api/projects/${res.body._id}`).set(headers);
     expect(res3.status).toBe(200);
     done();
   });
@@ -169,12 +163,13 @@ describe('UPDATE', () => {
       .set(headers)
       .set('Cookie', [`token=${token}`])
       .send(updatedDataPayload);
-    expect(res2.status).toBe(200)
+    expect(res2.status).toBe(200);
 
     // Get project
-    const res3 = await request.get(`/api/projects/${res.body._id}`)
-    .set(headers)
-    .set('Cookie', [`token=${token}`])
+    const res3 = await request
+      .get(`/api/projects/${res.body._id}`)
+      .set(headers)
+      .set('Cookie', [`token=${token}`]);
     expect(res3.status).toBe(200);
 
     const APIData = res3.body;
@@ -196,12 +191,12 @@ describe('DELETE', () => {
     const auth_origin = 'TEST';
     token = jwt.sign(
       { id: user.id, role: user.accessLevel, auth_origin },
-      CONFIG_AUTH.SECRET,
+      CONFIG_AUTH.TOKEN_SECRET,
       {
-        expiresIn: `${CONFIG_AUTH.TOKEN_EXPIRATION_SEC}s`,
+        expiresIn: `${CONFIG_AUTH.ACCESS_TOKEN_EXPIRATION_SEC}s`,
       },
     );
-  })
+  });
   test('Delete a project with POST to /api/projects/:id without a token', async (done) => {
     // Test Data
     const submittedData = {
@@ -217,11 +212,10 @@ describe('DELETE', () => {
     expect(res.status).toBe(201);
 
     // Delete project
-    const res2 = await request.patch(`/api/projects/${res.body._id}`)
-    .set(headers);
+    const res2 = await request.patch(`/api/projects/${res.body._id}`).set(headers);
     expect(res2.status).toBe(401);
     done();
-});
+  });
   test('Delete a project with POST to /api/projects/:id with a token', async (done) => {
     // Test Data
     const submittedData = {
@@ -237,10 +231,11 @@ describe('DELETE', () => {
     expect(res.status).toBe(201);
 
     // Delete project
-    const res2 = await request.patch(`/api/projects/${res.body._id}`)
-    .set(headers)
-    .set('Cookie', [`token=${token}`])
+    const res2 = await request
+      .patch(`/api/projects/${res.body._id}`)
+      .set(headers)
+      .set('Cookie', [`token=${token}`]);
     expect(res2.status).toBe(200);
     done();
-});
+  });
 });

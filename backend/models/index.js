@@ -6,8 +6,9 @@ const { Question } = require('./question.model');
 const { RecurringEvent } = require('./recurringEvent.model');
 const { Role } = require('./role.model');
 const { User } = require('./user.model');
+const { RefreshToken } = require('./refreshToken.model');
 
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 module.exports = {
@@ -19,4 +20,5 @@ module.exports = {
   RecurringEvent,
   Role,
   User,
+  RefreshToken,
 };
