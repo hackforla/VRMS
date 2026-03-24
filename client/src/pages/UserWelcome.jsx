@@ -1,22 +1,24 @@
-import React from 'react';
-import { Typography, Box, Link } from '@mui/material';
+import { Box, Link, Typography } from '@mui/material';
+import React, { useEffect } from 'react';
+import { useFeatureFlags } from '../context/featureFlagsContext';
 import useAuth from '../hooks/useAuth';
 
 export default function UserWelcome() {
   const { auth } = useAuth();
+  const { flags } = useFeatureFlags();
 
   const user = auth?.user;
 
   const firstName = user?.name.firstName;
 
   console.log('AUTH', auth);
+  console.log(flags, 'flags', 'we have user logged in at this point');
+  console.log(user, 'user');
   return (
     <Box textAlign="center" sx={{ pt: 5 }}>
       <Typography variant="h1">Welcome {firstName}!</Typography>
       <Box sx={{ fontSize: '16px' }}>
-        <Typography variant="p">
-          For assistance using VRMS, check out the{' '}
-        </Typography>
+        <Typography variant="p">For assistance using VRMS, check out the </Typography>
         <Link
           target="_blank"
           href="https://github.com/hackforla/VRMS/wiki/User-Guide"
