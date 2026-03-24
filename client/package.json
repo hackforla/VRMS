@@ -31,7 +31,7 @@
     "react-hook-form": "^7.44.3",
     "react-router-dom": "^5.1.2",
     "tailwindcss": "^4.1.10",
-    "validator": "^13.7.0",
+    "validator": "^13.15.22",
     "vite": "^6.4.1",
     "vite-plugin-svgr": "^4.3.0"
   },
@@ -44,20 +44,9 @@
     "preview": "vite preview",
     "heroku-postbuild": "npm run build"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "production": [">0.2%", "not dead", "not op_mini all"],
+    "development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
   },
   "author": "sarL3y",
   "license": "ISC",
@@ -65,16 +54,7 @@
     "@testing-library/dom": "^10.3.2",
     "@testing-library/react": "^16.0.0",
     "autoprefixer": "^10.4.21",
-    "eslint-config-airbnb": "^18.2.0",
-    "eslint-config-airbnb-base": "^14.2.0",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-jsx-a11y": "^6.3.1",
-    "eslint-plugin-prettier": "^3.1.4",
-    "eslint-plugin-react": "^7.20.6",
-    "eslint-plugin-react-hooks": "^4.1.2",
     "jsdom": "^24.1.0",
-    "prettier": "^2.1.1",
     "sass": "^1.49.7",
     "vitest": "^1.6.1"
   },

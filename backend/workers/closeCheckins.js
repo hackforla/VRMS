@@ -1,86 +1,99 @@
 module.exports = (cron, fetch) => {
+  // Check to see if any events are about to start,
+  // and if so, open their respective check-ins
 
-    // Check to see if any events are about to start,
-    // and if so, open their respective check-ins
+  const url =
+    process.env.NODE_ENV === 'prod'
+      ? 'https://www.vrms.io'
+      : `http://localhost:${process.env.BACKEND_PORT}`;
+  const headerToSend = process.env.CUSTOM_REQUEST_HEADER;
 
-    const url = process.env.NODE_ENV === 'prod' ? 'https://www.vrms.io' : `http://localhost:${process.env.BACKEND_PORT}`;
-    const headerToSend = process.env.CUSTOM_REQUEST_HEADER;
+  async function fetchEvents() {
+    try {
+      const res = await fetch(`${url}/api/events`, {
+        headers: {
+          'x-customrequired-header': headerToSend,
+        },
+      });
+      const resJson = await res.json();
 
-    async function fetchEvents() {
-        try {
-            const res = await fetch(`${url}/api/events`, {
-                headers: {
-                  "x-customrequired-header": headerToSend
-                }
-            });
-            const resJson = await res.json();
+      return resJson;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
-            return resJson;
-        } catch(error) {
-            console.log(error);
-        };
-    };
+  async function updateEvents(eventsToUpdate) {
+    try {
+      const res = await fetch(`${url}/api/events/batchUpdate`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-customrequired-header': headerToSend,
+        },
+        body: JSON.stringify(eventsToUpdate),
+      });
+      if (!res.ok) throw new Error('Failed to update event');
+      return await res.json();
+    } catch (error) {
+      console.error('Error updating event:', error);
+      return null;
+    }
+  }
+  async function sortAndFilterEvents() {
+    const events = await fetchEvents();
 
-    async function sortAndFilterEvents() {
-        const events = await fetchEvents();
+    // Get current time and set to date variable
+    const now = Date.now();
 
-        // Filter events if event date is after now but before thirty minutes from now
-        if (events && events.length > 0) {
+    // Filter events if event date is after now but before thirty minutes from now
+    if (events && events.length > 0) {
+      const sortedEvents = events.filter((event) => {
+        if (!event.date) {
+          // handle if event date is null/undefined
+          // false meaning don't include in sortedEvents
+          return false;
+        }
+        // Calculate three hours from now
+        const threeHoursFromStartTime = new Date(event.date).getTime() + 10800000;
+        if (Number.isNaN(threeHoursFromStartTime)) return false;
+        return now >= threeHoursFromStartTime && event.checkInReady === true;
+      });
 
-            const sortedEvents = events.filter(event => {
-                if (!event.date) {
-                    // handle if event date is null/undefined
-                    // false meaning don't include in sortedEvents
-                    return false
-                }
+      // console.log('Sorted events: ', sortedEvents);
+      return sortedEvents;
+    }
+  }
 
-                const currentTimeISO = new Date().toISOString();
-                const threeHoursFromStartTime = new Date(event.date).getTime() + 10800000;
-                const threeHoursISO = new Date(threeHoursFromStartTime).toISOString();
+  async function closeCheckins(events) {
+    if (events && events.length > 0) {
+      console.log('Closing check-ins');
+      // console.log('Closing event: ', event);
+      const batchEventsToUpdate = events.map((e) => ({
+        _id: e._id,
+        checkInReady: false,
+      }));
+      const updatedEvents = await updateEvents(batchEventsToUpdate);
+      if (updatedEvents) console.log('Updated events:', updatedEvents);
+      console.log('Check-ins closed');
+    } else {
+      console.log('No open events to close');
+    }
+  }
 
-                return (currentTimeISO > threeHoursISO) && (event.checkInReady === true);
-            });
-
-            // console.log('Sorted events: ', sortedEvents);
-            return sortedEvents;
-        };
-    };
-
-    async function closeCheckins(events) {
-        if(events && events.length > 0) {
-            events.forEach(async event => {
-                // console.log('Closing event: ', event);
-
-                await fetch(`${url}/api/events/${event._id}`, {
-                    method: "PATCH",
-                    headers: {
-                      "Content-Type": "application/json",
-                      "x-customrequired-header": headerToSend
-                    },
-                    body: JSON.stringify({ checkInReady: false })
-                })
-                    .catch(err => {
-                        console.log(err);
-                    });
-            });
-        };
-    };
-
-    async function runTask() {
-        console.log("Closing check-ins");
-
-        const eventsToClose = await sortAndFilterEvents()
-            .catch(err => {console.log(err)});
-
-        await closeCheckins(eventsToClose)
-            .catch(err => {console.log(err)});
-
-        console.log("Check-ins closed");
-    };
-
-    const scheduledTask = cron.schedule('*/30 * * * *', () => {
-        runTask();
+  async function runTask() {
+    const eventsToClose = await sortAndFilterEvents().catch((err) => {
+      console.log(err);
     });
 
-    return scheduledTask;
+    await closeCheckins(eventsToClose).catch((err) => {
+      console.log(err);
+    });
+  }
+
+  const scheduledTask = cron.schedule('*/30 * * * *', () => {
+    runTask();
+  });
+
+  return scheduledTask;
 };

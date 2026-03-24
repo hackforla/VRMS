@@ -148,6 +148,21 @@ class ProjectApiService {
       alert('Server not responding.  Please refresh the page.');
     }
   }
+
+  async updateOnboardOffboardVisibility(projectId, onboardOffboardVisible) {
+    const url = `${this.baseProjectUrl}${projectId}/visibility`;
+    try {
+      const res = await fetch(url, {
+        method: 'PATCH',
+        headers: this.headers,
+        body: JSON.stringify({ onboardOffboardVisible }),
+      });
+      return await res.json();
+    } catch (error) {
+      console.error(`updateOnboardOffboardVisibility error: ${error}`);
+      alert('Server not responding.  Please refresh the page.');
+    }
+  }
 }
 
 export default ProjectApiService;

@@ -109,15 +109,15 @@ ProjectController.bulkUpdateManagedByUsers = async function (req, res) {
   // Convert string IDs to ObjectId in bulkOps
   bulkOps.forEach((op) => {
     if (op?.updateOne?.filter._id) {
-      op.updateOne.filter._id = ObjectId(op.updateOne.filter._id);
+      op.updateOne.filter._id = new ObjectId(op.updateOne.filter._id);
     }
     if (op?.updateOne?.update) {
       const update = op.updateOne.update;
       if (update?.$addToSet?.managedByUsers) {
-        update.$addToSet.managedByUsers = ObjectId(update.$addToSet.managedByUsers);
+        update.$addToSet.managedByUsers = new ObjectId(update.$addToSet.managedByUsers);
       }
       if (update?.$pull?.managedByUsers) {
-        update.$pull.managedByUsers = ObjectId(update.$pull.managedByUsers);
+        update.$pull.managedByUsers = new ObjectId(update.$pull.managedByUsers);
       }
     }
   });
@@ -127,6 +127,28 @@ ProjectController.bulkUpdateManagedByUsers = async function (req, res) {
     res.status(200).json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+};
+
+// Update onboard/offboard visibility for a project
+ProjectController.updateOnboardOffboardVisibility = async function (req, res) {
+  const { ProjectId } = req.params;
+  const { onboardOffboardVisible } = req.body;
+
+  try {
+    const project = await Project.findByIdAndUpdate(
+      ProjectId,
+      { onboardOffboardVisible },
+      { new: true }
+    );
+
+    if (!project) {
+      return res.status(404).send({ message: 'Project not found' });
+    }
+
+    return res.status(200).send(project);
+  } catch (err) {
+    return res.status(400).send({ message: 'Error updating visibility', error: err.message });
   }
 };
 

@@ -11,8 +11,8 @@ import {
   FormControl,
   FormControlLabel,
   RadioGroup,
+  Paper,
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
 
 import useAuth from '../hooks/useAuth';
 import ProjectApiService from '../api/ProjectApiService';
@@ -28,28 +28,12 @@ import ChangesModal from './ChangesModal';
  *  -the rest are inline
  */
 
-export const StyledButton = styled(Button)(() => ({
-  width: '150px',
-}));
-
-const StyledFormControlLabel = styled(FormControlLabel)(() => ({
-  width: 'max-content',
-  '& .MuiFormControlLabel-label': {
-    fontSize: '14px',
-  },
-}));
-
-const StyledRadio = styled(Radio)(() => ({
-  padding: '0px 0px 0px 0px',
-  marginRight: '.5rem',
-}));
-
 /**Project Form Component
  * -renders a form for creating and updating a project
 
 
 /**
- 
+
 /**
  * Takes Array, formData, projectToEdit, handleChage, isEdit
  * submitForm, handleChange, and isEdit are for the edit forms.
@@ -145,6 +129,7 @@ export default function ProjectForm({
 
   // Handles the location radio button change.
   const handleRadioChange = (event) => {
+    alert(event.target.value);
     setLocationType(event.target.value);
   };
 
@@ -211,16 +196,16 @@ export default function ProjectForm({
           onChange={handleRadioChange}
           sx={{ mb: 0.5 }}
         >
-          <StyledFormControlLabel
+          <FormControlLabel
             value="remote"
-            control={<StyledRadio size="small" />}
+            control={<Radio size="small" />}
             label="Remote"
             disabled={isEdit ? !editMode : false}
           />
           <Box sx={{ width: '10px' }} />
-          <StyledFormControlLabel
+          <FormControlLabel
             value="in-person"
-            control={<StyledRadio size="small" />}
+            control={<Radio size="small" />}
             label="In-Person"
             disabled={isEdit ? !editMode : false}
           />
@@ -241,7 +226,8 @@ export default function ProjectForm({
           badge={isEdit ? editIcon() : addIcon()}
           expandable={true}
         >
-          <form
+          <Box
+            component="form"
             id="project-form"
             onSubmit={handleSubmit((data) => {
               isEdit ? submitEditProject(data) : submitNewProject(data);
@@ -267,25 +253,31 @@ export default function ProjectForm({
               aria-describedby="modal-modal-description"
               handleClose={handleClose}
             />
-          </form>{' '}
+          </Box>
           <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
             <Grid item xs="auto">
-              <StyledButton
+              <Button
                 type="submit"
                 form="project-form"
                 variant={
                   !isEdit ? 'secondary' : !editMode ? 'contained' : 'secondary'
                 }
-                cursor="pointer"
+                sx={{
+                  width: '150px',
+                  cursor: 'pointer',
+                }}
                 disabled={isEdit && isLoading ? !editMode : false}
               >
                 {isLoading ? <CircularProgress /> : 'Save'}
-              </StyledButton>
+              </Button>
             </Grid>
             <Grid item xs="auto">
-              <StyledButton
+              <Button
                 variant="contained"
-                cursor="pointer"
+                sx={{
+                  width: '150px',
+                  cursor: 'pointer',
+                }}
                 onClick={
                   !editMode || Object.keys(dirtyFields).length === 0
                     ? checkFields
@@ -293,13 +285,12 @@ export default function ProjectForm({
                 }
               >
                 Close
-              </StyledButton>
+              </Button>
             </Grid>
           </Grid>
         </TitledBox>
       ) : (
         <TitledBox title={'Project Information'} expandable={true}>
-          {' '}
           <form
             id="project-form"
             onSubmit={handleSubmit((data) => {
@@ -327,7 +318,6 @@ export default function ProjectForm({
               handleClose={handleClose}
             />
           </form>
-          {''}
         </TitledBox>
       )}
     </Box>

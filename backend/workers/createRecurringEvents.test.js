@@ -3,7 +3,7 @@ const {
   adjustToLosAngelesTime,
   isSameUTCDate,
   doesEventExist,
-  createEvent,
+  createEvents,
   filterAndCreateEvents,
   runTask,
   scheduleTask,
@@ -189,7 +189,7 @@ describe('createRecurringEvents Module Tests', () => {
       expect(fetch).toHaveBeenCalledWith(
         `${mockURL}/api/events/`,
         expect.objectContaining({
-          body: JSON.stringify(expectedEvent),
+          body: JSON.stringify([expectedEvent]),
         }),
       );
 
@@ -222,7 +222,7 @@ describe('createRecurringEvents Module Tests', () => {
       expect(fetch).toHaveBeenCalledWith(
         `${mockURL}/api/events/`,
         expect.objectContaining({
-          body: JSON.stringify(expectedEvent),
+          body: JSON.stringify([expectedEvent]),
         }),
       );
 
@@ -256,7 +256,7 @@ describe('createRecurringEvents Module Tests', () => {
       expect(fetch).toHaveBeenCalledWith(
         `${mockURL}/api/events/`,
         expect.objectContaining({
-          body: JSON.stringify(expectedEvent),
+          body: JSON.stringify([expectedEvent]),
         }),
       );
 
@@ -289,7 +289,7 @@ describe('createRecurringEvents Module Tests', () => {
       expect(fetch).toHaveBeenCalledWith(
         `${mockURL}/api/events/`,
         expect.objectContaining({
-          body: JSON.stringify(expectedEvent),
+          body: JSON.stringify([expectedEvent]),
         }),
       );
 
@@ -330,15 +330,16 @@ describe('createRecurringEvents Module Tests', () => {
     });
   });
 
-  describe('createEvent', () => {
+  describe('createEvents', () => {
     it('should create a new event via POST request', async () => {
       const mockEvent = { name: 'Event 1', date: '2023-11-02T19:00:00Z' };
+      const mockEventArray = [mockEvent];
       fetch.mockResolvedValueOnce({
         ok: true,
         json: jest.fn().mockResolvedValue({ id: 1, ...mockEvent }),
       });
 
-      const result = await createEvent(mockEvent, mockURL, mockHeader, fetch);
+      const result = await createEvents(mockEventArray, mockURL, mockHeader, fetch);
 
       expect(fetch).toHaveBeenCalledWith(`${mockURL}/api/events/`, {
         method: 'POST',
@@ -346,7 +347,7 @@ describe('createRecurringEvents Module Tests', () => {
           'Content-Type': 'application/json',
           'x-customrequired-header': mockHeader,
         },
-        body: JSON.stringify(mockEvent),
+        body: JSON.stringify(mockEventArray),
       });
       expect(result).toEqual({ id: 1, ...mockEvent });
     });
@@ -354,7 +355,7 @@ describe('createRecurringEvents Module Tests', () => {
     it('should return null if event creation fails', async () => {
       fetch.mockRejectedValueOnce(new Error('Network error'));
 
-      const result = await createEvent(null, mockURL, mockHeader, fetch);
+      const result = await createEvents(null, mockURL, mockHeader, fetch);
 
       expect(result).toBeNull();
     });

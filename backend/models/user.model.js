@@ -61,7 +61,6 @@ userSchema.methods.serialize = function () {
     skillsToMatch: this.skillsToMatch,
     firstAttended: this.firstAttended,
     attendanceReason: this.attendanceReason,
-    githubHandle: this.githubHandle,
     projects: this.projects,
     //currentProject: this.currentProject
     phone: this.phone,

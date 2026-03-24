@@ -25,4 +25,7 @@ router.patch('/:ProjectId', ProjectController.updateManagedByUsers);
 // Bulk update for editing project members
 router.post('/bulk-updates', ProjectController.bulkUpdateManagedByUsers);
 
+// Update onboard/offboard visibility for a project
+router.patch('/:ProjectId/visibility', AuthUtil.verifyCookie, ProjectController.updateOnboardOffboardVisibility);
+
 module.exports = router;
