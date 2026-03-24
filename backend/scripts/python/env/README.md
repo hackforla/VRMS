@@ -22,6 +22,12 @@ From within the `scripts` directory, run the following command to create a virtu
 python -m venv .
 ```
 
+or
+
+```
+python3 -m venv venv
+```
+
 This will create a virtual environment within the current directory.
 
 ### 2. Activate the Virtual Environment
@@ -29,13 +35,19 @@ This will create a virtual environment within the current directory.
 Once the virtual environment is created, you'll need to activate it.
 
 - On **Windows**, run:
-  
+
   ```
   .\Scripts\activate
   ```
 
+  If using **Ubuntu**, run:
+
+  ```
+  source venv/bin/activate
+  ```
+
 - On **MacOS/Linux**, run:
-  
+
   ```
   source bin/activate
   ```

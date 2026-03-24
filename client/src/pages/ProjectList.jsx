@@ -63,7 +63,8 @@ export default function ProjectList({ auth }) {
     [projectApiService, user.accessLevel, user.managedProjects]
   );
 
-
+  const projsWithUsers = projects?.filter((project) => project.managedByUsers?.length > 0);
+  console.log('Projects with users:', projsWithUsers);
 
   // Render loading circle until project data is served from API
   if (!projects)
@@ -82,14 +83,22 @@ export default function ProjectList({ auth }) {
       </Box>
 
       {(user?.accessLevel === 'admin' || user?.accessLevel === 'superadmin') && (
-        <Box sx={{ textAlign: 'center' }}>
+        <Box sx={{ display: 'grid', gridTemplateColumns: 'max-content', gap: 2, justifyContent: 'center', mx: 'auto' }}>
           <Button
             component={Link}
             to="/projects/create"
             variant="secondary"
-            sx={{ mb: 3, px: 4 }}
+            sx={{ px: 4 }}
           >
             Add a New Project
+          </Button>
+          <Button
+            component={Link}
+            to="/projects/visibility"
+            variant="secondary"
+            sx={{ px: 4 }}
+          >
+            On / Offboard Visibility
           </Button>
         </Box>
       )}

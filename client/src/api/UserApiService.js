@@ -14,6 +14,36 @@ class UserApiService {
       const res = await fetch(this.baseUserUrl, {
         headers: this.headers,
       });
+      console.log(res);
+      return await res.json();
+    } catch (error) {
+      console.error(`fetchUsers error: ${error}`);
+      alert('Server not responding.  Please refresh the page.');
+    }
+    return [];
+  }
+
+  async fetchUserById(id) {
+    try {
+      const uri = `${this.baseUserUrl}id/${id}`;
+      const res = await fetch(uri, {
+        headers: this.headers,
+      });
+      return await res.json();
+    } catch (error) {
+      console.error(`fetchUsers error: ${error}`);
+      alert('Server not responding.  Please refresh the page.');
+    }
+    return [];
+  }
+
+  // Fetch user by email
+  async fetchUserByEmail(email) {
+    try {
+      const uri = `${this.baseUserUrl}email/${email}`;
+      const res = await fetch(uri, {
+        headers: this.headers,
+      });
       return await res.json();
     } catch (error) {
       console.error(`fetchUsers error: ${error}`);
@@ -51,13 +81,13 @@ class UserApiService {
   }
 
   // Updates user projects in db
-  async updateUserDbProjects(userToEdit, managedProjects) {
+  async updateUserDbProjects(userToEdit, projectId, action) {
     // eslint-disable-next-line no-underscore-dangle
-    const url = `${this.baseUserUrl}${userToEdit._id}`;
+    const url = `${this.baseUserUrl}${userToEdit._id}/managedProjects`;
     const requestOptions = {
       method: 'PATCH',
       headers: this.headers,
-      body: JSON.stringify({ managedProjects }),
+      body: JSON.stringify({ action, projectId }),
     };
 
     try {
@@ -116,6 +146,21 @@ class UserApiService {
     } catch (err) {
       console.error('update access level error', err);
       alert('server not responding.  Please try again.');
+    }
+  }
+
+  async bulkUpdateManagedProjects(bulkOps) {
+    const url = `${this.baseUserUrl}bulk-updates`;
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: this.headers,
+        body: JSON.stringify({ bulkOps }),
+      });
+      return await res.json();
+    } catch (error) {
+      console.error(`bulkUpdateManagedProjects error: ${error}`);
+      alert('Server not responding.  Please try again.');
     }
   }
 }

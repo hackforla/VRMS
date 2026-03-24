@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import '../../sass/ManageProjects.scss';
 import { useSnackbar } from '../../context/snackbarContext';
 import EditableMeeting from './editableMeeting';
@@ -17,6 +17,12 @@ const EditMeetingTimes = ({
 }) => {
   const [formErrors, setFormErrors] = useState({});
   const { showSnackbar } = useSnackbar();
+
+  const handleClose = () => {
+    setFormErrors(null);
+    setSelectedEvent(null);
+  };
+
   const handleEventUpdate =
     (eventID, values, startTimeOriginal, durationOriginal) => async () => {
       const errors = validateEventForm(values, projectToEdit);
@@ -76,15 +82,15 @@ const EditMeetingTimes = ({
 
         updateRecurringEvent(theUpdatedEvent, eventID);
         showSnackbar('Recurring event updated', 'info');
-        setSelectedEvent(null);
+        handleClose();
       }
       setFormErrors(errors);
     };
 
   const handleEventDelete = (eventID) => async () => {
     deleteRecurringEvent(eventID);
-    setSelectedEvent(null);
     showSnackbar('Recurring event deleted', 'info');
+    handleClose();
   };
 
   return (

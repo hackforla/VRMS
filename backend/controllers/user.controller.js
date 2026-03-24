@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const { ObjectId } = require('mongodb');
 
 const EmailController = require('./email.controller');
 const { CONFIG_AUTH } = require('../config');
@@ -23,6 +24,25 @@ UserController.user_list = async function (req, res) {
     return res.status(200).send(user);
   } catch (err) {
     console.error(err);
+    return res.sendStatus(400);
+  }
+};
+
+UserController.user_by_email = async function (req, res) {
+  const { headers } = req;
+  const { email } = req.params;
+
+  console.log('email: ', email);
+
+  if (headers['x-customrequired-header'] !== expectedHeader) {
+    return res.sendStatus(403);
+  }
+
+  try {
+    const user = await User.find({ email });
+    return res.status(200).send(user);
+  } catch (err) {
+    console.log(err);
     return res.sendStatus(400);
   }
 };
@@ -104,8 +124,6 @@ UserController.user_by_id = async function (req, res) {
 
   try {
     const user = await User.findById(UserId);
-    // TODO throw 404 if User.findById returns empty object
-    // and look downstream to see whether 404 would break anything
     return res.status(200).send(user);
   } catch (err) {
     console.error(err);
@@ -186,7 +204,7 @@ function generateAccessToken(user, auth_origin) {
   );
 }
 
-UserController.createUser = function (req, res) {
+UserController.createUser = async function (req, res) {
   const { firstName, lastName, email } = req.body;
   const { origin } = req.headers;
 
@@ -199,13 +217,12 @@ UserController.createUser = function (req, res) {
     accessLevel: 'user',
   });
 
-  // eslint-disable-next-line
-  user.save((err, usr) => {
-    if (err) {
-      res.sendStatus(400);
-    }
+  try {
+    await user.save();
     res.sendStatus(201);
-  });
+  } catch (err) {
+    res.sendStatus(400);
+  }
 
   const jsonToken = generateAccessToken(user);
 
@@ -264,6 +281,76 @@ UserController.verifyMe = async function (req, res) {
 
 UserController.logout = async function (req, res) {
   return res.clearCookie('token').status(200).send('Successfully logged out.');
+};
+
+// Update user's managedProjects
+UserController.updateManagedProjects = async function (req, res) {
+  const { headers } = req;
+  const { UserId } = req.params;
+  const { action, projectId } = req.body; // action - 'add' or 'remove'
+  // console.log('action:', action, 'projectId:', projectId);
+
+  if (headers['x-customrequired-header'] !== expectedHeader) {
+    return res.sendStatus(403);
+  }
+
+  try {
+    // Update user's managedProjects and the project's managedByUsers
+    const user = await User.findById(UserId);
+    let managedProjects = user.managedProjects || [];
+
+    const project = await Project.findById(projectId);
+    let managedByUsers = project.managedByUsers || [];
+
+    if (action === 'add') {
+      managedProjects = [...managedProjects, projectId];
+      managedByUsers = [...managedByUsers, UserId];
+    } else {
+      // remove case
+      managedProjects = managedProjects.filter((id) => id !== projectId);
+      managedByUsers = managedByUsers.filter((id) => id !== UserId);
+    }
+
+    // Update user's managedProjects
+    user.managedProjects = managedProjects;
+    await user.save({ validateBeforeSave: false });
+
+    // Update project's managedByUsers
+    project.managedByUsers = managedByUsers;
+    await project.save({ validateBeforeSave: false });
+
+    return res.status(200).send({ user, project });
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(400);
+  }
+};
+
+UserController.bulkUpdateManagedProjects = async function (req, res) {
+  const { bulkOps } = req.body;
+
+  // Convert string IDs to ObjectId in bulkOps
+  bulkOps.forEach((op) => {
+    if (op?.updateOne?.filter._id) {
+      op.updateOne.filter._id = new ObjectId(op.updateOne.filter._id);
+    }
+    if (op?.updateOne?.update) {
+      const update = op.updateOne.update;
+      if (update?.$addToSet?.managedProjects) {
+        update.$addToSet.managedProjects = new ObjectId(update.$addToSet.managedProjects);
+      }
+      if (update?.$pull?.managedProjects) {
+        update.$pull.managedProjects = new ObjectId(update.$pull.managedProjects);
+      }
+    }
+  });
+
+  try {
+    const result = await User.bulkWrite(bulkOps);
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };
 
 module.exports = UserController;

@@ -29,8 +29,8 @@ const UserPermission = () => {
   }, [userApiService]);
 
   const updateUserDb = useCallback(
-    async (user, managedProjects) => {
-      await userApiService.updateUserDbProjects(user, managedProjects);
+    async (user, managedProjects, action) => {
+      await userApiService.updateUserDbProjects(user, managedProjects, action);
       fetchAdmins();
     },
     [userApiService, fetchAdmins]
@@ -38,7 +38,7 @@ const UserPermission = () => {
 
   const updateUserActiveStatus = useCallback(
     async (user, isActive) => {
-      await userApiService.updateUserDbIsActive(admins, isActive);
+      await userApiService.updateUserDbIsActive(user, isActive);
       fetchAdmins();
     },
     [userApiService, fetchAdmins]
@@ -46,8 +46,8 @@ const UserPermission = () => {
 
   // Update user's access level (admin/user)
   const updateUserAccessLevel = useCallback(
-    async (admin, newAccessLevel) => {
-      await userApiService.updateUserAccessLevel(admin, newAccessLevel);
+    async (user, newAccessLevel) => {
+      await userApiService.updateUserAccessLevel(user, newAccessLevel);
       fetchAdmins();
     },
     [userApiService, fetchAdmins]
@@ -62,7 +62,7 @@ const UserPermission = () => {
     fetchAdmins();
     fetchProjects();
     fetchProjectsManagers();
-  }, [fetchAdmins, fetchProjects, fetchProjectsManagers]);
+  }, [userToEdit, fetchAdmins, fetchProjects, fetchProjectsManagers]);
 
   const backToSearch = () => {
     setUserToEdit({});
@@ -76,7 +76,7 @@ const UserPermission = () => {
     return (
       <UserPermissionSearch
         admins={admins}
-        projectLeads={projectManagers}
+        projectManagers={projectManagers}
         setUserToEdit={setUserToEdit}
       />
     );

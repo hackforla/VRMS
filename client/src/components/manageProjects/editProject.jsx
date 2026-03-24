@@ -5,6 +5,7 @@ import readableEvent from './utilities/readableEvent';
 import ProjectForm from '../ProjectForm';
 import { simpleInputs, additionalInputsForEdit } from '../data';
 import TitledBox from '../parts/boxes/TitledBox';
+import TitledBoxIFrame from '../parts/boxes/TitledBoxIFrame';
 
 import { styled } from '@mui/material/styles';
 import CloseIcon from '@mui/icons-material/Close';
@@ -24,6 +25,7 @@ import {
   ListItemButton,
   ListItemText,
 } from '@mui/material';
+import EditProjectMembers from './editPMs/editProjectMembers';
 
 // --- Styled Components: Centralized & Reusable UI Elements ---
 // Leverages MUI's `styled` utility for cleaner, component-specific styles
@@ -68,9 +70,6 @@ const DetailsText = styled(Typography)(({ theme }) => ({
   textOverflow: 'ellipsis',
   display: 'block',
 }));
-
-
-
 
 // DescriptionText: Specific typography for the event description line
 const DescriptionText = styled(Typography)(({ theme }) => ({
@@ -324,6 +323,14 @@ const EditProject = ({
         setFormData={setFormData}
       />
 
+      {/* Only show onboarding/offboarding forms if visibility is enabled */}
+      {projectToEdit.onboardOffboardVisible !== false && (
+        <TitledBoxIFrame projectName={projectToEdit.name} />
+      )}
+
+      {/* Insert Project Members (Event Editors) here */}
+      <EditProjectMembers projectToEdit={projectToEdit} />
+
       {/* Section for displaying and managing recurring events */}
       <TitledBox
         title="Recurring Events"
@@ -350,6 +357,7 @@ const EditProject = ({
             Add New Event
           </Button>
         }
+        expandable={true}
       >
         <Box
           sx={{
@@ -419,7 +427,7 @@ const EditProject = ({
       </TitledBox>
 
       {/* Section for manually editing check-ins for regular (non-recurring) events */}
-      <TitledBox title="Manually Edit Events Checkin">
+      <TitledBox title="Manually Edit Events Checkin" expandable={true}>
         <Box sx={{ marginBottom: '40px' }}>
           <Typography
             variant="h6"
