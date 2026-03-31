@@ -8,6 +8,9 @@ const { ProjectController } = require('../controllers');
 // Require user to be project manager or higher (commented out for now for current app to work succesfully without auth, will re-enable when auth is ready)
 // router.use(Auth.authUser, Auth.requireMinimumRole(ROLES.PROJECT_MANAGER));
 // The base is /api/projects
+
+import { AuthUtil } from '../middleware/auth.middleware';
+
 router.get('/', ProjectController.project_list);
 
 // Its a put because we have to send the PM projects to be filtered here
@@ -26,6 +29,10 @@ router.patch('/:ProjectId', ProjectController.updateManagedByUsers);
 router.post('/bulk-updates', ProjectController.bulkUpdateManagedByUsers);
 
 // Update onboard/offboard visibility for a project
-router.patch('/:ProjectId/visibility', AuthUtil.verifyCookie, ProjectController.updateOnboardOffboardVisibility);
+router.patch(
+  '/:ProjectId/visibility',
+  AuthUtil.verifyCookie,
+  ProjectController.updateOnboardOffboardVisibility,
+);
 
 module.exports = router;
