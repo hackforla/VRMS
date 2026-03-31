@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { Box, Button, FormControl, TextField, Typography } from '@mui/material';
+import React, { useState } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
-import { checkUser, checkAuth } from '../../services/user.service';
-import { Typography, Button, FormControl, Box, TextField } from '@mui/material';
+import { checkAuth, checkUser } from '../../services/user.service';
+import { authLevelRedirect } from '../../utils/authUtils';
 
 import useAuth from '../../hooks/useAuth';
 import '../../sass/AdminLogin.scss';
@@ -48,13 +49,11 @@ const Auth = () => {
       const userData = await checkUser(email, LOG_IN);
       if (userData) {
         if (
-          userData.user.accessLevel !== ADMIN && // if he is not an admin, is a user, has no managed proejcts, he doesn't have access to view the dashboard
+          userData.user.accessLevel !== ADMIN &&
           userData.user.accessLevel === USER &&
           userData.user.managedProjects.length === 0
         ) {
-          showError(
-            "You don't have the correct access level to view the dashboard",
-          );
+          showError("You don't have the correct access level to view the dashboard");
           return;
         }
 
@@ -62,14 +61,10 @@ const Auth = () => {
         if (isAuth) {
           history.push('/emailsent');
         } else {
-          showError(
-            'We don’t recognize your email address. Please, create an account.',
-          );
+          showError('We don't recognize your email address. Please, create an account.');
         }
       } else {
-        showError(
-          'We don’t recognize your email address. Please, create an account.',
-        );
+        showError('We don't recognize your email address. Please, create an account.');
       }
     }
   };
@@ -99,11 +94,7 @@ const Auth = () => {
             Welcome Back!
           </Typography>
         </div>
-        <form
-          onSubmit={handleLogin}
-          className="form-check-in"
-          autoComplete="off"
-        >
+        <form onSubmit={handleLogin} className="form-check-in" autoComplete="off">
           <FormControl>
             <div className="form-row">
               <div className="form-input-text">
@@ -127,10 +118,7 @@ const Auth = () => {
           </FormControl>
         </form>
 
-        <div
-          className="adminlogin-warning"
-          style={{ visibility: isError ? 'visible' : 'hidden' }}
-        >
+        <div className="adminlogin-warning" style={{ visibility: isError ? 'visible' : 'hidden' }}>
           {errorMessage}
         </div>
 
