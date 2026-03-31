@@ -5,7 +5,7 @@ const { RefreshToken, User } = require('../models');
 const crypto = require('crypto');
 const AuthUtils = require('../../shared/authorizationUtils');
 
-const SECRET = CONFIG_AUTH.TOKEN_SECRET;
+const SECRET = CONFIG_AUTH.JWT_SECRET;
 
 // Utility functions
 
