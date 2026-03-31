@@ -34,7 +34,7 @@ describe('Unit Tests for userRouter', () => {
   });
 
   describe('CREATE', () => {
-    it('should create a User through the UserController', async (done) => {
+    it('should create a User through the UserController', async () => {
       //Mock the UserController function that this route calls with expected results
       UserController.create.mockImplementationOnce((req, res) => {
         return res.status(201).send(mockUser);
@@ -52,13 +52,11 @@ describe('Unit Tests for userRouter', () => {
       );
       expect(response.status).toBe(201);
       expect(response.body).toEqual(mockUser);
-
-      done();
     });
   });
 
   describe('READ', () => {
-    it('should get a list of Users with with GET to /api/users/ through UserController', async (done) => {
+    it('should get a list of Users with with GET to /api/users/ through UserController', async () => {
       //Mock the UserController function that this route calls with expected results
       UserController.user_list.mockImplementationOnce((req, res) => {
         return res.status(200).send([mockUser]);
@@ -72,11 +70,9 @@ describe('Unit Tests for userRouter', () => {
       expect(UserController.user_list).toHaveBeenCalled();
       expect(response.status).toBe(200);
       expect(response.body[0]).toEqual(mockUser);
-
-      done();
     });
 
-    it('should get a specific User by param with GET to /api/users?email=<query> through UserController', async (done) => {
+    it('should get a specific User by param with GET to /api/users?email=<query> through UserController', async () => {
       //Mock the UserController function that this route calls with expected results
       UserController.user_list.mockImplementationOnce((req, res) => {
         return res.status(200).send([mockUser]);
@@ -90,11 +86,9 @@ describe('Unit Tests for userRouter', () => {
       expect(UserController.user_list).toHaveBeenCalled();
       expect(response.status).toBe(200);
       expect(response.body[0]).toEqual(mockUser);
-
-      done();
     });
 
-    it('should get a list of Users with accessLevel of admin or superadmin with GET to /api/users/admins through UserController', async (done) => {
+    it('should get a list of Users with accessLevel of admin or superadmin with GET to /api/users/admins through UserController', async () => {
       //Mock the UserController function that this route calls with expected results
       UserController.admin_list.mockImplementationOnce((req, res) => {
         return res.status(200).send([mockUser]);
@@ -108,11 +102,9 @@ describe('Unit Tests for userRouter', () => {
       expect(UserController.admin_list).toHaveBeenCalled();
       expect(response.status).toBe(200);
       expect(response.body[0]).toEqual(mockUser);
-
-      done();
     });
 
-    it('should get a list of Users with the ability to manage projects with GET to /api/users/projectManagers through UserController', async (done) => {
+    it('should get a list of Users with the ability to manage projects with GET to /api/users/projectManagers through UserController', async () => {
       //Mock the UserController function that this route calls with expected results
       UserController.projectManager_list.mockImplementationOnce((req, res) => {
         return res.status(200).send([mockUser]);
@@ -126,12 +118,10 @@ describe('Unit Tests for userRouter', () => {
       expect(UserController.projectManager_list).toHaveBeenCalled();
       expect(response.status).toBe(200);
       expect(response.body[0]).toEqual(mockUser);
-
-      done();
     });
 
     // @TODO: Fix failing test, require investigation. Please referece issue 2036
-    it.skip('should get a specific User by UserId with GET to /api/users/:UserId through UserController', async (done) => {
+    it.skip('should get a specific User by UserId with GET to /api/users/:UserId through UserController', async () => {
       //Mock the UserController function that this route calls with expected results
       UserController.user_by_id.mockImplementationOnce((req, res) => {
         return res.status(200).send(mockUser);
@@ -149,13 +139,11 @@ describe('Unit Tests for userRouter', () => {
       );
       expect(response.status).toBe(200);
       expect(response.body).toEqual(mockUser);
-
-      done();
     });
   });
 
   describe('UPDATE', () => {
-    it('should update a User with PATCH to /api/users/:UserId through UserController', async (done) => {
+    it('should update a User with PATCH to /api/users/:UserId through UserController', async () => {
       //Mock the UserController function that this route calls with expected results
       UserController.update.mockImplementationOnce((req, res) => {
         return res.status(200).send(mockUser);
@@ -173,8 +161,6 @@ describe('Unit Tests for userRouter', () => {
       );
       expect(response.status).toBe(200);
       expect(response.body).toEqual(mockUser);
-
-      done();
     });
 
     // Create mock project and add userId to managedByUsers
@@ -185,7 +171,7 @@ describe('Unit Tests for userRouter', () => {
     };
     const projectId = mockProject.id;
 
-    it("should add projectId to user's managedProjects and userId to project's managedByUsers with PATCH /api/users/:UserId/managedProjects", async (done) => {
+    it("should add projectId to user's managedProjects and userId to project's managedByUsers with PATCH /api/users/:UserId/managedProjects", async () => {
       // Mock the response of UserController.updateManagedProjects
       UserController.updateManagedProjects.mockImplementationOnce((req, res) => {
         return res.status(200).send({ user: mockUser, project: mockProject });
@@ -208,11 +194,9 @@ describe('Unit Tests for userRouter', () => {
       );
       expect(response.status).toBe(200);
       expect(response.body).toEqual({ user: mockUser, project: mockProject });
-
-      done();
     });
 
-    it("should remove projectId in user's managedProjects and userId in project's managedByUsers with PATCH /api/users/:UserId/managedProjects", async (done) => {
+    it("should remove projectId in user's managedProjects and userId in project's managedByUsers with PATCH /api/users/:UserId/managedProjects", async () => {
       // Remove projectId and userId from fields
       mockProject.managedByUsers = [];
       mockUser.managedProjects = [];
@@ -239,13 +223,11 @@ describe('Unit Tests for userRouter', () => {
       );
       expect(response.status).toBe(200);
       expect(response.body).toEqual({ user: mockUser, project: mockProject });
-
-      done();
     });
   });
 
   describe('DELETE', () => {
-    it('should delete a specific user by Id with DELETE /api/users/:UserId through UserController', async (done) => {
+    it('should delete a specific user by Id with DELETE /api/users/:UserId through UserController', async () => {
       //Mock the UserController function that this route calls with expected results
       UserController.delete.mockImplementationOnce((req, res) => {
         return res.status(200).send(mockUser);
@@ -262,8 +244,6 @@ describe('Unit Tests for userRouter', () => {
       );
       expect(response.status).toBe(200);
       expect(response.body).toEqual(mockUser);
-
-      done();
     });
   });
 });
