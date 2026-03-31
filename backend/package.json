@@ -20,7 +20,7 @@
   "devDependencies": {
     "concurrently": "^5.1.0",
     "debug": "^4.3.1",
-    "jest": "^26.4.0",
+    "jest": "^29.7.0",
     "mockdate": "^3.0.5",
     "nodemon": "^2.0.2",
     "supertest": "^4.0.2",
@@ -39,7 +39,7 @@
     "googleapis": "^59.0.0",
     "helmet": "^3.22.0",
     "jsonwebtoken": "^8.5.1",
-    "mongodb-memory-server": "^6.9.0",
+    "mongodb-memory-server": "^8.2.3",
     "mongoose": "^8.9.5",
     "morgan": "^1.10.0",
     "node-cron": "^2.0.3",

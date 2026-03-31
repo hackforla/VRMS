@@ -47,7 +47,7 @@ describe('Unit tests for questions router', () => {
       },
     ];
 
-    it('should return all questions with GET /api/questions', async (done) => {
+    it('should return all questions with GET /api/questions', async () => {
       // Mock the Question.find() method
       Question.find.mockResolvedValue(mockQuestions);
 
@@ -60,10 +60,9 @@ describe('Unit tests for questions router', () => {
       expect(response.body).toEqual(mockQuestions);
 
       // Marks completion of tests
-      done();
     });
 
-    it('should return 400 status code when there is an error with GET /api/questions', async (done) => {
+    it('should return 400 status code when there is an error with GET /api/questions', async () => {
       // Mock the error thrown when find method is called
       const error = new Error('Database error');
       Question.find.mockRejectedValue(error);
@@ -82,10 +81,9 @@ describe('Unit tests for questions router', () => {
       // Clean up and restores original console log function
       consoleLogSpy.mockRestore();
       // Marks completion of tests
-      done();
     });
 
-    it('should return a specific question with GET /api/questions/:id', async (done) => {
+    it('should return a specific question with GET /api/questions/:id', async () => {
       // Mock the Question.findById() method
       const mockQuestion = mockQuestions[0];
       const { id } = mockQuestion;
@@ -100,10 +98,9 @@ describe('Unit tests for questions router', () => {
       expect(response.body).toEqual(mockQuestion);
 
       // Marks completion of tests
-      done();
     });
 
-    it('should return 400 status code when there is an error with GET /api/questions/:id', async (done) => {
+    it('should return 400 status code when there is an error with GET /api/questions/:id', async () => {
       // Mock user id
       const id = mockQuestions[0].id;
 
@@ -125,12 +122,11 @@ describe('Unit tests for questions router', () => {
       // Clean up and restores original console log function
       consoleLogSpy.mockRestore();
       // Marks completion of tests
-      done();
     });
   });
 
   describe('CREATE', () => {
-    it('should create a new question with POST /api/questions/', async (done) => {
+    it('should create a new question with POST /api/questions/', async () => {
       // Mock the Question.create() method
       const newQuestion = {
         id: 3,
@@ -155,10 +151,9 @@ describe('Unit tests for questions router', () => {
       expect(response.status).toBe(201);
 
       // Marks completion of tests
-      done();
     });
 
-    it('should return 400 status code when there is an error with POST /api/questions', async (done) => {
+    it('should return 400 status code when there is an error with POST /api/questions', async () => {
       // Mock the error thrown when create method is called
       const error = new Error('Database error');
       Question.create.mockRejectedValue(error);
@@ -177,7 +172,6 @@ describe('Unit tests for questions router', () => {
       // Clean up and restores original console log function
       consoleLogSpy.mockRestore();
       // Marks completion of tests
-      done();
     });
   });
 });

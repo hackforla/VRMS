@@ -64,7 +64,7 @@ describe('Unit Tests for events.router.js', () => {
   // Test suite for GET /api/events (event_list)
 
   describe('GET /api/events (event_list)', () => {
-    it('should call EventController.event_list and return a list of events', async (done) => {
+    it('should call EventController.event_list and return a list of events', async () => {
       EventController.event_list.mockImplementationOnce((req, res) =>
         res.status(200).send([mockEvent]),
       );
@@ -83,12 +83,11 @@ describe('Unit Tests for events.router.js', () => {
 
       expect(response.body).toEqual([mockEvent]);
 
-      done();
     });
   });
   // Test suite for POST /api/events (create)
   describe('POST /api/events (create)', () => {
-    it('should call EventController.create and return the created event', async (done) => {
+    it('should call EventController.create and return the created event', async () => {
       EventController.create.mockImplementationOnce((req, res) => res.status(201).send(mockEvent));
 
       const newEventData = {
@@ -113,12 +112,11 @@ describe('Unit Tests for events.router.js', () => {
 
       expect(response.body).toEqual(mockEvent);
 
-      done();
     });
   });
   // Test suite for GET /api/events/:EventId (event_by_id)
   describe('GET /api/events/:EventId (event_by_id)', () => {
-    it('should call EventController.event_by_id and return a specific event', async (done) => {
+    it('should call EventController.event_by_id and return a specific event', async () => {
       EventController.event_by_id.mockImplementationOnce((req, res) =>
         res.status(200).send(mockEvent),
       );
@@ -137,12 +135,11 @@ describe('Unit Tests for events.router.js', () => {
 
       expect(response.body).toEqual(mockEvent);
 
-      done();
     });
   });
   // Test suite for DELETE /api/events/:EventId (destroy)
   describe('DELETE /api/events/:EventId (destroy)', () => {
-    it('should call EventController.destroy and return 204 No Content', async (done) => {
+    it('should call EventController.destroy and return 204 No Content', async () => {
       EventController.destroy.mockImplementationOnce((req, res) => res.status(204).send());
 
       const response = await request.delete(`/api/events/${mockEventId}`);
@@ -159,12 +156,11 @@ describe('Unit Tests for events.router.js', () => {
 
       expect(response.body).toEqual({});
 
-      done();
     });
   });
   // Test suite for PATCH /api/events/:EventId (update)
   describe('PATCH /api/events/:EventId (update)', () => {
-    it('should call EventController.update and return the updated event', async (done) => {
+    it('should call EventController.update and return the updated event', async () => {
       EventController.update.mockImplementationOnce((req, res) =>
         res.status(200).send({ ...mockEvent, ...mockUpdatedEventData }),
       );
@@ -187,12 +183,11 @@ describe('Unit Tests for events.router.js', () => {
 
       expect(response.body).toEqual({ ...mockEvent, ...mockUpdatedEventData });
 
-      done();
     });
   });
   // Test suite for GET /api/events/nexteventbyproject/:id
   describe('GET /api/events/nexteventbyproject/:id', () => {
-    it('should return the last event for a given project ID directly from the router', async (done) => {
+    it('should return the last event for a given project ID directly from the router', async () => {
       const mockEventsForProject = [
         { _id: 'eventA', project: mockProjectId, name: 'Event A' },
 
@@ -221,10 +216,9 @@ describe('Unit Tests for events.router.js', () => {
 
       expect(response.body).toEqual(mockEventsForProject[mockEventsForProject.length - 1]);
 
-      done();
     });
     // Test case for error handling when fetching next event by project
-    it('should return 500 if an error occurs when fetching next event by project', async (done) => {
+    it('should return 500 if an error occurs when fetching next event by project', async () => {
       const mockError = new Error('Simulated database error for next event by project');
 
       Event.find.mockImplementationOnce(() => ({
@@ -241,7 +235,6 @@ describe('Unit Tests for events.router.js', () => {
 
       expect(response.status).toBe(500);
 
-      done();
     });
   });
 });

@@ -21,7 +21,7 @@ describe('Unit testing for Health Check Router', () => {
   });
 
   describe('READ', () => {
-    it('should return status code 200 and message "I\'m Alive" with GET /api/healthcheck', async (done) => {
+    it('should return status code 200 and message "I\'m Alive" with GET /api/healthcheck', async () => {
       // Mock the controller method
       HealthCheckController.isAlive.mockImplementationOnce((req, res) => {
         res.status(200).send("I'm Alive!");
@@ -34,9 +34,6 @@ describe('Unit testing for Health Check Router', () => {
       expect(HealthCheckController.isAlive).toHaveBeenCalled();
       expect(response.status).toBe(200);
       expect(response.text).toBe("I'm Alive!");
-
-      // Marks completion of the test
-      done();
     });
   });
 });

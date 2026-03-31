@@ -58,7 +58,7 @@ describe('Unit tests for auth router', () => {
   };
 
   describe('CREATE', () => {
-    it('should sign up new user with POST /api/auth/signup', async (done) => {
+    it('should sign up new user with POST /api/auth/signup', async () => {
       // Mock implementation of UserController.createUser
       UserController.createUser.mockImplementationOnce((req, res) => {
         res.status(201).send({ message: 'User created successfully' });
@@ -81,10 +81,9 @@ describe('Unit tests for auth router', () => {
       expect(response.body).toEqual({ message: 'User created successfully' });
 
       // Marks completion of tests
-      done();
     });
 
-    it('should sign in existing user with POST /api/auth/signin', async (done) => {
+    it('should sign in existing user with POST /api/auth/signin', async () => {
       // Mock implementation for UserController.signin
       const jsonToken = 'mockedToken';
       const email = mockUser.email.toLowerCase();
@@ -142,10 +141,9 @@ describe('Unit tests for auth router', () => {
       expect(response.text).toBe('Signin successful');
 
       // Marks completion of tests
-      done();
     });
 
-    it('should verify sign in with POST /api/auth/verify-signin', async (done) => {
+    it('should verify sign in with POST /api/auth/verify-signin', async () => {
       // Mock implementation for UserController.verifySignIn
       UserController.verifySignIn.mockImplementation((req, res) => {
         res.status(200).send(mockUser);
@@ -163,10 +161,9 @@ describe('Unit tests for auth router', () => {
       expect(response.body).toEqual(mockUser);
 
       // Marks completion of tests
-      done();
     });
 
-    it('should verify me with POST /api/auth/me', async (done) => {
+    it('should verify me with POST /api/auth/me', async () => {
       // Mock implementation for UserController.verifyMe
       UserController.verifyMe.mockImplementation((req, res) => {
         res.status(200).send(mockUser);
@@ -184,10 +181,9 @@ describe('Unit tests for auth router', () => {
       expect(response.body).toEqual(mockUser);
 
       // Marks completion of tests
-      done();
     });
 
-    it('should log out with POST /api/auth/logout', async (done) => {
+    it('should log out with POST /api/auth/logout', async () => {
       const token = 'token';
       // Mock implementation for UserController.logout
       UserController.logout.mockImplementation((req, res) => {
@@ -206,7 +202,6 @@ describe('Unit tests for auth router', () => {
       expect(response.text).toBe('Successfully logged out.');
   
       // Marks completion of tests
-      done();
     });
   });
 
