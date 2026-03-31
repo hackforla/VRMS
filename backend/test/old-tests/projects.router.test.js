@@ -28,13 +28,9 @@ describe('CREATE', () => {
     };
     const user = await User.create(submittedData);
     const auth_origin = 'TEST';
-    token = jwt.sign(
-      { id: user.id, role: user.accessLevel, auth_origin },
-      CONFIG_AUTH.TOKEN_SECRET,
-      {
-        expiresIn: `${CONFIG_AUTH.ACCESS_TOKEN_EXPIRATION_SEC}s`,
-      },
-    );
+    token = jwt.sign({ id: user.id, role: user.accessLevel, auth_origin }, CONFIG_AUTH.JWT_SECRET, {
+      expiresIn: `${CONFIG_AUTH.ACCESS_TOKEN_EXPIRATION_SEC}s`,
+    });
   });
   test('Create a Project with POST to /api/projects/ without token', async (done) => {
     // Test Data
@@ -101,13 +97,9 @@ describe('UPDATE', () => {
     };
     const user = await User.create(submittedData);
     const auth_origin = 'TEST';
-    token = jwt.sign(
-      { id: user.id, role: user.accessLevel, auth_origin },
-      CONFIG_AUTH.TOKEN_SECRET,
-      {
-        expiresIn: `${CONFIG_AUTH.ACCESS_TOKEN_EXPIRATION_SEC}s`,
-      },
-    );
+    token = jwt.sign({ id: user.id, role: user.accessLevel, auth_origin }, CONFIG_AUTH.JWT_SECRET, {
+      expiresIn: `${CONFIG_AUTH.ACCESS_TOKEN_EXPIRATION_SEC}s`,
+    });
   });
   test('Update a project with PATCH to /api/projects/:id without a token', async (done) => {
     // Test Data
@@ -189,13 +181,9 @@ describe('DELETE', () => {
     };
     const user = await User.create(submittedData);
     const auth_origin = 'TEST';
-    token = jwt.sign(
-      { id: user.id, role: user.accessLevel, auth_origin },
-      CONFIG_AUTH.TOKEN_SECRET,
-      {
-        expiresIn: `${CONFIG_AUTH.ACCESS_TOKEN_EXPIRATION_SEC}s`,
-      },
-    );
+    token = jwt.sign({ id: user.id, role: user.accessLevel, auth_origin }, CONFIG_AUTH.JWT_SECRET, {
+      expiresIn: `${CONFIG_AUTH.ACCESS_TOKEN_EXPIRATION_SEC}s`,
+    });
   });
   test('Delete a project with POST to /api/projects/:id without a token', async (done) => {
     // Test Data
