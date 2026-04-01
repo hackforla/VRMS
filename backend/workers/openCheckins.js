@@ -44,11 +44,12 @@ module.exports = (cron, fetch) => {
   async function sortAndFilterEvents() {
     const events = await fetchEvents();
 
-    // Get current time and set to date variable
-    const now = Date.now();
-
+    // Get current time in LA and set to date variable
+    const now = new Date();
+    const laNow = new Date(now.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
+    const laNowMs = laNow.getTime();
     // Calculate thirty minutes from now
-    const thirtyMinutesFromNow = now + 1800000;
+    const thirtyMinutesFromLaNow = laNowMs + 1800000;
 
     // Filter events if event date is after now but before thirty minutes from now
     if (events && events.length > 0) {
@@ -56,11 +57,14 @@ module.exports = (cron, fetch) => {
         if (!event.date) {
           // handle if event date is null/undefined
           // false meaning don't include in sortedEvents
+          console.log('Events exist but no date');
           return false;
         }
         const startMs = new Date(event.date).getTime();
         if (Number.isNaN(startMs)) return false;
-        return startMs >= now && startMs <= thirtyMinutesFromNow && event.checkInReady === false;
+        return (
+          startMs >= laNowMs && startMs <= thirtyMinutesFromLaNow && event.checkInReady === false
+        );
       });
       // console.log('Sorted events: ', sortedEvents);
       return sortedEvents;

@@ -44,8 +44,9 @@ module.exports = (cron, fetch) => {
     const events = await fetchEvents();
 
     // Get current time and set to date variable
-    const now = Date.now();
-
+    const now = new Date();
+    const laNow = new Date(now.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
+    const laNowMs = laNow.getTime();
     // Filter events if event date is after now but before thirty minutes from now
     if (events && events.length > 0) {
       const sortedEvents = events.filter((event) => {
@@ -57,7 +58,7 @@ module.exports = (cron, fetch) => {
         // Calculate three hours from now
         const threeHoursFromStartTime = new Date(event.date).getTime() + 10800000;
         if (Number.isNaN(threeHoursFromStartTime)) return false;
-        return now >= threeHoursFromStartTime && event.checkInReady === true;
+        return laNowMs >= threeHoursFromStartTime && event.checkInReady === true;
       });
 
       // console.log('Sorted events: ', sortedEvents);
