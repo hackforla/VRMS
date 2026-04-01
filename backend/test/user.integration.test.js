@@ -18,7 +18,7 @@ var createdUserId = '';
 
 // @TODO: Fix failing test, require investigation. Please referece issue 2036
 describe.skip('CREATE', () => {
-  test('Create a User with POST to /api/users/', async (done) => {
+  test('Create a User with POST to /api/users/', async () => {
     // Submit a User
     const res = await request
       .post('/api/users/')
@@ -30,10 +30,9 @@ describe.skip('CREATE', () => {
 
     createdUserId = res.body._id;
 
-    done();
   });
 
-  test('Fail when creating a User with duplicate email', async (done) => {
+  test('Fail when creating a User with duplicate email', async () => {
     // Submit a User
     const res = await request
       .post('/api/users/')
@@ -46,13 +45,12 @@ describe.skip('CREATE', () => {
       message: 'User already exists',
     });
 
-    done();
   });
 });
 
 // @TODO: Fix failing test, require investigation. Please referece issue 2036
 describe.skip('READ', () => {
-  test('Get a list of Users with with GET to /api/users/', async (done) => {
+  test('Get a list of Users with with GET to /api/users/', async () => {
     // Get all Users
     const res = await request.get('/api/users/').set('x-customrequired-header', backendHeaders);
     expect(res.status).toBe(200);
@@ -60,9 +58,8 @@ describe.skip('READ', () => {
     const APIData = res.body[0];
     expect(APIData.name).toMatchObject(submittedData.name);
 
-    done();
   });
-  test('Get a specific User by param with GET to /api/users?email=<query>', async (done) => {
+  test('Get a specific User by param with GET to /api/users?email=<query>', async () => {
     // Get User by query of email
     const res = await request
       .get('/api/users?email=newtest@test.com')
@@ -72,10 +69,9 @@ describe.skip('READ', () => {
     const APIData = res.body[0];
     expect(APIData.name).toMatchObject(submittedData.name);
 
-    done();
   });
 
-  test('Get a specific User by UserId with GET to /api/users/:UserId', async (done) => {
+  test('Get a specific User by UserId with GET to /api/users/:UserId', async () => {
     // Get User by UserId
     const res = await request
       .get(`/api/users/${createdUserId}`)
@@ -86,13 +82,12 @@ describe.skip('READ', () => {
     expect(APIData.email).toBe(submittedData.email);
     expect(APIData.name).toMatchObject(submittedData.name);
 
-    done();
   });
 });
 
 // @TODO: Fix failing test, require investigation. Please referece issue 2036
 describe.skip('UPDATE', () => {
-  test('Update a User with PATCH to /api/users/:UserId', async (done) => {
+  test('Update a User with PATCH to /api/users/:UserId', async () => {
     const updatedEmail = {
       email: 'newtest2@test.com',
     };
@@ -115,13 +110,12 @@ describe.skip('UPDATE', () => {
     expect(APIData.email).toBe(updatedEmail.email);
     expect(APIData.name).toMatchObject(submittedData.name);
 
-    done();
   });
 });
 
 // @TODO: Fix failing test, require investigation. Please referece issue 2036
 describe.skip('DELETE', () => {
-  test('Delete a specific user by Id with DELETE /api/users/:UserId', async (done) => {
+  test('Delete a specific user by Id with DELETE /api/users/:UserId', async () => {
     // Delete User
     const res = await request
       .delete(`/api/users/${createdUserId}`)
@@ -137,6 +131,5 @@ describe.skip('DELETE', () => {
       .set('x-customrequired-header', backendHeaders);
     expect(res2.body).toEqual({});
 
-    done();
   });
 });

@@ -27,7 +27,7 @@ describe('Unit tests for checkIns router', () => {
   });
 
   describe('READ', () => {
-    it('should return a list of check-ins with GET /api/checkins', async (done) => {
+    it('should return a list of check-ins with GET /api/checkins', async () => {
       // Mock Mongoose method
       CheckIn.find.mockResolvedValue(mockCheckIns);
 
@@ -39,10 +39,9 @@ describe('Unit tests for checkIns router', () => {
       expect(response.body).toEqual(mockCheckIns);
 
       // Marks completion of test
-      done();
     });
 
-    it('should return a single check-in by id with GET /api/checkins/:id', async (done) => {
+    it('should return a single check-in by id with GET /api/checkins/:id', async () => {
       // Mock Mongoose method
       CheckIn.findById.mockResolvedValue(mockCheckIns[0]);
 
@@ -54,10 +53,9 @@ describe('Unit tests for checkIns router', () => {
       expect(response.body).toEqual(mockCheckIns[0]);
 
       // Marks completion of test
-      done();
     });
 
-    it('should return a list of users who have checked into a specific event with GET /api/checkins/findEvent/:id', async (done) => {
+    it('should return a list of users who have checked into a specific event with GET /api/checkins/findEvent/:id', async () => {
       // Mock specific checkIn
       const mockCheckIn = mockCheckIns[1];
       const { eventId } = mockCheckIn;
@@ -79,12 +77,11 @@ describe('Unit tests for checkIns router', () => {
       expect(response.body).toEqual(mockCheckIn);
 
       // Marks completion of test
-      done();
     });
   });
 
   describe('CREATE', () => {
-    it('should create a new check-in with POST /api/checkins', async (done) => {
+    it('should create a new check-in with POST /api/checkins', async () => {
       // Mock new check-in data
       const newCheckIn = {
         id: 3,
@@ -104,7 +101,6 @@ describe('Unit tests for checkIns router', () => {
       expect(response.status).toBe(201);
 
       // Marks completion of test
-      done();
     });
   });
 });

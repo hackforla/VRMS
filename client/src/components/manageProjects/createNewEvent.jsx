@@ -84,17 +84,6 @@ const CreateNewEvent = ({
   };
   return (
     <div>
-      <button
-        type="button"
-        className="meeting-cancel-button"
-        onClick={() => {
-          setFormValues(initialFormValues);
-          setFormErrors(null);
-          setIsCreateNew(false);
-        }}
-      >
-        X
-      </button>
       <EventForm
         handleInputChange={handleInputChange}
         formValues={formValues}

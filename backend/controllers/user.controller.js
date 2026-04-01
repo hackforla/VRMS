@@ -4,14 +4,20 @@ const { ObjectId } = require('mongodb');
 const EmailController = require('./email.controller');
 const { CONFIG_AUTH } = require('../config');
 
-const { User, Project } = require('../models');
+const { User, Project, RefreshToken } = require('../models');
+const {
+  generateRefreshToken,
+  getClientIp,
+  hashToken,
+  generateAccessToken,
+} = require('../middleware/auth.middleware');
 
 const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
 
 const UserController = {};
 
 // Get list of Users with GET
-UserController.user_list = async function (req, res) {
+UserController.user_list = async (req, res) => {
   const { headers } = req;
   const { query } = req;
 
@@ -28,7 +34,7 @@ UserController.user_list = async function (req, res) {
   }
 };
 
-UserController.user_by_email = async function (req, res) {
+UserController.user_by_email = async (req, res) => {
   const { headers } = req;
   const { email } = req.params;
 
@@ -48,7 +54,7 @@ UserController.user_by_email = async function (req, res) {
 };
 
 // Get list of Users with accessLevel 'admin' or 'superadmin' with GET
-UserController.admin_list = async function (req, res) {
+UserController.admin_list = async (req, res) => {
   const { headers } = req;
 
   if (headers['x-customrequired-header'] !== expectedHeader) {
@@ -56,7 +62,9 @@ UserController.admin_list = async function (req, res) {
   }
 
   try {
-    const admins = await User.find({ accessLevel: { $in: ['admin', 'superadmin'] } });
+    const admins = await User.find({
+      accessLevel: { $in: ['admin', 'superadmin'] },
+    });
     return res.status(200).send(admins);
   } catch (err) {
     console.error(err);
@@ -64,7 +72,7 @@ UserController.admin_list = async function (req, res) {
   }
 };
 
-UserController.projectManager_list = async function (req, res) {
+UserController.projectManager_list = async (req, res) => {
   const { headers } = req;
 
   if (headers['x-customrequired-header'] !== expectedHeader) {
@@ -114,7 +122,7 @@ UserController.projectManager_list = async function (req, res) {
 };
 
 // Get User by id with GET
-UserController.user_by_id = async function (req, res) {
+UserController.user_by_id = async (req, res) => {
   const { headers } = req;
   const { UserId } = req.params;
 
@@ -132,7 +140,7 @@ UserController.user_by_id = async function (req, res) {
 };
 
 // Add User with POST
-UserController.create = async function (req, res) {
+UserController.create = async (req, res) => {
   const { headers } = req;
 
   if (headers['x-customrequired-header'] !== expectedHeader) {
@@ -158,7 +166,7 @@ UserController.create = async function (req, res) {
 };
 
 // Update User with PATCH
-UserController.update = async function (req, res) {
+UserController.update = async (req, res) => {
   const { headers } = req;
   const { UserId } = req.params;
 
@@ -167,7 +175,9 @@ UserController.update = async function (req, res) {
   }
 
   try {
-    const user = await User.findOneAndUpdate({ _id: UserId }, req.body, { new: true });
+    const user = await User.findOneAndUpdate({ _id: UserId }, req.body, {
+      new: true,
+    });
     return res.status(200).send(user);
   } catch (err) {
     console.error(err);
@@ -176,7 +186,7 @@ UserController.update = async function (req, res) {
 };
 
 // Add User with POST
-UserController.delete = async function (req, res) {
+UserController.delete = async (req, res) => {
   const { headers } = req;
   const { UserId } = req.params;
 
@@ -193,18 +203,7 @@ UserController.delete = async function (req, res) {
   }
 };
 
-function generateAccessToken(user, auth_origin) {
-  // expires after half and hour (1800 seconds = 30 minutes)
-  return jwt.sign(
-    { id: user.id, role: user.accessLevel, auth_origin: auth_origin },
-    CONFIG_AUTH.SECRET,
-    {
-      expiresIn: `${CONFIG_AUTH.TOKEN_EXPIRATION_SEC}s`,
-    },
-  );
-}
-
-UserController.createUser = async function (req, res) {
+UserController.createUser = async (req, res) => {
   const { firstName, lastName, email } = req.body;
   const { origin } = req.headers;
 
@@ -229,7 +228,7 @@ UserController.createUser = async function (req, res) {
   EmailController.sendLoginLink(req.body.email, user.name.firstName, jsonToken, req.cookie, origin);
 };
 
-UserController.signin = function (req, res) {
+UserController.signin = (req, res) => {
   const { email, auth_origin } = req.body;
   const { origin } = req.headers;
 
@@ -256,7 +255,7 @@ UserController.signin = function (req, res) {
     });
 };
 
-UserController.verifySignIn = async function (req, res) {
+UserController.verifySignIn = async (req, res) => {
   let token = req.headers['x-access-token'] || req.headers['authorization'];
   if (token.startsWith('Bearer ')) {
     // Remove Bearer from string
@@ -264,27 +263,61 @@ UserController.verifySignIn = async function (req, res) {
   }
 
   try {
-    const payload = jwt.verify(token, CONFIG_AUTH.SECRET);
+    const payload = jwt.verify(token, CONFIG_AUTH.JWT_SECRET);
     const user = await User.findById(payload.id);
-    res.cookie('token', token, { httpOnly: true });
-    return res.send(user);
+    const refreshToken = generateRefreshToken();
+    const accessToken = generateAccessToken(user, payload.auth_origin);
+    const ipAddress = getClientIp(req);
+
+    await RefreshToken.create({
+      userId: user._id,
+      hash: hashToken(refreshToken),
+      deviceInfo: {
+        deviceType: req.headers['user-agent'],
+        ipAddress: ipAddress,
+      },
+    });
+
+    res.cookie('token', accessToken, { httpOnly: true });
+    res.cookie('refresh_token', refreshToken, { httpOnly: true });
+
+    return res.send({
+      user: user,
+      expiresAt: accessToken.exp * 1000, // Convert JWT exp (seconds) to milliseconds
+    });
   } catch (err) {
     console.error(err);
     return res.status(403);
   }
 };
 
-UserController.verifyMe = async function (req, res) {
-  const user = await User.findById(req.userId);
-  return res.status(200).send(user);
+UserController.verifyMe = async (req, res) => res.status(200).send(req.user);
+
+UserController.logout = async (req, res) => {
+  try {
+    await RefreshToken.deleteOne({ _id: req.refreshToken._id });
+    return res.clearCookie('token').status(200).send('Successfully logged out.');
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send('Error occurred while logging out.');
+  }
 };
 
-UserController.logout = async function (req, res) {
-  return res.clearCookie('token').status(200).send('Successfully logged out.');
+UserController.refreshAccessToken = async (req, res) => {
+  const accessToken = generateAccessToken(req.user, req.auth_origin);
+  const decoded = jwt.decode(accessToken);
+
+  return res
+    .cookie('token', accessToken, { httpOnly: true })
+    .status(200)
+    .json({
+      user: req.user,
+      expiresAt: decoded.exp * 1000, // Convert JWT exp (seconds) to milliseconds
+    });
 };
 
 // Update user's managedProjects
-UserController.updateManagedProjects = async function (req, res) {
+UserController.updateManagedProjects = async (req, res) => {
   const { headers } = req;
   const { UserId } = req.params;
   const { action, projectId } = req.body; // action - 'add' or 'remove'
@@ -326,7 +359,7 @@ UserController.updateManagedProjects = async function (req, res) {
   }
 };
 
-UserController.bulkUpdateManagedProjects = async function (req, res) {
+UserController.bulkUpdateManagedProjects = async (req, res) => {
   const { bulkOps } = req.body;
 
   // Convert string IDs to ObjectId in bulkOps

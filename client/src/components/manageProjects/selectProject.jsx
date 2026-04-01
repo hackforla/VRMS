@@ -1,25 +1,28 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import '../../sass/ManageProjects.scss';
+import useAuth from '../../hooks/useAuth';
 
 import { Button, Typography } from '@mui/material';
+import { ROLES } from '../../../../shared/roles';
 
-const SelectProject = ({ projects, accessLevel, user }) => {
+const SelectProject = ({ projects }) => {
+  const { auth, isAdmin, isSuperAdmin, hasMinimumRole } = useAuth();
+  const user = auth?.user;
   // If access level is 'admin', display all active projects.
   // If access level is 'user' display user managed projects.
   const managedProjects = projects
     ?.filter((proj) => {
-      if (accessLevel === 'admin' || accessLevel === 'superadmin') {
+      if (isAdmin() || isSuperAdmin()) {
         return proj.projectStatus === 'Active';
       }
 
       // accessLevel is user
-      // eslint-disable-next-line no-underscore-dangle
+       
       return user?.managedProjects.includes(proj._id);
     })
     .sort((a, b) => a.name?.localeCompare(b.name))
     .map((p) => (
-      // eslint-disable-next-line no-underscore-dangle
+       
       <li className="project-list-item" key={p._id}>
         <Link className="project-list-button" to={`/projects/${p._id}`}>
           {p.name ? p.name : '[unnamed project]'}
@@ -31,7 +34,7 @@ const SelectProject = ({ projects, accessLevel, user }) => {
     <div className="container--ManageProjects">
       <Typography variant="h3">Project Management</Typography>
       <div className="project-sub-heading" style={{ margin: '0 auto' }}>
-        {accessLevel === 'admin' || accessLevel === 'superadmin' && (
+        {hasMinimumRole(ROLES.ADMIN) && (
           <Link to="/projects/create">
             {' '}
             <Button variant="secondary" sx={{ mb: 3 }}>

@@ -1,4 +1,4 @@
- 
+
 // app.js - Entry point for our application
 
 // Load in all of our node modules. Their uses are explained below as they are called.
@@ -62,6 +62,10 @@ runCloseCheckinWorker(cron, fetch);
 const { createRecurringEvents } = require('./workers/createRecurringEvents');
 createRecurringEvents(cron, fetch);
 // const runSlackBot = require("./workers/slackbot")(fetch);
+
+// Run cleanup expired refresh token(s) on startup
+const { cleanupExpiredTokens } = require('./workers/tokenCleanup');
+cleanupExpiredTokens();
 
 // MIDDLEWARE
 const errorhandler = require('./middleware/errorhandler.middleware');

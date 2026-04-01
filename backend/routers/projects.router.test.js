@@ -1,7 +1,7 @@
 // Mock for Project controller
 jest.mock('../controllers/project.controller');
 
-// Mock AuthUtil.verifyCookie middleware
+// Mock Auth.verifyCookie middleware
 const mockVerifyCookie = jest.fn((req, res, next) => next());
 jest.mock('../middleware/auth.middleware', () => ({
   verifyCookie: mockVerifyCookie,
@@ -73,7 +73,7 @@ describe('Unit testing for Projects router', () => {
       },
     ];
 
-    it('should return a list of projects based on query with GET /api/projects/', async (done) => {
+    it('should return a list of projects based on query with GET /api/projects/', async () => {
       // Mock ProjectController.project_list method when this route is called
       ProjectController.project_list.mockImplementationOnce((req, res) => {
         res.status(200).send(mockProjects);
@@ -88,10 +88,9 @@ describe('Unit testing for Projects router', () => {
       expect(response.body).toEqual(mockProjects);
 
       // Marks completion of tests
-      done();
     });
 
-    it('should return a single project with GET /api/projects/:ProjectId', async (done) => {
+    it('should return a single project with GET /api/projects/:ProjectId', async () => {
       const mockProject = mockProjects[0];
       const ProjectId = mockProject.id;
 
@@ -113,7 +112,6 @@ describe('Unit testing for Projects router', () => {
       expect(response.body).toEqual(mockProject);
 
       // Marks completion of tests
-      done();
     });
   });
 
@@ -140,7 +138,7 @@ describe('Unit testing for Projects router', () => {
       managedByUsers: ['n/a'],
     };
 
-    it('should create a new project with POST /api/projects', async (done) => {
+    it('should create a new project with POST /api/projects', async () => {
       // Mock ProjectController.create method when this route is called
       ProjectController.create.mockImplementationOnce((req, res) => {
         res.status(201).send(newProject);
@@ -166,7 +164,6 @@ describe('Unit testing for Projects router', () => {
       expect(response.body).toEqual(newProject);
 
       // Marks completion of tests
-      done();
     });
   });
 
@@ -215,7 +212,7 @@ describe('Unit testing for Projects router', () => {
       },
     ];
 
-    it('should return a filed list of projects for PMs with PUT /api/projects', async (done) => {
+    it('should return a filed list of projects for PMs with PUT /api/projects', async () => {
       // Mock ProjectController.pm_filtered_projects method when this route is called
       ProjectController.pm_filtered_projects.mockImplementationOnce((req, res) => {
         res.status(200).send(filteredProjects);
@@ -230,7 +227,6 @@ describe('Unit testing for Projects router', () => {
       expect(response.body).toEqual(filteredProjects);
 
       // Marks completion of tests
-      done();
     });
 
     const updatedProject = {
@@ -256,7 +252,7 @@ describe('Unit testing for Projects router', () => {
 
     const ProjectId = updatedProject.id;
 
-    it('should return an updated project with PUT /api/projects/:ProjectId', async (done) => {
+    it('should return an updated project with PUT /api/projects/:ProjectId', async () => {
       // Mock ProjectController.update method when this route is called
       ProjectController.update.mockImplementationOnce((req, res) => {
         res.status(200).send(updatedProject);
@@ -282,7 +278,6 @@ describe('Unit testing for Projects router', () => {
       expect(response.body).toEqual(updatedProject);
 
       // Marks completion of tests
-      done();
     });
 
     const updatedUser = {
@@ -294,7 +289,7 @@ describe('Unit testing for Projects router', () => {
 
     const userId = updatedUser.id;
 
-    it("should add to the project's managedByUsers and the user's managedProjects fields with PATCH /api/projects/:ProjectId", async (done) => {
+    it("should add to the project's managedByUsers and the user's managedProjects fields with PATCH /api/projects/:ProjectId", async () => {
       // Mock ProjectController.updateManagedByUsers method when this route is called
       ProjectController.updateManagedByUsers.mockImplementationOnce((req, res) => {
         res.status(200).send({ project: updatedProject, user: updatedUser });
@@ -325,10 +320,9 @@ describe('Unit testing for Projects router', () => {
       expect(response.body).toEqual({ project: updatedProject, user: updatedUser });
 
       // Marks completion of tests
-      done();
     });
 
-    it("should remove user from the project's managedByUsers and remove project from the user's managedProjects fields with PATCH /api/projects/:ProjectId", async (done) => {
+    it("should remove user from the project's managedByUsers and remove project from the user's managedProjects fields with PATCH /api/projects/:ProjectId", async () => {
       updatedProject.managedByUsers = [];
       updatedUser.managedProjects = [];
 
@@ -362,7 +356,6 @@ describe('Unit testing for Projects router', () => {
       expect(response.body).toEqual({ project: updatedProject, user: updatedUser });
 
       // Marks completion of tests
-      done();
     });
   });
 });

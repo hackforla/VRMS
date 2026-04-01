@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import { isValidToken } from '../../services/user.service';
-import { authLevelRedirect } from '../../utils/authUtils';
 import { Box, CircularProgress, Typography } from '@mui/material';
 
 import '../../sass/MagicLink.scss';
 import useAuth from '../../hooks/useAuth';
 
 const HandleAuth = (props) => {
-  const { auth, refreshAuth } = useAuth();
+  const { auth, refreshAuth, getLoginRedirect } = useAuth();
   const [isMagicLinkValid, setMagicLink] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -19,43 +18,28 @@ const HandleAuth = (props) => {
     const api_token = params.get('token');
 
     if (!api_token) return;
+    // Validates token and creates HttpOnly cookies (access + refresh tokens)
     isValidToken(api_token).then((isValid) => {
       setMagicLink(isValid);
     });
   }, [props.location.search]);
 
-  // Step 2: Refresh user auth (requires valid Magic Link)
+  // Step 2: After magic link is validated, refresh auth to get user data
   useEffect(() => {
-    if (!isMagicLinkValid) return;
-    if (!auth?.isError) return;
-
-    refreshAuth();
-  }, [isMagicLinkValid, refreshAuth, auth]);
-
-  // Step 3: Set IsLoaded value to render Component
-  useEffect(() => {
-    if (!isMagicLinkValid) return;
-
-    if (!auth || auth.isError) return;
-
-    setIsLoaded(true);
-  }, [isMagicLinkValid, setIsLoaded, auth]);
-
-  useEffect(() => {
-    if (!isLoaded) {
-      const timer = setTimeout(() => {
-        setIsLoaded(true);
-      }, 1000);
-
-      return () => clearTimeout(timer);
+    if (isMagicLinkValid) {
+      refreshAuth();
+    } else {
+      // Invalid magic link - show error immediately
+      setIsLoaded(true);
     }
-  }, [isLoaded]);
+  }, [isMagicLinkValid]);
 
-  let loginRedirect = '';
-
-  if (auth?.user) {
-    loginRedirect = authLevelRedirect(auth.user);
-  }
+  // Step 3: Once we have user data, we're ready to redirect
+  useEffect(() => {
+    if (auth?.user) {
+      setIsLoaded(true);
+    }
+  }, [auth]);
 
   return (
     <Box textAlign="center" sx={{ pt: 5, fontSize: '16px' }}>
@@ -66,7 +50,11 @@ const HandleAuth = (props) => {
           Sorry, the link is not valid anymore.
         </Typography>
       )}
-      {auth?.user && <Redirect to={loginRedirect} /> /* Redirect to /welcome */}
+      {
+        auth?.user && (
+          <Redirect to={getLoginRedirect()} />
+        ) /* Redirect to /welcome */
+      }
     </Box>
   );
 };

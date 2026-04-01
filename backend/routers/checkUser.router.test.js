@@ -47,7 +47,7 @@ describe('Unit tests for checkUser router', () => {
   });
 
   describe('CREATE', () => {
-    it('should authenticate user with POST /api/checkuser', async (done) => {
+    it('should authenticate user with POST /api/checkuser', async () => {
       // Mock Mongoose method
       User.findOne.mockResolvedValue(mockUser);
 
@@ -61,12 +61,11 @@ describe('Unit tests for checkUser router', () => {
       expect(response.body).toEqual({ user: mockUser, auth_origin: auth_origin });
 
       // Marks completion of tests
-      done();
     });
   });
 
   describe('READ', () => {
-    it('should return a user by id with GET /api/checkuser/:id', async (done) => {
+    it('should return a user by id with GET /api/checkuser/:id', async () => {
       // Mock Mongoose method
       User.findById.mockResolvedValue(mockUser);
 
@@ -78,7 +77,6 @@ describe('Unit tests for checkUser router', () => {
       expect(response.body).toEqual(mockUser);
 
       // Marks completion of tests
-      done();
     });
   });
 });
