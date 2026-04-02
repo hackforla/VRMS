@@ -9,7 +9,7 @@ const { ProjectController } = require('../controllers');
 // router.use(Auth.authUser, Auth.requireMinimumRole(ROLES.PROJECT_MANAGER));
 // The base is /api/projects
 
-const { AuthUtil } = require('../middleware/auth.middleware');
+const AuthUtil = require('../middleware/auth.middleware');
 
 router.get('/', ProjectController.project_list);
 
