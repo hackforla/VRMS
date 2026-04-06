@@ -22,6 +22,7 @@ const h1sx = {
 const h4sx = {
   ...h1sx,
   fontSize: { xs: '1.8rem' },
+  marginTop: '2rem',
 };
 
 export default function UserWelcome() {
@@ -80,8 +81,8 @@ export default function UserWelcome() {
           User Guide
         </Link>
       </Box>
-      {events && events.length === 0 ? (
-        <Box className="meeting-select-container">
+      {events && events.length > 0 ? (
+        <Box className="meeting-select-container" sx={{ mt: 10 }}>
           <FormControl
             className="form-select-meeting"
             autoComplete="off"
