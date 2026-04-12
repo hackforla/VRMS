@@ -1,11 +1,13 @@
 import {
   Box,
+  Button,
   CircularProgress,
   FormControl,
   InputLabel,
   Link,
   MenuItem,
   Select,
+  TextField,
   Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -132,7 +134,15 @@ export default function UserWelcome() {
       {/* If any events with checkInReady: true */}
       {events.length > 0 && (
         <Box>
-          <CheckInButtons disabled={selectedEvent === ''} event={selectedEvent} events={events} />
+          <Button
+            variant="contained"
+            size="large"
+            disabled={selectedEvent === ''}
+            component={Link}
+            to={`/checkIn/${selectedEvent}`}
+          >
+            Check In
+          </Button>
         </Box>
       )}
     </Box>
