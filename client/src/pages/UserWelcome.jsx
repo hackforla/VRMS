@@ -27,6 +27,14 @@ const h4sx = {
   marginTop: '2rem',
 };
 
+const checkInButton = {
+  width: '315px',
+  height: '42px',
+  borderRadius: '6px',
+  fontSize: '20px',
+  lineHeight: 'normal',
+};
+
 export default function UserWelcome() {
   const { auth } = useAuth();
 
@@ -133,14 +141,8 @@ export default function UserWelcome() {
       )}
       {/* If any events with checkInReady: true */}
       {events.length > 0 && (
-        <Box>
-          <Button
-            variant="contained"
-            size="large"
-            disabled={selectedEvent === ''}
-            component={Link}
-            to={`/checkIn/${selectedEvent}`}
-          >
+        <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center', width: '100%' }}>
+          <Button type="submit" sx={checkInButton} disabled={!selectedEvent} variant="outlined">
             Check In
           </Button>
         </Box>
