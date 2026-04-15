@@ -9,14 +9,12 @@ const SECRET = CONFIG_AUTH.JWT_SECRET;
 
 // Utility functions
 
-function generateAccessToken(user, auth_origin) {
+function generateAccessToken(user) {
   return jwt.sign(
     {
       id: user._id,
       email: user.email,
-      role: user.accessLevel,
-      accessLevel: user.accessLevel,
-      auth_origin: auth_origin,
+
     },
     SECRET,
     { expiresIn: CONFIG_AUTH.ACCESS_TOKEN_EXPIRATION },
