@@ -7,7 +7,6 @@ import {
   Link,
   MenuItem,
   Select,
-  TextField,
   Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -44,9 +43,47 @@ export default function UserWelcome() {
 
   const [events, setEvents] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isCheckedIn, setIsCheckedIn] = useState(false);
 
   const handleEventChange = (e) => {
+    console.log('EVENT SELECTED', e.target.value);
     setSelectedEvent(e.target.value);
+    console.log('SELECTED EVENT', selectedEvent);
+  };
+
+  const handleCheckIn = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    const eventId =
+      events.find((event) => event.project?.name + ' - ' + event.name === selectedEvent)?._id ||
+      null;
+    const userId = user._id;
+    if (!eventId) {
+      throw new Error('Event ID is not selected.');
+    }
+    if (!userId) {
+      throw new Error('Logged-in user is not found.');
+    }
+
+    const checkInRes = await fetch('/api/checkins', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-customrequired-header': headerToSend,
+      },
+      body: JSON.stringify({
+        userId,
+        eventId,
+      }),
+    });
+
+    if (!checkInRes.ok) {
+      throw new Error(checkInRes.statusText);
+    }
+
+    setIsCheckedIn(true);
+    setIsLoading(false);
   };
 
   // Fetching only events with checkInReady = true
@@ -66,7 +103,12 @@ export default function UserWelcome() {
     }
     fetchEvents();
   }, []);
-  console.log('EVENTS', events);
+
+  console.log('EVENTS', events && events[0] ? events[0]._id : null);
+  console.log('SELECTED EVENT', selectedEvent);
+  const eventId =
+    events.find((event) => event.project?.name + ' - ' + event.name === selectedEvent)?._id || null;
+  console.log('EVENT ID', eventId);
   // render loading spinner until API response
   if (!events) {
     return (
