@@ -156,11 +156,8 @@ function verifyCookie(req, res, next) {
   });
 }
 
-function addCookieIfAvailable(req, res, next) {
+function addCookieIfAvailable(req, _res, next) {
   jwt.verify(req.cookies.token, SECRET, (err, decoded) => {
-    if (err) {
-      return res.sendStatus(401);
-    }
     if (!err) {
       req.userId = decoded.id;
     }

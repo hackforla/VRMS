@@ -2,7 +2,6 @@ import { Box, Button, FormControl, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
 import { checkAuth, checkUser } from '../../services/user.service';
-import { authLevelRedirect } from '../../utils/authUtils';
 
 import useAuth from '../../hooks/useAuth';
 import '../../sass/AdminLogin.scss';
@@ -61,10 +60,10 @@ const Auth = () => {
         if (isAuth) {
           history.push('/emailsent');
         } else {
-          showError('We don't recognize your email address. Please, create an account.');
+          showError("We don't recognize your email address. Please, create an account.");
         }
       } else {
-        showError('We don't recognize your email address. Please, create an account.');
+        showError("We don't recognize your email address. Please, create an account.");
       }
     }
   };
