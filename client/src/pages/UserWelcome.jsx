@@ -183,7 +183,7 @@ export default function UserWelcome() {
                 disabled={!selectedEvent}
                 variant="outlined"
               >
-                Check In
+                CHECK IN
               </Button>
             )}
             {checkInError && (
