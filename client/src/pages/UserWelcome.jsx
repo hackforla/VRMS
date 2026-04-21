@@ -13,17 +13,18 @@ import { useEffect, useState } from 'react';
 import useAuth from '../hooks/useAuth';
 import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend } from '../utils/globalSettings';
 
-const h1sx = {
-  fontFamily: 'aliseoregular',
-  fontWeight: 'bold',
-  fontSize: { xs: '5.3rem' },
-  marginBottom: `0rem`,
-};
-
 const h4sx = {
-  ...h1sx,
   fontSize: { xs: '1.8rem' },
   marginTop: '2rem',
+  marginBottom: `0rem`,
+  fontFamily: 'aliseoregular',
+  fontWeight: 'bold',
+};
+
+const pstyle = {
+  fontSize: '20px',
+  fontFamily: 'Source Sans Pro',
+  fontWeight: 600,
 };
 
 const checkInButton = {
@@ -34,6 +35,8 @@ const checkInButton = {
   lineHeight: 'normal',
 };
 
+const getEventLabel = (event) => event.project?.name + ' - ' + event.name;
+
 export default function UserWelcome() {
   const { auth } = useAuth();
 
@@ -43,47 +46,45 @@ export default function UserWelcome() {
 
   const [events, setEvents] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [isCheckedIn, setIsCheckedIn] = useState(false);
+  const [checkInError, setCheckInError] = useState(null);
 
   const handleEventChange = (e) => {
-    console.log('EVENT SELECTED', e.target.value);
     setSelectedEvent(e.target.value);
-    console.log('SELECTED EVENT', selectedEvent);
   };
 
   const handleCheckIn = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    const eventId =
-      events.find((event) => event.project?.name + ' - ' + event.name === selectedEvent)?._id ||
-      null;
-    const userId = user._id;
-    if (!eventId) {
-      throw new Error('Event ID is not selected.');
-    }
-    if (!userId) {
-      throw new Error('Logged-in user is not found.');
-    }
+    setCheckInError(null);
+    try {
+      const eventId = events.find((event) => getEventLabel(event) === selectedEvent)?._id || null;
+      const userId = user._id;
+      if (!eventId) {
+        throw new Error('Event ID is not selected.');
+      }
+      if (!userId) {
+        throw new Error('Logged-in user is not found.');
+      }
 
-    const checkInRes = await fetch('/api/checkins', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-customrequired-header': headerToSend,
-      },
-      body: JSON.stringify({
-        userId,
-        eventId,
-      }),
-    });
+      const checkInRes = await fetch('/api/checkins', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-customrequired-header': headerToSend,
+        },
+        body: JSON.stringify({
+          userId,
+          eventId,
+        }),
+      });
 
-    if (!checkInRes.ok) {
-      throw new Error(checkInRes.statusText);
+      if (!checkInRes.ok) {
+        throw new Error(checkInRes.statusText);
+      }
+      setIsCheckedIn(true);
+    } catch (error) {
+      setCheckInError(error.message);
     }
-
-    setIsCheckedIn(true);
-    setIsLoading(false);
   };
 
   // Fetching only events with checkInReady = true
@@ -104,11 +105,6 @@ export default function UserWelcome() {
     fetchEvents();
   }, []);
 
-  console.log('EVENTS', events && events[0] ? events[0]._id : null);
-  console.log('SELECTED EVENT', selectedEvent);
-  const eventId =
-    events.find((event) => event.project?.name + ' - ' + event.name === selectedEvent)?._id || null;
-  console.log('EVENT ID', eventId);
   // render loading spinner until API response
   if (!events) {
     return (
@@ -118,7 +114,6 @@ export default function UserWelcome() {
     );
   }
 
-  console.log('AUTH', auth);
   return (
     <Box textAlign="center" sx={{ pt: 5 }}>
       <Typography variant="h1">Welcome {firstName}!</Typography>
@@ -133,60 +128,77 @@ export default function UserWelcome() {
           User Guide
         </Link>
       </Box>
-      {events && events.length > 0 ? (
-        <Box className="meeting-select-container" sx={{ mt: 10 }}>
-          <FormControl
-            className="form-select-meeting"
-            autoComplete="off"
-            onSubmit={(e) => e.preventDefault()}
-            variant="standard"
-          >
-            <Box className="form-row">
-              <Box className="form-input-select">
-                <InputLabel id="select-meeting-label">Select a meeting to check-in:</InputLabel>
-                <Box className="radio-buttons">
-                  <Select
-                    labelId="select-meeting-label"
-                    className="select-meeting-dropdown"
-                    value={selectedEvent ? selectedEvent : '--SELECT ONE--'}
-                    renderValue={(selected) => (
-                      <Typography sx={{ color: 'red' }}>
-                        {selectedEvent ? selectedEvent : '--SELECT ONE--'}
-                      </Typography>
-                    )}
-                    onChange={handleEventChange}
-                  >
-                    {events.map((event) => {
-                      return (
-                        <MenuItem
-                          key={event._id || 0}
-                          value={event.project?.name + ' - ' + event.name}
-                        >
-                          <Typography>{event?.project?.name + ' - ' + event.name}</Typography>
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </Box>
+
+      {events.length > 0 ? (
+        <>
+          <Box className="meeting-select-container" sx={{ mt: 10 }}>
+            {isCheckedIn ? (
+              <Box>
+                <Typography variant="h1">Success!</Typography>
+                <Typography sx={pstyle}>You have checked in to: </Typography>
+                <Typography sx={pstyle}>{selectedEvent}</Typography>
               </Box>
-            </Box>
-          </FormControl>
-        </Box>
+            ) : (
+              <FormControl
+                className="form-select-meeting"
+                autoComplete="off"
+                onSubmit={(e) => e.preventDefault()}
+                variant="standard"
+              >
+                <Box className="form-row">
+                  <Box className="form-input-select">
+                    <InputLabel id="select-meeting-label">Select a meeting to check-in:</InputLabel>
+                    <Box className="radio-buttons">
+                      <Select
+                        labelId="select-meeting-label"
+                        className="select-meeting-dropdown"
+                        value={selectedEvent ? selectedEvent : '--SELECT ONE--'}
+                        renderValue={(selected) => (
+                          <Typography sx={{ color: 'red' }}>
+                            {selected ? selected : '--SELECT ONE--'}
+                          </Typography>
+                        )}
+                        onChange={handleEventChange}
+                      >
+                        {events.map((event) => {
+                          return (
+                            <MenuItem key={event._id || 0} value={getEventLabel(event)}>
+                              <Typography>{getEventLabel(event)}</Typography>
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                    </Box>
+                  </Box>
+                </Box>
+              </FormControl>
+            )}
+          </Box>
+          <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center', width: '100%' }}>
+            {!isCheckedIn && (
+              <Button
+                type="submit"
+                onClick={handleCheckIn}
+                sx={checkInButton}
+                disabled={!selectedEvent}
+                variant="outlined"
+              >
+                Check In
+              </Button>
+            )}
+            {checkInError && (
+              <Typography color="error" sx={{ mt: 1 }}>
+                {checkInError}
+              </Typography>
+            )}
+          </Box>
+        </>
       ) : (
         <Box>
-          {/* If no events with checkInReady: true */}
           {/* If no meetings available*/}
           <Typography variant="h4" sx={h4sx}>
             No meetings available
           </Typography>
-        </Box>
-      )}
-      {/* If any events with checkInReady: true */}
-      {events.length > 0 && (
-        <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center', width: '100%' }}>
-          <Button type="submit" sx={checkInButton} disabled={!selectedEvent} variant="outlined">
-            Check In
-          </Button>
         </Box>
       )}
     </Box>
