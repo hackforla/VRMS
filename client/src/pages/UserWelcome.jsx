@@ -45,23 +45,26 @@ export default function UserWelcome() {
   const firstName = user?.name.firstName;
 
   const [events, setEvents] = useState(null);
-  const [selectedEvent, setSelectedEvent] = useState('');
+  const [selectedEventId, setSelectedEventId] = useState('');
   const [isCheckedIn, setIsCheckedIn] = useState(false);
   const [checkInError, setCheckInError] = useState(null);
 
   const handleEventChange = (e) => {
-    setSelectedEvent(e.target.value);
+    setSelectedEventId(e.target.value);
   };
 
   const handleCheckIn = async (e) => {
     e.preventDefault();
     setCheckInError(null);
+
     try {
-      const eventId = events.find((event) => getEventLabel(event) === selectedEvent)?._id || null;
-      const userId = user._id;
+      const eventId = selectedEventId || null;
+      const userId = user?._id || null;
+
       if (!eventId) {
         throw new Error('Event ID is not selected.');
       }
+
       if (!userId) {
         throw new Error('Logged-in user is not found.');
       }
@@ -73,8 +76,8 @@ export default function UserWelcome() {
           'x-customrequired-header': headerToSend,
         },
         body: JSON.stringify({
-          userId,
-          eventId,
+          userId: userId,
+          eventId: eventId,
         }),
       });
 
@@ -96,10 +99,12 @@ export default function UserWelcome() {
             'x-customrequired-header': headerToSend,
           },
         });
+
         const resJson = await res.json();
         setEvents(resJson);
       } catch (error) {
         console.log(error);
+        setEvents([]);
       }
     }
     fetchEvents();
@@ -130,69 +135,70 @@ export default function UserWelcome() {
       </Box>
 
       {events.length > 0 ? (
-        <>
-          <Box className="meeting-select-container" sx={{ mt: 10 }}>
-            {isCheckedIn ? (
-              <Box>
-                <Typography variant="h1">Success!</Typography>
-                <Typography sx={pstyle}>You have checked in to: </Typography>
-                <Typography sx={pstyle}>{selectedEvent}</Typography>
-              </Box>
-            ) : (
-              <FormControl
-                className="form-select-meeting"
-                autoComplete="off"
-                onSubmit={(e) => e.preventDefault()}
-                variant="standard"
-              >
-                <Box className="form-row">
-                  <Box className="form-input-select">
-                    <InputLabel id="select-meeting-label">Select a meeting to check-in:</InputLabel>
-                    <Box className="radio-buttons">
-                      <Select
-                        labelId="select-meeting-label"
-                        className="select-meeting-dropdown"
-                        value={selectedEvent ? selectedEvent : '--SELECT ONE--'}
-                        renderValue={(selected) => (
+        <Box className="meeting-select-container" sx={{ mt: 10 }}>
+          {isCheckedIn ? (
+            <Box>
+              <Typography variant="h1">SUCCESS!</Typography>
+              <Typography sx={pstyle}>You have checked in to: </Typography>
+              <Typography sx={pstyle}>
+                {getEventLabel(events.find((e) => e._id === selectedEventId))}
+              </Typography>
+            </Box>
+          ) : (
+            <FormControl
+              className="form-select-meeting"
+              autoComplete="off"
+              onSubmit={(e) => e.preventDefault()}
+              variant="standard"
+            >
+              <Box className="form-row">
+                <Box className="form-input-select">
+                  <InputLabel id="select-meeting-label">Select a meeting to check-in:</InputLabel>
+                  <Box className="radio-buttons">
+                    <Select
+                      labelId="select-meeting-label"
+                      className="select-meeting-dropdown"
+                      value={selectedEventId ? selectedEventId : '--SELECT ONE--'}
+                      renderValue={(id) => {
+                        const event = events.find((e) => e._id === id);
+                        return (
                           <Typography sx={{ color: 'red' }}>
-                            {selected ? selected : '--SELECT ONE--'}
+                            {event ? getEventLabel(event) : '--SELECT ONE--'}
                           </Typography>
-                        )}
-                        onChange={handleEventChange}
-                      >
-                        {events.map((event) => {
-                          return (
-                            <MenuItem key={event._id || 0} value={getEventLabel(event)}>
-                              <Typography>{getEventLabel(event)}</Typography>
-                            </MenuItem>
-                          );
-                        })}
-                      </Select>
-                    </Box>
+                        );
+                      }}
+                      onChange={handleEventChange}
+                    >
+                      {events.map((event) => {
+                        return (
+                          <MenuItem key={event._id || 0} value={event._id || 0}>
+                            <Typography>{getEventLabel(event)}</Typography>
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
                   </Box>
                 </Box>
-              </FormControl>
-            )}
-          </Box>
-          <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center', width: '100%' }}>
-            {!isCheckedIn && (
-              <Button
-                type="submit"
-                onClick={handleCheckIn}
-                sx={checkInButton}
-                disabled={!selectedEvent}
-                variant="outlined"
-              >
-                CHECK IN
-              </Button>
-            )}
-            {checkInError && (
-              <Typography color="error" sx={{ mt: 1 }}>
-                {checkInError}
-              </Typography>
-            )}
-          </Box>
-        </>
+              </Box>
+              {!isCheckedIn && (
+                <Button
+                  type="submit"
+                  onClick={handleCheckIn}
+                  sx={checkInButton}
+                  disabled={!selectedEventId}
+                  variant="outlined"
+                >
+                  CHECK IN
+                </Button>
+              )}
+              {checkInError && (
+                <Typography color="error" sx={{ mt: 1 }}>
+                  {checkInError}
+                </Typography>
+              )}
+            </FormControl>
+          )}
+        </Box>
       ) : (
         <Box>
           {/* If no meetings available*/}
