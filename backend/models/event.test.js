@@ -45,5 +45,3 @@ describe('CREATE', () => {
     expect(savedData.name).toBe('testEvent');
   });
 });
-
-describe('Cannot save simple data', () => {});
