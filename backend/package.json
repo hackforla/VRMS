@@ -7,8 +7,8 @@
   "scripts": {
     "lint": "eslint .",
     "format": "prettier --check .",
-    "test": "jest",
-    "test:watch": "jest --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "start": "node server.js",
     "dev": "nodemon server.js",
     "client": "npm run start --prefix client",
@@ -20,7 +20,6 @@
     "@babel/core": "^7.15.0",
     "@babel/eslint-parser": "^7.15.0",
     "@babel/eslint-plugin": "^7.14.5",
-    "@shelf/jest-mongodb": "^1.2.3",
     "concurrently": "^5.1.0",
     "debug": "^4.1.1",
     "eslint": "^7.9.0",
@@ -30,11 +29,11 @@
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-react": "^7.20.6",
-    "jest": "^26.4.0",
     "nodemon": "^2.0.2",
     "prettier": "^2.1.1",
     "pretty-quick": "^3.0.2",
     "supertest": "^4.0.2",
+    "vitest": "^4.1.5",
     "why-is-node-running": "^2.2.0"
   },
   "dependencies": {
