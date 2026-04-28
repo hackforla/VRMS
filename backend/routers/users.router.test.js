@@ -8,7 +8,7 @@ setupDB('api-users');
 
 const backendHeaders = process.env.CUSTOM_REQUEST_HEADER;
 describe('CREATE', () => {
-  test('Create a User with POST to /api/users/', async (done) => {
+  test('Create a User with POST to /api/users/', async () => {
     // Test Data
     const submittedData = {
       name: {
@@ -26,12 +26,11 @@ describe('CREATE', () => {
       .send(submittedData);
     expect(res.status).toBe(201);
 
-    done();
   });
 });
 
 describe('READ', () => {
-  test('Get a list of Users with with GET to /api/users/', async (done) => {
+  test('Get a list of Users with with GET to /api/users/', async () => {
     // Test Data
     const submittedData = {
       name: {
@@ -56,9 +55,8 @@ describe('READ', () => {
     const APIData = res2.body[0];
     expect(APIData.name).toMatchObject(submittedData.name);
 
-    done();
   });
-  test('Get a specific User by param with GET to /api/users?email=<query>', async (done) => {
+  test('Get a specific User by param with GET to /api/users?email=<query>', async () => {
     // Test Data
     const submittedData = {
       name: {
@@ -85,10 +83,9 @@ describe('READ', () => {
     const APIData = res2.body[0];
     expect(APIData.name).toMatchObject(submittedData.name);
 
-    done();
   });
 
-  test('Get a specific User by UserId with GET to /api/users/:UserId', async (done) => {
+  test('Get a specific User by UserId with GET to /api/users/:UserId', async () => {
     // Test Data
     const submittedData = {
       name: {
@@ -116,12 +113,11 @@ describe('READ', () => {
     expect(APIData.email).toBe(submittedData.email);
     expect(APIData.name).toMatchObject(submittedData.name);
 
-    done();
   });
 });
 
 describe('UPDATE', () => {
-  test('Update a User with PATCH to /api/users/:UserId', async (done) => {
+  test('Update a User with PATCH to /api/users/:UserId', async () => {
     // Test Data
     const submittedData = {
       name: {
@@ -163,12 +159,11 @@ describe('UPDATE', () => {
     expect(APIData.email).toBe(updatedEmail.email);
     expect(APIData.name).toMatchObject(submittedData.name);
 
-    done();
   });
 });
 
 describe('DELETE', () => {
-  test('Delete a specific user by Id with DELETE /api/users/:UserId', async (done) => {
+  test('Delete a specific user by Id with DELETE /api/users/:UserId', async () => {
     // Test Data
     const submittedData = {
       name: {
@@ -195,6 +190,5 @@ describe('DELETE', () => {
     const APIData = res2.body;
     expect(APIData.name).toMatchObject(submittedData.name);
 
-    done();
   });
 });

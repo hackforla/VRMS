@@ -6,7 +6,7 @@ setupDB("recurringEvent-model");
 
 // Please add and expand on this simple test.
 describe("Question Model saves the correct values", () => {
-  test("Save a model instance and then read from the db", async (done) => {
+  test("Save a model instance and then read from the db", async () => {
     const submittedData = {
       name: "testRecurringEvent",
       location: {
@@ -34,6 +34,5 @@ describe("Question Model saves the correct values", () => {
     expect(savedData.name === submittedData.name);
     expect(savedData.location.country === submittedData.location.country);
     expect(savedData.description === submittedData.description);
-    done();
   });
 });

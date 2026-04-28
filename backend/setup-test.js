@@ -1,4 +1,5 @@
 // test-setup.js
+import { beforeAll, afterEach, afterAll } from 'vitest';
 import mongoose from 'mongoose';
 mongoose.set("useCreateIndex", true);
 mongoose.promise = global.Promise;

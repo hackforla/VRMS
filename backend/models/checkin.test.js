@@ -5,7 +5,7 @@ import { setupDB } from '../setup-test.js';
 setupDB("checkin-model");
 
 describe("Checkin Model saves the correct values", () => {
-  test("Save a model instance and then read from the db", async (done) => {
+  test("Save a model instance and then read from the db", async () => {
     const submittedCheckinData = {
       userId: "1",
       eventId: "23",
@@ -19,6 +19,5 @@ describe("Checkin Model saves the correct values", () => {
     expect(savedCheckinData.userId).toBe(submittedCheckinData.userId);
     expect(savedCheckinData.eventId).toBe(submittedCheckinData.eventId);
     expect(savedCheckinData.createdDate.getTime()).toBe(submittedCheckinData.createdDate);
-    done();
   });
 });

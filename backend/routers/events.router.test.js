@@ -16,7 +16,7 @@ headers.Accept = 'application/json';
 
 // API Tests
 describe('CREATE', () => {
-  test('Create Event', async (done) => {
+  test('Create Event', async () => {
     // Test Data
     const submittedData = {
       name: 'eventName',
@@ -34,12 +34,11 @@ describe('CREATE', () => {
     const databaseEvent = databaseEventQuery[0];
     expect(databaseEventQuery.length).toBeGreaterThanOrEqual(1);
     expect(databaseEvent.name).toBe(submittedData.name);
-    done();
   });
 });
 
 describe('READ', () => {
-  test('GET Events list', async (done) => {
+  test('GET Events list', async () => {
     // Test Data
     const submittedData = {
       createdDate: '2020-05-20T21:16:44.498Z',
@@ -60,9 +59,8 @@ describe('READ', () => {
     expect(response.statusCode).toBe(200);
     const APIData = response.body[0];
     expect(APIData.createdDate).toBe(submittedData.createdDate);
-    done();
   });
-  test('GET Event by ID', async (done) => {
+  test('GET Event by ID', async () => {
     // Test Data
     const submittedData = {
       name: 'eventName',
@@ -98,12 +96,11 @@ describe('READ', () => {
     const apiRetrievedEvent = await response.body;
     expect(apiRetrievedEvent._id).toBe(dbCreatedeventId);
 
-    done();
   });
 });
 
 describe('UPDATE', () => {
-  test('Update Event by ID with PATCH', async (done) => {
+  test('Update Event by ID with PATCH', async () => {
     // Test Data
     const submittedData = {
       name: 'originalEventName',
@@ -127,12 +124,11 @@ describe('UPDATE', () => {
       .send(updatedDataPayload);
     expect(res2.status).toBe(200);
 
-    done();
   });
 });
 
 describe('DELETE', () => {
-  test('Delete Event by ID with DELETE', async (done) => {
+  test('Delete Event by ID with DELETE', async () => {
     // Test Data
     const submittedData = {
       name: 'eventName',
@@ -149,6 +145,5 @@ describe('DELETE', () => {
     const res2 = await request.delete(`/api/events/${res.body._id}/`).set(headers);
     expect(res2.status).toBe(200);
 
-    done();
   });
 });

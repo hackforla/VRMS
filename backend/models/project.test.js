@@ -5,7 +5,7 @@ import { setupDB } from '../setup-test.js';
 setupDB("project-model");
 
 describe("Project Model saves the correct values", () => {
-  test("Save a model instance and then read from the db", async (done) => {
+  test("Save a model instance and then read from the db", async () => {
     const submittedData = {
       name: "projectTest",
       description: "An instance of a Project model",
@@ -26,12 +26,11 @@ describe("Project Model saves the correct values", () => {
     expect(savedData.githubUrl).toBe(submittedData.githubUrl);
 
 
-    done();
   });
 });
 
 describe('CREATE/READ', () => {
-  test('Create Project with Mongoose model', async (done) => {
+  test('Create Project with Mongoose model', async () => {
     const submittedData = {
       name: 'projectTest',
     };
@@ -40,12 +39,11 @@ describe('CREATE/READ', () => {
     const savedDataArray = await Project.find();
     const savedData = savedDataArray[0];
     expect(savedData.name).toBe(submittedData.name);
-    done();
   });
 });
 
 describe('UPDATE', () => {
-  test('Update Project with Mongoose model', async (done) => {
+  test('Update Project with Mongoose model', async () => {
     const submittedData = {
       name: 'projectTest',
     };
@@ -61,12 +59,11 @@ describe('UPDATE', () => {
       {new: true});
 
     expect(updatedProject.name).toBe(updatedData.name);
-    done();
   });
 });
 
 describe('DELETE', () => {
-  test('Delete Project with Mongoose model', async (done) => {
+  test('Delete Project with Mongoose model', async () => {
     const submittedData = {
       name: 'projectTest',
     };
@@ -78,6 +75,5 @@ describe('DELETE', () => {
 
     const deleteData = await Project.deleteOne(submittedData);
     expect(deleteData.ok).toBe(1);
-    done();
   });
 });

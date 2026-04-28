@@ -6,7 +6,7 @@ setupDB("question-model");
 
 // Please add and expand on this simple test.
 describe("Question Model saves the correct values", () => {
-  test("Save a model instance and then read from the db", async (done) => {
+  test("Save a model instance and then read from the db", async () => {
     const submittedData = {
       questionText: "Is this a test?",
       htmlName: "html_name_test",
@@ -30,6 +30,5 @@ describe("Question Model saves the correct values", () => {
       savedData.answers.answerThreeText).toBe(
         submittedData.answers.answerThreeText
     );
-    done();
   });
 });

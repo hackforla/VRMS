@@ -6,7 +6,7 @@ setupDB("projectTeamMember-model");
 
 // Please add and expand on this simple test.
 describe("ProjectTeamMember Model saves the correct values", () => {
-  test("Save a model instance and then read from the db", async (done) => {
+  test("Save a model instance and then read from the db", async () => {
     const submittedData = {
       teamMemberStatus: "Inactive", // Active or Inactive
       vrmsProjectAdmin: true, // does this team member have admin rights to the project in VRMS?
@@ -27,6 +27,5 @@ describe("ProjectTeamMember Model saves the correct values", () => {
     expect(
       savedData.githubPermissionLevel).toBe(submittedData.githubPermissionLevel
     );
-    done();
   });
 });

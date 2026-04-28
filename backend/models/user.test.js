@@ -6,7 +6,7 @@ setupDB("user-model");
 
 // Please add and expand on this simple test.
 describe("Question Model saves the correct values", () => {
-  test('Save a model instance and then read from the db', async (done) => {
+  test('Save a model instance and then read from the db', async () => {
     const submittedData = {
       name: {
         firstName: 'Test',
@@ -35,10 +35,9 @@ describe("Question Model saves the correct values", () => {
     expect(savedData.name.firstName).toBe(submittedData.name.firstName);
     expect(savedData.currentRole).toBe(submittedData.currentRole);
     expect(savedData.desiredJobTitle).toBe(submittedData.desiredJobTitle);
-    done();
   });
 
-  test('Create a simple user', async (done) => {
+  test('Create a simple user', async () => {
     // Test Data
     const submittedData = {
       name: {
@@ -54,6 +53,5 @@ describe("Question Model saves the correct values", () => {
     expect(savedData.name.firstName).toBe(submittedData.name.firstName);
     expect(savedData.currentRole).toBe(submittedData.currentRole);
     expect(savedData.desiredJobTitle).toBe(submittedData.desiredJobTitle);
-    done();
   });
 });

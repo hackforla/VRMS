@@ -14,7 +14,7 @@ headers['x-customrequired-header'] = CONFIG.CUSTOM_REQUEST_HEADER;
 headers.Accept = 'application/json';
 
 describe('CREATE', () => {
-  test('Create a Project with POST to /api/projects/', async (done) => {
+  test('Create a Project with POST to /api/projects/', async () => {
     // Test Data
     const submittedData = {
       name: 'projectName',
@@ -26,12 +26,11 @@ describe('CREATE', () => {
       .set(headers)
       .send(submittedData);
     expect(res.status).toBe(201);
-    done();
   });
 });
 
 describe('READ', () => {
-  test('Get all projects with GET to /api/projects/', async (done) => {
+  test('Get all projects with GET to /api/projects/', async () => {
       // Test Data
       const submittedData = {
         name: 'projectName',
@@ -50,12 +49,11 @@ describe('READ', () => {
 
       const APIData = res2.body[0];
       expect(APIData.name).toBe(submittedData.name);
-      done();
   });;
 });
 
 describe('UPDATE', () => {
-  test('Update a project with PATCH to /api/projects/:id', async (done) => {
+  test('Update a project with PATCH to /api/projects/:id', async () => {
     // Test Data
     const submittedData = {
       name: 'projectName',
@@ -85,12 +83,11 @@ describe('UPDATE', () => {
 
     const APIData = res3.body;
     expect(APIData.name).toBe(updatedDataPayload.name);
-    done();
   });
 });
 
 describe('DELETE', () => {
-  test('Delete a project with POST to /api/projects/:id', async (done) => {
+  test('Delete a project with POST to /api/projects/:id', async () => {
     // Test Data
     const submittedData = {
       name: 'projectName',
@@ -106,6 +103,5 @@ describe('DELETE', () => {
     // Delete project
     const res2 = await request.patch(`/api/projects/${res.body._id}`).set(headers);
     expect(res2.status).toBe(200);
-    done();
 });
 });

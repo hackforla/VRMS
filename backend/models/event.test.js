@@ -5,7 +5,7 @@ setupDB("event-model");
 import { Event } from './event.model.js';
 
 describe('CREATE', () => {
-  test('Can create a complex Event', async (done) => {
+  test('Can create a complex Event', async () => {
     const submittedData = {
       name: 'eventName',
       location: {
@@ -35,16 +35,14 @@ describe('CREATE', () => {
     expect(savedData.name).toBe( submittedData.name);
     expect(savedData.location.city).toBe(submittedData.location.city);
     expect(savedData.startTime.getTime()).toBe(submittedData.startTime);
-    done();
   });
 
-  test('Can create a simple Event', async (done) => {
+  test('Can create a simple Event', async () => {
     const submittedData = { name: 'testEvent' };
     await Event.create(submittedData);
     const savedDataArray = await Event.find();
     const savedData = savedDataArray[0];
     expect(savedData.name).toBe('testEvent');
-    done();
   });
 });
 
