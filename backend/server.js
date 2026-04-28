@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { fileURLToPath } from 'url';
 
 import app from './app.js';
 
@@ -62,7 +63,7 @@ async function initial() {
   }
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
   runServer()
     .then(() => initial())
     .catch((err) => console.error(err));
