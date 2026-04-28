@@ -1,55 +1,54 @@
+import { describe, it, expect, vi, beforeAll, beforeEach, afterAll, afterEach, test } from 'vitest';
+
 // Set up mocks for User model and controller
-jest.mock('../controllers/user.controller');
-jest.mock('../controllers/email.controller');
-jest.mock('../models/user.model');
+vi.mock('../controllers/user.controller');
+vi.mock('../controllers/email.controller');
+vi.mock('../models/user.model');
 // Set up mocks for middleware
-jest.mock('../middleware', () => ({
+vi.mock('../middleware', () => ({
   AuthUtil: {
-    verifyCookie: jest.fn((req, res, next) => next()),
+    verifyCookie: vi.fn((req, res, next) => next()),
   },
   Auth: {
-    authUser: jest.fn((req, res, next) => next()),
+    authUser: vi.fn((req, res, next) => next()),
   },
   verifyUser: {
-    checkDuplicateEmail: jest.fn((req, res, next) => next()),
-    isAdminByEmail: jest.fn((req, res, next) => next()),
+    checkDuplicateEmail: vi.fn((req, res, next) => next()),
+    isAdminByEmail: vi.fn((req, res, next) => next()),
   },
   verifyToken: {
-    isTokenValid: jest.fn((req, res, next) => next()),
+    isTokenValid: vi.fn((req, res, next) => next()),
   },
 }));
 // Set up mocks for authApiValidator
-jest.mock('../validators/user.api.validator', () => ({
-  validateCreateUserAPICall: jest.fn((req, res, next) => next()),
-  validateSigninUserAPICall: jest.fn((req, res, next) => next()),
+vi.mock('../validators/user.api.validator', () => ({
+  validateCreateUserAPICall: vi.fn((req, res, next) => next()),
+  validateSigninUserAPICall: vi.fn((req, res, next) => next()),
 }));
 
 // Import User model and controller
 import { User } from '../models/user.model.js';
-const { UserController, EmailController } = require('../controllers');
+const { UserController, EmailController } = await import('../controllers/index.js');
 
 // Import auth router
 import express from 'express';
 import supertest from 'supertest';
 import authRouter from '../routers/auth.router.js';
-const { verifyToken, verifyUser, AuthUtil, Auth } = require('../middleware');
-const { authApiValidator } = require('../validators');
+const { verifyToken, verifyUser, AuthUtil, Auth } = await import('../middleware/index.js');
+const { authApiValidator } = await import('../validators/index.js');
 
 // Create a new Express application for testing
 const testapp = express();
-// Use body parser to extract params in API calls
 testapp.use(express.json());
 testapp.use('/api/auth', authRouter);
 const request = supertest(testapp);
 
 
 describe('Unit tests for auth router', () => {
-  // Clear all mocks after each test
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
-  // Mocker user for test
   const mockUser = {
     id: 1,
     name: {
