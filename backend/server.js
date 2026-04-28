@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { fileURLToPath } from 'url';
 
 import app from './app.js';
 
@@ -75,7 +76,7 @@ function initial() {
   });
 }
 
-if (require.main === module) {
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
   runServer().catch((err) => console.error(err));
   initial();
 }
