@@ -1,35 +1,37 @@
 /**
- * RED TESTS: Timezone / DST bugs in event generation and checkin workers.
+ * Timezone / DST tests for event generation and checkin workers.
  *
- * These tests document known failures in how the system handles
- * Pacific time and DST transitions. They are intentionally RED —
- * they describe correct behavior that the current code does NOT produce.
+ * These tests verify correct behavior when the server runs in UTC
+ * but events are in America/Los_Angeles time. They cover:
+ * - Day-of-week detection across timezone boundaries
+ * - Event time generation preserving LA time-of-day
+ * - DST spring-forward / fall-back transitions
+ * - Checkin open/close window calculations
  *
- * The core problem: recurring events store date/startTime as Date objects.
- * The workers use getDay(), getHours(), getMinutes() which return values
- * in the SERVER's timezone, not LA time. If the server runs in UTC,
- * a Tuesday 7pm PST event (stored as Wednesday 3am UTC) gets getDay()=3
- * (Wednesday) instead of getDay()=2 (Tuesday).
+ * Run with: TZ=UTC npx vitest run backend/workers/timezone.test.js
  *
- * Related: GitHub issue #1872, PR #2116, bead VRMS-lw6
+ * Related: GitHub issue #1872, PR #2116
  */
 
 import { describe, test, expect } from 'vitest';
-import { getEventDay, generateEventFromRecurring } from './lib/eventTime.js';
+import {
+  getEventDay,
+  generateEventFromRecurring,
+  isInOpenWindow,
+  isPastCloseWindow,
+} from './lib/eventTime.js';
 
 // -- The tests --
 
 describe('Event day-of-week detection', () => {
   test('Tuesday 7pm PST event should be detected as Tuesday regardless of server timezone', () => {
     // Tuesday Jan 7, 2025 at 7pm PST = Wednesday Jan 8, 2025 at 3am UTC
-    // If the server is in UTC, getDay() returns 3 (Wednesday), not 2 (Tuesday)
     const tuesdayEventPST = {
       date: new Date('2025-01-08T03:00:00Z'), // 7pm PST Tuesday = 3am UTC Wednesday
     };
 
     const day = getEventDay(tuesdayEventPST);
 
-    // This SHOULD be Tuesday (2), but on a UTC server it returns Wednesday (3)
     expect(day).toBe(2); // Tuesday
   });
 
@@ -41,32 +43,24 @@ describe('Event day-of-week detection', () => {
 
     const day = getEventDay(mondayLateEvent);
 
-    // Should be Monday (1), but on UTC server returns Tuesday (2)
     expect(day).toBe(1); // Monday
   });
 
   test('event day should not change across DST spring-forward', () => {
     // Sunday March 9, 2025 at 7pm PST
     // Before spring forward: 7pm PST = UTC-8 = 3am UTC March 10
-    // After spring forward:  7pm PDT = UTC-7 = 2am UTC March 10
-    // Either way, getDay() on UTC returns Monday (1), not Sunday (0)
     const sundayEvent = {
       date: new Date('2025-03-10T03:00:00Z'), // 7pm PST Sunday March 9
     };
 
     const day = getEventDay(sundayEvent);
 
-    // Should be Sunday (0), but on UTC server returns Monday (1)
     expect(day).toBe(0); // Sunday
   });
 });
 
 describe('Event time generation', () => {
   test('7pm PST event should generate at 7pm LA time, not at UTC hour', () => {
-    // Recurring event: 7pm PST = stored as 3am UTC next day
-    // generateEventFromRecurring extracts hours via getHours()
-    // On a UTC server, getHours() returns 3 (3am), not 19 (7pm)
-
     const today = new Date('2025-01-07T08:00:00Z'); // noon PST Tuesday
     const recurringEvent = {
       name: 'Tuesday Hacknight',
@@ -91,11 +85,6 @@ describe('Event time generation', () => {
   });
 
   test('11pm PST event should not jump to the next day', () => {
-    // 11pm PST = 7am UTC next day
-    // getHours() on UTC returns 7
-    // new Date(2025, 0, 7, 7, 0, 0) = 7am Jan 7 (server local)
-    // This is 16 hours too early and on the wrong day in LA
-
     const today = new Date('2025-01-07T08:00:00Z'); // noon PST Tuesday Jan 7
     const recurringEvent = {
       name: 'Late Night Event',
@@ -131,8 +120,6 @@ describe('Event time generation', () => {
     // March 9 is spring forward day (2am PST -> 3am PDT)
     // Recurring event stored at 7pm PST = 3am UTC
     // On March 9 after spring forward, 7pm PDT = 2am UTC March 10
-    // But getHours() still returns 3 (from the stored PST-era timestamp)
-    // So the event gets created at 3am server time, which is wrong
 
     const marchNinth = new Date('2025-03-09T20:00:00Z'); // noon PDT
     const recurringEvent = {
@@ -153,42 +140,22 @@ describe('Event time generation', () => {
       10,
     );
 
-    // Should be 7pm (19), not 8pm (20) or some other shifted time
     expect(hourLA).toBe(19);
   });
 });
 
 describe('Checkin open/close window — DST transitions', () => {
-  // NOTE: These tests exercise checkin window logic proposed in PR #2116,
-  // which is NOT yet merged to development. The inline logic below simulates
-  // the toLocaleString-based approach from that PR. Once PR #2116 lands,
-  // these should be updated to import the real functions.
-
   test('checkin should open 15min before a 7pm event on spring-forward day', () => {
     // March 9, 2025: spring forward
-    // Event at 7pm PDT (post-transition) = stored as fake-UTC by createRecurringEvents
-    // "Now" is 6:45pm PDT = 1:45am UTC March 10
-    //
-    // The event was stored during PST era at 7pm PST = 3am UTC
-    // But today is PDT, so 7pm PDT = 2am UTC
-    // The stored event.date is at 3am UTC (PST offset), but real 7pm PDT is 2am UTC
-    // This 1-hour mismatch means the checkin window calculation is wrong
+    // Event at 7pm PDT = 2am UTC March 10
+    // "Now" is 6:45pm PDT March 9 = 1:45am UTC March 10
 
-    // Simulate: event stored with PST offset
-    const eventDateStored = new Date('2025-03-10T03:00:00Z'); // 7pm PST = 3am UTC
+    // After Temporal fix: generateEventFromRecurring would produce 7pm PDT = 2am UTC
+    // So eventDate should be 2am UTC March 10 for a correctly generated event
+    const eventDate = new Date('2025-03-10T02:00:00Z'); // 7pm PDT March 9
+    const nowReal = new Date('2025-03-10T01:45:00Z');   // 6:45pm PDT March 9
 
-    // "Now" in real life: 6:45pm PDT March 9 = 1:45am UTC March 10
-    const nowReal = new Date('2025-03-10T01:45:00Z');
-
-    // What openCheckins does (PR #2116 approach):
-    const laNow = new Date(
-      nowReal.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }),
-    );
-    const laNowMs = laNow.getTime();
-    const thirtyMinFromNow = laNowMs + 1800000;
-    const startMs = eventDateStored.getTime();
-
-    const inWindow = startMs >= laNowMs && startMs <= thirtyMinFromNow;
+    const inWindow = isInOpenWindow(eventDate, nowReal);
 
     // 6:45pm is 15min before 7pm — should be in the 30-minute window
     expect(inWindow).toBe(true);
@@ -200,17 +167,10 @@ describe('Checkin open/close window — DST transitions', () => {
     // 3 hours after start = 10pm PST = 6am UTC Nov 3
     // "Now" is 10:05pm PST = 6:05am UTC Nov 3
 
-    const eventDateStored = new Date('2025-11-03T03:00:00Z'); // 7pm PST
-    const nowReal = new Date('2025-11-03T06:05:00Z');         // 10:05pm PST
+    const eventDate = new Date('2025-11-03T03:00:00Z'); // 7pm PST
+    const nowReal = new Date('2025-11-03T06:05:00Z');   // 10:05pm PST
 
-    const laNow = new Date(
-      nowReal.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }),
-    );
-    const laNowMs = laNow.getTime();
-    const threeHoursFromStart = eventDateStored.getTime() + 10800000;
-
-    // closeCheckins: laNowMs >= threeHoursFromStartTime
-    const shouldClose = laNowMs >= threeHoursFromStart;
+    const shouldClose = isPastCloseWindow(eventDate, nowReal);
 
     expect(shouldClose).toBe(true);
   });
