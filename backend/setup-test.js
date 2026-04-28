@@ -1,4 +1,5 @@
 // test-setup.js
+import { beforeAll, afterEach, afterAll } from 'vitest';
 import mongoose from 'mongoose';
 mongoose.promise = global.Promise;
 
