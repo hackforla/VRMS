@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
 
-const { CheckIn } = require('../models/checkIn.model');
+import { CheckIn } from '../models/checkIn.model.js';
 
 // GET /api/checkins/
 router.get('/', (req, res) => {

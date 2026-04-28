@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
 
-const { User } = require('../models/user.model');
+import { User } from '../models/user.model.js';
 
 // TODO: Refactor checkuser and test. Consider moving to auth.
 

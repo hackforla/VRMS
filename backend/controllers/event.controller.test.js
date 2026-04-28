@@ -1,7 +1,7 @@
-const { setupDB } = require('../setup-test');
+import { setupDB } from '../setup-test.js';
 setupDB('event-controller');
 
-const EventController = require('./event.controller');
+import EventController from './event.controller.js';
 
 test('Can import the email controller', async () => {
   expect(EventController).not.toBeUndefined();

@@ -1,8 +1,8 @@
 import supertest from 'supertest';
-const app = require('../app');
+import app from '../app.js';
 const request = supertest(app);
 
-const { setupDB } = require('../setup-test');
+import { setupDB } from '../setup-test.js';
 setupDB('api-users');
 
 const backendHeaders = process.env.CUSTOM_REQUEST_HEADER;

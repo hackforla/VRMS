@@ -1,18 +1,18 @@
 import supertest from 'supertest';
-const app = require('../app');
+import app from '../app.js';
 const request = supertest(app);
 
-const { setupDB } = require('../setup-test');
+import { setupDB } from '../setup-test.js';
 setupDB('api-auth');
 
-const { CONFIG_AUTH } = require('../config/');
-const { User } = require('../models');
+import { CONFIG_AUTH } from '../config/index.js';
+import { User } from '../models/index.js';
 
 
 // Create mock for EmailController
 const sendMailMock = jest.fn()
 jest.mock('../controllers/email.controller');
-const mockEmailController = require('../controllers/email.controller');
+import mockEmailController from '../controllers/email.controller.js';
 mockEmailController.sendLoginLink.mockReturnValue({ sendMail: sendMailMock });
 
 beforeEach(() => {

@@ -1,13 +1,13 @@
 import supertest from 'supertest';
-const app = require("../app");
-const CONFIG = require('../config/auth.config');
+import app from '../app.js';
+import CONFIG from '../config/auth.config.js';
 
 const request = supertest(app);
 
-const { setupDB } = require("../setup-test");
+import { setupDB } from '../setup-test.js';
 setupDB("api-events");
 
-const { Event } = require('../models');
+import { Event } from '../models/index.js';
 
 const headers = {};
 headers['x-customrequired-header'] = CONFIG.CUSTOM_REQUEST_HEADER;

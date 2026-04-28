@@ -1,7 +1,7 @@
-const { setupDB } = require('../setup-test');
+import { setupDB } from '../setup-test.js';
 setupDB("event-model");
 
-const { Event } = require('./event.model');
+import { Event } from './event.model.js';
 
 describe('CREATE', () => {
   test('Can create a complex Event', async (done) => {

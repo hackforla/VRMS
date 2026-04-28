@@ -1,6 +1,6 @@
-const { CheckIn } = require('./checkIn.model');
+import { CheckIn } from './checkIn.model.js';
 
-const { setupDB } = require("../setup-test");
+import { setupDB } from '../setup-test.js';
 setupDB("checkin-model");
 
 describe("Checkin Model saves the correct values", () => {

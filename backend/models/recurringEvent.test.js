@@ -1,6 +1,6 @@
-const { RecurringEvent } = require('./recurringEvent.model');
+import { RecurringEvent } from './recurringEvent.model.js';
 
-const { setupDB } = require("../setup-test");
+import { setupDB } from '../setup-test.js';
 setupDB("recurringEvent-model");
 
 // Please add and expand on this simple test.

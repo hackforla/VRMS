@@ -1,4 +1,4 @@
-const { RecurringEvent } = require('../models');
+import { RecurringEvent } from '../models/index.js';
 const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
 
 const RecurringEventController = {};

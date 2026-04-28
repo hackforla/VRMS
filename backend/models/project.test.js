@@ -1,6 +1,6 @@
-const { Project } = require('./project.model');
+import { Project } from './project.model.js';
 
-const { setupDB } = require("../setup-test");
+import { setupDB } from '../setup-test.js';
 setupDB("project-model");
 
 describe("Project Model saves the correct values", () => {

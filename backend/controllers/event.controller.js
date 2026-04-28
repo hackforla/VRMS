@@ -1,4 +1,4 @@
-const { Event } = require('../models');
+import { Event } from '../models/index.js';
 
 const EventController = {};
 

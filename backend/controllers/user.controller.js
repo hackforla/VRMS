@@ -1,9 +1,9 @@
 import jwt from 'jsonwebtoken';
 
-const EmailController = require('./email.controller');
-const { CONFIG_AUTH } = require('../config');
+import EmailController from './email.controller.js';
+import { CONFIG_AUTH } from '../config/index.js';
 
-const { User } = require('../models');
+import { User } from '../models/index.js';
 
 const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
 

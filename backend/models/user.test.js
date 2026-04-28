@@ -1,6 +1,6 @@
-const { User } = require('./user.model');
+import { User } from './user.model.js';
 
-const { setupDB } = require("../setup-test");
+import { setupDB } from '../setup-test.js';
 setupDB("user-model");
 
 // Please add and expand on this simple test.

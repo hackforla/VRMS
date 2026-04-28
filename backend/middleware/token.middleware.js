@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-const { CONFIG_AUTH } = require('../config');
+import { CONFIG_AUTH } from '../config/index.js';
 
 async function isTokenValid(req, res, next) {
   let token = req.headers['x-access-token'] || req.headers['authorization'];

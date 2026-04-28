@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
 
-const { ProjectTeamMember } = require('../models/projectTeamMember.model');
+import { ProjectTeamMember } from '../models/projectTeamMember.model.js';
 
 // GET /api/projectteammembers/
 router.get("/", (req, res) => {

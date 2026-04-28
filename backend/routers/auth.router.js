@@ -1,7 +1,7 @@
 import express from 'express';
-const { AuthUtil, verifyUser, verifyToken } = require('../middleware');
-const { UserController } = require('../controllers/');
-const { authApiValidator } = require('../validators');
+import { AuthUtil, verifyUser, verifyToken } from '../middleware/index.js';
+import { UserController } from '../controllers/index.js';
+import { authApiValidator } from '../validators/index.js';
 
 const router = express.Router();
 

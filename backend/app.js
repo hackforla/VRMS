@@ -54,27 +54,31 @@ app.use(cookieParser());
 app.use(morgan('dev'));
 
 // WORKERS
-const runOpenCheckinWorker = require('./workers/openCheckins')(cron, fetch);
-const runCloseCheckinWorker = require('./workers/closeCheckins')(cron, fetch);
-const runCreateRecurringEventsWorker = require('./workers/createRecurringEvents')(cron, fetch);
-// const runSlackBot = require("./workers/slackbot")(fetch);
+import openCheckins from './workers/openCheckins.js';
+import closeCheckins from './workers/closeCheckins.js';
+import createRecurringEvents from './workers/createRecurringEvents.js';
+const runOpenCheckinWorker = openCheckins(cron, fetch);
+const runCloseCheckinWorker = closeCheckins(cron, fetch);
+const runCreateRecurringEventsWorker = createRecurringEvents(cron, fetch);
+// import slackbot from './workers/slackbot.js';
+// const runSlackBot = slackbot(fetch);
 
 // MIDDLEWARE
-const errorhandler = require('./middleware/errorhandler.middleware');
+import errorhandler from './middleware/errorhandler.middleware.js';
 
 // ROUTES
-const eventsRouter = require('./routers/events.router');
-const checkInsRouter = require('./routers/checkIns.router');
-const usersRouter = require('./routers/users.router');
-const questionsRouter = require('./routers/questions.router');
-const checkUserRouter = require('./routers/checkUser.router');
-const grantPermissionRouter = require('./routers/grantpermission.router');
-const projectsRouter = require('./routers/projects.router');
-const recurringEventsRouter = require('./routers/recurringEvents.router');
-const projectTeamMembersRouter = require('./routers/projectTeamMembers.router');
-//const slackRouter = require("./routers/slack.router");
-const authRouter = require('./routers/auth.router');
-const healthCheckRouter = require('./routers/healthCheck.router');
+import eventsRouter from './routers/events.router.js';
+import checkInsRouter from './routers/checkIns.router.js';
+import usersRouter from './routers/users.router.js';
+import questionsRouter from './routers/questions.router.js';
+import checkUserRouter from './routers/checkUser.router.js';
+import grantPermissionRouter from './routers/grantpermission.router.js';
+import projectsRouter from './routers/projects.router.js';
+import recurringEventsRouter from './routers/recurringEvents.router.js';
+import projectTeamMembersRouter from './routers/projectTeamMembers.router.js';
+//import slackRouter from './routers/slack.router.js';
+import authRouter from './routers/auth.router.js';
+import healthCheckRouter from './routers/healthCheck.router.js';
 
 // Check that clients to the API are sending the custom request header on all methods
 // except for ones described in the dontCheckCustomRequestHeaderApis array.

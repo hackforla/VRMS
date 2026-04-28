@@ -1,4 +1,4 @@
-const { Project } = require('../models');
+import { Project } from '../models/index.js';
 
 const ProjectController = {};
 

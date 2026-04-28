@@ -1,6 +1,6 @@
-const ProjectController = require('./project.controller');
+import ProjectController from './project.controller.js';
 
-const { setupDB } = require('../setup-test');
+import { setupDB } from '../setup-test.js';
 setupDB('project-controller');
 
 test('Can import the project controller', async () => {

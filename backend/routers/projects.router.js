@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
 
-const { ProjectController } = require('../controllers');
+import { ProjectController } from '../controllers/index.js';
 
 // The base is /api/projects
 router.get('/', ProjectController.project_list);

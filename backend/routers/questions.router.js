@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
 
-const { Question } = require('../models/question.model');
+import { Question } from '../models/question.model.js';
 
 
 // GET /api/questions/

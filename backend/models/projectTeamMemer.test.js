@@ -1,6 +1,6 @@
-const { ProjectTeamMember } = require('./projectTeamMember.model');
+import { ProjectTeamMember } from './projectTeamMember.model.js';
 
-const { setupDB } = require("../setup-test");
+import { setupDB } from '../setup-test.js';
 setupDB("projectTeamMember-model");
 
 // Please add and expand on this simple test.

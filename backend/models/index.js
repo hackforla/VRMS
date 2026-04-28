@@ -1,11 +1,11 @@
-const { CheckIn } = require('./checkIn.model');
-const { Event } = require('./event.model');
-const { Project } = require('./project.model');
-const { ProjectTeamMember } = require('./projectTeamMember.model');
-const { Question } = require('./question.model');
-const { RecurringEvent } = require('./recurringEvent.model');
-const { Role } = require('./role.model');
-const { User } = require('./user.model');
+import { CheckIn } from './checkIn.model.js';
+import { Event } from './event.model.js';
+import { Project } from './project.model.js';
+import { ProjectTeamMember } from './projectTeamMember.model.js';
+import { Question } from './question.model.js';
+import { RecurringEvent } from './recurringEvent.model.js';
+import { Role } from './role.model.js';
+import { User } from './user.model.js';
 
 import mongoose from 'mongoose';
 mongoose.Promise = global.Promise;

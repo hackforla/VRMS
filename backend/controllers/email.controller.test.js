@@ -1,6 +1,6 @@
-const EmailController = require('./email.controller');
+import EmailController from './email.controller.js';
 
-const { setupDB } = require('../setup-test');
+import { setupDB } from '../setup-test.js';
 setupDB('conrtoller-email');
 
 test('Can import the email controller', async () => {

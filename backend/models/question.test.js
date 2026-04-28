@@ -1,6 +1,6 @@
-const { Question } = require('./question.model');
+import { Question } from './question.model.js';
 
-const { setupDB } = require("../setup-test");
+import { setupDB } from '../setup-test.js';
 setupDB("question-model");
 
 // Please add and expand on this simple test.
