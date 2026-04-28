@@ -1,3 +1,4 @@
+import { describe, it, expect, vi, beforeAll, beforeEach, afterAll, afterEach, test } from 'vitest';
 import supertest from 'supertest';
 import app from '../app.js';
 const request = supertest(app);
@@ -10,8 +11,8 @@ import { User } from '../models/index.js';
 
 
 // Create mock for EmailController
-const sendMailMock = jest.fn()
-jest.mock('../controllers/email.controller');
+const sendMailMock = vi.fn()
+vi.mock('../controllers/email.controller');
 import mockEmailController from '../controllers/email.controller.js';
 mockEmailController.sendLoginLink.mockReturnValue({ sendMail: sendMailMock });
 

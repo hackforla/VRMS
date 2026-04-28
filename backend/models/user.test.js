@@ -1,3 +1,4 @@
+import { describe, it, expect, vi, beforeAll, beforeEach, afterAll, afterEach, test } from 'vitest';
 import { User } from './user.model.js';
 
 import { setupDB } from '../setup-test.js';

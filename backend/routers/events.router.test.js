@@ -1,3 +1,4 @@
+import { describe, it, expect, vi, beforeAll, beforeEach, afterAll, afterEach, test } from 'vitest';
 import supertest from 'supertest';
 import app from '../app.js';
 import CONFIG from '../config/auth.config.js';

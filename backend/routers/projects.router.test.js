@@ -1,3 +1,4 @@
+import { describe, it, expect, vi, beforeAll, beforeEach, afterAll, afterEach, test } from 'vitest';
 import supertest from 'supertest';
 import app from '../app.js';
 const request = supertest(app);

@@ -1,3 +1,4 @@
+import { describe, it, expect, vi, beforeAll, beforeEach, afterAll, afterEach, test } from 'vitest';
 import { CheckIn } from './checkIn.model.js';
 
 import { setupDB } from '../setup-test.js';
