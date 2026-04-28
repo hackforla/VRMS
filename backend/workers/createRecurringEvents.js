@@ -43,6 +43,8 @@ module.exports = (cron, fetch) => {
     };
 
     async function filterAndCreateEvents() {
+        const { getEventDay, generateEventFromRecurring } = await import('./lib/eventTime.js');
+
         TODAY_DATE = new Date();
         TODAY = TODAY_DATE.getDay();
         console.log("Date: ", TODAY_DATE, "Day: ", TODAY);
@@ -51,7 +53,7 @@ module.exports = (cron, fetch) => {
         // Filter recurring events where the event date is today
         if (recurringEvents && recurringEvents.length > 0) {
             const filteredEvents = recurringEvents.filter(event => {
-                const eventDay = new Date(event.date).getDay();
+                const eventDay = getEventDay(event);
                 // console.log("Event Day: ", eventDay);
                 return (eventDay === TODAY);
             });
@@ -61,24 +63,12 @@ module.exports = (cron, fetch) => {
             for (filteredEvent of filteredEvents) {
                 const eventExists = await checkIfEventExists(filteredEvent.name);
                 // console.log('Event exists? ', eventExists);
-                const eventDate = new Date(filteredEvent.date);
 
                 if (eventExists) {
                     console.log("Not going to run ceateEvent");
                 } else {
                     // Create new event
-                    const hours = eventDate.getHours();
-                    const minutes = eventDate.getMinutes();
-                    const seconds = eventDate.getSeconds();
-                    const milliseconds = eventDate.getMilliseconds();
-
-                    const yearToday = TODAY_DATE.getFullYear();
-                    const monthToday = TODAY_DATE.getMonth();
-                    const dateToday = TODAY_DATE.getDate();
-
-                    const newEventDate = new Date(yearToday, monthToday, dateToday, hours, minutes, seconds, milliseconds);
-
-                    const newEndTime = new Date(yearToday, monthToday, dateToday, hours + filteredEvent.hours, minutes, seconds, milliseconds)
+                    const { newEventDate, newEndTime } = generateEventFromRecurring(filteredEvent, TODAY_DATE);
 
                     const eventToCreate = {
                         name: filteredEvent.name && filteredEvent.name,
