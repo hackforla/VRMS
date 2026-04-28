@@ -130,4 +130,4 @@ const EmailController = {
   sendLoginLink,
   sendEmail,
 };
-module.exports = EmailController;
+export default EmailController;

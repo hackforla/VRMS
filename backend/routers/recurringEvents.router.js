@@ -53,4 +53,4 @@ router.patch('/:RecurringEventId', Auth.verifyCookie, RecurringEventController.u
 
 router.delete('/:RecurringEventId', Auth.verifyCookie, RecurringEventController.destroy);
 
-module.exports = router;
+export default router;

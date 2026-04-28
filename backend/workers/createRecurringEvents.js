@@ -1,13 +1,6 @@
-const { generateEventData } = require('./lib/generateEventData');
+import { generateEventData } from './lib/generateEventData.js';
 
 //API CALLS to GET and POST
-/** GET
- * Utility to fetch data from an API endpoint.
- * @param {string} endpoint - The API endpoint to fetch data from.
- * @param {string} URL - The base URL for API requests.
- * @param {string} headerToSend - Custom request header.
- * @returns {Promise<Array>} - Resolves to the fetched data or an empty array on failure.
- */
 const fetchData = async (endpoint, URL, headerToSend, fetch) => {
   try {
     const res = await fetch(`${URL}${endpoint}`, {
@@ -21,11 +14,6 @@ const fetchData = async (endpoint, URL, headerToSend, fetch) => {
   }
 };
 
-/** POST
- * Creates a new event by making a POST request to the events API.
- * @param {Object} eventArray - The events array data to create.
- * @returns {Promise<Object|null>} - The created event data or null on failure.
- */
 const createEvents = async (eventArray, URL, headerToSend, fetch) => {
   if (!eventArray) return null;
 
@@ -46,12 +34,6 @@ const createEvents = async (eventArray, URL, headerToSend, fetch) => {
   }
 };
 
-/**
- * Checks if two dates are on the same day in UTC.
- * @param {Date} eventDate - Event date.
- * @param {Date} todayDate - Today's data.
- * @returns {boolean} - True if both dates are on the same UTC day.
- */
 const isSameUTCDate = (eventDate, todayDate) => {
   return (
     eventDate.getUTCFullYear() === todayDate.getUTCFullYear() &&
@@ -60,23 +42,12 @@ const isSameUTCDate = (eventDate, todayDate) => {
   );
 };
 
-/**
- * Checks if an event with the given name already exists for today's date.
- * @param {string} recurringEventName - The name of the recurring event to check.
- * @param {Date} today - Today's date in UTC.
- * @returns {boolean} - True if the event exists, false otherwise.
- */
 const doesEventExist = (recurringEventName, today, events) =>
   events.some((event) => {
     const eventDate = new Date(event.date);
     return isSameUTCDate(eventDate, today) && event.name === recurringEventName;
   });
 
-/**
- * Adjusts an event date to Los_Angeles time, accounting for DST offsets.
- * @param {Date} eventDate - The event date to adjust.
- * @returns {Date} - The adjusted event date.
- */
 const adjustToLosAngelesTime = (eventDate) => {
   const tempDate = new Date(eventDate);
   const losAngelesOffsetHours = new Intl.DateTimeFormat('en-US', {
@@ -90,66 +61,29 @@ const adjustToLosAngelesTime = (eventDate) => {
   return new Date(tempDate.getTime() + offsetMinutes * 60000);
 };
 
-/**
- * Filters recurring events happening today and creates new events if they do not already exist.
- * Adjusts for Daylight Saving Time (DST) by converting stored UTC dates to Los Angeles time.
- * @param {Array} events - The list of existing events.
- * @param {Array} recurringEvents - The list of recurring events to check.
- * @param {string} URL - The base URL for API requests.
- * @param {string} headerToSend - Custom header for authentication or request tracking.
- * @param {Function} fetch - Fetch function for making API calls.
- * @returns {Promise<void>} - A promise that resolves when all events are processed.
- */
 const filterAndCreateEvents = async (events, recurringEvents, URL, headerToSend, fetch) => {
   const today = new Date();
   const todayUTCDay = today.getUTCDay();
-  //2025-11-25
-  // const allLocalDays = [];
-  // const dateCheck = [];
-  // const eventNameExist = [];
-  // // filter recurring events for today and not already existing
+
   const eventsToCreate = recurringEvents?.filter((recurringEvent) => {
-    // we're converting the stored UTC event date to local time to compare the system DOW with the event DOW
     const localEventDate = adjustToLosAngelesTime(recurringEvent.date);
-    //Logs for checking
-    // allLocalDays.push(localEventDate.getUTCDay());
-    // dateCheck.push(localEventDate.getUTCDay() === todayUTCDay);
-    // eventNameExist.push(!doesEventExist(recurringEvent.name, today, events));
     return (
       localEventDate.getUTCDay() === todayUTCDay &&
       !doesEventExist(recurringEvent.name, today, events)
     );
   });
-  // console.log(
-  //   'Event date\n',
-  //   today,
-  //   '\nToday\n',
-  //   todayUTCDay,
-  //   '\nAll days\n',
-  //   allLocalDays,
-  //   '\nDay vs All Days comparison (Bool)\n',
-  //   dateCheck,
-  //   '\nEvent exist or not (Bool)\n',
-  //   eventNameExist,
-  //   '\nList of events to create\n',
-  //   eventsToCreate,
-  // );
 
-  //Check if event exists
   if (!eventsToCreate || eventsToCreate?.length === 0) {
     return 'No events for today.';
   } else {
     const batchEvents = [];
     for (const event of eventsToCreate) {
-      // convert to local time for DST correction...
       const correctedStartTime = adjustToLosAngelesTime(event.startTime);
       const timeCorrectedEvent = {
         ...event,
-        // ... then back to UTC for DB
         date: correctedStartTime.toISOString(),
         startTime: correctedStartTime.toISOString(),
       };
-      // map/generate all event data with adjusted date, startTime
       const eventToCreate = generateEventData(timeCorrectedEvent);
       batchEvents.push(eventToCreate);
     }
@@ -159,14 +93,6 @@ const filterAndCreateEvents = async (events, recurringEvents, URL, headerToSend,
   }
 };
 
-/**
- * Executes the task of fetching existing events and recurring events,
- * filtering those that should occur today, and creating them if needed.
- * @param {Function} fetch - Fetch function for making API requests.
- * @param {string} URL - The base URL for API requests.
- * @param {string} headerToSend - Custom header for authentication or request tracking.
- * @returns {Promise<void>} - A promise that resolves when all tasks are completed.
- */
 const runTask = async (fetch, URL, headerToSend) => {
   console.log("Creating today's events...");
   const [events, recurringEvents] = await Promise.all([
@@ -184,26 +110,12 @@ const runTask = async (fetch, URL, headerToSend) => {
   console.log(checkAndCreateEvents);
 };
 
-/**
- * Schedules the runTask function to execute periodically using a cron job.
- * @param {Object} cron - The cron scheduling library.
- * @param {Function} fetch - Fetch function for making API requests.
- * @param {string} URL - The base URL for API requests.
- * @param {string} headerToSend - Custom header for authentication or request tracking.
- * @returns {Object} - The scheduled cron job instance.
- */
 const scheduleTask = (cron, fetch, URL, headerToSend) => {
   return cron.schedule('*/30 * * * *', () => {
     runTask(fetch, URL, headerToSend).catch((error) => console.error('Error running task:', error));
   });
 };
 
-/**
- * Wrapper function to initialize the worker with dependencies in app.js
- * @param {Object} cron - The cron scheduling library.
- * @param {Function} fetch - Fetch function for making API requests.
- * @returns {Object} - The scheduled cron job instance.
- */
 const createRecurringEvents = (cron, fetch) => {
   const URL =
     process.env.NODE_ENV === 'prod'
@@ -214,7 +126,7 @@ const createRecurringEvents = (cron, fetch) => {
   return scheduleTask(cron, fetch, URL, headerToSend);
 };
 
-module.exports = {
+export {
   createRecurringEvents,
   fetchData,
   adjustToLosAngelesTime,
@@ -225,3 +137,5 @@ module.exports = {
   runTask,
   scheduleTask,
 };
+
+export default createRecurringEvents;

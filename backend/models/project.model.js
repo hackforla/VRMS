@@ -65,4 +65,4 @@ projectSchema.methods.serialize = function () {
 
 const Project = mongoose.model('Project', projectSchema);
 
-module.exports = { Project };
+export { Project };

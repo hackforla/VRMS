@@ -152,4 +152,4 @@ ProjectController.updateOnboardOffboardVisibility = async function (req, res) {
   }
 };
 
-module.exports = ProjectController;
+export default ProjectController;

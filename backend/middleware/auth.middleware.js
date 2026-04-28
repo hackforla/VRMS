@@ -1,9 +1,8 @@
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 import { CONFIG_AUTH } from '../config/index.js';
-
-const { RefreshToken, User } = require('../models');
-const crypto = require('crypto');
-const AuthUtils = require('../../shared/authorizationUtils');
+import { RefreshToken, User } from '../models/index.js';
+import AuthUtils from '../../shared/authorizationUtils.js';
 
 const SECRET = CONFIG_AUTH.JWT_SECRET;
 
@@ -32,14 +31,11 @@ function hashToken(token) {
 }
 
 function getClientIp(req) {
-  // Check X-Forwarded-For header (most common)
   const forwarded = req.headers['x-forwarded-for'];
   if (forwarded) {
-    // Takes the first IP if there are multiple
     return forwarded.split(',')[0].trim();
   }
 
-  // Check other common headers
   return (
     req.headers['x-real-ip'] || req.connection.remoteAddress || req.socket.remoteAddress || req.ip
   );
@@ -47,7 +43,6 @@ function getClientIp(req) {
 
 async function authenticateAccessToken(req, res, next) {
   try {
-    // Extract token from Authorization header
     let accessToken =
       req.cookies.token || req.headers['x-access-token'] || req.headers['authorization'];
 
@@ -60,7 +55,6 @@ async function authenticateAccessToken(req, res, next) {
     }
 
     const decoded = jwt.verify(accessToken, SECRET);
-    // Attach user info to request
     req.user = decoded;
 
     next();
@@ -77,7 +71,6 @@ async function authenticateAccessToken(req, res, next) {
   }
 }
 
-// shorthand for authenticateAccessToken
 const authUser = authenticateAccessToken;
 
 async function authenticateRefreshToken(req, res, next) {
@@ -104,7 +97,6 @@ async function authenticateRefreshToken(req, res, next) {
       return res.status(401).json({ error: 'User not found for this token' });
     }
 
-    // Attach user & refresh token to request for downstream handlers
     req.user = user;
     req.refreshToken = tokenDoc;
 
@@ -163,7 +155,22 @@ function verifyCookie(req, res, next) {
   });
 }
 
-module.exports = {
+const Auth = {
+  authenticateAccessToken,
+  authUser,
+  authenticateRefreshToken,
+  requireRole,
+  requireMinimumRole,
+  generateAccessToken,
+  generateRefreshToken,
+  getClientIp,
+  hashToken,
+  verifyCookie,
+};
+
+export default Auth;
+
+export {
   authenticateAccessToken,
   authUser,
   authenticateRefreshToken,

@@ -11,7 +11,7 @@ import { RefreshToken } from './refreshToken.model.js';
 import mongoose from 'mongoose';
 mongoose.Promise = global.Promise;
 
-module.exports = {
+export {
   CheckIn,
   Event,
   Project,

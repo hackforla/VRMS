@@ -35,4 +35,4 @@ router.patch(
   ProjectController.updateOnboardOffboardVisibility,
 );
 
-module.exports = router;
+export default router;

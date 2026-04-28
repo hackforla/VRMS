@@ -20,18 +20,16 @@ async function dropAllCollections() {
     try {
       await collection.drop();
     } catch (error) {
-      // Sometimes this error happens, but you can safely ignore it
       if (error.message === "ns not found") return;
-      // This error occurs when you use it.todo. You can
-      // safely ignore this error too
       if (error.message.includes("a background operation is currently running"))
         return;
       console.log(error.message);
     }
   }
 }
+
 let mongoServer;
-const setupIntegrationDB = (databaseName) => {
+export const setupIntegrationDB = (databaseName) => {
     // Connect to Mongoose
     beforeAll(async () => {
       mongoServer = await MongoMemoryServer.create({
@@ -53,7 +51,4 @@ const setupIntegrationDB = (databaseName) => {
     });
 };
 
-module.exports = {
-  setupIntegrationDB,
-  setupDB: setupIntegrationDB,
-};
+export const setupDB = setupIntegrationDB;

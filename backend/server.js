@@ -68,4 +68,4 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     .catch((err) => console.error(err));
 }
 
-module.exports = { app, runServer, closeServer };
+export { app, runServer, closeServer };

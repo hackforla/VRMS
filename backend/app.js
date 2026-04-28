@@ -132,4 +132,4 @@ app.get('*', (req, res, next) => {
 
 app.use(errorhandler);
 
-module.exports = app;
+export default app;
