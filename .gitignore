@@ -11,3 +11,5 @@ videos/
 screenshots/
 vrms.code-workspace
 .vscode/
+package-lock.json
+pnpm-lock.yaml
