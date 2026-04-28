@@ -1,11 +1,11 @@
 import mongoose from 'mongoose';
 
-const app = require('./app');
+import app from './app.js';
 
-const { Role } = require('./models');
+import { Role } from './models/index.js';
 
 // Load config variables
-const { CONFIG_DB } = require('./config/');
+import { CONFIG_DB } from './config/index.js';
 
 // Required convention for mongoose - https://stackoverflow.com/a/51862948/5900471
 mongoose.Promise = global.Promise;
@@ -62,7 +62,7 @@ async function initial() {
   }
 }
 
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   runServer()
     .then(() => initial())
     .catch((err) => console.error(err));

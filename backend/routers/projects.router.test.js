@@ -8,8 +8,8 @@ jest.mock('../middleware/auth.middleware', () => ({
 }));
 
 // Import Projects router and controller
-const ProjectController = require('../controllers/project.controller');
-const projectsRouter = require('./projects.router');
+import ProjectController from '../controllers/project.controller.js';
+import projectsRouter from './projects.router.js';
 import express from 'express';
 import supertest from 'supertest';
 
@@ -29,7 +29,6 @@ describe('Unit testing for Projects router', () => {
   });
 
   describe('READ', () => {
-    // Mock list of projects
     const mockProjects = [
       {
         id: '1',
@@ -74,49 +73,38 @@ describe('Unit testing for Projects router', () => {
     ];
 
     it('should return a list of projects based on query with GET /api/projects/', async () => {
-      // Mock ProjectController.project_list method when this route is called
       ProjectController.project_list.mockImplementationOnce((req, res) => {
         res.status(200).send(mockProjects);
       });
 
-      // Mock GET API call
       const response = await request.get('/api/projects');
 
-      // Tests
       expect(ProjectController.project_list).toHaveBeenCalled();
       expect(response.status).toBe(200);
       expect(response.body).toEqual(mockProjects);
-
-      // Marks completion of tests
     });
 
     it('should return a single project with GET /api/projects/:ProjectId', async () => {
       const mockProject = mockProjects[0];
       const ProjectId = mockProject.id;
 
-      // Mock ProjectController.project_list method when this route is called
       ProjectController.project_by_id.mockImplementationOnce((req, res) => {
         res.status(200).send(mockProject);
       });
 
-      // Mock GET API call
       const response = await request.get(`/api/projects/${ProjectId}`);
 
-      // Tests
       expect(ProjectController.project_by_id).toHaveBeenCalledWith(
         expect.objectContaining({ params: { ProjectId } }),
-        expect.anything(), // Mock response
-        expect.anything(), // Mock next
+        expect.anything(),
+        expect.anything(),
       );
       expect(response.status).toBe(200);
       expect(response.body).toEqual(mockProject);
-
-      // Marks completion of tests
     });
   });
 
   describe('CREATE', () => {
-    // Mock new project
     const newProject = {
       id: '3',
       name: 'mockProject3',
@@ -139,36 +127,29 @@ describe('Unit testing for Projects router', () => {
     };
 
     it('should create a new project with POST /api/projects', async () => {
-      // Mock ProjectController.create method when this route is called
       ProjectController.create.mockImplementationOnce((req, res) => {
         res.status(201).send(newProject);
       });
 
-      // Mock API POST req
       const response = await request.post('/api/projects').send(newProject);
 
-      // Middlware assertions
       expect(mockVerifyCookie).toHaveBeenCalledWith(
         expect.any(Object),
         expect.any(Object),
         expect.any(Function),
       );
 
-      // Tests
       expect(ProjectController.create).toHaveBeenCalledWith(
-        expect.objectContaining({ body: newProject }), // Check if newProject in body is parsed
-        expect.anything(), // Mock response
-        expect.anything(), // Mock next
+        expect.objectContaining({ body: newProject }),
+        expect.anything(),
+        expect.anything(),
       );
       expect(response.status).toBe(201);
       expect(response.body).toEqual(newProject);
-
-      // Marks completion of tests
     });
   });
 
   describe('UPDATE', () => {
-    // Mock filtered projects
     const filteredProjects = [
       {
         id: '1',
@@ -213,20 +194,15 @@ describe('Unit testing for Projects router', () => {
     ];
 
     it('should return a filed list of projects for PMs with PUT /api/projects', async () => {
-      // Mock ProjectController.pm_filtered_projects method when this route is called
       ProjectController.pm_filtered_projects.mockImplementationOnce((req, res) => {
         res.status(200).send(filteredProjects);
       });
 
-      // Mock PUT API call
       const response = await request.put('/api/projects');
 
-      // Tests
       expect(ProjectController.pm_filtered_projects).toHaveBeenCalled();
       expect(response.status).toBe(200);
       expect(response.body).toEqual(filteredProjects);
-
-      // Marks completion of tests
     });
 
     const updatedProject = {
@@ -253,31 +229,25 @@ describe('Unit testing for Projects router', () => {
     const ProjectId = updatedProject.id;
 
     it('should return an updated project with PUT /api/projects/:ProjectId', async () => {
-      // Mock ProjectController.update method when this route is called
       ProjectController.update.mockImplementationOnce((req, res) => {
         res.status(200).send(updatedProject);
       });
 
-      // Mock PUT API call
       const response = await request.put(`/api/projects/${ProjectId}`).send(updatedProject);
 
-      // Middlware assertions
       expect(mockVerifyCookie).toHaveBeenCalledWith(
         expect.any(Object),
         expect.any(Object),
         expect.any(Function),
       );
 
-      // Tests
       expect(ProjectController.update).toHaveBeenCalledWith(
-        expect.objectContaining({ params: { ProjectId } }), // Check if ProjectId is parsed from params
-        expect.anything(), // Mock response
-        expect.anything(), // Mock next
+        expect.objectContaining({ params: { ProjectId } }),
+        expect.anything(),
+        expect.anything(),
       );
       expect(response.status).toBe(200);
       expect(response.body).toEqual(updatedProject);
-
-      // Marks completion of tests
     });
 
     const updatedUser = {
@@ -290,72 +260,60 @@ describe('Unit testing for Projects router', () => {
     const userId = updatedUser.id;
 
     it("should add to the project's managedByUsers and the user's managedProjects fields with PATCH /api/projects/:ProjectId", async () => {
-      // Mock ProjectController.updateManagedByUsers method when this route is called
       ProjectController.updateManagedByUsers.mockImplementationOnce((req, res) => {
         res.status(200).send({ project: updatedProject, user: updatedUser });
       });
 
-      // Mock PUT API call
       const response = await request
         .patch(`/api/projects/${ProjectId}`)
         .send({ action: 'add', userId });
 
-      // Middlware assertions
       expect(mockVerifyCookie).toHaveBeenCalledWith(
         expect.any(Object),
         expect.any(Object),
         expect.any(Function),
       );
 
-      // Tests
       expect(ProjectController.updateManagedByUsers).toHaveBeenCalledWith(
         expect.objectContaining({
           params: { ProjectId },
           body: { action: 'add', userId },
-        }), // Check if ProjectId is parsed from params
-        expect.anything(), // Mock response
-        expect.anything(), // Mock next
+        }),
+        expect.anything(),
+        expect.anything(),
       );
       expect(response.status).toBe(200);
       expect(response.body).toEqual({ project: updatedProject, user: updatedUser });
-
-      // Marks completion of tests
     });
 
     it("should remove user from the project's managedByUsers and remove project from the user's managedProjects fields with PATCH /api/projects/:ProjectId", async () => {
       updatedProject.managedByUsers = [];
       updatedUser.managedProjects = [];
 
-      // Mock ProjectController.updateManagedByUsers method when this route is called
       ProjectController.updateManagedByUsers.mockImplementationOnce((req, res) => {
         res.status(200).send({ project: updatedProject, user: updatedUser });
       });
 
-      // Mock PUT API call
       const response = await request
         .patch(`/api/projects/${ProjectId}`)
         .send({ action: 'remove', userId });
 
-      // Middlware assertions
       expect(mockVerifyCookie).toHaveBeenCalledWith(
         expect.any(Object),
         expect.any(Object),
         expect.any(Function),
       );
 
-      // Tests
       expect(ProjectController.updateManagedByUsers).toHaveBeenCalledWith(
         expect.objectContaining({
           params: { ProjectId },
           body: { action: 'remove', userId },
-        }), // Check if ProjectId is parsed from params
-        expect.anything(), // Mock response
-        expect.anything(), // Mock next
+        }),
+        expect.anything(),
+        expect.anything(),
       );
       expect(response.status).toBe(200);
       expect(response.body).toEqual({ project: updatedProject, user: updatedUser });
-
-      // Marks completion of tests
     });
   });
 });

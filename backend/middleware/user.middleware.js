@@ -1,4 +1,4 @@
-const { User } = require('../models');
+import { User } from '../models/index.js';
 
 function checkDuplicateEmail(req, res, next) {
   User.findOne({ email: req.body.email }).then((user) => {

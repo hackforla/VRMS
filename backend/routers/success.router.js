@@ -2,7 +2,7 @@ import express from 'express';
 const router = express.Router();
 import cors from 'cors';
 
-const { Event } = require('../models/event.model');
+import { Event } from '../models/event.model.js';
 
 // GET /api/recurringevents/
 router.get("/", cors(), (req, res) => {

@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-const { CONFIG_AUTH } = require('../config');
+import { CONFIG_AUTH } from '../config/index.js';
 
 const { RefreshToken, User } = require('../models');
 const crypto = require('crypto');

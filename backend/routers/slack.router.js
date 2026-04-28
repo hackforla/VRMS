@@ -3,8 +3,8 @@ import express from 'express';
 const router = express.Router();
 import { App } from '@slack/bolt';
 import cron from 'node-cron';
-const { Event } = require('../models/event.model');
-const { Project } = require('../models/project.model');
+import { Event } from '../models/event.model.js';
+import { Project } from '../models/project.model.js';
 
 //  https://api.slack.com/web
 
