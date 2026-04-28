@@ -11,7 +11,7 @@ async function removeAllCollections() {
   const collections = Object.keys(mongooseCollections);
   for (const collectionName of collections) {
     const collection = mongoose.connection.collections[collectionName];
-    collection.deleteMany();
+    await collection.deleteMany();
   }
 }
 
