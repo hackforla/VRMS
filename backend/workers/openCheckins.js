@@ -1,3 +1,5 @@
+import { isInOpenWindow } from './lib/eventTime.js';
+
 export default (cron, fetch) => {
 
     // Check to see if any events are about to start,
@@ -21,13 +23,13 @@ export default (cron, fetch) => {
         };
     };
 
-    async function sortAndFilterEvents(currentTime, thirtyMinutes) {
+    async function sortAndFilterEvents(currentTime) {
         const events = await fetchEvents();
 
-        // Filter events if event date is after now but before thirty minutes from now
+        // Filter events if event starts between now and 30 minutes from now
         if (events && events.length > 0) {
             const sortedEvents = events.filter(event => {
-                return (event.date >= currentTime) && (event.date <= thirtyMinutes) && (event.checkInReady === false);
+                return isInOpenWindow(event.date, currentTime) && (event.checkInReady === false);
             })
             // console.log('Sorted events: ', sortedEvents);
             return sortedEvents;
@@ -60,14 +62,8 @@ export default (cron, fetch) => {
     async function runTask() {
         console.log("Opening check-ins");
 
-        // Get current time and set to date variable
-        const currentTimeISO = new Date().toISOString();
-
-        // Calculate thirty minutes from now
-        const thirtyMinutesFromNow = new Date().getTime() + 1800000;
-        const thirtyMinutesISO = new Date(thirtyMinutesFromNow).toISOString();
-
-        const eventsToOpen = await sortAndFilterEvents(currentTimeISO, thirtyMinutesISO);
+        const currentTime = new Date();
+        const eventsToOpen = await sortAndFilterEvents(currentTime);
         await openCheckins(eventsToOpen);
 
         console.log("Check-ins opened");
