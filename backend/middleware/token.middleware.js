@@ -24,4 +24,4 @@ const verifyToken = {
   isTokenValid,
 };
 
-module.exports = verifyToken;
+export default verifyToken;

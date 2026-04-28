@@ -14,4 +14,4 @@ router.patch('/:UserId', UserController.update);
 
 router.delete('/:UserId', UserController.delete);
 
-module.exports = router;
+export default router;

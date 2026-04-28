@@ -10,7 +10,7 @@ import { User } from './user.model.js';
 import mongoose from 'mongoose';
 mongoose.Promise = global.Promise;
 
-module.exports = {
+export {
   CheckIn,
   Event,
   Project,

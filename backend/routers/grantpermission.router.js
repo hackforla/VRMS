@@ -411,4 +411,4 @@ function checkPublicMembership(githubHandle) {
   ).then((res) => (res.status === 204 ? true : false));
 }
 
-module.exports = router;
+export default router;

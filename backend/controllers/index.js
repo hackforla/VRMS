@@ -5,7 +5,7 @@ import ProjectController from './project.controller.js';
 import HealthCheckController from './healthCheck.controller.js';
 import RecurringEventController from './recurringEvent.controller.js';
 
-module.exports = {
+export {
   EmailController,
   EventController,
   UserController,

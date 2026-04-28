@@ -40,4 +40,4 @@ router.patch('/:RecurringEventId', RecurringEventController.update);
 
 router.delete('/:RecurringEventId', RecurringEventController.destroy);
 
-module.exports = router;
+export default router;

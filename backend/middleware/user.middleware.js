@@ -29,4 +29,4 @@ const verifyUser = {
   isAdminByEmail,
 };
 
-module.exports = verifyUser;
+export default verifyUser;

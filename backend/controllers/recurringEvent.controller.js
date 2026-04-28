@@ -54,4 +54,4 @@ RecurringEventController.destroy = async function (req, res) {
 	}
       };
 
-module.exports = RecurringEventController;
+export default RecurringEventController;

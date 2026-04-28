@@ -198,4 +198,4 @@ UserController.logout = async function (req, res) {
     .send('Successfully logged out.');
 }
 
-module.exports = UserController;
+export default UserController;

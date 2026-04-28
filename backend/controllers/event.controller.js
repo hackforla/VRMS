@@ -57,4 +57,4 @@ EventController.update = async function (req, res) {
   }
 };
 
-module.exports = EventController;
+export default EventController;

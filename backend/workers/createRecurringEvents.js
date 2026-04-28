@@ -1,4 +1,4 @@
-module.exports = (cron, fetch) => {
+export default (cron, fetch) => {
 
     // Check to see if any recurring events are happening today,
     // and if so, check to see if an event has already been created

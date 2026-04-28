@@ -1,4 +1,4 @@
-module.exports = (cron, fetch) => {
+export default (cron, fetch) => {
 
     // Check to see if any events are about to start,
     // and if so, open their respective check-ins

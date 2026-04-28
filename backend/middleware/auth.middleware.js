@@ -39,4 +39,4 @@ const AuthUtil = {
   verifyToken,
   verifyCookie,
 };
-module.exports = AuthUtil;
+export default AuthUtil;

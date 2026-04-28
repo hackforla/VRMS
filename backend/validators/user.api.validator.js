@@ -39,4 +39,4 @@ const authApiValidator = {
   validateSigninUserAPICall,
 };
 
-module.exports = authApiValidator;
+export default authApiValidator;

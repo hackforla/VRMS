@@ -30,4 +30,4 @@ router.post('/me', [AuthUtil.verifyCookie], UserController.verifyMe);
 
 router.post('/logout', [AuthUtil.verifyCookie], UserController.logout);
 
-module.exports = router;
+export default router;
