@@ -8,6 +8,7 @@ dotenvExpand(myEnv);
 
 // TODO: Refactor worker routes. These are setup to run cron jobs every time the app
 // is instantiated. These break any integration tests.
+vi.mock('assert-env', () => ({ default: () => {} }));
 vi.mock('./workers/openCheckins');
 vi.mock('./workers/closeCheckins');
 vi.mock('./workers/createRecurringEvents');
