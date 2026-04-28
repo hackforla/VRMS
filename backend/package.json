@@ -2,6 +2,7 @@
   "name": "vrms-server",
   "version": "0.3.0",
   "description": "VRMS Backend",
+  "type": "module",
   "main": "server.js",
   "scripts": {
     "lint": "biome lint .",
