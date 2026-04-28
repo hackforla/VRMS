@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
+import supertest from 'supertest';
 
-const supertest = require('supertest');
 // Mock the Mongoose Event model
 jest.mock('../models/event.model', () => ({
   Event: {

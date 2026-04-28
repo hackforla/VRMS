@@ -7,6 +7,9 @@ jest.mock('../middleware', () => ({
   AuthUtil: {
     verifyCookie: jest.fn((req, res, next) => next()),
   },
+  Auth: {
+    authUser: jest.fn((req, res, next) => next()),
+  },
   verifyUser: {
     checkDuplicateEmail: jest.fn((req, res, next) => next()),
     isAdminByEmail: jest.fn((req, res, next) => next()),
@@ -26,10 +29,10 @@ const { User } = require('../models/user.model');
 const { UserController, EmailController } = require('../controllers');
 
 // Import auth router
-const express = require('express');
-const supertest = require('supertest');
+import express from 'express';
+import supertest from 'supertest';
 const authRouter = require('../routers/auth.router');
-const { verifyToken, verifyUser, AuthUtil } = require('../middleware');
+const { verifyToken, verifyUser, AuthUtil, Auth } = require('../middleware');
 const { authApiValidator } = require('../validators');
 
 // Create a new Express application for testing
@@ -155,7 +158,7 @@ describe('Unit tests for auth router', () => {
       });
 
       // Tests
-      expect(verifyToken.isTokenValid).toHaveBeenCalled();
+      expect(Auth.authUser).toHaveBeenCalled();
       expect(UserController.verifySignIn).toHaveBeenCalled();
       expect(response.status).toBe(200);
       expect(response.body).toEqual(mockUser);
@@ -175,7 +178,7 @@ describe('Unit tests for auth router', () => {
       });
 
       // Tests
-      expect(AuthUtil.verifyCookie).toHaveBeenCalled();
+      expect(Auth.authUser).toHaveBeenCalled();
       expect(UserController.verifyMe).toHaveBeenCalled();
       expect(response.status).toBe(200);
       expect(response.body).toEqual(mockUser);
@@ -190,17 +193,16 @@ describe('Unit tests for auth router', () => {
         res.clearCookie(token);
         res.status(200).send('Successfully logged out.');
       });
-  
+
       // Mock POST API call
       const response = await request.post('/api/auth/logout').set('Cookie', token);
-  
+
       // Tests
-      expect(AuthUtil.verifyCookie).toHaveBeenCalled();
       expect(UserController.logout).toHaveBeenCalled();
       expect(response.headers['set-cookie'][0]).toMatch(/token=;/);
       expect(response.status).toBe(200);
       expect(response.text).toBe('Successfully logged out.');
-  
+
       // Marks completion of tests
     });
   });

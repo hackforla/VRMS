@@ -1,4 +1,4 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
 const { Auth } = require('../middleware');
 const { UserController } = require('../controllers');

@@ -4,8 +4,8 @@ const { UserController } = require('../controllers');
 
 // Must import usersRouter after setting up mocks for UserController
 const usersRouter = require('./users.router');
-const express = require('express');
-const supertest = require('supertest');
+import express from 'express';
+import supertest from 'supertest';
 
 // Setup testapp with just usersRouter which calls mocked UserController
 const testapp = express();

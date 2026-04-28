@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 const { ObjectId } = require('mongodb');
 
 const EmailController = require('./email.controller');

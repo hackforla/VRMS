@@ -1,10 +1,10 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const fs = require('fs');
+import fs from 'fs';
 
-const { google } = require('googleapis');
-const async = require('async');
-const fetch = require('node-fetch');
+import { google } from 'googleapis';
+import async from 'async';
+import fetch from 'node-fetch';
 const { authUser } = require('../middleware/auth.middleware');
 const AuthUtils = require('../../shared/authorizationUtils');
 const { ROLES } = require('../../shared/roles');
@@ -216,44 +216,6 @@ function sendToken(oAuth2Client, code) {
     });
   });
 }
-
-/**
- * Lists the names and IDs of up to 10 files.
- * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
- * @returns {Promise} Promise with an object that contains the boolean success to determine
- * what to do in the route. Rejection objects also have a message field.
- */
-// function listFiles(auth) {
-//   const drive = google.drive({ version: 'v3', auth });
-//   return new Promise(function (resolve, reject) {
-//     drive.files.list(
-//       {
-//         pageSize: 10,
-//         fields: 'nextPageToken, files(id, name)',
-//       },
-//       (err, res) => {
-//         if (err)
-//           reject({
-//             success: false,
-//             message: 'The API returned an error: ' + err.message,
-//           });
-//         const files = res.data.files;
-//         if (files.length) {
-//           console.log('Files:');
-//           files.map((file) => {
-//             console.log(`${file.name} (${file.id})`);
-//           });
-//           resolve({ success: true });
-//         } else {
-//           return reject({
-//             success: false,
-//             message: 'No files found',
-//           });
-//         }
-//       },
-//     );
-//   });
-// }
 
 /**
  * Gives Google Drive permission to an email address for the file ID

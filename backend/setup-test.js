@@ -1,8 +1,8 @@
 // test-setup.js
-const mongoose = require("mongoose");
+import mongoose from 'mongoose';
 mongoose.promise = global.Promise;
 
-const { MongoMemoryServer } = require("mongodb-memory-server");
+import { MongoMemoryServer } from 'mongodb-memory-server';
 
 async function removeAllCollections() {
   const mongooseCollections = mongoose.connection.collections;

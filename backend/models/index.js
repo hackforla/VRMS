@@ -8,7 +8,7 @@ const { Role } = require('./role.model');
 const { User } = require('./user.model');
 const { RefreshToken } = require('./refreshToken.model');
 
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 mongoose.Promise = global.Promise;
 
 module.exports = {

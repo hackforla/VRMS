@@ -10,8 +10,8 @@ jest.mock('../middleware/auth.middleware', () => ({
 // Import Projects router and controller
 const ProjectController = require('../controllers/project.controller');
 const projectsRouter = require('./projects.router');
-const express = require('express');
-const supertest = require('supertest');
+import express from 'express';
+import supertest from 'supertest';
 
 // Set up testapp for testing Projects router
 const testapp = express();
