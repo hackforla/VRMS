@@ -1,4 +1,4 @@
-const express = require('express');
+import express from 'express';
 const { AuthUtil, verifyUser, verifyToken } = require('../middleware');
 const { UserController } = require('../controllers/');
 const { authApiValidator } = require('../validators');

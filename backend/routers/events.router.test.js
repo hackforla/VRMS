@@ -1,4 +1,4 @@
-const supertest = require("supertest");
+import supertest from 'supertest';
 const app = require("../app");
 const CONFIG = require('../config/auth.config');
 

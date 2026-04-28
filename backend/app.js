@@ -1,25 +1,26 @@
 // app.js - Entry point for our application
 
 // Load in all of our node modules. Their uses are explained below as they are called.
-const express = require('express');
-const bodyParser = require('body-parser');
-const cron = require('node-cron');
-const fetch = require('node-fetch');
-const morgan = require('morgan');
-const cookieParser = require('cookie-parser');
+import express from 'express';
+import bodyParser from 'body-parser';
+import cron from 'node-cron';
+import fetch from 'node-fetch';
+import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
 
 const customRequestHeaderName = 'x-customrequired-header';
 const dontCheckCustomRequestHeaderApis = ['GET::/api/recurringevents', 'GET::/api/healthcheck'];
 
 // Import environment variables
-const dotenv = require('dotenv');
-const dotenvExpand = require('dotenv-expand');
+import dotenv from 'dotenv';
+import dotenvExpand from 'dotenv-expand';
 
 const myEnv = dotenv.config();
 dotenvExpand(myEnv);
 
 // Verify environment variables
-require('assert-env')([
+import assertEnv from 'assert-env';
+assertEnv([
   'CUSTOM_REQUEST_HEADER',
   'SLACK_OAUTH_TOKEN',
   'SLACK_BOT_TOKEN',

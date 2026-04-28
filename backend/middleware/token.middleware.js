@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 const { CONFIG_AUTH } = require('../config');
 
 async function isTokenValid(req, res, next) {

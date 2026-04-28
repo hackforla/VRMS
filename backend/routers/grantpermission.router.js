@@ -1,10 +1,10 @@
-const express = require("express");
+import express from 'express';
 const router = express.Router();
-const fs = require("fs");
+import fs from 'fs';
 
-const { google } = require("googleapis");
-const async = require('async');
-const fetch = require("node-fetch");
+import { google } from 'googleapis';
+import async from 'async';
+import fetch from 'node-fetch';
 
 const SCOPES = ["https://www.googleapis.com/auth/drive"];
 

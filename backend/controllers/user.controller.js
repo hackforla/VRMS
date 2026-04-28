@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
 const EmailController = require('./email.controller');
 const { CONFIG_AUTH } = require('../config');

@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 const { CONFIG_AUTH } = require('../config');
 
 function verifyToken(req, res, next) {

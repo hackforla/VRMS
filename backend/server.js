@@ -1,5 +1,6 @@
+import mongoose from 'mongoose';
+
 const app = require("./app");
-const mongoose = require("mongoose");
 
 const { Role } = require("./models");
 

@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const cors = require('cors');
+import cors from 'cors';
 
 const { RecurringEvent } = require('../models/recurringEvent.model');
 const { RecurringEventController } = require('../controllers/');

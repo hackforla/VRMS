@@ -1,6 +1,6 @@
 // Be able to use Env variables in Github Actions
-const dotenv = require('dotenv');
-const dotenvExpand = require('dotenv-expand');
+import dotenv from 'dotenv';
+import dotenvExpand from 'dotenv-expand';
 
 const myEnv = dotenv.config();
 dotenvExpand(myEnv);

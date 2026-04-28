@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from 'mongoose';
 // const bcrypt = require('bcrypt-nodejs');
 
 mongoose.Promise = global.Promise;
