@@ -1,7 +1,11 @@
 import { describe, it, expect, vi, beforeAll, beforeEach, afterAll, afterEach, test } from 'vitest';
+
+vi.hoisted(() => {
+  process.env.CUSTOM_REQUEST_HEADER = 'test-request-header';
+});
+
 import supertest from 'supertest';
 import app from '../app.js';
-import CONFIG from '../config/auth.config.js';
 
 const request = supertest(app);
 
@@ -11,7 +15,7 @@ setupDB("api-events");
 import { Event } from '../models/index.js';
 
 const headers = {};
-headers['x-customrequired-header'] = CONFIG.CUSTOM_REQUEST_HEADER;
+headers['x-customrequired-header'] = process.env.CUSTOM_REQUEST_HEADER;
 headers.Accept = 'application/json';
 
 // API Tests

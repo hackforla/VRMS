@@ -1,4 +1,9 @@
 import { describe, it, expect, vi, beforeAll, beforeEach, afterAll, afterEach, test } from 'vitest';
+
+vi.hoisted(() => {
+  process.env.CUSTOM_REQUEST_HEADER = 'test-request-header';
+});
+
 import supertest from 'supertest';
 import app from '../app.js';
 const request = supertest(app);

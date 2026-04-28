@@ -1,4 +1,9 @@
 import { describe, it, expect, vi, beforeAll, beforeEach, afterAll, afterEach, test } from 'vitest';
+
+vi.hoisted(() => {
+  process.env.CUSTOM_REQUEST_HEADER = 'test-request-header';
+});
+
 import supertest from 'supertest';
 import app from '../app.js';
 const request = supertest(app);
@@ -6,9 +11,7 @@ const request = supertest(app);
 import { setupDB } from '../setup-test.js';
 setupDB('api-auth');
 
-import { CONFIG_AUTH } from '../config/index.js';
 import { User } from '../models/index.js';
-
 
 // Create mock for EmailController
 const sendMailMock = vi.fn()
@@ -22,7 +25,7 @@ beforeEach(() => {
 });
 
 const headers = {};
-headers['x-customrequired-header'] = CONFIG_AUTH.CUSTOM_REQUEST_HEADER;
+headers['x-customrequired-header'] = process.env.CUSTOM_REQUEST_HEADER;
 headers.Accept = 'application/json';
 
 // API Tests
