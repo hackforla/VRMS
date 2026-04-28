@@ -48,9 +48,11 @@ export function setupDB(databaseName) {
       useCreateIndex: true,
       useUnifiedTopology: true,
     };
-    await mongoose.connect(mongoUri, opts, (err) => {
-      if (err) console.error(err);
-    });
+    try {
+      await mongoose.connect(mongoUri, opts);
+    } catch (err) {
+      console.error(err);
+    }
   });
 
   // Cleans up database between each test
@@ -61,7 +63,7 @@ export function setupDB(databaseName) {
   // Disconnect Mongoose
   afterAll(async () => {
     await dropAllCollections();
-    await mongoose.connection.close();
+    await mongoose.connection.close(true);
     await mongoServer.stop();
   });
 }
