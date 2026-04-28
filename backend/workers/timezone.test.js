@@ -14,36 +14,8 @@
  * Related: GitHub issue #1872, PR #2116, bead VRMS-lw6
  */
 
-// -- Extract the inline event generation logic for testing --
-// This mirrors lines 69-100 of createRecurringEvents.js on development
-
-function generateEventFromRecurring(filteredEvent, TODAY_DATE) {
-  const eventDate = new Date(filteredEvent.date);
-  const hours = eventDate.getHours();
-  const minutes = eventDate.getMinutes();
-  const seconds = eventDate.getSeconds();
-  const milliseconds = eventDate.getMilliseconds();
-
-  const yearToday = TODAY_DATE.getFullYear();
-  const monthToday = TODAY_DATE.getMonth();
-  const dateToday = TODAY_DATE.getDate();
-
-  const newEventDate = new Date(
-    yearToday, monthToday, dateToday,
-    hours, minutes, seconds, milliseconds,
-  );
-
-  return {
-    name: filteredEvent.name,
-    date: newEventDate,
-    startTime: newEventDate,
-  };
-}
-
-// This mirrors line 54 of createRecurringEvents.js
-function getEventDay(event) {
-  return new Date(event.date).getDay();
-}
+import { describe, test, expect } from 'vitest';
+import { getEventDay, generateEventFromRecurring } from './lib/eventTime.js';
 
 // -- The tests --
 
@@ -103,11 +75,11 @@ describe('Event time generation', () => {
       hours: 2,
     };
 
-    const result = generateEventFromRecurring(recurringEvent, today);
+    const { newEventDate } = generateEventFromRecurring(recurringEvent, today);
 
     // The generated event should be at 7pm LA time
     const startHourLA = parseInt(
-      result.startTime.toLocaleString('en-US', {
+      newEventDate.toLocaleString('en-US', {
         timeZone: 'America/Los_Angeles',
         hour: 'numeric',
         hour12: false,
@@ -132,18 +104,18 @@ describe('Event time generation', () => {
       hours: 2,
     };
 
-    const result = generateEventFromRecurring(recurringEvent, today);
+    const { newEventDate } = generateEventFromRecurring(recurringEvent, today);
 
     // Should be Jan 7 at 11pm LA time
     const dayLA = parseInt(
-      result.date.toLocaleString('en-US', {
+      newEventDate.toLocaleString('en-US', {
         timeZone: 'America/Los_Angeles',
         day: 'numeric',
       }),
       10,
     );
     const hourLA = parseInt(
-      result.startTime.toLocaleString('en-US', {
+      newEventDate.toLocaleString('en-US', {
         timeZone: 'America/Los_Angeles',
         hour: 'numeric',
         hour12: false,
@@ -170,10 +142,10 @@ describe('Event time generation', () => {
       hours: 2,
     };
 
-    const result = generateEventFromRecurring(recurringEvent, marchNinth);
+    const { newEventDate } = generateEventFromRecurring(recurringEvent, marchNinth);
 
     const hourLA = parseInt(
-      result.startTime.toLocaleString('en-US', {
+      newEventDate.toLocaleString('en-US', {
         timeZone: 'America/Los_Angeles',
         hour: 'numeric',
         hour12: false,
@@ -187,8 +159,10 @@ describe('Event time generation', () => {
 });
 
 describe('Checkin open/close window — DST transitions', () => {
-  // openCheckins filters: startMs >= laNowMs && startMs <= thirtyMinutesFromLaNow
-  // Both sides use different fake-UTC conversions that can disagree during DST
+  // NOTE: These tests exercise checkin window logic proposed in PR #2116,
+  // which is NOT yet merged to development. The inline logic below simulates
+  // the toLocaleString-based approach from that PR. Once PR #2116 lands,
+  // these should be updated to import the real functions.
 
   test('checkin should open 15min before a 7pm event on spring-forward day', () => {
     // March 9, 2025: spring forward
