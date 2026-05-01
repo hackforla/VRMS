@@ -100,6 +100,10 @@ export default function UserWelcome() {
           },
         });
 
+        if (!res.ok) {
+          throw new Error(`Failed to fetch events: ${res.statusText}`);
+        }
+
         const resJson = await res.json();
         setEvents(resJson);
       } catch (error) {
@@ -141,7 +145,10 @@ export default function UserWelcome() {
               <Typography variant="h1">SUCCESS!</Typography>
               <Typography sx={pstyle}>You have checked in to: </Typography>
               <Typography sx={pstyle}>
-                {getEventLabel(events.find((e) => e._id === selectedEventId))}
+                {(() => {
+                  const event = events.find((e) => e._id === selectedEventId);
+                  return event ? getEventLabel(event) : 'Unknown event';
+                })()}
               </Typography>
             </Box>
           ) : (
