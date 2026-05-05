@@ -1,16 +1,16 @@
-const jwt = require('jsonwebtoken');
-const { ObjectId } = require('mongodb');
+import jwt from 'jsonwebtoken';
+import { ObjectId } from 'mongodb';
 
-const EmailController = require('./email.controller');
-const { CONFIG_AUTH } = require('../config');
+import EmailController from './email.controller.js';
+import { CONFIG_AUTH } from '../config/index.js';
 
-const { User, Project, RefreshToken } = require('../models');
-const {
+import { User, Project, RefreshToken } from '../models/index.js';
+import {
   generateRefreshToken,
   getClientIp,
   hashToken,
   generateAccessToken,
-} = require('../middleware/auth.middleware');
+} from '../middleware/auth.middleware.js';
 
 const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
 
@@ -321,14 +321,12 @@ UserController.updateManagedProjects = async (req, res) => {
   const { headers } = req;
   const { UserId } = req.params;
   const { action, projectId } = req.body; // action - 'add' or 'remove'
-  // console.log('action:', action, 'projectId:', projectId);
 
   if (headers['x-customrequired-header'] !== expectedHeader) {
     return res.sendStatus(403);
   }
 
   try {
-    // Update user's managedProjects and the project's managedByUsers
     const user = await User.findById(UserId);
     let managedProjects = user.managedProjects || [];
 
@@ -339,16 +337,13 @@ UserController.updateManagedProjects = async (req, res) => {
       managedProjects = [...managedProjects, projectId];
       managedByUsers = [...managedByUsers, UserId];
     } else {
-      // remove case
       managedProjects = managedProjects.filter((id) => id !== projectId);
       managedByUsers = managedByUsers.filter((id) => id !== UserId);
     }
 
-    // Update user's managedProjects
     user.managedProjects = managedProjects;
     await user.save({ validateBeforeSave: false });
 
-    // Update project's managedByUsers
     project.managedByUsers = managedByUsers;
     await project.save({ validateBeforeSave: false });
 
@@ -362,7 +357,6 @@ UserController.updateManagedProjects = async (req, res) => {
 UserController.bulkUpdateManagedProjects = async (req, res) => {
   const { bulkOps } = req.body;
 
-  // Convert string IDs to ObjectId in bulkOps
   bulkOps.forEach((op) => {
     if (op?.updateOne?.filter._id) {
       op.updateOne.filter._id = new ObjectId(op.updateOne.filter._id);
@@ -386,4 +380,4 @@ UserController.bulkUpdateManagedProjects = async (req, res) => {
   }
 };
 
-module.exports = UserController;
+export default UserController;

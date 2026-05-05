@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 mongoose.Promise = global.Promise;
 
@@ -65,4 +65,4 @@ projectSchema.methods.serialize = function () {
 
 const Project = mongoose.model('Project', projectSchema);
 
-module.exports = { Project };
+export { Project };

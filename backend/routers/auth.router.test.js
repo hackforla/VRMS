@@ -1,52 +1,54 @@
+import { describe, it, expect, vi, beforeAll, beforeEach, afterAll, afterEach, test } from 'vitest';
+
 // Set up mocks for User model and controller
-jest.mock('../controllers/user.controller');
-jest.mock('../controllers/email.controller');
-jest.mock('../models/user.model');
+vi.mock('../controllers/user.controller');
+vi.mock('../controllers/email.controller');
+vi.mock('../models/user.model');
 // Set up mocks for middleware
-jest.mock('../middleware', () => ({
+vi.mock('../middleware', () => ({
   AuthUtil: {
-    verifyCookie: jest.fn((req, res, next) => next()),
+    verifyCookie: vi.fn((req, res, next) => next()),
+  },
+  Auth: {
+    authUser: vi.fn((req, res, next) => next()),
   },
   verifyUser: {
-    checkDuplicateEmail: jest.fn((req, res, next) => next()),
-    isAdminByEmail: jest.fn((req, res, next) => next()),
+    checkDuplicateEmail: vi.fn((req, res, next) => next()),
+    isAdminByEmail: vi.fn((req, res, next) => next()),
   },
   verifyToken: {
-    isTokenValid: jest.fn((req, res, next) => next()),
+    isTokenValid: vi.fn((req, res, next) => next()),
   },
 }));
 // Set up mocks for authApiValidator
-jest.mock('../validators/user.api.validator', () => ({
-  validateCreateUserAPICall: jest.fn((req, res, next) => next()),
-  validateSigninUserAPICall: jest.fn((req, res, next) => next()),
+vi.mock('../validators/user.api.validator', () => ({
+  validateCreateUserAPICall: vi.fn((req, res, next) => next()),
+  validateSigninUserAPICall: vi.fn((req, res, next) => next()),
 }));
 
 // Import User model and controller
-const { User } = require('../models/user.model');
-const { UserController, EmailController } = require('../controllers');
+import { User } from '../models/user.model.js';
+const { UserController, EmailController } = await import('../controllers/index.js');
 
 // Import auth router
-const express = require('express');
-const supertest = require('supertest');
-const authRouter = require('../routers/auth.router');
-const { verifyToken, verifyUser, AuthUtil } = require('../middleware');
-const { authApiValidator } = require('../validators');
+import express from 'express';
+import supertest from 'supertest';
+import authRouter from '../routers/auth.router.js';
+const { verifyToken, verifyUser, AuthUtil, Auth } = await import('../middleware/index.js');
+const { authApiValidator } = await import('../validators/index.js');
 
 // Create a new Express application for testing
 const testapp = express();
-// Use body parser to extract params in API calls
 testapp.use(express.json());
 testapp.use('/api/auth', authRouter);
 const request = supertest(testapp);
 
 
 describe('Unit tests for auth router', () => {
-  // Clear all mocks after each test
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
-  // Mocker user for test
   const mockUser = {
     id: 1,
     name: {
@@ -59,12 +61,10 @@ describe('Unit tests for auth router', () => {
 
   describe('CREATE', () => {
     it('should sign up new user with POST /api/auth/signup', async () => {
-      // Mock implementation of UserController.createUser
       UserController.createUser.mockImplementationOnce((req, res) => {
         res.status(201).send({ message: 'User created successfully' });
       });
 
-      // Mock POST API call
       const response = await request.post('/api/auth/signup').send({
         name: {
           firstName: mockUser.firstName,
@@ -73,18 +73,14 @@ describe('Unit tests for auth router', () => {
         email: mockUser.email.toLowerCase(),
       });
 
-      // Tests
       expect(authApiValidator.validateCreateUserAPICall).toHaveBeenCalled();
       expect(verifyUser.checkDuplicateEmail).toHaveBeenCalled();
       expect(UserController.createUser).toHaveBeenCalled();
       expect(response.status).toBe(201);
       expect(response.body).toEqual({ message: 'User created successfully' });
-
-      // Marks completion of tests
     });
 
     it('should sign in existing user with POST /api/auth/signin', async () => {
-      // Mock implementation for UserController.signin
       const jsonToken = 'mockedToken';
       const email = mockUser.email.toLowerCase();
       const auth_origin = 'web';
@@ -94,10 +90,7 @@ describe('Unit tests for auth router', () => {
       };
 
       UserController.signin.mockImplementation((req, res) => {
-        // Set a cookie in the response
         res.cookie('token', cookie, { httpOnly: true });
-
-        // Set custom headers in the response
         res.set('origin', headers.origin);
 
         EmailController.sendLoginLink(
@@ -112,7 +105,6 @@ describe('Unit tests for auth router', () => {
         res.status(200).send('Signin successful');
       });
 
-      // Mock implementation for EmailController.sendLoginLink
       EmailController.sendLoginLink.mockImplementation(() => {
         console.log('Mocked EmailController.sendLoginLink called');
       });
@@ -122,7 +114,6 @@ describe('Unit tests for auth router', () => {
         auth_origin: auth_origin,
       });
 
-      // Tests
       expect(authApiValidator.validateSigninUserAPICall).toHaveBeenCalled();
       expect(verifyUser.isAdminByEmail).toHaveBeenCalled();
       expect(UserController.signin).toHaveBeenCalled();
@@ -135,73 +126,54 @@ describe('Unit tests for auth router', () => {
         headers.origin,
       );
       expect(response.status).toBe(200);
-      // Verify that the cookie is set
       expect(response.headers['set-cookie']).toBeDefined();
       expect(response.headers['set-cookie'][0]).toContain(`token=${cookie}`);
       expect(response.text).toBe('Signin successful');
-
-      // Marks completion of tests
     });
 
     it('should verify sign in with POST /api/auth/verify-signin', async () => {
-      // Mock implementation for UserController.verifySignIn
       UserController.verifySignIn.mockImplementation((req, res) => {
         res.status(200).send(mockUser);
       });
 
-      // Mock POST API call
       const response = await request.post('/api/auth/verify-signin').send({
         token: 'mockedToken',
       });
 
-      // Tests
-      expect(verifyToken.isTokenValid).toHaveBeenCalled();
+      expect(Auth.authUser).toHaveBeenCalled();
       expect(UserController.verifySignIn).toHaveBeenCalled();
       expect(response.status).toBe(200);
       expect(response.body).toEqual(mockUser);
-
-      // Marks completion of tests
     });
 
     it('should verify me with POST /api/auth/me', async () => {
-      // Mock implementation for UserController.verifyMe
       UserController.verifyMe.mockImplementation((req, res) => {
         res.status(200).send(mockUser);
       });
 
-      // Mock POST API call
       const response = await request.post('/api/auth/me').send({
         token: 'mockedToken',
       });
 
-      // Tests
-      expect(AuthUtil.verifyCookie).toHaveBeenCalled();
+      expect(Auth.authUser).toHaveBeenCalled();
       expect(UserController.verifyMe).toHaveBeenCalled();
       expect(response.status).toBe(200);
       expect(response.body).toEqual(mockUser);
-
-      // Marks completion of tests
     });
 
     it('should log out with POST /api/auth/logout', async () => {
       const token = 'token';
-      // Mock implementation for UserController.logout
       UserController.logout.mockImplementation((req, res) => {
         res.clearCookie(token);
         res.status(200).send('Successfully logged out.');
       });
-  
-      // Mock POST API call
+
       const response = await request.post('/api/auth/logout').set('Cookie', token);
-  
-      // Tests
-      expect(AuthUtil.verifyCookie).toHaveBeenCalled();
+
       expect(UserController.logout).toHaveBeenCalled();
       expect(response.headers['set-cookie'][0]).toMatch(/token=;/);
       expect(response.status).toBe(200);
       expect(response.text).toBe('Successfully logged out.');
-  
-      // Marks completion of tests
     });
   });
 
