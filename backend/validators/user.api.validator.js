@@ -1,4 +1,4 @@
-const { body, validationResult } = require('express-validator');
+import { body, validationResult } from 'express-validator';
 
 async function validateCreateUserAPICall(req, res, next) {
   await body('name.firstName').not().isEmpty().trim().escape().run(req);
@@ -39,4 +39,4 @@ const authApiValidator = {
   validateSigninUserAPICall,
 };
 
-module.exports = authApiValidator;
+export default authApiValidator;

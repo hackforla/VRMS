@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from 'mongoose';
 
 mongoose.Promise = global.Promise;
 
@@ -21,4 +21,4 @@ checkInSchema.methods.serialize = function () {
 
 const CheckIn = mongoose.model("CheckIn", checkInSchema);
 
-module.exports = { CheckIn };
+export { CheckIn };
