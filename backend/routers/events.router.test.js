@@ -1,153 +1,148 @@
 import { describe, it, expect, vi, beforeAll, beforeEach, afterAll, afterEach, test } from 'vitest';
-
-vi.hoisted(() => {
-  process.env.CUSTOM_REQUEST_HEADER = 'test-request-header';
-});
-
+import express from 'express';
 import supertest from 'supertest';
-import app from '../app.js';
 
-const request = supertest(app);
+// Mock the Mongoose Event model
+vi.mock('../models/event.model', () => ({
+  Event: {
+    find: vi.fn(),
+  },
+}));
 
-import { setupDB } from '../setup-test.js';
-setupDB("api-events");
+import { Event } from '../models/event.model.js';
+//Mock the EventController to isolate router tests
+vi.mock('../controllers', () => ({
+  EventController: {
+    event_list: vi.fn(),
+    create: vi.fn(),
+    event_by_id: vi.fn(),
+    destroy: vi.fn(),
+    update: vi.fn(),
+  },
+}));
 
-import { Event } from '../models/index.js';
+const { EventController } = await import('../controllers/index.js');
 
-const headers = {};
-headers['x-customrequired-header'] = process.env.CUSTOM_REQUEST_HEADER;
-headers.Accept = 'application/json';
+import eventsRouter from './events.router.js';
+const testapp = express();
+testapp.use(express.json());
+testapp.use(express.urlencoded({ extended: false }));
+testapp.use('/api/events', eventsRouter);
+const request = supertest(testapp);
 
-// API Tests
-describe('CREATE', () => {
-  test('Create Event', async () => {
-    // Test Data
-    const submittedData = {
-      name: 'eventName',
-    };
+describe('Unit Tests for events.router.js', () => {
+  const mockEvent = {
+    _id: 'event123',
+    name: 'Test Event',
+    project: 'projectABC',
+    date: '2025-01-01T10:00:00Z',
+  };
+  const mockEventId = 'event123';
+  const mockProjectId = 'projectABC';
+  const mockUpdatedEventData = { name: 'Updated Test Event Name' };
 
-    // Submit an event
-    const res = await request
-      .post('/api/events/')
-      .set(headers)
-      .send(submittedData);
-    expect(res.status).toBe(201);
-
-    // Retrieve that event
-    const databaseEventQuery = await Event.find();
-    const databaseEvent = databaseEventQuery[0];
-    expect(databaseEventQuery.length).toBeGreaterThanOrEqual(1);
-    expect(databaseEvent.name).toBe(submittedData.name);
+  afterEach(() => {
+    vi.clearAllMocks();
   });
-});
 
-describe('READ', () => {
-  test('GET Events list', async () => {
-    // Test Data
-    const submittedData = {
-      createdDate: '2020-05-20T21:16:44.498Z',
-      checkinReady: true,
-    };
-    
-    // Add an event with a project using the API.
-    const res = await request.post("/api/events").send(submittedData).set(headers);
-
-    // Retrieve and compare the the Event values using the DB.
-    const databaseEventQuery = await Event.find();
-    const databaseEvent = databaseEventQuery[0];
-    expect(databaseEventQuery.length).toBeGreaterThanOrEqual(1);
-    expect(databaseEvent.createdDate).toStrictEqual(new Date(submittedData.createdDate));
-
-    // Retrieve and compare the the values using the API.
-    const response = await request.get('/api/events/').set(headers);
-    expect(response.statusCode).toBe(200);
-    const APIData = response.body[0];
-    expect(APIData.createdDate).toBe(submittedData.createdDate);
+  describe('GET /api/events (event_list)', () => {
+    it('should call EventController.event_list and return a list of events', async () => {
+      EventController.event_list.mockImplementationOnce((req, res) =>
+        res.status(200).send([mockEvent]),
+      );
+      const response = await request.get('/api/events');
+      expect(EventController.event_list).toHaveBeenCalledWith(
+        expect.anything(), expect.anything(), expect.anything(),
+      );
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual([mockEvent]);
+    });
   });
-  test('GET Event by ID', async () => {
-    // Test Data
-    const submittedData = {
-      name: 'eventName',
-      location: {
-        // should we include address here?
-        city: 'Los Angeles',
-        state: 'California',
-        country: 'USA',
-      },
-      hacknight: 'Online', // DTLA, Westside, South LA, Online
-      eventType: 'Workshop', // Project Meeting, Orientation, Workshop
-      description: 'A workshop to do stuff',
-      date: 1594023390039,
-      startTime: 1594023390039, // start date and time of the event
-      endTime: 1594023390039, // end date and time of the event
-      hours: 2, // length of the event in hours
-      createdDate: 1594023390039, // date/time event was created
-      updatedDate: 1594023390039, // date/time event was last updated
-      checkInReady: false, // is the event open for check-ins?
-      owner: {
-        ownerId: 33, // id of user who created event
-      },
-    };
 
-    // Create Event by DB
-    const dbCreatedevent = await Event.create(submittedData);
-    const dbCreatedeventId = dbCreatedevent.id;
-    const dbCreatedEventIdURL = `/api/events/${dbCreatedeventId}`;
-
-    // Retrieve and compare the the values using the API.
-    const response = await request.get(dbCreatedEventIdURL).set(headers);
-    expect(response.statusCode).toBe(200);
-    const apiRetrievedEvent = await response.body;
-    expect(apiRetrievedEvent._id).toBe(dbCreatedeventId);
-
+  describe('POST /api/events (create)', () => {
+    it('should call EventController.create and return the created event', async () => {
+      EventController.create.mockImplementationOnce((req, res) => res.status(201).send(mockEvent));
+      const newEventData = { name: mockEvent.name, project: mockEvent.project, date: mockEvent.date };
+      const response = await request.post('/api/events/').send(newEventData);
+      expect(EventController.create).toHaveBeenCalledWith(
+        expect.objectContaining({ body: newEventData }), expect.anything(), expect.anything(),
+      );
+      expect(response.status).toBe(201);
+      expect(response.body).toEqual(mockEvent);
+    });
   });
-});
 
-describe('UPDATE', () => {
-  test('Update Event by ID with PATCH', async () => {
-    // Test Data
-    const submittedData = {
-      name: 'originalEventName',
-    };
-
-    // Submit an event
-    const res = await request
-      .post('/api/events/')
-      .set(headers)
-      .send(submittedData);
-    expect(res.status).toBe(201);
-
-    const updatedDataPayload = {
-      name: 'updateEventName',
-    };
-
-    // Update the event
-    const res2 = await request
-      .patch(`/api/events/${res.body._id}`)
-      .set(headers)
-      .send(updatedDataPayload);
-    expect(res2.status).toBe(200);
-
+  describe('GET /api/events/:EventId (event_by_id)', () => {
+    it('should call EventController.event_by_id and return a specific event', async () => {
+      EventController.event_by_id.mockImplementationOnce((req, res) =>
+        res.status(200).send(mockEvent),
+      );
+      const response = await request.get(`/api/events/${mockEventId}`);
+      expect(EventController.event_by_id).toHaveBeenCalledWith(
+        expect.objectContaining({ params: { EventId: mockEventId } }),
+        expect.anything(), expect.anything(),
+      );
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(mockEvent);
+    });
   });
-});
 
-describe('DELETE', () => {
-  test('Delete Event by ID with DELETE', async () => {
-    // Test Data
-    const submittedData = {
-      name: 'eventName',
-    };
+  describe('DELETE /api/events/:EventId (destroy)', () => {
+    it('should call EventController.destroy and return 204 No Content', async () => {
+      EventController.destroy.mockImplementationOnce((req, res) => res.status(204).send());
+      const response = await request.delete(`/api/events/${mockEventId}`);
+      expect(EventController.destroy).toHaveBeenCalledWith(
+        expect.objectContaining({ params: { EventId: mockEventId } }),
+        expect.anything(), expect.anything(),
+      );
+      expect(response.status).toBe(204);
+      expect(response.body).toEqual({});
+    });
+  });
 
-    // Submit an event
-    const res = await request
-      .post('/api/events/')
-      .set(headers)
-      .send(submittedData);
-    expect(res.status).toBe(201);
+  describe('PATCH /api/events/:EventId (update)', () => {
+    it('should call EventController.update and return the updated event', async () => {
+      EventController.update.mockImplementationOnce((req, res) =>
+        res.status(200).send({ ...mockEvent, ...mockUpdatedEventData }),
+      );
+      const response = await request.patch(`/api/events/${mockEventId}`).send(mockUpdatedEventData);
+      expect(EventController.update).toHaveBeenCalledWith(
+        expect.objectContaining({ params: { EventId: mockEventId }, body: mockUpdatedEventData }),
+        expect.anything(), expect.anything(),
+      );
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ ...mockEvent, ...mockUpdatedEventData });
+    });
+  });
 
-    // Delete the event
-    const res2 = await request.delete(`/api/events/${res.body._id}/`).set(headers);
-    expect(res2.status).toBe(200);
+  describe('GET /api/events/nexteventbyproject/:id', () => {
+    it('should return the last event for a given project ID directly from the router', async () => {
+      const mockEventsForProject = [
+        { _id: 'eventA', project: mockProjectId, name: 'Event A' },
+        { _id: 'eventB', project: mockProjectId, name: 'Event B' },
+        { _id: 'eventC', project: mockProjectId, name: 'Event C' },
+      ];
+      Event.find.mockImplementationOnce(() => ({
+        populate: vi.fn().mockReturnThis(),
+        then: vi.fn(function (callback) { return Promise.resolve(callback(mockEventsForProject)); }),
+        catch: vi.fn(),
+      }));
+      const response = await request.get(`/api/events/nexteventbyproject/${mockProjectId}`);
+      expect(Event.find).toHaveBeenCalledWith({ project: mockProjectId });
+      expect(Event.find.mock.results[0].value.populate).toHaveBeenCalledWith('project');
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(mockEventsForProject[mockEventsForProject.length - 1]);
+    });
 
+    it('should return 500 if an error occurs when fetching next event by project', async () => {
+      const mockError = new Error('Simulated database error for next event by project');
+      Event.find.mockImplementationOnce(() => ({
+        populate: vi.fn().mockReturnThis(),
+        then: vi.fn(() => Promise.reject(mockError)),
+        catch: vi.fn(function (callback) { return Promise.resolve(callback(mockError)); }),
+      }));
+      const response = await request.get(`/api/events/nexteventbyproject/${mockProjectId}`);
+      expect(response.status).toBe(500);
+    });
   });
 });

@@ -26,200 +26,6 @@
   }
 }
 
-.project-list {
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-}
-
-.project-list-item li {
-  margin-bottom: 5px;
-  border: 2px black solid;
-  border-radius: 5px;
-  padding: 0.3em;
-  &:hover {
-    background-color: lightgrey;
-  }
-}
-
-.project-list-button {
-  font-family: 'aliseoregular', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
-    'Helvetica Neue', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  padding: 0;
-  text-align: left;
-}
-
-.project-list-heading {
-  margin: 20px 0;
-  font-size: 18px;
-}
-
-.project-sub-heading {
-  margin: 20px 0 20px 0;
-}
-
-.project-warning-text {
-  color: #fa114f;
-  font-size: smaller;
-  margin-bottom: 1rem;
-}
-
-div.editable-field {
-  font-weight: normal;
-  font-size: 18px;
-  max-width: none;
-  width: 400px;
-}
-
-.editable-field {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 14px;
-}
-
-.editable-field-div {
-  margin-bottom: 20px;
-}
-
-.section-name {
-  font-size: 16px;
-}
-
-.section-content {
-  font-size: 14px;
-  text-transform: none;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-.project-edit-title {
-  margin-bottom: 4px;
-  display: flex;
-  flex-direction: row;
-}
-
-.project-edit-button {
-  flex: 2;
-  padding-left: 8px;
-  color: #fa114f;
-  cursor: pointer;
-  font-family: Arial, Helvetica, sans-serif;
-  text-align: left;
-}
-
-.button-edit {
-  background-color: black;
-  width: 150px;
-  color: white;
-  font-size: 20px;
-  padding: 10px;
-  border-radius: 5px;
-  margin: 10px 0px;
-}
-
-.display-events {
-  margin-top: 15px;
-  margin-bottom: 10px;
-}
-
-.event-list {
-  margin-bottom: 40px;
-  h3 {
-    width: 190px;
-    padding: 7px 18px 10px;
-    font-family: Arial, Helvetica, sans-serif;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 18px;
-    line-height: 24px;
-    color: #000000;
-    background-color: #f2f2f2;
-  }
-
-  ul {
-    padding-top: 4px;
-    border-top: 2px solid #32373b;
-  }
-
-  li {
-    display: flex;
-    padding: 8px 0;
-    flex-direction: column;
-    border-bottom: 1px solid #ecebed;
-  }
-
-  li:hover {
-    background-color: #f2f2f2;
-  }
-
-  button {
-    font-family: 'aliseoregular', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-      'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
-      'Helvetica Neue', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    padding: 0;
-    text-align: left;
-  }
-
-  &-details,
-  &-description {
-    font-family: Arial, Helvetica, sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 14px;
-    line-height: 24px;
-  }
-
-  &-description {
-    color: #5c5c5c;
-    height: 24px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-}
-
-.edit-meeting-modal {
-  width: 92%;
-  display: none;
-  background-color: white;
-  opacity: 1;
-  &.active {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    padding-left: 8px;
-    padding-right: 50px;
-    top: 24px;
-    display: block;
-    background-color: rgba(255, 255, 255, 0.763);
-    z-index: 3;
-  }
-}
-
-.meeting-cancel-button {
-  background-color: transparent;
-  border: none;
-  width: 98%;
-  font-family: Helvetica, sans-serif;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 22px;
-  line-height: 24px;
-  color: #000000;
-  text-align: right;
-}
-
-.event-alert {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: white;
-}
-
-// create new event form on createNewEvent.js
 .event-form-box {
   min-width: 100%;
   min-height: 540px;
@@ -228,63 +34,38 @@ div.editable-field {
   border: solid black 2px;
   display: flex;
   flex-direction: column;
+  gap: 20px;
   background-color: white;
+
+  // Temporary solution until Globally applied CSS is refactored/removed
+
+  // Resets the label text size on EventForm.tsx Text Fields
+  // A global variable was interacting with MUI styles and overflowing the label on <TextField> in EventForm.tsx
+  .MuiInputLabel-root {
+    font-size: inherit;
+  }
+
+  // Forces horizontal padding inside EventForm.tsx Text Fields
+  // A global variable was interacting with MUI styles and affecting padding inside <TextField> in EventForm.tsx
+  .MuiInputBase-input {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
 }
 
-.event-form-box .event-form-title {
+.event-form-title {
   font-size: 20px;
-  margin-bottom: 16px;
 }
 
 .event-form-row {
   display: flex;
   flex-direction: row;
-}
-
-.event-form-label {
-  display: block;
-  margin-top: 4px;
-  select {
-    display: block;
-  }
+  gap: 16px;
 }
 
 .event-form-error {
   color: red;
   margin-bottom: 10px;
-}
-
-.event-form-box input,
-textarea {
-  display: block;
-  width: 100%;
-  padding: 2px 0 15px 10px;
-  margin: 5px 0;
-  border: 1px;
-  border-radius: 5px;
-  font-size: 20px;
-  color: black;
-}
-
-.event-form-box select {
-  color: black;
-  width: 140px;
-  padding: 6px;
-  font-size: 16px;
-  font-weight: bold;
-  border: 1px solid black;
-  border-radius: 0px;
-  margin: 12px;
-}
-
-.event-form-box textarea {
-  height: 25px;
-}
-
-.event-form-box label {
-  font-size: 15px;
-  width: 100%;
-  display: block;
 }
 
 .button-box {
@@ -310,12 +91,4 @@ textarea {
 
 .create-form-button:active {
   background-color: #969595;
-}
-
-.event-list-details {
- display: flex;
-}
-
-.edit-icon {
-  margin-left: 22px;
 }

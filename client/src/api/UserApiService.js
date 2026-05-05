@@ -14,6 +14,7 @@ class UserApiService {
       const res = await fetch(this.baseUserUrl, {
         headers: this.headers,
       });
+      console.log(res);
       return await res.json();
     } catch (error) {
       console.error(`fetchUsers error: ${error}`);
@@ -22,14 +23,71 @@ class UserApiService {
     return [];
   }
 
+  async fetchUserById(id) {
+    try {
+      const uri = `${this.baseUserUrl}id/${id}`;
+      const res = await fetch(uri, {
+        headers: this.headers,
+      });
+      return await res.json();
+    } catch (error) {
+      console.error(`fetchUsers error: ${error}`);
+      alert('Server not responding.  Please refresh the page.');
+    }
+    return [];
+  }
+
+  // Fetch user by email
+  async fetchUserByEmail(email) {
+    try {
+      const uri = `${this.baseUserUrl}email/${email}`;
+      const res = await fetch(uri, {
+        headers: this.headers,
+      });
+      return await res.json();
+    } catch (error) {
+      console.error(`fetchUsers error: ${error}`);
+      alert('Server not responding.  Please refresh the page.');
+    }
+    return [];
+  }
+
+  async fetchAdmins() {
+    try {
+      const route = this.baseUserUrl + '/admins';
+      const res = await fetch(route, {
+        headers: this.headers,
+      });
+      return await res.json();
+    } catch (error) {
+      console.error(`fetchAdmins error: ${error}`);
+      alert('Server not responding.  Please refresh the page.');
+    }
+    return [];
+  }
+
+  async fetchProjectsManagers() {
+    try {
+      const route = this.baseUserUrl + '/projectManagers';
+      const res = await fetch(route, {
+        headers: this.headers,
+      });
+      return await res.json();
+    } catch (error) {
+      console.error(`fetchProjectsManagers error: ${error}`);
+      alert('Server not responding. Please refresh the page.');
+    }
+    return [];
+  }
+
   // Updates user projects in db
-  async updateUserDbProjects(userToEdit, managedProjects) {
+  async updateUserDbProjects(userToEdit, projectId, action) {
     // eslint-disable-next-line no-underscore-dangle
-    const url = `${this.baseUserUrl}${userToEdit._id}`;
+    const url = `${this.baseUserUrl}${userToEdit._id}/managedProjects`;
     const requestOptions = {
       method: 'PATCH',
       headers: this.headers,
-      body: JSON.stringify({ managedProjects }),
+      body: JSON.stringify({ action, projectId }),
     };
 
     try {
@@ -39,6 +97,71 @@ class UserApiService {
       alert('Server not responding.  Please try again.');
     }
     return undefined;
+  }
+
+  async updateUserDbIsActive(userToEdit, isActive) {
+    const url = `${this.baseUserUrl}${userToEdit._id}`;
+    const requestOptions = {
+      method: 'PATCH',
+      headers: this.headers,
+      body: JSON.stringify({ isActive }),
+    };
+
+    try {
+      return await fetch(url, requestOptions);
+    } catch (err) {
+      console.error('update is-active error', err);
+      alert('server not responding.  Please try again.');
+    }
+  }
+
+  async updateUserDbEmail(userToEdit, email) {
+    const url = `${this.baseUserUrl}${userToEdit._id}`;
+    const lowercaseEmail = email.toLowerCase();
+    const requestOptions = {
+      method: 'PATCH',
+      headers: this.headers,
+      body: JSON.stringify({ lowercaseEmail }),
+    };
+
+    try {
+      return await fetch(url, requestOptions);
+    } catch (err) {
+      console.error('update use email error', err);
+      alert('server not responding.  Please try again.');
+    }
+  }
+
+  // Update user's access level (admin/user)
+  async updateUserAccessLevel(userToEdit, accessLevel) {
+    const url = `${this.baseUserUrl}${userToEdit._id}`;
+    const requestOptions = {
+      method: 'PATCH',
+      headers: this.headers,
+      body: JSON.stringify({ accessLevel }),
+    };
+
+    try {
+      return await fetch(url, requestOptions);
+    } catch (err) {
+      console.error('update access level error', err);
+      alert('server not responding.  Please try again.');
+    }
+  }
+
+  async bulkUpdateManagedProjects(bulkOps) {
+    const url = `${this.baseUserUrl}bulk-updates`;
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: this.headers,
+        body: JSON.stringify({ bulkOps }),
+      });
+      return await res.json();
+    } catch (error) {
+      console.error(`bulkUpdateManagedProjects error: ${error}`);
+      alert('Server not responding.  Please try again.');
+    }
   }
 }
 

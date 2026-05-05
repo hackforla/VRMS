@@ -14,21 +14,14 @@ mongoose.Promise = global.Promise;
 let server;
 async function runServer(databaseUrl = CONFIG_DB.DATABASE_URL, port = CONFIG_DB.PORT) {
   await mongoose
-    .connect(databaseUrl, {
-      useNewUrlParser: true,
-      useCreateIndex: true,
-      useUnifiedTopology: true,
-      useFindAndModify: false,
-    })
+    .connect(databaseUrl)
     .catch((err) => err);
 
   server = app
     .listen(port, () => {
-      console.log(
-        `Mongoose connected from runServer() and is listening on ${port}`
-      );
+      console.log(`Mongoose connected from runServer() and is listening on ${port}`);
     })
-    .on("error", (err) => {
+    .on('error', (err) => {
       mongoose.disconnect();
       return err;
     });
@@ -37,7 +30,7 @@ async function runServer(databaseUrl = CONFIG_DB.DATABASE_URL, port = CONFIG_DB.
 async function closeServer() {
   await mongoose.disconnect().then(() => {
     return new Promise((resolve, reject) => {
-      console.log("Closing Mongoose connection. Bye");
+      console.log('Closing Mongoose connection. Bye');
 
       server.close((err) => {
         if (err) {
@@ -50,35 +43,30 @@ async function closeServer() {
   });
 }
 
-function initial() {
-  Role.collection.estimatedDocumentCount((err, count) => {
-    if (!err && count === 0) {
-      new Role({
+async function initial() {
+  try {
+    const count = await Role.collection.estimatedDocumentCount();
+
+    if (count === 0) {
+      await new Role({
         name: "APP_USER",
-      }).save((err) => {
-        if (err) {
-          console.log("error", err);
-        }
+      }).save();
+      console.log("added 'user' to roles collection");
 
-        console.log("added 'user' to roles collection");
-      });
-
-      new Role({
+      await new Role({
         name: "APP_ADMIN",
-      }).save((err) => {
-        if (err) {
-          console.log("error", err);
-        }
-
-        console.log("added 'moderator' to roles collection");
-      });
+      }).save();
+      console.log("added 'moderator' to roles collection");
     }
-  });
+  } catch (err) {
+    console.log("error", err);
+  }
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  runServer().catch((err) => console.error(err));
-  initial();
+  runServer()
+    .then(() => initial())
+    .catch((err) => console.error(err));
 }
 
 export { app, runServer, closeServer };

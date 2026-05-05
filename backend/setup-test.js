@@ -1,7 +1,6 @@
 // test-setup.js
 import { beforeAll, afterEach, afterAll } from 'vitest';
 import mongoose from 'mongoose';
-mongoose.set("useCreateIndex", true);
 mongoose.promise = global.Promise;
 
 import { MongoMemoryServer } from 'mongodb-memory-server';
@@ -22,10 +21,7 @@ async function dropAllCollections() {
     try {
       await collection.drop();
     } catch (error) {
-      // Sometimes this error happens, but you can safely ignore it
       if (error.message === "ns not found") return;
-      // This error occurs when you use it.todo. You can
-      // safely ignore this error too
       if (error.message.includes("a background operation is currently running"))
         return;
       console.log(error.message);
@@ -34,36 +30,31 @@ async function dropAllCollections() {
 }
 
 let mongoServer;
-
-export function setupDB(databaseName) {
-  // Connect to Mongoose
-  beforeAll(async () => {
-    mongoServer = new MongoMemoryServer({
-      instance: { dbName: databaseName },
+export const setupIntegrationDB = (databaseName) => {
+    // Connect to Mongoose
+    beforeAll(async () => {
+      mongoServer = await MongoMemoryServer.create({
+        instance: { dbName: databaseName },
+      });
+      const mongoUri = mongoServer.getUri();
+      try {
+        await mongoose.connect(mongoUri);
+      } catch (err) {
+        console.error(err);
+      }
     });
-    const mongoUri = await mongoServer.getUri();
-    const opts = {
-      useNewUrlParser: true,
-      useFindAndModify: false,
-      useCreateIndex: true,
-      useUnifiedTopology: true,
-    };
-    try {
-      await mongoose.connect(mongoUri, opts);
-    } catch (err) {
-      console.error(err);
-    }
-  });
 
-  // Cleans up database between each test
-  afterEach(async () => {
-    await removeAllCollections();
-  });
+    // Cleans up database between each test
+    afterEach(async () => {
+      await removeAllCollections();
+    });
 
-  // Disconnect Mongoose
-  afterAll(async () => {
-    await dropAllCollections();
-    await mongoose.connection.close(true);
-    await mongoServer.stop();
-  });
-}
+    // Disconnect Mongoose
+    afterAll(async () => {
+      await dropAllCollections();
+      await mongoose.connection.close();
+      await mongoServer.stop();
+    });
+};
+
+export const setupDB = setupIntegrationDB;

@@ -22,29 +22,30 @@ class ProjectApiService {
     }
   }
 
+  // Handles the POST request and returns the projects ID.
   async create(projectData) {
     const {
       name,
       description,
-      location,
-      githubIdentifier,
+      //location, this feature is commented out as per the PR #1567
       githubUrl,
       slackUrl,
       googleDriveUrl,
       hflaWebsiteUrl,
+      githubIdentifier,
     } = projectData;
     const requestOptions = {
       method: 'POST',
       headers: this.headers,
       body: JSON.stringify({
-        name: name,
-        description: description,
-        location: location,
-        githubIdentifier: githubIdentifier,
-        githubUrl: githubUrl,
-        slackUrl: slackUrl,
-        googleDriveUrl: googleDriveUrl,
-        hflaWebsiteUrl: hflaWebsiteUrl,
+        name,
+        description,
+        // location, this feature is commented out as per the PR #1567
+        githubUrl,
+        slackUrl,
+        googleDriveUrl,
+        hflaWebsiteUrl,
+        githubIdentifier,
         projectStatus: 'Active',
       }),
     };
@@ -52,9 +53,9 @@ class ProjectApiService {
     console.log('THIS BASEPROJECT URL', this.baseProjectUrl);
 
     try {
-      const proj =  await fetch(this.baseProjectUrl, requestOptions);
-      const projectDetails = await proj.json()
-      return projectDetails._id
+      const proj = await fetch(this.baseProjectUrl, requestOptions);
+      const projectDetails = await proj.json();
+      return projectDetails._id;
     } catch (error) {
       console.error(`Add project error: `, error);
       alert('Server not responding.  Please try again.');
@@ -62,26 +63,13 @@ class ProjectApiService {
     }
   }
 
-  async updateProject(projectId, fieldName, fieldValue) {
-    let updateValue = fieldValue;
-    // These field are arrays, but the form makes them comma separated strings,
-    // so this adds it back to db as an arrray.
-    if (
-      fieldValue &&
-      (fieldName === 'partners' || fieldName === 'recruitingCategories')
-    ) {
-      updateValue = fieldValue
-        .split(',')
-        .filter((x) => x !== '')
-        .map((y) => y.trim());
-    }
-
+  async updateProject(projectId, projectData) {
     // Update database
     const url = `${this.baseProjectUrl}${projectId}`;
     const requestOptions = {
-      method: 'PATCH',
+      method: 'PUT',
       headers: this.headers,
-      body: JSON.stringify({ [fieldName]: updateValue }),
+      body: JSON.stringify({ ...projectData }),
     };
 
     try {
@@ -93,6 +81,86 @@ class ProjectApiService {
       console.log(`update project error: `, error);
       alert('Server not responding.  Please try again.');
       return undefined;
+    }
+  }
+
+  // update managedByUsers in Project
+  async updateManagedByUsers(projectId, userId, action) {
+    const url = `${this.baseProjectUrl}${projectId}`;
+    const requestOptions = {
+      method: 'PATCH',
+      headers: this.headers,
+      body: JSON.stringify({ action, userId }),
+    };
+
+    try {
+      const response = await fetch(url, requestOptions);
+      const resJson = await response.json();
+      console.log(resJson);
+      return resJson;
+    } catch (error) {
+      console.log(`update project error: `, error);
+      alert('Server not responding.  Please try again.');
+      return undefined;
+    }
+  }
+
+  async fetchPMProjects(projects) {
+    const requestOptions = {
+      headers: this.headers,
+      method: 'PUT',
+      body: JSON.stringify(projects),
+    };
+    try {
+      const res = await fetch(this.baseProjectUrl, requestOptions);
+      return await res.json();
+    } catch (e) {
+      console.error(e);
+      return undefined;
+    }
+  }
+
+  async fetchManagedByUsers(projectId) {
+    const url = `${this.baseProjectUrl}${projectId}`;
+    try {
+      const res = await fetch(url, {
+        headers: this.headers,
+        method: 'GET',
+      });
+      return await res.json();
+    } catch (error) {
+      console.error(`fetchManagedByUsers error: ${error}`);
+      alert('Server not responding.  Please refresh the page.');
+    }
+  }
+
+  async bulkUpdateManagedByUsers(bulkOps) {
+    const url = `${this.baseProjectUrl}bulk-updates`;
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: this.headers,
+        body: JSON.stringify({ bulkOps }),
+      });
+      return await res.json();
+    } catch (error) {
+      console.error(`bulkUpdateManagedByUsers error: ${error}`);
+      alert('Server not responding.  Please refresh the page.');
+    }
+  }
+
+  async updateOnboardOffboardVisibility(projectId, onboardOffboardVisible) {
+    const url = `${this.baseProjectUrl}${projectId}/visibility`;
+    try {
+      const res = await fetch(url, {
+        method: 'PATCH',
+        headers: this.headers,
+        body: JSON.stringify({ onboardOffboardVisible }),
+      });
+      return await res.json();
+    } catch (error) {
+      console.error(`updateOnboardOffboardVisibility error: ${error}`);
+      alert('Server not responding.  Please refresh the page.');
     }
   }
 }

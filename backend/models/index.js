@@ -6,6 +6,7 @@ import { Question } from './question.model.js';
 import { RecurringEvent } from './recurringEvent.model.js';
 import { Role } from './role.model.js';
 import { User } from './user.model.js';
+import { RefreshToken } from './refreshToken.model.js';
 
 import mongoose from 'mongoose';
 mongoose.Promise = global.Promise;
@@ -19,4 +20,5 @@ export {
   RecurringEvent,
   Role,
   User,
+  RefreshToken,
 };

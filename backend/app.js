@@ -1,11 +1,11 @@
+
 // app.js - Entry point for our application
 
 // Load in all of our node modules. Their uses are explained below as they are called.
 import express from 'express';
-import bodyParser from 'body-parser';
+import morgan from 'morgan';
 import cron from 'node-cron';
 import fetch from 'node-fetch';
-import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 
 const customRequestHeaderName = 'x-customrequired-header';
@@ -44,8 +44,8 @@ assertEnv([
 const app = express();
 
 // Required to view Request Body (req.body) in JSON
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Used to save JWT token from MagicLink
 app.use(cookieParser());
@@ -62,6 +62,10 @@ const runCloseCheckinWorker = closeCheckins(cron, fetch);
 const runCreateRecurringEventsWorker = createRecurringEvents(cron, fetch);
 // import slackbot from './workers/slackbot.js';
 // const runSlackBot = slackbot(fetch);
+
+// Run cleanup expired refresh token(s) on startup
+import { cleanupExpiredTokens } from './workers/tokenCleanup.js';
+cleanupExpiredTokens();
 
 // MIDDLEWARE
 import errorhandler from './middleware/errorhandler.middleware.js';

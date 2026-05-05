@@ -1,8 +1,9 @@
 import { describe, it, expect, vi, beforeAll, beforeEach, afterAll, afterEach, test } from 'vitest';
+import mongoose from 'mongoose';
 import { User } from './user.model.js';
+import { setupIntegrationDB } from '../setup-test.js';
 
-import { setupDB } from '../setup-test.js';
-setupDB("user-model");
+setupIntegrationDB('user-model');
 
 describe('User Model - Create and Read', () => {
   test('Save a model instance and then read from the db', async () => {
@@ -69,6 +70,7 @@ describe('User Model - Serialization', () => {
       githubPublic2FA: false,
       availability: 'Evenings',
       managedProjects: ['ProjectGamma'],
+      isActive: true,
       createdDate: new Date(2023, 0, 15),
     };
 
@@ -92,6 +94,7 @@ describe('User Model - Serialization', () => {
     expect(serializedUser.githubPublic2FA).toBe(userData.githubPublic2FA);
     expect(serializedUser.availability).toBe(userData.availability);
     expect([...serializedUser.managedProjects]).toEqual(userData.managedProjects);
+    expect(serializedUser.isActive).toBe(userData.isActive);
   });
 });
 
@@ -113,4 +116,14 @@ describe('User Model - Validation', () => {
     ).rejects.toMatchObject({ code: 11000 });
   });
 
+  test('should fail if accessLevel is not in enum', async () => {
+    const userData = {
+      name: { firstName: 'Enum', lastName: 'Test' },
+      email: 'enum.test@example.com',
+      accessLevel: 'invalid_access_level',
+    };
+
+    const user = new User(userData);
+    await expect(user.save()).rejects.toBeInstanceOf(mongoose.Error.ValidationError);
+  });
 });

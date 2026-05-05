@@ -1,209 +1,180 @@
 import { describe, it, expect, vi, beforeAll, beforeEach, afterAll, afterEach, test } from 'vitest';
 
-vi.hoisted(() => {
-  process.env.CUSTOM_REQUEST_HEADER = 'test-request-header';
-});
-
-import supertest from 'supertest';
-import app from '../app.js';
-const request = supertest(app);
-
-import { setupDB } from '../setup-test.js';
-setupDB('api-auth');
-
-import { User } from '../models/index.js';
-
-// Create mock for EmailController
-const sendMailMock = vi.fn()
+// Set up mocks for User model and controller
+vi.mock('../controllers/user.controller');
 vi.mock('../controllers/email.controller');
-import mockEmailController from '../controllers/email.controller.js';
-mockEmailController.sendLoginLink.mockReturnValue({ sendMail: sendMailMock });
+vi.mock('../models/user.model');
+// Set up mocks for middleware
+vi.mock('../middleware', () => ({
+  AuthUtil: {
+    verifyCookie: vi.fn((req, res, next) => next()),
+  },
+  Auth: {
+    authUser: vi.fn((req, res, next) => next()),
+  },
+  verifyUser: {
+    checkDuplicateEmail: vi.fn((req, res, next) => next()),
+    isAdminByEmail: vi.fn((req, res, next) => next()),
+  },
+  verifyToken: {
+    isTokenValid: vi.fn((req, res, next) => next()),
+  },
+}));
+// Set up mocks for authApiValidator
+vi.mock('../validators/user.api.validator', () => ({
+  validateCreateUserAPICall: vi.fn((req, res, next) => next()),
+  validateSigninUserAPICall: vi.fn((req, res, next) => next()),
+}));
 
-beforeEach(() => {
-  sendMailMock.mockClear();
-  mockEmailController.sendLoginLink.mockClear();
+// Import User model and controller
+import { User } from '../models/user.model.js';
+const { UserController, EmailController } = await import('../controllers/index.js');
+
+// Import auth router
+import express from 'express';
+import supertest from 'supertest';
+import authRouter from '../routers/auth.router.js';
+const { verifyToken, verifyUser, AuthUtil, Auth } = await import('../middleware/index.js');
+const { authApiValidator } = await import('../validators/index.js');
+
+// Create a new Express application for testing
+const testapp = express();
+testapp.use(express.json());
+testapp.use('/api/auth', authRouter);
+const request = supertest(testapp);
+
+
+describe('Unit tests for auth router', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  const mockUser = {
+    id: 1,
+    name: {
+      firstName: 'mock',
+      lastName: 'user',
+    },
+    email: 'mockUser@test.com',
+    accessLevel: 'user',
+  };
+
+  describe('CREATE', () => {
+    it('should sign up new user with POST /api/auth/signup', async () => {
+      UserController.createUser.mockImplementationOnce((req, res) => {
+        res.status(201).send({ message: 'User created successfully' });
+      });
+
+      const response = await request.post('/api/auth/signup').send({
+        name: {
+          firstName: mockUser.firstName,
+          lastName: mockUser.lastName,
+        },
+        email: mockUser.email.toLowerCase(),
+      });
+
+      expect(authApiValidator.validateCreateUserAPICall).toHaveBeenCalled();
+      expect(verifyUser.checkDuplicateEmail).toHaveBeenCalled();
+      expect(UserController.createUser).toHaveBeenCalled();
+      expect(response.status).toBe(201);
+      expect(response.body).toEqual({ message: 'User created successfully' });
+    });
+
+    it('should sign in existing user with POST /api/auth/signin', async () => {
+      const jsonToken = 'mockedToken';
+      const email = mockUser.email.toLowerCase();
+      const auth_origin = 'web';
+      const cookie = 'mockedCookie';
+      const headers = {
+        origin: 'http://localhost:3000',
+      };
+
+      UserController.signin.mockImplementation((req, res) => {
+        res.cookie('token', cookie, { httpOnly: true });
+        res.set('origin', headers.origin);
+
+        EmailController.sendLoginLink(
+          req.body.email,
+          req.body.auth_origin,
+          mockUser.name.firstName,
+          jsonToken,
+          cookie,
+          headers.origin,
+        );
+
+        res.status(200).send('Signin successful');
+      });
+
+      EmailController.sendLoginLink.mockImplementation(() => {
+        console.log('Mocked EmailController.sendLoginLink called');
+      });
+
+      const response = await request.post('/api/auth/signin').send({
+        email: email,
+        auth_origin: auth_origin,
+      });
+
+      expect(authApiValidator.validateSigninUserAPICall).toHaveBeenCalled();
+      expect(verifyUser.isAdminByEmail).toHaveBeenCalled();
+      expect(UserController.signin).toHaveBeenCalled();
+      expect(EmailController.sendLoginLink).toHaveBeenCalledWith(
+        email,
+        auth_origin,
+        mockUser.name.firstName,
+        jsonToken,
+        cookie,
+        headers.origin,
+      );
+      expect(response.status).toBe(200);
+      expect(response.headers['set-cookie']).toBeDefined();
+      expect(response.headers['set-cookie'][0]).toContain(`token=${cookie}`);
+      expect(response.text).toBe('Signin successful');
+    });
+
+    it('should verify sign in with POST /api/auth/verify-signin', async () => {
+      UserController.verifySignIn.mockImplementation((req, res) => {
+        res.status(200).send(mockUser);
+      });
+
+      const response = await request.post('/api/auth/verify-signin').send({
+        token: 'mockedToken',
+      });
+
+      expect(Auth.authUser).toHaveBeenCalled();
+      expect(UserController.verifySignIn).toHaveBeenCalled();
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(mockUser);
+    });
+
+    it('should verify me with POST /api/auth/me', async () => {
+      UserController.verifyMe.mockImplementation((req, res) => {
+        res.status(200).send(mockUser);
+      });
+
+      const response = await request.post('/api/auth/me').send({
+        token: 'mockedToken',
+      });
+
+      expect(Auth.authUser).toHaveBeenCalled();
+      expect(UserController.verifyMe).toHaveBeenCalled();
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(mockUser);
+    });
+
+    it('should log out with POST /api/auth/logout', async () => {
+      const token = 'token';
+      UserController.logout.mockImplementation((req, res) => {
+        res.clearCookie(token);
+        res.status(200).send('Successfully logged out.');
+      });
+
+      const response = await request.post('/api/auth/logout').set('Cookie', token);
+
+      expect(UserController.logout).toHaveBeenCalled();
+      expect(response.headers['set-cookie'][0]).toMatch(/token=;/);
+      expect(response.status).toBe(200);
+      expect(response.text).toBe('Successfully logged out.');
+    });
+  });
+
 });
-
-const headers = {};
-headers['x-customrequired-header'] = process.env.CUSTOM_REQUEST_HEADER;
-headers.Accept = 'application/json';
-
-// API Tests
-describe('CREATE User', () => {
-  test('Create user with POST to /users', async () => {
-    // Test Data
-    const submittedData = {
-      name: { firstName: 'test_first', lastName: 'test_last' },
-      email: 'test@test.com',
-    };
-
-    // Add a user using the API.
-    const res = await request.post('/api/users').send(submittedData).set(headers);
-
-    expect(res.status).toBe(201);
-
-    // Retrieve and compare the the User values using the DB.
-    const databaseUserQuery = await User.find();
-
-    const databaseUser = databaseUserQuery[0];
-
-    expect(databaseUserQuery.length).toBeGreaterThanOrEqual(1);
-    expect(databaseUser.name.firstName).toBe(submittedData.name.firstName);
-    expect(databaseUser.name.lastName).toBe(submittedData.name.lastName);
-
-    // Retrieve and compare the User values using the API.
-    const response = await request.get('/api/users').set(headers);
-    expect(response.statusCode).toBe(200);
-    const APIData = response.body[0];
-    expect(APIData.name.firstName).toBe(submittedData.name.firstName);
-    expect(APIData.name.lastName).toBe(submittedData.name.lastName);
-
-  });
-
-  test('Create user with POST to /auth/signup', async () => {
-    // setupDBRoles();
-    // Test Data
-    const goodUserData = {
-      name: { firstName: 'testname', lastName: 'testlast' },
-      email: 'test@test.com',
-    };
-
-    const res = await request
-      .post('/api/auth/signup')
-      .send(goodUserData)
-      .set(headers);
-
-    expect(res.status).toBe(201);
-  });
-});
-
-describe('SIGNUP Validation', () => {
-  test('Invalid data to /api/auth/signup returns 403', async () => {
-    // Test Data
-    const badUserData = {
-      firstName: 'test_first',
-      lastName: 'test_last',
-      email: 'test@test.com',
-    };
-
-     const res = await request
-      .post('/api/auth/signup')
-      .send(badUserData)
-      .set(headers);
-
-    expect(res.status).toBe(403);
-    const errorMessage = JSON.parse(res.text);
-
-    expect(errorMessage.errors).toEqual([
-      { msg: 'Invalid value', param: 'name.firstName', location: 'body' },
-      { msg: 'Invalid value', param: 'name.lastName', location: 'body' },
-    ]);
-  });
-
-  test('Existing user returns 400', async () => {
-    // Test Data
-    const userOneWithSameEmail = {
-      name: { firstName: 'one', lastName: 'two' },
-      email: 'test@test.com',
-    };
-
-    const userTwoWithSameEmail = {
-      name: { firstName: 'three', lastName: 'four' },
-      email: 'test@test.com',
-    };
-
-    await request
-      .post('/api/auth/signup')
-      .send(userOneWithSameEmail)
-      .set(headers);
-
-    const res2 = await request
-      .post('/api/auth/signup')
-      .send(userTwoWithSameEmail)
-      .set(headers);
-
-    expect(res2.status).toBe(400);
-  });
-
-});
-
-describe('SIGNIN User', () => {
-  test('User can signin and returns 200', async () => {
-    // Create user in DB
-    const goodUserData = {
-      name: {
-        firstName: 'Free',
-        lastName: 'Mason',
-      },
-      email: 'test@test.com',
-      accessLevel: 'admin',
-    };
-    await User.create(goodUserData);
-
-    // POST to the DB with that same data.
-    const res = await request
-      .post('/api/auth/signin')
-      .send(goodUserData)
-      .set(headers)
-      .set('Origin', 'localhost');
-
-    expect(res.status).toBe(200);
-  });
-});
-
-describe('SIGNIN Validation', () => {
-  test('Non admin user returns 401', async () => {
-    // Test Data
-
-    // Create user in DB
-    const notValidPermission = {
-      name: {
-        firstName: 'Free',
-        lastName: 'Mason',
-      },
-      email: 'test@test.com',
-      accessLevel: 'user',
-    };
-    await User.create(notValidPermission);
-
-    // POST to the DB with that same data.
-    const res = await request
-      .post('/api/auth/signin')
-      .send(notValidPermission)
-      .set(headers)
-      .set('Origin', 'localhost');
-
-    expect(res.status).toBe(401);
-  });
-
-  test('A non-valid email return 403', async () => {
-    // Create user in DB
-    const notValidEmailPayload = {
-      name: {
-        firstName: 'Free',
-        lastName: 'Mason',
-      },
-      email: 'test',
-      accessLevel: 'admin',
-    };
-    await User.create(notValidEmailPayload);
-
-    // POST to the DB with that same data.
-    const res = await request
-      .post('/api/auth/signin')
-      .send(notValidEmailPayload)
-      .set(headers);
-
-    expect(res.status).toBe(403);
-    const errorMessage = JSON.parse(res.text);
-
-    expect(errorMessage.errors).toEqual([
-      {
-        value: 'test',
-        msg: 'Invalid email',
-        param: 'email',
-        location: 'body',
-      },
-    ]);
-  });
-})
