@@ -10,7 +10,6 @@ import {
 import { useEffect, useState } from 'react';
 import CheckInButtons from '../components/presentational/CheckInButtons';
 import CreateNewProfileButton from '../components/presentational/CreateNewProfileButton';
-import { useFeatureFlags } from '../context/featureFlagsContext';
 import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend } from '../utils/globalSettings';
 
 import '../sass/Home.scss';
@@ -37,7 +36,6 @@ const h4sx = {
 const Home = () => {
   const [events, setEvents] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState('');
-  const { flags } = useFeatureFlags();
 
   const handleEventChange = (e) => {
     setSelectedEvent(e.target.value);
@@ -71,11 +69,8 @@ const Home = () => {
     );
   }
 
-  console.log(flags, 'flags', 'user not logged in');
-
   return (
     <Box className="home">
-      {flags.is_friendly && <div>G'day mate</div>}
       <Box className="home-headers">
         <Typography variant="h1" sx={h1sx}>
           VRMS
