@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 mongoose.Promise = global.Promise;
 
@@ -46,4 +46,4 @@ projectTeamMemberSchema.methods.serialize = function() {
 
 const ProjectTeamMember = mongoose.model('ProjectTeamMember', projectTeamMemberSchema);
 
-module.exports = { ProjectTeamMember };
+export { ProjectTeamMember };
