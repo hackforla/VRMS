@@ -1,4 +1,4 @@
-module.exports = (fetch) => {
+export default (fetch) => {
 
   console.log('Hello from SlackBot');
   const token = process.env.SLACK_TOKEN;
