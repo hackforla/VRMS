@@ -1,10 +1,12 @@
-const app = require('./app');
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
+import { fileURLToPath } from 'url';
 
-const { Role } = require('./models');
+import app from './app.js';
+
+import { Role } from './models/index.js';
 
 // Load config variables
-const { CONFIG_DB } = require('./config/');
+import { CONFIG_DB } from './config/index.js';
 
 // Required convention for mongoose - https://stackoverflow.com/a/51862948/5900471
 mongoose.Promise = global.Promise;
@@ -61,10 +63,10 @@ async function initial() {
   }
 }
 
-if (require.main === module) {
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
   runServer()
     .then(() => initial())
     .catch((err) => console.error(err));
 }
 
-module.exports = { app, runServer, closeServer };
+export { app, runServer, closeServer };
