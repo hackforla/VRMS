@@ -10,7 +10,7 @@ async function removeAllCollections() {
   const collections = Object.keys(mongooseCollections);
   for (const collectionName of collections) {
     const collection = mongoose.connection.collections[collectionName];
-    collection.deleteMany();
+    await collection.deleteMany();
   }
 }
 
@@ -42,6 +42,11 @@ export const setupIntegrationDB = (databaseName) => {
       } catch (err) {
         console.error(err);
       }
+    });
+
+    // Cleans up database between each test
+    afterEach(async () => {
+      await removeAllCollections();
     });
 
     // Disconnect Mongoose

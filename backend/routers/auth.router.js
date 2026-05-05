@@ -28,4 +28,5 @@ router.post('/me', [Auth.authUser], UserController.verifyMe);
 
 router.post('/logout', [authenticateRefreshToken], UserController.logout);
 
+
 export default router;

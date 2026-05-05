@@ -50,4 +50,5 @@ HealthCheckController.isAlive = (_, res) => {
     );
 };
 
+
 export default HealthCheckController;

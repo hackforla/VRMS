@@ -380,4 +380,5 @@ UserController.bulkUpdateManagedProjects = async (req, res) => {
   }
 };
 
+
 export default UserController;

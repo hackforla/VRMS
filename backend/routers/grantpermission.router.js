@@ -5,9 +5,9 @@ import fs from 'fs';
 import { google } from 'googleapis';
 import async from 'async';
 import fetch from 'node-fetch';
-const { authUser } = require('../middleware/auth.middleware');
-const AuthUtils = require('../../shared/authorizationUtils');
-const { ROLES } = require('../../shared/roles');
+import { authUser } from '../middleware/auth.middleware.js';
+import AuthUtils from '../../shared/authorizationUtils.js';
+import { ROLES } from '../../shared/roles.js';
 
 const SCOPES = ['https://www.googleapis.com/auth/drive'];
 
@@ -27,10 +27,6 @@ router.post('/googleDrive', async (req, res) => {
 
   const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris[1]);
   console.log('AFTERCLIENT');
-  // if (err)
-  //   return res.status(500).send({
-  //     message: "Error loading client secret file:" + err.message,
-  //   });
 
   const tokenObject = {
     access_token: process.env.GOOGLE_ACCESS_TOKEN,
@@ -42,7 +38,6 @@ router.post('/googleDrive', async (req, res) => {
   oAuth2Client.setCredentials(tokenObject);
 
   console.log('AFTR OAUTH');
-  // sends google drive grant permission from VRMS to email
   try {
     const result = await grantPermission(oAuth2Client, req.body.email, req.body.file);
     if (result.success) {
@@ -56,8 +51,6 @@ router.post('/googleDrive', async (req, res) => {
     return res.sendStatus(500);
   }
 });
-
-// GET /api/grantpermission/gitHub (checks if it can update the db data)
 
 // Route accounts for onboaring admins or regular users
 router.post('/gitHub', authUser, async (req, res) => {
@@ -78,13 +71,11 @@ router.post('/gitHub', authUser, async (req, res) => {
   }
 
   try {
-    // Is member of github organization? If not, add to organization
     const userStatus = await checkOrgMembershipStatus(userHandle);
     const orgMembershipStatus = userStatus
       ? userStatus
       : (await inviteToOrg(userHandle)) && 'pending';
 
-    // Add user to github project teams
     console.log({ teamSlugs });
     await Promise.all(
       teamSlugs.map(async (slug) => {
@@ -106,13 +97,8 @@ router.post('/gitHub', authUser, async (req, res) => {
     };
 
     if (orgMembershipStatus === 'active') {
-      // user automatically added to team if active membership in org
       result.teamMembershipStatus = 'active';
-
-      // check if membership is public
       result.publicMembership = await checkPublicMembership(userHandle);
-
-      // check if 2FA is enabled
       result.twoFAenabled = await check2FA(userHandle);
     }
 
@@ -129,7 +115,6 @@ router.post('/', async (req, res) => {
     const { client_secret, client_id, redirect_uris } = credentialsObject.web;
     const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris[1]);
 
-    // sends back error if credentials files cannot be read
     if (err) {
       return res.sendStatus(400);
     }
@@ -137,7 +122,6 @@ router.post('/', async (req, res) => {
     let token;
     let setToken = false;
 
-    // if the user did not send a refresh/access token with them in the body request
     if (!req.body.token && req.body.code) {
       try {
         const tokenResult = await sendToken(oAuth2Client, req.body.code);
@@ -152,14 +136,12 @@ router.post('/', async (req, res) => {
         console.error(err.message);
         return res.sendStatus(400);
       }
-      // if token is already placed into body request
     } else if (req.body.token) {
       token = req.body.token;
     }
     if (token) {
       oAuth2Client.setCredentials(token);
       try {
-        // another callback function that returns promises can replace this method
         console.log('TRY');
         const result = await grantPermission(oAuth2Client, req.body.email, req.body.file);
         if (result.success) {
@@ -178,18 +160,11 @@ router.post('/', async (req, res) => {
         return res.sendStatus(400);
       }
     } else {
-      // returns a URL for the user to give permission
       return res.status(200).send({ url: sendURL(oAuth2Client) });
     }
   });
 });
 
-// If modifying these scopes, delete token.json.
-
-/**
- * Creates an auth URL that lets the user give permission to VRMS.
- * @param {oAuth2Client} oAuth2Client The OAuth2 client needed to generate an auth url.
- */
 function sendURL(oAuth2Client) {
   const authUrl = oAuth2Client.generateAuthUrl({
     access_type: 'offline',
@@ -198,12 +173,6 @@ function sendURL(oAuth2Client) {
   return authUrl;
 }
 
-/**
- * Creates an token object including access token and refresh token that will allow the user to
- * be able to log in without needed to give permission each time
- * @param {oAuth2Client} oAuth2Client The authorization OAuth2 client needed to create a token object.
- * @param {String} code The code string from the auth URL.
- */
 function sendToken(oAuth2Client, code) {
   return new Promise(function (resolve, reject) {
     oAuth2Client.getToken(code, (err, token) => {
@@ -263,22 +232,16 @@ function grantPermission(auth, email, fileId) {
   });
 }
 
-/**
- * Checks if user is a public OR private member of the organization.
- * Requires authentication to the organization (currently via a token in env file).
- * @param {str} githubHandle
- */
 function checkOrgMembershipStatus(githubHandle) {
-  return fetch(`https://api.github.com/orgs/${githubOrganization}/memberships/${githubHandle}`, {
+  return fetch('https://api.github.com/orgs/' + githubOrganization + '/memberships/' + githubHandle, {
     method: 'GET',
     headers: {
-      Authorization: `token ${process.env.GITHUB_TOKEN}`,
+      Authorization: 'token ' + process.env.GITHUB_TOKEN,
     },
   })
     .then((res) => {
       if (res.status === 200) return res.json();
       if (res.status === 404) return false;
-
       return new Error('Unexpected result');
     })
     .then((res) => {
@@ -290,37 +253,25 @@ function checkOrgMembershipStatus(githubHandle) {
     });
 }
 
-/**
- * API call returns 200 if successfully invited or if already in organization
- * @param {str} githubHandle
- */
 function inviteToOrg(githubHandle) {
   return fetch(
-    `https://api.github.com/orgs/${githubOrganization}/memberships/${githubHandle}?role=member`,
+    'https://api.github.com/orgs/' + githubOrganization + '/memberships/' + githubHandle + '?role=member',
     {
       method: 'PUT',
       headers: {
-        Authorization: `token ${process.env.GITHUB_TOKEN}`,
+        Authorization: 'token ' + process.env.GITHUB_TOKEN,
       },
     },
   ).then((res) => (res.status === 200 ? true : new Error('Unexpected response')));
 }
 
-/**
- * @returns "active" or "pending". Returns "active" if already on team OR
- * if already a member of the organization (automatically adds them without
- * sendaingn invitation ). Returns "pending" if membership is pending
- * (collaborator invite is sent).
- * @param {str} githubHandle
- * @param {str} teamSlug
- */
 function addToTeam(githubHandle, teamSlug) {
   return fetch(
-    `https://api.github.com/orgs/${githubOrganization}/teams/${teamSlug}/memberships/${githubHandle}`,
+    'https://api.github.com/orgs/' + githubOrganization + '/teams/' + teamSlug + '/memberships/' + githubHandle,
     {
       method: 'PUT',
       headers: {
-        Authorization: `token ${process.env.GITHUB_TOKEN}`,
+        Authorization: 'token ' + process.env.GITHUB_TOKEN,
       },
     },
   )
@@ -330,7 +281,7 @@ function addToTeam(githubHandle, teamSlug) {
     }))
     .then((res) => {
       if (res.result.message === 'Not Found') {
-        return 'team not found'; // how can I just throw an error here instead?
+        return 'team not found';
       } else {
         console.log(res.status);
         return Boolean(res.status === 200);
@@ -340,19 +291,18 @@ function addToTeam(githubHandle, teamSlug) {
 
 function check2FA(githubHandle) {
   return fetch(
-    `https://api.github.com/orgs/${githubOrganization}/members?filter=2fa_disabled`,
+    'https://api.github.com/orgs/' + githubOrganization + '/members?filter=2fa_disabled',
   ).then((no2FAMembersArr) => {
     if (no2FAMembersArr.length) {
       return !no2FAMembersArr.includes((member) => member.login === githubHandle);
     }
-
     return true;
   });
 }
 
 function checkPublicMembership(githubHandle) {
   return fetch(
-    `https://api.github.com/orgs/${githubOrganization}/public_members/${githubHandle}`,
+    'https://api.github.com/orgs/' + githubOrganization + '/public_members/' + githubHandle,
   ).then((res) => (res.status === 204 ? true : false));
 }
 

@@ -34,4 +34,5 @@ router.delete(
   UserController.delete,
 );
 
+
 export default router;
