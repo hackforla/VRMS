@@ -12,7 +12,7 @@ import { User } from '../models/index.js';
 
 // Create mock for EmailController
 const sendMailMock = vi.fn()
-vi.mock('../controllers/email.controller');
+vi.mock('../controllers/email.controller.js');
 import mockEmailController from '../controllers/email.controller.js';
 mockEmailController.sendLoginLink.mockReturnValue({ sendMail: sendMailMock });
 

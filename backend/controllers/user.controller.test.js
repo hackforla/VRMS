@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeAll, beforeEach, afterAll, afterEach, t
 import { setupDB } from '../setup-test.js';
 setupDB('conrtoller-user');
 
-vi.mock('../models/user.model');
+vi.mock('../models/user.model.js');
 import userContoller from './user.controller.js';
 
 test('Can import the email controller', async () => {
