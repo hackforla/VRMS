@@ -1,5 +1,5 @@
-const { Project, User } = require('../models');
-const { ObjectId } = require('mongodb');
+import { Project, User } from '../models/index.js';
+import { ObjectId } from 'mongodb';
 
 const ProjectController = {};
 
@@ -152,4 +152,4 @@ ProjectController.updateOnboardOffboardVisibility = async function (req, res) {
   }
 };
 
-module.exports = ProjectController;
+export default ProjectController;
