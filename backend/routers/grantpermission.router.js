@@ -186,6 +186,14 @@ function sendToken(oAuth2Client, code) {
   });
 }
 
+/**
+ * Gives Google Drive permission to an email address for the file ID
+ * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
+ * @param {String} email E-mail to receive Google Drive invite
+ * @param {String} fileId File ID to give permissions
+ * @returns {Promise} Promise with an object that contains the boolean success to determine
+ * what to do in the route. Rejection objects also have a message field.
+ */
 function grantPermission(auth, email, fileId) {
   console.log('GRANT PERMISSIONS');
   var permissions = [
