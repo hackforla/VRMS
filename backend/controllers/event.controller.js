@@ -1,4 +1,4 @@
-const { Event } = require('../models');
+import { Event } from '../models/index.js';
 
 const EventController = {};
 
@@ -79,4 +79,4 @@ EventController.update = async function (req, res) {
   }
 };
 
-module.exports = EventController;
+export default EventController;
