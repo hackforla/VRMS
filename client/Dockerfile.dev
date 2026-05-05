@@ -1,4 +1,4 @@
-FROM node:18-alpine AS client-development
+FROM node:24-alpine AS client-development
 RUN mkdir /srv/client && chown node:node /srv/client
 WORKDIR /srv/client
 USER node
