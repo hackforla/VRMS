@@ -1,6 +1,14 @@
-const path = require('path');
-const swaggerAutogen = require('swagger-autogen')({ openapi: '3.0.0' });
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { createRequire } from 'module';
+import swaggerAutogenModule from 'swagger-autogen';
+
+const swaggerAutogen = swaggerAutogenModule({ openapi: '3.0.0' });
+const require = createRequire(import.meta.url);
 const packageJson = require('../package.json');
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const doc = {
   info: {

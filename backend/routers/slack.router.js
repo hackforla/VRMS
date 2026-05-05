@@ -1,10 +1,10 @@
-const express = require("express");
+import express from 'express';
 
 const router = express.Router();
-const { App } = require("@slack/bolt");
-const cron = require("node-cron");
-const { Event } = require('../models/event.model');
-const { Project } = require('../models/project.model');
+import { App } from '@slack/bolt';
+import cron from 'node-cron';
+import { Event } from '../models/event.model.js';
+import { Project } from '../models/project.model.js';
 
 //  https://api.slack.com/web
 
@@ -112,4 +112,4 @@ async function findProject(req, res) {
       return res.sendStatus(400);
     });
 }
-module.exports = router;
+export default router;

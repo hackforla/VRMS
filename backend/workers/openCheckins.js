@@ -1,4 +1,4 @@
-module.exports = (cron, fetch) => {
+export default (cron, fetch) => {
   // Check to see if any events are about to start,
   // and if so, open their respective check-ins
 
@@ -44,25 +44,18 @@ module.exports = (cron, fetch) => {
   async function sortAndFilterEvents() {
     const events = await fetchEvents();
 
-    // Get current time and set to date variable
     const now = Date.now();
-
-    // Calculate thirty minutes from now
     const thirtyMinutesFromNow = now + 1800000;
 
-    // Filter events if event date is after now but before thirty minutes from now
     if (events && events.length > 0) {
       const sortedEvents = events.filter((event) => {
         if (!event.date) {
-          // handle if event date is null/undefined
-          // false meaning don't include in sortedEvents
           return false;
         }
         const startMs = new Date(event.date).getTime();
         if (Number.isNaN(startMs)) return false;
         return startMs >= now && startMs <= thirtyMinutesFromNow && event.checkInReady === false;
       });
-      // console.log('Sorted events: ', sortedEvents);
       return sortedEvents;
     }
   }
@@ -70,7 +63,6 @@ module.exports = (cron, fetch) => {
   async function openCheckins(events) {
     if (events && events.length > 0) {
       console.log('Opening check-ins');
-      // console.log('Opening event: ', event);
       const batchEventsToUpdate = events.map((e) => ({
         _id: e._id,
         checkInReady: true,
