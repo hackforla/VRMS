@@ -1,3 +1,4 @@
+const path = require('path');
 const swaggerAutogen = require('swagger-autogen')({ openapi: '3.0.0' });
 const packageJson = require('../package.json');
 
@@ -26,8 +27,8 @@ const doc = {
   ],
 };
 
-const outputFile = '../swagger-output.json';
-const routes = ['../app.js'];
+const outputFile = path.resolve(__dirname, '../swagger-output.json');
+const routes = [path.resolve(__dirname, '../app.js')];
 
 swaggerAutogen(outputFile, routes, doc).then(() => {
   console.log('Swagger documentation generated successfully.');
