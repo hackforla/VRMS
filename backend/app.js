@@ -7,9 +7,18 @@ const morgan = require('morgan');
 const cron = require('node-cron');
 const fetch = require('node-fetch');
 const cookieParser = require('cookie-parser');
+const swaggerUi = require('swagger-ui-express');
+
+let swaggerDocument;
+try {
+  swaggerDocument = require('./swagger-output.json');
+} catch (e) {
+  console.warn('swagger-output.json not found. Run "npm run swagger" to generate it.');
+  swaggerDocument = null;
+}
 
 const customRequestHeaderName = 'x-customrequired-header';
-const dontCheckCustomRequestHeaderApis = ['GET::/api/recurringevents', 'GET::/api/healthcheck'];
+const dontCheckCustomRequestHeaderApis = ['GET::/api/recurringevents', 'GET::/api/healthcheck', 'GET::/api-docs', 'GET::/api-docs/'];
 
 // Import environment variables
 const dotenv = require('dotenv');
@@ -51,6 +60,11 @@ app.use(cookieParser());
 
 // HTTP Request Logger
 app.use(morgan('dev'));
+
+// Swagger API Documentation
+if (swaggerDocument) {
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+}
 
 // WORKERS
 const runOpenCheckinWorker = require('./workers/openCheckins');
