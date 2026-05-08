@@ -403,6 +403,7 @@ const EditProject = ({
                         primary={event.name}
                         primaryTypographyProps={{
                           fontWeight: 'bold',
+                          fontFamily: "'Source Code Pro', monospace",
                         }}
                       />
                       <DetailsText component="span">
