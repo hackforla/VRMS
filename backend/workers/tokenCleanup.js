@@ -1,4 +1,4 @@
-const { RefreshToken } = require('../models');
+import { RefreshToken } from '../models/index.js';
 
 async function cleanupExpiredTokens() {
   try {
@@ -14,4 +14,4 @@ async function cleanupExpiredTokens() {
 // Run daily
 setInterval(cleanupExpiredTokens, 24 * 60 * 60 * 1000);
 
-module.exports = { cleanupExpiredTokens };
+export { cleanupExpiredTokens };
