@@ -1,8 +1,8 @@
-import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
+import { hasAnyRole, hasMinimumRole } from '../../shared/authorizationUtils.js';
 import { CONFIG_AUTH } from '../config/index.js';
 import { RefreshToken, User } from '../models/index.js';
-import AuthUtils from '../../shared/authorizationUtils.js';
 
 const SECRET = CONFIG_AUTH.JWT_SECRET;
 
@@ -113,7 +113,7 @@ function requireRole(...roles) {
       return res.status(401).json({ error: 'Authentication required' });
     }
 
-    if (!AuthUtils.hasAnyRole(req.user, roles)) {
+    if (!hasAnyRole(req.user, ...roles)) {
       return res.status(403).json({
         error: 'Insufficient permissions',
         required_role: roles,
@@ -132,7 +132,7 @@ function requireMinimumRole(role) {
     }
 
     const user = req.user;
-    if (!AuthUtils.hasMinimumRole(user, role)) {
+    if (!hasMinimumRole(user, role)) {
       return res.status(403).json({
         error: 'Insufficient permissions',
         required_minimum_role: role,
