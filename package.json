@@ -2,6 +2,7 @@
   "name": "vrms-server",
   "version": "0.3.0",
   "description": "VRMS Server",
+  "type": "module",
   "scripts": {
     "start": "concurrently \"cd backend && npm run start\" \"cd client && npm run start\"",
     "mvp": "concurrently \"cd backend && npm run start\" \"cd client-mvp-04 && npm run start\"",

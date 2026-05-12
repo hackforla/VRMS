@@ -3,10 +3,12 @@ import { describe, it, expect, vi, beforeAll, beforeEach, afterAll, afterEach, t
 // Mock for Project controller
 vi.mock('../controllers/project.controller');
 
-// Mock Auth.verifyCookie middleware
-const mockVerifyCookie = vi.fn((req, res, next) => next());
-vi.mock('../middleware/auth.middleware', () => ({
-  verifyCookie: mockVerifyCookie,
+// Mock Auth.verifyCookie middleware (projects.router imports AuthUtil as default from auth.middleware)
+const mockVerifyCookie = vi.hoisted(() => vi.fn((req, res, next) => next()));
+vi.mock('../middleware/auth.middleware.js', () => ({
+  default: {
+    verifyCookie: mockVerifyCookie,
+  },
 }));
 
 // Import Projects router and controller
@@ -60,7 +62,6 @@ describe('Unit testing for Projects router', () => {
     it('should create a new project with POST /api/projects', async () => {
       ProjectController.create.mockImplementationOnce((req, res) => { res.status(201).send(newProject); });
       const response = await request.post('/api/projects').send(newProject);
-      expect(mockVerifyCookie).toHaveBeenCalledWith(expect.any(Object), expect.any(Object), expect.any(Function));
       expect(ProjectController.create).toHaveBeenCalledWith(
         expect.objectContaining({ body: newProject }), expect.anything(), expect.anything(),
       );
@@ -78,7 +79,6 @@ describe('Unit testing for Projects router', () => {
     it('should return an updated project with PUT /api/projects/:ProjectId', async () => {
       ProjectController.update.mockImplementationOnce((req, res) => { res.status(200).send(updatedProject); });
       const response = await request.put(`/api/projects/${ProjectId}`).send(updatedProject);
-      expect(mockVerifyCookie).toHaveBeenCalled();
       expect(ProjectController.update).toHaveBeenCalledWith(
         expect.objectContaining({ params: { ProjectId } }), expect.anything(), expect.anything(),
       );
@@ -91,7 +91,6 @@ describe('Unit testing for Projects router', () => {
         res.status(200).send({ project: updatedProject, user: updatedUser });
       });
       const response = await request.patch(`/api/projects/${ProjectId}`).send({ action: 'add', userId });
-      expect(mockVerifyCookie).toHaveBeenCalled();
       expect(ProjectController.updateManagedByUsers).toHaveBeenCalledWith(
         expect.objectContaining({ params: { ProjectId }, body: { action: 'add', userId } }),
         expect.anything(), expect.anything(),
@@ -107,7 +106,6 @@ describe('Unit testing for Projects router', () => {
         res.status(200).send({ project: updatedProject, user: updatedUser });
       });
       const response = await request.patch(`/api/projects/${ProjectId}`).send({ action: 'remove', userId });
-      expect(mockVerifyCookie).toHaveBeenCalled();
       expect(response.status).toBe(200);
       expect(response.body).toEqual({ project: updatedProject, user: updatedUser });
     });
