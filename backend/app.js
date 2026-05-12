@@ -1,14 +1,13 @@
-
 // app.js - Entry point for our application
 
+import { createRequire } from 'module';
+import cookieParser from 'cookie-parser';
 // Load in all of our node modules. Their uses are explained below as they are called.
 import express from 'express';
 import morgan from 'morgan';
 import cron from 'node-cron';
 import fetch from 'node-fetch';
-import cookieParser from 'cookie-parser';
 import swaggerUi from 'swagger-ui-express';
-import { createRequire } from 'module';
 
 const require = createRequire(import.meta.url);
 let swaggerDocument;
@@ -20,14 +19,12 @@ try {
 }
 
 const customRequestHeaderName = 'x-customrequired-header';
-const dontCheckCustomRequestHeaderApis = ['GET::/api/recurringevents', 'GET::/api/healthcheck', 'GET::/api-docs', 'GET::/api-docs/'];
-
-// Import environment variables
-import dotenv from 'dotenv';
-import dotenvExpand from 'dotenv-expand';
-
-const myEnv = dotenv.config();
-dotenvExpand(myEnv);
+const dontCheckCustomRequestHeaderApis = [
+  'GET::/api/recurringevents',
+  'GET::/api/healthcheck',
+  'GET::/api-docs',
+  'GET::/api-docs/',
+];
 
 // Verify environment variables
 import assertEnv from 'assert-env';
@@ -69,10 +66,10 @@ if (swaggerDocument) {
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 
-// WORKERS
-import openCheckins from './workers/openCheckins.js';
 import closeCheckins from './workers/closeCheckins.js';
 import createRecurringEvents from './workers/createRecurringEvents.js';
+// WORKERS
+import openCheckins from './workers/openCheckins.js';
 const runOpenCheckinWorker = openCheckins(cron, fetch);
 const runCloseCheckinWorker = closeCheckins(cron, fetch);
 const runCreateRecurringEventsWorker = createRecurringEvents(cron, fetch);
@@ -86,19 +83,19 @@ cleanupExpiredTokens();
 // MIDDLEWARE
 import errorhandler from './middleware/errorhandler.middleware.js';
 
-// ROUTES
-import eventsRouter from './routers/events.router.js';
-import checkInsRouter from './routers/checkIns.router.js';
-import usersRouter from './routers/users.router.js';
-import questionsRouter from './routers/questions.router.js';
-import checkUserRouter from './routers/checkUser.router.js';
-import grantPermissionRouter from './routers/grantpermission.router.js';
-import projectsRouter from './routers/projects.router.js';
-import recurringEventsRouter from './routers/recurringEvents.router.js';
-import projectTeamMembersRouter from './routers/projectTeamMembers.router.js';
 //import slackRouter from './routers/slack.router.js';
 import authRouter from './routers/auth.router.js';
+import checkInsRouter from './routers/checkIns.router.js';
+import checkUserRouter from './routers/checkUser.router.js';
+// ROUTES
+import eventsRouter from './routers/events.router.js';
+import grantPermissionRouter from './routers/grantpermission.router.js';
 import healthCheckRouter from './routers/healthCheck.router.js';
+import projectTeamMembersRouter from './routers/projectTeamMembers.router.js';
+import projectsRouter from './routers/projects.router.js';
+import questionsRouter from './routers/questions.router.js';
+import recurringEventsRouter from './routers/recurringEvents.router.js';
+import usersRouter from './routers/users.router.js';
 
 // Check that clients to the API are sending the custom request header on all methods
 // except for ones described in the dontCheckCustomRequestHeaderApis array.
