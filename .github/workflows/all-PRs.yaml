@@ -19,7 +19,7 @@ jobs:
       - name: Build the backend container
         run: docker compose build backend
       - name: Run backend unit test suite
-        run: docker compose run --rm backend yarn run test --testPathIgnorePatterns=routers
+        run: docker compose run --rm backend yarn run test:unit
 
   test-backend-integration:
     runs-on: ubuntu-latest
@@ -49,7 +49,7 @@ jobs:
       - name: Build the backend container
         run: docker compose build backend
       - name: Run backend integration test suite
-        run: docker compose run --rm backend yarn run test backend/routers/
+        run: docker compose run --rm backend yarn run test:integration
 
   test-client-unit:
     runs-on: ubuntu-latest
