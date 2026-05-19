@@ -1,5 +1,11 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 
+// Ensure CUSTOM_REQUEST_HEADER is set before the controller loads,
+// since it captures process.env.CUSTOM_REQUEST_HEADER at import time.
+vi.hoisted(() => {
+  process.env.CUSTOM_REQUEST_HEADER ??= 'test-header-value';
+});
+
 vi.mock('../services/featureFlags.service.js');
 
 import FeatureFlagsController from './featureFlags.controller.js';
