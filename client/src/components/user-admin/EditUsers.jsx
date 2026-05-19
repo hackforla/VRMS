@@ -1,23 +1,65 @@
-import { useEffect, useState } from 'react';
 import {
-  Grid,
-  FormGroup,
-  FormControlLabel,
-  Switch,
   Button,
-  Typography,
   Container,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  Grid,
+  InputLabel,
   List,
   ListItem,
   ListItemText,
-  Select,
   MenuItem,
-  FormControl,
-  InputLabel,
+  Select,
+  Switch,
+  Typography,
 } from '@mui/material';
+import { useEffect, useState } from 'react';
 import '../../sass/UserAdmin.scss';
-import useAuth from '../../hooks/useAuth';
 import { ROLES } from '../../../../shared/roles';
+import useAuth from '../../hooks/useAuth';
+
+const muiSwitchStyles = {
+  width: 40,
+  height: 24,
+  padding: 0,
+  top: 4,
+  marginRight: 2,
+  marginLeft: 1,
+  '& .MuiSwitch-switchBase': {
+    padding: 0,
+    margin: '4px',
+    color: '#6b7280',
+    '&.Mui-checked': {
+      transform: 'translateX(16px)',
+      color: '#fff',
+    },
+    '&.Mui-checked + .MuiSwitch-track': {
+      backgroundColor: '#359F3A',
+      borderColor: '#359F3A',
+      opacity: 1,
+    },
+  },
+  '& .MuiSwitch-thumb': {
+    width: 8,
+    height: 8,
+    boxShadow: 'none',
+  },
+  '& .MuiSwitch-track': {
+    width: 32,
+    height: 16,
+    borderRadius: 1000,
+    backgroundColor: '#fff',
+    border: '2px solid #6b7280',
+    opacity: 1,
+    boxSizing: 'border-box',
+  },
+};
+
+const muiFormControlLabelStyles = {
+  alignItems: 'flex-end',
+  marginLeft: 1,
+};
 
 // child of UserAdmin. Displays form to update users.
 const EditUsers = ({
@@ -51,9 +93,7 @@ const EditUsers = ({
     setUserManagedProjects(userToEdit.managedProjects);
   }, [userToEdit]);
 
-  const userProjectsToDisplay = activeProjects.filter((item) =>
-    userProjects.includes(item[0]),
-  );
+  const userProjectsToDisplay = activeProjects.filter((item) => userProjects.includes(item[0]));
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -75,9 +115,7 @@ const EditUsers = ({
 
   const handleRemoveProject = (projectToRemove) => {
     if (!superAdmin && userManagedProjects.length > 0) {
-      const newProjects = userManagedProjects.filter(
-        (p) => p !== projectToRemove,
-      );
+      const newProjects = userManagedProjects.filter((p) => p !== projectToRemove);
       updateUserDb(userToEdit, projectToRemove, 'remove');
       setUserManagedProjects(newProjects);
     }
@@ -107,10 +145,11 @@ const EditUsers = ({
           Is Active:
         </Typography>
         <FormControlLabel
-          sx={{ marginLeft: 1 }}
+          sx={muiFormControlLabelStyles}
           control={
             <Switch
               checked={isActive}
+              sx={muiSwitchStyles}
               onChange={handleSetIsActive}
               disabled={superAdmin}
             />
@@ -123,10 +162,11 @@ const EditUsers = ({
           VRMS Admin:
         </Typography>
         <FormControlLabel
-          sx={{ marginLeft: 1 }}
+          sx={muiFormControlLabelStyles}
           control={
             <Switch
               checked={admin || superAdmin}
+              sx={muiSwitchStyles}
               onChange={handleSetAccessLevel}
               disabled={superAdmin}
             />
@@ -183,11 +223,7 @@ const EditUsers = ({
           Add project
         </Button>
       </FormControl>
-      <Button
-        variant="outlined"
-        onClick={backToSearch}
-        style={{ marginTop: '1rem' }}
-      >
+      <Button variant="outlined" onClick={backToSearch} style={{ marginTop: '1rem' }}>
         Back to search
       </Button>
     </Container>
