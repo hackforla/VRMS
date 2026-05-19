@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import adjustToLosAngelesTime from './adjustToLosAngelesTime.js';
+import adjustToLosAngelesTime from './adjustToLosAngelesTime.ts';
 
 describe('adjustToLosAngelesTime', () => {
   it('should adjust UTC to PST (winter, UTC-8)', () => {

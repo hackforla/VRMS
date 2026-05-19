@@ -1,17 +1,19 @@
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import MockDate from 'mockdate';
+import type { VRMSEvent } from './types.ts';
 
 // Unmock — vitest.setup.js globally mocks all workers
 vi.unmock('./closeCheckins.js');
+vi.unmock('./closeCheckins.ts');
 
-import { filterEventsToClose } from './closeCheckins.js';
+import { filterEventsToClose } from './closeCheckins.ts';
 
 describe('closeCheckins — filterEventsToClose', () => {
   afterEach(() => {
     MockDate.reset();
   });
 
-  const makeEvent = (date, checkInReady = true) => ({
+  const makeEvent = (date: string, checkInReady = true): VRMSEvent => ({
     _id: `evt-${date}`,
     name: 'Test Event',
     date,
@@ -26,7 +28,7 @@ describe('closeCheckins — filterEventsToClose', () => {
   });
 
   it('skips events with no date', () => {
-    const events = [{ _id: '1', name: 'No Date', checkInReady: true }];
+    const events = [{ _id: '1', name: 'No Date', checkInReady: true } as VRMSEvent];
     expect(filterEventsToClose(events, new Date())).toEqual([]);
   });
 
@@ -64,7 +66,6 @@ describe('closeCheckins — filterEventsToClose', () => {
   // --- DST: timezone-aware comparison ---
 
   it('spring forward: event closes 3h after start during PDT', () => {
-    // Event at 03:00 UTC, 3h later = 06:00 UTC. At 06:05 UTC → close.
     MockDate.set('2024-03-13T06:05:00Z');
     const events = [makeEvent('2024-03-13T03:00:00Z', true)];
     const result = filterEventsToClose(events, new Date());
@@ -72,13 +73,12 @@ describe('closeCheckins — filterEventsToClose', () => {
   });
 
   it('spring forward: event does NOT close before 3h during PDT', () => {
-    MockDate.set('2024-03-13T05:05:00Z'); // only 2h5m after start
+    MockDate.set('2024-03-13T05:05:00Z');
     const events = [makeEvent('2024-03-13T03:00:00Z', true)];
     expect(filterEventsToClose(events, new Date())).toHaveLength(0);
   });
 
   it('fall back: event closes 3h after start during PST', () => {
-    // Event at 02:00 UTC, 3h later = 05:00 UTC. At 05:05 UTC → close.
     MockDate.set('2024-11-06T05:05:00Z');
     const events = [makeEvent('2024-11-06T02:00:00Z', true)];
     const result = filterEventsToClose(events, new Date());
@@ -86,7 +86,7 @@ describe('closeCheckins — filterEventsToClose', () => {
   });
 
   it('fall back: event does NOT close before 3h during PST', () => {
-    MockDate.set('2024-11-06T04:55:00Z'); // only 2h55m after start
+    MockDate.set('2024-11-06T04:55:00Z');
     const events = [makeEvent('2024-11-06T02:00:00Z', true)];
     expect(filterEventsToClose(events, new Date())).toHaveLength(0);
   });

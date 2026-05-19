@@ -1,17 +1,19 @@
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import MockDate from 'mockdate';
+import type { VRMSEvent } from './types.ts';
 
 // Unmock — vitest.setup.js globally mocks all workers
 vi.unmock('./openCheckins.js');
+vi.unmock('./openCheckins.ts');
 
-import { filterEventsToOpen } from './openCheckins.js';
+import { filterEventsToOpen } from './openCheckins.ts';
 
 describe('openCheckins — filterEventsToOpen', () => {
   afterEach(() => {
     MockDate.reset();
   });
 
-  const makeEvent = (date, checkInReady = false) => ({
+  const makeEvent = (date: string, checkInReady = false): VRMSEvent => ({
     _id: `evt-${date}`,
     name: 'Test Event',
     date,
@@ -26,7 +28,7 @@ describe('openCheckins — filterEventsToOpen', () => {
   });
 
   it('skips events with no date', () => {
-    const events = [{ _id: '1', name: 'No Date', checkInReady: false }];
+    const events = [{ _id: '1', name: 'No Date', checkInReady: false } as VRMSEvent];
     expect(filterEventsToOpen(events, new Date())).toEqual([]);
   });
 
@@ -63,7 +65,6 @@ describe('openCheckins — filterEventsToOpen', () => {
   // --- DST: timezone-aware comparison ---
 
   it('spring forward: event within 30 min during PDT', () => {
-    // Event at 03:00 UTC. At 02:50 UTC → 10 min before → open.
     MockDate.set('2024-03-13T02:50:00Z');
     const events = [makeEvent('2024-03-13T03:00:00Z', false)];
     const result = filterEventsToOpen(events, new Date());
@@ -71,14 +72,12 @@ describe('openCheckins — filterEventsToOpen', () => {
   });
 
   it('spring forward: event NOT within 30 min during PDT', () => {
-    // Event at 03:00 UTC. At 02:00 UTC → 60 min before → skip.
     MockDate.set('2024-03-13T02:00:00Z');
     const events = [makeEvent('2024-03-13T03:00:00Z', false)];
     expect(filterEventsToOpen(events, new Date())).toEqual([]);
   });
 
   it('fall back: event within 30 min during PST', () => {
-    // Event at 02:00 UTC. At 01:50 UTC → 10 min before → open.
     MockDate.set('2024-11-06T01:50:00Z');
     const events = [makeEvent('2024-11-06T02:00:00Z', false)];
     const result = filterEventsToOpen(events, new Date());

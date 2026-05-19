@@ -66,10 +66,10 @@ if (swaggerDocument) {
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 
-import closeCheckins from './workers/closeCheckins.js';
+import closeCheckins from './workers/closeCheckins.ts';
 import createRecurringEvents from './workers/createRecurringEvents.js';
 // WORKERS
-import openCheckins from './workers/openCheckins.js';
+import openCheckins from './workers/openCheckins.ts';
 const runOpenCheckinWorker = openCheckins(cron, fetch);
 const runCloseCheckinWorker = closeCheckins(cron, fetch);
 const runCreateRecurringEventsWorker = createRecurringEvents(cron, fetch);
