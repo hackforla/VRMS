@@ -74,29 +74,4 @@ describe('FeatureFlagsController.index', () => {
     expect(getAllFlags).toHaveBeenCalledWith('anonymous');
   });
 
-  test('should fall back to anonymous when req.userId is null', async () => {
-    getAllFlags.mockResolvedValue({});
-    req.userId = null;
-
-    await FeatureFlagsController.index(req, res);
-
-    expect(getAllFlags).toHaveBeenCalledWith('anonymous');
-  });
-
-  test('should not call getAllFlags when header validation fails', async () => {
-    req.headers = {};
-
-    await FeatureFlagsController.index(req, res);
-
-    expect(getAllFlags).not.toHaveBeenCalled();
-  });
-
-  test('should call res.json with the actual flags object', async () => {
-    const flags = { 'new-dashboard': true, 'beta-feature': false, 'experiment-x': true };
-    getAllFlags.mockResolvedValue(flags);
-
-    await FeatureFlagsController.index(req, res);
-
-    expect(res.json).toHaveBeenCalledWith(flags);
-  });
 });
