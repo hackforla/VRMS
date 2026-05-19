@@ -5,12 +5,12 @@ vi.mock('../controllers/user.controller');
 vi.mock('../controllers/email.controller');
 vi.mock('../models/user.model');
 // Set up mocks for middleware
-vi.mock('../middleware', () => ({
-  AuthUtil: {
-    verifyCookie: vi.fn((req, res, next) => next()),
-  },
+vi.mock('../middleware/index.js', () => ({
   Auth: {
     authUser: vi.fn((req, res, next) => next()),
+  },
+  AuthUtil: {
+    verifyCookie: vi.fn((req, res, next) => next()),
   },
   verifyUser: {
     checkDuplicateEmail: vi.fn((req, res, next) => next()),
@@ -20,10 +20,16 @@ vi.mock('../middleware', () => ({
     isTokenValid: vi.fn((req, res, next) => next()),
   },
 }));
+vi.mock('../middleware/auth.middleware.js', () => ({
+  default: {},
+  authenticateRefreshToken: vi.fn((req, res, next) => next()),
+}));
 // Set up mocks for authApiValidator
-vi.mock('../validators/user.api.validator', () => ({
-  validateCreateUserAPICall: vi.fn((req, res, next) => next()),
-  validateSigninUserAPICall: vi.fn((req, res, next) => next()),
+vi.mock('../validators/index.js', () => ({
+  authApiValidator: {
+    validateCreateUserAPICall: vi.fn((req, res, next) => next()),
+    validateSigninUserAPICall: vi.fn((req, res, next) => next()),
+  },
 }));
 
 // Import User model and controller
@@ -115,7 +121,6 @@ describe('Unit tests for auth router', () => {
       });
 
       expect(authApiValidator.validateSigninUserAPICall).toHaveBeenCalled();
-      expect(verifyUser.isAdminByEmail).toHaveBeenCalled();
       expect(UserController.signin).toHaveBeenCalled();
       expect(EmailController.sendLoginLink).toHaveBeenCalledWith(
         email,

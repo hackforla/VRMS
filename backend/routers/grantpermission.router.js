@@ -2,12 +2,12 @@ import express from 'express';
 const router = express.Router();
 import fs from 'fs';
 
-import { google } from 'googleapis';
 import async from 'async';
+import { google } from 'googleapis';
 import fetch from 'node-fetch';
-const { authUser } = require('../middleware/auth.middleware');
-const AuthUtils = require('../../shared/authorizationUtils');
-const { ROLES } = require('../../shared/roles');
+import { hasMinimumRole } from '../../shared/authorizationUtils.js';
+import { ROLES } from '../../shared/roles.js';
+import { authUser } from '../middleware/auth.middleware.js';
 
 const SCOPES = ['https://www.googleapis.com/auth/drive'];
 
@@ -16,7 +16,7 @@ const githubOrganization = 'testvrms';
 
 // GET /api/grantpermission/googleDrive
 router.post('/googleDrive', async (req, res) => {
-  let credentials = JSON.parse(process.env.GOOGLECREDENTIALS);
+  const credentials = JSON.parse(process.env.GOOGLECREDENTIALS);
 
   //checks if email and file to change are in req.body
   if (!req.body.email || !req.body.file) {
@@ -69,11 +69,11 @@ router.post('/gitHub', authUser, async (req, res) => {
 
   const teamSlugs = [baseTeamSlug, managerTeamSlug];
 
-  if (AuthUtils.hasMinimumRole(req.user, ROLES.ADMIN)) {
+  if (hasMinimumRole(req.user, ROLES.ADMIN)) {
     teamSlugs.push(adminTeamSlug);
   }
   function createSlug(string) {
-    let slug = string.toLowerCase();
+    const slug = string.toLowerCase();
     return slug.split(' ').join('-');
   }
 
@@ -205,7 +205,7 @@ function sendURL(oAuth2Client) {
  * @param {String} code The code string from the auth URL.
  */
 function sendToken(oAuth2Client, code) {
-  return new Promise(function (resolve, reject) {
+  return new Promise((resolve, reject) => {
     oAuth2Client.getToken(code, (err, token) => {
       if (err)
         reject({
@@ -235,8 +235,8 @@ function grantPermission(auth, email, fileId) {
     },
   ];
 
-  return new Promise(function (resolve, reject) {
-    async.eachSeries(permissions, function (permission, permissionCallback) {
+  return new Promise((resolve, reject) => {
+    async.eachSeries(permissions, (permission, permissionCallback) => {
       const drive = google.drive({ version: 'v3', auth });
       drive.permissions.create(
         {
