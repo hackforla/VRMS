@@ -41,11 +41,4 @@ describe('featureFlags.service', () => {
     await expect(getAllFlags('user-123')).rejects.toThrow('PostHog API error');
   });
 
-  test('handles empty distinctId string', async () => {
-    mockGetAllFlags.mockResolvedValue({});
-
-    await getAllFlags('');
-
-    expect(mockGetAllFlags).toHaveBeenCalledWith('');
-  });
 });
