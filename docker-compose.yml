@@ -9,6 +9,7 @@ services:
     command: yarn run dev
     volumes:
       - ./backend:/srv/backend
+      - ./shared:/srv/shared
       - backend_node_modules:/srv/backend/node_modules
     expose:
       - "4000"

@@ -44,7 +44,8 @@ This is an ambitious project to create a system that will help us measure our hu
       </ul>
     </li>
     <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#wiki-highlights">Wiki Highlights</a></li>  
+    <li><a href="#wiki-highlights">Wiki Highlights</a></li>
+    <li><a href="#deployment--operations">Deployment & Operations</a></li>
     <!-- <li><a href="#usage">Usage</a></li> -->
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#license">License</a></li>
@@ -93,6 +94,15 @@ Contributions are welcome once you've been onboarded to Hack for LA through an o
 1. [Introduction](https://github.com/hackforla/VRMS/wiki/Introduction)
 2. [Technology Stack](https://github.com/hackforla/VRMS/wiki/Technology)
 3. [Team Meetings](https://github.com/hackforla/VRMS/wiki/Team-Meetings)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Deployment & Operations
+
+Learn how code gets from your laptop to production:
+
+- **[Deployment Guide](DEPLOYMENT.md)** -- Step-by-step walkthrough of the full deployment pipeline, with diagrams and plain-language explanations of Docker, AWS, and CI/CD
+- **[Infrastructure Reference](INFRASTRUCTURE.md)** -- AWS account details, services, CI/CD pipeline specs, and required secrets
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
