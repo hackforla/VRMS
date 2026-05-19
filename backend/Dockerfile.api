@@ -20,4 +20,3 @@ WORKDIR /srv/backend
 COPY --from=api-development /srv/backend/node_modules ./node_modules
 COPY . .
 CMD ["npm", "run", "dev"]
-

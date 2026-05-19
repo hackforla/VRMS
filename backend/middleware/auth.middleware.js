@@ -155,6 +155,15 @@ function verifyCookie(req, res, next) {
   });
 }
 
+function addCookieIfAvailable(req, _res, next) {
+  jwt.verify(req.cookies.token, SECRET, (err, decoded) => {
+    if (!err) {
+      req.userId = decoded.id;
+    }
+    next();
+  });
+}
+
 const Auth = {
   authenticateAccessToken,
   authUser,
@@ -166,6 +175,7 @@ const Auth = {
   getClientIp,
   hashToken,
   verifyCookie,
+  addCookieIfAvailable,
 };
 
 export default Auth;
@@ -181,4 +191,5 @@ export {
   getClientIp,
   hashToken,
   verifyCookie,
+  addCookieIfAvailable,
 };
