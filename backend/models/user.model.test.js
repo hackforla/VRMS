@@ -1,22 +1,17 @@
-// import necessary modules
-const mongoose = require('mongoose');
-const { User } = require('./user.model');
+import { describe, it, expect, vi, afterEach } from 'vitest';
+import mongoose from 'mongoose';
+import { User } from './user.model.js';
 
 describe('Unit tests for User Model', () => {
-  // Clears all mocks after each test
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('Serialization test', () => {
     it('should return the correct serialized user object', async () => {
-      // Create mock user data
       const userObj = {
         _id: new mongoose.Types.ObjectId(),
-        name: {
-          firstName: 'mock',
-          lastName: 'user',
-        },
+        name: { firstName: 'mock', lastName: 'user' },
         email: 'mock.user@example.com',
         accessLevel: 'user',
         createdDate: new Date(),
@@ -39,17 +34,12 @@ describe('Unit tests for User Model', () => {
         isActive: true,
       };
 
-      // Create a mock user instance
       const mockUser = new User(userObj);
       const serializedUser = mockUser.serialize();
 
-      // Test
       expect(serializedUser).toEqual({
         id: mockUser._id,
-        name: {
-          firstName: mockUser.name.firstName,
-          lastName: mockUser.name.lastName,
-        },
+        name: { firstName: mockUser.name.firstName, lastName: mockUser.name.lastName },
         email: mockUser.email,
         accessLevel: mockUser.accessLevel,
         createdDate: mockUser.createdDate,
@@ -76,12 +66,8 @@ describe('Unit tests for User Model', () => {
 
   describe('Validation test', () => {
     it('should fail validation check if accessLevel is invalid', async () => {
-      // Create a mock user with an invalid accessLevel
-      const mockuser = new User({
-        accessLevel: 'projectleader', // not 'user', 'admin', or 'superadmin'
-      });
+      const mockuser = new User({ accessLevel: 'projectleader' });
 
-      // Attempt to validate the mock user by checking for valid accessLevel
       let error;
       try {
         await mockuser.validate();
@@ -89,35 +75,25 @@ describe('Unit tests for User Model', () => {
         error = err;
       }
 
-      // Tests
       expect(error).toBeDefined();
       expect(error.errors.accessLevel).toBeDefined();
     });
 
     it('should enforce that emails are stored in lowercase', async () => {
-      // Create a mock user with an uppercase email
       const uppercaseEmail = 'TEST@test.com';
-      const mockUser = new User({
-        email: uppercaseEmail,
-      });
+      const mockUser = new User({ email: uppercaseEmail });
 
       mockUser.validate();
-      // Tests
       expect(mockUser.email).toBe(uppercaseEmail.toLowerCase());
     });
 
     it('should pass validation with valid user data', async () => {
-      // Create a mock user with valid data
       const mockUser = new User({
-        name: {
-          firstName: 'Valid',
-          lastName: 'User',
-        },
+        name: { firstName: 'Valid', lastName: 'User' },
         email: 'mockuser@gmail.com',
         accessLevel: 'user',
       });
 
-      // Attempt to save the mock user
       let error;
       try {
         await mockUser.validate();
@@ -125,11 +101,10 @@ describe('Unit tests for User Model', () => {
         error = err;
       }
 
-      // Tests
       expect(error).toBeUndefined();
       expect(mockUser.email).toBe('mockuser@gmail.com');
       expect(mockUser.accessLevel).toBe('user');
-      await expect(mockUser.validate()).resolves.toBeUndefined(); // async validation check
+      await expect(mockUser.validate()).resolves.toBeUndefined();
     });
   });
 });

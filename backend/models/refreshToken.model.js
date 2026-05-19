@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const { CONFIG_AUTH } = require('../config');
+import mongoose from 'mongoose';
+import { CONFIG_AUTH } from '../config/index.js';
 
 mongoose.Promise = global.Promise;
 
@@ -11,7 +11,12 @@ const refreshTokenSchema = mongoose.Schema({
     index: true,
   },
   hash: { type: String, required: true, unique: true, immutable: true },
-  createdAt: { type: Date, required: true, default: () => Date.now(), immutable: true },
+  createdAt: {
+    type: Date,
+    required: true,
+    default: () => Date.now(),
+    immutable: true,
+  },
   expiresAt: {
     type: Date,
     required: true,
@@ -39,4 +44,4 @@ refreshTokenSchema.index({ expires_at: 1 }, { expiresAfterSeconds: 0 });
 
 const RefreshToken = mongoose.model('RefreshToken', refreshTokenSchema);
 
-module.exports = { RefreshToken };
+export { RefreshToken };

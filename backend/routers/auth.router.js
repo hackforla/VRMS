@@ -1,8 +1,8 @@
-const express = require('express');
-const { Auth, verifyUser } = require('../middleware');
-const { UserController } = require('../controllers/');
-const { authApiValidator } = require('../validators');
-const { authenticateRefreshToken } = require('../middleware/auth.middleware');
+import express from 'express';
+import { Auth, verifyUser } from '../middleware/index.js';
+import { UserController } from '../controllers/index.js';
+import { authApiValidator } from '../validators/index.js';
+import { authenticateRefreshToken } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
 
@@ -28,4 +28,4 @@ router.post('/me', [Auth.authUser], UserController.verifyMe);
 
 router.post('/logout', [authenticateRefreshToken], UserController.logout);
 
-module.exports = router;
+export default router;
