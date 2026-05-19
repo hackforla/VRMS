@@ -44,7 +44,7 @@
     "googleapis": "^59.0.0",
     "helmet": "^3.22.0",
     "jsonwebtoken": "^8.5.1",
-    "mongodb-memory-server": "^8.2.3",
+    "mongodb-memory-server": "^11.1.0",
     "mongoose": "^8.9.5",
     "morgan": "^1.10.0",
     "node-cron": "^2.0.3",
