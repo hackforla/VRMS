@@ -1,11 +1,11 @@
-FROM node:20-alpine AS client-development
+FROM node:24-alpine AS client-development
 RUN mkdir /srv/client
 WORKDIR /srv/client
 RUN mkdir -p node_modules
 COPY package.json package.json ./
 RUN npm install --silent
 
-FROM node:20-alpine AS client-builder
+FROM node:24-alpine AS client-builder
 USER node
 WORKDIR /srv/client
 COPY --from=client-development /srv/client/node_modules node_modules
