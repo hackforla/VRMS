@@ -16,24 +16,25 @@ Idea for the future: programmingLanguages, numberGithubContributions (pull these
 */
 
 const projectSchema = mongoose.Schema({
-    name: { type: String },
-    description: { type: String },
-    githubIdentifier: { type: String },
-    projectStatus: { type: String },                    // Active, Completed, or Paused
-    location: { type: String },                         // DTLA, Westside, South LA, or Remote (hacknight)
-    //teamMembers: { type: String },                    // commented since we should be able to get this from Project Team Members table
-    createdDate: { type: Date, default: Date.now },     // date/time project was created
-    completedDate: { type: Date },                      // only if Status = Completed, date/time completed
-    githubUrl: { type: String },                        // link to main repo
-    slackUrl: { type: String },                         // link to Slack channel
-    googleDriveUrl: { type: String },
-    googleDriveId: { type: String },
-    hflaWebsiteUrl: { type: String },
-    videoConferenceLink: { type: String },
-    lookingDescription: { type: String },               // narrative on what the project is looking for
-    recruitingCategories: [{ type: String }],           // same as global Skills picklist
-    partners: [{ type: String }],                       // any third-party partners on the project, e.g. City of LA
-    managedByUsers: [{ type: String }]                  // Which users may manage this project.                 
+  name: { type: String, trim: true },
+  description: { type: String, trim: true },
+  githubIdentifier: { type: String, trim: true },
+  projectStatus: { type: String }, // Active, Completed, or Paused
+  location: { type: String, trim: true }, // DTLA, Westside, South LA, or Remote (hacknight)
+  //teamMembers: { type: String },                    // commented since we should be able to get this from Project Team Members table
+  createdDate: { type: Date, default: Date.now }, // date/time project was created
+  completedDate: { type: Date }, // only if Status = Completed, date/time completed
+  githubUrl: { type: String, trim: true }, // link to main repo
+  slackUrl: { type: String, trim: true }, // link to Slack channel
+  googleDriveUrl: { type: String, trim: true },
+  googleDriveId: { type: String },
+  hflaWebsiteUrl: { type: String, trim: true },
+  videoConferenceLink: { type: String },
+  lookingDescription: { type: String }, // narrative on what the project is looking for
+  recruitingCategories: [{ type: String }], // same as global Skills picklist
+  partners: [{ type: String }], // any third-party partners on the project, e.g. City of LA
+  managedByUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // Which users may manage this project.
+  onboardOffboardVisible: { type: Boolean, default: true }, // Whether onboarding/offboarding forms are visible on the project page
 });
 
 projectSchema.methods.serialize = function() {

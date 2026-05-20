@@ -33,7 +33,7 @@ const userSchema = mongoose.Schema({
   isHflaGithubMember: { type: Boolean }, // pull from API once github handle in place?
   githubPublic2FA: { type: Boolean }, // does the user have 2FA enabled on their github and membership set to public?
   availability: { type: String }, // availability to meet outside of hacknight times; string for now, more structured in future
-  managedProjects: [{ type: String}] // Which projects managed by user.
+  managedProjects: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Project' }], // Which projects managed by user.
   //currentProject: { type: String }              // no longer need this as we can get it from Project Team Member table
   // password: { type: String, required: true }
 });

@@ -3,8 +3,8 @@ const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
 const checkInSchema = mongoose.Schema({
-  userId: { type: String },
-  eventId: { type: String },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  eventId: { type: mongoose.Schema.Types.ObjectId, ref: 'Event' },
   checkedIn: { type: Boolean, default: true },
   createdDate: { type: Date, default: Date.now },
 });
