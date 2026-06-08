@@ -22,17 +22,14 @@ module.exports = (cron, fetch) => {
     };
 
     async function sortAndFilterEvents() {
+        const { isPastCloseWindow } = await import('./lib/eventTime.js');
         const events = await fetchEvents();
 
-        // Filter events if event date is after now but before thirty minutes from now
+        // Filter events where 3 hours have passed since start and check-in is still open
         if (events && events.length > 0) {
 
             const sortedEvents = events.filter(event => {
-                const currentTimeISO = new Date().toISOString();
-                const threeHoursFromStartTime = new Date(event.date).getTime() + 10800000;
-                const threeHoursISO = new Date(threeHoursFromStartTime).toISOString();
-
-                return (currentTimeISO > threeHoursISO) && (event.checkInReady === true);
+                return isPastCloseWindow(event.date, new Date()) && (event.checkInReady === true);
             });
 
             // console.log('Sorted events: ', sortedEvents);

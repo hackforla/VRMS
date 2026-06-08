@@ -43,17 +43,17 @@ module.exports = (cron, fetch) => {
     };
 
     async function filterAndCreateEvents() {
-        const { getEventDay, generateEventFromRecurring } = await import('./lib/eventTime.js');
+        const { getEventDayLA, getTodayDayLA, generateEventFromRecurring, checkIfSameDayLA } = await import('./lib/eventTime.js');
 
         TODAY_DATE = new Date();
-        TODAY = TODAY_DATE.getDay();
+        TODAY = getTodayDayLA();
         console.log("Date: ", TODAY_DATE, "Day: ", TODAY);
         const recurringEvents = RECURRING_EVENTS;
         // console.log("Today Day: ", TODAY);
         // Filter recurring events where the event date is today
         if (recurringEvents && recurringEvents.length > 0) {
             const filteredEvents = recurringEvents.filter(event => {
-                const eventDay = getEventDay(event);
+                const eventDay = getEventDayLA(event);
                 // console.log("Event Day: ", eventDay);
                 return (eventDay === TODAY);
             });
@@ -98,20 +98,11 @@ module.exports = (cron, fetch) => {
 
     async function checkIfEventExists(eventName) {
         const events = EVENTS;
-        // const today = new Date();
+        const { checkIfSameDayLA } = await import('./lib/eventTime.js');
 
         if (events && events.length > 0) {
             const filteredEvents = events.filter(event => {
-                const eventDate = new Date(event.date);
-                const year = eventDate.getFullYear();
-                const month = eventDate.getMonth();
-                const date = eventDate.getDate();
-
-                const yearToday = TODAY_DATE.getFullYear();
-                const monthToday = TODAY_DATE.getMonth();
-                const dateToday = TODAY_DATE.getDate();
-
-                return (year === yearToday && month === monthToday && date === dateToday && eventName === event.name);
+                return checkIfSameDayLA(event.date, TODAY_DATE) && eventName === event.name;
             });
             console.log("Events already created: ", filteredEvents);
             return filteredEvents.length > 0 ? true : false;
