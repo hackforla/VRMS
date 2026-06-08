@@ -34,7 +34,11 @@ export const getEventDay = getEventDayLA;
  * Get today's day-of-week in LA time.
  * Returns JS-style day: 0=Sun, 1=Mon, ..., 6=Sat
  */
-export function getTodayDayLA() {
+export function getTodayDayLA(now = null) {
+  if (now !== null) {
+    return Temporal.Instant.fromEpochMilliseconds(new Date(now).getTime())
+      .toZonedDateTimeISO(TZ).dayOfWeek % 7;
+  }
   return Temporal.Now.zonedDateTimeISO(TZ).dayOfWeek % 7;
 }
 
