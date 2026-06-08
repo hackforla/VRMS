@@ -43,71 +43,33 @@ module.exports = (cron, fetch) => {
     };
 
     async function filterAndCreateEvents() {
-        const { getEventDayLA, getTodayDayLA, generateEventFromRecurring, checkIfSameDayLA } = await import('./lib/eventTime.js');
+        const { getTodayDayLA } = await import('./lib/eventTime.js');
+        const { filterTodaysRecurringEvents, buildNewEvent, isEventDuplicate } = await import('./lib/recurringEventOps.js');
 
         TODAY_DATE = new Date();
         TODAY = getTodayDayLA();
         console.log("Date: ", TODAY_DATE, "Day: ", TODAY);
         const recurringEvents = RECURRING_EVENTS;
-        // console.log("Today Day: ", TODAY);
-        // Filter recurring events where the event date is today
+
         if (recurringEvents && recurringEvents.length > 0) {
-            const filteredEvents = recurringEvents.filter(event => {
-                const eventDay = getEventDayLA(event);
-                // console.log("Event Day: ", eventDay);
-                return (eventDay === TODAY);
-            });
+            const filteredEvents = await filterTodaysRecurringEvents(recurringEvents, TODAY_DATE);
+
             // For each recurring event, check to see if an event already
             // exists for it and do something if true/false. Can't use
             // forEach function with async/await.
-            for (filteredEvent of filteredEvents) {
-                const eventExists = await checkIfEventExists(filteredEvent.name);
-                // console.log('Event exists? ', eventExists);
+            for (const filteredEvent of filteredEvents) {
+                const eventExists = isEventDuplicate(filteredEvent.name, EVENTS || [], TODAY_DATE);
 
                 if (eventExists) {
-                    console.log("Not going to run ceateEvent");
+                    console.log("Not going to run createEvent");
                 } else {
-                    // Create new event
-                    const { newEventDate, newEndTime } = generateEventFromRecurring(filteredEvent, TODAY_DATE);
-
-                    const eventToCreate = {
-                        name: filteredEvent.name && filteredEvent.name,
-                        hacknight: filteredEvent.hacknight && filteredEvent.hacknight,
-                        eventType: filteredEvent.eventType && filteredEvent.eventType,
-                        description: filteredEvent.eventDescription && filteredEvent.eventDescription,
-                        project: filteredEvent.project && filteredEvent.project,
-                        date: filteredEvent.date && newEventDate,
-                        startTime: filteredEvent.startTime && newEventDate,
-                        endTime: filteredEvent.endTime && newEndTime,
-                        hours: filteredEvent.hours && filteredEvent.hours
-                    }
-                    if (filteredEvent.hasOwnProperty("location")) {
-                        eventToCreate.location = {
-                            city: filteredEvent.location.city ? filteredEvent.location.city : 'REMOTE',
-                            state: filteredEvent.location.state ? filteredEvent.location.state : 'REMOTE',
-                            country: filteredEvent.location.country ? filteredEvent.location.country : 'REMOTE'
-                        };
-                    }
-
+                    const eventToCreate = await buildNewEvent(filteredEvent, TODAY_DATE);
                     const created = await createEvent(eventToCreate);
                     console.log(created);
-                };
-            };
-        };
-    };
-
-    async function checkIfEventExists(eventName) {
-        const events = EVENTS;
-        const { checkIfSameDayLA } = await import('./lib/eventTime.js');
-
-        if (events && events.length > 0) {
-            const filteredEvents = events.filter(event => {
-                return checkIfSameDayLA(event.date, TODAY_DATE) && eventName === event.name;
-            });
-            console.log("Events already created: ", filteredEvents);
-            return filteredEvents.length > 0 ? true : false;
-        };
-    };
+                }
+            }
+        }
+    }
 
     const createEvent = async (event) => {
         if(event) {
