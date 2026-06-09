@@ -16,6 +16,8 @@
 import { describe, test, expect } from 'vitest';
 import {
   getEventDay,
+  getTodayDayLA,
+  checkIfSameDayLA,
   generateEventFromRecurring,
   isInOpenWindow,
   isPastCloseWindow,
@@ -173,5 +175,104 @@ describe('Checkin open/close window — DST transitions', () => {
     const shouldClose = isPastCloseWindow(eventDate, nowReal);
 
     expect(shouldClose).toBe(true);
+  });
+});
+
+describe('getTodayDayLA — returns LA day-of-week regardless of UTC wall-clock', () => {
+  test('returns LA Tuesday when UTC clock has already rolled to Wednesday', () => {
+    // Tuesday Jan 7, 2025 at 10pm PST = Wednesday Jan 8, 2025 at 6am UTC
+    expect(getTodayDayLA(new Date('2025-01-08T06:00:00Z'))).toBe(2); // Tuesday, not 3 (Wednesday UTC)
+  });
+
+  test('returns correct LA day on DST spring-forward day (March 9, 2025)', () => {
+    // 8pm PDT March 9 = 3am UTC March 10 — UTC rolls to Monday, LA is still Sunday
+    expect(getTodayDayLA(new Date('2025-03-10T03:00:00Z'))).toBe(0); // Sunday, not 1 (Monday UTC)
+  });
+});
+
+describe('checkIfSameDayLA — same-day comparison in LA timezone', () => {
+  test('two timestamps both Tuesday in LA even though one is UTC Wednesday', () => {
+    // 11pm PST Tue Jan 7 = 7am UTC Wed Jan 8
+    // 8pm PST Tue Jan 7  = 4am UTC Wed Jan 8
+    const elevenPmLATuesday = new Date('2025-01-08T07:00:00Z');
+    const eightPmLATuesday  = new Date('2025-01-08T04:00:00Z');
+
+    expect(checkIfSameDayLA(elevenPmLATuesday, eightPmLATuesday)).toBe(true);
+  });
+
+  test('two timestamps on different LA days return false', () => {
+    const tuesdayLA   = new Date('2025-01-07T09:00:00Z'); // 1am PST Tue Jan 7
+    const wednesdayLA = new Date('2025-01-09T07:00:00Z'); // 11pm PST Wed Jan 8
+
+    expect(checkIfSameDayLA(tuesdayLA, wednesdayLA)).toBe(false);
+  });
+
+  test('midnight UTC crossover: 11:58pm LA Monday vs 12:02am LA Tuesday are different days', () => {
+    // Both are UTC Tuesday Jan 7, but different LA calendar days
+    const lateLAMonday   = new Date('2025-01-07T07:58:00Z'); // 11:58pm PST Mon Jan 6
+    const earlyLATuesday = new Date('2025-01-07T08:02:00Z'); // 12:02am PST Tue Jan 7
+
+    expect(checkIfSameDayLA(lateLAMonday, earlyLATuesday)).toBe(false);
+  });
+});
+
+describe('isInOpenWindow — exact boundary behavior', () => {
+  test('event exactly at now is in the open window', () => {
+    const now = new Date('2025-01-07T03:00:00Z');
+    expect(isInOpenWindow(now, now)).toBe(true);
+  });
+
+  test('event exactly 30 minutes from now is in the open window', () => {
+    const now       = new Date('2025-01-07T03:00:00Z');
+    const eventDate = new Date('2025-01-07T03:30:00Z');
+    expect(isInOpenWindow(eventDate, now)).toBe(true);
+  });
+
+  test('event 31 minutes from now is NOT in the open window', () => {
+    const now       = new Date('2025-01-07T03:00:00Z');
+    const eventDate = new Date('2025-01-07T03:31:00Z');
+    expect(isInOpenWindow(eventDate, now)).toBe(false);
+  });
+});
+
+describe('isPastCloseWindow — exact boundary behavior', () => {
+  test('exactly 3 hours after event start is past the close window', () => {
+    const eventDate = new Date('2025-01-07T03:00:00Z');
+    const now       = new Date('2025-01-07T06:00:00Z');
+    expect(isPastCloseWindow(eventDate, now)).toBe(true);
+  });
+
+  test('2 hours 59 minutes after event start is NOT past the close window', () => {
+    const eventDate = new Date('2025-01-07T03:00:00Z');
+    const now       = new Date('2025-01-07T05:59:00Z');
+    expect(isPastCloseWindow(eventDate, now)).toBe(false);
+  });
+});
+
+describe('generateEventFromRecurring — fall-back DST (Nov 2, 2025)', () => {
+  test('event stored at 7pm PDT generates at 7pm PST on fall-back day', () => {
+    // Recurring event stored during PDT: 7pm PDT Oct 26 = 2am UTC Oct 27
+    // On Nov 2 after fall-back, 7pm PST = 3am UTC Nov 3
+    const nov2FallBackDay = new Date('2025-11-02T20:00:00Z'); // noon PST Nov 2
+    const recurringEvent = {
+      name: 'Sunday Stand-up',
+      date:      new Date('2025-10-27T02:00:00Z'), // 7pm PDT stored as 2am UTC
+      startTime: new Date('2025-10-27T02:00:00Z'),
+      hours: 1,
+    };
+
+    const { newEventDate } = generateEventFromRecurring(recurringEvent, nov2FallBackDay);
+
+    const hourLA = parseInt(
+      newEventDate.toLocaleString('en-US', {
+        timeZone: 'America/Los_Angeles',
+        hour: 'numeric',
+        hour12: false,
+      }),
+      10,
+    );
+
+    expect(hourLA).toBe(19);        // still 7pm wall-clock in LA
+    expect(newEventDate.getUTCHours()).toBe(3); // 7pm PST = 3am UTC (not 2am PDT offset)
   });
 });
