@@ -12,6 +12,12 @@ import { Temporal } from '@js-temporal/polyfill';
 
 const TZ = 'America/Los_Angeles';
 
+/** Hours after event start before check-in window closes. */
+export const CHECKIN_CLOSE_HOURS = 3;
+
+/** Minutes before event start that the check-in window opens. */
+export const CHECKIN_OPEN_WINDOW_MINUTES = 30;
+
 /**
  * @typedef {{ date: string | Date }} EventLike
  * Minimum required shape from an event or recurring event document.
@@ -140,7 +146,7 @@ export function isInOpenWindow(eventDate, now) {
   const nowInstant = Temporal.Instant.fromEpochMilliseconds(
     new Date(now).getTime(),
   );
-  const thirtyMinLater = nowInstant.add({ minutes: 30 });
+  const thirtyMinLater = nowInstant.add({ minutes: CHECKIN_OPEN_WINDOW_MINUTES });
 
   return (
     Temporal.Instant.compare(eventInstant, nowInstant) >= 0 &&
@@ -160,7 +166,7 @@ export function isPastCloseWindow(eventDate, now) {
   const eventInstant = Temporal.Instant.fromEpochMilliseconds(
     new Date(eventDate).getTime(),
   );
-  const closeTime = eventInstant.add({ hours: 3 });
+  const closeTime = eventInstant.add({ hours: CHECKIN_CLOSE_HOURS });
   const nowInstant = Temporal.Instant.fromEpochMilliseconds(
     new Date(now).getTime(),
   );

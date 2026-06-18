@@ -1,7 +1,6 @@
-export default (cron, fetch) => {
-  // Check to see if any events are about to start,
-  // and if so, open their respective check-ins
+import { filterEventsInOpenWindow } from './lib/checkinOps.js';
 
+export default (cron, fetch) => {
   const url =
     process.env.NODE_ENV === 'prod'
       ? 'https://www.vrms.io'
@@ -42,10 +41,8 @@ export default (cron, fetch) => {
   }
 
   async function sortAndFilterEvents(currentTime) {
-    const { filterEventsInOpenWindow } = await import('./lib/checkinOps.js');
     const events = await fetchEvents();
 
-    // Filter events if event date is after now but before thirty minutes from now
     if (events && events.length > 0) {
       return filterEventsInOpenWindow(events, currentTime);
     }

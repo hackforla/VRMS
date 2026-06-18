@@ -20,6 +20,7 @@ import {
 
 /**
  * @typedef {Object} RecurringEvent
+ * @property {string} [_id] - MongoDB ObjectId (used to link created events back)
  * @property {string | Date} date - Stored UTC timestamp for the recurring event
  * @property {number} [hours] - Event duration in hours
  * @property {string} [name] - Event name
@@ -45,6 +46,7 @@ import {
  * @property {Date} [endTime]
  * @property {number} [hours]
  * @property {{ city: string, state: string, country: string }} [location]
+ * @property {{ recurringEventId: string }} [recurringEventLink]
  */
 
 /**
@@ -92,6 +94,9 @@ export async function buildNewEvent(filteredEvent, todayDate) {
     startTime: filteredEvent.startTime && newEventDate,
     endTime: filteredEvent.endTime && newEndTime,
     hours: filteredEvent.hours && filteredEvent.hours,
+    recurringEventLink: {
+      recurringEventId: filteredEvent._id?.toString(),
+    },
   };
 
   if (
@@ -110,22 +115,32 @@ export async function buildNewEvent(filteredEvent, todayDate) {
 }
 
 /**
- * Determine whether an event with `eventName` already exists on `todayDate`
- * (LA calendar day) in the supplied `existingEvents` list.
+ * Determine whether an occurrence of `recurringEvent` already exists on
+ * `todayDate` (LA calendar day) in the supplied `existingEvents` list.
  *
- * @param {string} eventName
- * @param {Array<{ name: string, date: string | Date }>} existingEvents
+ * Matching strategy (in priority order):
+ *   1. `recurringEventLink.recurringEventId` match — survives event renames.
+ *   2. Name + same LA calendar day — fallback for events created before the
+ *      `recurringEventLink` field was introduced.
+ *
+ * @param {RecurringEvent} recurringEvent
+ * @param {Array<{ name: string, date: string | Date, recurringEventLink?: { recurringEventId?: string } }>} existingEvents
  * @param {Date} todayDate
  * @returns {boolean}
  */
-export function isEventDuplicate(eventName, existingEvents, todayDate) {
+export function isEventDuplicate(recurringEvent, existingEvents, todayDate) {
   if (!Array.isArray(existingEvents) || existingEvents.length === 0) {
     return false;
   }
-  return existingEvents.some(
-    (event) =>
-      event &&
-      event.name === eventName &&
-      checkIfSameDayLA(event.date, todayDate),
-  );
+  const recurringId = recurringEvent._id?.toString();
+  return existingEvents.some((event) => {
+    if (!event) return false;
+    if (recurringId && event.recurringEventLink?.recurringEventId) {
+      return (
+        event.recurringEventLink.recurringEventId === recurringId &&
+        checkIfSameDayLA(event.date, todayDate)
+      );
+    }
+    return event.name === recurringEvent.name && checkIfSameDayLA(event.date, todayDate);
+  });
 }

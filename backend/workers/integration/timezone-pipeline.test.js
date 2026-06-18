@@ -170,9 +170,8 @@ describe('timezone pipeline — duplicate detection', () => {
     const todayDate = new Date('2025-01-07T20:00:00Z'); // noon PST Tuesday Jan 7
     const eventName = 'Tuesday Hacknight';
 
-    // Seed the recurring template (not strictly required for the duplicate
-    // check, but mirrors what the worker actually does at runtime).
-    await RecurringEvent.create({
+    // Seed the recurring template — saved so we can pass it as the first arg.
+    const recurringTemplate = await RecurringEvent.create({
       name: eventName,
       hacknight: 'DTLA',
       eventType: 'Project Meeting',
@@ -182,7 +181,8 @@ describe('timezone pipeline — duplicate detection', () => {
       hours: 2,
     });
 
-    // Existing event already created today at 7pm PST = 3am UTC Jan 8
+    // Existing event already created today at 7pm PST = 3am UTC Jan 8.
+    // No recurringEventLink set → isEventDuplicate falls back to name+day match.
     const existing = await Event.create({
       name: eventName,
       hacknight: 'DTLA',
@@ -193,13 +193,13 @@ describe('timezone pipeline — duplicate detection', () => {
       hours: 2,
     });
 
-    expect(isEventDuplicate(eventName, [existing], todayDate)).toBe(true);
+    expect(isEventDuplicate(recurringTemplate, [existing], todayDate)).toBe(true);
 
     // Sanity: an unrelated name on the same day is NOT a duplicate
-    expect(isEventDuplicate('Other Event', [existing], todayDate)).toBe(false);
+    expect(isEventDuplicate({ name: 'Other Event' }, [existing], todayDate)).toBe(false);
 
     // Sanity: same name but a different LA day is NOT a duplicate
     const differentDay = new Date('2025-01-09T20:00:00Z'); // Wednesday LA
-    expect(isEventDuplicate(eventName, [existing], differentDay)).toBe(false);
+    expect(isEventDuplicate(recurringTemplate, [existing], differentDay)).toBe(false);
   });
 });

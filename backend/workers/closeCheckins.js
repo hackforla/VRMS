@@ -1,7 +1,6 @@
-export default (cron, fetch) => {
-  // Check to see if any events are about to start,
-  // and if so, open their respective check-ins
+import { isPastCloseWindow } from './lib/eventTime.js';
 
+export default (cron, fetch) => {
   const url =
     process.env.NODE_ENV === 'prod'
       ? 'https://www.vrms.io'
@@ -43,14 +42,11 @@ export default (cron, fetch) => {
 
   async function sortAndFilterEvents() {
     const events = await fetchEvents();
-    const { isPastCloseWindow } = await import('./lib/eventTime.js');
 
     if (events && events.length > 0) {
-      const sortedEvents = events.filter((event) => {
-        if (!event.date) return false;
-        return isPastCloseWindow(event.date, new Date()) && event.checkInReady === true;
-      });
-      return sortedEvents;
+      return events.filter(
+        (event) => event.date && event.checkInReady && isPastCloseWindow(event.date, new Date()),
+      );
     }
   }
 
