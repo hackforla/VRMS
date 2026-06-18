@@ -29,12 +29,9 @@ import { filterEventsInOpenWindow } from '../lib/checkinOps.js';
 let mongoServer;
 
 beforeAll(async () => {
-  mongoServer = new MongoMemoryServer();
-  const uri = await mongoServer.getUri();
-  await mongoose.connect(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+  mongoServer = await MongoMemoryServer.create();
+  const uri = mongoServer.getUri();
+  await mongoose.connect(uri);
 }, 60000);
 
 afterEach(async () => {
