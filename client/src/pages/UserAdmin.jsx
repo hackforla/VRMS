@@ -1,0 +1,77 @@
+import React, { useState, useEffect, useCallback } from 'react';
+import '../sass/UserAdmin.scss';
+import EditUsers from '../components/user-admin/EditUsers';
+import UserApiService from '../api/UserApiService';
+import ProjectApiService from '../api/ProjectApiService';
+import UserManagement from '../components/user-admin/UserManagement';
+
+const UserAdmin = () => {
+  // Initialize state hooks
+  const [users, setUsers] = useState([]); // All users pulled from database
+  const [projects, setProjects] = useState([]); // All projects pulled from db
+  const [userToEdit, setUserToEdit] = useState({}); // The selected user that is being edited
+
+  const [userApiService] = useState(new UserApiService());
+  const [projectApiService] = useState(new ProjectApiService());
+
+  const fetchUsers = useCallback(async () => {
+    const userRes = await userApiService.fetchUsers();
+    setUsers(userRes);
+  }, [userApiService]);
+
+  const updateUserDb = useCallback(
+    async (user, projectId, action) => {
+      await userApiService.updateUserDbProjects(user, projectId, action);
+      fetchUsers();
+    },
+    [userApiService, fetchUsers]
+  );
+
+  const updateUserActiveStatus = useCallback(
+    async (user, isActive) => {
+      await userApiService.updateUserDbIsActive(user, isActive);
+      fetchUsers();
+    },
+    [userApiService, fetchUsers]
+  );
+
+  // Update user's access level (admin/user)
+  const updateUserAccessLevel = useCallback(
+    async (user, newAccessLevel) => {
+      await userApiService.updateUserAccessLevel(user, newAccessLevel);
+      fetchUsers();
+    },
+    [userApiService, fetchUsers]
+  );
+
+  const fetchProjects = useCallback(async () => {
+    const projectRes = await projectApiService.fetchProjects();
+    setProjects(projectRes);
+  }, [projectApiService]);
+
+  useEffect(() => {
+    fetchUsers();
+    fetchProjects();
+  }, [fetchUsers, fetchProjects]);
+
+  const backToSearch = () => {
+    setUserToEdit({});
+  };
+
+  if (Object.keys(userToEdit).length === 0) {
+    return <UserManagement users={users} setUserToEdit={setUserToEdit} />;
+  } else {
+    return (
+      <EditUsers
+        userToEdit={userToEdit}
+        projects={projects}
+        updateUserDb={updateUserDb}
+        backToSearch={backToSearch}
+        updateUserActiveStatus={updateUserActiveStatus}
+        updateUserAccessLevel={updateUserAccessLevel}
+      />
+    );
+  }
+};
+
+export default UserAdmin;

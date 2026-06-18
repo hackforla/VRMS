@@ -15,7 +15,7 @@ body {
         "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-image: url("/bg-image-skyline.jpg");
+    background-image: url("/bg-image-skyline.webp");
     background-repeat: no-repeat;
     background-position: bottom;
     background-position-y: 80%;
@@ -28,27 +28,6 @@ body {
     font-family: "aliseoregular";
     src: url("./fonts/aliseo-noncommercial-webfont.woff2") format("woff2"),
         url("./fonts/aliseo-noncommercial-webfont.woff") format("woff");
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: "Source Code Pro Medium";
-    src: url("./fonts/SourceCodePro-Medium.otf") format("opentype");
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: "Source Code Pro SemiBold";
-    src: url("./fonts/SourceCodePro-Semibold.otf") format("opentype");
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: "Source Code Pro Bold";
-    src: url("./fonts/SourceCodePro-Bold.otf") format("opentype");
     font-weight: normal;
     font-style: normal;
 }
@@ -156,7 +135,7 @@ label {
     }
 
     body {
-        background-image: url("/bg-image-pier.jpg");
+        background-image: url("/bg-image-pier.webp");
         background-repeat: no-repeat;
         background-position: top;
         background-size: 1200px 1200px;

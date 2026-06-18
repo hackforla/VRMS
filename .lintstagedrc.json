@@ -1,0 +1,5 @@
+{
+  "*.{js,jsx,ts,tsx,json,css,md}": [
+    "sh -c 'biome check --write --no-errors-on-unmatched \"$@\" || true' --"
+  ]
+}

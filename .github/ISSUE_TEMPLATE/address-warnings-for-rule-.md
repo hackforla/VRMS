@@ -2,7 +2,7 @@
 name: 'Address warnings for rule:'
 about: Describe this issue template's purpose here.
 title: 'Address warnings for rule:'
-labels: 'feature: eslint warnings, role: Front End, size: 1pt'
+labels: 'role: Front End, size: 1pt'
 assignees: ''
 
 ---

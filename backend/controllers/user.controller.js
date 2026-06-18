@@ -1,16 +1,23 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
+import { ObjectId } from 'mongodb';
 
-const EmailController = require('./email.controller');
-const { CONFIG_AUTH } = require('../config');
+import EmailController from './email.controller.js';
+import { CONFIG_AUTH } from '../config/index.js';
 
-const { User } = require('../models');
+import { User, Project, RefreshToken } from '../models/index.js';
+import {
+  generateRefreshToken,
+  getClientIp,
+  hashToken,
+  generateAccessToken,
+} from '../middleware/auth.middleware.js';
 
 const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
 
 const UserController = {};
 
 // Get list of Users with GET
-UserController.user_list = async function (req, res) {
+UserController.user_list = async (req, res) => {
   const { headers } = req;
   const { query } = req;
 
@@ -22,12 +29,100 @@ UserController.user_list = async function (req, res) {
     const user = await User.find(query);
     return res.status(200).send(user);
   } catch (err) {
+    console.error(err);
+    return res.sendStatus(400);
+  }
+};
+
+UserController.user_by_email = async (req, res) => {
+  const { headers } = req;
+  const { email } = req.params;
+
+  console.log('email: ', email);
+
+  if (headers['x-customrequired-header'] !== expectedHeader) {
+    return res.sendStatus(403);
+  }
+
+  try {
+    const user = await User.find({ email });
+    return res.status(200).send(user);
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(400);
+  }
+};
+
+// Get list of Users with accessLevel 'admin' or 'superadmin' with GET
+UserController.admin_list = async (req, res) => {
+  const { headers } = req;
+
+  if (headers['x-customrequired-header'] !== expectedHeader) {
+    return res.sendStatus(403);
+  }
+
+  try {
+    const admins = await User.find({
+      accessLevel: { $in: ['admin', 'superadmin'] },
+    });
+    return res.status(200).send(admins);
+  } catch (err) {
+    console.error(err);
+    return res.sendStatus(400);
+  }
+};
+
+UserController.projectManager_list = async (req, res) => {
+  const { headers } = req;
+
+  if (headers['x-customrequired-header'] !== expectedHeader) {
+    return res.sendStatus(403);
+  }
+
+  try {
+    const projectManagers = await User.find({
+      managedProjects: { $exists: true, $type: 'array', $ne: [] },
+    });
+
+    // Collect all unique project IDs
+    const allProjectIds = [
+      ...new Set(
+        projectManagers
+          .flatMap((pm) => pm.managedProjects)
+          .filter((id) => typeof id === 'string' && id.match(/^[a-f\d]{24}$/i)),
+      ),
+    ];
+
+    // Fetch all projects in one query
+    const projects = await Project.find(
+      { _id: { $in: allProjectIds } },
+      { _id: 1, name: 1 }, // projection
+    );
+
+    const projectIdToName = {};
+    for (const project of projects) {
+      projectIdToName[project._id.toString()] = project.name;
+    }
+
+    const updatedProjectManagers = projectManagers.map((pm) => {
+      const pmObj = pm.toObject();
+      pmObj.isProjectLead = true;
+      pmObj.managedProjectNames = (pmObj.managedProjects || [])
+        .map((pid) => projectIdToName[pid.toString()] || null)
+        .filter(Boolean);
+      return pmObj;
+    });
+
+    return res.status(200).send(updatedProjectManagers);
+  } catch (err) {
+    console.error(err);
+    console.log('Projectlead error', err);
     return res.sendStatus(400);
   }
 };
 
 // Get User by id with GET
-UserController.user_by_id = async function (req, res) {
+UserController.user_by_id = async (req, res) => {
   const { headers } = req;
   const { UserId } = req.params;
 
@@ -39,24 +134,24 @@ UserController.user_by_id = async function (req, res) {
     const user = await User.findById(UserId);
     return res.status(200).send(user);
   } catch (err) {
+    console.error(err);
     return res.sendStatus(400);
   }
 };
 
 // Add User with POST
-UserController.create = async function (req, res) {
+UserController.create = async (req, res) => {
   const { headers } = req;
 
   if (headers['x-customrequired-header'] !== expectedHeader) {
     return res.sendStatus(403);
   }
 
-
   try {
-  const newUser = {
-    ...req.body,
-    email: req.body.email.toLowerCase()
-  }
+    const newUser = {
+      ...req.body,
+      email: req.body.email.toLowerCase(),
+    };
     const user = await User.create(newUser);
     return res.status(201).send(user);
   } catch (error) {
@@ -71,7 +166,7 @@ UserController.create = async function (req, res) {
 };
 
 // Update User with PATCH
-UserController.update = async function (req, res) {
+UserController.update = async (req, res) => {
   const { headers } = req;
   const { UserId } = req.params;
 
@@ -80,15 +175,18 @@ UserController.update = async function (req, res) {
   }
 
   try {
-    const user = await User.findOneAndUpdate({_id: UserId}, req.body, { new: true });
+    const user = await User.findOneAndUpdate({ _id: UserId }, req.body, {
+      new: true,
+    });
     return res.status(200).send(user);
   } catch (err) {
+    console.error(err);
     return res.sendStatus(400);
   }
 };
 
 // Add User with POST
-UserController.delete = async function (req, res) {
+UserController.delete = async (req, res) => {
   const { headers } = req;
   const { UserId } = req.params;
 
@@ -100,22 +198,12 @@ UserController.delete = async function (req, res) {
     const user = await User.findByIdAndDelete(UserId);
     return res.status(200).send(user);
   } catch (err) {
+    console.error(err);
     return res.sendStatus(400);
   }
 };
 
-function generateAccessToken(user, auth_origin) {
-  // expires after half and hour (1800 seconds = 30 minutes)
-  return jwt.sign(
-    { id: user.id, role: user.accessLevel, auth_origin: auth_origin },
-    CONFIG_AUTH.SECRET,
-    {
-      expiresIn: `${CONFIG_AUTH.TOKEN_EXPIRATION_SEC}s`,
-    },
-  );
-}
-
-UserController.createUser = function (req, res) {
+UserController.createUser = async (req, res) => {
   const { firstName, lastName, email } = req.body;
   const { origin } = req.headers;
 
@@ -128,20 +216,19 @@ UserController.createUser = function (req, res) {
     accessLevel: 'user',
   });
 
-  // eslint-disable-next-line
-  user.save((err, usr) => {
-    if (err) {
-      res.sendStatus(400);
-    }
+  try {
+    await user.save();
     res.sendStatus(201);
-  });
+  } catch (err) {
+    res.sendStatus(400);
+  }
 
   const jsonToken = generateAccessToken(user);
 
   EmailController.sendLoginLink(req.body.email, user.name.firstName, jsonToken, req.cookie, origin);
 };
 
-UserController.signin = function (req, res) {
+UserController.signin = (req, res) => {
   const { email, auth_origin } = req.body;
   const { origin } = req.headers;
 
@@ -168,8 +255,7 @@ UserController.signin = function (req, res) {
     });
 };
 
-UserController.verifySignIn = async function (req, res) {
-  // eslint-disable-next-line dot-notation
+UserController.verifySignIn = async (req, res) => {
   let token = req.headers['x-access-token'] || req.headers['authorization'];
   if (token.startsWith('Bearer ')) {
     // Remove Bearer from string
@@ -177,25 +263,121 @@ UserController.verifySignIn = async function (req, res) {
   }
 
   try {
-    const payload = jwt.verify(token, CONFIG_AUTH.SECRET);
+    const payload = jwt.verify(token, CONFIG_AUTH.JWT_SECRET);
     const user = await User.findById(payload.id);
-    res.cookie('token', token, { httpOnly: true });
-    return res.send(user);
+    const refreshToken = generateRefreshToken();
+    const accessToken = generateAccessToken(user, payload.auth_origin);
+    const ipAddress = getClientIp(req);
+
+    await RefreshToken.create({
+      userId: user._id,
+      hash: hashToken(refreshToken),
+      deviceInfo: {
+        deviceType: req.headers['user-agent'],
+        ipAddress: ipAddress,
+      },
+    });
+
+    res.cookie('token', accessToken, { httpOnly: true });
+    res.cookie('refresh_token', refreshToken, { httpOnly: true });
+
+    return res.send({
+      user: user,
+      expiresAt: accessToken.exp * 1000, // Convert JWT exp (seconds) to milliseconds
+    });
   } catch (err) {
+    console.error(err);
     return res.status(403);
   }
 };
 
-UserController.verifyMe = async function (req, res) {
-  const user = await User.findById(req.userId);
-  return res.status(200).send(user);
+UserController.verifyMe = async (req, res) => res.status(200).send(req.user);
+
+UserController.logout = async (req, res) => {
+  try {
+    await RefreshToken.deleteOne({ _id: req.refreshToken._id });
+    return res.clearCookie('token').status(200).send('Successfully logged out.');
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send('Error occurred while logging out.');
+  }
 };
 
-UserController.logout = async function (req, res) {
-  return res
-    .clearCookie('token')
-    .status(200)
-    .send('Successfully logged out.');
-}
+UserController.refreshAccessToken = async (req, res) => {
+  const accessToken = generateAccessToken(req.user, req.auth_origin);
+  const decoded = jwt.decode(accessToken);
 
-module.exports = UserController;
+  return res
+    .cookie('token', accessToken, { httpOnly: true })
+    .status(200)
+    .json({
+      user: req.user,
+      expiresAt: decoded.exp * 1000, // Convert JWT exp (seconds) to milliseconds
+    });
+};
+
+// Update user's managedProjects
+UserController.updateManagedProjects = async (req, res) => {
+  const { headers } = req;
+  const { UserId } = req.params;
+  const { action, projectId } = req.body; // action - 'add' or 'remove'
+
+  if (headers['x-customrequired-header'] !== expectedHeader) {
+    return res.sendStatus(403);
+  }
+
+  try {
+    const user = await User.findById(UserId);
+    let managedProjects = user.managedProjects || [];
+
+    const project = await Project.findById(projectId);
+    let managedByUsers = project.managedByUsers || [];
+
+    if (action === 'add') {
+      managedProjects = [...managedProjects, projectId];
+      managedByUsers = [...managedByUsers, UserId];
+    } else {
+      managedProjects = managedProjects.filter((id) => id !== projectId);
+      managedByUsers = managedByUsers.filter((id) => id !== UserId);
+    }
+
+    user.managedProjects = managedProjects;
+    await user.save({ validateBeforeSave: false });
+
+    project.managedByUsers = managedByUsers;
+    await project.save({ validateBeforeSave: false });
+
+    return res.status(200).send({ user, project });
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(400);
+  }
+};
+
+UserController.bulkUpdateManagedProjects = async (req, res) => {
+  const { bulkOps } = req.body;
+
+  bulkOps.forEach((op) => {
+    if (op?.updateOne?.filter._id) {
+      op.updateOne.filter._id = new ObjectId(op.updateOne.filter._id);
+    }
+    if (op?.updateOne?.update) {
+      const update = op.updateOne.update;
+      if (update?.$addToSet?.managedProjects) {
+        update.$addToSet.managedProjects = new ObjectId(update.$addToSet.managedProjects);
+      }
+      if (update?.$pull?.managedProjects) {
+        update.$pull.managedProjects = new ObjectId(update.$pull.managedProjects);
+      }
+    }
+  });
+
+  try {
+    const result = await User.bulkWrite(bulkOps);
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export default UserController;

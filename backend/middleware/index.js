@@ -1,9 +1,7 @@
-const AuthUtil = require('./auth.middleware');
-const verifyUser = require('./user.middleware');
-const verifyToken = require('./token.middleware');
+import Auth from './auth.middleware.js';
+import verifyUser from './user.middleware.js';
 
-module.exports = {
-  AuthUtil,
+export {
+  Auth,
   verifyUser,
-  verifyToken,
 };

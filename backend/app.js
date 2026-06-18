@@ -1,25 +1,34 @@
 // app.js - Entry point for our application
 
+import { createRequire } from 'module';
+import cookieParser from 'cookie-parser';
 // Load in all of our node modules. Their uses are explained below as they are called.
-const express = require('express');
-const bodyParser = require('body-parser');
-const cron = require('node-cron');
-const fetch = require('node-fetch');
-const morgan = require('morgan');
-const cookieParser = require('cookie-parser');
+import express from 'express';
+import morgan from 'morgan';
+import cron from 'node-cron';
+import fetch from 'node-fetch';
+import swaggerUi from 'swagger-ui-express';
+
+const require = createRequire(import.meta.url);
+let swaggerDocument;
+try {
+  swaggerDocument = require('./swagger-output.json');
+} catch (e) {
+  console.warn('swagger-output.json not found. Run "npm run swagger" to generate it.');
+  swaggerDocument = null;
+}
 
 const customRequestHeaderName = 'x-customrequired-header';
-const dontCheckCustomRequestHeaderApis = ['GET::/api/recurringevents', 'GET::/api/healthcheck'];
-
-// Import environment variables
-const dotenv = require('dotenv');
-const dotenvExpand = require('dotenv-expand');
-
-const myEnv = dotenv.config();
-dotenvExpand(myEnv);
+const dontCheckCustomRequestHeaderApis = [
+  'GET::/api/recurringevents',
+  'GET::/api/healthcheck',
+  'GET::/api-docs',
+  'GET::/api-docs/',
+];
 
 // Verify environment variables
-require('assert-env')([
+import assertEnv from 'assert-env';
+assertEnv([
   'CUSTOM_REQUEST_HEADER',
   'SLACK_OAUTH_TOKEN',
   'SLACK_BOT_TOKEN',
@@ -43,8 +52,8 @@ require('assert-env')([
 const app = express();
 
 // Required to view Request Body (req.body) in JSON
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Used to save JWT token from MagicLink
 app.use(cookieParser());
@@ -52,28 +61,41 @@ app.use(cookieParser());
 // HTTP Request Logger
 app.use(morgan('dev'));
 
+// Swagger API Documentation
+if (swaggerDocument) {
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+}
+
+import closeCheckins from './workers/closeCheckins.js';
+import createRecurringEvents from './workers/createRecurringEvents.js';
 // WORKERS
-const runOpenCheckinWorker = require('./workers/openCheckins')(cron, fetch);
-const runCloseCheckinWorker = require('./workers/closeCheckins')(cron, fetch);
-const runCreateRecurringEventsWorker = require('./workers/createRecurringEvents')(cron, fetch);
-// const runSlackBot = require("./workers/slackbot")(fetch);
+import openCheckins from './workers/openCheckins.js';
+const runOpenCheckinWorker = openCheckins(cron, fetch);
+const runCloseCheckinWorker = closeCheckins(cron, fetch);
+const runCreateRecurringEventsWorker = createRecurringEvents(cron, fetch);
+// import slackbot from './workers/slackbot.js';
+// const runSlackBot = slackbot(fetch);
+
+// Run cleanup expired refresh token(s) on startup
+import { cleanupExpiredTokens } from './workers/tokenCleanup.js';
+cleanupExpiredTokens();
 
 // MIDDLEWARE
-const errorhandler = require('./middleware/errorhandler.middleware');
+import errorhandler from './middleware/errorhandler.middleware.js';
 
+//import slackRouter from './routers/slack.router.js';
+import authRouter from './routers/auth.router.js';
+import checkInsRouter from './routers/checkIns.router.js';
+import checkUserRouter from './routers/checkUser.router.js';
 // ROUTES
-const eventsRouter = require('./routers/events.router');
-const checkInsRouter = require('./routers/checkIns.router');
-const usersRouter = require('./routers/users.router');
-const questionsRouter = require('./routers/questions.router');
-const checkUserRouter = require('./routers/checkUser.router');
-const grantPermissionRouter = require('./routers/grantpermission.router');
-const projectsRouter = require('./routers/projects.router');
-const recurringEventsRouter = require('./routers/recurringEvents.router');
-const projectTeamMembersRouter = require('./routers/projectTeamMembers.router');
-//const slackRouter = require("./routers/slack.router");
-const authRouter = require('./routers/auth.router');
-const healthCheckRouter = require('./routers/healthCheck.router');
+import eventsRouter from './routers/events.router.js';
+import grantPermissionRouter from './routers/grantpermission.router.js';
+import healthCheckRouter from './routers/healthCheck.router.js';
+import projectTeamMembersRouter from './routers/projectTeamMembers.router.js';
+import projectsRouter from './routers/projects.router.js';
+import questionsRouter from './routers/questions.router.js';
+import recurringEventsRouter from './routers/recurringEvents.router.js';
+import usersRouter from './routers/users.router.js';
 
 // Check that clients to the API are sending the custom request header on all methods
 // except for ones described in the dontCheckCustomRequestHeaderApis array.
@@ -123,4 +145,4 @@ app.get('*', (req, res, next) => {
 
 app.use(errorhandler);
 
-module.exports = app;
+export default app;
