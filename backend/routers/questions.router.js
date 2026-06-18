@@ -1,7 +1,7 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
 
-const { Question } = require('../models/question.model');
+import { Question } from '../models/question.model.js';
 
 
 // GET /api/questions/
@@ -45,4 +45,4 @@ router.get('/:id', (req, res) => {
         });
 });
 
-module.exports = router;
+export default router;

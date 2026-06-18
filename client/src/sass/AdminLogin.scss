@@ -1,17 +1,18 @@
 .adminlogin-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 1;
-    padding-top: 6vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  padding-top: 6vh;
 }
 
 .adminlogin-headers {
-    margin: 36px 0px;
+  margin: 36px 0px;
 }
 
 .adminlogin-warning {
-    width: 300px;
-    color: red;
+  width: 300px;
+  color: red;
+  height: 20px;
 }

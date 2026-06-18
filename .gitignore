@@ -1,4 +1,8 @@
+# vscode dirs
+.devcontainer
+.vscode
 
+# project dirs and files
 node_modules/
 npm-debug.log
 .DS_Store
@@ -11,3 +15,4 @@ videos/
 screenshots/
 vrms.code-workspace
 .vscode/
+backend/swagger-output.json

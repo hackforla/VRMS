@@ -1,0 +1,1 @@
+VRMS is governed by the [Hack for LA Code of Conduct](https://www.hackforla.org/code-of-conduct/) which applies to any interaction on our VRMS slack channel (inside the HackforLA Slack workspace), direct slack messages, github org or repository, or any other communication medium.

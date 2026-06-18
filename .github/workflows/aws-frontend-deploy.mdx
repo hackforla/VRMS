@@ -1,0 +1,182 @@
+---
+title: AWS Frontend Deploy Workflow
+---
+
+# AWS Frontend Deploy Workflow
+
+This document describes the purpose and structure of the GitHub Actions workflow defined in `.github/workflows/aws-frontend-deploy.yml`.
+
+## Overview
+
+This workflow automates the process of building, pushing, and deploying the frontend application to AWS. It is triggered manually via the GitHub Actions UI using `workflow_dispatch`:
+
+```yaml
+on:
+  workflow_dispatch: # Manual trigger from GitHub Actions UI
+    inputs:
+      env:
+        type: choice
+        description: "AWS Incubator Env"
+        options: # Selectable environment options
+          - dev
+          - prod
+      ref:
+        description: "Branch, Tag, or SHA" # Code reference to deploy
+        required: true
+```
+
+Users can select the environment (`dev` or `prod`) and specify a branch, tag, or SHA to deploy.
+
+## Environment Variables
+
+The workflow sets several environment variables for use throughout the jobs:
+
+```yaml
+env:
+  AWS_SHARED_CLUSTER: incubator-prod # Target ECS cluster name
+  AWS_APP_NAME: vrms-frontend # Application name for tagging and service
+  AWS_REGION: us-west-2 # AWS region for deployment
+  DOCKERFILE: Dockerfile.prod # Dockerfile used for build
+  DOCKER_PATH: client # Path to frontend source and Dockerfile
+```
+
+Each of these environment variables is set at the top level of the workflow and is available to all jobs and steps. Here is a description of each:
+
+- `AWS_SHARED_CLUSTER`: The name of the AWS ECS cluster to which the frontend will be deployed. In this workflow, it is set to `incubator-prod`. _Might be sourced from your AWS infrastructure naming conventions or deployment environment._
+- `AWS_APP_NAME`: The application name used for tagging Docker images and identifying the service in AWS. Here, it is set to `vrms-frontend`. _Might be sourced from your project or repository name._
+- `AWS_REGION`: The AWS region where resources are deployed. Set to `us-west-2` (Oregon). _Might be sourced from your AWS account's preferred deployment region._
+- `DOCKERFILE`: The Dockerfile used for building the frontend image. Set to `Dockerfile.prod`, indicating a production-ready build. _Might be sourced from your repository's Docker configuration._
+- `DOCKER_PATH`: The path to the directory containing the Dockerfile and frontend source code. Set to `client`. _Might be sourced from your repository structure._
+
+## Jobs
+
+### 1. `setup_env`
+
+This job checks out the code and sets up environment-specific variables for the deployment:
+
+```yaml
+jobs:
+  setup_env:
+    name: Set-up environment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Debug Action
+        uses: hmarr/debug-action@v2 # Prints debug info to logs
+      - name: Checkout
+        uses: actions/checkout@v3 # Checks out code at specified ref
+        with:
+          ref: ${{ github.event.inputs.ref }} # Uses user-specified ref
+      - name: Set AWS Env & Image Tag per workflow
+        # Get short SHA of current commit
+        # if  -- action is triggered manually
+        # Get environment input from workflow dispatch
+        # Get ref input from workflow dispatch
+        # Set AWS_APPENV for later steps
+        # Set IMAGE_TAG for later steps
+        # fi
+        run: |
+          SHORT_SHA=$(git rev-parse --short HEAD) 
+            if [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then 
+                INPUT_ENV=${{ github.event.inputs.env }} 
+                INPUT_REF=${{ github.event.inputs.ref }} 
+                echo AWS_APPENV="$AWS_APP_NAME"-$INPUT_ENV >> $GITHUB_ENV 
+                echo IMAGE_TAG=$SHORT_SHA >> $GITHUB_ENV 
+            fi
+```
+
+This job outputs the application environment and image tag for use in subsequent jobs.
+
+### 2. `build`
+
+This job builds the Docker image for the frontend and pushes it to Amazon ECR:
+
+```yaml
+build:
+  name: Build & Push Docker Image
+  runs-on: ubuntu-latest
+  permissions:
+    id-token: write # Needed for OIDC authentication to AWS
+  needs: [setup_env] # Waits for environment setup
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v3 # Checks out code at specified ref
+      with:
+        ref: ${{ github.event.inputs.ref }}
+    - name: Setup Node.js
+      uses: actions/setup-node@v3 # Sets up Node.js for build
+      with:
+        node-version: 18 # Uses Node.js v18
+        cache: "npm" # Enables npm caching
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v3 # Sets AWS credentials for CLI
+      with:
+        role-to-assume: arn:aws:iam::035866691871:role/incubator-cicd-vrms # IAM role for deploy
+        role-session-name: incubator-cicd-vrms-gha # Session name for audit
+        aws-region: us-west-2 # AWS region
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1 # Authenticates Docker to ECR
+    - name: Build, tag, and push the image to Amazon ECR
+      id: build-push-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }} # ECR registry URL
+        ECR_REPOSITORY: ${{ env.AWS_APP_NAME }} # ECR repo name
+      run: |
+        ls # List files for debug
+        cd ./${{ env.DOCKER_PATH }} # Enter frontend directory
+        docker build \
+          -f ${{ env.DOCKERFILE }} \ # Use production Dockerfile
+          -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ needs.setup_env.outputs.IMAGE_TAG }} \ # Tag with image SHA
+          -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.event.inputs.env }} \ # Tag with environment
+          .
+        docker image push --all-tags ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }} # Push all tags
+```
+
+### 3. `deploy`
+
+This job deploys the new Docker image to AWS ECS by forcing a new deployment of the ECS service:
+
+```yaml
+deploy:
+  name: Deploy to AWS ECS
+  runs-on: ubuntu-latest
+  needs: [setup_env, build] # Waits for setup and build jobs
+  permissions:
+    id-token: write # Needed for OIDC authentication to AWS
+  steps:
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v3 # Sets AWS credentials for CLI
+      with:
+        role-to-assume: arn:aws:iam::035866691871:role/incubator-cicd-vrms # IAM role for deploy
+        role-session-name: incubator-cicd-vrms-gha # Session name for audit
+        aws-region: us-west-2 # AWS region
+    - name: Restart ECS Service
+      id: redeploy-service
+      env:
+        SERVICE_NAME: ${{env.AWS_APP_NAME}}-${{ github.event.inputs.env }} # ECS service name
+      run: |
+        aws ecs update-service --force-new-deployment --service $SERVICE_NAME --cluster $AWS_SHARED_CLUSTER # Triggers ECS redeploy
+```
+
+## Repository Checkout and Working Directory
+
+When this workflow runs, it uses the `actions/checkout@v3` action to clone the entire repository. The initial working directory for all steps is the root of the repository.
+
+Before building the Docker image, the workflow explicitly changes into the `client` directory using:
+
+```bash
+cd ./${{ env.DOCKER_PATH }}
+```
+
+This means that for the Docker build step, the working directory is `client/`, and the Dockerfile path `Dockerfile.prod` refers to `client/Dockerfile.prod`.
+
+**Summary:**
+
+- The workflow clones the entire repository.
+- The working directory starts at the repo root.
+- The workflow changes into the `client` directory before building the Docker image.
+- The Docker build context and Dockerfile are both relative to the `client` directory.
+
+## Summary
+
+This workflow provides a manual, environment-aware deployment pipeline for the frontend application, leveraging Docker, Amazon ECR, and ECS. It ensures that only the specified code reference is built and deployed, and that deployments are traceable and auditable via GitHub Actions.

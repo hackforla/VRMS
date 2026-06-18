@@ -1,4 +1,4 @@
-const { body, validationResult } = require('express-validator');
+import { body, validationResult } from 'express-validator';
 
 async function validateCreateUserAPICall(req, res, next) {
   await body('name.firstName').not().isEmpty().trim().escape().run(req);
@@ -6,7 +6,7 @@ async function validateCreateUserAPICall(req, res, next) {
   await body('email', 'Invalid email')
     .exists()
     .isEmail()
-    .normalizeEmail({ gmail_remove_dots: false })
+    .normalizeEmail({ gmail_remove_dots: false, gmail_remove_subaddress: false })
     .run(req);
 
   // Finds the validation errors in this request and wraps them in an object with handy functions
@@ -22,7 +22,7 @@ async function validateSigninUserAPICall(req, res, next) {
   await body('email', 'Invalid email')
     .exists()
     .isEmail()
-    .normalizeEmail({ gmail_remove_dots: false })
+    .normalizeEmail({ gmail_remove_dots: false, gmail_remove_subaddress: false })
     .run(req);
 
   // Finds the validation errors in this request and wraps them in an object with handy functions
@@ -39,4 +39,4 @@ const authApiValidator = {
   validateSigninUserAPICall,
 };
 
-module.exports = authApiValidator;
+export default authApiValidator;
