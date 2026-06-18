@@ -19,12 +19,41 @@ import {
 } from './eventTime.js';
 
 /**
+ * @typedef {Object} RecurringEvent
+ * @property {string | Date} date - Stored UTC timestamp for the recurring event
+ * @property {number} [hours] - Event duration in hours
+ * @property {string} [name] - Event name
+ * @property {string} [hacknight] - Hacknight identifier
+ * @property {string} [eventType] - Event type label
+ * @property {string} [eventDescription] - Human-readable description
+ * @property {Object} [project] - Associated project document
+ * @property {string | Date} [startTime] - Start time (may differ from date)
+ * @property {string | Date} [endTime] - End time
+ * @property {{ city?: string, state?: string, country?: string }} [location]
+ */
+
+/**
+ * @typedef {Object} NewEventPayload
+ * Shape POSTed to /api/events/ when creating a new occurrence.
+ * @property {string} [name]
+ * @property {string} [hacknight]
+ * @property {string} [eventType]
+ * @property {string} [description]
+ * @property {Object} [project]
+ * @property {Date} [date]
+ * @property {Date} [startTime]
+ * @property {Date} [endTime]
+ * @property {number} [hours]
+ * @property {{ city: string, state: string, country: string }} [location]
+ */
+
+/**
  * Filter a list of recurring events down to the ones whose day-of-week
  * (in America/Los_Angeles) matches `todayDate`'s day-of-week (also in LA).
  *
- * @param {Array<Object>} recurringEvents - Recurring event documents (need `.date`)
+ * @param {RecurringEvent[]} recurringEvents
  * @param {Date} todayDate - JS Date representing "now"
- * @returns {Promise<Array<Object>>} subset of `recurringEvents` whose day matches
+ * @returns {Promise<RecurringEvent[]>} Subset whose day-of-week matches today
  */
 export async function filterTodaysRecurringEvents(recurringEvents, todayDate) {
   if (!Array.isArray(recurringEvents) || recurringEvents.length === 0) {
@@ -42,9 +71,9 @@ export async function filterTodaysRecurringEvents(recurringEvents, todayDate) {
  * historically constructed before delegating to `createEvent()`:
  * `{ name, hacknight, eventType, description, project, date, startTime, endTime, hours, location? }`.
  *
- * @param {Object} filteredEvent - Recurring event template
+ * @param {RecurringEvent} filteredEvent - Recurring event template
  * @param {Date} todayDate - JS Date representing "now"
- * @returns {Promise<Object>} New event payload
+ * @returns {Promise<NewEventPayload>}
  */
 export async function buildNewEvent(filteredEvent, todayDate) {
   const { newEventDate, newEndTime } = generateEventFromRecurring(
@@ -85,7 +114,7 @@ export async function buildNewEvent(filteredEvent, todayDate) {
  * (LA calendar day) in the supplied `existingEvents` list.
  *
  * @param {string} eventName
- * @param {Array<Object>} existingEvents - Already-created events (need `.name`, `.date`)
+ * @param {Array<{ name: string, date: string | Date }>} existingEvents
  * @param {Date} todayDate
  * @returns {boolean}
  */

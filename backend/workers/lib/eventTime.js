@@ -13,11 +13,29 @@ import { Temporal } from '@js-temporal/polyfill';
 const TZ = 'America/Los_Angeles';
 
 /**
+ * @typedef {{ date: string | Date }} EventLike
+ * Minimum required shape from an event or recurring event document.
+ */
+
+/**
+ * @typedef {{ date: string | Date, hours: number }} RecurringEventTemplate
+ * Fields required by generateEventFromRecurring. The full document shape
+ * is defined in the Mongoose recurringEvent model.
+ */
+
+/**
+ * @typedef {{ newEventDate: Date, newEndTime: Date }} GeneratedEventTimes
+ * Computed start and end times for a new event occurrence.
+ */
+
+/**
  * Get the day-of-week for an event's stored date, in LA time.
- * Returns JS-style day: 0=Sun, 1=Mon, ..., 6=Sat
  *
- * Temporal.ZonedDateTime.dayOfWeek is ISO: 1=Mon..7=Sun
- * Convert to JS convention with % 7 (7 % 7 = 0 = Sunday)
+ * Temporal.ZonedDateTime.dayOfWeek is ISO (1=Mon..7=Sun).
+ * Converted to JS convention with % 7 so Sunday = 0.
+ *
+ * @param {EventLike} event
+ * @returns {number} JS day-of-week: 0=Sun, 1=Mon, ..., 6=Sat
  */
 export function getEventDayLA(event) {
   const instant = Temporal.Instant.fromEpochMilliseconds(
@@ -32,7 +50,9 @@ export const getEventDay = getEventDayLA;
 
 /**
  * Get today's day-of-week in LA time.
- * Returns JS-style day: 0=Sun, 1=Mon, ..., 6=Sat
+ *
+ * @param {Date | string | null} [now=null] - Reference time; defaults to current system time
+ * @returns {number} JS day-of-week: 0=Sun, 1=Mon, ..., 6=Sat
  */
 export function getTodayDayLA(now = null) {
   if (now !== null) {
@@ -50,9 +70,9 @@ export function getTodayDayLA(now = null) {
  * This correctly handles DST transitions — a 7pm PST event stays at 7pm PDT
  * after spring forward.
  *
- * @param {Object} filteredEvent - Recurring event with .date and .hours
+ * @param {RecurringEventTemplate} filteredEvent
  * @param {Date} todayDate - Today's date as a JS Date
- * @returns {{ newEventDate: Date, newEndTime: Date }}
+ * @returns {GeneratedEventTimes}
  */
 export function generateEventFromRecurring(filteredEvent, todayDate) {
   // Extract LA time-of-day from the stored UTC timestamp
@@ -87,8 +107,8 @@ export function generateEventFromRecurring(filteredEvent, todayDate) {
 /**
  * Check if two dates fall on the same calendar day in LA time.
  *
- * @param {Date|string} eventDate
- * @param {Date|string} referenceDate
+ * @param {Date | string} eventDate
+ * @param {Date | string} referenceDate
  * @returns {boolean}
  */
 export function checkIfSameDayLA(eventDate, referenceDate) {
@@ -109,8 +129,8 @@ export function checkIfSameDayLA(eventDate, referenceDate) {
  * Check if an event starts between now and 30 minutes from now.
  * Uses UTC instants for comparison — no timezone conversion needed.
  *
- * @param {Date|string} eventDate - Event start time
- * @param {Date|string} now - Current time
+ * @param {Date | string} eventDate - Event start time
+ * @param {Date | string} now - Current time
  * @returns {boolean}
  */
 export function isInOpenWindow(eventDate, now) {
@@ -132,8 +152,8 @@ export function isInOpenWindow(eventDate, now) {
  * Check if 3 hours have passed since the event started.
  * Uses UTC instants for comparison — no timezone conversion needed.
  *
- * @param {Date|string} eventDate - Event start time
- * @param {Date|string} now - Current time
+ * @param {Date | string} eventDate - Event start time
+ * @param {Date | string} now - Current time
  * @returns {boolean}
  */
 export function isPastCloseWindow(eventDate, now) {

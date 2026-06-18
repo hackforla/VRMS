@@ -11,6 +11,11 @@
 import { isInOpenWindow } from './eventTime.js';
 
 /**
+ * @typedef {{ date: string | Date, checkInReady: boolean }} CheckInEvent
+ * Minimum event shape required by the check-in pipeline.
+ */
+
+/**
  * Filter a list of events down to those whose checkin window is open right now.
  *
  * "Open" means:
@@ -18,9 +23,9 @@ import { isInOpenWindow } from './eventTime.js';
  *   - `isInOpenWindow(event.date, currentTime)` returns true (event starts
  *     within the next 30 minutes).
  *
- * @param {Array<Object>} events - Event documents (need `.date`, `.checkInReady`)
+ * @param {CheckInEvent[]} events - Event documents
  * @param {Date} currentTime - JS Date representing "now"
- * @returns {Promise<Array<Object>>} subset of `events` that should be opened
+ * @returns {Promise<CheckInEvent[]>} Subset of `events` that should be opened
  */
 export async function filterEventsInOpenWindow(events, currentTime) {
   if (!Array.isArray(events) || events.length === 0) {
