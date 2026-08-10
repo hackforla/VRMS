@@ -1,6 +1,7 @@
-import mongoose from 'mongoose';
 import { fileURLToPath } from 'url';
+import mongoose from 'mongoose';
 
+import './env.bootstrap.js';
 import app from './app.js';
 
 import { Role } from './models/index.js';
@@ -13,9 +14,7 @@ mongoose.Promise = global.Promise;
 
 let server;
 async function runServer(databaseUrl = CONFIG_DB.DATABASE_URL, port = CONFIG_DB.PORT) {
-  await mongoose
-    .connect(databaseUrl)
-    .catch((err) => err);
+  await mongoose.connect(databaseUrl).catch((err) => err);
 
   server = app
     .listen(port, () => {
@@ -49,17 +48,17 @@ async function initial() {
 
     if (count === 0) {
       await new Role({
-        name: "APP_USER",
+        name: 'APP_USER',
       }).save();
       console.log("added 'user' to roles collection");
 
       await new Role({
-        name: "APP_ADMIN",
+        name: 'APP_ADMIN',
       }).save();
       console.log("added 'moderator' to roles collection");
     }
   } catch (err) {
-    console.log("error", err);
+    console.log('error', err);
   }
 }
 

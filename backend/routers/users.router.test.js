@@ -2,6 +2,13 @@ import { describe, it, expect, vi, beforeAll, beforeEach, afterAll, afterEach, t
 
 // Setup mocks for UserController
 vi.mock('../controllers/user.controller');
+// Mock Auth middleware so UPDATE/DELETE routes (which require Auth.authUser) pass through
+vi.mock('../middleware/index.js', () => ({
+  Auth: {
+    authUser: vi.fn((req, res, next) => next()),
+    requireMinimumRole: vi.fn(() => (req, res, next) => next()),
+  },
+}));
 import { UserController } from '../controllers/index.js';
 
 // Must import usersRouter after setting up mocks for UserController

@@ -1,7 +1,4 @@
 export default (cron, fetch) => {
-  // Check to see if any events are about to start,
-  // and if so, open their respective check-ins
-
   const url =
     process.env.NODE_ENV === 'prod'
       ? 'https://www.vrms.io'
@@ -41,7 +38,7 @@ export default (cron, fetch) => {
     }
   }
 
-  async function sortAndFilterEvents() {
+  async function sortAndFilterEvents(currentTime) {
     const events = await fetchEvents();
 
     // Get current time in LA and set to date variable
@@ -85,13 +82,14 @@ export default (cron, fetch) => {
   }
 
   async function runTask() {
-    const eventsToOpen = await sortAndFilterEvents().catch((err) => {
-      console.log(err);
-    });
+    console.log('Opening check-ins');
 
-    await openCheckins(eventsToOpen).catch((err) => {
-      console.log(err);
-    });
+    const currentTime = new Date();
+
+    const eventsToOpen = await sortAndFilterEvents(currentTime);
+    await openCheckins(eventsToOpen);
+
+    console.log('Check-ins opened');
   }
 
   const scheduledTask = cron.schedule('*/30 * * * *', () => {
