@@ -54,7 +54,7 @@ const Navbar = () => {
                 CHECK IN
               </StyledButton>
               <StyledButton component={NavLink} to="/login">
-                ADMIN
+                LOGIN
               </StyledButton>
             </>
           )}
