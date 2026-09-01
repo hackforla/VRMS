@@ -1,5 +1,3 @@
-import { filterEventsInOpenWindow } from './lib/checkinOps.js';
-
 export default (cron, fetch) => {
   const url =
     process.env.NODE_ENV === 'prod'
@@ -43,10 +41,29 @@ export default (cron, fetch) => {
   async function sortAndFilterEvents(currentTime) {
     const events = await fetchEvents();
 
+    // Get current time in LA and set to date variable
+    const now = new Date();
+    const laNow = new Date(now.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
+    const laNowMs = laNow.getTime();
+    // Calculate thirty minutes from now
+    const thirtyMinutesFromLaNow = laNowMs + 1800000;
+
     if (events && events.length > 0) {
-      return filterEventsInOpenWindow(events, currentTime);
+      const sortedEvents = events.filter((event) => {
+        if (!event.date) {
+          // handle if event date is null/undefined
+          // false meaning don't include in sortedEvents
+          console.log('Events exist but no date');
+          return false;
+        }
+        const startMs = new Date(event.date).getTime();
+        if (Number.isNaN(startMs)) return false;
+        return (
+          startMs >= laNowMs && startMs <= thirtyMinutesFromLaNow && event.checkInReady === false
+        );
+      });
+      return sortedEvents;
     }
-    return [];
   }
 
   async function openCheckins(events) {

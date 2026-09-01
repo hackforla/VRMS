@@ -1,5 +1,3 @@
-import { isPastCloseWindow } from './lib/eventTime.js';
-
 export default (cron, fetch) => {
   const url =
     process.env.NODE_ENV === 'prod'
@@ -43,10 +41,24 @@ export default (cron, fetch) => {
   async function sortAndFilterEvents() {
     const events = await fetchEvents();
 
+    // Get current time and set to date variable
+    const now = new Date();
+    const laNow = new Date(now.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
+    const laNowMs = laNow.getTime();
+    // Filter events if event date is after now but before thirty minutes from now
     if (events && events.length > 0) {
-      return events.filter(
-        (event) => event.date && event.checkInReady && isPastCloseWindow(event.date, new Date()),
-      );
+      const sortedEvents = events.filter((event) => {
+        if (!event.date) {
+          // handle if event date is null/undefined
+          // false meaning don't include in sortedEvents
+          return false;
+        }
+        const threeHoursFromStartTime = new Date(event.date).getTime() + 10800000;
+        if (Number.isNaN(threeHoursFromStartTime)) return false;
+        return laNowMs >= threeHoursFromStartTime && event.checkInReady === true;
+      });
+
+      return sortedEvents;
     }
   }
 
