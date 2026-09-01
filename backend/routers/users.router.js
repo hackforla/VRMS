@@ -1,8 +1,9 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const { Auth } = require('../middleware');
-const { UserController } = require('../controllers');
-const { ROLES } = require('../../shared/roles');
+
+import { Auth } from '../middleware/index.js';
+import { UserController } from '../controllers/index.js';
+import { ROLES } from '../../shared/roles.js';
 
 // The base is /api/users
 router.get('/', UserController.user_list);
@@ -33,4 +34,4 @@ router.delete(
   UserController.delete,
 );
 
-module.exports = router;
+export default router;

@@ -1,21 +1,18 @@
-// Mock and import User Model
-jest.mock('../models/user.model');
-const { User } = require('../models');
+import { describe, it, expect, vi, afterEach } from 'vitest';
 
-// Import checkUser router
-const express = require('express');
-const supertest = require('supertest');
-const checkUserRouter = require('./checkUser.router');
+vi.mock('../models/user.model.js');
 
-// Create a new Express application for testing
+import { User } from '../models/index.js';
+import checkUserRouter from './checkUser.router.js';
+import express from 'express';
+import supertest from 'supertest';
+
 const testapp = express();
-// express.json() is a body parser needed for POST API requests
 testapp.use(express.json());
 testapp.use('/api/checkuser', checkUserRouter);
 const request = supertest(testapp);
 
 describe('Unit tests for checkUser router', () => {
-  // Mock user for test
   const id = '123';
   const mockUser = {
     id,
@@ -41,42 +38,33 @@ describe('Unit tests for checkUser router', () => {
 
   const auth_origin = 'test-origin';
 
-  // Clear all mocks after each test
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('CREATE', () => {
     it('should authenticate user with POST /api/checkuser', async () => {
-      // Mock Mongoose method
       User.findOne.mockResolvedValue(mockUser);
 
       const response = await request
         .post('/api/checkuser')
         .send({ email: 'mockuser@gmail.com', auth_origin });
 
-      // Tests
       expect(User.findOne).toHaveBeenCalledWith({ email: 'mockuser@gmail.com' });
       expect(response.status).toBe(200);
       expect(response.body).toEqual({ user: mockUser, auth_origin: auth_origin });
-
-      // Marks completion of tests
     });
   });
 
   describe('READ', () => {
     it('should return a user by id with GET /api/checkuser/:id', async () => {
-      // Mock Mongoose method
       User.findById.mockResolvedValue(mockUser);
 
       const response = await request.get(`/api/checkuser/${id}`);
 
-      // Tests
       expect(User.findById).toHaveBeenCalledWith(id);
       expect(response.status).toBe(200);
       expect(response.body).toEqual(mockUser);
-
-      // Marks completion of tests
     });
   });
 });

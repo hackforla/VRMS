@@ -1,9 +1,8 @@
-const jwt = require('jsonwebtoken');
-const { CONFIG_AUTH } = require('../config');
-
-const { RefreshToken, User } = require('../models');
-const crypto = require('crypto');
-const AuthUtils = require('../../shared/authorizationUtils');
+import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
+import { hasAnyRole, hasMinimumRole } from '../../shared/authorizationUtils.js';
+import { CONFIG_AUTH } from '../config/index.js';
+import { RefreshToken, User } from '../models/index.js';
 
 const SECRET = CONFIG_AUTH.JWT_SECRET;
 
@@ -32,14 +31,11 @@ function hashToken(token) {
 }
 
 function getClientIp(req) {
-  // Check X-Forwarded-For header (most common)
   const forwarded = req.headers['x-forwarded-for'];
   if (forwarded) {
-    // Takes the first IP if there are multiple
     return forwarded.split(',')[0].trim();
   }
 
-  // Check other common headers
   return (
     req.headers['x-real-ip'] || req.connection.remoteAddress || req.socket.remoteAddress || req.ip
   );
@@ -47,7 +43,6 @@ function getClientIp(req) {
 
 async function authenticateAccessToken(req, res, next) {
   try {
-    // Extract token from Authorization header
     let accessToken =
       req.cookies.token || req.headers['x-access-token'] || req.headers['authorization'];
 
@@ -60,7 +55,6 @@ async function authenticateAccessToken(req, res, next) {
     }
 
     const decoded = jwt.verify(accessToken, SECRET);
-    // Attach user info to request
     req.user = decoded;
 
     next();
@@ -77,7 +71,6 @@ async function authenticateAccessToken(req, res, next) {
   }
 }
 
-// shorthand for authenticateAccessToken
 const authUser = authenticateAccessToken;
 
 async function authenticateRefreshToken(req, res, next) {
@@ -104,7 +97,6 @@ async function authenticateRefreshToken(req, res, next) {
       return res.status(401).json({ error: 'User not found for this token' });
     }
 
-    // Attach user & refresh token to request for downstream handlers
     req.user = user;
     req.refreshToken = tokenDoc;
 
@@ -121,7 +113,7 @@ function requireRole(...roles) {
       return res.status(401).json({ error: 'Authentication required' });
     }
 
-    if (!AuthUtils.hasAnyRole(req.user, roles)) {
+    if (!hasAnyRole(req.user, ...roles)) {
       return res.status(403).json({
         error: 'Insufficient permissions',
         required_role: roles,
@@ -140,7 +132,7 @@ function requireMinimumRole(role) {
     }
 
     const user = req.user;
-    if (!AuthUtils.hasMinimumRole(user, role)) {
+    if (!hasMinimumRole(user, role)) {
       return res.status(403).json({
         error: 'Insufficient permissions',
         required_minimum_role: role,
@@ -163,7 +155,16 @@ function verifyCookie(req, res, next) {
   });
 }
 
-module.exports = {
+function addCookieIfAvailable(req, _res, next) {
+  jwt.verify(req.cookies.token, SECRET, (err, decoded) => {
+    if (!err) {
+      req.userId = decoded.id;
+    }
+    next();
+  });
+}
+
+const Auth = {
   authenticateAccessToken,
   authUser,
   authenticateRefreshToken,
@@ -174,4 +175,21 @@ module.exports = {
   getClientIp,
   hashToken,
   verifyCookie,
+  addCookieIfAvailable,
+};
+
+export default Auth;
+
+export {
+  authenticateAccessToken,
+  authUser,
+  authenticateRefreshToken,
+  requireRole,
+  requireMinimumRole,
+  generateAccessToken,
+  generateRefreshToken,
+  getClientIp,
+  hashToken,
+  verifyCookie,
+  addCookieIfAvailable,
 };

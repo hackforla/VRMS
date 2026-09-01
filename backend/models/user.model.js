@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 // const bcrypt = require('bcrypt-nodejs');
 
 mongoose.Promise = global.Promise;
@@ -76,4 +76,4 @@ userSchema.methods.serialize = function () {
 
 const User = mongoose.model('User', userSchema);
 
-module.exports = { User };
+export { User };

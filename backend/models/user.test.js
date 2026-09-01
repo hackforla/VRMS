@@ -1,6 +1,7 @@
-const mongoose = require('mongoose');
-const { User } = require('./user.model');
-const { setupIntegrationDB } = require('../setup-test');
+import { describe, it, expect, vi, beforeAll, beforeEach, afterAll, afterEach, test } from 'vitest';
+import mongoose from 'mongoose';
+import { User } from './user.model.js';
+import { setupIntegrationDB } from '../setup-test.js';
 
 setupIntegrationDB('user-model');
 

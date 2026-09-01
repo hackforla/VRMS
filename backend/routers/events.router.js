@@ -1,8 +1,8 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
 
-const { Event } = require('../models/event.model');
-const { EventController } = require('../controllers');
+import { Event } from '../models/event.model.js';
+import { EventController } from '../controllers/index.js';
 
 // The root is /api/events
 router.get('/', EventController.event_list);
@@ -30,4 +30,4 @@ router.get('/nexteventbyproject/:id', (req, res) => {
     });
 });
 
-module.exports = router;
+export default router;

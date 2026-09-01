@@ -1,7 +1,4 @@
-module.exports = (cron, fetch) => {
-  // Check to see if any events are about to start,
-  // and if so, open their respective check-ins
-
+export default (cron, fetch) => {
   const url =
     process.env.NODE_ENV === 'prod'
       ? 'https://www.vrms.io'
@@ -40,12 +37,14 @@ module.exports = (cron, fetch) => {
       return null;
     }
   }
+
   async function sortAndFilterEvents() {
     const events = await fetchEvents();
 
     // Get current time and set to date variable
-    const now = Date.now();
-
+    const now = new Date();
+    const laNow = new Date(now.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
+    const laNowMs = laNow.getTime();
     // Filter events if event date is after now but before thirty minutes from now
     if (events && events.length > 0) {
       const sortedEvents = events.filter((event) => {
@@ -54,13 +53,11 @@ module.exports = (cron, fetch) => {
           // false meaning don't include in sortedEvents
           return false;
         }
-        // Calculate three hours from now
         const threeHoursFromStartTime = new Date(event.date).getTime() + 10800000;
         if (Number.isNaN(threeHoursFromStartTime)) return false;
-        return now >= threeHoursFromStartTime && event.checkInReady === true;
+        return laNowMs >= threeHoursFromStartTime && event.checkInReady === true;
       });
 
-      // console.log('Sorted events: ', sortedEvents);
       return sortedEvents;
     }
   }
@@ -68,7 +65,6 @@ module.exports = (cron, fetch) => {
   async function closeCheckins(events) {
     if (events && events.length > 0) {
       console.log('Closing check-ins');
-      // console.log('Closing event: ', event);
       const batchEventsToUpdate = events.map((e) => ({
         _id: e._id,
         checkInReady: false,
