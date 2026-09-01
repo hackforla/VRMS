@@ -1,7 +1,6 @@
-export default (cron, fetch) => {
-  // Check to see if any events are about to start,
-  // and if so, open their respective check-ins
+import { filterEventsInOpenWindow } from './lib/checkinOps.js';
 
+export default (cron, fetch) => {
   const url =
     process.env.NODE_ENV === 'prod'
       ? 'https://www.vrms.io'
@@ -41,23 +40,13 @@ export default (cron, fetch) => {
     }
   }
 
-  async function sortAndFilterEvents() {
+  async function sortAndFilterEvents(currentTime) {
     const events = await fetchEvents();
 
-    const now = Date.now();
-    const thirtyMinutesFromNow = now + 1800000;
-
     if (events && events.length > 0) {
-      const sortedEvents = events.filter((event) => {
-        if (!event.date) {
-          return false;
-        }
-        const startMs = new Date(event.date).getTime();
-        if (Number.isNaN(startMs)) return false;
-        return startMs >= now && startMs <= thirtyMinutesFromNow && event.checkInReady === false;
-      });
-      return sortedEvents;
+      return filterEventsInOpenWindow(events, currentTime);
     }
+    return [];
   }
 
   async function openCheckins(events) {
@@ -76,13 +65,14 @@ export default (cron, fetch) => {
   }
 
   async function runTask() {
-    const eventsToOpen = await sortAndFilterEvents().catch((err) => {
-      console.log(err);
-    });
+    console.log('Opening check-ins');
 
-    await openCheckins(eventsToOpen).catch((err) => {
-      console.log(err);
-    });
+    const currentTime = new Date();
+
+    const eventsToOpen = await sortAndFilterEvents(currentTime);
+    await openCheckins(eventsToOpen);
+
+    console.log('Check-ins opened');
   }
 
   const scheduledTask = cron.schedule('*/30 * * * *', () => {
