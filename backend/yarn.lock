@@ -60,6 +60,18 @@
   resolved "https://registry.yarnpkg.com/@oxc-project/types/-/types-0.133.0.tgz#2e282ef9e1d26e06b68ccd14b73f310a3b2cf7f8"
   integrity sha512-KzkdCd6Uxqnf6l3HOw1xfatAlUURA0g14cvBYFyJ5SaNOQbOUvBr9PKArcPcrNIeRsBdgcUzOGrhKveVpvOIGA==
 
+"@posthog/core@^1.49.1":
+  version "1.49.2"
+  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.49.2.tgz#9b2772038c8f390e2fe7e1681539d8f8c5d12401"
+  integrity sha512-AXHDo/4nisUg7OPG1TQNgREK7n+chBQXLQyttp7bDTDsDg2k9lV06TmnpvuNbwJs53q9mP9hjezKEZu4fYadfg==
+  dependencies:
+    "@posthog/types" "^1.407.1"
+
+"@posthog/types@^1.407.1":
+  version "1.407.1"
+  resolved "https://registry.yarnpkg.com/@posthog/types/-/types-1.407.1.tgz#aca89563a8b6799751b20ef9678641c13ba9441b"
+  integrity sha512-WhbkXPC2rgylXqmxHqv70ffI3k+KxyR6s7DBIfr5NvIqHkxp6v0pk31D/jbz0DNVbzwkLjyll2pxr4FNbJiYzg==
+
 "@rolldown/binding-android-arm64@1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@rolldown/binding-android-arm64/-/binding-android-arm64-1.0.3.tgz#54ce8f8382213f4a314a0c2f7ba83f81ffeae592"
@@ -2649,6 +2661,13 @@ postcss@^8.5.15:
     nanoid "^3.3.12"
     picocolors "^1.1.1"
     source-map-js "^1.2.1"
+
+posthog-node@^5.21.2:
+  version "5.51.4"
+  resolved "https://registry.yarnpkg.com/posthog-node/-/posthog-node-5.51.4.tgz#0a6e86f772e26399b62ee515ba7f3a9be93b36f7"
+  integrity sha512-gI6JMBnU3vjDNclUBWonw3y7k8Y0UPIAVO4AQ2zu9eyW+7sY8UQRofx4JIA7IGYLMEbs4gykfogOmXp16+oUdg==
+  dependencies:
+    "@posthog/core" "^1.49.1"
 
 process-nextick-args@~2.0.0:
   version "2.0.1"
