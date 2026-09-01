@@ -1,29 +1,29 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import EditMeetingTimes from './editMeetingTimes';
-import CreateNewEvent from './createNewEvent';
-import readableEvent from './utilities/readableEvent';
+import { useCallback, useEffect, useState } from 'react';
 import ProjectForm from '../ProjectForm';
-import { simpleInputs, additionalInputsForEdit } from '../data';
+import { additionalInputsForEdit, simpleInputs } from '../data';
 import TitledBox from '../parts/boxes/TitledBox';
 import TitledBoxIFrame from '../parts/boxes/TitledBoxIFrame';
+import CreateNewEvent from './createNewEvent';
+import EditMeetingTimes from './editMeetingTimes';
+import readableEvent from './utilities/readableEvent';
 
-import { styled } from '@mui/material/styles';
 import CloseIcon from '@mui/icons-material/Close';
+import { styled } from '@mui/material/styles';
 import EditIcon from '../../svg/Icon_Edit.svg?react';
 import PlusIcon from '../../svg/PlusIcon.svg?react';
 
 import {
-  Typography,
   Box,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  IconButton,
   Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
   List,
   ListItem,
   ListItemButton,
   ListItemText,
+  Typography,
 } from '@mui/material';
 import EditProjectMembers from './editPMs/editProjectMembers';
 
@@ -170,7 +170,7 @@ const EditProject = ({
       }
       setLastOpenedEventId(null);
     },
-    [lastOpenedEventId]
+    [lastOpenedEventId],
   );
 
   // `handleOpenCreateNewModal`: Sets the state to open the Create New Event modal
@@ -197,7 +197,7 @@ const EditProject = ({
           // eslint-disable-next-line no-underscore-dangle
           .filter((e) => e?.project?._id === projectToEdit._id)
           .map((item) => ({ ...item, ...readableEvent(item), raw: item }))
-          .reverse() // sorts most recent events first
+          .reverse(), // sorts most recent events first
       );
     }
   }, [projectToEdit, regularEvents, setRegularEventsState]);
@@ -211,7 +211,7 @@ const EditProject = ({
           // eslint-disable-next-line no-underscore-dangle
           .filter((e) => e?.project?._id === projectToEdit._id)
           .map((item) => readableEvent(item))
-          .sort((a, b) => a.dayOfTheWeekNumber - b.dayOfTheWeekNumber)
+          .sort((a, b) => a.dayOfTheWeekNumber - b.dayOfTheWeekNumber),
       );
     }
   }, [projectToEdit, recurringEvents, setREvents]);
@@ -219,12 +219,7 @@ const EditProject = ({
   return (
     <Box sx={{ px: 0.5 }}>
       {/* Dialog for editing recurring meeting times */}
-      <Dialog
-        open={!!selectedEvent}
-        onClose={handleCloseEditMeetingModal}
-        maxWidth="xs"
-        fullWidth
-      >
+      <Dialog open={!!selectedEvent} onClose={handleCloseEditMeetingModal} maxWidth="xs" fullWidth>
         <DialogTitle
           sx={{
             m: 0,
@@ -269,12 +264,7 @@ const EditProject = ({
       </Dialog>
 
       {/* Dialog for creating new events */}
-      <Dialog
-        open={isCreateNew}
-        onClose={handleCloseCreateNewModal}
-        maxWidth="xs"
-        fullWidth
-      >
+      <Dialog open={isCreateNew} onClose={handleCloseCreateNewModal} maxWidth="xs" fullWidth>
         <DialogTitle
           sx={{
             m: 0,
@@ -395,9 +385,7 @@ const EditProject = ({
                       : currentEventId // Uses stable ID for normal renders
                   }
                 >
-                  <StyledListItemButton
-                    onClick={() => handleSelectEvent(event)}
-                  >
+                  <StyledListItemButton onClick={() => handleSelectEvent(event)}>
                     <Box sx={{ flexGrow: 1, minWidth: 0 }}>
                       <ListItemText
                         primary={event.name}
@@ -409,10 +397,7 @@ const EditProject = ({
                         {' '}
                         {`${event.dayOfTheWeek}, ${event.startTime} - ${event.endTime}; ${event.eventType}`}
                       </DetailsText>
-                      <DescriptionText component="span">
-                        {' '}
-                        {`${event.description}`}
-                      </DescriptionText>
+                      <DescriptionText component="span"> {`${event.description}`}</DescriptionText>
                     </Box>
                     <Box sx={{ flexShrink: 0, ml: 1 }}>
                       {' '}
@@ -456,7 +441,6 @@ const EditProject = ({
                     : event._id // Uses stable _id for normal renders
                 }
                 updateRegularEvent={updateRegularEvent}
-                handleSelectEvent={handleSelectEvent} // Pass handler for modal opening.
               />
             ))}
           </List>
@@ -468,16 +452,17 @@ const EditProject = ({
 
 /**
  * RegularEvent: Displays a single regular event item within a list.
- * It's responsible for rendering event details and handling selection to open an edit modal.
+ * It's responsible for rendering event details and toggling the event's check-in readiness when clicked.
  * @param {Object} event - The regular event object to display. Includes details like name, time, type, and check-in status.
- * @param {Function} updateRegularEvent - A function to call when a regular event needs to be updated. (Note: Not directly used in the provided JSX, but passed as a prop.)
- * @param {Function} handleSelectEvent - A callback function to invoke when the event item is clicked, typically to select it and open a corresponding edit modal.
+ * @param {Function} updateRegularEvent - A callback invoked when the item is clicked to toggle the event's `checkInReady` status.
  * @returns {ReactElement} - A list item component representing a single regular event, with clickable functionality.
  */
-const RegularEvent = ({ event, updateRegularEvent, handleSelectEvent }) => {
+const RegularEvent = ({ event, updateRegularEvent }) => {
   return (
     <StyledListItem>
-      <StyledListItemButton onClick={() => handleSelectEvent(event)}>
+      <StyledListItemButton
+        onClick={() => updateRegularEvent({ checkInReady: !event.checkInReady }, event._id)}
+      >
         <Box sx={{ flexGrow: 1, minWidth: 0 }}>
           <ListItemText
             primary={event.name}
