@@ -1,3 +1,11 @@
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+
+vi.mock('./lib/generateEventData.js', () => ({
+  generateEventData: vi.fn((event) => ({ ...event, generated: true })),
+}));
+vi.mock('node-fetch', () => ({ default: vi.fn() }));
+
+// Use importActual to get real implementations (mirrors jest.requireActual in the original test)
 const {
   fetchData,
   adjustToLosAngelesTime,
@@ -7,32 +15,18 @@ const {
   filterAndCreateEvents,
   runTask,
   scheduleTask,
-} = jest.requireActual('./createRecurringEvents');
-const { generateEventData } = require('./lib/generateEventData');
+} = await vi.importActual('./createRecurringEvents.js');
 
-const MockDate = require('mockdate');
-const cron = require('node-cron');
-
-jest.mock('./lib/generateEventData', () => ({
-  generateEventData: jest.fn((event) => ({
-    ...event,
-    generated: true,
-  })),
-}));
-
-jest.mock('node-fetch', () => jest.fn());
-const fetch = require('node-fetch');
+import { generateEventData } from './lib/generateEventData.js';
+import fetch from 'node-fetch';
+import MockDate from 'mockdate';
+import cron from 'node-cron';
 
 describe('createRecurringEvents Module Tests', () => {
   const mockURL = 'http://localhost:3000';
   const mockHeader = 'mock-header';
   let mockEvents;
   let mockRecurringEvents;
-
-  fetch.mockResolvedValue({
-    ok: true,
-    json: jest.fn().mockResolvedValue(mockEvents),
-  });
 
   beforeEach(() => {
     MockDate.set('2023-11-02T00:00:00Z');
@@ -44,14 +38,19 @@ describe('createRecurringEvents Module Tests', () => {
     mockRecurringEvents = [
       { name: 'Event 1', date: '2023-11-02T19:00:00Z' },
       { name: 'Event 2', date: '2023-11-02T07:00:00Z' },
-      { name: 'Event 3', date: '2023-11-03T07:00:00Z' }, // Does not match today
+      { name: 'Event 3', date: '2023-11-03T07:00:00Z' },
     ];
 
-    jest.clearAllMocks();
+    vi.clearAllMocks();
+
+    fetch.mockResolvedValue({
+      ok: true,
+      json: vi.fn().mockResolvedValue(mockEvents),
+    });
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     MockDate.reset();
   });
 
@@ -59,7 +58,7 @@ describe('createRecurringEvents Module Tests', () => {
     it('should fetch data from the API endpoint', async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
-        json: jest.fn().mockResolvedValue(mockEvents),
+        json: vi.fn().mockResolvedValue(mockEvents),
       });
 
       const result = await fetchData('/api/events/', mockURL, mockHeader, fetch);
@@ -82,8 +81,8 @@ describe('createRecurringEvents Module Tests', () => {
 
   describe('adjustToLosAngelesTime', () => {
     it('should correctly adjust timestamps before DST starts (PST -8)', () => {
-      const utcTimestamp = new Date('2024-03-10T07:00:00Z'); // 7 AM UTC
-      const expectedLocal = new Date('2024-03-09T23:00:00Z'); // 11 PM PST (-8)
+      const utcTimestamp = new Date('2024-03-10T07:00:00Z');
+      const expectedLocal = new Date('2024-03-09T23:00:00Z');
 
       const result = adjustToLosAngelesTime(utcTimestamp);
 
@@ -91,8 +90,8 @@ describe('createRecurringEvents Module Tests', () => {
     });
 
     it('should correctly adjust timestamps after DST starts (PDT -7)', () => {
-      const utcTimestamp = new Date('2024-03-11T07:00:00Z'); // 7 AM UTC (after DST)
-      const expectedLocal = new Date('2024-03-11T00:00:00Z'); // 12 AM PDT (-7)
+      const utcTimestamp = new Date('2024-03-11T07:00:00Z');
+      const expectedLocal = new Date('2024-03-11T00:00:00Z');
 
       const result = adjustToLosAngelesTime(utcTimestamp);
 
@@ -100,8 +99,8 @@ describe('createRecurringEvents Module Tests', () => {
     });
 
     it('should correctly adjust timestamps after DST ends (PST -8)', () => {
-      const utcTimestamp = new Date('2024-11-10T08:00:00Z'); // 8 AM UTC
-      const expectedLocal = new Date('2024-11-10T00:00:00Z'); // 12 AM PST (-8)
+      const utcTimestamp = new Date('2024-11-10T08:00:00Z');
+      const expectedLocal = new Date('2024-11-10T00:00:00Z');
 
       const result = adjustToLosAngelesTime(utcTimestamp);
 
@@ -109,8 +108,8 @@ describe('createRecurringEvents Module Tests', () => {
     });
 
     it('should correctly adjust timestamps when DST ends (PST -8)', () => {
-      const utcTimestamp = new Date('2024-11-03T09:00:00Z'); // 9 AM UTC
-      const expectedLocal = new Date('2024-11-03T01:00:00Z'); // 1 AM PST (UTC-8)
+      const utcTimestamp = new Date('2024-11-03T09:00:00Z');
+      const expectedLocal = new Date('2024-11-03T01:00:00Z');
 
       const result = adjustToLosAngelesTime(utcTimestamp);
 
@@ -118,8 +117,8 @@ describe('createRecurringEvents Module Tests', () => {
     });
 
     it('should correctly handle the repeated hour when DST ends (PST -8)', () => {
-      const utcTimestamp = new Date('2024-11-03T08:30:00Z'); // 8:30 AM UTC
-      const expectedLocal = new Date('2024-11-03T01:30:00Z'); // 1:30 AM PST (during repeat hour)
+      const utcTimestamp = new Date('2024-11-03T08:30:00Z');
+      const expectedLocal = new Date('2024-11-03T01:30:00Z');
 
       const result = adjustToLosAngelesTime(utcTimestamp);
 
@@ -157,20 +156,19 @@ describe('createRecurringEvents Module Tests', () => {
     it('should not create events already present for today', async () => {
       await filterAndCreateEvents(mockEvents, mockRecurringEvents, mockURL, mockHeader, fetch);
 
-      expect(generateEventData).not.toHaveBeenCalledWith(mockRecurringEvents[0]); // Recurring Event 1
-      expect(generateEventData).not.toHaveBeenCalledWith(mockRecurringEvents[1]); // Recurring Event 2
+      expect(generateEventData).not.toHaveBeenCalledWith(mockRecurringEvents[0]);
+      expect(generateEventData).not.toHaveBeenCalledWith(mockRecurringEvents[1]);
       expect(fetch).not.toHaveBeenCalled();
     });
 
     it('should correctly adjust an event before DST ends (UTC-7 -> UTC-8)', async () => {
-      MockDate.set('2023-11-04T23:00:00Z'); // Before DST ends
+      MockDate.set('2023-11-04T23:00:00Z');
 
       const preDstEvent = [
         {
           name: 'Pre-DST Event',
-          date: '2023-11-04T08:00:00Z', // 8 AM UTC (1 AM PDT)
+          date: '2023-11-04T08:00:00Z',
           startTime: '2023-11-04T08:00:00Z',
-          // hours: 1,
         },
       ];
       await filterAndCreateEvents([], preDstEvent, mockURL, mockHeader, fetch);
@@ -181,23 +179,21 @@ describe('createRecurringEvents Module Tests', () => {
 
       const expectedEvent = {
         name: 'Pre-DST Event',
-        date: new Date('2023-11-04T01:00:00Z').toISOString(), // Should match 1 AM PDT
+        date: new Date('2023-11-04T01:00:00Z').toISOString(),
         startTime: new Date('2023-11-04T01:00:00Z').toISOString(),
         generated: true,
       };
 
       expect(fetch).toHaveBeenCalledWith(
         `${mockURL}/api/events/`,
-        expect.objectContaining({
-          body: JSON.stringify([expectedEvent]),
-        }),
+        expect.objectContaining({ body: JSON.stringify([expectedEvent]) }),
       );
 
       MockDate.reset();
     });
 
     it('should correctly adjust an event during DST ending (PDT -> PST shift)', async () => {
-      MockDate.set('2023-11-05T02:00:00Z'); // The moment of DST shift
+      MockDate.set('2023-11-05T02:00:00Z');
 
       const dstTransitionEvent = [
         {
@@ -221,21 +217,19 @@ describe('createRecurringEvents Module Tests', () => {
 
       expect(fetch).toHaveBeenCalledWith(
         `${mockURL}/api/events/`,
-        expect.objectContaining({
-          body: JSON.stringify([expectedEvent]),
-        }),
+        expect.objectContaining({ body: JSON.stringify([expectedEvent]) }),
       );
 
       MockDate.reset();
     });
 
     it('should correctly adjust an event before DST starts (UTC-8 -> UTC-7)', async () => {
-      MockDate.set('2024-03-10T09:00:00Z'); // 1 AM PST before the shift
+      MockDate.set('2024-03-10T09:00:00Z');
 
       const preDstStartEvent = [
         {
           name: 'Pre-DST Start Event',
-          date: '2024-03-10T09:00:00Z', // 1 AM PST in UTC-8
+          date: '2024-03-10T09:00:00Z',
           startTime: '2024-03-10T09:00:00Z',
         },
       ];
@@ -248,16 +242,14 @@ describe('createRecurringEvents Module Tests', () => {
 
       const expectedEvent = {
         name: 'Pre-DST Start Event',
-        date: new Date('2024-03-10T01:00:00Z').toISOString(), // Should match 1 AM PST
+        date: new Date('2024-03-10T01:00:00Z').toISOString(),
         startTime: new Date('2024-03-10T01:00:00Z').toISOString(),
         generated: true,
       };
 
       expect(fetch).toHaveBeenCalledWith(
         `${mockURL}/api/events/`,
-        expect.objectContaining({
-          body: JSON.stringify([expectedEvent]),
-        }),
+        expect.objectContaining({ body: JSON.stringify([expectedEvent]) }),
       );
 
       MockDate.reset();
@@ -269,7 +261,7 @@ describe('createRecurringEvents Module Tests', () => {
       const dstStartTransitionEvent = [
         {
           name: 'DST Start Event',
-          date: '2024-03-10T10:00:00Z', // 2 AM PST in UTC-8
+          date: '2024-03-10T10:00:00Z',
           startTime: '2024-03-10T10:00:00Z',
         },
       ];
@@ -281,16 +273,14 @@ describe('createRecurringEvents Module Tests', () => {
 
       const expectedEvent = {
         name: 'DST Start Event',
-        date: new Date('2024-03-10T03:00:00Z').toISOString(), // Should match 3 AM PDT
+        date: new Date('2024-03-10T03:00:00Z').toISOString(),
         startTime: new Date('2024-03-10T03:00:00Z').toISOString(),
         generated: true,
       };
 
       expect(fetch).toHaveBeenCalledWith(
         `${mockURL}/api/events/`,
-        expect.objectContaining({
-          body: JSON.stringify([expectedEvent]),
-        }),
+        expect.objectContaining({ body: JSON.stringify([expectedEvent]) }),
       );
 
       MockDate.reset();
@@ -299,22 +289,19 @@ describe('createRecurringEvents Module Tests', () => {
 
   describe('runTask', () => {
     it('should fetch data but not create events if all exist', async () => {
-      // First API call response (events)
       fetch.mockResolvedValueOnce({
         ok: true,
-        json: jest.fn().mockResolvedValue(mockEvents),
+        json: vi.fn().mockResolvedValue(mockEvents),
       });
 
-      // Second API call response (recurring events)
       fetch.mockResolvedValueOnce({
         ok: true,
-        json: jest.fn().mockResolvedValue(mockRecurringEvents),
+        json: vi.fn().mockResolvedValue(mockRecurringEvents),
       });
 
       await runTask(fetch, mockURL, mockHeader);
 
       console.log('Actual fetch calls:', fetch.mock.calls);
-      // Expect only 2 fetch calls (no event creation needed)
       expect(fetch).toHaveBeenCalledTimes(2);
 
       expect(fetch).toHaveBeenCalledWith(
@@ -322,7 +309,6 @@ describe('createRecurringEvents Module Tests', () => {
         expect.objectContaining({ headers: { 'x-customrequired-header': mockHeader } }),
       );
 
-      // Ensure no call to createEvent
       expect(fetch).not.toHaveBeenCalledWith(
         `${mockURL}/api/events/`,
         expect.objectContaining({ method: 'POST' }),
@@ -336,7 +322,7 @@ describe('createRecurringEvents Module Tests', () => {
       const mockEventArray = [mockEvent];
       fetch.mockResolvedValueOnce({
         ok: true,
-        json: jest.fn().mockResolvedValue({ id: 1, ...mockEvent }),
+        json: vi.fn().mockResolvedValue({ id: 1, ...mockEvent }),
       });
 
       const result = await createEvents(mockEventArray, mockURL, mockHeader, fetch);
@@ -363,7 +349,7 @@ describe('createRecurringEvents Module Tests', () => {
 
   describe('scheduleTask', () => {
     it('should schedule the runTask function', () => {
-      const scheduleSpy = jest.spyOn(cron, 'schedule').mockImplementation((_, callback) => {
+      const scheduleSpy = vi.spyOn(cron, 'schedule').mockImplementation((_, callback) => {
         callback();
       });
 

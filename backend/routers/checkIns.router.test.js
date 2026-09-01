@@ -1,73 +1,58 @@
-// Mock and import CheckIn model
-jest.mock('../models/checkIn.model');
-const { CheckIn } = require('../models');
+import { describe, it, expect, vi, afterEach } from 'vitest';
 
-// Import the check-ins router
-const express = require('express');
-const supertest = require('supertest');
-const checkInsRouter = require('./checkIns.router');
+vi.mock('../models/checkIn.model.js');
 
-// Create a new Express application for testing
+import { CheckIn } from '../models/index.js';
+import checkInsRouter from './checkIns.router.js';
+import express from 'express';
+import supertest from 'supertest';
+
 const testapp = express();
-// Allows for body parsing
 testapp.use(express.json());
 testapp.use('/api/checkins', checkInsRouter);
 const request = supertest(testapp);
 
 describe('Unit tests for checkIns router', () => {
-  // Mock data for check-ins
   const mockCheckIns = [
     { id: 1, eventId: 'event1', userId: 'user1', checkedIn: true, createdDate: String(new Date()) },
     { id: 2, eventId: 'event2', userId: 'user2', checkedIn: true, createdDate: String(new Date()) },
   ];
 
-  // Clear mocks after each test
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('READ', () => {
     it('should return a list of check-ins with GET /api/checkins', async () => {
-      // Mock Mongoose method
       CheckIn.find.mockResolvedValue(mockCheckIns);
 
       const response = await request.get('/api/checkins');
 
-      // Tests
       expect(CheckIn.find).toHaveBeenCalled();
       expect(response.status).toBe(200);
       expect(response.body).toEqual(mockCheckIns);
-
-      // Marks completion of test
     });
 
     it('should return a single check-in by id with GET /api/checkins/:id', async () => {
-      // Mock Mongoose method
       CheckIn.findById.mockResolvedValue(mockCheckIns[0]);
 
       const response = await request.get('/api/checkins/1');
 
-      // Tests
       expect(CheckIn.findById).toHaveBeenCalledWith('1');
       expect(response.status).toBe(200);
       expect(response.body).toEqual(mockCheckIns[0]);
-
-      // Marks completion of test
     });
 
     it('should return a list of users who have checked into a specific event with GET /api/checkins/findEvent/:id', async () => {
-      // Mock specific checkIn
       const mockCheckIn = mockCheckIns[1];
       const { eventId } = mockCheckIn;
 
-      // Mock Mongoose methods
       CheckIn.find.mockReturnValue({
-        populate: jest.fn().mockResolvedValue(mockCheckIn),
+        populate: vi.fn().mockResolvedValue(mockCheckIn),
       });
 
       const response = await request.get(`/api/checkins/findEvent/${eventId}`);
 
-      // Tests
       expect(CheckIn.find).toHaveBeenCalledWith({
         eventId: eventId,
         userId: { $ne: 'undefined' },
@@ -75,14 +60,11 @@ describe('Unit tests for checkIns router', () => {
       expect(CheckIn.find().populate).toHaveBeenCalledWith({ path: 'userId', model: 'User' });
       expect(response.status).toBe(200);
       expect(response.body).toEqual(mockCheckIn);
-
-      // Marks completion of test
     });
   });
 
   describe('CREATE', () => {
     it('should create a new check-in with POST /api/checkins', async () => {
-      // Mock new check-in data
       const newCheckIn = {
         id: 3,
         eventId: 'event3',
@@ -91,16 +73,12 @@ describe('Unit tests for checkIns router', () => {
         createdDate: String(new Date()),
       };
 
-      // Mock create method
       CheckIn.create.mockResolvedValue(newCheckIn);
 
       const response = await request.post('/api/checkins').send(newCheckIn);
 
-      // Tests
       expect(CheckIn.create).toHaveBeenCalledWith(newCheckIn);
       expect(response.status).toBe(201);
-
-      // Marks completion of test
     });
   });
 });

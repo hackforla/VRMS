@@ -1,19 +1,20 @@
-const app = require('./app');
-const mongoose = require('mongoose');
+import { fileURLToPath } from 'url';
+import mongoose from 'mongoose';
 
-const { Role } = require('./models');
+import './env.bootstrap.js';
+import app from './app.js';
+
+import { Role } from './models/index.js';
 
 // Load config variables
-const { CONFIG_DB } = require('./config/');
+import { CONFIG_DB } from './config/index.js';
 
 // Required convention for mongoose - https://stackoverflow.com/a/51862948/5900471
 mongoose.Promise = global.Promise;
 
 let server;
 async function runServer(databaseUrl = CONFIG_DB.DATABASE_URL, port = CONFIG_DB.PORT) {
-  await mongoose
-    .connect(databaseUrl)
-    .catch((err) => err);
+  await mongoose.connect(databaseUrl).catch((err) => err);
 
   server = app
     .listen(port, () => {
@@ -47,24 +48,24 @@ async function initial() {
 
     if (count === 0) {
       await new Role({
-        name: "APP_USER",
+        name: 'APP_USER',
       }).save();
       console.log("added 'user' to roles collection");
 
       await new Role({
-        name: "APP_ADMIN",
+        name: 'APP_ADMIN',
       }).save();
       console.log("added 'moderator' to roles collection");
     }
   } catch (err) {
-    console.log("error", err);
+    console.log('error', err);
   }
 }
 
-if (require.main === module) {
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
   runServer()
     .then(() => initial())
     .catch((err) => console.error(err));
 }
 
-module.exports = { app, runServer, closeServer };
+export { app, runServer, closeServer };

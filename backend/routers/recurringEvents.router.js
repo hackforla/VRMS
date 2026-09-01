@@ -1,10 +1,10 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const cors = require('cors');
+import cors from 'cors';
 
-const { RecurringEvent } = require('../models/recurringEvent.model');
-const { RecurringEventController } = require('../controllers/');
-const { Auth } = require('../middleware');
+import { RecurringEvent } from '../models/recurringEvent.model.js';
+import { RecurringEventController } from '../controllers/index.js';
+import { Auth } from '../middleware/index.js';
 
 // GET /api/recurringevents/
 router.get('/', cors(), (req, res) => {
@@ -53,4 +53,4 @@ router.patch('/:RecurringEventId', Auth.verifyCookie, RecurringEventController.u
 
 router.delete('/:RecurringEventId', Auth.verifyCookie, RecurringEventController.destroy);
 
-module.exports = router;
+export default router;

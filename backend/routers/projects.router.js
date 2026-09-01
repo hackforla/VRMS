@@ -1,15 +1,15 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
 
-const { ProjectController } = require('../controllers');
-// const { Auth } = require('../middleware');
-// const { ROLES } = require('../../shared/roles');
+import { ProjectController } from '../controllers/index.js';
+// import { Auth } from '../middleware/index.js';
+// import { ROLES } from '../../shared/roles.js';
 
 // Require user to be project manager or higher (commented out for now for current app to work succesfully without auth, will re-enable when auth is ready)
 // router.use(Auth.authUser, Auth.requireMinimumRole(ROLES.PROJECT_MANAGER));
 // The base is /api/projects
 
-const AuthUtil = require('../middleware/auth.middleware');
+import AuthUtil from '../middleware/auth.middleware.js';
 
 router.get('/', ProjectController.project_list);
 
@@ -35,4 +35,4 @@ router.patch(
   ProjectController.updateOnboardOffboardVisibility,
 );
 
-module.exports = router;
+export default router;

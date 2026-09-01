@@ -1,13 +1,13 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const fs = require('fs');
+import fs from 'fs';
 
-const { google } = require('googleapis');
-const async = require('async');
-const fetch = require('node-fetch');
-const { authUser } = require('../middleware/auth.middleware');
-const AuthUtils = require('../../shared/authorizationUtils');
-const { ROLES } = require('../../shared/roles');
+import async from 'async';
+import { google } from 'googleapis';
+import fetch from 'node-fetch';
+import { hasMinimumRole } from '../../shared/authorizationUtils.js';
+import { ROLES } from '../../shared/roles.js';
+import { authUser } from '../middleware/auth.middleware.js';
 
 const SCOPES = ['https://www.googleapis.com/auth/drive'];
 
@@ -16,7 +16,7 @@ const githubOrganization = 'testvrms';
 
 // GET /api/grantpermission/googleDrive
 router.post('/googleDrive', async (req, res) => {
-  let credentials = JSON.parse(process.env.GOOGLECREDENTIALS);
+  const credentials = JSON.parse(process.env.GOOGLECREDENTIALS);
 
   //checks if email and file to change are in req.body
   if (!req.body.email || !req.body.file) {
@@ -69,11 +69,11 @@ router.post('/gitHub', authUser, async (req, res) => {
 
   const teamSlugs = [baseTeamSlug, managerTeamSlug];
 
-  if (AuthUtils.hasMinimumRole(req.user, ROLES.ADMIN)) {
+  if (hasMinimumRole(req.user, ROLES.ADMIN)) {
     teamSlugs.push(adminTeamSlug);
   }
   function createSlug(string) {
-    let slug = string.toLowerCase();
+    const slug = string.toLowerCase();
     return slug.split(' ').join('-');
   }
 
@@ -205,7 +205,7 @@ function sendURL(oAuth2Client) {
  * @param {String} code The code string from the auth URL.
  */
 function sendToken(oAuth2Client, code) {
-  return new Promise(function (resolve, reject) {
+  return new Promise((resolve, reject) => {
     oAuth2Client.getToken(code, (err, token) => {
       if (err)
         reject({
@@ -216,44 +216,6 @@ function sendToken(oAuth2Client, code) {
     });
   });
 }
-
-/**
- * Lists the names and IDs of up to 10 files.
- * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
- * @returns {Promise} Promise with an object that contains the boolean success to determine
- * what to do in the route. Rejection objects also have a message field.
- */
-// function listFiles(auth) {
-//   const drive = google.drive({ version: 'v3', auth });
-//   return new Promise(function (resolve, reject) {
-//     drive.files.list(
-//       {
-//         pageSize: 10,
-//         fields: 'nextPageToken, files(id, name)',
-//       },
-//       (err, res) => {
-//         if (err)
-//           reject({
-//             success: false,
-//             message: 'The API returned an error: ' + err.message,
-//           });
-//         const files = res.data.files;
-//         if (files.length) {
-//           console.log('Files:');
-//           files.map((file) => {
-//             console.log(`${file.name} (${file.id})`);
-//           });
-//           resolve({ success: true });
-//         } else {
-//           return reject({
-//             success: false,
-//             message: 'No files found',
-//           });
-//         }
-//       },
-//     );
-//   });
-// }
 
 /**
  * Gives Google Drive permission to an email address for the file ID
@@ -273,8 +235,8 @@ function grantPermission(auth, email, fileId) {
     },
   ];
 
-  return new Promise(function (resolve, reject) {
-    async.eachSeries(permissions, function (permission, permissionCallback) {
+  return new Promise((resolve, reject) => {
+    async.eachSeries(permissions, (permission, permissionCallback) => {
       const drive = google.drive({ version: 'v3', auth });
       drive.permissions.create(
         {
@@ -394,4 +356,4 @@ function checkPublicMembership(githubHandle) {
   ).then((res) => (res.status === 204 ? true : false));
 }
 
-module.exports = router;
+export default router;
