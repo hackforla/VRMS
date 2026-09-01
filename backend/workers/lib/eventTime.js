@@ -1,0 +1,175 @@
+/**
+ * Timezone-correct event time utilities using Temporal API.
+ *
+ * All VRMS events are in America/Los_Angeles timezone. MongoDB stores dates
+ * as UTC timestamps. These functions use Temporal to correctly convert
+ * between UTC and LA time, handling DST transitions properly.
+ *
+ * Fixes: GitHub issue #1872
+ */
+
+import { Temporal } from '@js-temporal/polyfill';
+
+const TZ = 'America/Los_Angeles';
+
+/** Hours after event start before check-in window closes. */
+export const CHECKIN_CLOSE_HOURS = 3;
+
+/** Minutes before event start that the check-in window opens. */
+export const CHECKIN_OPEN_WINDOW_MINUTES = 30;
+
+/**
+ * @typedef {{ date: string | Date }} EventLike
+ * Minimum required shape from an event or recurring event document.
+ */
+
+/**
+ * @typedef {{ date: string | Date, hours: number }} RecurringEventTemplate
+ * Fields required by generateEventFromRecurring. The full document shape
+ * is defined in the Mongoose recurringEvent model.
+ */
+
+/**
+ * @typedef {{ newEventDate: Date, newEndTime: Date }} GeneratedEventTimes
+ * Computed start and end times for a new event occurrence.
+ */
+
+/**
+ * Get the day-of-week for an event's stored date, in LA time.
+ *
+ * Temporal.ZonedDateTime.dayOfWeek is ISO (1=Mon..7=Sun).
+ * Converted to JS convention with % 7 so Sunday = 0.
+ *
+ * @param {EventLike} event
+ * @returns {number} JS day-of-week: 0=Sun, 1=Mon, ..., 6=Sat
+ */
+export function getEventDayLA(event) {
+  const instant = Temporal.Instant.fromEpochMilliseconds(
+    new Date(event.date).getTime(),
+  );
+  const zdt = instant.toZonedDateTimeISO(TZ);
+  return zdt.dayOfWeek % 7;
+}
+
+// Backward-compat alias
+export const getEventDay = getEventDayLA;
+
+/**
+ * Get today's day-of-week in LA time.
+ *
+ * @param {Date | string | null} [now=null] - Reference time; defaults to current system time
+ * @returns {number} JS day-of-week: 0=Sun, 1=Mon, ..., 6=Sat
+ */
+export function getTodayDayLA(now = null) {
+  if (now !== null) {
+    return Temporal.Instant.fromEpochMilliseconds(new Date(now).getTime())
+      .toZonedDateTimeISO(TZ).dayOfWeek % 7;
+  }
+  return Temporal.Now.zonedDateTimeISO(TZ).dayOfWeek % 7;
+}
+
+/**
+ * Generate a new event occurrence from a recurring event template.
+ *
+ * Extracts the time-of-day (in LA time) from the stored UTC timestamp,
+ * combines it with today's date (in LA time), and returns JS Date objects.
+ * This correctly handles DST transitions — a 7pm PST event stays at 7pm PDT
+ * after spring forward.
+ *
+ * @param {RecurringEventTemplate} filteredEvent
+ * @param {Date} todayDate - Today's date as a JS Date
+ * @returns {GeneratedEventTimes}
+ */
+export function generateEventFromRecurring(filteredEvent, todayDate) {
+  // Extract LA time-of-day from the stored UTC timestamp
+  const storedInstant = Temporal.Instant.fromEpochMilliseconds(
+    new Date(filteredEvent.date).getTime(),
+  );
+  const storedZdt = storedInstant.toZonedDateTimeISO(TZ);
+  const eventTime = storedZdt.toPlainTime();
+
+  // Get today's date in LA time
+  const todayInstant = Temporal.Instant.fromEpochMilliseconds(
+    todayDate.getTime(),
+  );
+  const todayZdt = todayInstant.toZonedDateTimeISO(TZ);
+  const todayPlain = todayZdt.toPlainDate();
+
+  // Combine today's LA date with the event's LA time
+  const newStartZdt = todayPlain.toZonedDateTime({
+    timeZone: TZ,
+    plainTime: eventTime,
+  });
+
+  // End time = start + hours
+  const newEndZdt = newStartZdt.add({ hours: filteredEvent.hours });
+
+  return {
+    newEventDate: new Date(newStartZdt.epochMilliseconds),
+    newEndTime: new Date(newEndZdt.epochMilliseconds),
+  };
+}
+
+/**
+ * Check if two dates fall on the same calendar day in LA time.
+ *
+ * @param {Date | string} eventDate
+ * @param {Date | string} referenceDate
+ * @returns {boolean}
+ */
+export function checkIfSameDayLA(eventDate, referenceDate) {
+  const eventInstant = Temporal.Instant.fromEpochMilliseconds(
+    new Date(eventDate).getTime(),
+  );
+  const refInstant = Temporal.Instant.fromEpochMilliseconds(
+    new Date(referenceDate).getTime(),
+  );
+
+  const eventPlain = eventInstant.toZonedDateTimeISO(TZ).toPlainDate();
+  const refPlain = refInstant.toZonedDateTimeISO(TZ).toPlainDate();
+
+  return eventPlain.equals(refPlain);
+}
+
+/**
+ * Check if an event starts between now and 30 minutes from now.
+ * Uses UTC instants for comparison — no timezone conversion needed.
+ *
+ * @param {Date | string} eventDate - Event start time
+ * @param {Date | string} now - Current time
+ * @returns {boolean}
+ */
+export function isInOpenWindow(eventDate, now) {
+  const eventInstant = Temporal.Instant.fromEpochMilliseconds(
+    new Date(eventDate).getTime(),
+  );
+  const nowInstant = Temporal.Instant.fromEpochMilliseconds(
+    new Date(now).getTime(),
+  );
+  const thirtyMinLater = nowInstant.add({ minutes: CHECKIN_OPEN_WINDOW_MINUTES });
+
+  return (
+    Temporal.Instant.compare(eventInstant, nowInstant) >= 0 &&
+    Temporal.Instant.compare(eventInstant, thirtyMinLater) <= 0
+  );
+}
+
+/**
+ * Check if 3 hours have passed since the event started.
+ * Uses UTC instants for comparison — no timezone conversion needed.
+ *
+ * @param {Date | string} eventDate - Event start time
+ * @param {Date | string} now - Current time
+ * @returns {boolean}
+ */
+export function isPastCloseWindow(eventDate, now) {
+  const eventInstant = Temporal.Instant.fromEpochMilliseconds(
+    new Date(eventDate).getTime(),
+  );
+  const closeTime = eventInstant.add({ hours: CHECKIN_CLOSE_HOURS });
+  const nowInstant = Temporal.Instant.fromEpochMilliseconds(
+    new Date(now).getTime(),
+  );
+
+  return Temporal.Instant.compare(nowInstant, closeTime) >= 0;
+}

@@ -9,6 +9,8 @@ export default (fetch) => {
 
   const fetchEvents = async () => {
     try {
+      const { checkIfSameDayLA } = await import('./lib/eventTime.js');
+
       const res = await fetch(`http://localhost:${process.env.BACKEND_PORT}/api/events`, {
         headers: {
           'x-customrequired-header': headerToSend,
@@ -18,22 +20,7 @@ export default (fetch) => {
 
       const today = new Date();
 
-      const todaysEvents = resJson.filter((event) => {
-        const eventDate = new Date(event.date);
-        console.log('Event date: ', eventDate);
-        const year = eventDate.getFullYear();
-        const month = eventDate.getMonth();
-        const date = eventDate.getDate();
-
-        const yearToday = today.getFullYear();
-        const monthToday = today.getMonth();
-        const dateToday = today.getDate();
-
-        console.log('Event: ', year, month, date);
-        console.log('Today: ', yearToday, monthToday, dateToday);
-
-        return year === yearToday && month === monthToday && date === dateToday;
-      });
+      const todaysEvents = resJson.filter((event) => checkIfSameDayLA(event.date, today));
 
       EVENTS = todaysEvents.filter((event) => {
         const now = new Date();

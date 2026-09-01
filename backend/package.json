@@ -32,6 +32,7 @@
     "why-is-node-running": "^2.2.0"
   },
   "dependencies": {
+    "@js-temporal/polyfill": "^0.5.1",
     "@slack/bolt": "^2.2.3",
     "assert-env": "^0.6.0",
     "async": "^3.2.2",
