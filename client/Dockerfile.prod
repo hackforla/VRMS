@@ -17,7 +17,7 @@ ARG CUSTOM_REQUEST_HEADER=nAb3kY-S%qE#4!d
 ENV REACT_APP_CUSTOM_REQUEST_HEADER=$CUSTOM_REQUEST_HEADER
 RUN npm run build
 
-FROM nginx as client-production
+FROM nginx AS client-production
 EXPOSE 3000
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY --from=client-builder /srv/client/build /usr/share/nginx/html/
