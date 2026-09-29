@@ -33,7 +33,7 @@
     "react-router-dom": "^5.1.2",
     "tailwindcss": "^4.1.10",
     "validator": "^13.15.22",
-    "vite": "^6.4.2",
+    "vite": "^6.4.3",
     "vite-plugin-svgr": "^4.3.0"
   },
   "scripts": {
