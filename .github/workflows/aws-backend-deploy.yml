@@ -89,7 +89,7 @@ jobs:
             -f ${{ env.DOCKERFILE }} \
             -t $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.event.inputs.env }} \
             -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
-            ${{ env.DOCKER_PATH }}
+            .
   deploy:
     name: Deploy to AWS ECS
     runs-on: ubuntu-latest
