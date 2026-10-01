@@ -16,3 +16,4 @@ screenshots/
 vrms.code-workspace
 .vscode/
 backend/swagger-output.json
+.env.test

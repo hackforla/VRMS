@@ -2,16 +2,18 @@ FROM node:24 AS api-builder
 RUN mkdir /srv/backend
 WORKDIR /srv/backend
 RUN mkdir -p node_modules
-COPY package.json yarn.lock ./
+COPY backend/package.json backend/yarn.lock ./
 RUN yarn install --pure-lockfile
-COPY . .
+COPY backend/. .
+COPY shared/ /srv/shared/
 
 FROM node:24-slim AS api-production
 ARG BUILD_SHA
 EXPOSE 4000
 WORKDIR /srv/backend
 COPY --from=api-builder /srv/backend/node_modules ./node_modules
-COPY . .
+COPY --from=api-builder /srv/shared/ /srv/shared/
+COPY backend/. .
 ENV BUILD_SHA=${BUILD_SHA}
 RUN echo "${BUILD_SHA:-unknown}" > BUILD_INFO
 USER node

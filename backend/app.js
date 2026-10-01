@@ -95,6 +95,7 @@ import projectTeamMembersRouter from './routers/projectTeamMembers.router.js';
 import projectsRouter from './routers/projects.router.js';
 import questionsRouter from './routers/questions.router.js';
 import recurringEventsRouter from './routers/recurringEvents.router.js';
+import featureFlagsRouter from './routers/featureFlags.router.js';
 import usersRouter from './routers/users.router.js';
 
 // Check that clients to the API are sending the custom request header on all methods
@@ -135,6 +136,7 @@ app.use('/api/recurringevents', recurringEventsRouter);
 app.use('/api/projectteammembers', projectTeamMembersRouter);
 //app.use('/api/slack', slackRouter);
 app.use('/api/healthcheck', healthCheckRouter);
+app.use('/api/featureFlags', featureFlagsRouter);
 
 // 404 for all non-defined endpoints.
 app.get('*', (req, res, next) => {
