@@ -1,4 +1,5 @@
 import { AuthProvider } from './context/authContext';
+import { FeatureFlagProvider } from './context/featureFlagsContext';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import Home from './pages/Home';
 import Navbar from './components/Navbar';
@@ -96,47 +97,49 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <AuthProvider>
         <SearchTextProvider>
-          <Box
-            sx={{
-              height: '100%',
-              width: '100vw',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              overflow: 'hidden',
-              maxHeight: '90vh',
-              margin: '5vh 0',
-            }}
-          >
+          <FeatureFlagProvider>
             <Box
               sx={{
-                position: 'relative',
-                maxWidth: '500px',
-                width: '100%',
-                backgroundColor: 'white',
+                height: '100%',
+                width: '100vw',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
                 overflow: 'hidden',
-                borderRadius: '10px',
-                padding: '15px',
+                maxHeight: '90vh',
+                margin: '5vh 0',
               }}
             >
-              <Navbar />
               <Box
-                component="main"
                 sx={{
-                  height: 'calc(90vh - 160px)',
-                  overflowY: 'scroll',
+                  position: 'relative',
+                  maxWidth: '500px',
+                  width: '100%',
+                  backgroundColor: 'white',
+                  overflow: 'hidden',
+                  borderRadius: '10px',
+                  padding: '15px',
                 }}
               >
-                <Switch>
-                  {routes.map(({ path, Component }) => (
-                    <Route key={path} exact path={path} component={Component} />
-                  ))}
-                  <Redirect to="/" />
-                </Switch>
+                <Navbar />
+                <Box
+                  component="main"
+                  sx={{
+                    height: 'calc(90vh - 160px)',
+                    overflowY: 'scroll',
+                  }}
+                >
+                  <Switch>
+                    {routes.map(({ path, Component }) => (
+                      <Route key={path} exact path={path} component={Component} />
+                    ))}
+                    <Redirect to="/" />
+                  </Switch>
+                </Box>
+                <Footer />
               </Box>
-              <Footer />
             </Box>
-          </Box>
+          </FeatureFlagProvider>
         </SearchTextProvider>
       </AuthProvider>
     </ThemeProvider>

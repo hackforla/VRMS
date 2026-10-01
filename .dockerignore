@@ -1,0 +1,17 @@
+# Root build context: keep the daemon lean, but DO NOT exclude
+# backend/, client/, shared/, nginx/ — all are COPY'd into the images.
+.git
+.claude/
+node_modules
+**/node_modules
+npm-debug.log*
+yarn-error.log*
+.gitignore
+.dockerignore
+docker-compose*.yml
+*.sh
+.env
+coverage
+build
+dist
+cypress

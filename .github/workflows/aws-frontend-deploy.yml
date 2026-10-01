@@ -81,17 +81,16 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }} # ECR registry URL
           ECR_REPOSITORY: ${{ env.AWS_APP_NAME }} # ECR repo name
         # List files for debug
-        # Enter frontend directory for Docker build context
+        # Build from the repo root so shared/ is inside the Docker build context
+        # (client/ code imports from ../../../shared/)
         # Build Docker image using production Dockerfile
         # Tag image with short SHA
         # Tag image with environment (dev/prod)
-        # Use current directory as build context
         # Push all tags for this image to ECR
         run: |
           ls
-          cd ./${{ env.DOCKER_PATH }}
           docker build \
-            -f ${{ env.DOCKERFILE }} \
+            -f ./${{ env.DOCKER_PATH }}/${{ env.DOCKERFILE }} \
             -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ needs.setup_env.outputs.IMAGE_TAG }} \
             -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.event.inputs.env }} \
             .

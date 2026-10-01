@@ -12,6 +12,7 @@ import {
   isAdmin as checkIsAdmin,
   isProjectManager as checkIsProjectManager,
 } from '../../../shared/authorizationUtils';
+import posthog from 'posthog-js';
 
 export const AuthContext = createContext();
 
@@ -147,4 +148,35 @@ export const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
+};
+
+const fetchAuth = async () => {
+  const request = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-customrequired-header': headerToSend,
+    },
+  };
+
+  try {
+    const response = await fetch('/api/auth/me', request);
+    if (response.status !== 200)
+      return { user: null, isAdmin: false, isError: true };
+
+    const user = await response.json();
+
+    posthog.identify(
+      user._id,
+      {
+        email: user.email,
+        name: `${user.name.firstName} ${user.name.lastName}`,
+      }
+    );
+
+    return { user, isAdmin: (user.accessLevel === 'admin' || user.accessLevel === 'superadmin'), isError: false };
+  } catch (error) {
+    // this should never be hit...
+    console.error('fetchAuth - error', error);
+  }
 };
