@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import '../../sass/UserAdmin.scss';
-import { ROLES } from '../../../../shared/roles';
+import { ROLES } from '@shared/roles';
 import useAuth from '../../hooks/useAuth';
 
 const muiSwitchStyles = {

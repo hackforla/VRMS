@@ -1,10 +1,10 @@
+import { Box, Button, Grid } from '@mui/material';
+import { styled } from '@mui/system';
+import { ROLES } from '@shared/roles';
 import { NavLink, withRouter } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import HflaImg from '../svg/hflalogo.svg';
-import { Box, Button, Grid } from '@mui/material';
-import { styled } from '@mui/system';
 import theme from '../theme';
-import { ROLES } from '../../../shared/roles';
 
 const Navbar = () => {
   // check user accessLevel and adjust link accordingly
@@ -31,11 +31,7 @@ const Navbar = () => {
       <Grid container>
         <Grid item>
           <NavLink to={loggedIn() ? '/welcome' : '/'}>
-            <Box
-              component="img"
-              src={HflaImg}
-              sx={{ width: '48.3px', mt: '7px' }}
-            />
+            <Box component="img" src={HflaImg} sx={{ width: '48.3px', mt: '7px' }} />
           </NavLink>
         </Grid>
         <Grid

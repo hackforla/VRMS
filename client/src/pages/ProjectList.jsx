@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
-import ProjectApiService from '../api/ProjectApiService';
 import { styled } from '@mui/system';
+import { useEffect, useState } from 'react';
+import ProjectApiService from '../api/ProjectApiService';
 
-import { Box, CircularProgress, Typography, Button } from '@mui/material';
+import { Box, Button, CircularProgress, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import TitledBox from '../components/parts/boxes/TitledBox';
 
+import { ROLES } from '@shared/roles';
 import useAuth from '../hooks/useAuth';
-import { ROLES } from '../../../shared/roles';
 
 const StyledTypography = styled(Typography)({
   textTransform: 'uppercase',
@@ -43,9 +43,7 @@ export default function ProjectList() {
           projectData = await projectApiService.fetchProjects();
         } else if (user?.managedProjects?.length > 0) {
           // if user is not admin, but is a project manager, only show projects they manage
-          projectData = await projectApiService.fetchPMProjects(
-            user.managedProjects,
-          );
+          projectData = await projectApiService.fetchPMProjects(user.managedProjects);
         }
 
         //sort the projects alphabetically
@@ -59,9 +57,7 @@ export default function ProjectList() {
     [projectApiService, user.accessLevel, user.managedProjects],
   );
 
-  const projsWithUsers = projects?.filter(
-    (project) => project.managedByUsers?.length > 0,
-  );
+  const projsWithUsers = projects?.filter((project) => project.managedByUsers?.length > 0);
   console.log('Projects with users:', projsWithUsers);
 
   // Render loading circle until project data is served from API
@@ -81,21 +77,19 @@ export default function ProjectList() {
       </Box>
 
       {hasAnyRole(ROLES.ADMIN, ROLES.SUPER_ADMIN) && (
-        <Box sx={{ display: 'grid', gridTemplateColumns: 'max-content', gap: 2, justifyContent: 'center', mx: 'auto' }}>
-          <Button
-            component={Link}
-            to="/projects/create"
-            variant="secondary"
-            sx={{ px: 4 }}
-          >
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: 'max-content',
+            gap: 2,
+            justifyContent: 'center',
+            mx: 'auto',
+          }}
+        >
+          <Button component={Link} to="/projects/create" variant="secondary" sx={{ px: 4 }}>
             Add a New Project
           </Button>
-          <Button
-            component={Link}
-            to="/projects/visibility"
-            variant="secondary"
-            sx={{ px: 4 }}
-          >
+          <Button component={Link} to="/projects/visibility" variant="secondary" sx={{ px: 4 }}>
             On / Offboard Visibility
           </Button>
         </Box>
