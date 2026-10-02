@@ -1,20 +1,23 @@
+# Build context is the REPO ROOT (not client/), because client/src imports
+# from ../../../shared/. See docker-compose.yml: context: .
 FROM node:24-alpine AS client-development
 RUN mkdir /srv/client
 WORKDIR /srv/client
 RUN mkdir -p node_modules
-COPY package.json package.json ./
+COPY client/package*.json ./
 RUN npm install --silent
 
 FROM node:24-alpine AS client-builder
 USER node
 WORKDIR /srv/client
 COPY --from=client-development /srv/client/node_modules node_modules
-COPY . .
+COPY client/. .
+COPY shared/ /srv/shared/
 USER root
 RUN npm run build
 
-FROM nginx as client-production
+FROM nginx AS client-production
 EXPOSE 3000
-COPY /nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY client/nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY --from=client-builder /srv/client/build /usr/share/nginx/html/
 CMD ["nginx", "-g", "daemon off;"]
