@@ -29,6 +29,7 @@ services:
     command: yarn run start
     volumes:
       - ./client:/srv/client
+      - ./shared:/srv/shared
       - client_node_modules:/srv/client/node_modules
     expose:
       - "3000"
