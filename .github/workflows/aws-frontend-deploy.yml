@@ -90,7 +90,6 @@ jobs:
         run: |
           ls
           docker build \
-            --no-cache \
             -f ./${{ env.DOCKER_PATH }}/${{ env.DOCKERFILE }} \
             -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ needs.setup_env.outputs.IMAGE_TAG }} \
             -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.event.inputs.env }} \
