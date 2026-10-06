@@ -9,30 +9,19 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
+      # Downloads the artifact by name from the triggering run. Do not index
+      # artifacts positionally -- a second artifact in the upstream workflow
+      # would silently be downloaded instead of this one.
       - name: Download artifact
-        uses: actions/github-script@v4
+        uses: actions/download-artifact@v4
         with:
-          script: |
-            // Retrieve metadata about the artifacts of the last workflow
-            // https://octokit.github.io/rest.js/v18#actions-list-workflow-run-artifacts
-            const artifacts = await github.actions.listWorkflowRunArtifacts({
-               owner: context.repo.owner,
-               repo: context.repo.repo,
-               run_id: context.payload.workflow_run.id,
-            });
-            const artifactData = artifacts.data.artifacts[0]
+          name: adding-pr-instructions-artifact
+          path: artifact
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
-            // Download artifact with GET API
-            // https://octokit.github.io/rest.js/v18#actions-download-artifact
-            var download = await github.actions.downloadArtifact({
-               owner: context.repo.owner,
-               repo: context.repo.repo,
-               artifact_id: artifactData.id,
-               archive_format: 'zip',
-            });
-            const fs = require('fs');
-            fs.writeFileSync('${{github.workspace}}/artifact.zip', Buffer.from(download.data));
-      - run: unzip artifact.zip
+      - name: List downloaded artifact
+        run: ls -l artifact
 
       - uses: actions/github-script@v4
         id: artifact
@@ -40,7 +29,7 @@ jobs:
           script: |
             // Retrieve pull request and issue number from downloaded artifact
             const fs = require('fs')
-            const artifact = fs.readFileSync('artifact.txt')
+            const artifact = fs.readFileSync('artifact/artifact.txt')
             const artifactJSON = JSON.parse(artifact);
             return artifactJSON
       
