@@ -17,7 +17,7 @@ jobs:
         id: instruction
         with:
           script: |
-            const script = require('./github-actions/pr-instructions/create-instruction.js')
+            const script = require('./github-actions/pr-instructions/create-instruction.cjs')
             const instruction = script({g: github, c: context})
             return JSON.stringify({ instruction: instruction, issueNum: context.payload.number })
       
