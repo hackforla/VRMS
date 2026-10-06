@@ -1,18 +1,18 @@
-import { createContext, useState, useEffect } from 'react';
-import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend } from '../utils/globalSettings';
-import * as authApi from '../api/auth';
-import { useHistory } from 'react-router-dom';
 // Key authorization methods are imported from shared utils
 // which is used by both frontend and backend to ensure consistent authorization logic across the app
 import {
-  hasRole as checkHasRole,
   hasAnyRole as checkHasAnyRole,
   hasMinimumRole as checkHasMinimumRole,
-  isSuperAdmin as checkIsSuperAdmin,
+  hasRole as checkHasRole,
   isAdmin as checkIsAdmin,
   isProjectManager as checkIsProjectManager,
-} from '../../../shared/authorizationUtils';
+  isSuperAdmin as checkIsSuperAdmin,
+} from '@shared/authorizationUtils';
 import posthog from 'posthog-js';
+import { createContext, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import * as authApi from '../api/auth';
+import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend } from '../utils/globalSettings';
 
 export const AuthContext = createContext();
 
@@ -161,20 +161,20 @@ const fetchAuth = async () => {
 
   try {
     const response = await fetch('/api/auth/me', request);
-    if (response.status !== 200)
-      return { user: null, isAdmin: false, isError: true };
+    if (response.status !== 200) return { user: null, isAdmin: false, isError: true };
 
     const user = await response.json();
 
-    posthog.identify(
-      user._id,
-      {
-        email: user.email,
-        name: `${user.name.firstName} ${user.name.lastName}`,
-      }
-    );
+    posthog.identify(user._id, {
+      email: user.email,
+      name: `${user.name.firstName} ${user.name.lastName}`,
+    });
 
-    return { user, isAdmin: (user.accessLevel === 'admin' || user.accessLevel === 'superadmin'), isError: false };
+    return {
+      user,
+      isAdmin: user.accessLevel === 'admin' || user.accessLevel === 'superadmin',
+      isError: false,
+    };
   } catch (error) {
     // this should never be hit...
     console.error('fetchAuth - error', error);
