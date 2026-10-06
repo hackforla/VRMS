@@ -11,8 +11,13 @@ const MAILHOG_PORT = Number.parseInt(process.env.MAILHOG_PORT);
 const MAILHOG_USER = process.env.MAILHOG_USER;
 const MAILHOG_PASSWORD = process.env.MAILHOG_PASSWORD;
 
-/** Create an access token to use Google Gmail account as our SMTP provider. */
-const getAccessTokenForGmailAccount = () => {
+/** Create an access token to use Google Gmail account as our SMTP provider.
+ *
+ * Note: OAuth2Client#getAccessToken() is async in google-auth-library v6, so it must be
+ * awaited. Not awaiting it yields a rejected promise (e.g. Google `invalid_grant` when the
+ * stored refresh token is revoked) that nothing handles, which crashes the whole process.
+ */
+const getAccessTokenForGmailAccount = async () => {
   const oauth2Client = new OAuth2(
     CLIENT_ID, // ClientID
     SECRET_ID, // Client Secret
@@ -22,7 +27,7 @@ const getAccessTokenForGmailAccount = () => {
   oauth2Client.setCredentials({
     refresh_token: REFRESH_TOKEN,
   });
-  const accessToken = oauth2Client.getAccessToken();
+  const { token: accessToken } = await oauth2Client.getAccessToken();
   return accessToken;
 };
 
@@ -49,8 +54,8 @@ const createMailhogSmtpTransport = () => {
  *
  * This requires setting up the Gmail account for use. https://tinyurl.com/y4farjwt
  */
-const createGmailSmtpTransport = () => {
-  const accessToken = getAccessTokenForGmailAccount();
+const createGmailSmtpTransport = async () => {
+  const accessToken = await getAccessTokenForGmailAccount();
   const smtpTransport = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -88,21 +93,26 @@ async function sendEmailByTransport(smtpTransport, email, subject, message = '',
 }
 
 /** Returns the appropriate email transport. */
-const getEmailTransport = () => {
-  let smtpTransport;
+const getEmailTransport = async () => {
   if (process.env.NODE_ENV === 'development') {
-    smtpTransport = createMailhogSmtpTransport();
-    return smtpTransport;
+    return createMailhogSmtpTransport();
   }
-  smtpTransport = createGmailSmtpTransport();
-  return smtpTransport;
+  return await createGmailSmtpTransport();
 };
 
-function sendEmail(email, subject, message = '', html = '') {
-  const smtpTransport = getEmailTransport();
-  // As we are using async/await with nodemailer, then we have to catch the promise.
-  // See the nodemailer docs for using async/await https://nodemailer.com/about/
-  sendEmailByTransport(smtpTransport, email, subject, message, html).catch(console.error);
+/** Send an email, swallowing (but logging) any delivery failure.
+ *
+ * Email is a side effect of signin; it must never take the API process down with it.
+ */
+async function sendEmail(email, subject, message = '', html = '') {
+  try {
+    const smtpTransport = await getEmailTransport();
+    // As we are using async/await with nodemailer, then we have to catch the promise.
+    // See the nodemailer docs for using async/await https://nodemailer.com/about/
+    await sendEmailByTransport(smtpTransport, email, subject, message, html);
+  } catch (err) {
+    console.error('sendEmail failed:', err?.message ?? err);
+  }
 }
 
 /** Send user signin link to their email.
@@ -123,7 +133,7 @@ async function sendLoginLink(email, auth_origin, userName, authToken, cookie, or
       <a href=${encodedUri} target="_blank">${encodedUri.substring(0, 32)}...</a>
     </div>
   `;
-  sendEmail(email, subject, '', htmlMessage);
+  await sendEmail(email, subject, '', htmlMessage);
 }
 
 const EmailController = {
