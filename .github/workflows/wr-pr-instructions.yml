@@ -52,7 +52,7 @@ jobs:
           script: |
             const artifact = ${{ steps.artifact.outputs.result }};
 
-            const script = require('./github-actions/pr-instructions/post-comment.js')
+            const script = require('./github-actions/pr-instructions/post-comment.cjs')
             script({g: github, c: context}, artifact)
 
   Last-Workflow-Failure:
