@@ -1,11 +1,11 @@
-import { describe, it, expect, vi, afterEach } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('../models/user.model.js');
 
-import { User } from '../models/index.js';
-import checkUserRouter from './checkUser.router.js';
 import express from 'express';
 import supertest from 'supertest';
+import { User } from '../models/index.js';
+import checkUserRouter from './checkUser.router.js';
 
 const testapp = express();
 testapp.use(express.json());
@@ -53,6 +53,46 @@ describe('Unit tests for checkUser router', () => {
       expect(User.findOne).toHaveBeenCalledWith({ email: 'mockuser@gmail.com' });
       expect(response.status).toBe(200);
       expect(response.body).toEqual({ user: mockUser, auth_origin: auth_origin });
+    });
+
+    it('should return 404 USER_NOT_FOUND when no account matches the email', async () => {
+      User.findOne.mockResolvedValue(null);
+
+      const response = await request
+        .post('/api/checkuser')
+        .send({ email: 'nobody@gmail.com', auth_origin });
+
+      expect(response.status).toBe(404);
+      expect(response.body.code).toBe('USER_NOT_FOUND');
+    });
+
+    it('should return 500 SERVER_ERROR when the lookup itself fails', async () => {
+      User.findOne.mockRejectedValue(new Error('connection lost'));
+
+      const response = await request
+        .post('/api/checkuser')
+        .send({ email: 'mockuser@gmail.com', auth_origin });
+
+      expect(response.status).toBe(500);
+      expect(response.body.code).toBe('SERVER_ERROR');
+    });
+
+    it('should return 400 INVALID_EMAIL when no email is supplied', async () => {
+      const response = await request.post('/api/checkuser').send({ auth_origin });
+
+      expect(User.findOne).not.toHaveBeenCalled();
+      expect(response.status).toBe(400);
+      expect(response.body.code).toBe('INVALID_EMAIL');
+    });
+
+    it('should return 400 INVALID_EMAIL for the string "undefined"', async () => {
+      const response = await request
+        .post('/api/checkuser')
+        .send({ email: 'undefined', auth_origin });
+
+      expect(User.findOne).not.toHaveBeenCalled();
+      expect(response.status).toBe(400);
+      expect(response.body.code).toBe('INVALID_EMAIL');
     });
   });
 
