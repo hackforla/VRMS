@@ -37,8 +37,8 @@ router.post('/', (req, res) => {
   User.findOne({ email })
     .then((user) => {
       if (!user) {
-        return res.status(401).json({
-          code: 'UNAUTHORIZED',
+        return res.status(404).json({
+          code: 'USER_NOT_FOUND',
           message: "We don't recognize your email address.",
         });
       }

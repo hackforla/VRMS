@@ -55,15 +55,15 @@ describe('Unit tests for checkUser router', () => {
       expect(response.body).toEqual({ user: mockUser, auth_origin: auth_origin });
     });
 
-    it('should return 401 UNAUTHORIZED when no account matches the email', async () => {
+    it('should return 404 USER_NOT_FOUND when no account matches the email', async () => {
       User.findOne.mockResolvedValue(null);
 
       const response = await request
         .post('/api/checkuser')
         .send({ email: 'nobody@gmail.com', auth_origin });
 
-      expect(response.status).toBe(401);
-      expect(response.body.code).toBe('UNAUTHORIZED');
+      expect(response.status).toBe(404);
+      expect(response.body.code).toBe('USER_NOT_FOUND');
     });
 
     it('should return 500 INTERNAL_SERVER_ERROR when the lookup itself fails', async () => {
