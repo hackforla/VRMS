@@ -37,7 +37,7 @@ export async function checkUser(email, auth_origin) {
     });
   } catch (error) {
     // Rejects only when no response arrived at all: offline, DNS, server down.
-    console.log('Could not reach the login service');
+    console.log('Cannot reach server');
     console.log(error);
     return { ok: false, code: 'NETWORK_ERROR', status: null };
   }
@@ -46,8 +46,8 @@ export async function checkUser(email, auth_origin) {
 
   if (response.ok) {
     // A 200 with no parsable user is a broken server, not a missing account.
-    if (!body || !body.user) {
-      return { ok: false, code: 'SERVER_ERROR', status: response.status };
+    if (!body?.user) {
+      return { ok: false, code: 'INTERNAL_SERVER_ERROR', status: response.status };
     }
     return { ok: true, user: body.user, auth_origin: body.auth_origin };
   }
@@ -55,7 +55,7 @@ export async function checkUser(email, auth_origin) {
   return {
     ok: false,
     status: response.status,
-    code: body?.code ?? 'SERVER_ERROR',
+    code: body?.code ?? 'INTERNAL_SERVER_ERROR',
     message: body?.message,
   };
 }

@@ -17,7 +17,7 @@ import { User } from '../models/user.model.js';
  *
  *   400 INVALID_EMAIL  - email missing or malformed in the request body
  *   404 USER_NOT_FOUND - no account exists for that email
- *   500 SERVER_ERROR   - database or internal failure; a retry may succeed
+ *   500 INTERNAL_SERVER_ERROR - database or internal failure; a retry may succeed
  *
  * A server that is unreachable produces no status code at all, so the client
  * classifies that case itself (NETWORK_ERROR in user.service.js).
@@ -37,8 +37,8 @@ router.post('/', (req, res) => {
   User.findOne({ email })
     .then((user) => {
       if (!user) {
-        return res.status(404).json({
-          code: 'USER_NOT_FOUND',
+        return res.status(401).json({
+          code: 'UNAUTHORIZED',
           message: "We don't recognize your email address.",
         });
       }
@@ -49,7 +49,7 @@ router.post('/', (req, res) => {
       console.log(err);
 
       return res.status(500).json({
-        code: 'SERVER_ERROR',
+        code: 'INTERNAL_SERVER_ERROR',
         message: 'We’re experiencing technical difficulties. Please try again later.',
       });
     });

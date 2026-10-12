@@ -16,7 +16,7 @@ const AUTH_ERROR_MESSAGES = {
   INVALID_EMAIL: 'Please enter a valid email address',
   USER_NOT_FOUND: 'We don’t recognize your email address. Please, create an account.',
   INSUFFICIENT_ACCESS: "You don't have the correct access level to view the dashboard",
-  SERVER_ERROR: 'We’re experiencing technical difficulties. Please try again later.',
+  INTERNAL_SERVER_ERROR: 'We’re experiencing technical difficulties. Please try again later.',
   NETWORK_ERROR: 'The login service is temporarily unavailable.',
   // This is for future use when we add password-based login.
   // AUTH_CREDENTIALS_ERROR: 'Incorrect email or password.',
@@ -26,7 +26,7 @@ const AUTH_ERROR_MESSAGES = {
  * then to the generic failure when there is nothing usable at all.
  **/
 const messageForError = ({ code, message }) =>
-  AUTH_ERROR_MESSAGES[code] ?? message ?? AUTH_ERROR_MESSAGES.SERVER_ERROR;
+  AUTH_ERROR_MESSAGES[code] ?? message ?? AUTH_ERROR_MESSAGES.INTERNAL_SERVER_ERROR;
 
 /** At the moment only users with the 'admin' accessLevel can login
  * and see the dashboard
