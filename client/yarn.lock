@@ -141,11 +141,6 @@
     "@babel/helper-split-export-declaration" "^7.24.6"
     "@babel/helper-validator-identifier" "^7.24.6"
 
-"@babel/helper-plugin-utils@^7.29.7":
-  version "7.29.7"
-  resolved "https://registry.yarnpkg.com/@babel/helper-plugin-utils/-/helper-plugin-utils-7.29.7.tgz#c0a0766f1a13617d8a17407d7ab8f9d486225ea4"
-  integrity sha512-G7sHYigPY17oO5SYWnfD/0MTBwVR781S/JI643e/JhUYgVgWE/61SoW3NH9KWUKyKq5LVh3npif99Wkt6j86Jw==
-
 "@babel/helper-simple-access@^7.24.6":
   version "7.24.6"
   resolved "https://registry.yarnpkg.com/@babel/helper-simple-access/-/helper-simple-access-7.24.6.tgz#1d6e04d468bba4fc963b4906f6dac6286cfedff1"
@@ -229,13 +224,6 @@
   integrity sha512-6aQR2zGE/QFi8JpDLjUZEPYOs7+mhKXm86VaKFiLP35JQwQb6bwUE+XbvkH0EptsYhbNBSUGaUBLKqxH1xSgsA==
   dependencies:
     "@babel/types" "^7.26.10"
-
-"@babel/plugin-transform-react-jsx-self@^7.29.7":
-  version "7.29.7"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-react-jsx-self/-/plugin-transform-react-jsx-self-7.29.7.tgz#c24424527858220624fd59a5b1eab4fa413c803a"
-  integrity sha512-TL0hMc9xzy86VD31nUiwzd5otRAcyEPcsegCxolO0PvcXuH1v0kECe/UIznYFihpkvU5wg/jk4v0TTEFfm53fw==
-  dependencies:
-    "@babel/helper-plugin-utils" "^7.29.7"
 
 "@babel/runtime@^7.12.5", "@babel/runtime@^7.18.3", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.7":
   version "7.26.10"
@@ -1260,13 +1248,6 @@
   dependencies:
     "@rolldown/pluginutils" "^1.0.1"
     "@swc/core" "^1.15.46"
-
-"@vitejs/plugin-react@^6.1.2":
-  version "6.1.2"
-  resolved "https://registry.yarnpkg.com/@vitejs/plugin-react/-/plugin-react-6.1.2.tgz#924d47e890a78cdf2b72f3f41fe8ab98e089b81e"
-  integrity sha512-fhJNGUdscQa4HkI0xFxwonWyhnVReCPDbXI7FH7jmzpnVCrFQI7PRrhWecO263610vOrs9tr2Y4xcf8uAdFxbw==
-  dependencies:
-    "@rolldown/pluginutils" "^1.0.1"
 
 "@vitest/mocker@5.0.4":
   version "5.0.4"

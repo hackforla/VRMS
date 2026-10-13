@@ -64,7 +64,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3 # Sets up Node.js for build
         with:
-          node-version: 18 # Uses Node.js v18
+          node-version: 24 # Uses Node.js v24 (matches .nvmrc and the Dockerfiles)
           cache: "npm" # Enables npm caching
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v3 # Sets AWS credentials for CLI

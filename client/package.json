@@ -4,7 +4,6 @@
   "description": "VRMS Client",
   "homepage": "https://www.vrms.io",
   "dependencies": {
-    "@babel/plugin-transform-react-jsx-self": "^7.29.7",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^9.5.0",
@@ -12,7 +11,6 @@
     "@mui/system": "^9.5.0",
     "@mui/x-date-pickers": "^9.15.0",
     "@tailwindcss/vite": "^4.3.3",
-    "@vitejs/plugin-react": "^6.1.2",
     "@vitejs/plugin-react-swc": "^4.3.3",
     "classnames": "^2.5.1",
     "cross-env": "^10.1.0",
@@ -70,6 +68,6 @@
     "vitest": "^5.0.4"
   },
   "engines": {
-    "node": "<=18.0.0"
+    "node": ">=24"
   }
 }
