@@ -2,14 +2,15 @@ FROM node:24 AS api-development
 RUN mkdir /srv/backend
 WORKDIR /srv/backend
 RUN mkdir -p node_modules
-COPY package.json yarn.lock ./
+COPY backend/package.json backend/yarn.lock ./
 RUN yarn install --pure-lockfile
-COPY . .
+COPY backend/. .
+COPY shared/ /srv/shared/
 
 FROM node:24 AS api-test
 RUN mkdir /srv/backend
 WORKDIR /srv/backend
-COPY package.json yarn.lock ./
+COPY backend/package.json backend/yarn.lock ./
 RUN yarn install --silent
 RUN mkdir -p node_modules
 
@@ -18,5 +19,6 @@ EXPOSE 4000
 USER node
 WORKDIR /srv/backend
 COPY --from=api-development /srv/backend/node_modules ./node_modules
-COPY . .
+COPY --from=api-development /srv/shared/ /srv/shared/
+COPY backend/. .
 CMD ["npm", "run", "dev"]

@@ -3,7 +3,7 @@ import '../../sass/ManageProjects.scss';
 import useAuth from '../../hooks/useAuth';
 
 import { Button, Typography } from '@mui/material';
-import { ROLES } from '../../../../shared/roles';
+import { ROLES } from '@shared/roles';
 
 const SelectProject = ({ projects }) => {
   const { auth, isAdmin, isSuperAdmin, hasMinimumRole } = useAuth();
@@ -17,12 +17,11 @@ const SelectProject = ({ projects }) => {
       }
 
       // accessLevel is user
-       
+
       return user?.managedProjects.includes(proj._id);
     })
     .sort((a, b) => a.name?.localeCompare(b.name))
     .map((p) => (
-       
       <li className="project-list-item" key={p._id}>
         <Link className="project-list-button" to={`/projects/${p._id}`}>
           {p.name ? p.name : '[unnamed project]'}

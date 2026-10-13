@@ -24,7 +24,7 @@ jobs:
         id: client_build
         uses: docker/build-push-action@v2
         with:
-          context: ./client
+          context: .
           file: ./client/Dockerfile.client
           platforms: linux/amd64
           target: client-production
@@ -38,7 +38,7 @@ jobs:
         id: backend_build
         uses: docker/build-push-action@v2
         with:
-          context: ./backend
+          context: .
           file: ./backend/Dockerfile.api
           platforms: linux/amd64
           target: api-production
