@@ -3,7 +3,6 @@
 
 <p>This document outlines the process for joining our team and contributing to the VRMS Github repository. If you notice errors or have important information to add, please feel free to propose changes to this document with a pull request</p>
 
-
 <h2>Table of Contents</h2>
 
 - [**Part 1 : How to join the team**](#part-1--how-to-join-the-team)
@@ -23,16 +22,18 @@
 - [**Part 4: How to create pull requests**](#part-4-how-to-create-pull-requests)
   - [**4.1 Push changes to your forked repository**](#41-push-changes-to-your-forked-repository)
   - [**4.2 Create a pull request on the VRMS repository**](#42-create-a-pull-request-on-the-vrms-repository)
-
+- [**Part 5: How to review pull requests**](#part-5-how-to-review-pull-requests)
 
 ## **Part 1 : How to join the team**
 
 ### **1.1 VRMS contributor expectations**
+
 - Attend at least 1 team meeting per week
 - Devote a minimum of 6 hours per week to working on VRMS assignments
 - Communicate with the team leadership if you plan to step away from the project
 
 ### **1.2 Reach out to us on Slack**
+
 If you would like to contribute to our project, please reach out to the team leads on Slack or at one of our weekly meetings. You can find the current project team, their slack links, and our team meeting times on the [VRMS Project Details Page](https://www.hackforla.org/projects/vrms).
 
 ### **1.3 Become a member of the repository Team**
@@ -45,58 +46,81 @@ Once you have accepted the GitHub invite (via email or in your GitHub notificati
 
 1. Setup two factor authentication on your account https://github.com/hackforla/governance/issues/20
 
-These steps are manditory in order to contribute to all HackforLA projects.
+These steps are mandatory in order to contribute to all HackforLA projects.
 
 ## **Part 2: How to set up the development environment**
 
 ### **2.1 Fork the repository**
 
-In https://github.com/hackforla/VRMS, look for the fork icon in the top right. Click it and create a fork of the repository.
+_A fork is a copy of the repository that will be placed on your GitHub account url._
 
-For git beginners, a fork is a copy of the repository that will be placed on your GitHub account url.
+- In https://github.com/hackforla/VRMS, look for the fork icon in the top right. Click it and create a fork of the repository.
 
-It should create a copy here: https://github.com/your_GitHub_user_name/vrms, where `your_GitHub_user_name` is replaced with exactly that.
+- It should create a copy here: https://github.com/YOUR_GITHUB_USERNAME/vrms, where `YOUR_GITHUB_USERNAME` is replaced with your github username.
 
-Note that this copy is on a remote server on the GitHub website and not on your computer yet.
+> NOTE: This copy is on a remote server on the GitHub website and not on your computer yet.
 
-If you click the icon again, it will not create a new fork but instead give you the URL associated with your fork.
+- Click the icon again, it will give you the URL associated with your forked repository and not create a new fork.
 
 ### **2.2 Clone the remote repository to your local computer**
 
 The following process will make a copy of the fork that you just created on your local computer.
 
-First create a new folder on your local computer that will contain `hackforla` projects.
+1. Create a new folder on your local computer that will contain `hackforla` projects.
 
-In your shell, navigate there then run the following commands:
+2. In your shell (terminal), navigate to this folder then run the following commands:
 
-```bash
-git clone https://github.com/your_GitHub_user_name/vrms.git
-```
+   ```bash
+   git clone https://github.com/YOUR_GITHUB_USERNAME/vrms.git
+   ```
 
-You should now have a new folder in your `hackforla` folder called `vrms`.
+   You should now have a new folder in your `hackforla` folder called `vrms`.
 
-Verify which URL your `origin` remote is pointing to:
+3. Verify which URL your `origin` remote is pointing to:
 
-```bash
-git remote show origin
-```
+   ```bash
+   git remote show origin
+   ```
 
-If you accidentally cloned the `hackforla/vrms.git` then you can change your local copy to upload to your fork with the following:
+   Your terminal should return:
 
-```bash
-git remote set-url origin https://github.com/your_user_name/vrms.git
-```
+   ```bash
+   remote origin
+   Fetch URL: https://github.com/YOUR_GITHUB_USERNAME/vrms.git
+   Push URL: https://github.com/YOUR_GITHUB_USERNAME/vrms.git
+   ...
+   ```
 
-Add another remote called `vrms` that points to the `hackforla` version of the repository. This will allow you to incorporate changes later:
+   If you accidentally cloned the `hackforla/vrms.git` then you can change your local copy to upload to your fork with the following:
 
-```bash
-git remote add vrms https://github.com/hackforla/vrms.git
-```
+   ```bash
+   git remote set-url origin https://github.com/YOUR_GITHUB_USERNAME/vrms.git
+   ```
 
-Note: Understanding how git remotes work will make collaborating much easier. You can learn more about remotes [here](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/configuring-a-remote-for-a-fork) and [here](https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes)
+4. Add another remote called `vrms` that points to the `hackforla` version of the repository. This will allow you to incorporate changes later:
+   ```bash
+   git remote add vrms https://github.com/hackforla/vrms.git
+   ```
 
+Note: Understanding how git remotes work will make collaborating much easier. You can learn more about remotes [here](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/configuring-a-remote-for-a-fork) and [here](https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes).
 
-### **2.3 Get up and running**   
+### **2.3 Get up and running**
+
+1. Install [NVM (Node Version Manager)](https://github.com/nvm-sh/nvm). NVM allows you to easily manage and switch between multiple versions of Node.
+
+   - Verify the installation: `nvm --version`
+   - Once NVM is verified, run the following commands from the root of the project:
+
+   ```
+   # Install the project's Node version (specified in the .nvmrc file)
+   nvm install
+
+   # Instruct NVM to use the Node version defined in the .nvmrc file
+   nvm use
+
+   ```
+
+   > NOTE: If the major version of Node does not match the version specified in the .nvmrc file, you may need to be explicit with the version and use: `nvm install <version>` and `nvm use <version>`
 
 1. Have [Node](https://nodejs.org/en/download/) and NPM installed locally:
 
@@ -114,21 +138,32 @@ Note: Understanding how git remotes work will make collaborating much easier. Yo
 
    - `cd vrms/` and run `yarn install`
    - `cd client` and run `yarn install`
-   - `cd client-mvp-04` and run `yarn install`
    - `cd ../backend` and run `yarn install`
 
 1. Add your required environment variables for the frontend and backend directories:
 
    - `touch vrms/backend/.env`
    - `touch vrms/client/.env`
-   - `touch vrms/client-mvp-04/.env`
 
-   Note 1: In the above example you are trying to create an empty file called `.env` in each of the listed directories: backend, client and client-mvp-04. You can use either `touch <path-to-directory> .env` or navigate to the directory and use `touch .env`
+   Note 1: In the above example you are trying to create an empty file called `.env` in each of the listed directories: backend and client. You can use either `touch <path-to-directory> .env` or navigate to the directory and use `touch .env`
 
    Note 2: `touch` is a Unix/Linux or Mac command; It is not available in Windows. In Windows, use a text editor (e.g. Notepad) to create an empty file and save it in each of the locations as `.env` . (If you use Windows Explorer to create the file it will create a file called `.env.txt`, which will not work.)
 
-   - Then paste the content from the [document](https://docs.google.com/document/d/1yDF6UmyO-MPNrl3y_Mw0mkm_WaixlSkXzWbudCzHXDY/edit?usp=sharing). It is accessible for the project team members only.
+   - Then paste the content from the [document](https://docs.google.com/document/d/1PdcZhyo2a2lr0JNcgyzpWi98tGkZeH1Zxz-Jnf6JQDU/edit?usp=sharing). It is accessible for the project team members only.
+
    - _Please note that the `ports` for the frontend and backend are set in this location_
+
+1. Set up Husky for Git hooks (required for all contributors):
+
+   To help enforce code quality and prevent errors from being committed, we use [Husky](https://typicode.github.io/husky/) to manage Git hooks. Husky should install itself automatically after you install dependencies (thanks to the `prepare` script in `package.json`).
+
+   If you notice that Git hooks are not working (for example, you don't see linting or formatting checks when committing), you may need to set up Husky manually. To do this, run the following in the root of the project:
+
+   ```sh
+   npx husky install
+   ```
+
+   If you encounter issues, see the [Husky documentation](https://typicode.github.io/husky/#/) or reach out on Slack!
 
 1. Take a second to review the `app.js` and `server.js` files in the `vrms/backend` folder. These two files are a blueprint for the back end, so please familiarize yourself with it. You'll see folders for the database collection models, routes for the API, and a config file which loads the necessary environment variables.
 
@@ -138,16 +173,15 @@ Note: Understanding how git remotes work will make collaborating much easier. Yo
 
    - Navigate to the root of the application `vrms/` and run `yarn start`
 
-   *Troubleshooting :* If you encounter the following error after running `yarn start`:
-   
-      ```
-      Error: error:0308010C:digital envelope routines::unsupported
-      ```
+   _Troubleshooting :_ If you encounter the following error after running `yarn start`:
+
+   ```
+   Error: error:0308010C:digital envelope routines::unsupported
+   ```
+
    Try changing your node version to `16.14.2` by running `nvm use 16.14.2`. If you do not have `nvm` installed, see [install instructions](https://github.com/nvm-sh/nvm#installing-and-updating)
 
-
 You should now have a live app. Happy hacking.
-
 
 ### **2.4 Running Tests**
 
@@ -158,76 +192,164 @@ To run all of the tests run `npm run test:all` from the root folder.
 
 ### **2.5 Using the development database**
 
-The application uses MongoDB. We have created a shared development database using MongoDB Cloud and MongoDB Atlas. The conection string for the development database is included in the environmental variables that you pasted into your backend/.env file in step 5 of the "Get Up and Running" setion. If you completed that step successfully you should not need to do anything else.
+The application uses MongoDB. We have created a shared development database using MongoDB Cloud and MongoDB Atlas. The connection string for the development database is included in the environmental variables that you pasted into your backend/.env file in step 5 of the "Get Up and Running" section. If you completed that step successfully you should not need to do anything else.
 
 To view and edit the development database manually, you can download [MongoDB Compass](https://www.mongodb.com/try/download/compass). To connect to the development database you will use the "DATABASE_URL" from the [document](https://docs.google.com/document/d/1yDF6UmyO-MPNrl3y_Mw0mkm_WaixlSkXzWbudCzHXDY/edit?usp=sharing) that contained the environmental variables. The string will start with "mongodb+srv://".
 
 If you want to install a local copy to experiment with and learn more about MongoDB, you can use [this tutorial](https://zellwk.com/blog/local-mongodb/)
 
-
-
 ## **Part 3: How to work on issues**
-
 
 ### **3.1 Claim an Issue**
 
-Developers may assign themselves to issues from the [Prioritized Backlog column](https://github.com/hackforla/VRMS/projects/12#column-19074778) of the project board.
+Developers may assign themselves to issues from the [Prioritized Backlog column](https://github.com/orgs/hackforla/projects/72/views/1?filterQuery=backlog) of the project board.
 
 The Prioritized Backlog column is filtered so the first (top) issue has the highest priority and should be worked on next if possible.
 
 Developers may choose from issues with the following `role` labels:
+
 - `role: Front End`
 - `role: Back End`
 - `role: Database`
+- `role: devops`
+- _Lead developers may choose from the above labels, as well as issues with the label:_ `role: Dev Lead`
 
 Claiming an issue is a two step process:
+
 1. Assign yourself to the issue using the gear icon in the upper right corner of the issue where it says "Assignees"
 2. Move the issue from the `Prioritized Backlog` to the `In Progress` column of the project board
 
+You may want to consider bookmarking your Github Issues page to track your current tasks:
+[https://github.com/issues/assigned](https://github.com/issues/assigned)
 
 ### **3.2 Create a new branch for each issue you work on**
-Create a new branch for each issue you work on. Doing all your work on feature branches leaves your repository's main branch unmodified and greatly simplifies keeping your fork in sync with the main project.
 
+You will create a new branch for each issue you work on. Doing all your work on feature branches leaves your repository's main branch unmodified and greatly simplifies keeping your fork in sync with the main project.
 
-Before creating a new branch, always make sure you are currently on the `development` branch by using the command 
-```
-git branch
-```
-Before creating a new branch, always pull down the latest changes from the `development` branch by using the command
-```
-git pull vrms development
-```
-Finally, create a new branch where you will work on your issue by using the command 
-```
-git checkout -b your-branch-name
-```
+1. Before creating a new branch, always make sure you are currently on the `development` branch by using the command
+   ```bash
+   git branch
+   ```
+2. Before creating a new branch, always pull down the latest changes from the `development` branch by using the command
+   ```bash
+   git pull vrms development
+   ```
+3. Finally, create a new branch where you will work on your issue by using the command:
+   ```bash
+   git checkout -b your-branch-name
+   ```
+
+### **3.2.1 Check for and resolve linting/prettier errors before making changes**
+
+Before you begin working on any part of a file, always check for existing code errors in the codebase. This helps prevent introducing new issues and ensures a stable foundation for your work.
+
+- Use your code editor's error checking tools or run the appropriate linting/compilation commands (e.g., `yarn lint (filename)`, or your IDE's error panel) to identify any errors in the files you plan to edit. (This isn't your fault, it's just an old codebase 🤷‍️)
+- If you find errors, resolve them in a **separate commit** before starting your feature or fix work. Use a clear commit message such as:
+
+> fix: Resolve existing linting and compilation errors
+
+(This makes it easier for reviewers to distinguish between error fixes and your new changes.)
+
+- If you are unsure how to fix an error, ask for help in the team Slack channel or consult the documentation.
+- Only begin implementing new features or fixes after confirming the file is error-free.
+- If you are unable to resolve the errors after making a reasonable effort, it is acceptable to use `--no-verify` when committing or pushing your changes. Please leave a comment in your pull request explaining why this was necessary.
 
 ### **3.3 Work on the Issue**
+
 Every issue will contain action items you must complete before you are ready to submit a pull request. Be sure to use the checkboxes as you complete each action item so we can track your progress!
 
-
 After you have completed the action items, add and commit the changes to your new branch using the commands
+
 ```
 git add .
 git commit -m "your commit message"
-``` 
-
+```
 
 ## **Part 4: How to create pull requests**
+
 ### **4.1 Push changes to your forked repository**
-Before pushing code, always pull down the latest changes from the `development` branch by using the command
-```
-git pull vrms development
-```
-Once you are satisfied with your changes, push them to the feature branch you made within your remote repository.
-```
-git push --set-upstream origin your-branch-name
-```
+
+1. Before pushing code, always pull down the latest changes from the `development` branch by using the command
+   ```
+   git pull vrms development
+   ```
+2. Once you are satisfied with your changes, push them to the feature branch you made within your remote repository.
+   ```
+   git push --set-upstream origin your-branch-name
+   ```
+
 ### **4.2 Create a pull request on the VRMS repository**
+
 1. Go to your fork of the VRMS repository on GitHub and click on the `Compare & pull request` button. <details><summary>See screenshot</summary> <img src="https://user-images.githubusercontent.com/73561520/220488394-09bc759e-98d9-4a09-86c6-66378cf50923.png"/></details>
 2. Be sure to title your pull request by summarizing the changes you made
 3. Be sure to add your issue number where the template says `Fixes #replace_this_text_with_the_issue_number`
 4. Fill out the "What changes did you make and why?" section of the pull request template
 5. Include before & after images with your pull request if there are visual changes to the user interface
 6. Request a review from another developer on the team
-7. Review another developers pull request while you are waiting for your pull request to be reviewed
+7. Review another developer's pull request while you are waiting for your pull request to be reviewed
+
+## **Part 5: How to review pull requests**
+
+Reviewing pull requests is an important part of maintaining code quality and helping team members improve their contributions. Here’s how to review a pull request on the VRMS repository:
+
+1. **Navigate to the Pull Requests tab**  
+   Go to the [Pull Requests](https://github.com/hackforla/VRMS/pulls) section of the repository to see open pull requests.
+
+2. **Select a pull request to review**  
+   Choose a pull request that is ready for review (look for those assigned to you or marked as "Ready for review").
+
+3. **Read the pull request description**  
+   Review the summary, linked issue(s), and any screenshots or documentation provided by the author.
+
+4. **Check the code changes**
+
+   - Click on the "Files changed" tab to see the code diff.
+   - Look for code quality, readability, and adherence to project conventions.
+   - Ensure the code addresses the issue and does not introduce bugs.
+
+5. **Run the code locally (optional but recommended)**
+
+   - Pull the branch to your local machine.
+   - Follow the setup instructions to test the changes.
+   - Run tests to verify nothing is broken.
+
+6. **Leave feedback**
+
+   - Use GitHub’s review tools to comment on specific lines or leave general feedback.
+   - Be constructive and respectful in your comments.
+
+7. **Approve or request changes**
+
+   - If the pull request is ready, click "Approve".
+   - If changes are needed, click "Request changes" and specify what needs to be addressed.
+
+8. **Merge the pull request (if authorized)**
+   - If you have permission and the pull request meets all requirements, you may merge it.
+   - Otherwise, notify the author or a maintainer that it is ready to merge.
+
+**Tip:** You can use the following helpful git alias to quickly check out a pull request locally:
+
+```sh
+# This git alias allows you to quickly check out a pull request by its number.
+# eg "git pr 1820 vrms"
+git config alias.pr '!f() { \
+  # If no arguments are provided, print usage instructions
+  if [ $# -lt 1 ]; then \
+    echo "Usage: git pr <id> [<remote>] # assuming <remote>[=origin] is on GitHub"; \
+    echo "    eg: git pr 1340 upstream"; \
+  else \
+    # Save current HEAD (optional, for safety)
+    git checkout -q "$(git rev-parse --verify HEAD)" && \
+    # Fetch the pull request from the specified remote (default: origin) into a local branch
+    git fetch -fv "${2:-origin}" pull/"$1"/head:pr/"$1" && \
+    # Check out the fetched PR branch
+    git checkout pr/"$1"; \
+  fi; \
+}; f'
+```
+
+This allows you to run `git pr <PR_NUMBER>` to fetch and check out a pull request by its number. For example: `git pr 1234 upstream`.
+
+**Resources:**
+
+- [GitHub: Reviewing proposed changes in a pull request](https://docs.github.com/en/github/collaborating-with-pull-requests/reviewing-changes-in-pull-requests)

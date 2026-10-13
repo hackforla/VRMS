@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 mongoose.Promise = global.Promise;
 
@@ -63,7 +63,7 @@ eventSchema.methods.serialize = function() {
 
 const Event = mongoose.model('Event', eventSchema);
 
-module.exports = { Event };
+export { Event };
 
 
 

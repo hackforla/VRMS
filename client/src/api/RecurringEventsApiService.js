@@ -11,7 +11,7 @@ class RecurringEventsApiService {
 
   async fetchRecurringEvents() {
     try {
-      const res = await fetch(this.baseUrl, {
+      const res = await fetch(`${this.baseUrl}/internal`, {
         headers: this.headers,
       });
       return await res.json();

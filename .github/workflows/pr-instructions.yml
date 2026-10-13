@@ -9,7 +9,7 @@ jobs:
   Add-Pull-Request-Instructions:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       # Create the message to post
       - name: Create Instruction
@@ -17,7 +17,7 @@ jobs:
         id: instruction
         with:
           script: |
-            const script = require('./github-actions/pr-instructions/create-instruction.js')
+            const script = require('./github-actions/pr-instructions/create-instruction.cjs')
             const instruction = script({g: github, c: context})
             return JSON.stringify({ instruction: instruction, issueNum: context.payload.number })
       
@@ -28,7 +28,7 @@ jobs:
           echo ${{ steps.instruction.outputs.result }} > addingPrInstructions/artifact/artifact.txt
       
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: adding-pr-instructions-artifact
           path: addingPrInstructions/artifact/

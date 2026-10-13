@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 mongoose.Promise = global.Promise;
 
@@ -30,7 +30,7 @@ questionSchema.methods.serialize = function() {
 
 const Question = mongoose.model('Question', questionSchema);
 
-module.exports = { Question };
+export { Question };
 
 
 

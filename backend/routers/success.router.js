@@ -1,8 +1,8 @@
-const express = require("express");
+import express from 'express';
 const router = express.Router();
-const cors = require("cors");
+import cors from 'cors';
 
-const { Event } = require('../models/event.model');
+import { Event } from '../models/event.model.js';
 
 // GET /api/recurringevents/
 router.get("/", cors(), (req, res) => {
@@ -29,4 +29,4 @@ router.get("/", cors(), (req, res) => {
   });
 });
 
-module.exports = router;
+export default router;

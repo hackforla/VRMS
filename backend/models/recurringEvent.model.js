@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 mongoose.Promise = global.Promise;
 
@@ -59,7 +59,7 @@ recurringEventSchema.methods.serialize = function() {
 
 const RecurringEvent = mongoose.model('RecurringEvent', recurringEventSchema);
 
-module.exports = { RecurringEvent };
+export { RecurringEvent };
 
 
 

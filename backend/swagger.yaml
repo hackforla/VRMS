@@ -1,0 +1,2146 @@
+openapi: 3.0.3
+info:
+  title: VRMS API
+  description: |
+    Volunteer Relationship Management System (VRMS) API for Hack for LA.
+
+    ## Authentication
+    Most endpoints require the custom header `x-customrequired-header`.
+    Auth endpoints use JWT tokens via `x-access-token` header or `Authorization: Bearer <token>`,
+    and refresh tokens stored in httpOnly cookies.
+
+    **Exempt from custom header:**
+    - `GET /api/recurringevents`
+    - `GET /api/healthcheck`
+  version: 1.0.0
+  contact:
+    name: Hack for LA
+    url: https://www.hackforla.org
+
+servers:
+  - url: /api
+    description: API base path
+
+tags:
+  - name: Auth
+    description: Authentication and session management
+  - name: Users
+    description: User management
+  - name: Events
+    description: One-time event management
+  - name: RecurringEvents
+    description: Recurring event management
+  - name: CheckIns
+    description: Event attendance check-ins
+  - name: Projects
+    description: Project management
+  - name: ProjectTeamMembers
+    description: Project team membership
+  - name: Questions
+    description: Survey/form questions
+  - name: CheckUser
+    description: User existence check utility
+  - name: GrantPermission
+    description: Google Drive and GitHub permission grants
+  - name: HealthCheck
+    description: Service health check
+
+components:
+  securitySchemes:
+    CustomHeader:
+      type: apiKey
+      in: header
+      name: x-customrequired-header
+      description: Required custom header for most endpoints
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT access token
+    AccessTokenHeader:
+      type: apiKey
+      in: header
+      name: x-access-token
+      description: JWT access token (alternative to Bearer)
+    CookieAuth:
+      type: apiKey
+      in: cookie
+      name: token
+      description: JWT token stored in httpOnly cookie
+    RefreshTokenCookie:
+      type: apiKey
+      in: cookie
+      name: refresh_token
+      description: Refresh token stored in httpOnly cookie
+
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: MongoDB ObjectId
+        name:
+          type: object
+          properties:
+            firstName:
+              type: string
+            lastName:
+              type: string
+        email:
+          type: string
+          format: email
+        accessLevel:
+          type: string
+          enum: [user, admin, superadmin]
+          default: user
+        role:
+          type: string
+        createdDate:
+          type: string
+          format: date-time
+        currentRole:
+          type: string
+        desiredRole:
+          type: string
+        newMember:
+          type: boolean
+        currentJobTitle:
+          type: string
+        desiredJobTitle:
+          type: string
+        skillsToMatch:
+          type: array
+          items:
+            type: string
+        firstAttended:
+          type: string
+        attendanceReason:
+          type: string
+        projects:
+          type: array
+          items:
+            type: string
+            description: Project ObjectId
+        githubHandle:
+          type: string
+        phone:
+          type: string
+        textingOk:
+          type: boolean
+          default: false
+        slackName:
+          type: string
+        isHflaGithubMember:
+          type: boolean
+        githubPublic2FA:
+          type: boolean
+        availability:
+          type: string
+        managedProjects:
+          type: array
+          items:
+            type: string
+        isActive:
+          type: boolean
+          default: true
+
+    UserCreateRequest:
+      type: object
+      required:
+        - name
+        - email
+      properties:
+        name:
+          type: object
+          required:
+            - firstName
+            - lastName
+          properties:
+            firstName:
+              type: string
+              minLength: 1
+            lastName:
+              type: string
+              minLength: 1
+        email:
+          type: string
+          format: email
+
+    Event:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        location:
+          $ref: '#/components/schemas/Location'
+        hacknight:
+          type: string
+          enum: [DTLA, Westside, South LA, Online]
+        eventType:
+          type: string
+          enum: [Project Meeting, Orientation, Workshop]
+        description:
+          type: string
+        project:
+          oneOf:
+            - type: string
+              description: Project ObjectId
+            - $ref: '#/components/schemas/Project'
+        date:
+          type: string
+          format: date-time
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        hours:
+          type: number
+        createdDate:
+          type: string
+          format: date-time
+        updatedDate:
+          type: string
+          format: date-time
+        checkInReady:
+          type: boolean
+          default: false
+        videoConferenceLink:
+          type: string
+        owner:
+          type: object
+          properties:
+            ownerId:
+              type: number
+        recurringEventLink:
+          type: object
+          properties:
+            recurringEventId:
+              type: string
+
+    RecurringEvent:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        location:
+          $ref: '#/components/schemas/Location'
+        hacknight:
+          type: string
+          enum: [DTLA, Westside, South LA, Online]
+        brigade:
+          type: string
+          default: Hack for LA
+        eventType:
+          type: string
+          enum: [Project Meeting, Orientation, Workshop]
+        description:
+          type: string
+        project:
+          oneOf:
+            - type: string
+            - $ref: '#/components/schemas/Project'
+        date:
+          type: string
+          format: date-time
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        hours:
+          type: number
+        createdDate:
+          type: string
+          format: date-time
+        updatedDate:
+          type: string
+          format: date-time
+        checkInReady:
+          type: boolean
+          default: false
+        videoConferenceLink:
+          type: string
+        owner:
+          type: object
+          properties:
+            ownerId:
+              type: string
+              default: '123456'
+
+    Project:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        githubIdentifier:
+          type: string
+        projectStatus:
+          type: string
+          enum: [Active, Completed, Paused]
+        location:
+          type: string
+          enum: [DTLA, Westside, South LA, Remote]
+        createdDate:
+          type: string
+          format: date-time
+        completedDate:
+          type: string
+          format: date-time
+        githubUrl:
+          type: string
+        slackUrl:
+          type: string
+        googleDriveUrl:
+          type: string
+        googleDriveId:
+          type: string
+        hflaWebsiteUrl:
+          type: string
+        videoConferenceLink:
+          type: string
+        lookingDescription:
+          type: string
+        recruitingCategories:
+          type: array
+          items:
+            type: string
+        partners:
+          type: array
+          items:
+            type: string
+        managedByUsers:
+          type: array
+          items:
+            type: string
+        onboardOffboardVisible:
+          type: boolean
+          default: true
+
+    CheckIn:
+      type: object
+      properties:
+        _id:
+          type: string
+        userId:
+          type: string
+        eventId:
+          type: string
+        checkedIn:
+          type: boolean
+          default: true
+        createdDate:
+          type: string
+          format: date-time
+
+    Question:
+      type: object
+      properties:
+        _id:
+          type: string
+        questionText:
+          type: string
+        htmlName:
+          type: string
+        answers:
+          type: object
+          properties:
+            answerOneText:
+              type: string
+            answerTwoText:
+              type: string
+            answerThreeText:
+              type: string
+            answerFourText:
+              type: string
+
+    ProjectTeamMember:
+      type: object
+      properties:
+        _id:
+          type: string
+        userId:
+          type: string
+        projectId:
+          type: string
+        teamMemberStatus:
+          type: string
+          enum: [Active, Inactive]
+        vrmsProjectAdmin:
+          type: boolean
+        roleOnProject:
+          type: string
+          enum: [Developer, Project Manager, UX, Data Science]
+        joinedDate:
+          type: string
+          format: date-time
+        leftDate:
+          type: string
+          format: date-time
+        leftReason:
+          type: string
+          enum: [project completed, switched projects, no-show]
+        githubPermissionLevel:
+          type: string
+          enum: [Write, Triage, Read, Maintainer, Admin]
+        onProjectGithub:
+          type: boolean
+          default: false
+        onProjectGoogleDrive:
+          type: boolean
+          default: false
+
+    Location:
+      type: object
+      properties:
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+
+    AuthTokenResponse:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        expiresAt:
+          type: string
+          format: date-time
+
+    ValidationError:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              value:
+                type: string
+              msg:
+                type: string
+              param:
+                type: string
+              location:
+                type: string
+
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+
+security:
+  - CustomHeader: []
+
+paths:
+  # ─── Auth ──────────────────────────────────────────────
+  /auth/signup:
+    post:
+      tags: [Auth]
+      summary: Sign up a new user
+      description: Creates a new user account and sends a magic login link via email.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [firstName, lastName, email]
+              properties:
+                firstName:
+                  type: string
+                  minLength: 1
+                lastName:
+                  type: string
+                  minLength: 1
+                email:
+                  type: string
+                  format: email
+      responses:
+        '201':
+          description: User created, login link sent via email
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '409':
+          description: Email already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/signin:
+    post:
+      tags: [Auth]
+      summary: Sign in an existing user
+      description: Sends a magic login link to the user's email.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email:
+                  type: string
+                  format: email
+                auth_origin:
+                  type: string
+                  description: Origin of the auth request (e.g., app URL)
+      responses:
+        '200':
+          description: Login link sent via email
+        '400':
+          description: Bad request or user not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+
+  /auth/verify-signin:
+    post:
+      tags: [Auth]
+      summary: Verify magic login link
+      description: |
+        Verifies the JWT token from the magic link, creates a refresh token,
+        and sets httpOnly cookies (`token` and `refresh_token`).
+      security:
+        - CustomHeader: []
+          BearerAuth: []
+        - CustomHeader: []
+          AccessTokenHeader: []
+      responses:
+        '200':
+          description: Successfully verified
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthTokenResponse'
+          headers:
+            Set-Cookie:
+              description: Sets `token` and `refresh_token` httpOnly cookies
+              schema:
+                type: string
+        '403':
+          description: Invalid or expired token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/me:
+    post:
+      tags: [Auth]
+      summary: Get current authenticated user
+      description: Returns the currently authenticated user based on JWT token.
+      security:
+        - CustomHeader: []
+          BearerAuth: []
+        - CustomHeader: []
+          CookieAuth: []
+      responses:
+        '200':
+          description: Current user info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/refresh-access-token:
+    post:
+      tags: [Auth]
+      summary: Refresh access token
+      description: Uses the refresh token cookie to issue a new access token.
+      security:
+        - CustomHeader: []
+          RefreshTokenCookie: []
+      responses:
+        '200':
+          description: New access token issued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthTokenResponse'
+          headers:
+            Set-Cookie:
+              description: Updated `token` cookie
+              schema:
+                type: string
+        '401':
+          description: Invalid or expired refresh token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/logout:
+    post:
+      tags: [Auth]
+      summary: Log out
+      description: Deletes the refresh token and clears auth cookies.
+      security:
+        - CustomHeader: []
+          RefreshTokenCookie: []
+      responses:
+        '200':
+          description: Successfully logged out
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Successfully logged out.
+        '401':
+          description: Invalid refresh token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # ─── Users ─────────────────────────────────────────────
+  /users:
+    get:
+      tags: [Users]
+      summary: List all users
+      description: Returns all users, optionally filtered by query parameters.
+      parameters:
+        - in: query
+          name: email
+          schema:
+            type: string
+          description: Filter by email address
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags: [Users]
+      summary: Create a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateRequest'
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Duplicate email
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: A user already exists with that email address.
+
+  /users/admins:
+    get:
+      tags: [Users]
+      summary: List admin users
+      description: Returns users with accessLevel 'admin' or 'superadmin'.
+      responses:
+        '200':
+          description: List of admin users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /users/projectManagers:
+    get:
+      tags: [Users]
+      summary: List project managers
+      description: |
+        Returns users who have managedProjects. Adds computed fields
+        `isProjectLead` and `managedProjectNames` to each result.
+      responses:
+        '200':
+          description: List of project managers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/User'
+                    - type: object
+                      properties:
+                        isProjectLead:
+                          type: boolean
+                        managedProjectNames:
+                          type: array
+                          items:
+                            type: string
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /users/id/{UserId}:
+    get:
+      tags: [Users]
+      summary: Get user by ID
+      parameters:
+        - in: path
+          name: UserId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /users/email/{email}:
+    get:
+      tags: [Users]
+      summary: Get user by email
+      parameters:
+        - in: path
+          name: email
+          required: true
+          schema:
+            type: string
+            format: email
+      responses:
+        '200':
+          description: Users matching email
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /users/{UserId}:
+    patch:
+      tags: [Users]
+      summary: Update a user
+      description: Requires admin role.
+      security:
+        - CustomHeader: []
+          BearerAuth: []
+      parameters:
+        - in: path
+          name: UserId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Not authenticated
+        '403':
+          description: Insufficient permissions
+    delete:
+      tags: [Users]
+      summary: Delete a user
+      description: Requires admin role.
+      security:
+        - CustomHeader: []
+          BearerAuth: []
+      parameters:
+        - in: path
+          name: UserId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Not authenticated
+        '403':
+          description: Insufficient permissions
+
+  /users/{UserId}/managedProjects:
+    patch:
+      tags: [Users]
+      summary: Add or remove a managed project
+      parameters:
+        - in: path
+          name: UserId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [action, projectId]
+              properties:
+                action:
+                  type: string
+                  enum: [add, remove]
+                projectId:
+                  type: string
+      responses:
+        '200':
+          description: Managed project updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+                  project:
+                    $ref: '#/components/schemas/Project'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /users/bulk-updates:
+    post:
+      tags: [Users]
+      summary: Bulk update managed projects
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [bulkOps]
+              properties:
+                bulkOps:
+                  type: array
+                  items:
+                    type: object
+                  description: Array of MongoDB bulk write operations
+      responses:
+        '200':
+          description: Bulk update result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: number
+                  nModified:
+                    type: number
+                  n:
+                    type: number
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # ─── Events ────────────────────────────────────────────
+  /events:
+    get:
+      tags: [Events]
+      summary: List all events
+      description: Returns all events with populated project data. Supports query filtering.
+      responses:
+        '200':
+          description: List of events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags: [Events]
+      summary: Create event(s)
+      description: Accepts a single event object or an array for batch creation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/Event'
+                - type: array
+                  items:
+                    $ref: '#/components/schemas/Event'
+      responses:
+        '201':
+          description: Event(s) created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/Event'
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/Event'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /events/{EventId}:
+    get:
+      tags: [Events]
+      summary: Get event by ID
+      parameters:
+        - in: path
+          name: EventId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Event found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      tags: [Events]
+      summary: Update an event
+      parameters:
+        - in: path
+          name: EventId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+      responses:
+        '200':
+          description: Event updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags: [Events]
+      summary: Delete an event
+      parameters:
+        - in: path
+          name: EventId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Event deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /events/batchUpdate:
+    patch:
+      tags: [Events]
+      summary: Batch update events
+      description: Updates checkInReady status for multiple events at once.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                required: [_id, checkInReady]
+                properties:
+                  _id:
+                    type: string
+                  checkInReady:
+                    type: boolean
+      responses:
+        '200':
+          description: Batch update result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: number
+                  nModified:
+                    type: number
+                  n:
+                    type: number
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /events/nexteventbyproject/{id}:
+    get:
+      tags: [Events]
+      summary: Get last event for a project
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Project ID
+      responses:
+        '200':
+          description: Last event for the project
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # ─── Recurring Events ─────────────────────────────────
+  /recurringevents:
+    get:
+      tags: [RecurringEvents]
+      summary: List all recurring events (public)
+      description: |
+        Returns all recurring events with project populated.
+        Excludes `videoConferenceLink` field. CORS enabled.
+        Does NOT require the custom header.
+      security: []
+      responses:
+        '200':
+          description: List of recurring events (without videoConferenceLink)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecurringEvent'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags: [RecurringEvents]
+      summary: Create a recurring event
+      description: Requires cookie-based authentication.
+      security:
+        - CustomHeader: []
+          CookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecurringEvent'
+      responses:
+        '200':
+          description: Recurring event created (note - returns 200, not 201)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecurringEvent'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /recurringevents/internal:
+    get:
+      tags: [RecurringEvents]
+      summary: List all recurring events (internal)
+      description: Returns all recurring events including videoConferenceLink.
+      responses:
+        '200':
+          description: List of recurring events (with videoConferenceLink)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecurringEvent'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /recurringevents/{id}:
+    get:
+      tags: [RecurringEvents]
+      summary: Get recurring event by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Recurring event found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecurringEvent'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /recurringevents/{RecurringEventId}:
+    patch:
+      tags: [RecurringEvents]
+      summary: Update a recurring event
+      description: Requires cookie-based authentication.
+      security:
+        - CustomHeader: []
+          CookieAuth: []
+      parameters:
+        - in: path
+          name: RecurringEventId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecurringEvent'
+      responses:
+        '200':
+          description: Recurring event updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecurringEvent'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags: [RecurringEvents]
+      summary: Delete a recurring event
+      description: Requires cookie-based authentication.
+      security:
+        - CustomHeader: []
+          CookieAuth: []
+      parameters:
+        - in: path
+          name: RecurringEventId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Recurring event deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecurringEvent'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # ─── Check-Ins ─────────────────────────────────────────
+  /checkins:
+    get:
+      tags: [CheckIns]
+      summary: List all check-ins
+      responses:
+        '200':
+          description: List of check-ins
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CheckIn'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags: [CheckIns]
+      summary: Create a check-in
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [userId, eventId]
+              properties:
+                userId:
+                  type: string
+                eventId:
+                  type: string
+                checkedIn:
+                  type: boolean
+                  default: true
+      responses:
+        '201':
+          description: Check-in created
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /checkins/{id}:
+    get:
+      tags: [CheckIns]
+      summary: Get check-in by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Check-in found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckIn'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /checkins/findEvent/{id}:
+    get:
+      tags: [CheckIns]
+      summary: Get check-ins for an event
+      description: Returns check-ins for the given event ID with userId populated as a User object.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Event ID
+      responses:
+        '200':
+          description: Check-ins for the event
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/CheckIn'
+                    - type: object
+                      properties:
+                        userId:
+                          $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # ─── Projects ──────────────────────────────────────────
+  /projects:
+    get:
+      tags: [Projects]
+      summary: List all projects
+      responses:
+        '200':
+          description: List of projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Project'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      tags: [Projects]
+      summary: Filter projects by PM list
+      description: Returns projects filtered by the provided array of project IDs.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+              description: Array of project IDs to filter by
+      responses:
+        '200':
+          description: Filtered projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Project'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags: [Projects]
+      summary: Create a project
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Project'
+      responses:
+        '201':
+          description: Project created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /projects/{ProjectId}:
+    get:
+      tags: [Projects]
+      summary: Get project by ID
+      parameters:
+        - in: path
+          name: ProjectId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Project found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      tags: [Projects]
+      summary: Update a project
+      parameters:
+        - in: path
+          name: ProjectId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Project'
+      responses:
+        '200':
+          description: Project updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      tags: [Projects]
+      summary: Add or remove managed user
+      parameters:
+        - in: path
+          name: ProjectId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [action, userId]
+              properties:
+                action:
+                  type: string
+                  enum: [add, remove]
+                userId:
+                  type: string
+      responses:
+        '200':
+          description: Managed user updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  project:
+                    $ref: '#/components/schemas/Project'
+                  user:
+                    $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /projects/{ProjectId}/visibility:
+    patch:
+      tags: [Projects]
+      summary: Update project visibility
+      description: Updates the onboardOffboardVisible flag. Requires cookie-based auth.
+      security:
+        - CustomHeader: []
+          CookieAuth: []
+      parameters:
+        - in: path
+          name: ProjectId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [onboardOffboardVisible]
+              properties:
+                onboardOffboardVisible:
+                  type: boolean
+      responses:
+        '200':
+          description: Visibility updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Project not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Project not found
+
+  /projects/bulk-updates:
+    post:
+      tags: [Projects]
+      summary: Bulk update managed users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [bulkOps]
+              properties:
+                bulkOps:
+                  type: array
+                  items:
+                    type: object
+                  description: Array of MongoDB bulk write operations
+      responses:
+        '200':
+          description: Bulk update result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: number
+                  nModified:
+                    type: number
+                  n:
+                    type: number
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # ─── Project Team Members ──────────────────────────────
+  /projectteammembers:
+    get:
+      tags: [ProjectTeamMembers]
+      summary: List all project team members
+      description: Returns all team members with userId populated as User objects.
+      responses:
+        '200':
+          description: List of team members
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/ProjectTeamMember'
+                    - type: object
+                      properties:
+                        userId:
+                          $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags: [ProjectTeamMembers]
+      summary: Create a project team member
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [userId, projectId]
+              properties:
+                userId:
+                  type: string
+                projectId:
+                  type: string
+                teamMemberStatus:
+                  type: string
+                  enum: [Active, Inactive]
+                vrmsProjectAdmin:
+                  type: boolean
+                roleOnProject:
+                  type: string
+                  enum: [Developer, Project Manager, UX, Data Science]
+                githubPermissionLevel:
+                  type: string
+                  enum: [Write, Triage, Read, Maintainer, Admin]
+                onProjectGithub:
+                  type: boolean
+                onProjectGoogleDrive:
+                  type: boolean
+      responses:
+        '201':
+          description: Team member created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectTeamMember'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /projectteammembers/{id}:
+    get:
+      tags: [ProjectTeamMembers]
+      summary: Get team members by project ID
+      description: Returns team members for the given project with userId populated.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Project ID
+      responses:
+        '200':
+          description: Team members for the project
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/ProjectTeamMember'
+                    - type: object
+                      properties:
+                        userId:
+                          $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      tags: [ProjectTeamMembers]
+      summary: Update a project team member
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Team member ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectTeamMember'
+      responses:
+        '200':
+          description: Team member updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectTeamMember'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /projectteammembers/project/{id}/{userId}:
+    get:
+      tags: [ProjectTeamMembers]
+      summary: Get specific team member
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Project ID
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+          description: User ID
+      responses:
+        '200':
+          description: Team member found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/ProjectTeamMember'
+                    - type: object
+                      properties:
+                        userId:
+                          $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /projectteammembers/projectowner/{id}:
+    get:
+      tags: [ProjectTeamMembers]
+      summary: Check if user is VRMS project admin
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: User ID
+      responses:
+        '200':
+          description: Project admin status
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ProjectTeamMember'
+                  - type: boolean
+                    example: false
+
+  # ─── Questions ─────────────────────────────────────────
+  /questions:
+    get:
+      tags: [Questions]
+      summary: List all questions
+      responses:
+        '200':
+          description: List of questions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Question'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags: [Questions]
+      summary: Create a question
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                questionText:
+                  type: string
+                htmlName:
+                  type: string
+                answers:
+                  type: object
+                  properties:
+                    answerOneText:
+                      type: string
+                    answerTwoText:
+                      type: string
+                    answerThreeText:
+                      type: string
+                    answerFourText:
+                      type: string
+      responses:
+        '201':
+          description: Question created
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /questions/{id}:
+    get:
+      tags: [Questions]
+      summary: Get question by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Question found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # ─── Check User ────────────────────────────────────────
+  /checkuser:
+    post:
+      tags: [CheckUser]
+      summary: Check if user exists by email
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email:
+                  type: string
+                  format: email
+                auth_origin:
+                  type: string
+      responses:
+        '200':
+          description: User found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+                  auth_origin:
+                    type: string
+        '400':
+          description: User not found or bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /checkuser/{id}:
+    get:
+      tags: [CheckUser]
+      summary: Get user by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # ─── Grant Permission ─────────────────────────────────
+  /grantpermission:
+    post:
+      tags: [GrantPermission]
+      summary: OAuth flow for Google Drive permission
+      description: |
+        Handles the OAuth2 flow for granting Google Drive permissions.
+        - If `token` and `code` are provided, completes the OAuth flow.
+        - Otherwise, returns an authorization URL to start the flow.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, file]
+              properties:
+                token:
+                  type: string
+                  description: Existing OAuth token (optional)
+                code:
+                  type: string
+                  description: OAuth authorization code (optional)
+                email:
+                  type: string
+                  format: email
+                file:
+                  type: string
+                  description: Google Drive file ID
+      responses:
+        '200':
+          description: Permission granted or auth URL returned
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    properties:
+                      message:
+                        type: string
+                        example: Success!
+                      token:
+                        type: string
+                  - type: object
+                    properties:
+                      url:
+                        type: string
+                        format: uri
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /grantpermission/googleDrive:
+    post:
+      tags: [GrantPermission]
+      summary: Grant Google Drive permission directly
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, file]
+              properties:
+                email:
+                  type: string
+                  format: email
+                file:
+                  type: string
+                  description: Google Drive file ID
+      responses:
+        '200':
+          description: Permission granted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Success!
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /grantpermission/gitHub:
+    post:
+      tags: [GrantPermission]
+      summary: Onboard user to GitHub org and team
+      description: |
+        Invites user to the GitHub organization and adds them to a team.
+        Requires JWT authentication.
+      security:
+        - CustomHeader: []
+          BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [teamName, handle]
+              properties:
+                teamName:
+                  type: string
+                  description: GitHub team slug
+                handle:
+                  type: string
+                  description: GitHub username
+      responses:
+        '200':
+          description: GitHub onboarding result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  orgMembershipStatus:
+                    type: string
+                    description: Organization membership status
+                  teamMembershipStatus:
+                    type: string
+                    description: Team membership status
+                  publicMembership:
+                    type: string
+                    description: Public membership visibility (if applicable)
+                  twoFAenabled:
+                    type: boolean
+                    description: Whether 2FA is enabled (if applicable)
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # ─── Health Check ──────────────────────────────────────
+  /healthcheck:
+    get:
+      tags: [HealthCheck]
+      summary: Service health check
+      description: |
+        Returns service status with build info. Does NOT require the custom header.
+        Build info is sourced from BUILD_SHA env var, BUILD_INFO file, or git SHA.
+      security: []
+      responses:
+        '200':
+          description: Service is alive
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "I'm Alive! Build: abc1234 | Built: 2024-01-01T00:00:00Z | Checked: 2024-01-01T00:00:00Z"

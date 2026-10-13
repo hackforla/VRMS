@@ -3,12 +3,13 @@ version: "3.8"
 services:
   backend:
     build:
-      context: ./backend
-      dockerfile: Dockerfile.api
+      context: .
+      dockerfile: backend/Dockerfile.api
       target: api-development
     command: yarn run dev
     volumes:
       - ./backend:/srv/backend
+      - ./shared:/srv/shared
       - backend_node_modules:/srv/backend/node_modules
     expose:
       - "4000"
@@ -22,12 +23,13 @@ services:
 
   client:
     build:
-      context: ./client
-      dockerfile: Dockerfile.client
+      context: .
+      dockerfile: client/Dockerfile.client
       target: client-development
     command: yarn run start
     volumes:
       - ./client:/srv/client
+      - ./shared:/srv/shared
       - client_node_modules:/srv/client/node_modules
     expose:
       - "3000"

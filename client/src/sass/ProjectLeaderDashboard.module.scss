@@ -22,7 +22,8 @@
 }
 
 .attendeeTableTitle {
-    font-family: "Source Code Pro Bold", sans-serif;
+    font-family: "Source Code Pro", sans-serif;
+    font-weight: 700;
     font-size: 1.1rem;
     letter-spacing: 1px;
     color: black;
@@ -30,14 +31,16 @@
 }
 
 .attendeeTableText {
-    font-family: "Source Code Pro SemiBold", sans-serif;
+    font-family: "Source Code Pro", sans-serif;
+    font-weight: 600;
     font-size: 0.875rem;
     letter-spacing: 1px;
     color: black;
 }
 
 .dashboardButton {
-    font-family: "Source Code Pro Medium", sans-serif;
+    font-family: "Source Code Pro", sans-serif;
+    font-weight: 500;
     font-size: 0.8125rem;
     text-transform: uppercase;
     background-color: white;
@@ -79,7 +82,8 @@
 }
 
 .dashboardHeadingProjectLeader {
-    font-family: "Source Code Pro SemiBold", sans-serif;
+    font-family: "Source Code Pro", sans-serif;
+    font-weight: 600;
     font-size: 0.875rem;
     letter-spacing: 1px;
     color: black;

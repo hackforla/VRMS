@@ -1,0 +1,21 @@
+.container--users {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+}
+
+.button {
+   width: 250px; 
+   border-radius: 8px;
+}
+
+.margin-bottom {
+    margin-bottom: 15px;
+}

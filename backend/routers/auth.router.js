@@ -1,11 +1,11 @@
-const express = require('express');
-const { AuthUtil, verifyUser, verifyToken } = require('../middleware');
-const { UserController } = require('../controllers/');
-const { authApiValidator } = require('../validators');
+import express from 'express';
+import { Auth, verifyUser } from '../middleware/index.js';
+import { UserController } from '../controllers/index.js';
+import { authApiValidator } from '../validators/index.js';
+import { authenticateRefreshToken } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
 
-// eslint-disable-next-line func-names
 router.use(function (req, res, next) {
   res.header('Access-Control-Allow-Headers', 'x-access-token, Origin, Content-Type, Accept');
   next();
@@ -18,16 +18,14 @@ router.post(
   UserController.createUser,
 );
 
-router.post(
-  '/signin',
-  [authApiValidator.validateSigninUserAPICall, verifyUser.isAdminByEmail],
-  UserController.signin,
-);
+router.post('/refresh-access-token', [authenticateRefreshToken], UserController.refreshAccessToken);
 
-router.post('/verify-signin', [verifyToken.isTokenValid], UserController.verifySignIn);
+router.post('/signin', [authApiValidator.validateSigninUserAPICall], UserController.signin);
 
-router.post('/me', [AuthUtil.verifyCookie], UserController.verifyMe);
+router.post('/verify-signin', [Auth.authUser], UserController.verifySignIn);
 
-router.post('/logout', [AuthUtil.verifyCookie], UserController.logout);
+router.post('/me', [Auth.authUser], UserController.verifyMe);
 
-module.exports = router;
+router.post('/logout', [authenticateRefreshToken], UserController.logout);
+
+export default router;

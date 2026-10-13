@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 mongoose.Promise = global.Promise;
 
@@ -37,31 +37,32 @@ const projectSchema = mongoose.Schema({
   onboardOffboardVisible: { type: Boolean, default: true }, // Whether onboarding/offboarding forms are visible on the project page
 });
 
-projectSchema.methods.serialize = function() {
-    return {
-        id: this._id,
-        name: this.name,
-        description: this.description,
-        githubIdentifier: this.githubIdentifier,
-        // owner: this.owner,
-        projectStatus: this.projectStatus,
-        location: this.location,
-        //teamMembers: this.teamMembers,
-        createdDate: this.createdDate,
-        completedDate: this.completedDate,
-        githubUrl: this.githubUrl,
-        slackUrl: this.slackUrl,
-        googleDriveUrl: this.googleDriveUrl,
-        googleDriveId: this.googleDriveId,
-        hflaWebsiteUrl: this.hflaWebsiteUrl,
-        videoConferenceLink: this.videoConferenceLink,
-        lookingDescription: this.lookingDescription,
-        recruitingCategories: this.recruitingCategories,
-        partners: this.partners,
-        managedByUsers: this.managedByUsers
-    };
+projectSchema.methods.serialize = function () {
+  return {
+    id: this._id,
+    name: this.name,
+    description: this.description,
+    githubIdentifier: this.githubIdentifier,
+    // owner: this.owner,
+    projectStatus: this.projectStatus,
+    location: this.location,
+    //teamMembers: this.teamMembers,
+    createdDate: this.createdDate,
+    completedDate: this.completedDate,
+    githubUrl: this.githubUrl,
+    slackUrl: this.slackUrl,
+    googleDriveUrl: this.googleDriveUrl,
+    googleDriveId: this.googleDriveId,
+    hflaWebsiteUrl: this.hflaWebsiteUrl,
+    videoConferenceLink: this.videoConferenceLink,
+    lookingDescription: this.lookingDescription,
+    recruitingCategories: this.recruitingCategories,
+    partners: this.partners,
+    managedByUsers: this.managedByUsers,
+    onboardOffboardVisible: this.onboardOffboardVisible,
+  };
 };
 
 const Project = mongoose.model('Project', projectSchema);
 
-module.exports = { Project };
+export { Project };

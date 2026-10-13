@@ -1,4 +1,4 @@
-const { RecurringEvent } = require('../models');
+import { RecurringEvent } from '../models/index.js';
 const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
 
 const RecurringEventController = {};
@@ -54,4 +54,4 @@ RecurringEventController.destroy = async function (req, res) {
 	}
       };
 
-module.exports = RecurringEventController;
+export default RecurringEventController;

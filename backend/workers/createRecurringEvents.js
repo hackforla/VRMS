@@ -1,170 +1,141 @@
-module.exports = (cron, fetch) => {
+import { generateEventData } from './lib/generateEventData.js';
 
-    // Check to see if any recurring events are happening today,
-    // and if so, check to see if an event has already been created
-    // for it. If not, create one.
-
-    let EVENTS;
-    let RECURRING_EVENTS;
-    let TODAY_DATE;
-    let TODAY;
-    const URL = process.env.NODE_ENV === 'prod' ? 'https://www.vrms.io' : 'http://localhost:4000';
-
-    const headerToSend = process.env.CUSTOM_REQUEST_HEADER;
-    const fetchEvents = async () => {
-        try {
-            const res = await fetch(`${URL}/api/events/`, {
-                headers: {
-                  "x-customrequired-header": headerToSend
-                }
-            });
-
-            EVENTS = await res.json();
-
-            // return EVENTS;
-        } catch(error) {
-            console.log(error);
-        };
-    };
-
-    const fetchRecurringEvents = async () => {
-        try {
-            const res = await fetch(`${URL}/api/recurringevents/`, {
-                headers: {
-                  "x-customrequired-header": headerToSend
-                }
-            });
-            RECURRING_EVENTS = await res.json();
-
-            // return resJson;
-        } catch(error) {
-            console.log(error);
-        };
-    };
-
-    async function filterAndCreateEvents() {
-        TODAY_DATE = new Date();
-        TODAY = TODAY_DATE.getDay();
-        console.log("Date: ", TODAY_DATE, "Day: ", TODAY);
-        const recurringEvents = RECURRING_EVENTS;
-        // console.log("Today Day: ", TODAY);
-        // Filter recurring events where the event date is today
-        if (recurringEvents && recurringEvents.length > 0) {
-            const filteredEvents = recurringEvents.filter(event => {
-                const eventDay = new Date(event.date).getDay();
-                // console.log("Event Day: ", eventDay);
-                return (eventDay === TODAY);
-            });
-            // For each recurring event, check to see if an event already
-            // exists for it and do something if true/false. Can't use
-            // forEach function with async/await.
-            for (filteredEvent of filteredEvents) {
-                const eventExists = await checkIfEventExists(filteredEvent.name);
-                // console.log('Event exists? ', eventExists);
-                const eventDate = new Date(filteredEvent.date);
-
-                if (eventExists) {
-                    console.log("Not going to run ceateEvent");
-                } else {
-                    // Create new event
-                    const hours = eventDate.getHours();
-                    const minutes = eventDate.getMinutes();
-                    const seconds = eventDate.getSeconds();
-                    const milliseconds = eventDate.getMilliseconds();
-
-                    const yearToday = TODAY_DATE.getFullYear();
-                    const monthToday = TODAY_DATE.getMonth();
-                    const dateToday = TODAY_DATE.getDate();
-
-                    const newEventDate = new Date(yearToday, monthToday, dateToday, hours, minutes, seconds, milliseconds);
-
-                    const newEndTime = new Date(yearToday, monthToday, dateToday, hours + filteredEvent.hours, minutes, seconds, milliseconds)
-
-                    const eventToCreate = {
-                        name: filteredEvent.name && filteredEvent.name,
-                        hacknight: filteredEvent.hacknight && filteredEvent.hacknight,
-                        eventType: filteredEvent.eventType && filteredEvent.eventType,
-                        description: filteredEvent.eventDescription && filteredEvent.eventDescription,
-                        project: filteredEvent.project && filteredEvent.project,
-                        date: filteredEvent.date && newEventDate,
-                        startTime: filteredEvent.startTime && newEventDate,
-                        endTime: filteredEvent.endTime && newEndTime,
-                        hours: filteredEvent.hours && filteredEvent.hours
-                    }
-                    if (filteredEvent.hasOwnProperty("location")) {
-                        eventToCreate.location = {
-                            city: filteredEvent.location.city ? filteredEvent.location.city : 'REMOTE',
-                            state: filteredEvent.location.state ? filteredEvent.location.state : 'REMOTE',
-                            country: filteredEvent.location.country ? filteredEvent.location.country : 'REMOTE'
-                        };
-                    }
-
-                    const created = await createEvent(eventToCreate);
-                    console.log(created);
-                };
-            };
-        };
-    };
-
-    async function checkIfEventExists(eventName) {
-        const events = EVENTS;
-        // const today = new Date();
-
-        if (events && events.length > 0) {
-            const filteredEvents = events.filter(event => {
-                const eventDate = new Date(event.date);
-                const year = eventDate.getFullYear();
-                const month = eventDate.getMonth();
-                const date = eventDate.getDate();
-
-                const yearToday = TODAY_DATE.getFullYear();
-                const monthToday = TODAY_DATE.getMonth();
-                const dateToday = TODAY_DATE.getDate();
-
-                return (year === yearToday && month === monthToday && date === dateToday && eventName === event.name);
-            });
-            console.log("Events already created: ", filteredEvents);
-            return filteredEvents.length > 0 ? true : false;
-        };
-    };
-
-    const createEvent = async (event) => {
-        if(event) {
-            const jsonEvent = JSON.stringify(event);
-            const options = {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "x-customrequired-header": headerToSend
-                },
-                body: jsonEvent
-            }
-
-            console.log('Running createEvent: ', jsonEvent);
-
-            try {
-                const response = await fetch(`${URL}/api/events/`, options);
-                const resJson = await response.json();
-                return resJson;
-            } catch (error) {
-                console.log(error);
-            };
-        };
-    };
-
-    async function runTask() {
-        console.log("Creating today's events");
-
-        await fetchEvents();
-        await fetchRecurringEvents();
-        await filterAndCreateEvents();
-
-        console.log("Today's events are created");
-
-    };
-
-    const scheduledTask = cron.schedule('*/30 * * * *', () => {
-        runTask();
+//API CALLS to GET and POST
+const fetchData = async (endpoint, URL, headerToSend, fetch) => {
+  try {
+    const res = await fetch(`${URL}${endpoint}`, {
+      headers: { 'x-customrequired-header': headerToSend },
     });
-    return scheduledTask;
+    if (!res?.ok) throw new Error(`Failed to fetch: ${endpoint}`);
+    return await res.json();
+  } catch (error) {
+    console.error(`Error fetching ${endpoint}:`, error);
+    return [];
+  }
 };
+
+const createEvents = async (eventArray, URL, headerToSend, fetch) => {
+  if (!eventArray) return null;
+
+  try {
+    const res = await fetch(`${URL}/api/events/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-customrequired-header': headerToSend,
+      },
+      body: JSON.stringify(eventArray),
+    });
+    if (!res.ok) throw new Error('Failed to create event');
+    return await res.json();
+  } catch (error) {
+    console.error('Error creating event:', error);
+    return null;
+  }
+};
+
+const isSameUTCDate = (eventDate, todayDate) => {
+  return (
+    eventDate.getUTCFullYear() === todayDate.getUTCFullYear() &&
+    eventDate.getUTCMonth() === todayDate.getUTCMonth() &&
+    eventDate.getUTCDate() === todayDate.getUTCDate()
+  );
+};
+
+const doesEventExist = (recurringEventName, today, events) =>
+  events.some((event) => {
+    const eventDate = new Date(event.date);
+    return isSameUTCDate(eventDate, today) && event.name === recurringEventName;
+  });
+
+const adjustToLosAngelesTime = (eventDate) => {
+  const tempDate = new Date(eventDate);
+  const losAngelesOffsetHours = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Los_Angeles',
+    timeZoneName: 'shortOffset',
+  })
+    .formatToParts(tempDate)
+    .find((part) => part.type === 'timeZoneName')
+    .value.slice(3);
+  const offsetMinutes = parseInt(losAngelesOffsetHours, 10) * 60;
+  return new Date(tempDate.getTime() + offsetMinutes * 60000);
+};
+
+const filterAndCreateEvents = async (events, recurringEvents, URL, headerToSend, fetch) => {
+  const today = new Date();
+  const todayUTCDay = today.getUTCDay();
+
+  const eventsToCreate = recurringEvents?.filter((recurringEvent) => {
+    const localEventDate = adjustToLosAngelesTime(recurringEvent.date);
+    return (
+      localEventDate.getUTCDay() === todayUTCDay &&
+      !doesEventExist(recurringEvent.name, today, events)
+    );
+  });
+
+  if (!eventsToCreate || eventsToCreate?.length === 0) {
+    return 'No events for today.';
+  } else {
+    const batchEvents = [];
+    for (const event of eventsToCreate) {
+      const correctedStartTime = adjustToLosAngelesTime(event.startTime);
+      const timeCorrectedEvent = {
+        ...event,
+        date: correctedStartTime.toISOString(),
+        startTime: correctedStartTime.toISOString(),
+      };
+      const eventToCreate = generateEventData(timeCorrectedEvent);
+      batchEvents.push(eventToCreate);
+    }
+    const createdEvents = await createEvents(batchEvents, URL, headerToSend, fetch);
+    if (createdEvents) console.log('Created events:', createdEvents);
+    return "Today's events have been created.";
+  }
+};
+
+const runTask = async (fetch, URL, headerToSend) => {
+  console.log("Creating today's events...");
+  const [events, recurringEvents] = await Promise.all([
+    fetchData('/api/events/', URL, headerToSend, fetch),
+    fetchData('/api/recurringevents/', URL, headerToSend, fetch),
+  ]);
+
+  const checkAndCreateEvents = await filterAndCreateEvents(
+    events,
+    recurringEvents,
+    URL,
+    headerToSend,
+    fetch,
+  );
+  console.log(checkAndCreateEvents);
+};
+
+const scheduleTask = (cron, fetch, URL, headerToSend) => {
+  return cron.schedule('*/30 * * * *', () => {
+    runTask(fetch, URL, headerToSend).catch((error) => console.error('Error running task:', error));
+  });
+};
+
+const createRecurringEvents = (cron, fetch) => {
+  const URL =
+    process.env.NODE_ENV === 'prod'
+      ? 'https://www.vrms.io'
+      : `http://localhost:${process.env.BACKEND_PORT}`;
+  const headerToSend = process.env.CUSTOM_REQUEST_HEADER;
+
+  return scheduleTask(cron, fetch, URL, headerToSend);
+};
+
+export {
+  createRecurringEvents,
+  fetchData,
+  adjustToLosAngelesTime,
+  isSameUTCDate,
+  doesEventExist,
+  createEvents,
+  filterAndCreateEvents,
+  runTask,
+  scheduleTask,
+};
+
+export default createRecurringEvents;

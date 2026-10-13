@@ -1,4 +1,4 @@
-const { User } = require('../models');
+import { User } from '../models/index.js';
 
 function checkDuplicateEmail(req, res, next) {
   User.findOne({ email: req.body.email }).then((user) => {
@@ -15,7 +15,7 @@ function isAdminByEmail(req, res, next) {
       return res.sendStatus(400);
     } else {
       const role = user.accessLevel;
-      if (req.get('origin').includes('3001') || role === 'admin' || user.managedProjects.length > 0) {
+      if (role === 'admin' || role === 'superadmin' || user.managedProjects.length > 0) {
         next();
       } else {
         next(res.sendStatus(401));
@@ -29,4 +29,4 @@ const verifyUser = {
   isAdminByEmail,
 };
 
-module.exports = verifyUser;
+export default verifyUser;

@@ -1,9 +1,9 @@
-const express = require("express");
+import express from 'express';
 const router = express.Router();
 
-const { HealthCheckController } = require('../controllers');
+import { HealthCheckController } from '../controllers/index.js';
 
 // The root is /api/healthcheck
 router.get('/', HealthCheckController.isAlive);
 
-module.exports = router;
+export default router;

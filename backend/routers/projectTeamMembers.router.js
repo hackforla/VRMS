@@ -1,12 +1,12 @@
-const express = require("express");
+import express from 'express';
 const router = express.Router();
 
-const { ProjectTeamMember } = require('../models/projectTeamMember.model');
+import { ProjectTeamMember } from '../models/projectTeamMember.model.js';
 
 // GET /api/projectteammembers/
-router.get("/", (req, res) => {
+router.get('/', (req, res) => {
   ProjectTeamMember.find()
-    .populate("userId")
+    .populate('userId')
     .then((teamMembers) => {
       return res.status(200).send(teamMembers);
     })
@@ -16,9 +16,9 @@ router.get("/", (req, res) => {
     });
 });
 
-router.get("/:id", (req, res) => {
+router.get('/:id', (req, res) => {
   ProjectTeamMember.find({ projectId: req.params.id })
-    .populate("userId")
+    .populate('userId')
     .then((teamMembers) => {
       return res.status(200).send(teamMembers);
     })
@@ -28,14 +28,14 @@ router.get("/:id", (req, res) => {
     });
 });
 
-router.get("/project/:id/:userId", (req, res) => {
+router.get('/project/:id/:userId', (req, res) => {
   ProjectTeamMember.find({
     projectId: req.params.id,
     userId: req.params.userId,
   })
-    .populate("userId")
+    .populate('userId')
     .then((teamMember) => {
-      if (!teamMember.length) {
+      if (!teamMember || teamMember.length === 0) {
         return res.sendStatus(400);
       } else {
         return res.status(200).send(teamMember);
@@ -47,12 +47,12 @@ router.get("/project/:id/:userId", (req, res) => {
     });
 });
 
-router.get("/projectowner/:id", (req, res) => {
+router.get('/projectowner/:id', (req, res) => {
   const id = req.params.id;
 
   ProjectTeamMember.findOne({ userId: id })
-    .populate("userId")
-    .populate("projectId")
+    .populate('userId')
+    .populate('projectId')
     .then((teamMember) => {
       teamMember.vrmsProjectAdmin === true
         ? res.status(200).send(teamMember)
@@ -63,7 +63,7 @@ router.get("/projectowner/:id", (req, res) => {
     });
 });
 
-router.post("/", (req, res) => {
+router.post('/', (req, res) => {
   ProjectTeamMember.create(req.body)
     .then((teamMember) => {
       return res.status(201).send(teamMember);
@@ -74,12 +74,11 @@ router.post("/", (req, res) => {
     });
 });
 
-router.patch("/:id", (req, res) => {
+router.patch('/:id', (req, res) => {
   ProjectTeamMember.findByIdAndUpdate(req.params.id, req.body)
     .then((edit) => res.json(edit))
-    .catch((err) =>
-      res.sendStatus(400));
+    .catch(() => res.sendStatus(400));
   // };
 });
 
-module.exports = router;
+export default router;

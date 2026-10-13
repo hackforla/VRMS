@@ -1,5 +1,5 @@
-const authApiValidator = require('./user.api.validator');
+import authApiValidator from './user.api.validator.js';
 
-module.exports = {
+export {
   authApiValidator,
 };

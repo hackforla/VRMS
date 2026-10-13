@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from 'mongoose';
 
 mongoose.Promise = global.Promise;
 
@@ -31,4 +31,4 @@ timeTrackerSchema.methods.serialize = function () {
 
 const TimeTracker = mongoose.model("TimeTracker", timeTrackerSchema);
 
-module.exports = { TimeTracker };
+export { TimeTracker };
