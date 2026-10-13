@@ -139,7 +139,7 @@ app.use('/api/healthcheck', healthCheckRouter);
 app.use('/api/featureFlags', featureFlagsRouter);
 
 // 404 for all non-defined endpoints.
-app.get('*', (req, res, next) => {
+app.get('/{*splat}', (req, res, next) => {
   const error = new Error('Not Found');
   error.status = 404;
   next(error);
