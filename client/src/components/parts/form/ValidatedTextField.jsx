@@ -1,5 +1,5 @@
-import React from 'react';
 import { Box, Grid, InputLabel, TextField } from '@mui/material';
+import React from 'react';
 
 /**
  * A validated text field component for forms.
@@ -61,8 +61,7 @@ function ValidatedTextField({
     // Handle other pattern validations
     validationRules.pattern = {
       value: input.value,
-      message:
-        input.errorMessage || `${input.label} is not in the correct format`,
+      message: input.errorMessage || `${input.label} is not in the correct format`,
     };
   }
 
@@ -73,11 +72,8 @@ function ValidatedTextField({
   return (
     <Box sx={{ mb: 1 }} key={input.name}>
       <Grid container alignItems="center">
-        <Grid item xs="auto" sx={{ pr: 3 }}>
-          <InputLabel
-            sx={{ width: 'max-content', ml: 0.5, mb: 0.5 }}
-            id={input.name}
-          >
+        <Grid size="auto" sx={{ pr: 3 }}>
+          <InputLabel sx={{ width: 'max-content', ml: 0.5, mb: 0.5 }} id={input.name}>
             {input.label}
           </InputLabel>
         </Grid>

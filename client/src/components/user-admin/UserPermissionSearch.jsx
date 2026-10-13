@@ -1,18 +1,18 @@
-import { useEffect } from 'react';
+import PersonIcon from '@mui/icons-material/Person';
 import {
   Box,
   Button,
   ButtonGroup,
   Grid,
-  TextField,
-  Typography,
   List,
   ListItem,
   ListItemButton,
+  TextField,
+  Typography,
 } from '@mui/material';
+import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useSearchText } from '../../context/searchContext';
-import PersonIcon from '@mui/icons-material/Person';
 import '../../sass/UserAdmin.scss';
 
 const Buttonsx = {
@@ -49,11 +49,16 @@ const ListComponent = ({ data, isProjectLead, setUserToEdit }) => {
               onClick={() => setUserToEdit(u)}
             >
               <Grid container>
-                <Grid item>
+                <Grid>
                   <Typography style={{ fontWeight: 600 }}>
-                    {(_id === auth?.user?._id) ? 
-                      (<><PersonIcon /><b>{`${name.firstName.toUpperCase()} ${name.lastName.toUpperCase()} ( ${email.toUpperCase()} )`}</b></>) 
-                      : `${name.firstName.toUpperCase()} ${name.lastName.toUpperCase()} ( ${email.toUpperCase()} )`}
+                    {_id === auth?.user?._id ? (
+                      <>
+                        <PersonIcon />
+                        <b>{`${name.firstName.toUpperCase()} ${name.lastName.toUpperCase()} ( ${email.toUpperCase()} )`}</b>
+                      </>
+                    ) : (
+                      `${name.firstName.toUpperCase()} ${name.lastName.toUpperCase()} ( ${email.toUpperCase()} )`
+                    )}
                   </Typography>
                 </Grid>
               </Grid>
@@ -82,15 +87,20 @@ const ListComponent = ({ data, isProjectLead, setUserToEdit }) => {
               onClick={() => setUserToEdit(u)}
             >
               <Grid container justifyContent={'space-between'}>
-                <Grid item>
+                <Grid>
                   <Typography style={{ fontWeight: 600 }}>
-                      {(_id === auth?.user?._id) ? 
-                      (<><PersonIcon /><b>{`${name.firstName.toUpperCase()} ${name.lastName.toUpperCase()}`}</b></>) :
-                      `${name.firstName.toUpperCase()} ${name.lastName.toUpperCase()}`}
+                    {_id === auth?.user?._id ? (
+                      <>
+                        <PersonIcon />
+                        <b>{`${name.firstName.toUpperCase()} ${name.lastName.toUpperCase()}`}</b>
+                      </>
+                    ) : (
+                      `${name.firstName.toUpperCase()} ${name.lastName.toUpperCase()}`
+                    )}
                   </Typography>
                 </Grid>
-                <Grid item>
-                  <Typography style={{ fontWeight: (_id === auth?.user?._id) ? 'bold' : 600 }}>
+                <Grid>
+                  <Typography style={{ fontWeight: _id === auth?.user?._id ? 'bold' : 600 }}>
                     {u.managedProjectName}
                   </Typography>
                 </Grid>
@@ -104,7 +114,8 @@ const ListComponent = ({ data, isProjectLead, setUserToEdit }) => {
 };
 
 const UserPermissionSearch = ({ admins, projectManagers, setUserToEdit }) => {
-  const { searchText, setSearchText, userType, setUserType, isProjectLead, setIsProjectLead } = useSearchText(); // React context hook
+  const { searchText, setSearchText, userType, setUserType, isProjectLead, setIsProjectLead } =
+    useSearchText(); // React context hook
 
   const location = useLocation();
 
@@ -130,7 +141,7 @@ const UserPermissionSearch = ({ admins, projectManagers, setUserToEdit }) => {
       setIsProjectLead(true);
       setUserType('projectLead');
     }
-  }
+  };
 
   // Handle change on input in search form
   const handleChange = (event) => {
@@ -140,11 +151,9 @@ const UserPermissionSearch = ({ admins, projectManagers, setUserToEdit }) => {
   const getFilteredData = (resultData, searchText, isProjectLead) => {
     const searchTextLowerCase = searchText.trim().toLowerCase();
 
-    let filteredData = resultData
+    const filteredData = resultData
       .filter((user) =>
-        isProjectLead
-          ? user.isProjectLead === true
-          : user.isProjectLead === undefined,
+        isProjectLead ? user.isProjectLead === true : user.isProjectLead === undefined,
       )
       .flatMap((user) =>
         isProjectLead && user.managedProjectNames.length > 0
@@ -155,11 +164,8 @@ const UserPermissionSearch = ({ admins, projectManagers, setUserToEdit }) => {
           : [{ ...user }],
       )
       .filter((user) => {
-        const fullName =
-          `${user.name.firstName} ${user.name.lastName}`.toLowerCase();
-        const projectName = user.managedProjectName
-          ? user.managedProjectName.toLowerCase()
-          : '';
+        const fullName = `${user.name.firstName} ${user.name.lastName}`.toLowerCase();
+        const projectName = user.managedProjectName ? user.managedProjectName.toLowerCase() : '';
         return (
           fullName.includes(searchTextLowerCase) ||
           (isProjectLead && projectName.includes(searchTextLowerCase))
@@ -181,19 +187,15 @@ const UserPermissionSearch = ({ admins, projectManagers, setUserToEdit }) => {
   let filteredData;
   if (!searchText) {
     filteredData = resultData.filter((user) =>
-      isProjectLead
-        ? user.isProjectLead === true
-        : user.isProjectLead === undefined,
+      isProjectLead ? user.isProjectLead === true : user.isProjectLead === undefined,
     );
 
     if (!isProjectLead) {
       // Default display for admins, sorted ASC based on first name
-      filteredData.sort((u1, u2) =>
-        u1.name?.firstName.localeCompare(u2.name?.firstName),
-      );
+      filteredData.sort((u1, u2) => u1.name?.firstName.localeCompare(u2.name?.firstName));
     } else {
       // Default display of all PMs, sorted ASC based on project name, then first name
-      let tempFilter = [];
+      const tempFilter = [];
       filteredData.forEach((user) => {
         user.managedProjectNames.forEach((managedProjectName) => {
           tempFilter.push({ ...user, managedProjectName });
@@ -259,10 +261,7 @@ const UserPermissionSearch = ({ admins, projectManagers, setUserToEdit }) => {
           width: 1 / 1,
         }}
       >
-        <Typography
-          variant="h4"
-          style={{ marginBottom: 20, fontWeight: 'bold' }}
-        >
+        <Typography variant="h4" style={{ marginBottom: 20, fontWeight: 'bold' }}>
           User Permission Search
         </Typography>
         <Box className="tab-buttons">

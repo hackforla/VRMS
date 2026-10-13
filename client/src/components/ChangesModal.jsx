@@ -1,6 +1,6 @@
-import { Modal, Box, Typography, Grid, Button } from '@mui/material';
-import { Link } from 'react-router-dom';
 import WarningAmberRoundedIcon from '@mui/icons-material/WarningAmberRounded';
+import { Box, Button, Grid, Modal, Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 const style = {
   position: 'absolute',
@@ -14,12 +14,7 @@ const style = {
   p: 4,
 };
 
-export default function ChangesModal({
-  open,
-  onClose,
-  handleClose,
-  destination,
-}) {
+export default function ChangesModal({ open, onClose, handleClose, destination }) {
   return (
     <Modal
       open={open}
@@ -28,37 +23,18 @@ export default function ChangesModal({
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
-        <Typography
-          sx={{ textAlign: 'center' }}
-          id="modal-modal-title"
-          variant="h4"
-          component="h3"
-        >
+        <Typography sx={{ textAlign: 'center' }} id="modal-modal-title" variant="h4" component="h3">
           <WarningAmberRoundedIcon fontSize="large" color="error" />
         </Typography>
 
-        <Typography
-          sx={{ textAlign: 'center' }}
-          id="modal-modal-title"
-          variant="h4"
-          component="h4"
-        >
+        <Typography sx={{ textAlign: 'center' }} id="modal-modal-title" variant="h4" component="h4">
           Wait! You made some changes.
         </Typography>
-        <Typography
-          id="modal-modal-description"
-          sx={{ mt: 2, textAlign: 'center' }}
-        >
+        <Typography id="modal-modal-description" sx={{ mt: 2, textAlign: 'center' }}>
           Are you sure you want to exit without saving?
         </Typography>
-        <Grid
-          direction="column"
-          spacing={3}
-          container
-          alignContent="center"
-          sx={{ my: 3 }}
-        >
-          <Grid item xs="auto">
+        <Grid direction="column" spacing={3} container alignContent="center" sx={{ my: 3 }}>
+          <Grid size="auto">
             <Button
               component={Link}
               to={destination}
@@ -68,7 +44,7 @@ export default function ChangesModal({
               Yes
             </Button>
           </Grid>
-          <Grid item xs="auto">
+          <Grid size="auto">
             <Button
               type="submit"
               form="project-form"

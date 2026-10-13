@@ -29,14 +29,13 @@ const Navbar = () => {
   return (
     <Box sx={{ my: 2, mx: { xs: 0, sm: 4 } }}>
       <Grid container>
-        <Grid item>
+        <Grid>
           <NavLink to={loggedIn() ? '/welcome' : '/'}>
             <Box component="img" src={HflaImg} sx={{ width: '48.3px', mt: '7px' }} />
           </NavLink>
         </Grid>
         <Grid
-          item
-          xs={10}
+          size={10}
           sx={{
             display: 'flex',
             justifyContent: 'space-evenly',
