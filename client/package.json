@@ -16,7 +16,7 @@
     "classnames": "^2.5.1",
     "cross-env": "^10.1.0",
     "cross-var": "^1.1.0",
-    "d3": "^5.16.0",
+    "d3": "^7.9.0",
     "dotenv-cli": "^11.0.0",
     "http-proxy-middleware": "^4.2.0",
     "js-cookie": "^3.0.8",
