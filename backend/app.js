@@ -50,6 +50,7 @@ assertEnv([
 
 // Create a new application using the Express framework
 const app = express();
+app.set('query parser', 'extended');
 
 // Required to view Request Body (req.body) in JSON
 app.use(express.json());

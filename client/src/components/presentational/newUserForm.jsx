@@ -216,7 +216,7 @@ const NewUserForm = (props) => {
                                 width: '100%',
                                 maxWidth: '300px',
                                 borderBottom: 'none',
-                                '& input[type=text]': {
+                                '& .MuiPickersInputBase-sectionsContainer': {
                                   height: '40px',
                                   width: '100%',
                                   borderBottom: 'none',
