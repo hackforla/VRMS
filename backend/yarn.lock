@@ -689,7 +689,7 @@ dezalgo@^1.0.4:
     asap "^2.0.0"
     wrappy "1"
 
-dotenv-expand@13:
+dotenv-expand@^13.0.0:
   version "13.0.0"
   resolved "https://registry.yarnpkg.com/dotenv-expand/-/dotenv-expand-13.0.0.tgz#e3bb68c3c1b59b015cda83d9a64efed6bb52242b"
   integrity sha512-aBfBS8eYIeXmpHI9ThIlA7/WLq+SLt18iXUZhb52rW89QLKQFoIpPG1bPeewoPZsTyjSSO3T7234FBVUM1V2rA==
