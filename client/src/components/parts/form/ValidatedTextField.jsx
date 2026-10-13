@@ -71,7 +71,7 @@ function ValidatedTextField({
 
   return (
     <Box sx={{ mb: 1 }} key={input.name}>
-      <Grid container alignItems="center">
+      <Grid container sx={{ alignItems: 'center' }}>
         <Grid size="auto" sx={{ pr: 3 }}>
           <InputLabel sx={{ width: 'max-content', ml: 0.5, mb: 0.5 }} id={input.name}>
             {input.label}

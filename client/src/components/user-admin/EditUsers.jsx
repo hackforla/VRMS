@@ -178,7 +178,7 @@ const EditUsers = ({
       <List>
         {userProjectsToDisplay.map((result) => (
           <ListItem key={`remove_${result[0]}`} divider>
-            <Grid container alignItems="center">
+            <Grid container sx={{ alignItems: 'center' }}>
               <Grid size={9}>
                 <ListItemText primary={result[1]} />
               </Grid>

@@ -59,7 +59,7 @@ export default function SecretPassword() {
           {!state.success && (
             <Box component="form" id="secret-password">
               <Box sx={{ mb: 1 }}>
-                <Grid container alignItems="center">
+                <Grid container sx={{ alignItems: 'center' }}>
                   <Grid size="auto" sx={{ pr: 3 }}>
                     <InputLabel sx={{ width: 'max-content', ml: 0.5, mb: 0.5 }} id="secretPassword">
                       {secretInputLabel}
@@ -104,7 +104,7 @@ export default function SecretPassword() {
 
       {state.success && (
         <Box>
-          <Grid container justifyContent="center">
+          <Grid container sx={{ justifyContent: 'center' }}>
             {encouragementMessage.map((phrase) => (
               <Typography variant="p" key={phrase} sx={{ mx: 5, mb: 4 }}>
                 {phrase}

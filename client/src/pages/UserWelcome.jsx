@@ -124,7 +124,7 @@ export default function UserWelcome() {
   }
 
   return (
-    <Box textAlign="center" sx={{ pt: 5 }}>
+    <Box sx={{ textAlign: 'center', pt: 5 }}>
       <Typography variant="h1">Welcome {firstName}!</Typography>
       <Box sx={{ fontSize: '16px' }}>
         <Typography variant="p">For assistance using VRMS, check out the </Typography>

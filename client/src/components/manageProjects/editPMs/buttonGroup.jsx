@@ -1,7 +1,7 @@
 import { Button, CircularProgress, Grid } from '@mui/material';
 
 const ButtonGroup = ({ btnName1, btnName2, callBackFn1, callBackFn2, isLoading }) => (
-  <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
+  <Grid container sx={{ justifyContent: 'space-evenly', my: 3 }}>
     <Grid size="auto">
       <Button
         size="large"

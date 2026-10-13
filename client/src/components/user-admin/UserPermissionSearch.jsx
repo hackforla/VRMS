@@ -86,7 +86,7 @@ const ListComponent = ({ data, isProjectLead, setUserToEdit }) => {
               type="button"
               onClick={() => setUserToEdit(u)}
             >
-              <Grid container justifyContent={'space-between'}>
+              <Grid container sx={{ justifyContent: 'space-between' }}>
                 <Grid>
                   <Typography style={{ fontWeight: 600 }}>
                     {_id === auth?.user?._id ? (

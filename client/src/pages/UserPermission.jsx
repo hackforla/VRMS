@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Redirect } from 'react-router-dom';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import '../sass/UserAdmin.scss';
-import useAuth from '../hooks/useAuth';
+import ProjectApiService from '../api/ProjectApiService';
+import UserApiService from '../api/UserApiService';
 import EditUsers from '../components/user-admin/EditUsers';
 import UserPermissionSearch from '../components/user-admin/UserPermissionSearch';
-import UserApiService from '../api/UserApiService';
-import ProjectApiService from '../api/ProjectApiService';
+import useAuth from '../hooks/useAuth';
 
 const UserPermission = () => {
   // Initialize state hooks
@@ -33,7 +33,7 @@ const UserPermission = () => {
       await userApiService.updateUserDbProjects(user, managedProjects, action);
       fetchAdmins();
     },
-    [userApiService, fetchAdmins]
+    [userApiService, fetchAdmins],
   );
 
   const updateUserActiveStatus = useCallback(
@@ -41,7 +41,7 @@ const UserPermission = () => {
       await userApiService.updateUserDbIsActive(user, isActive);
       fetchAdmins();
     },
-    [userApiService, fetchAdmins]
+    [userApiService, fetchAdmins],
   );
 
   // Update user's access level (admin/user)
@@ -50,7 +50,7 @@ const UserPermission = () => {
       await userApiService.updateUserAccessLevel(user, newAccessLevel);
       fetchAdmins();
     },
-    [userApiService, fetchAdmins]
+    [userApiService, fetchAdmins],
   );
 
   const fetchProjects = useCallback(async () => {
@@ -69,7 +69,7 @@ const UserPermission = () => {
   };
 
   if (!auth && !auth?.user) {
-    return <Redirect to="/login" />;
+    return <Navigate to="/login" replace />;
   }
 
   if (Object.keys(userToEdit).length === 0) {

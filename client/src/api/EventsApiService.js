@@ -14,8 +14,8 @@ class EventsApiService {
       const threeWeeksInMilliseconds = 3 * 7 * 24 * 60 * 60 * 1000; // 3 weeks in milliseconds
       const threeWeeksAgo = new Date();
       threeWeeksAgo.setTime(threeWeeksAgo.getTime() - threeWeeksInMilliseconds);
-      
-      const dateQuery = `?date[$gt]=${threeWeeksAgo.toISOString().split('.')[0]+"Z"}`;
+
+      const dateQuery = `?date[$gt]=${threeWeeksAgo.toISOString().split('.')[0] + 'Z'}`;
 
       const res = await fetch(this.baseUrl + dateQuery, {
         headers: this.headers,
@@ -51,7 +51,7 @@ class EventsApiService {
     };
 
     try {
-      return await fetch(`${this.baseUrl}/${recurringEventID}`, requestOptions);
+      return await fetch(`${this.baseUrl}${recurringEventID}`, requestOptions);
     } catch (error) {
       console.error(`Delete event error: `, error);
       alert('Server not responding.  Please try again.');

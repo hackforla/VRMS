@@ -11,7 +11,7 @@ class RecurringEventsApiService {
 
   async fetchRecurringEvents() {
     try {
-      const res = await fetch(`${this.baseUrl}/internal`, {
+      const res = await fetch(`${this.baseUrl}internal`, {
         headers: this.headers,
       });
       return await res.json();
@@ -45,7 +45,7 @@ class RecurringEventsApiService {
     };
 
     try {
-      return await fetch(`${this.baseUrl}/${recurringEventID}`, requestOptions);
+      return await fetch(`${this.baseUrl}${recurringEventID}`, requestOptions);
     } catch (error) {
       console.error(`Delete recurring event error: `, error);
       alert('Server not responding.  Please try again.');
@@ -60,7 +60,7 @@ class RecurringEventsApiService {
       body: JSON.stringify(eventToUpdate),
     };
     try {
-      return await fetch(`${this.baseUrl}/${recurringEventID}`, requestOptions);
+      return await fetch(`${this.baseUrl}${recurringEventID}`, requestOptions);
     } catch (error) {
       console.error(`Update recurring event error: `, error);
       alert('Server not responding.  Please try again.');

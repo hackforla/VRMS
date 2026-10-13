@@ -1,9 +1,7 @@
+import { Box, Button, Typography } from '@mui/material';
 import React from 'react';
-import { Redirect } from 'react-router-dom';
-
 import pkg from '../../package.json';
 import useAuth from '../hooks/useAuth';
-import { Button, Box, Typography } from '@mui/material';
 
 import '../sass/Footer.scss';
 
@@ -13,7 +11,6 @@ const Footer = () => {
   const handleLogout = async (e) => {
     e.preventDefault();
     await logout();
-    return <Redirect to="/" />;
   };
 
   return (

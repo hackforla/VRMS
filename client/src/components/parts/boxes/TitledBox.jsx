@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Box, Typography, Divider } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Box, Divider, Typography } from '@mui/material';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import React, { useState } from 'react';
 
 /**
  * Renders a titled box component with optional badge and children content. Can be configured as an expandable accordion.
@@ -15,13 +15,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
  * @param {boolean} [props.expandable=false] - Whether the component should be an expandable accordion.
  * @returns {JSX.Element} The rendered TitledBox component.
  */
-export default function TitledBox({
-  title,
-  children,
-  badge,
-  childrenBoxSx,
-  expandable = false,
-}) {
+export default function TitledBox({ title, children, badge, childrenBoxSx, expandable = false }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   if (expandable) {
@@ -32,6 +26,7 @@ export default function TitledBox({
         onChange={(event, expanded) => setIsExpanded(expanded)}
       >
         <AccordionSummary
+          component="div"
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel-content"
           id="panel-header"
@@ -44,9 +39,7 @@ export default function TitledBox({
               width: '100%',
             }}
           >
-            <Typography sx={{ fontSize: '18px', fontWeight: '600' }}>
-              {title}
-            </Typography>
+            <Typography sx={{ fontSize: '18px', fontWeight: '600' }}>{title}</Typography>
             <Box
               onClick={(e) => {
                 if (isExpanded) e.stopPropagation();
@@ -75,9 +68,7 @@ export default function TitledBox({
         }}
       >
         <Box>
-          <Typography sx={{ fontSize: '18px', fontWeight: '600' }}>
-            {title}
-          </Typography>
+          <Typography sx={{ fontSize: '18px', fontWeight: '600' }}>{title}</Typography>
         </Box>
         {badge || ' '}
       </Box>

@@ -1,26 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import { Box } from '@mui/material';
+import { format } from 'date-fns';
 import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import NewUserForm from './../components/presentational/newUserForm';
 import ReturnUserForm from './../components/presentational/returnUserForm';
 import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend } from '../utils/globalSettings';
-import { format } from 'date-fns';
-import { Box } from '@mui/material';
 
 import '../sass/CheckIn.scss';
 
-const CheckInForm = (props) => {
+const CheckInForm = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { userType } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const [isQuestionAnswered, setIsQuestionAnswered] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [questions, setQuestions] = useState([]);
-  const [newOrReturning] = useState(props && props.match.params.userType);
+  const [newOrReturning] = useState(userType);
 
   // eslint-disable-next-line no-unused-vars
-  const [eventId, setEventId] = useState(
-    props.location.search.slice(9, props.location.search.length)
-  );
+  const [eventId, setEventId] = useState(location.search.slice(9, location.search.length));
   const [formInput, setFormInput] = useState({
     email: '',
     currentRole: '',
@@ -35,7 +37,7 @@ const CheckInForm = (props) => {
   const [reason, setReason] = useState('--SELECT ONE--');
   const [project, setProject] = useState('--SELECT ONE--');
   const [user, setUser] = useState(null);
-  console.log(props.location.pathname);
+  console.log(location.pathname);
 
   // form data to fill drop-downs
   const months = [
@@ -149,7 +151,7 @@ const CheckInForm = (props) => {
 
     const userData = await userRes.json();
     const userId = userData._id;
-    const eventId = new URLSearchParams(props.location.search).get('eventId');
+    const eventId = new URLSearchParams(location.search).get('eventId');
 
     const checkinRes = await fetch('/api/checkins', {
       method: 'POST',
@@ -164,7 +166,7 @@ const CheckInForm = (props) => {
       throw new Error(checkinRes.statusText);
     }
 
-    props.history.push(`/success?eventId=${eventId}`);
+    navigate(`/success?eventId=${eventId}`);
   };
 
   const submitReturning = (returningUser, e = null) => {
@@ -199,7 +201,7 @@ const CheckInForm = (props) => {
         .then((response) => {
           const checkInForm = {
             userId: `${returningUser?.user?._id}`,
-            eventId: new URLSearchParams(props.location.search).get('eventId'),
+            eventId: new URLSearchParams(location.search).get('eventId'),
           };
 
           return fetch('/api/checkins', {
@@ -212,7 +214,7 @@ const CheckInForm = (props) => {
           })
             .then((res) => {
               if (res.ok) {
-                return props.history.push('/success');
+                return navigate('/success');
               }
               console.log('throwing new error in line 230');
               throw new Error(res.statusText);
@@ -262,7 +264,7 @@ const CheckInForm = (props) => {
           setIsError(true);
           setErrorMessage('Email address is already in use.');
         } else {
-          props.history.push(`/success`);
+          navigate(`/success`);
         }
       })
       .catch((err) => {
@@ -308,15 +310,10 @@ const CheckInForm = (props) => {
       const currMonth = parseInt(moment().format('MM'));
       const yearJoined = parseInt(year);
       const monthJoined = parseInt(moment(month + ' 9, 2020').format('MM'));
-     
-      if (
-        yearJoined > currYear ||
-        (yearJoined === currYear && monthJoined > currMonth)
-      ) {
+
+      if (yearJoined > currYear || (yearJoined === currYear && monthJoined > currMonth)) {
         setIsError(true);
-        setErrorMessage(
-          "You can't set a date in the future... Please try again."
-        );
+        setErrorMessage("You can't set a date in the future... Please try again.");
         ready = false;
       }
 
@@ -372,14 +369,9 @@ const CheckInForm = (props) => {
       // extra date info needed to be recognized as a date
       const monthJoined = parseInt(moment(month + ' 9, 2020').format('MM'));
 
-      if (
-        yearJoined > currYear ||
-        (yearJoined === currYear && monthJoined > currMonth)
-      ) {
+      if (yearJoined > currYear || (yearJoined === currYear && monthJoined > currMonth)) {
         setIsError(true);
-        setErrorMessage(
-          "You can't set a date in the future... Please try again."
-        );
+        setErrorMessage("You can't set a date in the future... Please try again.");
         ready = false;
       }
 
@@ -427,7 +419,7 @@ const CheckInForm = (props) => {
         .catch((err) => {
           console.log(err);
           setIsLoading(false);
-          
+
           // Fixes for error messages
           setUser(false);
           setIsError(true);
@@ -448,7 +440,7 @@ const CheckInForm = (props) => {
 
   return (
     <Box className="flex-container">
-      {props.location.pathname === '/newProfile' && (
+      {location.pathname === '/newProfile' && (
         <NewUserForm
           firstName={firstName}
           handleFirstNameChange={handleFirstNameChange}

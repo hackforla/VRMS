@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { useForm, useFormState } from 'react-hook-form';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import ProjectApiService from '../api/ProjectApiService';
 import useAuth from '../hooks/useAuth';
 import EditIcon from '../svg/Icon_Edit.svg?react';
@@ -43,7 +43,7 @@ import ValidatedTextField from './parts/form/ValidatedTextField';
  * - setFormData - allows us to updated the form data.
  * */
 export default function ProjectForm({ arr, formData, projectToEdit, isEdit, setFormData }) {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   // ----------------- States -----------------
   const { isAdmin, isSuperAdmin } = useAuth();
@@ -55,7 +55,7 @@ export default function ProjectForm({ arr, formData, projectToEdit, isEdit, setF
   const handleOpen = () => setIsModalOpen(true);
   const handleClose = () => setIsModalOpen(false);
   const checkFields = () => {
-    history.push('/projects');
+    navigate('/projects');
   };
 
   /**
@@ -93,7 +93,7 @@ export default function ProjectForm({ arr, formData, projectToEdit, isEdit, setF
     try {
       setIsLoading(true);
       const id = await projectApi.create(data);
-      history.push(`/projects/${id}`);
+      navigate(`/projects/${id}`);
     } catch (errors) {
       console.error(errors);
     }
@@ -245,7 +245,7 @@ export default function ProjectForm({ arr, formData, projectToEdit, isEdit, setF
               handleClose={handleClose}
             />
           </Box>
-          <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
+          <Grid container sx={{ justifyContent: 'space-evenly', my: 3 }}>
             <Grid size="auto">
               <Button
                 type="submit"

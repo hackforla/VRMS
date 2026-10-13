@@ -33,7 +33,7 @@ export default function ChangesModal({ open, onClose, handleClose, destination }
         <Typography id="modal-modal-description" sx={{ mt: 2, textAlign: 'center' }}>
           Are you sure you want to exit without saving?
         </Typography>
-        <Grid direction="column" spacing={3} container alignContent="center" sx={{ my: 3 }}>
+        <Grid direction="column" spacing={3} container sx={{ alignContent: 'center', my: 3 }}>
           <Grid size="auto">
             <Button
               component={Link}

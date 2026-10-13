@@ -1,14 +1,14 @@
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import useAuth from './useAuth';
 
 const withAuth = (Component) => (props) => {
-    const { auth } = useAuth();
+  const { auth } = useAuth();
 
-    if (!auth) {
-        return <Redirect to="/login" />
-    }
+  if (!auth) {
+    return <Navigate to="/login" replace />;
+  }
 
-    return <Component {...props} auth={auth} />;
-}
+  return <Component {...props} auth={auth} />;
+};
 
 export default withAuth;

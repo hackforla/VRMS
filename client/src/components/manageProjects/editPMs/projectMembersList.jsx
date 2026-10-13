@@ -187,13 +187,13 @@ const ProjectMembersList = ({
                 >
                   <Grid
                     container
-                    justifyContent={'space-between'}
+                    sx={{ justifyContent: 'space-between' }}
                     onClick={() => {
                       if (editMode && !openModal) setSelectedUserId(_id);
                     }}
                   >
                     <Grid>
-                      <Typography fontWeight="bold" color="black">
+                      <Typography sx={{ fontWeight: 'bold' }} color="black">
                         {name.firstName.toUpperCase() + ' ' + name.lastName[0].toUpperCase() + '.'}
                       </Typography>
                     </Grid>
@@ -204,7 +204,7 @@ const ProjectMembersList = ({
                     <Modal open={openModal} hideBackdrop={true}>
                       <Box sx={modalStyle2}>
                         <WarningAmberIcon sx={{ fontSize: 40, color: 'red' }} />
-                        <Typography variant="h6" component="h2" fontWeight="bold">
+                        <Typography variant="h6" component="h2" sx={{ fontWeight: 'bold' }}>
                           Are you sure you want to remove this user from the project?
                         </Typography>
                         <ButtonGroup
@@ -224,7 +224,7 @@ const ProjectMembersList = ({
                       <Box onClick={() => setRemoveConfirmModal(false)} sx={modalStyle1}>
                         <Box sx={modalStyle2} onClick={(e) => e.stopPropagation()}>
                           <CheckCircleOutline color="success" />
-                          <Typography variant="h6" component="h2" fontWeight="bold">
+                          <Typography variant="h6" component="h2" sx={{ fontWeight: 'bold' }}>
                             User removed from project.
                           </Typography>
                         </Box>
@@ -307,7 +307,12 @@ const ProjectMembersList = ({
       >
         <Box sx={modalStyle2}>
           <WarningAmberIcon sx={{ fontSize: 40, color: 'red' }} />
-          <Typography id="modal-modal-title" variant="h6" component="h2" fontWeight="bold">
+          <Typography
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+            sx={{ fontWeight: 'bold' }}
+          >
             Are you sure you want to close without saving these changes?
           </Typography>
           <ButtonGroup

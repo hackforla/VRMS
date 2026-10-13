@@ -54,7 +54,7 @@ class UserApiService {
 
   async fetchAdmins() {
     try {
-      const route = this.baseUserUrl + '/admins';
+      const route = this.baseUserUrl + 'admins';
       const res = await fetch(route, {
         headers: this.headers,
       });
@@ -68,7 +68,7 @@ class UserApiService {
 
   async fetchProjectsManagers() {
     try {
-      const route = this.baseUserUrl + '/projectManagers';
+      const route = this.baseUserUrl + 'projectManagers';
       const res = await fetch(route, {
         headers: this.headers,
       });

@@ -159,10 +159,17 @@ const EditProjectMembers = ({ projectToEdit }) => {
             <Grid>
               <Box
                 display="flex"
-                alignItems="center"
-                justifyContent="space-between"
                 width="100%"
-                sx={{ px: 2, py: 2, border: 1, borderColor: 'grey.400', borderRadius: 1, mt: 1 }}
+                sx={{
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  px: 2,
+                  py: 2,
+                  border: 1,
+                  borderColor: 'grey.400',
+                  borderRadius: 1,
+                  mt: 1,
+                }}
               >
                 <Typography sx={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {!toggleSelect ? (
