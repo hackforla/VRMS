@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import moment from 'moment';
-import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend} from '../utils/globalSettings';
+import React, { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend } from '../utils/globalSettings';
 
 import '../sass/Event.scss';
 
-const Event = (props) => {
+const Event = () => {
+  const { id } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [event, setEvent] = useState([]);
   const [isCheckInReady, setIsCheckInReady] = useState();
@@ -15,7 +16,7 @@ const Event = (props) => {
     e.preventDefault();
 
     try {
-      await fetch(`/api/events/${props.match.params.id}`, {
+      await fetch(`/api/events/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -35,13 +36,13 @@ const Event = (props) => {
   useEffect(() => {
     async function fetchEvent() {
       try {
-        const res = await fetch(`/api/events/${props.match.params.id}`, {
+        const res = await fetch(`/api/events/${id}`, {
           headers: {
             'x-customrequired-header': headerToSend,
           },
         });
         const resJson = await res.json();
-  
+
         setEvent(resJson);
         setIsCheckInReady(resJson.checkInReady);
       } catch (error) {
@@ -50,7 +51,7 @@ const Event = (props) => {
     }
 
     fetchEvent();
-  }, [isLoading, isCheckInReady, props.match.params.id]);
+  }, [isLoading, isCheckInReady, id]);
 
   return (
     <div className="flex-container">
@@ -61,7 +62,7 @@ const Event = (props) => {
             <p>{moment(event.date).format('dddd, MMMM D, YYYY @ h:mm a')}</p>
             <p>{event.location.city}</p>
             <p>{event.location.state}</p>
-            {event.project &&
+            {event.project && (
               <Link
                 to={`/project/${event.project._id}`}
                 className="create-form-button"
@@ -75,7 +76,7 @@ const Event = (props) => {
               >
                 Edit Event
               </Link>
-            }
+            )}
           </div>
         ) : (
           <div>Loading...</div>

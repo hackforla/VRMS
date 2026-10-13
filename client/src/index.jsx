@@ -1,11 +1,11 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import './index.scss';
 import './tailwind.css';
-import App from './App';
-import { BrowserRouter } from 'react-router-dom';
-import { SnackbarProvider } from './context/snackbarContext';
 import posthog from 'posthog-js';
+import { BrowserRouter } from 'react-router-dom';
+import App from './App';
+import { SnackbarProvider } from './context/snackbarContext';
 
 posthog.init(import.meta.env.VITE_POSTHOG_KEY, {
   api_host: import.meta.env.VITE_POSTHOG_HOST,
@@ -13,13 +13,12 @@ posthog.init(import.meta.env.VITE_POSTHOG_KEY, {
   capture_pageview: false,
 });
 
-ReactDOM.render(
-    <BrowserRouter>
-        <SnackbarProvider>
-            <App />
-        </SnackbarProvider>
-    </BrowserRouter>, 
-    document.getElementById('root')
+createRoot(document.getElementById('root')).render(
+  <BrowserRouter>
+    <SnackbarProvider>
+      <App />
+    </SnackbarProvider>
+  </BrowserRouter>,
 );
 
 // If you want your app to work offline and load faster, you can change

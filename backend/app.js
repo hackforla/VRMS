@@ -50,6 +50,7 @@ assertEnv([
 
 // Create a new application using the Express framework
 const app = express();
+app.set('query parser', 'extended');
 
 // Required to view Request Body (req.body) in JSON
 app.use(express.json());
@@ -139,7 +140,7 @@ app.use('/api/healthcheck', healthCheckRouter);
 app.use('/api/featureFlags', featureFlagsRouter);
 
 // 404 for all non-defined endpoints.
-app.get('*', (req, res, next) => {
+app.get('/{*splat}', (req, res, next) => {
   const error = new Error('Not Found');
   error.status = 404;
   next(error);

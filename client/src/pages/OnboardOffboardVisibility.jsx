@@ -1,14 +1,8 @@
-import { useState, useEffect } from 'react';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import { Box, CircularProgress, Switch, Tooltip, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
 import ProjectApiService from '../api/ProjectApiService';
 import TitledBox from '../components/parts/boxes/TitledBox';
-import {
-  Box,
-  CircularProgress,
-  Typography,
-  Switch,
-  Tooltip,
-} from '@mui/material';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
 /**
  * On/Offboard Visibility Page
@@ -31,9 +25,7 @@ export default function OnboardOffboardVisibility({ auth }) {
       try {
         const projectData = await projectApiService.fetchProjects();
         // Sort projects alphabetically
-        const sortedProjects = projectData.sort((a, b) =>
-          a.name?.localeCompare(b.name)
-        );
+        const sortedProjects = projectData.sort((a, b) => a.name?.localeCompare(b.name));
         setProjects(sortedProjects);
       } catch (error) {
         console.error('Error fetching projects:', error);
@@ -47,18 +39,15 @@ export default function OnboardOffboardVisibility({ auth }) {
   const handleVisibilityToggle = async (projectId, currentValue) => {
     setLoading(true);
     try {
-      await projectApiService.updateOnboardOffboardVisibility(
-        projectId,
-        !currentValue
-      );
+      await projectApiService.updateOnboardOffboardVisibility(projectId, !currentValue);
 
       // Update local state
       setProjects((prevProjects) =>
         prevProjects.map((project) =>
           project._id === projectId
             ? { ...project, onboardOffboardVisible: !currentValue }
-            : project
-        )
+            : project,
+        ),
       );
     } catch (error) {
       console.error('Error updating visibility:', error);
@@ -80,10 +69,10 @@ export default function OnboardOffboardVisibility({ auth }) {
   if (user?.accessLevel !== 'admin' && user?.accessLevel !== 'superadmin') {
     return (
       <Box sx={{ px: 1, py: 3 }}>
-        <Typography variant="h2" textAlign="center" color="error">
+        <Typography variant="h2" sx={{ textAlign: 'center' }} color="error">
           Access Denied
         </Typography>
-        <Typography textAlign="center" sx={{ mt: 2 }}>
+        <Typography sx={{ textAlign: 'center', mt: 2 }}>
           You do not have permission to view this page.
         </Typography>
       </Box>
@@ -94,7 +83,7 @@ export default function OnboardOffboardVisibility({ auth }) {
     <Box sx={{ px: 1, py: 2 }}>
       {/* Page Title */}
       <Box sx={{ my: 3 }}>
-        <Typography variant="h1" textAlign="center">
+        <Typography variant="h1" sx={{ textAlign: 'center' }}>
           On / Offboard Visibility
         </Typography>
       </Box>
@@ -152,9 +141,7 @@ export default function OnboardOffboardVisibility({ auth }) {
                 '&:hover': { backgroundColor: '#e8e8e8' },
               }}
             >
-              <Typography
-                sx={{ fontSize: '14px', display: 'flex', alignItems: 'center' }}
-              >
+              <Typography sx={{ fontSize: '14px', display: 'flex', alignItems: 'center' }}>
                 {project.name}
               </Typography>
               <Box
@@ -172,10 +159,7 @@ export default function OnboardOffboardVisibility({ auth }) {
                 <Switch
                   checked={project.onboardOffboardVisible !== false}
                   onChange={() =>
-                    handleVisibilityToggle(
-                      project._id,
-                      project.onboardOffboardVisible !== false
-                    )
+                    handleVisibilityToggle(project._id, project.onboardOffboardVisible !== false)
                   }
                   disabled={loading}
                   color="primary"

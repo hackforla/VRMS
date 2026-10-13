@@ -1,7 +1,7 @@
 import { Box, Button, Grid } from '@mui/material';
 import { styled } from '@mui/system';
 import { ROLES } from '@shared/roles';
-import { NavLink, withRouter } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import HflaImg from '../svg/hflalogo.svg';
 import theme from '../theme';
@@ -29,14 +29,13 @@ const Navbar = () => {
   return (
     <Box sx={{ my: 2, mx: { xs: 0, sm: 4 } }}>
       <Grid container>
-        <Grid item>
+        <Grid>
           <NavLink to={loggedIn() ? '/welcome' : '/'}>
             <Box component="img" src={HflaImg} sx={{ width: '48.3px', mt: '7px' }} />
           </NavLink>
         </Grid>
         <Grid
-          item
-          xs={10}
+          size={10}
           sx={{
             display: 'flex',
             justifyContent: 'space-evenly',
@@ -46,7 +45,7 @@ const Navbar = () => {
           {/* No auth page -> Displays 2 links -> 'Checkin' and 'Admin'. */}
           {!auth?.user && (
             <>
-              <StyledButton component={NavLink} exact to="/">
+              <StyledButton component={NavLink} end to="/">
                 CHECK IN
               </StyledButton>
               <StyledButton component={NavLink} to="/login">
@@ -82,4 +81,4 @@ const Navbar = () => {
   );
 };
 
-export default withRouter(Navbar);
+export default Navbar;

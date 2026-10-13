@@ -1,9 +1,8 @@
 import { Box, Button, FormControl, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
-import { Redirect, useHistory } from 'react-router-dom';
-import { checkAuth, checkUser } from '../../services/user.service';
-
+import { Navigate, useNavigate } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
+import { checkAuth, checkUser } from '../../services/user.service';
 import '../../sass/AdminLogin.scss';
 
 /** User-facing copy for every login failure we can distinguish.
@@ -37,7 +36,7 @@ const Auth = () => {
   const USER = 'user';
   const pattern = /\b[a-z0-9._]+@[a-z0-9.-]+\.[a-z]{2,4}\b/i;
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const { auth, getLoginRedirect } = useAuth();
 
   const [email, setEmail] = useState('');
@@ -85,7 +84,7 @@ const Auth = () => {
 
       const isAuth = await checkAuth(email, LOG_IN);
       if (isAuth) {
-        history.push('/emailsent');
+        navigate('/emailsent');
       } else {
         showError(AUTH_ERROR_MESSAGES.USER_NOT_FOUND);
       }
@@ -108,7 +107,7 @@ const Auth = () => {
   // This allows users who are not admin, but are allowed to manage projects, to login
 
   return auth?.user ? (
-    <Redirect to={getLoginRedirect()} />
+    <Navigate to={getLoginRedirect()} replace />
   ) : (
     <div className="flex-container">
       <div className="adminlogin-container">

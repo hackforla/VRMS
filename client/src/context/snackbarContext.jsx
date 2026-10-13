@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useState } from 'react';
-import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import Slide from '@mui/material/Slide';
+import Snackbar from '@mui/material/Snackbar';
+import React, { createContext, useContext, useState } from 'react';
 
 const SnackbarContext = createContext();
 
@@ -33,13 +33,9 @@ export const SnackbarProvider = ({ children }) => {
           vertical: 'bottom',
           horizontal: 'right',
         }}
-        TransitionComponent={Slide}
+        slots={{ transition: Slide }}
       >
-        <Alert
-          onClose={hideSnackbar}
-          severity={snackbarState.severity}
-          sx={{width: '100%'}}
-        >
+        <Alert onClose={hideSnackbar} severity={snackbarState.severity} sx={{ width: '100%' }}>
           {snackbarState.message}
         </Alert>
       </Snackbar>

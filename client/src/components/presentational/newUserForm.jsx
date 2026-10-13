@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   Box,
   Button,
@@ -10,9 +9,10 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { useState } from 'react';
 import '../../sass/CheckIn.scss';
 
 const NewUserForm = (props) => {
@@ -50,33 +50,29 @@ const NewUserForm = (props) => {
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Box className="check-in-container">
         <Box className="check-in-headers">
-          <Typography variant="h3" fontSize="3em">
+          <Typography variant="h3" sx={{ fontSize: '3em' }}>
             Welcome!
           </Typography>
-          <Typography variant="h6">
-            Tell us a little bit about yourself:
-          </Typography>
+          <Typography variant="h6">Tell us a little bit about yourself:</Typography>
         </Box>
         <Box className="check-in-form">
-          <Box
-            className="form-check-in"
-            autoComplete="off"
-            onSubmit={(e) => e.preventDefault()}
-          >
+          <Box className="form-check-in" autoComplete="off" onSubmit={(e) => e.preventDefault()}>
             <Box className="form-row">
               <TextField
                 label="First Name"
                 variant="outlined"
-                InputLabelProps={{
-                  sx: {
-                    backgroundColor: 'white',
-                    px: 0,
-                    width: '6.3em',
-                    '&.Mui-focused': {
-                      mt: 0.4, // only applies when the input is focused
-                    },
-                    '&.MuiInputLabel-shrink': {
-                      mt: 0.4,
+                slotProps={{
+                  inputLabel: {
+                    sx: {
+                      backgroundColor: 'white',
+                      px: 0,
+                      width: '6.3em',
+                      '&.Mui-focused': {
+                        mt: 0.4, // only applies when the input is focused
+                      },
+                      '&.MuiInputLabel-shrink': {
+                        mt: 0.4,
+                      },
                     },
                   },
                 }}
@@ -90,16 +86,18 @@ const NewUserForm = (props) => {
               <TextField
                 label="Last Name"
                 variant="outlined"
-                InputLabelProps={{
-                  sx: {
-                    backgroundColor: 'white',
-                    px: 0,
-                    width: '6.2em',
-                    '&.Mui-focused': {
-                      mt: 0.4, // only applies when the input is focused
-                    },
-                    '&.MuiInputLabel-shrink': {
-                      mt: 0.4,
+                slotProps={{
+                  inputLabel: {
+                    sx: {
+                      backgroundColor: 'white',
+                      px: 0,
+                      width: '6.2em',
+                      '&.Mui-focused': {
+                        mt: 0.4, // only applies when the input is focused
+                      },
+                      '&.MuiInputLabel-shrink': {
+                        mt: 0.4,
+                      },
                     },
                   },
                 }}
@@ -113,16 +111,24 @@ const NewUserForm = (props) => {
               <TextField
                 label="Email Address"
                 variant="outlined"
-                InputLabelProps={{
-                  sx: {
-                    backgroundColor: 'white',
-                    px: 0,
-                    width: '8em',
-                    '&.Mui-focused': {
-                      mt: 0.4, // only applies when the input is focused
+                slotProps={{
+                  inputLabel: {
+                    sx: {
+                      backgroundColor: 'white',
+                      px: 0,
+                      width: '8em',
+                      '&.Mui-focused': {
+                        mt: 0.4, // only applies when the input is focused
+                      },
+                      '&.MuiInputLabel-shrink': {
+                        mt: 0.4,
+                      },
                     },
-                    '&.MuiInputLabel-shrink': {
-                      mt: 0.4,
+                  },
+                  formHelperText: {
+                    sx: {
+                      marginBottom: '10px',
+                      color: 'black',
                     },
                   },
                 }}
@@ -130,12 +136,6 @@ const NewUserForm = (props) => {
                 value={props.formInput.email.toString().toLowerCase()}
                 onChange={props.handleInputChange}
                 helperText="(This allows easy use of the app. We'll never sell your data!)"
-                FormHelperTextProps={{
-                  sx: {
-                    marginBottom: '10px',
-                    color: 'black',
-                  },
-                }}
                 required
               />
             </Box>
@@ -148,16 +148,12 @@ const NewUserForm = (props) => {
                       <TextField
                         label={question.questionText}
                         variant="outlined"
-                        InputLabelProps={InputLabelProps}
+                        slotProps={{ inputLabel: InputLabelProps }}
                         name={question.htmlName}
                         placeholder={question.placeholderText}
                         value={
-                          Object.keys(props.formInput).includes(
-                            question.htmlName,
-                          )
-                            ? props.formInput[
-                                question.htmlName.toString()
-                              ].toString()
+                          Object.keys(props.formInput).includes(question.htmlName)
+                            ? props.formInput[question.htmlName.toString()].toString()
                             : ''
                         }
                         onChange={props.handleInputChange}
@@ -181,16 +177,8 @@ const NewUserForm = (props) => {
                           defaultValue="true"
                           onChange={props.handleNewMemberChange}
                         >
-                          <FormControlLabel
-                            value="true"
-                            control={<Radio />}
-                            label="Yes"
-                          />
-                          <FormControlLabel
-                            value="false"
-                            control={<Radio />}
-                            label="No"
-                          />
+                          <FormControlLabel value="true" control={<Radio />} label="Yes" />
+                          <FormControlLabel value="false" control={<Radio />} label="No" />
                         </RadioGroup>
                       </FormControl>
                     </Box>
@@ -220,7 +208,6 @@ const NewUserForm = (props) => {
                               maxDate={maxDate}
                               value={selectedDate}
                               onChange={handleDateChange}
-                              inputFormat="MMM yyyy"
                               localeText={{
                                 fieldMonthPlaceholder: () => 'Month',
                                 fieldYearPlaceholder: () => 'Year',
@@ -229,7 +216,7 @@ const NewUserForm = (props) => {
                                 width: '100%',
                                 maxWidth: '300px',
                                 borderBottom: 'none',
-                                '& input[type=text]': {
+                                '& .MuiPickersInputBase-sectionsContainer': {
                                   height: '40px',
                                   width: '100%',
                                   borderBottom: 'none',
@@ -242,11 +229,7 @@ const NewUserForm = (props) => {
                                   width: '8em',
                                 },
                               }}
-                            >
-                              {(params) => (
-                                <TextField {...params} variant="outlined" />
-                              )}
-                            </DatePicker>
+                            />
                           </FormControl>
                         </FormControl>
                       </Box>

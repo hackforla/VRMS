@@ -10,7 +10,7 @@ import {
 } from '@shared/authorizationUtils';
 import posthog from 'posthog-js';
 import { createContext, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import * as authApi from '../api/auth';
 import { REACT_APP_CUSTOM_REQUEST_HEADER as headerToSend } from '../utils/globalSettings';
 
@@ -18,7 +18,7 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   // On mount, check if user has valid session (HttpOnly cookies)
   useEffect(() => {
@@ -84,7 +84,7 @@ export const AuthProvider = ({ children }) => {
       throw new Error(res.statusText);
     }
 
-    history.push('/');
+    navigate('/');
     setAuth(null);
   };
 

@@ -173,14 +173,6 @@ Note: Understanding how git remotes work will make collaborating much easier. Yo
 
    - Navigate to the root of the application `vrms/` and run `yarn start`
 
-   _Troubleshooting :_ If you encounter the following error after running `yarn start`:
-
-   ```
-   Error: error:0308010C:digital envelope routines::unsupported
-   ```
-
-   Try changing your node version to `16.14.2` by running `nvm use 16.14.2`. If you do not have `nvm` installed, see [install instructions](https://github.com/nvm-sh/nvm#installing-and-updating)
-
 You should now have a live app. Happy hacking.
 
 ### **2.4 Running Tests**

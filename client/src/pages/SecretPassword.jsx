@@ -1,30 +1,23 @@
+import { Box, Button, Grid, InputLabel, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
-import {
-  Typography,
-  Box,
-  TextField,
-  InputLabel,
-  Button,
-  Grid,
-} from '@mui/material';
 
 /** Secret Ppassword Component
  *
  * To be used for validating the secret password during HFLA onboarding
  * */
 
-const currentSecretPassword = "strawberry".toLowerCase() // must be lower case
+const currentSecretPassword = 'strawberry'.toLowerCase(); // must be lower case
 
 const encouragementMessage = [
-  "Great job! You found the secret password!",
-  "You can now return to the onboarding instructions.",
-  "When later asked for the password, in the onboarding form, use the password you just validated."
-]
+  'Great job! You found the secret password!',
+  'You can now return to the onboarding instructions.',
+  'When later asked for the password, in the onboarding form, use the password you just validated.',
+];
 
-const secretInputLabel = "What's the Secret Password?"
-const helperTextInitial = " "
-const helperTextError = "That's not the password, please try again."
-const helperTextSuccess = "That's the word!"
+const secretInputLabel = "What's the Secret Password?";
+const helperTextInitial = ' ';
+const helperTextError = "That's not the password, please try again.";
+const helperTextSuccess = "That's the word!";
 
 /** Secret Password Component
  * -renders a form for validating the secret password
@@ -41,20 +34,20 @@ export default function SecretPassword() {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    const newFormData = { ...state }
-    newFormData[name] = value
+    const newFormData = { ...state };
+    newFormData[name] = value;
     setState(newFormData);
   };
 
   const onSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     setState((fData) => ({
       ...fData,
-      "secretPassword": "",
-      "error": currentSecretPassword !== state.secretPassword.toLowerCase(),
-      "success": currentSecretPassword === state.secretPassword.toLowerCase(),
+      secretPassword: '',
+      error: currentSecretPassword !== state.secretPassword.toLowerCase(),
+      success: currentSecretPassword === state.secretPassword.toLowerCase(),
     }));
-  }
+  };
 
   return (
     <Box sx={{ px: 0.5 }}>
@@ -64,14 +57,11 @@ export default function SecretPassword() {
       <Box>
         <Box sx={{ py: 2, px: 4 }}>
           {!state.success && (
-            <Box component='form' id="secret-password">
+            <Box component="form" id="secret-password">
               <Box sx={{ mb: 1 }}>
-                <Grid container alignItems="center">
-                  <Grid item xs="auto" sx={{ pr: 3 }}>
-                    <InputLabel
-                      sx={{ width: 'max-content', ml: 0.5, mb: 0.5 }}
-                      id="secretPassword"
-                    >
+                <Grid container sx={{ alignItems: 'center' }}>
+                  <Grid size="auto" sx={{ pr: 3 }}>
+                    <InputLabel sx={{ width: 'max-content', ml: 0.5, mb: 0.5 }} id="secretPassword">
                       {secretInputLabel}
                     </InputLabel>
                   </Grid>
@@ -84,23 +74,26 @@ export default function SecretPassword() {
                   variant="outlined"
                   type="text"
                   onChange={handleChange}
-                  color={state.success ? "success" : ""}
+                  color={state.success ? 'success' : ''}
                   helperText={
                     state.success
                       ? helperTextSuccess // This component should be hidden if this state is active ( state.success === true )
                       : !state.error
                         ? helperTextInitial
-                        : helperTextError}
+                        : helperTextError
+                  }
                   error={state.error}
-                  value={state["secretPassword"]}
+                  value={state['secretPassword']}
                 />
               </Box>
               <Button
                 sx={{ minWidth: 150 }}
                 form="secret-password"
-                variant='contained'
-                type='submit'
-                onClick={(e) => { onSubmit(e) }}
+                variant="contained"
+                type="submit"
+                onClick={(e) => {
+                  onSubmit(e);
+                }}
               >
                 Submit
               </Button>
@@ -111,25 +104,27 @@ export default function SecretPassword() {
 
       {state.success && (
         <Box>
-          <Grid container justifyContent="center">
-            {encouragementMessage.map(phrase => (
-              <Typography variant='p' key={phrase} sx={{ mx: 5, mb: 4 }}>{phrase}</Typography>
+          <Grid container sx={{ justifyContent: 'center' }}>
+            {encouragementMessage.map((phrase) => (
+              <Typography variant="p" key={phrase} sx={{ mx: 5, mb: 4 }}>
+                {phrase}
+              </Typography>
             ))}
-            <Grid item xs="auto">
+            <Grid size="auto">
               <Button
                 sx={{ minWidth: 150 }}
                 form="secret-password"
-                variant='contained'
+                variant="contained"
                 color="success"
                 onClick={(e) => {
                   navigator.clipboard.writeText(currentSecretPassword);
                   setState((fData) => ({
                     ...fData,
-                    "copied": true,
+                    copied: true,
                   }));
                 }}
               >
-                {!state.copied ? "Click to Copy" : "Copied!"}
+                {!state.copied ? 'Click to Copy' : 'Copied!'}
               </Button>
             </Grid>
           </Grid>

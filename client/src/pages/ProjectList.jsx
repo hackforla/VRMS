@@ -1,12 +1,10 @@
-import { styled } from '@mui/system';
-import { useEffect, useState } from 'react';
-import ProjectApiService from '../api/ProjectApiService';
-
 import { Box, Button, CircularProgress, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
-import TitledBox from '../components/parts/boxes/TitledBox';
-
+import { styled } from '@mui/system';
 import { ROLES } from '@shared/roles';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import ProjectApiService from '../api/ProjectApiService';
+import TitledBox from '../components/parts/boxes/TitledBox';
 import useAuth from '../hooks/useAuth';
 
 const StyledTypography = styled(Typography)({
@@ -71,7 +69,7 @@ export default function ProjectList() {
   return (
     <Box sx={{ px: 1 }}>
       <Box sx={{ my: 3 }}>
-        <Typography variant="h1" textAlign="center">
+        <Typography variant="h1" sx={{ textAlign: 'center' }}>
           Project Management
         </Typography>
       </Box>

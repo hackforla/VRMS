@@ -1,26 +1,25 @@
-import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useForm, useFormState } from 'react-hook-form';
 import {
-  CircularProgress,
-  Typography,
   Box,
   Button,
-  Grid,
-  Radio,
+  CircularProgress,
   FormControl,
   FormControlLabel,
-  RadioGroup,
+  Grid,
   Paper,
+  Radio,
+  RadioGroup,
+  Typography,
 } from '@mui/material';
-
-import useAuth from '../hooks/useAuth';
+import { useState } from 'react';
+import { useForm, useFormState } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import ProjectApiService from '../api/ProjectApiService';
+import useAuth from '../hooks/useAuth';
 import EditIcon from '../svg/Icon_Edit.svg?react';
 import PlusIcon from '../svg/PlusIcon.svg?react';
-import ValidatedTextField from './parts/form/ValidatedTextField';
-import TitledBox from './parts/boxes/TitledBox';
 import ChangesModal from './ChangesModal';
+import TitledBox from './parts/boxes/TitledBox';
+import ValidatedTextField from './parts/form/ValidatedTextField';
 
 /** STYLES
  *  -most TextField and InputLabel styles are controlled by the theme
@@ -43,14 +42,8 @@ import ChangesModal from './ChangesModal';
  * - isEdit - Whether its creating a new project or editing one - True or False.
  * - setFormData - allows us to updated the form data.
  * */
-export default function ProjectForm({
-  arr,
-  formData,
-  projectToEdit,
-  isEdit,
-  setFormData,
-}) {
-  const history = useHistory();
+export default function ProjectForm({ arr, formData, projectToEdit, isEdit, setFormData }) {
+  const navigate = useNavigate();
 
   // ----------------- States -----------------
   const { isAdmin, isSuperAdmin } = useAuth();
@@ -62,7 +55,7 @@ export default function ProjectForm({
   const handleOpen = () => setIsModalOpen(true);
   const handleClose = () => setIsModalOpen(false);
   const checkFields = () => {
-    history.push('/projects');
+    navigate('/projects');
   };
 
   /**
@@ -100,7 +93,7 @@ export default function ProjectForm({
     try {
       setIsLoading(true);
       const id = await projectApi.create(data);
-      history.push(`/projects/${id}`);
+      navigate(`/projects/${id}`);
     } catch (errors) {
       console.error(errors);
     }
@@ -156,9 +149,7 @@ export default function ProjectForm({
         }}
       >
         <PlusIcon style={{ p: 1 }} />
-        <Typography sx={{ p: 1, fontSize: '14px', fontWeight: '600' }}>
-          Add New Project
-        </Typography>
+        <Typography sx={{ p: 1, fontSize: '14px', fontWeight: '600' }}>Add New Project</Typography>
       </Box>
     );
   };
@@ -186,7 +177,7 @@ export default function ProjectForm({
 
   // Holdes the location radios styling.
   const locationRadios = (
-    <Grid item>
+    <Grid>
       <FormControl>
         <RadioGroup
           row
@@ -254,14 +245,12 @@ export default function ProjectForm({
               handleClose={handleClose}
             />
           </Box>
-          <Grid container justifyContent="space-evenly" sx={{ my: 3 }}>
-            <Grid item xs="auto">
+          <Grid container sx={{ justifyContent: 'space-evenly', my: 3 }}>
+            <Grid size="auto">
               <Button
                 type="submit"
                 form="project-form"
-                variant={
-                  !isEdit ? 'secondary' : !editMode ? 'contained' : 'secondary'
-                }
+                variant={!isEdit ? 'secondary' : !editMode ? 'contained' : 'secondary'}
                 sx={{
                   width: '150px',
                   cursor: 'pointer',
@@ -271,7 +260,7 @@ export default function ProjectForm({
                 {isLoading ? <CircularProgress /> : 'Save'}
               </Button>
             </Grid>
-            <Grid item xs="auto">
+            <Grid size="auto">
               <Button
                 variant="contained"
                 sx={{
@@ -279,9 +268,7 @@ export default function ProjectForm({
                   cursor: 'pointer',
                 }}
                 onClick={
-                  !editMode || Object.keys(dirtyFields).length === 0
-                    ? checkFields
-                    : handleOpen
+                  !editMode || Object.keys(dirtyFields).length === 0 ? checkFields : handleOpen
                 }
               >
                 Close
