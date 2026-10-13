@@ -1,5 +1,5 @@
-import { describe, test, expect, beforeAll } from 'vitest';
 import supertest from 'supertest';
+import { beforeAll, describe, expect, test } from 'vitest';
 import app from '../app.js';
 import { Event } from '../models/index.js';
 import { setupIntegrationDB } from '../setup-test.js';
