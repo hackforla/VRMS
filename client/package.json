@@ -57,7 +57,7 @@
     "autoprefixer": "^10.4.21",
     "jsdom": "^24.1.0",
     "sass": "^1.49.7",
-    "vitest": "^3.2.6"
+    "vitest": "^4.1.11"
   },
   "engines": {
     "node": "<=18.0.0"
