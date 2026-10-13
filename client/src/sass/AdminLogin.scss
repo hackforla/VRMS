@@ -5,6 +5,24 @@
   align-items: center;
   z-index: 1;
   padding-top: 6vh;
+
+  // Visible focus indicator for keyboard navigation (WCAG 2.1 SC 2.4.7).
+  // The MUI TextField root receives focus-within when the underlying input
+  // is focused; the login button is targeted directly. Both render an
+  // outline ring so keyboard users can tell which control is focused.
+  .MuiTextField-root:focus-within,
+  .login-button:focus-visible {
+    outline: 2px solid #1976d2;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  // Keyboard-only focus on the underlying input also lights up the ring,
+  // for browsers that do not propagate :focus-within reliably.
+  .MuiInputBase-input:focus-visible {
+    outline: 2px solid #1976d2;
+    outline-offset: 2px;
+  }
 }
 
 .adminlogin-headers {
