@@ -169,7 +169,13 @@ describe('refreshSession', () => {
       reply(409, { error: 'Refresh token was just replaced; retry' }),
       reply(200, session),
     ];
-    const fetchMock = mockApi({ 'POST /api/auth/v2/refresh': () => answers.shift()! });
+    const fetchMock = mockApi({
+      'POST /api/auth/v2/refresh': () => {
+        const next = answers.shift();
+        if (!next) throw new Error('Unexpected extra refresh request');
+        return next;
+      },
+    });
 
     expect(await refreshSession()).toEqual(user);
     expect(fetchMock).toHaveBeenCalledTimes(2);
