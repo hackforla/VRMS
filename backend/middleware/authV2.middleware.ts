@@ -31,23 +31,26 @@ export function requireAccessTokenV2(req: Request, res: Response, next: NextFunc
   next();
 }
 
-// Counts sign-in and sign-up attempts per client IP in a fixed window, so
-// passwords can't be guessed without limit. Counts are kept in memory only.
+// Counts failed sign-in and sign-up attempts per client IP in a fixed window,
+// so passwords can't be guessed without limit while many people signing in
+// from one network are never blocked. Counts are kept in memory only.
 let windowStartedAt = Date.now();
-const attemptsByIp = new Map<string, number>();
+const failuresByIp = new Map<string, number>();
 
 export function limitSigninAttempts(req: Request, res: Response, next: NextFunction) {
   const now = Date.now();
   if (now - windowStartedAt >= SIGNIN_LIMIT_WINDOW_MS) {
     windowStartedAt = now;
-    attemptsByIp.clear();
+    failuresByIp.clear();
   }
   const key = req.ip ?? 'unknown';
-  const attempts = (attemptsByIp.get(key) ?? 0) + 1;
-  attemptsByIp.set(key, attempts);
-  if (attempts > getSigninLimit()) {
+  if ((failuresByIp.get(key) ?? 0) >= getSigninLimit()) {
     res.set('Retry-After', String(Math.ceil((windowStartedAt + SIGNIN_LIMIT_WINDOW_MS - now) / 1000)));
-    return res.status(429).json({ error: 'Too many sign-in attempts; try again later' });
+    return res.status(429).json({ error: 'Too many failed sign-in attempts; try again later' });
   }
+  res.on('finish', () => {
+    if (res.statusCode >= 200 && res.statusCode < 300) return;
+    failuresByIp.set(key, (failuresByIp.get(key) ?? 0) + 1);
+  });
   next();
 }

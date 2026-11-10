@@ -19,28 +19,35 @@ beforeAll(() => {
   process.env.AUTH_V2_SIGNIN_LIMIT = '3';
 });
 
-test('sign-in and sign-up attempts from one IP are capped, other routes are not', async () => {
-  const guess = (password: string) =>
-    request.post('/api/auth/v2/signin').send({ identifier: 'volunteer', password });
+test('only failed sign-in and sign-up attempts from one IP are capped', async () => {
+  const password = 'correct horse battery';
+  const signIn = (attempt: string) =>
+    request.post('/api/auth/v2/signin').send({ identifier: 'volunteer', password: attempt });
 
-  expect((await guess('guess-1')).status).toBe(401);
-  expect((await guess('guess-2')).status).toBe(401);
   expect(
     (
       await request
         .post('/api/auth/v2/signup')
-        .send({ email: 'someone@example.com', password: 'correct horse battery' })
+        .send({ email: 'someone@example.com', username: 'volunteer', password })
     ).status,
   ).toBe(201);
+  for (let i = 0; i < 5; i++) expect((await signIn(password)).status).toBe(200);
 
-  const blocked = await guess('guess-3');
+  expect((await signIn('guess-1')).status).toBe(401);
+  expect((await signIn('guess-2')).status).toBe(401);
+  expect(
+    (await request.post('/api/auth/v2/signup').send({ email: 'someone@example.com', password }))
+      .status,
+  ).toBe(409);
+
+  const blocked = await signIn(password);
   expect(blocked.status).toBe(429);
   expect(blocked.body.error).toMatch(/too many/i);
   expect(Number(blocked.headers['retry-after'])).toBeGreaterThan(0);
 
   const blockedSignup = await request
     .post('/api/auth/v2/signup')
-    .send({ email: 'other@example.com', password: 'correct horse battery' });
+    .send({ email: 'other@example.com', password });
   expect(blockedSignup.status).toBe(429);
 
   expect((await request.post('/api/auth/v2/refresh')).status).toBe(401);

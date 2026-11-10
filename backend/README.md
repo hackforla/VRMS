@@ -10,7 +10,7 @@ the same session code.
 **Turning it on:** set `AUTH_V2_ACCESS_TOKEN_SECRET` (32+ random characters, e.g. `openssl rand -base64 48`).
 Without it the rest of the app is unaffected and every v2 route answers `503 Login v2 is not configured`.
 `AUTH_V2_BCRYPT_ROUNDS` (optional, default 12) sets the password hashing cost.
-`AUTH_V2_SIGNIN_LIMIT` (optional, default 10) caps sign-in and sign-up attempts per client IP in each
+`AUTH_V2_SIGNIN_LIMIT` (optional, default 10) caps failed sign-in and sign-up attempts (any non-2xx answer) per client IP in each
 15-minute window; further attempts get `429` with a JSON `error`. Counts are kept in memory per backend
 process (no account lockout).
 
