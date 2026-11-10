@@ -25,10 +25,10 @@ const eventSchema = mongoose.Schema({
     checkInReady: { type: Boolean, default: false },    // is the event open for check-ins?
     videoConferenceLink: { type: String },              // can be same or different from project
     owner: {
-        ownerId: { type: Number }                       // id of user who created event
+        ownerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }                       // id of user who created event
     },
     recurringEventLink: {                               // only populated if this event was created from a RecurringEvent
-        recurringEventId: { type: String }
+        recurringEventId: { type: mongoose.Schema.Types.ObjectId, ref: 'RecurringEvent' }
     }
 });
 

@@ -1,7 +1,7 @@
-import { describe, it, expect, vi, beforeAll, beforeEach, afterAll, afterEach, test } from 'vitest';
 import mongoose from 'mongoose';
-import { User } from './user.model.js';
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, test, vi } from 'vitest';
 import { setupIntegrationDB } from '../setup-test.js';
+import { User } from './user.model.js';
 
 setupIntegrationDB('user-model');
 
@@ -69,7 +69,7 @@ describe('User Model - Serialization', () => {
       isHflaGithubMember: true,
       githubPublic2FA: false,
       availability: 'Evenings',
-      managedProjects: ['ProjectGamma'],
+      managedProjects: [new mongoose.Types.ObjectId()],
       isActive: true,
       createdDate: new Date(2023, 0, 15),
     };
@@ -93,7 +93,9 @@ describe('User Model - Serialization', () => {
     expect(serializedUser.isHflaGithubMember).toBe(userData.isHflaGithubMember);
     expect(serializedUser.githubPublic2FA).toBe(userData.githubPublic2FA);
     expect(serializedUser.availability).toBe(userData.availability);
-    expect([...serializedUser.managedProjects]).toEqual(userData.managedProjects);
+    expect(serializedUser.managedProjects.map(String)).toEqual(
+      userData.managedProjects.map(String),
+    );
     expect(serializedUser.isActive).toBe(userData.isActive);
   });
 });

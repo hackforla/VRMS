@@ -33,7 +33,7 @@ const projectSchema = mongoose.Schema({
   lookingDescription: { type: String }, // narrative on what the project is looking for
   recruitingCategories: [{ type: String }], // same as global Skills picklist
   partners: [{ type: String }], // any third-party partners on the project, e.g. City of LA
-  managedByUsers: [{ type: String }], // Which users may manage this project.
+  managedByUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // Which users may manage this project.
   onboardOffboardVisible: { type: Boolean, default: true }, // Whether onboarding/offboarding forms are visible on the project page
 });
 
