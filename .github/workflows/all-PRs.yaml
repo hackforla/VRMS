@@ -17,7 +17,7 @@ jobs:
         run: yarn install --frozen-lockfile
         working-directory: backend
       - name: Install client dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --frozen-lockfile --ignore-engines
         working-directory: client
       - name: Type-check backend and shared
         run: yarn run typecheck
