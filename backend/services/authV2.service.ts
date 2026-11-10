@@ -10,13 +10,11 @@ import {
   getBaseUrl,
   getSigninLimit,
 } from '../config/authV2.config.ts';
-import { User } from '../models/user.model.js';
 
 const MINUTE = 60;
 
-// Better Auth writes people into the same `users` collection the rest of the app
-// reads through Mongoose, so a freshly created user has to look like one the
-// Mongoose User model would have made.
+// Login v2 keeps its people in its own collections, apart from the `users`
+// collection the rest of the app reads, until account linking is decided.
 function createAuth(db: NonNullable<typeof mongoose.connection.db>) {
   const signinRule = { window: MINUTE, max: getSigninLimit() };
 
@@ -28,10 +26,7 @@ function createAuth(db: NonNullable<typeof mongoose.connection.db>) {
     emailAndPassword: { enabled: true, minPasswordLength: 10 },
     plugins: [username({ minUsernameLength: 3, maxUsernameLength: 30 })],
     user: {
-      modelName: 'users',
-      // The Mongoose model keeps `name` as { firstName, lastName }, so the
-      // library's single display name goes in its own field.
-      fields: { name: 'displayName' },
+      modelName: 'authV2Users',
       additionalFields: {
         accessLevel: { type: 'string', required: false, defaultValue: 'user', input: false },
         isActive: { type: 'boolean', required: false, defaultValue: true, input: false },
@@ -60,30 +55,13 @@ function createAuth(db: NonNullable<typeof mongoose.connection.db>) {
       },
     },
     databaseHooks: {
-      user: {
-        create: {
-          after: async (user) => {
-            const [firstName, ...rest] = String(user.name ?? '')
-              .trim()
-              .split(/\s+/);
-            await User.updateOne(
-              { _id: user.id },
-              {
-                $set: {
-                  'name.firstName': firstName,
-                  'name.lastName': rest.join(' '),
-                  createdDate: user.createdAt,
-                },
-              },
-            );
-          },
-        },
-      },
       session: {
         create: {
-          // The current login refuses deactivated volunteers; so does this one.
-          before: async (session) => {
-            const person = await User.findById(session.userId).select('isActive');
+          before: async (session, ctx) => {
+            const person = await ctx?.context.adapter.findOne<{ isActive?: boolean }>({
+              model: 'user',
+              where: [{ field: 'id', value: session.userId }],
+            });
             if (person && person.isActive === false) {
               throw new APIError('FORBIDDEN', { message: 'This account is not active' });
             }

@@ -18,12 +18,13 @@ how many sign-in or sign-up requests one client IP may make per minute before ge
 `GET /api/auth/v2/get-session`; see its documentation for the request shapes. They go through the same
 custom-header check as the rest of the API.
 
-**Where things live:** people are stored in the existing `users` collection (Better Auth writes to it with
-the MongoDB driver, so a hook fills in `name.firstName`/`name.lastName` and `createdDate`, and new accounts
-get `accessLevel: 'user'` and `isActive: true`). Password hashes, sessions and verification records are in
-the `authV2Accounts`, `authV2Sessions` and `authV2Verifications` collections, which the rest of the app
-never touches. A deactivated user (`isActive: false`) cannot sign in. Someone who already has a VRMS account
-but no password cannot sign up with the same email, and cannot sign in with a password.
+**Where things live:** Login v2 keeps everything in its own collections, which the rest of the app never
+reads: people in `authV2Users` (new accounts get `accessLevel: 'user'` and `isActive: true`), password
+hashes in `authV2Accounts`, sessions in `authV2Sessions` and verification records in `authV2Verifications`.
+It never reads or writes the existing `users` collection, so signing up for v2 does not create or change a
+VRMS account, and an email already used by a current volunteer is just another v2 sign-up. How v2 accounts
+link to current ones is still to be decided. A deactivated v2 user (`isActive: false` in `authV2Users`)
+cannot sign in.
 
 **Sessions:** a signed, `httpOnly`, `SameSite=Lax` cookie (`Secure` when the site is https) that is only
 sent to `/api/auth/v2`; the session is stored in MongoDB, lasts 7 days and is extended as it is used.

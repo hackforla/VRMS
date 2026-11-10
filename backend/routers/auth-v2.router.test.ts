@@ -87,7 +87,7 @@ describe('Login v2', () => {
   beforeEach(async () => {
     configure();
     await User.deleteMany({});
-    for (const name of ['authV2Sessions', 'authV2Accounts', 'authV2Verifications']) {
+    for (const name of ['authV2Users', 'authV2Sessions', 'authV2Accounts', 'authV2Verifications']) {
       await collection(name).deleteMany({});
     }
   });
@@ -102,23 +102,19 @@ describe('Login v2', () => {
       expect(JSON.stringify(res.body)).not.toContain(credentials.password);
     });
 
-    test('writes a user the Mongoose User model can read', async () => {
+    test('keeps the account out of the users collection the rest of the app reads', async () => {
       await signUp();
 
-      const person = await User.findOne({ email: 'volunteer@example.com' });
-      expect(person).toMatchObject({
-        accessLevel: 'user',
-        isActive: true,
-        name: { firstName: 'Vera', lastName: 'Volunteer' },
-      });
-      expect(person?.createdDate).toBeInstanceOf(Date);
-      expect(person?.serialize()).toMatchObject({ email: 'volunteer@example.com' });
+      expect(await User.countDocuments()).toBe(0);
+      expect(await collection('users').countDocuments()).toBe(0);
+      const person = await collection('authV2Users').findOne({ email: 'volunteer@example.com' });
+      expect(person).toMatchObject({ accessLevel: 'user', isActive: true, name: 'Vera Volunteer' });
     });
 
-    test('keeps only a salted hash of the password, outside the users collection', async () => {
+    test('keeps only a salted hash of the password, apart from the user record', async () => {
       await signUp();
 
-      const person = await collection('users').findOne({ email: 'volunteer@example.com' });
+      const person = await collection('authV2Users').findOne({ email: 'volunteer@example.com' });
       expect(JSON.stringify(person)).not.toContain(credentials.password);
       const account = await collection('authV2Accounts').findOne({
         userId: { $in: [person?._id, person?._id.toString()] },
@@ -146,18 +142,17 @@ describe('Login v2', () => {
         expect(res.status, code).toBeLessThan(500);
         expect(res.body.code).toBe(code);
       }
-      expect(await User.countDocuments()).toBe(1);
+      expect(await collection('authV2Users').countDocuments()).toBe(1);
     });
 
-    test('refuses an email that already belongs to a current volunteer', async () => {
+    test('neither claims nor changes a current volunteer with the same email', async () => {
       await User.create({ email: 'legacy@example.com', name: { firstName: 'Lee' } });
+      const before = await collection('users').findOne({ email: 'legacy@example.com' });
 
-      const res = await signUp({ email: 'legacy@example.com', username: 'lee' });
+      const res = await signUp({ email: 'legacy@example.com', username: 'lee', name: 'Not Lee' });
 
-      expect(res.status).toBe(422);
-      const legacy = await collection('users').findOne({ email: 'legacy@example.com' });
-      expect(legacy?.username).toBeUndefined();
-      expect(await collection('authV2Accounts').countDocuments()).toBe(0);
+      expect(res.status).toBe(200);
+      expect(await collection('users').find({}).toArray()).toEqual([before]);
     });
   });
 
@@ -210,7 +205,10 @@ describe('Login v2', () => {
     });
 
     test('refuses a deactivated volunteer', async () => {
-      await User.updateOne({ email: 'volunteer@example.com' }, { isActive: false });
+      await collection('authV2Users').updateOne(
+        { email: 'volunteer@example.com' },
+        { $set: { isActive: false } },
+      );
 
       const res = await post('/sign-in/email', {
         email: 'volunteer@example.com',
