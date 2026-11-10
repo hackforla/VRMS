@@ -51,6 +51,9 @@ assertEnv([
 // Create a new application using the Express framework
 const app = express();
 
+// One proxy (nginx or Heroku's router) sits in front, so req.ip is the client's address.
+app.set('trust proxy', 1);
+
 // Required to view Request Body (req.body) in JSON
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

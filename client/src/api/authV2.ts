@@ -68,7 +68,9 @@ export function signIn(identifier: string, password: string): Promise<AuthV2User
 export function refreshSession(): Promise<AuthV2User | null> {
   refreshInFlight ??= (async () => {
     try {
-      const res = await request('/refresh', { method: 'POST' });
+      let res = await request('/refresh', { method: 'POST' });
+      // 409: another tab just exchanged the same cookie; the browser now holds its newer one.
+      if (res.status === 409) res = await request('/refresh', { method: 'POST' });
       if (!res.ok) {
         accessToken = null;
         return null;

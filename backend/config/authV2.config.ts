@@ -26,3 +26,11 @@ export function getBcryptRounds(): number {
   const rounds = Number(process.env.AUTH_V2_BCRYPT_ROUNDS);
   return Number.isInteger(rounds) && rounds >= 4 && rounds <= 15 ? rounds : 12;
 }
+
+// Sign-in and sign-up attempts allowed per client IP in each window.
+export const SIGNIN_LIMIT_WINDOW_MS = 15 * 60 * 1000;
+
+export function getSigninLimit(): number {
+  const limit = Number(process.env.AUTH_V2_SIGNIN_LIMIT);
+  return Number.isInteger(limit) && limit > 0 ? limit : 10;
+}

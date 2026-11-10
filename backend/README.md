@@ -10,6 +10,9 @@ the same session code.
 **Turning it on:** set `AUTH_V2_ACCESS_TOKEN_SECRET` (32+ random characters, e.g. `openssl rand -base64 48`).
 Without it the rest of the app is unaffected and every v2 route answers `503 Login v2 is not configured`.
 `AUTH_V2_BCRYPT_ROUNDS` (optional, default 12) sets the password hashing cost.
+`AUTH_V2_SIGNIN_LIMIT` (optional, default 10) caps sign-in and sign-up attempts per client IP in each
+15-minute window; further attempts get `429` with a JSON `error`. Counts are kept in memory per backend
+process (no account lockout).
 
 | Route | What it does |
 | --- | --- |
@@ -23,7 +26,8 @@ Without it the rest of the app is unaffected and every v2 route answers `503 Log
 memory only) and sets a 30-day refresh token in an `httpOnly`, `SameSite=Strict` cookie (`Secure` in
 production) that is only sent to `/api/auth/v2`. Every refresh issues a new refresh token and marks the
 old one used. Replaying a used token ends that whole sign-in, except within 10 seconds of the rotation,
-which is treated as a second browser tab racing. Only SHA-256 hashes of refresh tokens are stored, in the
+which is treated as a second browser tab racing: that request gets `409`, the cookie is left alone, and
+the client retries with the newer cookie the other tab received. Only SHA-256 hashes of refresh tokens are stored, in the
 `RefreshTokenV2` collection, which MongoDB expires automatically via a TTL index on `expiresAt`.
 
 **Passwords:** hashed with bcrypt (via `bcryptjs`) and stored in `User.passwordHash`, which is never

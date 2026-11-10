@@ -163,4 +163,19 @@ describe('refreshSession', () => {
     expect(second).toEqual(user);
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
   });
+
+  test('retries once when another tab just exchanged the same refresh cookie', async () => {
+    const answers = [reply(409, { error: 'Refresh token was just replaced; retry' }), reply(200, session)];
+    const fetchMock = mockApi({ 'POST /api/auth/v2/refresh': () => answers.shift()! });
+
+    expect(await refreshSession()).toEqual(user);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  test('gives up after one retry', async () => {
+    const fetchMock = mockApi({ 'POST /api/auth/v2/refresh': () => reply(409, {}) });
+
+    expect(await refreshSession()).toBeNull();
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
 });

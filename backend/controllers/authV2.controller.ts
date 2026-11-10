@@ -142,6 +142,11 @@ export async function refresh(req: Request, res: Response) {
   }
 
   const rotation = await rotateRefreshToken(presented);
+  if (rotation.status === 'superseded') {
+    // Another tab exchanged this token a moment ago and its response set the
+    // newer cookie, so the cookie is left alone and the client retries.
+    return res.status(409).json({ error: 'Refresh token was just replaced; retry' });
+  }
   if (rotation.status !== 'ok') {
     clearRefreshCookie(res);
     return res.status(401).json({

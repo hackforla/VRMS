@@ -85,6 +85,7 @@ export async function issueRefreshToken(userId: string, family: string = crypto.
 export type RotationResult =
   | { status: 'ok'; userId: string; token: string }
   | { status: 'invalid' }
+  | { status: 'superseded' }
   | { status: 'reuse-detected' };
 
 // Exchanges a refresh token for a new one. The old token is marked used in one
@@ -107,7 +108,7 @@ export async function rotateRefreshToken(rawToken: string): Promise<RotationResu
   const replayed = await RefreshTokenV2.findOne({ hash, usedAt: { $ne: null } });
   if (!replayed?.usedAt) return { status: 'invalid' };
   if (now.getTime() - replayed.usedAt.getTime() <= REFRESH_REUSE_GRACE_MS) {
-    return { status: 'invalid' }; // recent: most likely a second tab, leave the session alone
+    return { status: 'superseded' }; // recent: most likely a second tab, leave the session alone
   }
   await RefreshTokenV2.deleteMany({ family: replayed.family });
   return { status: 'reuse-detected' };

@@ -41,6 +41,7 @@ const refreshWith = (token: string) =>
 
 beforeAll(async () => {
   process.env.AUTH_V2_BCRYPT_ROUNDS = '4'; // keep the suite fast; production default is 12
+  process.env.AUTH_V2_SIGNIN_LIMIT = '10000'; // this suite signs in far more than a person would
 });
 
 describe('when Login v2 is not configured', () => {
@@ -271,7 +272,7 @@ describe('Login v2', () => {
       await refreshWith(first);
 
       const replay = await refreshWith(first);
-      expect(replay.status).toBe(401);
+      expect(replay.status).toBe(409);
       expect(replay.body.accessToken).toBeUndefined();
     });
 
@@ -295,7 +296,11 @@ describe('Login v2', () => {
       const first = refreshTokenFrom(await request.post('/api/auth/v2/signup').send(credentials));
       const second = refreshTokenFrom(await refreshWith(first));
 
-      expect((await refreshWith(first)).status).toBe(401);
+      const replay = await refreshWith(first);
+      expect(replay.status).toBe(409);
+      expect(replay.body.accessToken).toBeUndefined();
+      // The newer cookie the other tab received must survive in the shared cookie jar.
+      expect(replay.headers['set-cookie']).toBeUndefined();
       expect((await refreshWith(second)).status).toBe(200);
     });
 
