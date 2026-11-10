@@ -42,6 +42,7 @@
     "start": "dotenv -e .env -e ../backend/.env -- cross-var cross-env PORT=%CLIENT_PORT% vite",
     "build": "vite build",
     "test": "vitest run",
+    "typecheck": "tsc --noEmit",
     "preview": "vite preview",
     "heroku-postbuild": "npm run build"
   },
@@ -54,9 +55,14 @@
   "devDependencies": {
     "@testing-library/dom": "^10.3.2",
     "@testing-library/react": "^16.0.0",
+    "@types/d3": "5",
+    "@types/node": "24",
+    "@types/react": "18",
+    "@types/react-dom": "18",
     "autoprefixer": "^10.4.21",
     "jsdom": "^24.1.0",
     "sass": "^1.49.7",
+    "typescript": "^7.0.2",
     "vitest": "^3.2.6"
   },
   "engines": {

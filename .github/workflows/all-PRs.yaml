@@ -6,6 +6,26 @@ on:
       - "*.md"
 
 jobs:
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - name: Install backend dependencies
+        run: yarn install --frozen-lockfile
+        working-directory: backend
+      - name: Install client dependencies
+        run: yarn install --frozen-lockfile --ignore-engines
+        working-directory: client
+      - name: Type-check backend and shared
+        run: yarn run typecheck
+        working-directory: backend
+      - name: Type-check client
+        run: yarn run typecheck
+        working-directory: client
+
   test-backend-unit:
     runs-on: ubuntu-latest
     steps:

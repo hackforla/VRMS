@@ -190,6 +190,14 @@ and look for any variation of `test` scripts.
 
 To run all of the tests run `npm run test:all` from the root folder.
 
+#### TypeScript
+
+New code should be written in TypeScript (`.ts` / `.tsx`). Existing JavaScript files keep working and are converted to TypeScript when you touch them; there is no need to convert files you are not otherwise changing.
+
+- Run `npm run typecheck` from the root folder to type-check the backend, `shared/`, and client (also run in CI).
+- The client is built by Vite, which compiles `.ts` / `.tsx` out of the box.
+- The backend has no build step: Node runs `.ts` files directly using its built-in type stripping, so `node server.js` and the Docker/Heroku start commands are unchanged. Because of this, backend TypeScript must use only erasable syntax (no `enum`, `namespace`, or constructor parameter properties) and relative imports must include the file extension (e.g. `import { x } from './x.ts'`).
+
 ### **2.5 Using the development database**
 
 The application uses MongoDB. We have created a shared development database using MongoDB Cloud and MongoDB Atlas. The connection string for the development database is included in the environmental variables that you pasted into your backend/.env file in step 5 of the "Get Up and Running" section. If you completed that step successfully you should not need to do anything else.

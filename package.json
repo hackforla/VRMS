@@ -19,6 +19,7 @@
     "test:backend": "cd backend && npm run test",
     "test:client": "cd client && npm run test",
     "test:all": "cross-env NODE_ENV=test npm run test:client && npm run test:backend",
+    "typecheck": "cd backend && npm run typecheck && cd ../client && npm run typecheck",
     "prepare": "husky install",
     "lint:files": "node scripts/list-lint-files.mjs"
   },
