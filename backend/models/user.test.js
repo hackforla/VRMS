@@ -101,6 +101,7 @@ describe('User Model - Serialization', () => {
 describe('User Model - Validation', () => {
   test('should fail if email is not unique', async () => {
     const email = 'unique.validation@example.com';
+    await User.init(); // wait for the unique indexes to finish building
     await User.create({
       name: { firstName: 'First', lastName: 'User' },
       email: email,

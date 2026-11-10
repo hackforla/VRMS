@@ -39,8 +39,11 @@ const userSchema = mongoose.Schema({
   availability: { type: String }, // availability to meet outside of hacknight times; string for now, more structured in future
   managedProjects: [{ type: String }], // Which projects managed by user.
   //currentProject: { type: String }              // no longer need this as we can get it from Project Team Member table
-  // password: { type: String, required: true }
   isActive: { type: Boolean, default: true },
+  // Login v2 (first-party sign-in). Both are absent on users who only use the
+  // current login flow, so existing users and queries are unaffected.
+  username: { type: String, lowercase: true, unique: true, sparse: true },
+  passwordHash: { type: String, select: false }, // bcrypt hash, never returned by default
 });
 
 userSchema.methods.serialize = function () {

@@ -1,5 +1,34 @@
 # Backend
 
+## Login v2 (work in progress)
+
+A separate sign-in system under `/api/auth/v2`, built and tested on its own. It is **not** connected to
+the current login flow or to anything in the client navigation; the trial page is at `/login-v2`.
+Today it supports first-party email/username + password. GitHub sign-in is planned and will plug into
+the same session code.
+
+**Turning it on:** set `AUTH_V2_ACCESS_TOKEN_SECRET` (32+ random characters, e.g. `openssl rand -base64 48`).
+Without it the rest of the app is unaffected and every v2 route answers `503 Login v2 is not configured`.
+`AUTH_V2_BCRYPT_ROUNDS` (optional, default 12) sets the password hashing cost.
+
+| Route | What it does |
+| --- | --- |
+| `POST /api/auth/v2/signup` | `{ email, password, username?, firstName?, lastName? }` creates an account and signs in |
+| `POST /api/auth/v2/signin` | `{ identifier, password }` where `identifier` is an email or a username |
+| `POST /api/auth/v2/refresh` | trades the refresh cookie for a new access token and a new refresh cookie |
+| `POST /api/auth/v2/logout` | revokes the sign-in's refresh tokens and clears the cookie |
+| `GET /api/auth/v2/me` | returns the signed-in user; needs `Authorization: Bearer <access token>` |
+
+**Sessions:** sign-in returns a 15-minute access token in the response body (the client keeps it in
+memory only) and sets a 30-day refresh token in an `httpOnly`, `SameSite=Strict` cookie (`Secure` in
+production) that is only sent to `/api/auth/v2`. Every refresh issues a new refresh token and marks the
+old one used. Replaying a used token ends that whole sign-in, except within 10 seconds of the rotation,
+which is treated as a second browser tab racing. Only SHA-256 hashes of refresh tokens are stored, in the
+`RefreshTokenV2` collection, which MongoDB expires automatically via a TTL index on `expiresAt`.
+
+**Passwords:** hashed with bcrypt (via `bcryptjs`) and stored in `User.passwordHash`, which is never
+selected or returned unless explicitly asked for. Passwords are 10 to 72 bytes (bcrypt's limit).
+
 ## Running Tests
 
 To maintain consistency across the front end and back end development, we are using Jest

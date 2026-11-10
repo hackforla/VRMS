@@ -85,6 +85,7 @@ import errorhandler from './middleware/errorhandler.middleware.js';
 
 //import slackRouter from './routers/slack.router.js';
 import authRouter from './routers/auth.router.js';
+import authV2Router from './routers/auth-v2.router.ts';
 import checkInsRouter from './routers/checkIns.router.js';
 import checkUserRouter from './routers/checkUser.router.js';
 // ROUTES
@@ -124,6 +125,8 @@ app.use(function customHeaderCheck(req, res, next) {
   }
 });
 
+// Login v2 is separate from the current login flow below and is not linked from the client.
+app.use('/api/auth/v2', authV2Router);
 app.use('/api/auth', authRouter);
 app.use('/api/events', eventsRouter);
 app.use('/api/checkins', checkInsRouter);
