@@ -1,5 +1,40 @@
 # Backend
 
+## Login v2 (work in progress)
+
+A separate sign-in system under `/api/auth/v2`, built on [Better Auth](https://www.better-auth.com)
+rather than hand-written session and password code. It is **not** connected to the current login flow or to
+anything in the client navigation; the trial page is at `/login-v2`. Today it supports email/username +
+password. GitHub sign-in is planned and is a configuration of the same library.
+
+**Turning it on:** set `AUTH_V2_SECRET` (32+ random characters, e.g. `openssl rand -base64 48`) and
+`AUTH_V2_BASE_URL` (the public origin people use for the site, e.g. `http://localhost:3000` in development;
+the client and API must share it). Without them the rest of the app is unaffected and every v2 route
+answers `503 Login v2 is not configured on this server`. `AUTH_V2_SIGNIN_LIMIT` (optional, default 10) is
+how many sign-in or sign-up requests one client IP may make per minute before getting `429`.
+
+**Routes** are Better Auth's own, for example `POST /api/auth/v2/sign-up/email`,
+`POST /api/auth/v2/sign-in/email`, `POST /api/auth/v2/sign-in/username`, `POST /api/auth/v2/sign-out` and
+`GET /api/auth/v2/get-session`; see its documentation for the request shapes. They go through the same
+custom-header check as the rest of the API.
+
+**Where things live:** Login v2 keeps everything in its own collections, which the rest of the app never
+reads: people in `authV2Users` (new accounts get `accessLevel: 'user'` and `isActive: true`), password
+hashes in `authV2Accounts`, sessions in `authV2Sessions` and verification records in `authV2Verifications`.
+It never reads or writes the existing `users` collection, so signing up for v2 does not create or change a
+VRMS account, and an email already used by a current volunteer is just another v2 sign-up. How v2 accounts
+link to current ones is still to be decided. A deactivated v2 user (`isActive: false` in `authV2Users`)
+cannot sign in.
+
+**Sessions:** a signed, `httpOnly`, `SameSite=Lax` cookie (`Secure` when the site is https) that is only
+sent to `/api/auth/v2`; the session is stored in MongoDB, lasts 7 days and is extended as it is used.
+Signing out deletes it. Requests that carry the cookie must come from the configured origin.
+
+**Rate limiting** is the library's, kept in memory, so it is per backend process. It counts every request
+to the sign-in and sign-up routes (successful ones too) per client IP: the IP is Express's `req.ip` (one
+proxy hop is trusted, see `trust proxy` in `app.js` and `nginx/default.conf`), never a header the caller
+chose.
+
 ## Running Tests
 
 To maintain consistency across the front end and back end development, we are using Jest

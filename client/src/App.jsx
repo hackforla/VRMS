@@ -27,6 +27,7 @@ import SecretPassword from './pages/SecretPassword';
 import UserWelcome from './pages/UserWelcome';
 import UserPermission from './pages/UserPermission';
 import OnboardOffboardVisibility from './pages/OnboardOffboardVisibility';
+import LoginV2 from './pages/LoginV2';
 
 import { Box, ThemeProvider } from '@mui/material';
 import theme from './theme';
@@ -90,6 +91,8 @@ const routes = [
     Component: SecretPassword,
   },
   { path: '/welcome', name: 'welcome', Component: UserWelcome },
+  // Login v2 trial page: reachable by URL only, not linked from the navigation.
+  { path: '/login-v2', name: 'loginv2', Component: LoginV2 },
 ];
 
 const App = () => {
