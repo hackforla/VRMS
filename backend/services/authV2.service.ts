@@ -1,121 +1,112 @@
-import crypto from 'node:crypto';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import { betterAuth } from 'better-auth';
+import { mongodbAdapter } from 'better-auth/adapters/mongodb';
+import { APIError } from 'better-auth/api';
+import { username } from 'better-auth/plugins';
+import mongoose from 'mongoose';
 import {
-  ACCESS_TOKEN_TTL_SECONDS,
-  REFRESH_REUSE_GRACE_MS,
-  REFRESH_TOKEN_TTL_MS,
-  getAccessTokenSecret,
-  getBcryptRounds,
+  AUTH_V2_BASE_PATH,
+  CLIENT_IP_HEADER,
+  getAuthSecret,
+  getBaseUrl,
+  getSigninLimit,
 } from '../config/authV2.config.ts';
-import { RefreshTokenV2 } from '../models/refreshTokenV2.model.ts';
+import { User } from '../models/user.model.js';
 
-// ---------------------------------------------------------------- passwords
+const MINUTE = 60;
 
-// Compared against when the account does not exist, so a wrong username and a
-// wrong password take about the same time.
-const DUMMY_HASH = bcrypt.hashSync('not-a-real-password', 4);
+// Better Auth writes people into the same `users` collection the rest of the app
+// reads through Mongoose, so a freshly created user has to look like one the
+// Mongoose User model would have made.
+function createAuth(db: NonNullable<typeof mongoose.connection.db>) {
+  const signinRule = { window: MINUTE, max: getSigninLimit() };
 
-export function hashPassword(password: string): Promise<string> {
-  return bcrypt.hash(password, getBcryptRounds());
-}
-
-export function verifyPassword(
-  password: string,
-  hash: string | null | undefined,
-): Promise<boolean> {
-  return bcrypt.compare(password, hash || DUMMY_HASH).then((matches) => matches && Boolean(hash));
-}
-
-// ------------------------------------------------------------ access tokens
-
-export interface AccessTokenClaims {
-  sub: string;
-  email?: string;
-  accessLevel?: string;
-}
-
-export function signAccessToken(user: {
-  id: string;
-  email?: string;
-  accessLevel?: string;
-}): string {
-  const secret = getAccessTokenSecret();
-  if (!secret) throw new Error('Login v2 is not configured');
-  const claims: AccessTokenClaims = {
-    sub: user.id,
-    email: user.email,
-    accessLevel: user.accessLevel,
-  };
-  return jwt.sign(claims, secret, { algorithm: 'HS256', expiresIn: ACCESS_TOKEN_TTL_SECONDS });
-}
-
-export function verifyAccessToken(token: string): AccessTokenClaims | null {
-  const secret = getAccessTokenSecret();
-  if (!secret) return null;
-  try {
-    const claims = jwt.verify(token, secret, { algorithms: ['HS256'] });
-    return typeof claims === 'object' && typeof claims.sub === 'string'
-      ? (claims as unknown as AccessTokenClaims)
-      : null;
-  } catch {
-    return null;
-  }
-}
-
-// ----------------------------------------------------------- refresh tokens
-
-function hashToken(token: string): string {
-  return crypto.createHash('sha256').update(token).digest('hex');
-}
-
-// Creates a refresh token. A new sign-in starts a new family; a rotation keeps
-// the family of the token it replaces.
-export async function issueRefreshToken(userId: string, family: string = crypto.randomUUID()) {
-  const token = crypto.randomBytes(32).toString('base64url');
-  await RefreshTokenV2.create({
-    userId,
-    family,
-    hash: hashToken(token),
-    expiresAt: new Date(Date.now() + REFRESH_TOKEN_TTL_MS),
+  return betterAuth({
+    secret: getAuthSecret() ?? undefined,
+    baseURL: getBaseUrl() ?? undefined,
+    basePath: AUTH_V2_BASE_PATH,
+    database: mongodbAdapter(db),
+    emailAndPassword: { enabled: true, minPasswordLength: 10 },
+    plugins: [username({ minUsernameLength: 3, maxUsernameLength: 30 })],
+    user: {
+      modelName: 'users',
+      // The Mongoose model keeps `name` as { firstName, lastName }, so the
+      // library's single display name goes in its own field.
+      fields: { name: 'displayName' },
+      additionalFields: {
+        accessLevel: { type: 'string', required: false, defaultValue: 'user', input: false },
+        isActive: { type: 'boolean', required: false, defaultValue: true, input: false },
+      },
+    },
+    session: { modelName: 'authV2Sessions' },
+    account: { modelName: 'authV2Accounts' },
+    verification: { modelName: 'authV2Verifications' },
+    advanced: {
+      cookiePrefix: 'vrms-v2',
+      // Only the v2 routes ever see the session cookie.
+      defaultCookieAttributes: { path: AUTH_V2_BASE_PATH },
+      ipAddress: { ipAddressHeaders: [CLIENT_IP_HEADER] },
+      // On by default outside tests; stated so the same checks run in the test suite.
+      disableOriginCheck: false,
+    },
+    rateLimit: {
+      enabled: true,
+      storage: 'memory',
+      window: MINUTE,
+      max: 100,
+      customRules: {
+        '/sign-in/email': signinRule,
+        '/sign-in/username': signinRule,
+        '/sign-up/email': signinRule,
+      },
+    },
+    databaseHooks: {
+      user: {
+        create: {
+          after: async (user) => {
+            const [firstName, ...rest] = String(user.name ?? '')
+              .trim()
+              .split(/\s+/);
+            await User.updateOne(
+              { _id: user.id },
+              {
+                $set: {
+                  'name.firstName': firstName,
+                  'name.lastName': rest.join(' '),
+                  createdDate: user.createdAt,
+                },
+              },
+            );
+          },
+        },
+      },
+      session: {
+        create: {
+          // The current login refuses deactivated volunteers; so does this one.
+          before: async (session) => {
+            const person = await User.findById(session.userId).select('isActive');
+            if (person && person.isActive === false) {
+              throw new APIError('FORBIDDEN', { message: 'This account is not active' });
+            }
+          },
+        },
+      },
+    },
   });
-  return token;
 }
 
-export type RotationResult =
-  | { status: 'ok'; userId: string; token: string }
-  | { status: 'invalid' }
-  | { status: 'superseded' }
-  | { status: 'reuse-detected' };
+type Auth = ReturnType<typeof createAuth>;
+let auth: Auth | undefined;
 
-// Exchanges a refresh token for a new one. The old token is marked used in one
-// atomic update, so it can only ever be exchanged once.
-export async function rotateRefreshToken(rawToken: string): Promise<RotationResult> {
-  const hash = hashToken(rawToken);
-  const now = new Date();
-
-  const used = await RefreshTokenV2.findOneAndUpdate(
-    { hash, usedAt: null, expiresAt: { $gt: now } },
-    { usedAt: now },
-  );
-
-  if (used) {
-    const token = await issueRefreshToken(String(used.userId), used.family);
-    return { status: 'ok', userId: String(used.userId), token };
-  }
-
-  // Not exchangeable. If it was already used, someone is replaying it.
-  const replayed = await RefreshTokenV2.findOne({ hash, usedAt: { $ne: null } });
-  if (!replayed?.usedAt) return { status: 'invalid' };
-  if (now.getTime() - replayed.usedAt.getTime() <= REFRESH_REUSE_GRACE_MS) {
-    return { status: 'superseded' }; // recent: most likely a second tab, leave the session alone
-  }
-  await RefreshTokenV2.deleteMany({ family: replayed.family });
-  return { status: 'reuse-detected' };
+// Built on first use because it needs the live MongoDB connection and the
+// (optional) v2 settings, neither of which exist when the app starts.
+export function getAuth(): Auth | null {
+  const db = mongoose.connection.db;
+  if (!db) return null;
+  auth ??= createAuth(db);
+  return auth;
 }
 
-// Ends the whole sign-in (every token in the family) that this token belongs to.
-export async function revokeRefreshToken(rawToken: string): Promise<void> {
-  const token = await RefreshTokenV2.findOne({ hash: hashToken(rawToken) });
-  if (token) await RefreshTokenV2.deleteMany({ family: token.family });
+// Tests change the v2 settings between cases; the next getAuth() builds from the new ones.
+export function resetAuthV2() {
+  auth = undefined;
 }

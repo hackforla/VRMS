@@ -16,39 +16,6 @@ const expectedHeader = process.env.CUSTOM_REQUEST_HEADER;
 
 const UserController = {};
 
-const CREDENTIAL_FIELDS = ['passwordHash', 'username'];
-
-const withoutCredentialFields = (fields) =>
-  Object.fromEntries(Object.entries(fields ?? {}).filter(([path]) => !CREDENTIAL_FIELDS.includes(path)));
-
-const withoutCredentialUpdates = (update) =>
-  Object.fromEntries(
-    Object.entries(withoutCredentialFields(update)).map(([key, value]) =>
-      key === '$rename' && value && typeof value === 'object'
-        ? [key, Object.fromEntries(Object.entries(withoutCredentialFields(value)).filter(([, to]) => !CREDENTIAL_FIELDS.includes(to)))]
-        : key.startsWith('$') && value && typeof value === 'object'
-          ? [key, withoutCredentialFields(value)]
-          : [key, value],
-    ),
-  );
-
-const isManagedProjectsOp = (op) => {
-  const update = op?.updateOne?.update;
-  return (
-    Object.keys(op ?? {}).length === 1 &&
-    update &&
-    typeof update === 'object' &&
-    Object.keys(update).length > 0 &&
-    Object.entries(update).every(
-      ([operator, fields]) =>
-        ['$addToSet', '$pull'].includes(operator) &&
-        fields &&
-        typeof fields === 'object' &&
-        Object.keys(fields).join() === 'managedProjects',
-    )
-  );
-};
-
 // Get list of Users with GET
 UserController.user_list = async (req, res) => {
   const { headers } = req;
@@ -182,7 +149,7 @@ UserController.create = async (req, res) => {
 
   try {
     const newUser = {
-      ...withoutCredentialFields(req.body),
+      ...req.body,
       email: req.body.email.toLowerCase(),
     };
     const user = await User.create(newUser);
@@ -208,7 +175,7 @@ UserController.update = async (req, res) => {
   }
 
   try {
-    const user = await User.findOneAndUpdate({ _id: UserId }, withoutCredentialUpdates(req.body), {
+    const user = await User.findOneAndUpdate({ _id: UserId }, req.body, {
       new: true,
     });
     return res.status(200).send(user);
@@ -389,10 +356,6 @@ UserController.updateManagedProjects = async (req, res) => {
 
 UserController.bulkUpdateManagedProjects = async (req, res) => {
   const { bulkOps } = req.body;
-
-  if (!Array.isArray(bulkOps) || !bulkOps.every(isManagedProjectsOp)) {
-    return res.status(400).json({ error: 'Only managedProjects updates are allowed' });
-  }
 
   bulkOps.forEach((op) => {
     if (op?.updateOne?.filter._id) {

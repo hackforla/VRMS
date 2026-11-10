@@ -1,35 +1,39 @@
-// Settings for Login v2 (/api/auth/v2). Read lazily so the existing app boots
-// without any of these variables; v2 routes answer 503 until they are set.
+// Settings for Login v2 (/api/auth/v2), which runs on Better Auth. Read lazily
+// so the existing app boots without any of these variables; v2 answers 503
+// until both required ones are set.
 
-export const REFRESH_COOKIE_NAME = 'vrms_refresh_v2';
-// Scoped to the v2 routes so the cookie is never sent to the rest of the API.
-export const REFRESH_COOKIE_PATH = '/api/auth/v2';
+export const AUTH_V2_BASE_PATH = '/api/auth/v2';
 
-export const ACCESS_TOKEN_TTL_SECONDS = 15 * 60;
-export const REFRESH_TOKEN_TTL_MS = 30 * 24 * 60 * 60 * 1000;
-// A rotated refresh token that shows up again within this window is treated as
-// a harmless race (two tabs reloading at once) rather than as theft.
-export const REFRESH_REUSE_GRACE_MS = 10 * 1000;
+// Header the v2 handler sets from Express's req.ip so rate limiting sees the real
+// client address (and ignores any X-Forwarded-For a caller makes up).
+export const CLIENT_IP_HEADER = 'x-vrms-client-ip';
 
 const MIN_SECRET_LENGTH = 32;
 
-export function getAccessTokenSecret(): string | null {
-  const secret = process.env.AUTH_V2_ACCESS_TOKEN_SECRET;
+export function getAuthSecret(): string | null {
+  const secret = process.env.AUTH_V2_SECRET;
   return secret && secret.length >= MIN_SECRET_LENGTH ? secret : null;
 }
 
+// The public origin the browser uses for the site (the client and the API share it),
+// e.g. https://vrms.example or http://localhost:3000 in development. Better Auth
+// uses it for cookie settings and to reject sign-ins started from other origins.
+export function getBaseUrl(): string | null {
+  const value = process.env.AUTH_V2_BASE_URL;
+  if (!value) return null;
+  try {
+    const url = new URL(value);
+    return url.protocol === 'http:' || url.protocol === 'https:' ? url.origin : null;
+  } catch {
+    return null;
+  }
+}
+
 export function isAuthV2Configured(): boolean {
-  return getAccessTokenSecret() !== null;
+  return getAuthSecret() !== null && getBaseUrl() !== null;
 }
 
-export function getBcryptRounds(): number {
-  const rounds = Number(process.env.AUTH_V2_BCRYPT_ROUNDS);
-  return Number.isInteger(rounds) && rounds >= 4 && rounds <= 15 ? rounds : 12;
-}
-
-// Failed sign-in and sign-up attempts allowed per client IP in each window.
-export const SIGNIN_LIMIT_WINDOW_MS = 15 * 60 * 1000;
-
+// Sign-in and sign-up requests allowed per client IP per minute.
 export function getSigninLimit(): number {
   const limit = Number(process.env.AUTH_V2_SIGNIN_LIMIT);
   return Number.isInteger(limit) && limit > 0 ? limit : 10;

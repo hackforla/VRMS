@@ -1,64 +1,23 @@
+import { toNodeHandler } from 'better-auth/node';
 import type { NextFunction, Request, Response } from 'express';
-import {
-  SIGNIN_LIMIT_WINDOW_MS,
-  getSigninLimit,
-  isAuthV2Configured,
-} from '../config/authV2.config.ts';
-import { type AccessTokenClaims, verifyAccessToken } from '../services/authV2.service.ts';
+import { CLIENT_IP_HEADER, isAuthV2Configured } from '../config/authV2.config.ts';
+import { getAuth } from '../services/authV2.service.ts';
 
-// Login v2 is optional: until its secret is set, every v2 route says so
-// instead of failing in some less obvious way.
-export function requireAuthV2Configured(_req: Request, res: Response, next: NextFunction) {
+// Hands every /api/auth/v2/* request to Better Auth. It reads the raw request
+// itself, so this must be mounted before express.json() and with app.all(...),
+// not app.use(...), so that the full path reaches the library.
+export function authV2Handler(req: Request, res: Response, next: NextFunction) {
+  // Login v2 is optional: until it is configured, say so plainly instead of
+  // failing in some less obvious way.
   if (!isAuthV2Configured()) {
-    return res.status(503).json({
-      error: 'Login v2 is not configured',
-      detail: 'Set AUTH_V2_ACCESS_TOKEN_SECRET (at least 32 characters) on the backend.',
-    });
+    return res.status(503).json({ error: 'Login v2 is not configured on this server' });
   }
-  next();
-}
-
-// Expects `Authorization: Bearer <access token>`; the verified claims are left
-// on res.locals.authV2.
-export function requireAccessTokenV2(req: Request, res: Response, next: NextFunction) {
-  const header = req.headers.authorization;
-  const token = header?.startsWith('Bearer ') ? header.slice('Bearer '.length) : null;
-  const claims = token ? verifyAccessToken(token) : null;
-  if (!claims) {
-    return res.status(401).json({ error: 'Access token missing, invalid or expired' });
+  const auth = getAuth();
+  if (!auth) {
+    return res.status(503).json({ error: 'Login v2 is not ready yet' });
   }
-  res.locals.authV2 = claims satisfies AccessTokenClaims;
-  next();
-}
-
-// Counts failed sign-in and sign-up attempts per client IP in a fixed window,
-// so passwords can't be guessed without limit while many people signing in
-// from one network are never blocked. Each attempt holds a slot while it runs,
-// so a burst of parallel guesses can't all slip past the check; the slot is
-// given back if the attempt succeeds. Counts are kept in memory only.
-let windowStartedAt = Date.now();
-const attemptsByIp = new Map<string, number>();
-
-export function limitSigninAttempts(req: Request, res: Response, next: NextFunction) {
-  const now = Date.now();
-  if (now - windowStartedAt >= SIGNIN_LIMIT_WINDOW_MS) {
-    windowStartedAt = now;
-    attemptsByIp.clear();
-  }
-  const key = req.ip ?? 'unknown';
-  const attempts = attemptsByIp.get(key) ?? 0;
-  if (attempts >= getSigninLimit()) {
-    res.set(
-      'Retry-After',
-      String(Math.ceil((windowStartedAt + SIGNIN_LIMIT_WINDOW_MS - now) / 1000)),
-    );
-    return res.status(429).json({ error: 'Too many failed sign-in attempts; try again later' });
-  }
-  attemptsByIp.set(key, attempts + 1);
-  const window = windowStartedAt;
-  res.on('finish', () => {
-    if (res.statusCode < 200 || res.statusCode >= 300 || window !== windowStartedAt) return;
-    attemptsByIp.set(key, (attemptsByIp.get(key) ?? 1) - 1);
-  });
-  next();
+  // Rate limiting keys on this header; set it from Express's own view of the
+  // client (which honors `trust proxy`) so a caller cannot choose their own.
+  req.headers[CLIENT_IP_HEADER] = req.ip ?? '';
+  toNodeHandler(auth)(req, res).catch(next);
 }

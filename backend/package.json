@@ -46,7 +46,7 @@
     "@slack/bolt": "^2.2.3",
     "assert-env": "^0.6.0",
     "async": "^3.2.2",
-    "bcryptjs": "^3.0.3",
+    "better-auth": "1.7.19",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",

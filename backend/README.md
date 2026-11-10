@@ -2,36 +2,37 @@
 
 ## Login v2 (work in progress)
 
-A separate sign-in system under `/api/auth/v2`, built and tested on its own. It is **not** connected to
-the current login flow or to anything in the client navigation; the trial page is at `/login-v2`.
-Today it supports first-party email/username + password. GitHub sign-in is planned and will plug into
-the same session code.
+A separate sign-in system under `/api/auth/v2`, built on [Better Auth](https://www.better-auth.com)
+rather than hand-written session and password code. It is **not** connected to the current login flow or to
+anything in the client navigation; the trial page is at `/login-v2`. Today it supports email/username +
+password. GitHub sign-in is planned and is a configuration of the same library.
 
-**Turning it on:** set `AUTH_V2_ACCESS_TOKEN_SECRET` (32+ random characters, e.g. `openssl rand -base64 48`).
-Without it the rest of the app is unaffected and every v2 route answers `503 Login v2 is not configured`.
-`AUTH_V2_BCRYPT_ROUNDS` (optional, default 12) sets the password hashing cost.
-`AUTH_V2_SIGNIN_LIMIT` (optional, default 10) caps failed sign-in and sign-up attempts (any non-2xx answer) per client IP in each
-15-minute window; further attempts get `429` with a JSON `error`. Counts are kept in memory per backend
-process (no account lockout).
+**Turning it on:** set `AUTH_V2_SECRET` (32+ random characters, e.g. `openssl rand -base64 48`) and
+`AUTH_V2_BASE_URL` (the public origin people use for the site, e.g. `http://localhost:3000` in development;
+the client and API must share it). Without them the rest of the app is unaffected and every v2 route
+answers `503 Login v2 is not configured on this server`. `AUTH_V2_SIGNIN_LIMIT` (optional, default 10) is
+how many sign-in or sign-up requests one client IP may make per minute before getting `429`.
 
-| Route | What it does |
-| --- | --- |
-| `POST /api/auth/v2/signup` | `{ email, password, username?, firstName?, lastName? }` creates an account and signs in |
-| `POST /api/auth/v2/signin` | `{ identifier, password }` where `identifier` is an email or a username |
-| `POST /api/auth/v2/refresh` | trades the refresh cookie for a new access token and a new refresh cookie |
-| `POST /api/auth/v2/logout` | revokes the sign-in's refresh tokens and clears the cookie |
-| `GET /api/auth/v2/me` | returns the signed-in user; needs `Authorization: Bearer <access token>` |
+**Routes** are Better Auth's own, for example `POST /api/auth/v2/sign-up/email`,
+`POST /api/auth/v2/sign-in/email`, `POST /api/auth/v2/sign-in/username`, `POST /api/auth/v2/sign-out` and
+`GET /api/auth/v2/get-session`; see its documentation for the request shapes. They go through the same
+custom-header check as the rest of the API.
 
-**Sessions:** sign-in returns a 15-minute access token in the response body (the client keeps it in
-memory only) and sets a 30-day refresh token in an `httpOnly`, `SameSite=Strict` cookie (`Secure` in
-production) that is only sent to `/api/auth/v2`. Every refresh issues a new refresh token and marks the
-old one used. Replaying a used token ends that whole sign-in, except within 10 seconds of the rotation,
-which is treated as a second browser tab racing: that request gets `409`, the cookie is left alone, and
-the client retries with the newer cookie the other tab received. Only SHA-256 hashes of refresh tokens are stored, in the
-`RefreshTokenV2` collection, which MongoDB expires automatically via a TTL index on `expiresAt`.
+**Where things live:** people are stored in the existing `users` collection (Better Auth writes to it with
+the MongoDB driver, so a hook fills in `name.firstName`/`name.lastName` and `createdDate`, and new accounts
+get `accessLevel: 'user'` and `isActive: true`). Password hashes, sessions and verification records are in
+the `authV2Accounts`, `authV2Sessions` and `authV2Verifications` collections, which the rest of the app
+never touches. A deactivated user (`isActive: false`) cannot sign in. Someone who already has a VRMS account
+but no password cannot sign up with the same email, and cannot sign in with a password.
 
-**Passwords:** hashed with bcrypt (via `bcryptjs`) and stored in `User.passwordHash`, which is never
-selected or returned unless explicitly asked for. Passwords are 10 to 72 bytes (bcrypt's limit).
+**Sessions:** a signed, `httpOnly`, `SameSite=Lax` cookie (`Secure` when the site is https) that is only
+sent to `/api/auth/v2`; the session is stored in MongoDB, lasts 7 days and is extended as it is used.
+Signing out deletes it. Requests that carry the cookie must come from the configured origin.
+
+**Rate limiting** is the library's, kept in memory, so it is per backend process. It counts every request
+to the sign-in and sign-up routes (successful ones too) per client IP: the IP is Express's `req.ip` (one
+proxy hop is trusted, see `trust proxy` in `app.js` and `nginx/default.conf`), never a header the caller
+chose.
 
 ## Running Tests
 

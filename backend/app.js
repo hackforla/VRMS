@@ -54,10 +54,6 @@ const app = express();
 // One proxy (nginx or Heroku's router) sits in front, so req.ip is the client's address.
 app.set('trust proxy', 1);
 
-// Required to view Request Body (req.body) in JSON
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
 // Used to save JWT token from MagicLink
 app.use(cookieParser());
 
@@ -85,10 +81,10 @@ cleanupExpiredTokens();
 
 // MIDDLEWARE
 import errorhandler from './middleware/errorhandler.middleware.js';
+import { authV2Handler } from './middleware/authV2.middleware.ts';
 
 //import slackRouter from './routers/slack.router.js';
 import authRouter from './routers/auth.router.js';
-import authV2Router from './routers/auth-v2.router.ts';
 import checkInsRouter from './routers/checkIns.router.js';
 import checkUserRouter from './routers/checkUser.router.js';
 // ROUTES
@@ -128,8 +124,14 @@ app.use(function customHeaderCheck(req, res, next) {
   }
 });
 
-// Login v2 is separate from the current login flow below and is not linked from the client.
-app.use('/api/auth/v2', authV2Router);
+// Login v2 (Better Auth) is separate from the current login flow below and is not linked
+// from the client. It reads the raw request body itself, so it sits before express.json().
+app.all('/api/auth/v2/*', authV2Handler);
+
+// Required to view Request Body (req.body) in JSON
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use('/api/auth', authRouter);
 app.use('/api/events', eventsRouter);
 app.use('/api/checkins', checkInsRouter);

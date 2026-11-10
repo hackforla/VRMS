@@ -1,107 +1,50 @@
-import cookieParser from 'cookie-parser';
 import express from 'express';
 import supertest from 'supertest';
-import { afterAll, beforeAll, expect, test } from 'vitest';
+import { beforeAll, describe, expect, test } from 'vitest';
+import { authV2Handler } from '../middleware/authV2.middleware.ts';
+import { resetAuthV2 } from '../services/authV2.service.ts';
 import { setupIntegrationDB } from '../setup-test.js';
-import authV2Router from './auth-v2.router.ts';
 
 setupIntegrationDB('api-auth-v2-rate-limit');
 
 const app = express();
 app.set('trust proxy', 1);
+app.all('/api/auth/v2/*', authV2Handler);
 app.use(express.json());
-app.use(cookieParser());
-app.use('/api/auth/v2', authV2Router);
-const server = app.listen(0);
-const request = supertest(server);
-afterAll(() => new Promise((resolve) => server.close(resolve)));
+const request = supertest(app);
 
-// Each test signs in from its own client address, as forwarded by the proxy.
-const from = (ip: string) => ({
-  post: (path: string) => request.post(path).set('X-Forwarded-For', ip),
-});
+const ORIGIN = 'http://localhost:3000';
+const attempt = (ip: string, forwardedFor?: string) => {
+  const req = request
+    .post('/api/auth/v2/sign-in/email')
+    .set('Origin', ORIGIN)
+    .set('X-Forwarded-For', forwardedFor ?? ip);
+  return req.send({ email: 'nobody@example.com', password: 'not a real password' });
+};
 
 beforeAll(() => {
-  process.env.AUTH_V2_ACCESS_TOKEN_SECRET = 'test-secret-that-is-at-least-32-characters-long';
-  process.env.AUTH_V2_BCRYPT_ROUNDS = '4';
+  process.env.AUTH_V2_SECRET = 'test-secret-that-is-at-least-32-characters-long';
+  process.env.AUTH_V2_BASE_URL = ORIGIN;
   process.env.AUTH_V2_SIGNIN_LIMIT = '3';
+  resetAuthV2();
 });
 
-test('only failed sign-in and sign-up attempts from one IP are capped', async () => {
-  const client = from('203.0.113.1');
-  const password = 'correct horse battery';
-  const signIn = (attempt: string) =>
-    client.post('/api/auth/v2/signin').send({ identifier: 'volunteer', password: attempt });
+describe('Login v2 rate limiting', () => {
+  test('blocks an address after too many sign-in attempts, and only that address', async () => {
+    for (let i = 0; i < 3; i++) expect((await attempt('203.0.113.1')).status).toBe(401);
 
-  expect(
-    (
-      await client
-        .post('/api/auth/v2/signup')
-        .send({ email: 'someone@example.com', username: 'volunteer', password })
-    ).status,
-  ).toBe(201);
-  for (let i = 0; i < 5; i++) expect((await signIn(password)).status).toBe(200);
+    const blocked = await attempt('203.0.113.1');
+    expect(blocked.status).toBe(429);
+    expect(Number(blocked.headers['x-retry-after'])).toBeGreaterThan(0);
 
-  expect((await signIn('guess-1')).status).toBe(401);
-  expect((await signIn('guess-2')).status).toBe(401);
-  expect(
-    (await client.post('/api/auth/v2/signup').send({ email: 'someone@example.com', password }))
-      .status,
-  ).toBe(409);
+    expect((await attempt('203.0.113.2')).status).toBe(401); // a different address is untouched
+  });
 
-  const blocked = await signIn(password);
-  expect(blocked.status).toBe(429);
-  expect(blocked.body.error).toMatch(/too many/i);
-  expect(Number(blocked.headers['retry-after'])).toBeGreaterThan(0);
-
-  const blockedSignup = await client
-    .post('/api/auth/v2/signup')
-    .send({ email: 'other@example.com', password });
-  expect(blockedSignup.status).toBe(429);
-
-  expect((await client.post('/api/auth/v2/refresh')).status).toBe(401);
-  expect((await client.post('/api/auth/v2/logout')).status).toBe(204);
-});
-
-test('parallel guesses from one IP cannot all get past the limit', async () => {
-  const client = from('203.0.113.2');
-  const guesses = await Promise.all(
-    Array.from({ length: 12 }, (_, i) =>
-      client.post('/api/auth/v2/signin').send({ identifier: 'nobody', password: `guess-${i}` }),
-    ),
-  );
-  const statuses = guesses.map((res) => res.status);
-  expect(statuses.filter((status) => status === 401)).toHaveLength(3);
-  expect(statuses.filter((status) => status === 429)).toHaveLength(9);
-});
-
-test('parallel successful sign-ins do not use up the limit', async () => {
-  const client = from('203.0.113.3');
-  const password = 'correct horse battery';
-  expect(
-    (
-      await client
-        .post('/api/auth/v2/signup')
-        .send({ email: 'parallel@example.com', username: 'parallel', password })
-    ).status,
-  ).toBe(201);
-
-  for (let round = 0; round < 3; round++) {
-    const signIns = await Promise.all(
-      Array.from({ length: 3 }, () =>
-        client.post('/api/auth/v2/signin').send({ identifier: 'parallel', password }),
-      ),
-    );
-    expect(signIns.map((res) => res.status)).toEqual([200, 200, 200]);
-  }
-
-  for (let i = 0; i < 3; i++) {
-    expect(
-      (await client.post('/api/auth/v2/signin').send({ identifier: 'parallel', password: 'nope' }))
-        .status,
-    ).toBe(401);
-  }
-  expect(
-    (await client.post('/api/auth/v2/signin').send({ identifier: 'parallel', password })).status,
-  ).toBe(429);
+  test('cannot be dodged by sending a made-up X-Forwarded-For chain', async () => {
+    // The server trusts one proxy hop: only the last entry (the one a proxy added) counts.
+    for (let i = 0; i < 3; i++) {
+      expect((await attempt('x', `198.51.100.${i}, 203.0.113.9`)).status).toBe(401);
+    }
+    expect((await attempt('x', '192.0.2.77, 203.0.113.9')).status).toBe(429);
+  });
 });

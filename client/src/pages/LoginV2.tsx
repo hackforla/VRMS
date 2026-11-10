@@ -1,9 +1,17 @@
 import { type FormEvent, useEffect, useState } from 'react';
-import { type AuthV2User, authFetch, logout, refreshSession, signIn, signUp } from '../api/authV2';
+import { authV2 } from '../api/authV2';
 
 // Standalone Login v2 page (route: /login-v2). It is not linked from the app
 // and does not touch the current login flow; it exists to exercise sign-up,
-// sign-in, staying signed in across a reload, and sign-out.
+// sign-in, staying signed in across a reload, and sign-out. The work is done by
+// Better Auth; this page only drives its client.
+
+interface SessionUser {
+  email: string;
+  name: string;
+  username?: string | null;
+  accessLevel?: string;
+}
 
 type Mode = 'signin' | 'signup';
 
@@ -27,11 +35,19 @@ const buttonStyle = {
   cursor: 'pointer',
 } as const;
 
+// An identifier with an @ is an email address; anything else is a username.
+function signInWith(identifier: string, password: string) {
+  return identifier.includes('@')
+    ? authV2.signIn.email({ email: identifier, password })
+    : authV2.signIn.username({ username: identifier, password });
+}
+
 export default function LoginV2() {
   // undefined = still checking for an existing session, null = signed out
-  const [user, setUser] = useState<AuthV2User | null | undefined>(undefined);
+  const [user, setUser] = useState<SessionUser | null | undefined>(undefined);
   const [mode, setMode] = useState<Mode>('signin');
   const [identifier, setIdentifier] = useState('');
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -39,11 +55,12 @@ export default function LoginV2() {
   const [busy, setBusy] = useState(false);
   const [sessionCheck, setSessionCheck] = useState('');
 
-  // Refresh-on-reload: the access token is gone after a reload, so ask the
-  // server whether the refresh cookie still stands for a session.
+  // The session cookie survives a reload, so ask the server who we are.
   useEffect(() => {
     let active = true;
-    refreshSession()
+    authV2
+      .getSession()
+      .then(({ data }) => (data?.user as SessionUser | undefined) ?? null)
       .catch(() => null)
       .then((restored) => {
         if (active) setUser(restored);
@@ -58,26 +75,36 @@ export default function LoginV2() {
     setError('');
     setBusy(true);
     try {
-      setUser(
+      const { data, error: failure } =
         mode === 'signin'
-          ? await signIn(identifier, password)
-          : await signUp({ email, password, username: username || undefined }),
-      );
+          ? await signInWith(identifier, password)
+          : await authV2.signUp.email({
+              name,
+              email,
+              password,
+              ...(username ? { username } : {}),
+            });
+      if (failure || !data) {
+        setError(failure?.message || 'Something went wrong');
+        return;
+      }
+      const current = await authV2.getSession();
+      setUser((current.data?.user as SessionUser | undefined) ?? null);
       setPassword('');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong');
+    } catch {
+      setError('Something went wrong');
     } finally {
       setBusy(false);
     }
   }
 
   async function checkSession() {
-    const res = await authFetch('/me');
-    setSessionCheck(res.ok ? 'Access token accepted by the server.' : `Rejected (${res.status}).`);
+    const { data } = await authV2.getSession();
+    setSessionCheck(data ? 'Session accepted by the server.' : 'Session rejected.');
   }
 
   async function signOut() {
-    await logout().catch(() => undefined);
+    await authV2.signOut().catch(() => undefined);
     setUser(null);
     setSessionCheck('');
   }
@@ -123,6 +150,16 @@ export default function LoginV2() {
           </label>
         ) : (
           <>
+            <label>
+              Name
+              <input
+                style={fieldStyle}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                autoComplete="name"
+                required
+              />
+            </label>
             <label>
               Email
               <input
