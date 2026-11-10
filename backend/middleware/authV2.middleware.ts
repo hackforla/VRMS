@@ -48,7 +48,10 @@ export function limitSigninAttempts(req: Request, res: Response, next: NextFunct
   const key = req.ip ?? 'unknown';
   const attempts = attemptsByIp.get(key) ?? 0;
   if (attempts >= getSigninLimit()) {
-    res.set('Retry-After', String(Math.ceil((windowStartedAt + SIGNIN_LIMIT_WINDOW_MS - now) / 1000)));
+    res.set(
+      'Retry-After',
+      String(Math.ceil((windowStartedAt + SIGNIN_LIMIT_WINDOW_MS - now) / 1000)),
+    );
     return res.status(429).json({ error: 'Too many failed sign-in attempts; try again later' });
   }
   attemptsByIp.set(key, attempts + 1);

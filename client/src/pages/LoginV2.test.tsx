@@ -165,7 +165,10 @@ describe('refreshSession', () => {
   });
 
   test('retries once when another tab just exchanged the same refresh cookie', async () => {
-    const answers = [reply(409, { error: 'Refresh token was just replaced; retry' }), reply(200, session)];
+    const answers = [
+      reply(409, { error: 'Refresh token was just replaced; retry' }),
+      reply(200, session),
+    ];
     const fetchMock = mockApi({ 'POST /api/auth/v2/refresh': () => answers.shift()! });
 
     expect(await refreshSession()).toEqual(user);

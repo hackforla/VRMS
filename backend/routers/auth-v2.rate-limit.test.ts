@@ -67,9 +67,7 @@ test('parallel guesses from one IP cannot all get past the limit', async () => {
   const client = from('203.0.113.2');
   const guesses = await Promise.all(
     Array.from({ length: 12 }, (_, i) =>
-      client
-        .post('/api/auth/v2/signin')
-        .send({ identifier: 'nobody', password: `guess-${i}` }),
+      client.post('/api/auth/v2/signin').send({ identifier: 'nobody', password: `guess-${i}` }),
     ),
   );
   const statuses = guesses.map((res) => res.status);
